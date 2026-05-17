@@ -89,10 +89,10 @@
                 <div class="dropdown-menu border-0" aria-labelledby="user-options">
                   {% if request.user.is_authenticated %}
                   <a href="{% url 'profile' %}" class="dropdown-item" aria-label="go to my profile page">My Profile</a>
-                  <a href="" class="dropdown-item" aria-label="go to the log out page">Logout</a>
+                  <a href="{% url 'account_logout' %}" class="dropdown-item" aria-label="go to the log out page">Logout</a>
                   {% else %}
-                  <a href="" class="dropdown-item" aria-label="go to the account registration page">Register</a>
-                  <a href="" class="dropdown-item" aria-label="go to the login page">Login</a>
+                  <a href="{% url 'account_signup' %}" class="dropdown-item" aria-label="go to the account registration page">Register</a>
+                  <a href="{% url 'account_login' %}" class="dropdown-item" aria-label="go to the login page">Login</a>
                   {% endif %}
                 </div>
               </li>

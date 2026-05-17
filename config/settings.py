@@ -27,7 +27,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 # If DEBUG in .env is exactly True → DEBUG becomes True; Otherwise → DEBUG becomes False
 
 ALLOWED_HOSTS = os.environ.get(
@@ -45,11 +45,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Required by django-allauth
+    'django.contrib.sites',
      
     # Third-party apps
     'django_countries',
     "crispy_forms",
-    "crispy_bootstrap4",    
+    "crispy_bootstrap4",
+    'allauth',
+    'allauth.account',    
     
     # Local apps
     'home',
@@ -62,11 +67,14 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -132,6 +140,36 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    # Keeps normal Django admin login working
+    'django.contrib.auth.backends.ModelBackend',
+
+    # Enables django-allauth authentication
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+
+if DEBUG:
+    ACCOUNT_EMAIL_VERIFICATION = 'optional'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+    # EMAIL_HOST = 'your_email_host'
+    # EMAIL_PORT = 587
+    # EMAIL_USE_TLS = True
+    # EMAIL_HOST_USER = 'your_email_user'
+    # EMAIL_HOST_PASSWORD = 'your_email_password'
+    # DEFAULT_FROM_EMAIL = 'English Grows <your_email@example.com>'
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -153,6 +191,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 

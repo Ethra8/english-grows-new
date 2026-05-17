@@ -11,6 +11,7 @@ body {
     flex-direction: column;  
 }
 
+
 #checkout-page.container {
     max-width: 95% !important;
 }
@@ -309,6 +310,13 @@ footer a {
     background-color: #c1f7e3;
 }
 
+.allauth-form-inner-content {
+    background-color: #c1f7e3;
+    padding: 7%;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
 
 /** BUTTTONS **/
 
@@ -325,6 +333,7 @@ footer a {
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     border: outset 1px aquamarine;
+    box-shadow: 0 1px 3px 0 #484a4d;    
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
@@ -682,6 +691,11 @@ span.vertical-line {
 
 
 /* Allauth form formatting */
+
+#account {
+    margin-top: 120px !important;
+    min-height: calc(100vh - 120px);
+}
 
 .allauth-headings-custom {
     font-family: "Big Shoulders Display", sans-serif;
