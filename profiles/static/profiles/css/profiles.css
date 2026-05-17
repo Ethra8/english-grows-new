@@ -1,0 +1,162 @@
+#profile-header {
+    margin-top: 120px;
+}
+
+#profile.container {
+    min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
+    padding: 0 3%;
+    max-width: 70%;
+}
+
+#profile h1 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 3.5rem;
+    color: #003366;
+}
+
+#profile h2 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
+    max-width: 55%;
+    margin-top: 40px;
+    line-height: 1.3 !important;
+}
+
+#profile h3 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    color: #003366;
+}
+
+#profile .btn-update {
+    width: 100%;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background: #003366;
+    color: white;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    border: outset 1px aquamarine;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/* col with order list w. details */
+/* #profile .col-lg-8 {
+    padding-left: 60px;
+} */
+
+#profile .fa-solid {
+    color: #c1f7e3;;
+    font-size: 1.5rem;
+}
+
+#profile .btn-custom {
+    min-width: 100%;
+    max-width: 280px;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+
+#profile .btn-custom:hover,
+#profile .btn-update:hover {
+    border: outset 1px #c1f7e3;
+    box-shadow: 0 1px 3px 0 #003366;
+}
+
+.account-info {
+    background-color: #c1f7e3;
+    /* width: fit-content; */
+    padding: 40px 3%;
+    margin: -50px auto 60px !important;
+    box-shadow: 0 1px 3px 0 #003366;
+    border-radius: 10px;
+}
+
+.order-history {
+    min-height: fit-content; /* height of profile form + submit button */
+    overflow-y: auto;
+}
+
+#ordersAccordion .card {
+    padding: 10px 20px;
+    margin: 20px auto;
+    height: 100%;
+    max-height: 100%; /* height of profile form + submit button */
+    border-radius: 10px !important;
+    border: solid 2px #003366;
+    background-color: teal;
+}
+
+#ordersAccordion .card-header {
+    color: white;
+}
+
+#ordersAccordion .card-body {
+    height: 100%;
+    max-height: 100%; /* height of profile form + submit button */
+    border-radius: 20px !important;
+    border: solid 2px #003366;
+    background-color: antiquewhite;
+}
+
+#profile .btn {
+    background-color: #003366;
+    color: antiquewhite;
+    text-transform: uppercase;
+}
+
+#profile-update-form .form-control {
+    color: #000;
+    border-radius: 20px;
+}
+
+#profile-update-form input::placeholder {
+    color: #aab7c4;
+}
+
+#id_default_country,
+#id_default_country option:not(:first-child) {
+    color: #000;
+}
+
+/* color of placeholder in CountryField */
+#id_default_country option:first-child {
+    color: #aab7c4;
+}
+
+
+@media (max-width: 1199.99px) {
+
+    #profile.container {
+        min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
+        padding: 0 7%;
+        max-width: 90%;
+    }
+
+}
+
+
+@media (max-width: 991.99px) {
+
+    #profile.container {
+        min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
+        padding: 0 7%;
+        max-width: 100%;
+    }
+
+    .account-info {
+        margin: 40px auto 60px !important;
+    }
+
+    #profile h2 {
+        max-width: 100%;
+        margin-top: 40px;
+        line-height: 1.3 !important;
+    }
+
+}
