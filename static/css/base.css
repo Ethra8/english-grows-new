@@ -1,3 +1,6 @@
+/* background home color 
+rgba(0, 103, 108) */
+
 body {
     background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -122,13 +125,13 @@ a.text-white:hover {
 .logo {
     margin-top: 0;
     padding-top: 0;
-    height: 6.5rem;
-    width: 6.5rem;
+    height: 5.5rem;
+    width: 5.5rem;
 }
 
-.icon-nav {
+/* .icon-nav {
     color: #fff;
-}
+} */
 
 .list-inline-item {
     padding-right: 14px;
@@ -136,7 +139,7 @@ a.text-white:hover {
 
 .list-inline-item p:hover,
 .list-inline-item .icon-nav:hover {
-    color: #c1f7e3 !important;
+    color: #c1f7e3;
     text-align: left;
 }
 
@@ -148,7 +151,7 @@ a.text-white:hover {
 
 .fa-circle-user {
     /* color: #82fae0 ; */
-    color: aquamarine;
+    color: #6afae1;
     font-size: 30px !important;
 }
 
@@ -165,7 +168,7 @@ a.text-white:hover {
     position: relative;
     left: 0;
     right: 0;
-    margin-top: 60px;
+    /* margin-top: 60px; */
 }
 
 footer a {
@@ -360,20 +363,22 @@ footer a {
 }
 
 .index-cta-button {
-    background: aquamarine;
-    color: #003366;
+    background: #003366 ;
+    color: aquamarine;
     border: 1px solid #003366;
     min-width: 220px;
     font-size: 1rem;
     border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
     transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
 }
 
 .index-cta-button:hover,
 .index-cta-button:active,
 .index-cta-button:focus {
-    background-color: #003366;
-    color: white;
+    background-color: #c1f7e3;
+    color: #003366;
+    font-weight: 400;
 }
 
 .btn-outline-custom {
@@ -494,7 +499,8 @@ span.btt-link:hover {
 /* Index */
 
 #index {
-    min-height: calc(100vh - 120px) ;
+    min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
+    padding: 60px 3%;
     margin-top: 120px;
 }
 
@@ -812,7 +818,7 @@ span.vertical-line {
 
 
 /* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
+/* @media (min-width: 992px) {
     .fixed-top-desktop-only {
         position: fixed;
         top: 0;
@@ -823,9 +829,8 @@ span.vertical-line {
 
     #index {
         padding: 60px 3%;
-        /* max-width: 1300px; */
     }
-}
+} */
 
 
 @media (min-width: 576px) {
