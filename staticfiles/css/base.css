@@ -11,6 +11,7 @@ body {
     flex-direction: column;  
 }
 
+
 #checkout-page.container {
     max-width: 95% !important;
 }
@@ -307,6 +308,7 @@ footer a {
 
 .dropdown-menu {
     background-color: #c1f7e3;
+    box-shadow: 0 1px 3px 0 #737577;    
 }
 
 .allauth-form-inner-content {
@@ -324,7 +326,7 @@ footer a {
 .allauth-form-inner-content input.btn,
 .allauth-form-inner-content form input.btn {
     width: 100%;
-    max-width: 320px; 
+    /* max-width: 320px;  */
     border-radius: 10px;
     font-size: 1.1rem;
     background: #003366;
@@ -358,7 +360,7 @@ footer a {
 
 .btn-custom-teal {
     width: 100%;
-    max-width: 320px;
+    /* max-width: 320px; */
     background: teal;
     color: white;
     text-transform: uppercase;
