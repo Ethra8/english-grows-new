@@ -24,7 +24,9 @@
         <div class="row">
             <div class="col">
                 <!-- <hr> -->
-                <h1 class="mt-5 mb-4">My Profile</h1>
+                <h1 class="mt-5 mb-4">My Profile <br>
+                    <small><small>User: {{ user.username }}</small></small> <br>
+                    <small><small>Level: {{ request.user.profile.level }}</small></small></h1>
                 <h2>Manage your account details, bookings and course details</h2>
                 <!-- <hr class="mb-4"> -->
             </div>

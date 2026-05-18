@@ -1,15 +1,3 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
-from .models import UserProfile
-from .forms import UserProfileForm
-# from checkout.models import Order
-
-
-# ---------------------------
-# PROFILE LANDING PAGE
-# ---------------------------
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -17,9 +5,17 @@ from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from .forms import UserProfileForm
 
+print("PROFILES VIEWS.PY HAS BEEN IMPORTED")
 
 @login_required
 def profile(request):
+    print("PROFILE VIEW IS RUNNING")
+
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    print("LOGGED-IN USER:", request.user)
+    print("PROFILE LEVEL RAW:", user_profile.level)
+    print("PROFILE LEVEL DISPLAY:", user_profile.get_level_display())
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':

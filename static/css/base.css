@@ -308,6 +308,7 @@ footer a {
 
 .dropdown-menu {
     background-color: #c1f7e3;
+    box-shadow: 0 1px 3px 0 #737577;    
 }
 
 .allauth-form-inner-content {
