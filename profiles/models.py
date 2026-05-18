@@ -9,7 +9,7 @@ from django_countries.fields import CountryField
 class Company(models.Model):
     """
     A company or organisation that can pay for courses
-    for multiple workers/users.
+    for multiple employees/users.
     """
 
     name = models.CharField(max_length=255)
@@ -75,30 +75,34 @@ class UserProfile(models.Model):
 
     ROLE_INDIVIDUAL = "individual"
     ROLE_COMPANY_ADMIN = "company_admin"
-    ROLE_WORKER = "worker"
+    ROLE_EMPLOYEE = "employee"
 
     ROLE_CHOICES = [
         (ROLE_INDIVIDUAL, "Individual Student"),
         (ROLE_COMPANY_ADMIN, "Company Admin"),
-        (ROLE_WORKER, "Worker"),
+        (ROLE_EMPLOYEE, "Employee"),
     ]
 
-    LEVEL_UNKNOWN = "unknown"
-    LEVEL_A1 = "A1"
-    LEVEL_A2 = "A2"
-    LEVEL_B1 = "B1"
-    LEVEL_B2 = "B2"
-    LEVEL_C1 = "C1"
-    LEVEL_C2 = "C2"
+    LEVEL_UNKNOWN = "Pending"
+    LEVEL_A1 = "A1 Beginner"
+    LEVEL_A2 = "A2 Elementary"
+    LEVEL_B1 = "B1 Pre-Intermediate"
+    LEVEL_B2_1 = "B2.1 Low Intermediate"
+    LEVEL_B2_2 = "B2.2 High Intermediate"
+    LEVEL_C1_1 = "C1.1 Low Advance"
+    LEVEL_C1_2 = "C1.2 High Advance"
+    LEVEL_C2 = "C2 Proficiency"
 
     LEVEL_CHOICES = [
-        (LEVEL_UNKNOWN, "Unknown"),
-        (LEVEL_A1, "A1"),
-        (LEVEL_A2, "A2"),
-        (LEVEL_B1, "B1"),
-        (LEVEL_B2, "B2"),
-        (LEVEL_C1, "C1"),
-        (LEVEL_C2, "C2"),
+        (LEVEL_UNKNOWN, "Pending"),
+        (LEVEL_A1, "A1 Beginner"),
+        (LEVEL_A2, "A2 Elementary"),
+        (LEVEL_B1, "B1 Pre-Intermediate"),
+        (LEVEL_B2_1, "B2.1 Low Intermediate"),
+        (LEVEL_B2_2, "B2.2 High Intermediate"),
+        (LEVEL_C1_1, "C1.1 Low Advance"),
+        (LEVEL_C1_2, "C1.2 High Advance"),
+        (LEVEL_C2, "C2 Proficiency"),
     ]
 
     user = models.OneToOneField(
@@ -117,7 +121,7 @@ class UserProfile(models.Model):
     )
 
     role = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=ROLE_CHOICES,
         default=ROLE_INDIVIDUAL
     )
@@ -129,7 +133,7 @@ class UserProfile(models.Model):
     )
 
     level = models.CharField(
-        max_length=20,
+        max_length=40,
         choices=LEVEL_CHOICES,
         default=LEVEL_UNKNOWN
     )
@@ -142,8 +146,8 @@ class UserProfile(models.Model):
         return self.role == self.ROLE_COMPANY_ADMIN
 
     @property
-    def is_worker(self):
-        return self.role == self.ROLE_WORKER
+    def is_employee(self):
+        return self.role == self.ROLE_EMPLOYEE
 
     @property
     def is_individual(self):
