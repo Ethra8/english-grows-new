@@ -1,17 +1,80 @@
 #profile-header {
-    margin-top: 120px;
+    margin-top: 100px;
 }
 
-/* #profile .overlay {
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    background: rgba(106, 250, 225, 0.1); 
-    z-index: -1;
-} */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+}
 
+.profile-sidebar {
+    background-color: #003b6f;
+    color: #ffffff;
+    padding: 2rem 1.5rem;
+}
+
+.sidebar-user {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.sidebar-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #5ff0df;
+    color: #003b6f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1rem;
+}
+
+.sidebar-user h3 {
+    margin-bottom: 0.3rem;
+}
+
+.sidebar-user span {
+    display: inline-block;
+    border: 1px solid #5ff0df;
+    border-radius: 999px;
+    padding: 0.25rem 1rem;
+    color: #5ff0df;
+    font-size: 0.9rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background-color: #008f8f;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.profile-main {
+    padding: 2rem;
+}
+
+#profile .sidebar {
+    background-color: rgba(4, 34, 62, 1);
+}
 
 #profile .profile-card,
 #profile .course-information-card,
@@ -52,8 +115,7 @@
     color: #003366;
 }
 
-#profile .class-card h2,
-#profile .course-information-card h2 {
+.profile-sidebar h2 {
     font-size: 2.5rem;
     font-weight: 500;
     font-family: "Big Shoulders Display", sans-serif;

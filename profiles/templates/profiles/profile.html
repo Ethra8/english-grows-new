@@ -19,12 +19,25 @@
 {% endblock %}
 
 {% block content %}
-    <div id="profile" class="container">
-    <!-- <div class="overlay"></div> -->
+    <div class="profile-layout">
+
+        {% include "profiles/includes/shared/sidebar.html" %}
+
+        <main class="profile-main">
+            {% if profile.role == "worker" %}
+                {% include "profiles/includes/employee/dashboard.html" %}
+            {% endif %}
+        </main>
+
+    </div>
+
+
+
+    <!-- <div id="profile" class="container">
         <div class="row">
 
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="profile-card col-12"><!-- <hr> -->
+            <div class="sidebar col-12 col-md-6 col-lg-4">
+                <div class="profile-card col-12">
                     <h1 class="mb-4"><span class="text-uppercase">Welcome,</span> {{ request.user.first_name|default:request.user.username }}</h1>
                     {% if request.user.profile.company %}
                         <p><i class="icon-card fa-regular fa-building mr-2"></i><strong></strong> {{ request.user.profile.company.name }}</p>
@@ -70,22 +83,17 @@
             </div>
             <div class="col-12 col-md-6 col-lg-3">
                 {% if request.user.profile.role == "employee" %}
-                    {% include "profiles/includes/employee/employee_left_column.html" %}
+                    {% include "profiles/includes/employee/dashboard.html" %}
                 {% endif %}
             </div>            
         </div>    
         <div class="row">
-            <!-- <div class="col-12 col-md-6 col-lg-4">
-                {% if request.user.profile.role == "employee" %}
-                    {% include "profiles/includes/employee/employee_left_column.html" %}
-                {% endif %}
-            </div>             -->
 
             {% if request.user.profile.role == "individual" %}
                 {% include "profiles/includes/individual/individual_profile.html" %}
 
             {% elif request.user.profile.role == "employee" %}
-                {% include "profiles/includes/employee/employee_profile.html" %}
+                {% include "profiles/includes/employee/update_profile_form.html" %}
 
             {% elif request.user.profile.role == "company_admin" %}
                 {% include "profiles/includes/company_admin/company_admin_profile.html" %}
@@ -93,7 +101,7 @@
 
         </div>
 
-    </div>
+    </div> -->
     {{ profile }}
 {% endblock %}
 

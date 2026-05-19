@@ -1,0 +1,47 @@
+<aside class="profile-sidebar">
+
+    <div class="sidebar-user">
+        <!-- <div class="sidebar-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div> -->
+
+        <h2>{{ request.user.first_name|default:request.user.username }}</h2>
+        {% if profile.role != "individual" %}
+            <span>{{ request.user.profile.get_role_display }}</span>
+        {% endif %}
+        {% if request.user.profile.company %}
+            <p class="text-center mt-4"><i class="icon-card fa-regular fa-building mr-2"></i><strong></strong> {{ request.user.profile.company.name }}</p>
+        {% endif %}
+    </div>
+    <hr>
+
+    <nav class="sidebar-nav" aria-label="Profile navigation">
+
+        <a href="{% url 'profile' %}" class="sidebar-link">
+            <i class="fa-solid fa-house"></i>
+            <span>Overview</span>
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>My Classes</span>
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>My Progress</span>
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="fa-solid fa-folder-open"></i>
+            <span>Materials</span>
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="fa-solid fa-gear"></i>
+            <span>Account Settings</span>
+        </a>
+    </nav>
+    <hr>
+
+</aside>
