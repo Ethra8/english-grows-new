@@ -17,11 +17,11 @@
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
     {% endif %}
     <div class="d-flex gap-5 mt-5">
-      <button class="btn btn-custom" type="submit">
+      <button class="btn btn-custom mr-1" type="submit">
           {% trans 'Sign Out' %}
       </button>
 
-      <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-cancel">
+      <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-cancel ml-1">
           {% trans 'Cancel' %}
       </a>
     </div>
