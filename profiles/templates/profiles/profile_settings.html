@@ -1,0 +1,28 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_title %}| My Profile{% endblock %}
+
+{% block page_header %}
+    <div id="profile-header" class="container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<section class="profile-settings-page">
+    <h1>Account Settings</h1>
+    <p>Update your personal information.</p>
+
+    {% include "profiles/includes/shared/account_settings_form.html" %}
+</section>
+{% endblock %}

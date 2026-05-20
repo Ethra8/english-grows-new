@@ -205,11 +205,22 @@
     color: #003366 !important;
 }
 
+.profile-settings-page {
+    margin: 120px auto 60px !important;
+}
+
+.profile-settings-page h1 {
+    color: #c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+}
+
 .account-info {
     background-color: #c1f7e3;
     /* width: fit-content; */
-    padding: 40px 3%;
-    margin: -220px auto 60px !important;
+    padding: 40px 20px;
+    margin: 0 auto 60px !important;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
 }

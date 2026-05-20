@@ -7,17 +7,17 @@
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
         {% if profile.role != "individual" %}
-            <span>{{ request.user.profile.get_role_display }}</span>
+            <span>{{ request.user.profile.company.name }}</span>
         {% endif %}
         {% if request.user.profile.company %}
-            <p class="text-center mt-4"><i class="icon-card fa-regular fa-building mr-2"></i><strong></strong> {{ request.user.profile.company.name }}</p>
+            <p class="text-center mt-4"><i class="fa-solid fa-user-tie mr-2 mr-2"></i><strong></strong> {{ request.user.profile.get_role_display }}</p>
         {% endif %}
     </div>
     <hr>
 
     <nav class="sidebar-nav" aria-label="Profile navigation">
 
-        <a href="{% url 'profile' %}" class="sidebar-link">
+        <a href="{% url 'profiles:profile' %}" class="sidebar-link">
             <i class="fa-solid fa-house"></i>
             <span>Overview</span>
         </a>
@@ -37,7 +37,7 @@
             <span>Materials</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{% url 'profiles:profile_settings' %}" class="sidebar-link">
             <i class="fa-solid fa-gear"></i>
             <span>Account Settings</span>
         </a>

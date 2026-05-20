@@ -21,7 +21,7 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-            return redirect('profile')
+            return redirect('profiles:profile')
         else:
             messages.error(request, 'Update failed. Please check the form.')
     else:
@@ -34,6 +34,29 @@ def profile(request):
         'profile': user_profile,
         'form': form,
     })
+
+@login_required
+def profile_settings(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=profile, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated.")
+            return redirect("profiles:profile_settings")
+    else:
+        form = UserProfileForm(instance=profile, user=request.user)
+
+    context = {
+        "profile": profile,
+        "form": form,
+    }
+
+    return render(request, "profiles/profile_settings.html", context)
+
+
 # ---------------------------
 # ACCOUNT INFORMATION PAGE
 # ---------------------------
