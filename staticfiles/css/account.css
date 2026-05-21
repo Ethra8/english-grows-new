@@ -1,18 +1,35 @@
 .allauth-form-inner-content {
-    background-color: #c1f7e3;
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 7%;
     border-radius: 10px;
     box-shadow: 0 1px 3px 0 #cfd7df;
 }
 
-.allauth-form-inner-content .btn-cancel
+.allauth-form-inner-content .btn-cancel {
+    width: 100%;
+    /* max-width: 320px;  */
+    border-radius: 5px;
+    font-size: 1.1rem;
+    background: rgb(187, 2, 2);
+    color: white;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: outset 1px aquamarine;
+    box-shadow: 0 1px 3px 0 #484a4d;    
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.allauth-form-inner-content .btn-cancel:hover {
+    background: red;
+}
+
 
 .allauth-form-inner-content button,
 .allauth-form-inner-content input.btn,
 .allauth-form-inner-content form input.btn {
     width: 100%;
     /* max-width: 320px;  */
-    border-radius: 10px;
+    border-radius: 5px;
     font-size: 1.1rem;
     background: #003366;
     color: white;

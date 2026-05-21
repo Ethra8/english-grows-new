@@ -19,34 +19,39 @@
 
     <nav class="sidebar-nav" aria-label="Profile navigation">
 
-        <a href="{% url 'profiles:profile' %}" class="sidebar-link">
+        <a href="{% url 'profiles:profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
             <i class="fa-solid fa-house"></i>
-            <span>Overview</span>
+            <span>Dashboard</span>
         </a>
 
-        <a href="{% url 'profiles:my_course' %}" class="sidebar-link">
+        <a href="{% url 'profiles:my_course' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_course' %}active{% endif %}">
             <i class="fa-solid fa-circle-info"></i>
             <span>Course Info</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
             <i class="fa-solid fa-calendar-days"></i>
             <span>Class Calendar</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
             <i class="fa-solid fa-chart-line"></i>
             <span>My Progress</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
             <i class="fa-solid fa-folder-open"></i>
             <span>Materials</span>
         </a>
 
-        <a href="{% url 'profiles:profile_settings' %}" class="sidebar-link">
+        <a href="{% url 'profiles:my_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
+            <i class="fa-solid fa-folder-open"></i>
+            <span>My Attendance</span>
+        </a>
+
+        <a href="{% url 'profiles:profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'profile_settings' %}active{% endif %}">
             <i class="fa-solid fa-gear"></i>
-            <span>Account Settings</span>
+            <span>Settings</span>
         </a>
     </nav>
     <hr>

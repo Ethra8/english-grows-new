@@ -12,8 +12,7 @@
 {% block page_header %}
     <div id="profile-header" class="container">
         <div class="row">
-            <div class="col">
-            </div>
+            <div class="col"></div>
         </div>
     </div>
 {% endblock %}
@@ -24,9 +23,32 @@
         {% include "profiles/includes/shared/sidebar.html" %}
 
         <main class="profile-main">
-            {% if profile.role == "worker" %}
-                {% include "profiles/includes/employee/dashboard.html" %}
-            {% endif %}
+            {% if profile.role == "company_admin" %}
+                {% include "profiles/includes/company_admin/company_admin_profile.html" %}
+            {% else %}
+                <div class="next-class-card profile-card mb-4">
+                    <h2>Next Class</h2>
+
+                    {% if next_class %}
+                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|date:"l, j F" }}</p>
+                        <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
+                        <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Not Assigned yet" }} {{ active_enrollment.course.teacher.last_name }}</p>
+                        {% if next_class.topic %} 
+                        <p><strong>Topic:</strong> {{ next_class.topic|default:"To be confirmed" }}</p>
+                        {% endif %}
+                        {% if next_class.meeting_link %}
+                            <a href="{{ next_class.meeting_link }}" class="btn-join-class btn btn-custom mt-3" target="_blank" rel="noopener">
+                                <i class="fa-solid fa-video mr-2"></i>
+                                Join Class
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <p>No upcoming class scheduled yet.</p>
+                    {% endif %}
+                </div>
+
+            
+                {% endif %}
         </main>
 
     </div>

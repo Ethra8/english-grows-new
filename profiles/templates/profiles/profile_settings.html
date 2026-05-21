@@ -3,33 +3,31 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-{% endblock %}
-
-{% block extra_title %}| My Profile{% endblock %}
-
-{% block page_header %}
-    <div id="profile-header" class="container">
-        <div class="row">
-            <div class="col">
-            </div>
-        </div>
-    </div>
-{% endblock %}
+{% block extra_title %}| Account Settings{% endblock %}
 
 {% block content %}
+
 {% include "profiles/includes/shared/sidebar.html" %}
+
 <section class="profile-settings-page">
     <div class="row">
         <div class="col-12">
             <h1>Account Settings</h1>
             <p>Update your personal information.</p>
+            <div class="account-settings-form mt-5">
 
-            {% include "profiles/includes/shared/account_settings_form.html" %}
+                <form class="mt-3" action="{% url 'profiles:profile' %}" method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
 
+                    <button class="btn btn-update text-uppercase mt-3" type="submit">
+                        Update Profile
+                    </button>
+                </form>
+            
+            </div>
         </div>
-
     </div>
 </section>
+
 {% endblock %}

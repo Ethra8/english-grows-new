@@ -125,57 +125,47 @@ def my_course(request):
 
     return render(request, "profiles/my_course.html", context)
 
-# ---------------------------
-# ACCOUNT INFORMATION PAGE
-# ---------------------------
-# @login_required
-# def account_information(request):
-#     profile = get_object_or_404(UserProfile, user=request.user)
-
-#     if request.method == 'POST':
-#         print("POST DATA:", request.POST)
-#         form = UserProfileForm(request.POST, instance=profile)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Profile updated successfully')
-#             return redirect('profile')  # IMPORTANT
-#         else:
-#             messages.error(request, 'Update failed. Please ensure the form is valid.')
-#     else:
-#         form = UserProfileForm(instance=profile)
-
-#     return render(request, 'profiles/profile.html', {
-#         'profile': profile,
-#         'form': form,
-#     })
 
 
-# ---------------------------
-# ORDER HISTORY PAGE
-# ---------------------------
-# @login_required
-# def order_history(request):
-#     profile = get_object_or_404(UserProfile, user=request.user)
-#     orders = Order.objects.filter(user_profile=profile).order_by('-date')
+@login_required
+def my_attendance(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
 
-#     return render(request, 'profiles/order_history.html', {
-#         'profile': profile,
-#         'orders': orders,
-#     })
+    active_enrollment = (
+        CourseEnrollment.objects
+        .filter(
+            student=request.user,
+            status="active"
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .first()
+    )
 
+    recent_attendance = Attendance.objects.none()
 
-# ---------------------------
-# SINGLE ORDER DETAIL
-# ---------------------------
-# @login_required
-# def order_detail(request, order_number):
-#     profile = get_object_or_404(UserProfile, user=request.user)
-#     order = get_object_or_404(Order, order_number=order_number)
+    if active_enrollment:
+        recent_attendance = (
+            Attendance.objects
+            .filter(
+                student=request.user,
+                class_session__course=active_enrollment.course,
+            )
+            .select_related(
+                "class_session",
+                "class_session__course",
+            )
+            .order_by("-class_session__start_time")
+        )
 
-#     messages.info(request, f'This is a past confirmation for order {order_number}. '
-#                            'A confirmation email was sent on the order date.')
+    context = {
+        "profile": profile,
+        "active_enrollment": active_enrollment,
+        "recent_attendance": recent_attendance,
+    }
 
-#     return render(request, 'checkout/checkout_success.html', {
-#         'order': order,
-#         'from_profile': True,
-#     })# Create your views here.
+    return render(request, "profiles/my_attendance.html", context)

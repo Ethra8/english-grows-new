@@ -73,11 +73,13 @@ class UserProfile(models.Model):
     - English level
     """
 
+    ROLE_TEACHER = "teacher"
     ROLE_INDIVIDUAL = "individual"
     ROLE_COMPANY_ADMIN = "company_admin"
     ROLE_EMPLOYEE = "employee"
 
     ROLE_CHOICES = [
+        (ROLE_TEACHER, "Teacher"),
         (ROLE_INDIVIDUAL, "Student Profile"),
         (ROLE_COMPANY_ADMIN, "Company Admin"),
         (ROLE_EMPLOYEE, "Employee"),

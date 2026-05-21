@@ -1,0 +1,82 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+
+{% block content %}
+
+{% include "profiles/includes/shared/sidebar.html" %}
+
+<section class="my-course">
+    
+    <div class="row">   
+        <div class="col-12">
+            <header>
+                <h1>My Attendance</h1>
+                <p>Check your attendance to your current course.</p>
+            </header>
+        </div>
+    </div>
+        {% if active_enrollment %}
+    <div class="row">
+        <div class="col-12">
+            <div class="profile-card mb-4">
+                <p><strong>Total assigned classes:</strong> {{ active_enrollment.total_assigned_classes }}</p>
+                <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
+                <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>
+                <div class="attendance-progress-wrapper mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Attendance</strong>
+                        <span>{{ active_enrollment.attendance_percentage }}%</span>
+                    </div>
+
+                    <progress
+                        class="attendance-progress"
+                        value="{{ active_enrollment.attendance_percentage }}"
+                        max="100">
+                        {{ active_enrollment.attendance_percentage }}%
+                    </progress>
+                </div>                
+                {% if active_enrollment.has_low_attendance_warning %}
+                <div class="attendance-warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Attendance is below the recommended level.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="profile-card mb-4">
+                <h2>Attendance Record</h2>
+
+                {% if recent_attendance %}
+                    {% for record in recent_attendance %}
+                        <p>
+                            <strong>{{ record.class_session.start_time|date:"d/m/Y" }}</strong>
+                            — {{ record.class_session.title }}
+                        </p>
+                        <p>
+                            Status: {{ record.get_status_display }}
+                            {% if record.minutes_late %}
+                                — {{ record.minutes_late }} minutes late
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                {% else %}
+                    <p>No attendance records yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="row">
+        <div class="profile-card">
+            <h2>No active course assigned yet</h2>
+            <p>Your course information will appear here once you are enrolled in a course.</p>
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

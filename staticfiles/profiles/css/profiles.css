@@ -1,38 +1,32 @@
 #profile-header {
-    margin-top: 120px;
+    margin-top: 100px;
 }
 
-#profile.container {
-    min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-    padding: 0 3%;
-    max-width: 70%;
+.profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
 }
 
-#profile h1 {
-    font-family: "Big Shoulders Display", sans-serif;
-    font-weight: 400;
-    font-size: 3.5rem;
-    color: #003366;
+
+/* ****** BUTTONS **************************************** */
+
+#profile .btn-custom {
+    max-width: 98%;
+    /* max-width: 320px; */
+    border: outset 1px #003366;
+    box-shadow: 0 2px 3px 0 #003366;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-#profile h2 {
-    font-size: 1.3rem;
-    font-weight: 400;
-    font-family: 'Montserrat', sans-serif;
-    color: #ffffff;
-    max-width: 55%;
-    margin-top: 40px;
-    line-height: 1.3 !important;
+#profile .btn-custom:hover,
+.profile-settings-page .btn-update:hover {
+    border: outset 1px rgba(106, 250, 225, 1);
+    box-shadow: 0 0px 3px 0 #003366;
+    color: aquamarine;
 }
 
-#profile h3 {
-    font-family: "Big Shoulders Display", sans-serif;
-    font-weight: 400;
-    font-size: 2.5rem;
-    color: #003366;
-}
-
-#profile .btn-update {
+.profile-settings-page .btn-update {
     width: 100%;
     border-radius: 10px;
     font-size: 1.1rem;
@@ -45,37 +39,219 @@
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-/* col with order list w. details */
-/* #profile .col-lg-8 {
-    padding-left: 60px;
+.sidebar-nav .btn-join-class {
+    background-color: rgba(106, 250, 225, 1) !important;
+    color: #003366 !important;
+}
+
+
+/*********************** SIDEBAR ***************************/
+
+.profile-sidebar {
+    background-color: #003b6f;
+    color: #ffffff;
+    padding: 2rem 1.5rem;
+}
+
+.profile-sidebar h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    font-family: "Big Shoulders Display", sans-serif;
+    color: #ffffff;
+    line-height: 1.3 !important;
+    text-transform: capitalize;
+}
+
+.sidebar-user {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* .sidebar-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #5ff0df;
+    color: #003b6f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1rem;
 } */
 
-#profile .fa-solid {
-    color: #c1f7e3;;
+.sidebar-user h3 {
+    margin-bottom: 0.3rem;
+}
+
+.sidebar-user span {
+    display: inline-block;
+    border: 1px solid #5ff0df;
+    border-radius: 999px;
+    padding: 0.25rem 1rem;
+    color: #5ff0df;
+    font-size: 0.9rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background-color: #008f8f;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+/******************** MAIN PROFILE *********************************/
+
+.profile-main {
+    padding: 2rem;
+}
+
+/* #profile .sidebar {
+    background-color: rgba(4, 34, 62, 1);
+} */
+
+#profile .icon-card {
+    color: #003366;
     font-size: 1.5rem;
 }
 
-#profile .btn-custom {
-    min-width: 100%;
-    max-width: 280px;
-    box-shadow: 0 1px 3px 0 #e6ebf1;
-    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
-}
-
-#profile .btn-custom:hover,
-#profile .btn-update:hover {
-    border: outset 1px #c1f7e3;
+.profile-card,
+#profile .course-information-card,
+#profile .class-card {
+    border-radius: 5px;
+    padding: 30px;
     box-shadow: 0 1px 3px 0 #003366;
+    /* max-width: 98%;
+    max-height: 95%;
+    min-height: 95%; */
+    /* min-width: 300px; */
+    min-width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+} 
+
+#profile .class-card h2 {
+    color: #ffffff;
 }
 
-.account-info {
+#profile .course-information-card h2 {
+    color: #003366;
+}
+
+#profile .profile-card p,
+#profile .course-information-card p,
+#profile .class-card p {
+    color: #003366;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    font-weight: 500;
+    padding: 0 !important;
+    line-height: 1.2;
+}
+
+#profile h4 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    color: #003366;
+}
+
+/* .profile-level {
+    background-color: #c1f7e3;
+    padding: 10px 15px;
+    border-radius: 5px;
+    max-width: fit-content;
+} */
+
+/* #profile .profile-card {
+    background-color: #c1f7e3;
+}
+
+#profile .course-information-card {
+    background: rgba(255, 255, 255, 0.9); 
+}
+
+#profile .class-card {
+    background-color: rgba(106, 250, 225, 0.5);
+}
+
+#profile.container {
+    min-height: calc(100vh - 120px) ; 
+    padding: 0 4%;
+    max-width: 100%;
+}
+
+#profile h1 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 500;
+    font-size: 3.5rem;
+    color: #003366;
+} */
+
+
+/* ************* COURSE INFO ***************************************** */
+
+.my-course {
+    margin: 70px 0 60px 7% !important;
+}
+
+.my-course header h1 {
+    color:#c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+}
+
+.my-course header p {
+    color: antiquewhite;
+}
+
+.my-course-card
+
+
+/* *********** ACCOUNT SETTINGS PAGE ***************************** */
+
+.profile-settings-page {
+    margin: 70px 0 60px 7% !important;
+}
+
+.profile-settings-page h1 {
+    color: #c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+}
+
+.profile-settings-page p {
+    color: whitesmoke;
+}
+
+.account-settings-form {
     background-color: #c1f7e3;
     /* width: fit-content; */
-    padding: 40px 3%;
-    margin: -50px auto 60px !important;
+    padding: 20px 20px;
+    margin: 0 auto 60px !important;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
 }
+
+
+/* ******* ORDER HISTORY: INDIVIDUAL USER ********************* */
 
 .order-history {
     min-height: fit-content; /* height of profile form + submit button */
@@ -132,31 +308,36 @@
 
 @media (max-width: 1199.99px) {
 
-    #profile.container {
-        min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-        padding: 0 7%;
-        max-width: 90%;
-    }
+    /* #profile.container {
+        min-height: calc(100vh - 120px) ;
+        padding: 0;
+        max-width: 100%;
+    } */
 
 }
 
 
 @media (max-width: 991.99px) {
 
-    #profile.container {
-        min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-        padding: 0 7%;
+    /* #profile.container {
+        min-height: calc(100vh - 120px) ;
+        padding: 0;
         max-width: 100%;
-    }
+    } */
 
-    .account-info {
+    /* .account-info {
         margin: 40px auto 60px !important;
-    }
+    } */
 
     #profile h2 {
         max-width: 100%;
-        margin-top: 40px;
+        /* margin-top: 40px; */
         line-height: 1.3 !important;
     }
+
+    #profile .btn-custom {
+        max-width: 100%;
+    }
+
 
 }

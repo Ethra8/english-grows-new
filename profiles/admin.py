@@ -47,12 +47,37 @@ class CustomUserAdmin(UserAdmin):
         'profile__company',
     )
 
+    list_filter = (
+        'profile__role',
+        'profile__company',
+        'is_staff',
+        'is_active',
+        'is_superuser',
+    )
+
+    search_fields = (
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+        'profile__role',
+        'profile__company__name',
+    )
+
+    ordering = (
+        'profile__role',
+        'last_name',
+        'first_name',
+        'username',
+    )
+
     def get_role(self, obj):
         if hasattr(obj, 'profile') and obj.profile.role:
             return obj.profile.get_role_display()
         return '-'
 
     get_role.short_description = 'Role'
+    get_role.admin_order_field = 'profile__role'
 
     def get_company(self, obj):
         if hasattr(obj, 'profile') and obj.profile.company:
@@ -60,7 +85,7 @@ class CustomUserAdmin(UserAdmin):
         return '-'
 
     get_company.short_description = 'Company'
-
+    get_company.admin_order_field = 'profile__company__name'
 
 class CompanyUserProfileInline(admin.TabularInline):
     model = UserProfile

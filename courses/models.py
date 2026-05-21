@@ -36,7 +36,7 @@ class Course(models.Model):
     """
 
     STATUS_CHOICES = [
-        ("planned", "Planned"),
+        ("confirmed", "Confirmed"),
         ("active", "Active"),
         ("completed", "Completed"),
         ("cancelled", "Cancelled"),
@@ -73,7 +73,7 @@ class Course(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default="planned"
+        default="confirmed"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
