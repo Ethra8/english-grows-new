@@ -6,8 +6,10 @@
         </div> -->
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
-        {% if profile.role != "individual" %}
+        {% if request.user.profile.role != "individual" %}
             <span>{{ request.user.profile.company.name }}</span>
+        {% else %}
+            <span>{{ request.user.profile.get_role_display|default:"Exam Preparation" }}</span>
         {% endif %}
         {% if request.user.profile.company %}
             <p class="text-center mt-4"><i class="fa-solid fa-user-tie mr-2 mr-2"></i><strong></strong> {{ request.user.profile.get_role_display }}</p>
@@ -20,6 +22,11 @@
         <a href="{% url 'profiles:profile' %}" class="sidebar-link">
             <i class="fa-solid fa-house"></i>
             <span>Overview</span>
+        </a>
+
+        <a href="{% url 'profiles:my_course' %}" class="sidebar-link">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>My Course</span>
         </a>
 
         <a href="#" class="sidebar-link">
