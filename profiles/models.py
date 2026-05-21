@@ -78,7 +78,7 @@ class UserProfile(models.Model):
     ROLE_EMPLOYEE = "employee"
 
     ROLE_CHOICES = [
-        (ROLE_INDIVIDUAL, "Individual Student"),
+        (ROLE_INDIVIDUAL, "Student Profile"),
         (ROLE_COMPANY_ADMIN, "Company Admin"),
         (ROLE_EMPLOYEE, "Employee"),
     ]
@@ -105,6 +105,16 @@ class UserProfile(models.Model):
         (LEVEL_C2, "C2 Proficiency"),
     ]
 
+    NATIVE_LANGUAGE_CHOICES = [
+        ("", "Native language"),
+        ("es", "Spanish"),
+        ("fr", "French"),
+        ("it", "Italian"),
+        ("de", "German"),
+        ("pt", "Portuguese"),
+        ("other", "Other"),
+    ]
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -126,8 +136,14 @@ class UserProfile(models.Model):
         default=ROLE_INDIVIDUAL
     )
 
+    native_language = models.CharField(
+        max_length=20,
+        choices=NATIVE_LANGUAGE_CHOICES,
+        blank=True,
+    )
+
     country = CountryField(
-        blank_label="Country",
+        blank_label="Country of origin",
         null=True,
         blank=True
     )

@@ -25,6 +25,7 @@ class UserProfileForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'native_language',
             'country',
         ]
 
@@ -45,6 +46,7 @@ class UserProfileForm(forms.ModelForm):
             'first_name': 'First name',
             'last_name': 'Last name',
             'email': 'Email address',
+            'native_language': 'Native Language',
             'country': 'Country',
         }
 

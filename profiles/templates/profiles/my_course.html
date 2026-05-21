@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <div id="profile-header" class="container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="profile-layout">
+
+    {% include "profiles/includes/shared/sidebar.html" %}
+
+    <main class="my-course">
+        <div class="row">
+            <div class="col-12">
+        <header>
+            <h1>Course Information</h1>
+            <p>View your course details.</p>
+        </header>
+
+        {% if active_enrollment %}
+
+            <div class="profile-card mb-4">
+
+                <p><strong>Course:</strong> {{ active_enrollment.course.course_type.name }}</p>
+
+                {% if active_enrollment.course.company %}
+                    <p><strong>Company:</strong> {{ active_enrollment.course.company.name }}</p>
+                {% endif %}
+
+                {% if active_enrollment.course.teacher %}
+                    <p>
+                        <strong>Teacher:</strong>
+                        {{ active_enrollment.course.teacher.first_name }}
+                        {{ active_enrollment.course.teacher.last_name }}
+                    </p>
+                {% else %}
+                    <p><strong>Teacher:</strong> Not assigned yet</p>
+                {% endif %}
+
+                <p><strong>Start date:</strong> {{ active_enrollment.course.start_date|date:"d/m/Y"|default:"Not confirmed yet" }}</p>
+                <p><strong>End date:</strong> {{ active_enrollment.course.end_date|date:"d/m/Y"|default:"Not confirmed yet" }}</p>
+                <p><strong>Status:</strong> {{ active_enrollment.course.get_status_display }}</p>
+            </div>
+
+            </div>
+        </div>
+
+
+            <div class="profile-card mb-4">
+                <h2>Student Performance</h2>
+
+                <p><strong>Total assigned classes:</strong> {{ active_enrollment.total_assigned_classes }}</p>
+                <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
+                <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>
+                <p><strong>Attendance:</strong> {{ active_enrollment.attendance_percentage }}%</p>
+
+                {% if active_enrollment.has_low_attendance_warning %}
+                    <div class="attendance-warning">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Attendance is below the recommended level.
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-card mb-4">
+                <h2>Next Class</h2>
+
+                {% if next_class %}
+                    <p><strong>Date:</strong> {{ next_class.start_time|date:"d/m/Y" }}</p>
+                    <p><strong>Time:</strong> {{ next_class.start_time|time:"H:i" }}</p>
+                    <p><strong>Topic:</strong> {{ next_class.topic|default:"To be confirmed" }}</p>
+
+                    {% if next_class.meeting_link %}
+                        <a href="{{ next_class.meeting_link }}" class="btn btn-custom mt-3" target="_blank" rel="noopener">
+                            <i class="fa-solid fa-video mr-2"></i>
+                            Join Class
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <p>No upcoming class scheduled yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="profile-card">
+                <h2>Recent Attendance</h2>
+
+                {% if recent_attendance %}
+                    {% for record in recent_attendance %}
+                        <div class="attendance-row">
+                            <p>
+                                <strong>{{ record.class_session.start_time|date:"d/m/Y" }}</strong>
+                                — {{ record.class_session.title }}
+                            </p>
+                            <p>
+                                Status: {{ record.get_status_display }}
+                                {% if record.minutes_late %}
+                                    — {{ record.minutes_late }} minutes late
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No attendance records yet.</p>
+                {% endif %}
+            </div>
+
+        {% else %}
+
+            <div class="profile-card">
+                <h2>No active course assigned yet</h2>
+                <p>Your course information will appear here once you are enrolled in a course.</p>
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+{% endblock %}

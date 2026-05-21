@@ -51,14 +51,15 @@ INSTALLED_APPS = [
      
     # Third-party apps
     'django_countries',
-    "crispy_forms",
-    "crispy_bootstrap4",
+    'crispy_forms',
+    'crispy_bootstrap4',
     'allauth',
     'allauth.account',    
     
     # Local apps
     'home',
     'profiles',
+    'courses',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"

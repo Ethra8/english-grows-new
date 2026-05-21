@@ -19,10 +19,17 @@
 {% endblock %}
 
 {% block content %}
+{% include "profiles/includes/shared/sidebar.html" %}
 <section class="profile-settings-page">
-    <h1>Account Settings</h1>
-    <p>Update your personal information.</p>
+    <div class="row">
+        <div class="col-12">
+            <h1>Account Settings</h1>
+            <p>Update your personal information.</p>
 
-    {% include "profiles/includes/shared/account_settings_form.html" %}
+            {% include "profiles/includes/shared/account_settings_form.html" %}
+
+        </div>
+
+    </div>
 </section>
 {% endblock %}
