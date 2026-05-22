@@ -130,62 +130,86 @@ class Course(models.Model):
 
     def generate_class_sessions(self):
         """
-        Automatically creates ClassSession objects for this course
-        based on:
-        - total_hours
-        - class_duration
+        Creates the required ClassSession objects for this course based on:
+        - start_date
         - number_of_classes
         - timetable slots
-        - active enrolments
+        - class_duration
 
         Also creates scheduled Attendance records for every active enrolled student.
+
+        This method is idempotent:
+        - running it twice does not duplicate class sessions
+        - adding a new student only creates missing attendance records
         """
 
         if not self.start_date:
-            raise ValidationError("This course needs a start date before sessions can be generated.")
+            raise ValidationError(
+                "This course needs a start date before sessions can be generated."
+            )
 
         if not self.number_of_classes:
-            raise ValidationError("This course needs total hours and class duration before sessions can be generated.")
+            raise ValidationError(
+                "This course needs total hours and class duration before sessions can be generated."
+            )
 
-        timetable_slots = self.timetable_slots.all().order_by("day_of_week", "start_time")
+        timetable_slots = self.timetable_slots.all().order_by(
+            "day_of_week",
+            "start_time"
+        )
 
         if not timetable_slots.exists():
-            raise ValidationError("This course needs at least one timetable slot.")
+            raise ValidationError(
+                "This course needs at least one timetable slot."
+            )
 
-        active_enrollments = self.enrollments.filter(status="active").select_related("student")
+        active_enrollments = self.enrollments.filter(
+            status="active"
+        ).select_related("student")
+
         enrolled_students = [enrollment.student for enrollment in active_enrollments]
 
         if not enrolled_students:
-            raise ValidationError("This course has no active enrolled students.")
+            raise ValidationError(
+                "This course has no active enrolled students."
+            )
+
+        class_duration_minutes = int(self.class_duration * Decimal("60"))
 
         sessions_created = 0
         attendances_created = 0
+        scheduled_class_count = 0
 
         current_date = self.start_date
-        class_duration_minutes = int(self.class_duration * Decimal("60"))
+        selected_sessions = []
 
-        while sessions_created < self.number_of_classes:
-            weekday = current_date.isoweekday()  # Monday = 1, Sunday = 7
+        while scheduled_class_count < self.number_of_classes:
+            weekday = current_date.isoweekday()
 
             slots_for_day = timetable_slots.filter(day_of_week=weekday)
 
             for slot in slots_for_day:
-                if sessions_created >= self.number_of_classes:
+                if scheduled_class_count >= self.number_of_classes:
                     break
 
                 naive_start = datetime.combine(current_date, slot.start_time)
+
                 aware_start = timezone.make_aware(
                     naive_start,
                     timezone.get_current_timezone()
                 )
 
-                aware_end = aware_start + timedelta(minutes=class_duration_minutes)
+                aware_end = aware_start + timedelta(
+                    minutes=class_duration_minutes
+                )
+
+                class_number = scheduled_class_count + 1
 
                 class_session, created = ClassSession.objects.get_or_create(
                     course=self,
                     start_time=aware_start,
                     defaults={
-                        "title": f"{self.name} - Class {sessions_created + 1}",
+                        "title": f"{self.name} - Class {class_number}",
                         "end_time": aware_end,
                         "topic": "",
                         "meeting_link": "",
@@ -193,27 +217,33 @@ class Course(models.Model):
                     }
                 )
 
+                selected_sessions.append(class_session)
+
                 if created:
                     sessions_created += 1
 
-                for student in enrolled_students:
-                    _, attendance_created = Attendance.objects.get_or_create(
-                        class_session=class_session,
-                        student=student,
-                        defaults={
-                            "status": "scheduled",
-                        }
-                    )
-
-                    if attendance_created:
-                        attendances_created += 1
+                scheduled_class_count += 1
 
             current_date += timedelta(days=1)
+
+        for class_session in selected_sessions:
+            for student in enrolled_students:
+                _, attendance_created = Attendance.objects.get_or_create(
+                    class_session=class_session,
+                    student=student,
+                    defaults={
+                        "status": "scheduled",
+                    }
+                )
+
+                if attendance_created:
+                    attendances_created += 1
 
         return {
             "sessions_created": sessions_created,
             "attendances_created": attendances_created,
             "students_count": len(enrolled_students),
+            "total_scheduled_classes": scheduled_class_count,
         }
 
     def __str__(self):
@@ -471,8 +501,13 @@ class Attendance(models.Model):
     recorded_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ("class_session", "student")
         ordering = ["class_session__start_time", "student"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["class_session", "student"],
+                name="unique_attendance_per_student_per_session"
+            )
+        ]
 
     def __str__(self):
         return f"{self.student} - {self.class_session} - {self.status}"
