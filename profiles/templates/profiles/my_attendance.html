@@ -56,18 +56,20 @@
                 {% if recent_attendance %}
                     {% for record in recent_attendance %}
                         <p>
-                            <strong>{{ record.class_session.start_time|date:"d/m/Y" }}</strong>
+                            <strong>{{ record.class_session.start_time|date:"l, j F Y" }}</strong>
                             — {{ record.class_session.title }}
                         </p>
+
                         <p>
                             Status: {{ record.get_status_display }}
+
                             {% if record.minutes_late %}
                                 — {{ record.minutes_late }} minutes late
                             {% endif %}
                         </p>
                     {% endfor %}
                 {% else %}
-                    <p>No attendance records yet.</p>
+                    <p>No attended classes recorded yet.</p>
                 {% endif %}
             </div>
         </div>

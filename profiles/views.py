@@ -146,22 +146,19 @@ def my_attendance(request):
         .first()
     )
 
-    recent_attendance = Attendance.objects.none()
-
-    if active_enrollment:
-        recent_attendance = (
-            Attendance.objects
-            .filter(
-                student=request.user,
-                class_session__course=active_enrollment.course,
-            )
-            .select_related(
-                "class_session",
-                "class_session__course",
-            )
-            .order_by("-class_session__start_time")
+    recent_attendance = (
+        Attendance.objects
+        .filter(
+            student=request.user,
+            class_session__course=active_enrollment.course,
+            status="attended",
         )
-
+        .select_related(
+            "class_session",
+            "class_session__course",
+        )
+        .order_by("-class_session__start_time")
+)
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,

@@ -231,6 +231,23 @@
     margin: 70px 0 60px 100px !important;
 }
 
+.my-course .course-card {
+    width: fit-content;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 3px 0 #003366;
+    /* max-width: 98%;
+    max-height: 95%;
+    min-height: 95%; */
+    /* min-width: 300px; */
+    min-width: 340px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.my-course .course-card strong {
+    text-transform: capitalize;
+}
+
 .my-course header h1 {
     color:#c1f7e3;
     font-family: "Big Shoulders Display", sans-serif;

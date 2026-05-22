@@ -30,7 +30,7 @@
                     <h2>Next Class</h2>
 
                     {% if next_class %}
-                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|date:"l, j F" }}</p>
+                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|date:"l, j F Y" }}</p>
                         <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
                         <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Not Assigned yet" }} {{ active_enrollment.course.teacher.last_name }}</p>
                         {% if next_class.topic %} 
