@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.core.exceptions import ValidationError
 from .models import CourseType, Course, CourseTimetableSlot, CourseEnrollment, ClassSession, Attendance
 
 
@@ -108,6 +108,34 @@ class CourseAdmin(admin.ModelAdmin):
         "company",
         "teacher",
     )
+
+    actions = (
+        "generate_class_sessions",
+    )
+
+    def generate_class_sessions(self, request, queryset):
+        for course in queryset:
+            try:
+                result = course.generate_class_sessions()
+
+                self.message_user(
+                    request,
+                    (
+                        f"{course.name}: "
+                        f"{result['sessions_created']} class sessions created, "
+                        f"{result['attendances_created']} attendance records created "
+                        f"for {result['students_count']} enrolled student(s)."
+                    )
+                )
+
+            except ValidationError as error:
+                self.message_user(
+                    request,
+                    f"{course.name}: {error.message}",
+                    level="ERROR"
+                )
+
+    generate_class_sessions.short_description = "Generate class sessions and attendance records"  
 
     inlines = (
         CourseTimetableSlotInline,

@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
+from datetime import datetime, timedelta
 from decimal import Decimal
 from math import ceil
 
@@ -125,6 +127,94 @@ class Course(models.Model):
         # ceil() to make num. of classes a whole number
         # eg: 6.66 classes = 7 classes
         return ceil(self.total_hours / self.class_duration)
+
+    def generate_class_sessions(self):
+        """
+        Automatically creates ClassSession objects for this course
+        based on:
+        - total_hours
+        - class_duration
+        - number_of_classes
+        - timetable slots
+        - active enrolments
+
+        Also creates scheduled Attendance records for every active enrolled student.
+        """
+
+        if not self.start_date:
+            raise ValidationError("This course needs a start date before sessions can be generated.")
+
+        if not self.number_of_classes:
+            raise ValidationError("This course needs total hours and class duration before sessions can be generated.")
+
+        timetable_slots = self.timetable_slots.all().order_by("day_of_week", "start_time")
+
+        if not timetable_slots.exists():
+            raise ValidationError("This course needs at least one timetable slot.")
+
+        active_enrollments = self.enrollments.filter(status="active").select_related("student")
+        enrolled_students = [enrollment.student for enrollment in active_enrollments]
+
+        if not enrolled_students:
+            raise ValidationError("This course has no active enrolled students.")
+
+        sessions_created = 0
+        attendances_created = 0
+
+        current_date = self.start_date
+        class_duration_minutes = int(self.class_duration * Decimal("60"))
+
+        while sessions_created < self.number_of_classes:
+            weekday = current_date.isoweekday()  # Monday = 1, Sunday = 7
+
+            slots_for_day = timetable_slots.filter(day_of_week=weekday)
+
+            for slot in slots_for_day:
+                if sessions_created >= self.number_of_classes:
+                    break
+
+                naive_start = datetime.combine(current_date, slot.start_time)
+                aware_start = timezone.make_aware(
+                    naive_start,
+                    timezone.get_current_timezone()
+                )
+
+                aware_end = aware_start + timedelta(minutes=class_duration_minutes)
+
+                class_session, created = ClassSession.objects.get_or_create(
+                    course=self,
+                    start_time=aware_start,
+                    defaults={
+                        "title": f"{self.name} - Class {sessions_created + 1}",
+                        "end_time": aware_end,
+                        "topic": "",
+                        "meeting_link": "",
+                        "is_cancelled": False,
+                    }
+                )
+
+                if created:
+                    sessions_created += 1
+
+                for student in enrolled_students:
+                    _, attendance_created = Attendance.objects.get_or_create(
+                        class_session=class_session,
+                        student=student,
+                        defaults={
+                            "status": "scheduled",
+                        }
+                    )
+
+                    if attendance_created:
+                        attendances_created += 1
+
+            current_date += timedelta(days=1)
+
+        return {
+            "sessions_created": sessions_created,
+            "attendances_created": attendances_created,
+            "students_count": len(enrolled_students),
+        }
 
     def __str__(self):
         return self.name
@@ -319,6 +409,12 @@ class ClassSession(models.Model):
 
     class Meta:
         ordering = ["start_time"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["course", "start_time"],
+                name="unique_course_session_start_time"
+            )
+        ]
 
     def __str__(self):
         return f"{self.course} - {self.start_time:%d/%m/%Y %H:%M}"
