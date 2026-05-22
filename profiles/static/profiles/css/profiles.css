@@ -165,6 +165,16 @@
     background: rgba(255, 255, 255, 0.9);
 } 
 
+.attendance-percentage-card,
+.detailed-attendance-card {
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 3px 0 #003366;
+    min-width: 340px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+}
+
 #profile .class-card h2 {
     color: #ffffff;
 }
@@ -228,7 +238,8 @@
 /* ************* COURSE INFO ***************************************** */
 
 .my-course {
-    margin: 70px 0 60px 100px !important;
+    margin: 70px auto 60px 100px !important;
+    width: 60%;
 }
 
 .my-course .course-card {
@@ -319,9 +330,11 @@
     overflow-y: auto;
 }
 
-#ordersAccordion .card {
+#ordersAccordion .card,
+.my-course .attendance-record-card,
+#attendance_accordion .card {
     padding: 10px 20px;
-    margin: 20px auto;
+    margin: 0 auto;
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
@@ -329,14 +342,16 @@
     background-color: teal;
 }
 
+#attendance_accordion .card-header,
 #ordersAccordion .card-header {
     color: white;
 }
 
+#attendance_accordion .card-body,
 #ordersAccordion .card-body {
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
-    border-radius: 20px !important;
+    border-radius: 10px !important;
     border: solid 2px #003366;
     background-color: antiquewhite;
 }
@@ -366,16 +381,6 @@
     color: #aab7c4;
 }
 
-
-@media (max-width: 1199.99px) {
-
-    /* #profile.container {
-        min-height: calc(100vh - 120px) ;
-        padding: 0;
-        max-width: 100%;
-    } */
-
-}
 
 
 @media (max-width: 991.99px) {

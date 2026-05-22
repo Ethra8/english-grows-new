@@ -209,7 +209,7 @@ class Course(models.Model):
                     course=self,
                     start_time=aware_start,
                     defaults={
-                        "title": f"{self.name} - Class {class_number}",
+                        "title": f"{self.name} - Lesson {class_number}",
                         "end_time": aware_end,
                         "topic": "",
                         "meeting_link": "",
@@ -310,7 +310,7 @@ class CourseTimetableSlot(models.Model):
 
 class CourseEnrollment(models.Model):
     """
-    Connects a user/student/worker to a specific course.
+    Connects a user/student/employee to a specific course.
     - One course can have many students.
     - One student can be enrolled in many courses.
     - Each enrolment can store its own status/objective.
@@ -366,30 +366,50 @@ class CourseEnrollment(models.Model):
         return self.course.class_sessions.filter(
             is_cancelled=False
         ).count()
-    
-    # Do not store attendance percentage in the database.
-    # Calculate it from Attendance through properties:
+
+    @property
+    def total_completed_classes(self):
+        return Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            class_session__is_cancelled=False,
+        ).exclude(
+            status="scheduled"
+        ).values("class_session").distinct().count()
+
+
     @property
     def classes_attended(self):
         return Attendance.objects.filter(
+            student=self.student,
             class_session__course=self.course,
             class_session__is_cancelled=False,
-            student=self.student,
             status="attended"
-        ).count()
+        ).values("class_session").distinct().count()
+
 
     @property
     def classes_missed(self):
         return Attendance.objects.filter(
+            student=self.student,
             class_session__course=self.course,
             class_session__is_cancelled=False,
-            student=self.student,
             status="missed"
-        ).count()
+        ).values("class_session").distinct().count()
+
+    @property
+    def classes_excused(self):
+        return Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            class_session__is_cancelled=False,
+            status="excused"
+        ).values("class_session").distinct().count()
+
 
     @property
     def attendance_percentage(self):
-        total = self.total_assigned_classes
+        total = self.total_completed_classes
 
         if total == 0:
             return 0
@@ -398,13 +418,12 @@ class CourseEnrollment(models.Model):
 
     @property
     def has_low_attendance_warning(self):
-        total = self.total_assigned_classes
+        total = self.total_completed_classes
 
-        if total < 3:
+        if total == 0:
             return False
 
         return self.attendance_percentage < 75
-
 
 class ClassSession(models.Model):
     """
