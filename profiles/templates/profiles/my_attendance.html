@@ -19,6 +19,12 @@
     <div class="row">
         <div class="col-12">
             <div class="profile-card mb-4">
+                <p><strong>Total course classes:</strong> 
+                {% if active_enrollment.course.number_of_classes %}    
+                    {{ active_enrollment.course.number_of_classes }}</p>
+                {% else %}
+                    Not assigned yet</p>
+                {% endif %}
                 <p><strong>Total assigned classes:</strong> {{ active_enrollment.total_assigned_classes }}</p>
                 <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
                 <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>

@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from .models import CourseType, Course, CourseEnrollment, ClassSession, Attendance
+from .models import CourseType, Course, CourseTimetableSlot, CourseEnrollment, ClassSession, Attendance
 
 
 @admin.register(CourseType)
 class CourseTypeAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "default_hours",
         "is_for_individual",
         "is_for_companies",
     )
@@ -56,16 +57,33 @@ class ClassSessionInline(admin.TabularInline):
     )
 
 
+class CourseTimetableSlotInline(admin.TabularInline):
+    model = CourseTimetableSlot
+    extra = 1
+
+    fields = (
+        "day_of_week",
+        "start_time",
+        "end_time",
+    )
+
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "course_type",
+        "total_hours",
+        "class_duration",
+        "number_of_classes",
         "company",
         "teacher",
         "start_date",
         "end_date",
         "status",
+    )
+
+    readonly_fields = (
+        "number_of_classes",
     )
 
     list_filter = (
@@ -92,6 +110,7 @@ class CourseAdmin(admin.ModelAdmin):
     )
 
     inlines = (
+        CourseTimetableSlotInline,
         CourseEnrollmentInline,
         ClassSessionInline,
     )

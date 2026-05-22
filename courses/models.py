@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
+from decimal import Decimal
+from math import ceil
 
 class CourseType(models.Model):
     """
@@ -16,6 +18,14 @@ class CourseType(models.Model):
 
     name = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True)
+
+    default_hours = models.DecimalField(
+        max_digits=5,
+        decimal_places=1,
+        null=True,
+        blank=True,
+        help_text="Default number of hours for this course type."
+    )
 
     is_for_companies = models.BooleanField(default=False)
     is_for_individual = models.BooleanField(default=False)
@@ -50,6 +60,22 @@ class Course(models.Model):
 
     name = models.CharField(max_length=200)
 
+    total_hours = models.DecimalField(
+        max_digits=5,
+        decimal_places=1,
+        null=True,
+        blank=True,
+        help_text="Actual number of hours for this course."
+    )
+
+    class_duration = models.DecimalField(
+        max_digits=3,
+        decimal_places=1,
+        null=True,
+        blank=True,
+        help_text="Duration of each class in hours, e.g. 1.0, 1.5 or 2.0."
+    )
+
     company = models.ForeignKey(
         "profiles.Company",
         on_delete=models.SET_NULL,
@@ -77,13 +103,89 @@ class Course(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
-
     class Meta:
         ordering = ["-created_at", "name"]
+
+    # If admin creates a Course and leaves total_hours empty,
+    # Django automatically copies the hours from the CourseType.
+    def save(self, *args, **kwargs):
+        if self.total_hours is None and self.course_type.default_hours is not None:
+            self.total_hours = self.course_type.default_hours
+
+        super().save(*args, **kwargs)
+
+    @property
+    def number_of_classes(self):
+        if not self.total_hours or not self.class_duration:
+            return None
+
+        if self.class_duration <= 0:
+            return None
+
+        # ceil() to make num. of classes a whole number
+        # eg: 6.66 classes = 7 classes
+        return ceil(self.total_hours / self.class_duration)
 
     def __str__(self):
         return self.name
 
+
+class CourseTimetableSlot(models.Model):
+    """
+    Weekly timetable slot for a course.
+
+    Examples:
+    - Monday 10:00 - 11:30
+    - Wednesday 18:00 - 19:30
+    """
+
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
+
+    DAY_CHOICES = [
+        (MONDAY, "Monday"),
+        (TUESDAY, "Tuesday"),
+        (WEDNESDAY, "Wednesday"),
+        (THURSDAY, "Thursday"),
+        (FRIDAY, "Friday"),
+        (SATURDAY, "Saturday"),
+        (SUNDAY, "Sunday"),
+    ]
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="timetable_slots"
+    )
+
+    day_of_week = models.PositiveSmallIntegerField(
+        choices=DAY_CHOICES
+    )
+
+    start_time = models.TimeField()
+
+    end_time = models.TimeField()
+
+    class Meta:
+        ordering = ["day_of_week", "start_time"]
+        unique_together = (
+            "course",
+            "day_of_week",
+            "start_time",
+            "end_time",
+        )
+
+    def __str__(self):
+        return (
+            f"{self.course} - "
+            f"{self.get_day_of_week_display()} "
+            f"{self.start_time:%H:%M} - {self.end_time:%H:%M}"
+        )
 
 
 class CourseEnrollment(models.Model):

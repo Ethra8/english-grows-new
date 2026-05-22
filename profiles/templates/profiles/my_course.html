@@ -17,6 +17,16 @@
         <div class="col-12">
             <div class="profile-card mb-4">
                 <h2> {{ active_enrollment.course.course_type.name }}</h2>
+                <p><strong>Total course hours:</strong> 
+                {% if active_enrollment.course.total_hours %}    
+                    {{ active_enrollment.course.total_hours }}</p>
+                {% elif active_enrollment.course.course_type.default_hours %}
+                    {{ active_enrollment.course.course_type.default_hours }}</p>
+                {% else %}
+                 Not assigned yet</p>
+                {% endif %}
+                <p><strong>Class Duration:</strong> {{ active_enrollment.course.class_duration|default:"Not confirmed yet" }}</p>
+                <p><strong>Number of Classes:</strong> {{ active_enrollment.course.number_of_classes|default:"Not confirmed yet" }}</p>
                 <p><strong>Start date:</strong> {{ active_enrollment.course.start_date|date:"d/m/Y"|default:"Not confirmed yet" }}</p>
                 <p><strong>End date:</strong> {{ active_enrollment.course.end_date|date:"d/m/Y"|default:"Not confirmed yet" }}</p>
                 <p><strong>Status:</strong> {{ active_enrollment.course.get_status_display }}</p>
