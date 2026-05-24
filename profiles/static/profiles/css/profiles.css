@@ -132,7 +132,22 @@
 /******************** MAIN PROFILE *********************************/
 
 .profile-main {
-    padding: 2rem;
+    margin: 70px auto 60px 100px !important;
+    /* padding: 70px auto 60px 100px; */
+}
+
+.profile-main h1 {
+    color:#c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+}
+
+.next-class-card {
+    border-radius: 10px;
+    padding: 0 30px 30px;
+    box-shadow: 0 2px 3px 0 #003366;
+    min-width: 340px;
+    max-width: 70%;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .next-class-card h2 {
@@ -156,21 +171,26 @@
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 2px 3px 0 #003366;
-    /* max-width: 98%;
-    max-height: 95%;
-    min-height: 95%; */
-    /* min-width: 300px; */
     min-width: 340px;
     max-width: 70%;
     background: rgba(255, 255, 255, 0.9);
-} 
+}
+
+.attendance-details {
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 3px 0 #003366;
+    min-width: 340px;
+    width: 100%;
+    background: rgba(106, 250, 225, 0.7);
+}
 
 .attendance-percentage-card,
 .detailed-attendance-card {
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 2px 3px 0 #003366;
-    min-width: 340px;
+    /* min-width: 340px; */
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
 }
@@ -299,7 +319,7 @@
 }
 
 
-/* ******** MY ATTENDANCE PAGE */
+/* ******** MY ATTENDANCE PAGE ******************************/
 
 .attendance-progress {
     width: 100%;
@@ -314,46 +334,77 @@
 }
 
 .attendance-progress::-webkit-progress-value {
-    background-color: #009b95;
+    background: linear-gradient(233deg,rgba(0, 128, 128, 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(106, 250, 225, 1) 100%);
     border-radius: 999px;
 }
 
 .attendance-progress::-moz-progress-bar {
-    background-color: #009b95;
+    background: linear-gradient(233deg,rgba(0, 128, 128, 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(106, 250, 225, 1) 100%);
     border-radius: 999px;
 }
 
-/* ******* ORDER HISTORY: INDIVIDUAL USER ********************* */
+/* ******* ATTENDANCE ACCORDION ********************* */
 
-.order-history {
-    min-height: fit-content; /* height of profile form + submit button */
-    overflow-y: auto;
+.wrapper-attendance-accordion {
+    width: 100%;
+    padding-right: 0%;
 }
 
-#ordersAccordion .card,
-.my-course .attendance-record-card,
+#parentAttendanceAccordion .card {
+    padding: 0;
+    margin: 0%; 
+    height: 100%;
+    max-height: 100%;
+    /* width: 100%;  */
+    background: rgba(106, 250, 225, 0);
+    border-radius: 10px !important;
+}
+
+#parentAttendanceAccordion .card-body {
+    padding: 0;
+    margin: 1rem; 
+    height: 100%;
+    max-height: 100%;
+    /* width: 100%;  */
+    background: rgba(106, 250, 225, 0);
+}
+
+/* #parentAttendanceAccordion .card, */
 #attendance_accordion .card {
-    padding: 10px 20px;
+    padding: 0;
     margin: 0 auto;
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
     border: solid 2px #003366;
-    background-color: teal;
+    background: teal;
 }
 
-#attendance_accordion .card-header,
-#ordersAccordion .card-header {
+#parentAttendanceHeading {
     color: white;
+    background-color: teal;
+    border-radius: 10px;
 }
 
-#attendance_accordion .card-body,
-#ordersAccordion .card-body {
+#attendance_accordion .card-header {
+    color: white;
+    background-color: teal;
+    border-radius: 10px;
+}
+
+#attendance_accordion .card-body {
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
-    border: solid 2px #003366;
-    background-color: antiquewhite;
+    background-color: rgba(106, 250, 225, 0.8);
+    margin: 0%;
+    padding: 1rem;
+}
+
+#attendance_accordion .card-body p {
+    line-height: 1.4;
+    margin: 0%;
+    color: #003366;
 }
 
 #profile .btn {

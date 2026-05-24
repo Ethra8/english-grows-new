@@ -52,25 +52,25 @@ def profile(request):
 
 @login_required
 def profile_settings(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == "POST":
-        form = UserProfileForm(request.POST, instance=profile, user=request.user)
+        form = UserProfileForm(request.POST, instance=user_profile, user=request.user)
 
         if form.is_valid():
             form.save()
             messages.success(request, "Your profile has been updated.")
             return redirect("profiles:profile_settings")
+
     else:
-        form = UserProfileForm(instance=profile, user=request.user)
+        form = UserProfileForm(instance=user_profile, user=request.user)
 
     context = {
-        "profile": profile,
+        "profile": user_profile,
         "form": form,
     }
 
     return render(request, "profiles/profile_settings.html", context)
-
 
 @login_required
 def my_course(request):
