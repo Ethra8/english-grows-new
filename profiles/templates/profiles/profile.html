@@ -45,7 +45,7 @@
                         <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
                         <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
                         {% if next_class.topic %} 
-                        <p><strong>Topic:</strong> {{ next_class.topic|default:"To be confirmed" }}</p>
+                        <p><strong>Topic:</strong> {{ next_class.topic }}</p>
                         {% endif %}
                         {% if next_class.meeting_link %}
                             <a href="{{ next_class.meeting_link }}" class="btn-join-class btn btn-custom mt-3" target="_blank" rel="noopener">
