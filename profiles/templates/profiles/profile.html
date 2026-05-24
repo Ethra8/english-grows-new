@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load date_extras %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
@@ -28,14 +29,14 @@
             {% else %}
             <div class="row mb-4">
                 <div class="col-12 pl-0">
-                    <h1>My Course: <br> <strong>{{ active_enrollment.course.course_type.name }}</strong></h1>
+                    <h1>My Course: <br> <span class="text-white">{{ active_enrollment.course.course_type.name }}</span></h1>
                 </div>
             </div>
                 <div class="next-class-card mb-4">
                     <h2>Next Class</h2>
 
                     {% if next_class %}
-                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|date:"l, j F Y" }}</p>
+                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
                         <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
                         <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Not Assigned yet" }} {{ active_enrollment.course.teacher.last_name }}</p>
                         {% if next_class.topic %} 
