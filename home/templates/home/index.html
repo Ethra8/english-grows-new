@@ -4,6 +4,9 @@
 
 {% block page_header %}
 <div class="overlay-birds"></div>
+    <video class="index-top-video" autoplay muted loop playsinline>
+        <source src="{{ MEDIA_URL }}videos/white_birds_video.webm" type="video/mp4">
+    </video>
 
 <div id="index" class="container h-100 w-100">
     <div class="row h-100">
@@ -25,7 +28,7 @@
                         <h2>
                             <a href="" class="index-cta-button btn text-uppercase py-2"
                             aria-label="go to the section with services tailored for professional">
-                                For Professionals
+                                For Professionals <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i>
                             </a>
                         </h2>
                     </div>
@@ -33,7 +36,7 @@
                         <h2>
                             <a href="" class="index-cta-button btn text-uppercase py-2"
                             aria-label="go to the companies section to request a tailored plan for your enterprise">
-                                For Companies
+                                For Companies <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i>
                             </a>
                         </h2>
                     </div>
@@ -41,7 +44,7 @@
                         <h2>
                             <a href="" class="index-cta-button btn text-uppercase py-2"
                             aria-label="go to the section with services tailored for Cambridge exams candidates">
-                                Cambridge Exams
+                                Cambridge Exams <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i>
                             </a>
                         </h2>
                     </div>

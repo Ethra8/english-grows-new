@@ -30,7 +30,7 @@
             {% else %}
             <div class="row mb-4">
                 <div class="col-12 pl-0">
-                    <h1><span class="text-uppercase">My Course:</span> <br> <span class="text-white smaller"><small>{{ active_enrollment.course.course_type.name }}</small></span></h1>
+                    <h1>Dashboard</h1>
                 </div>
             </div>
             <div class="next-class-card">
@@ -50,7 +50,7 @@
                         {% if next_class.meeting_link %}
                             <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
                                 <i class="fa-solid fa-video mr-2"></i>
-                                Join Class
+                                Join Class <i class="fa-solid fa-chevron-right ml-5 float-right mt-1"></i>
                             </a>
                         {% endif %}
                     {% else %}

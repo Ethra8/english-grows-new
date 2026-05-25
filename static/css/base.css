@@ -121,7 +121,6 @@ a.text-white:hover {
 
 .eg-font {
     font-family: "Big Shoulders Display", sans-serif;
-    font-weight: bold;
 }
 
 .logo {
@@ -460,6 +459,10 @@ span.btt-link:hover {
     position: fixed;
     background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed;
     background-size: cover;
+    z-index: -2;
+}
+
+.index-top-video {
     z-index: -1;
 }
 

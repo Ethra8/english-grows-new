@@ -2,17 +2,21 @@
 {% load static %}
 {% load date_extras %}
 
+
+{% block extra_title %}| My Attendance{% endblock %}
+
+
 {% block content %}
 
 {% include "profiles/includes/shared/sidebar.html" %}
 
-<section class="my-course">
+<section class="my-attendance">
     <div class="overlay-birds"></div>
-    <div class="row w-100">   
-        <div class="col-12 w-100">
+    <div class="row w-100 mb-4">   
+        <div class="col-12 w-100 ml-0 pl-0">
             <header>
                 <h1>My Attendance</h1>
-                <p>Check your attendance to your current course: <strong>{{ active_enrollment.course.course_type.name }}</strong>.</p>
+                <!-- <p>Check your attendance to your current course: <strong>{{ active_enrollment.course.course_type.name }}</strong>.</p> -->
             </header>
         </div>
     </div>
@@ -40,9 +44,9 @@
                     </progress>
                 </div>                            
                 {% if active_enrollment.has_low_attendance_warning %}
-                <div class="attendance-warning">
+                <div class="attendance-warning ml-4 mr-3">
                     
-                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level.</p>
+                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level!</p>
                 </div>
                 {% endif %}
             </div>
