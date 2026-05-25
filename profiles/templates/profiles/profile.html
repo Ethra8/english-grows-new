@@ -39,7 +39,7 @@
                     <h2>Next Class</h2>
                 </div>
                 <div class="circle-panel2"></div>
-                <div class="class-info">
+                <div class="info">
                     {% if next_class %}
                         <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
                         <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
@@ -48,7 +48,7 @@
                         <p><strong>Topic:</strong> {{ next_class.topic }}</p>
                         {% endif %}
                         {% if next_class.meeting_link %}
-                            <a href="{{ next_class.meeting_link }}" class="btn-join-class btn btn-custom mt-3" target="_blank" rel="noopener">
+                            <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
                                 <i class="fa-solid fa-video mr-2"></i>
                                 Join Class
                             </a>
@@ -59,30 +59,7 @@
 
                 </div>
             </div>
-                <!-- <div class="card next-class-card mb-4">
-                    <div class="card-header">                    
-                        <h2 class="p-0 m-0"> <small><i class="fa-solid fa-calendar-day mr-2 mb-2"></i></small> Next Class</h2>
-                    </div>
-                    <div class="card-body">
-                    {% if next_class %}
-                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
-                        <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
-                        <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
-                        {% if next_class.topic %} 
-                        <p><strong>Topic:</strong> {{ next_class.topic|default:"To be confirmed" }}</p>
-                        {% endif %}
-                        {% if next_class.meeting_link %}
-                            <a href="{{ next_class.meeting_link }}" class="btn-join-class btn btn-custom mt-3" target="_blank" rel="noopener">
-                                <i class="fa-solid fa-video mr-2"></i>
-                                Join Class
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        <p>No upcoming class scheduled yet.</p>
-                    {% endif %}
-                    </div>    
-                </div>            
-            {% endif %} -->
+            {% endif %}
         </main>
 
     </div>

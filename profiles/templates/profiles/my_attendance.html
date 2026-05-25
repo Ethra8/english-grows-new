@@ -1,5 +1,6 @@
 {% extends "profiles/profile.html" %}
 {% load static %}
+{% load date_extras %}
 
 {% block content %}
 
@@ -15,44 +16,52 @@
             </header>
         </div>
     </div>
+
+    <div class="attendance-progress-card mb-4">
     {% if active_enrollment %}
-    <div class="row">
-        <div class="col-12 attendance-percentage-card mt-3 mb-3">
-            <div class="d-flex justify-content-between mb-2">
-                <strong>Attendance</strong>
-                <span>{{ active_enrollment.attendance_percentage }}%</span>
-            </div>
+        <div class="circle-panel1">
+            <div class="icon-circle-bg"><i class="fa-solid fa-clipboard-check"></i></div>
+            <h2>Current Attendance</h2>
+        </div>
+        <div class="circle-panel2"></div>
+            <div class="info">
+                <div class="attendance-percentage-card mt-3 mb-3">
+                    <div class="mb-2">
+                        <!-- <strong>Attendance</strong> -->
+                        <p>{{ active_enrollment.attendance_percentage }}%</p>
+                        
+                    </div>
 
-            <progress
-                class="attendance-progress"
-                value="{{ active_enrollment.attendance_percentage }}"
-                max="100">
-                {{ active_enrollment.attendance_percentage }}%
-            </progress>
-            {% if active_enrollment.has_low_attendance_warning %}
-            <div class="attendance-warning">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                Attendance is below the recommended level.
-            </div>
-            {% endif %}
-        </div>                
-
-    </div>
-
-    <div class="row">
-        <div class="row attendance-details">
-            <div class="col-12 col-lg-6 detailed-attendance-card mb-4 mb-xl-0">
-                <p><strong>Total course classes:</strong> 
-                {% if active_enrollment.course.number_of_classes %}    
-                    {{ active_enrollment.course.number_of_classes }}</p>
-                <p><strong>Completed classes:</strong> {{ active_enrollment.total_completed_classes }}</p>                
-                <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
-                <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>
-                <p><strong>Classes excused:</strong> {{ active_enrollment.classes_excused }}</p>
-                {% else %}
-                    Not assigned yet</p>
+                    <progress
+                        class="attendance-progress"
+                        value="{{ active_enrollment.attendance_percentage }}"
+                        max="100">
+                        {{ active_enrollment.attendance_percentage }}%
+                    </progress>
+                </div>                            
+                {% if active_enrollment.has_low_attendance_warning %}
+                <div class="attendance-warning">
+                    
+                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level.</p>
+                </div>
                 {% endif %}
             </div>
+        </div>
+
+        <div class="row">
+            <div class="row attendance-details">
+                <div class="col-12 col-lg-6 detailed-attendance-card mb-4 mb-xl-0">
+                    <p><strong>Total course classes:</strong> 
+                    {% if active_enrollment.course.number_of_classes %}    
+                        {{ active_enrollment.course.number_of_classes }}</p>
+                    <p><strong>Past classes:</strong> {{ active_enrollment.total_completed_classes }}</p>                
+                    <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
+                    <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>
+                    <p><strong>Classes excused:</strong> {{ active_enrollment.classes_excused }}</p>
+                    {% else %}
+                        Not assigned yet</p>
+                    {% endif %}
+                </div>
 
     {% else %}
             <div class="profile-card">
@@ -80,7 +89,7 @@
                                 aria-controls="parentAttendanceCollapse">
 
                                     <i class="fa-solid fa-list-check mr-2"></i>
-                                    My Attendance Record
+                                    My Attendance History
                                 </a>
                             </h6>
                         </div>
@@ -108,7 +117,7 @@
                                             aria-controls="collapse{{ forloop.counter }}">
 
                                                 <h6 class="mb-1">
-                                                    <i class="fa-regular fa-calendar mr-2"></i>
+                                                    <i class="fa-regular fa-calendar fa-bounce mr-2"></i>
                                                     {{ attendance.class_session.start_time|date:"l, j F Y" }}
                                                 </h6>
 
