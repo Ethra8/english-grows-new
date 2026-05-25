@@ -85,17 +85,19 @@
 
                         <!-- PARENT HEADER -->
                         <div class="card-header" role="tab" id="parentAttendanceHeading">
-                            <h6 class="mb-0">
-                                <a class="collapsed text-light d-flex align-items-center"
+                            <div class="mb-0">
+                                <a class="collapsed text-light d-flex align-items-center justify-content-between"
                                 data-toggle="collapse"
                                 href="#parentAttendanceCollapse"
                                 aria-expanded="false"
                                 aria-controls="parentAttendanceCollapse">
-
-                                    <i class="fa-solid fa-list-check mr-2"></i>
-                                    My Attendance History
+                                    <div class="attendance-history-icon">
+                                        <i class="fa-solid fa-list-check mr-2"></i>
+                                    </div>
+                                    <strong class="ml-3">My Attendance History</strong>
+                                    <i class="fa-solid fa-chevron-down ml-2 float-right mt-1"></i>
                                 </a>
-                            </h6>
+                            </div>
                         </div>
 
                         <!-- PARENT COLLAPSE -->
@@ -122,12 +124,11 @@
 
                                                 <div class="attendance-history-item">
                                                     <div class="attendance-history-icon">
-                                                        <i class="fa-solid fa-calendar-day mr-2"></i>
+                                                        <i class="fa-solid fa-calendar-day"></i>
                                                     </div>
 
                                                     <div class="attendance-history-text">
-                                                        <h6><strong>Lesson {{ attendance.class_session.class_number }}</strong></h6>
-                                                        <p><span>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
+                                                        <h6 class="mb-0"><strong>Lesson {{ attendance.class_session.class_number }}</strong></h6>                                                        
                                                     </div>
                                                 </div>                    
 
@@ -152,6 +153,7 @@
 
                                             <div class="card-body row">
                                                 <div class="col-12">
+                                                    <p><span>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
                                                     <p><strong>Status:</strong> {{ attendance.get_status_display }}</p>
                                                 </div>
                                             </div>
