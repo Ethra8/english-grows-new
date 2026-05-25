@@ -15,7 +15,7 @@
             <p class="text-center mt-4"><i class="fa-solid fa-user-tie mr-2 mr-2"></i><strong></strong> {{ request.user.profile.get_role_display }}</p>
         {% endif %}
         {% if active_enrollment %}
-            <p class="eg-font text-center mt-3"> {{ active_enrollment.course.course_type.name }}</p>
+            <p class="eg-font text-center mt-4"> {{ active_enrollment.course.course_type.name }}</p>
         {% endif %}
     </div>
     <hr>

@@ -238,7 +238,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 3px 0 #003366;
     min-width: 340px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #c1f7e3;
 }
 
 .my-course .course-card strong {
@@ -257,15 +257,9 @@
     color: antiquewhite;
 }
 
-/* .my-course header .course-info-item {
-    background-color: #008f8f;
-    border-radius: 50px;
-    width: 300px;
-} */
-
 .my-course header .course-info-item .fa-solid {
     color: #c1f7e3;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .my-course header .course-info-text strong {
