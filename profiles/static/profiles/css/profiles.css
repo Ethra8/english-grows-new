@@ -369,8 +369,8 @@
     height: 44px;
     min-width: 44px;
     border-radius: 50%;
-    background: rgba(0, 128, 128, 0.12);
-    color: teal;
+    background: linear-gradient(31deg,rgba(0, 31, 61, 1) 0%, rgba(0, 51, 102, 1) 55%, rgba(0, 87, 173, 1) 100%);
+    color: #c1f7e3;
     display: flex;
     align-items: center;
     justify-content: center;

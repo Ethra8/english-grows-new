@@ -463,7 +463,19 @@ span.btt-link:hover {
 }
 
 .index-top-video {
-    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+    /* z-index: -1; */
+}
+
+#index .row {
+    position: relative;
+    z-index: 2;
 }
 
 .overlay-light {
@@ -497,6 +509,8 @@ span.btt-link:hover {
 /* Index */
 
 #index {
+    position: relative;
+    overflow: hidden;
     min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
     padding: 60px 3%;
     margin-top: 120px;
