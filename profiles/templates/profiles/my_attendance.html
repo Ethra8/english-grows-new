@@ -111,7 +111,7 @@
                                 <div id="attendance_accordion" role="tablist">
 
                                     {% for attendance in recent_attendance %}
-                                    <div class="card mb-1 shadow-sm rounded">
+                                    <div class="card mb-1 shadow-sm">
 
                                         <div class="card-header" role="tab" id="heading{{ forloop.counter }}">
                                             <a class="collapsed text-light d-block"
@@ -120,17 +120,26 @@
                                             aria-expanded="false"
                                             aria-controls="collapse{{ forloop.counter }}">
 
-                                                <h6 class="mb-1">
-                                                    <i class="fa-regular fa-calendar fa-bounce mr-2"></i>
-                                                    {{ attendance.class_session.start_time|date:"l, j F Y" }}
+                                                <div class="attendance-history-item">
+                                                    <div class="attendance-history-icon">
+                                                        <i class="fa-solid fa-calendar-day mr-2"></i>
+                                                    </div>
+
+                                                    <div class="attendance-history-text">
+                                                        <h6><strong>Lesson {{ attendance.class_session.class_number }}</strong></h6>
+                                                        <p><span>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
+                                                    </div>
+                                                </div>                    
+
+                                                <!-- <h6 class="mb-1">
+                                                    <i class="fa-regular fa-calendar mr-2"></i>
+                                                    {{ attendance.class_session.start_time|ordinal_sup|safe }}
                                                 </h6>
 
                                                 <p class="mb-0">
-                                                    <i class="fa-regular fa-clock mr-2"></i>
-                                                    {{ attendance.class_session.start_time|time:"H:i" }}
-                                                    -
-                                                    {{ attendance.class_session.end_time|time:"H:i" }}
-                                                </p>
+                                                    <i class="fa-regular fa-calendar mr-2"></i>
+                                                    <strong>Lesson {{ attendance.class_session.class_number }}</strong>
+                                                </p> -->
 
                                             </a>
                                         </div>
@@ -143,7 +152,6 @@
 
                                             <div class="card-body row">
                                                 <div class="col-12">
-                                                    <p><strong>Class:</strong> {{ attendance.class_session.title }}</p>
                                                     <p><strong>Status:</strong> {{ attendance.get_status_display }}</p>
                                                 </div>
                                             </div>

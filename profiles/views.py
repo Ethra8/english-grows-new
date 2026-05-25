@@ -158,7 +158,15 @@ def my_attendance(request):
             "class_session__course",
         )
         .order_by("-class_session__start_time")
-)
+    )
+    
+    class_session = (
+       Attendance.objects
+       .filter(
+           
+       ) 
+    )
+
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,

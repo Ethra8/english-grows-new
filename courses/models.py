@@ -210,6 +210,7 @@ class Course(models.Model):
                     start_time=aware_start,
                     defaults={
                         "title": f"{self.name} - Lesson {class_number}",
+                        "class_number": class_number,
                         "end_time": aware_end,
                         "topic": "",
                         "meeting_link": "",
@@ -306,7 +307,6 @@ class CourseTimetableSlot(models.Model):
             f"{self.get_day_of_week_display()} "
             f"{self.start_time:%H:%M} - {self.end_time:%H:%M}"
         )
-
 
 class CourseEnrollment(models.Model):
     """
@@ -443,6 +443,12 @@ class ClassSession(models.Model):
     title = models.CharField(
         max_length=200,
         default="English Class"
+    )
+
+    class_number = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Lesson number within the course."
     )
 
     start_time = models.DateTimeField()

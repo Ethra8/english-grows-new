@@ -350,7 +350,8 @@
     color: #003366;
 }
 
-.course-info-item {
+.course-info-item,
+.attendance-history-item {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -358,7 +359,8 @@
     border-bottom: 1px solid rgba(0, 128, 128, 0.15);
 }
 
-.course-info-icon {
+.course-info-icon,
+.attendance-history-icon {
     width: 44px;
     height: 44px;
     min-width: 44px;
@@ -371,18 +373,21 @@
     font-size: 1.2rem;
 }
 
-.course-info-text {
+.course-info-text,
+.attendance-history-text {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
 }
 
-.course-info-text strong {
+.course-info-text strong,
+.attendance-history-text strong {
     color: #00426b;
     font-weight: 700;
 }
 
-.course-info-text span {
+.course-info-text span,
+.attendance-history-text span {
     color: #5f6363;
 }
 
@@ -602,8 +607,9 @@
 #attendance_accordion .card-body {
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
-    border-radius: 10px !important;
-    background-color: rgba(106, 250, 225, 0.8);
+    border-bottom-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    background-color: #c1f7e3;
     margin: 0%;
     padding: 1rem;
 }
