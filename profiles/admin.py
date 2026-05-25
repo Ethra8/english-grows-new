@@ -34,12 +34,12 @@ class CustomUserAdmin(UserAdmin):
     list_display = (
         'username',
         'email',
+        'is_active',
         'first_name',
         'last_name',
         'get_role',
         'get_company',
         'is_staff',
-        'is_active',
     )
 
     list_select_related = (

@@ -72,6 +72,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "course_type",
+        "status",
         "total_hours",
         "class_duration",
         "number_of_classes",
@@ -79,7 +80,6 @@ class CourseAdmin(admin.ModelAdmin):
         "teacher",
         "start_date",
         "end_date",
-        "status",
     )
 
     readonly_fields = (

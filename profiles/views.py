@@ -91,10 +91,14 @@ def my_course(request):
         .first()
     )
 
+    enrollment_status = None
+
     next_class = None
     recent_attendance = Attendance.objects.none()
 
     if active_enrollment:
+        enrollment_status = active_enrollment.status
+
         next_class = (
             ClassSession.objects
             .filter(
@@ -119,12 +123,12 @@ def my_course(request):
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,
+        "enrollment_status": enrollment_status,
         "next_class": next_class,
         "recent_attendance": recent_attendance,
     }
 
     return render(request, "profiles/my_course.html", context)
-
 
 
 @login_required

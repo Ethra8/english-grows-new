@@ -85,17 +85,21 @@
 
                         <!-- PARENT HEADER -->
                         <div class="card-header" role="tab" id="parentAttendanceHeading">
-                            <div class="mb-0">
-                                <a class="collapsed text-light d-flex align-items-center justify-content-between"
+                            <div class="mb-0 w-100">
+                                <a class="collapsed text-white d-flex align-items-center justify-content-between w-100"
                                 data-toggle="collapse"
                                 href="#parentAttendanceCollapse"
                                 aria-expanded="false"
                                 aria-controls="parentAttendanceCollapse">
-                                    <div class="attendance-history-icon">
-                                        <i class="fa-solid fa-list-check mr-2"></i>
+                                    <div class="d-flex align-items-center">
+                                        <div class="attendance-history-icon mr-2">
+                                            <i class="fa-solid fa-list-check mr-2"></i>
+                                        </div>
+
+                                        <strong class="ml-3">My Attendance History</strong>
                                     </div>
-                                    <strong class="ml-3">My Attendance History</strong>
-                                    <i class="fa-solid fa-chevron-down ml-2 float-right mt-1"></i>
+
+                                    <i class="fa-solid fa-chevron-down ml-2"></i>
                                 </a>
                             </div>
                         </div>
@@ -122,14 +126,16 @@
                                             aria-expanded="false"
                                             aria-controls="collapse{{ forloop.counter }}">
 
-                                                <div class="attendance-history-item">
-                                                    <div class="attendance-history-icon">
-                                                        <i class="fa-solid fa-calendar-day"></i>
+                                                <div class="attendance-history-item d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="attendance-history-icon mr-4">
+                                                            <i class="fa-solid fa-clipboard-check"></i>                                                        
+                                                        </div>
+                                                        <div class="attendance-history-text">
+                                                            <h6 class="mb-0">Lesson {{ attendance.class_session.class_number }}</h6>                                                        
+                                                        </div>
                                                     </div>
-
-                                                    <div class="attendance-history-text">
-                                                        <h6 class="mb-0"><strong>Lesson {{ attendance.class_session.class_number }}</strong></h6>                                                        
-                                                    </div>
+                                                    <i class="fa-solid fa-chevron-down ml-2"></i>
                                                 </div>                    
 
                                                 <!-- <h6 class="mb-1">
@@ -153,7 +159,7 @@
 
                                             <div class="card-body row">
                                                 <div class="col-12">
-                                                    <p><span>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
+                                                    <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
                                                     <p><strong>Status:</strong> {{ attendance.get_status_display }}</p>
                                                 </div>
                                             </div>
