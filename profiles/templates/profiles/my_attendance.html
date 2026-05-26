@@ -25,7 +25,7 @@
 
         <div class="circle-panel1">
             <div class="icon-circle-bg"><i class="fa-solid fa-clipboard-check"></i></div>
-            <h2>Current Attendance</h2>
+            <h2>Attendance Rate</h2>
         </div>
         <div class="circle-panel2"></div>
 {% if active_enrollment %}                
@@ -44,33 +44,113 @@
                     {{ active_enrollment.attendance_percentage }}%
                 </progress>
             </div>                            
+            <div class="row pl-5">
+                <div class="col-12 col-md-6">
+                    <div class="course-info-item">
+                        <div class="course-info-icon">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </div>
+
+                        <div class="course-info-text">
+                            <strong>Lessons Attended</strong>
+                            <span>{{ active_enrollment.classes_attended|default:"Missing data" }}</span>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="course-info-item">
+                        <div class="course-info-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+
+                        <div class="course-info-text">
+                            <strong>Past Lessons</strong>
+                            <span>{{ active_enrollment.total_completed_classes|default:"Missing data" }}</span>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+
             {% if active_enrollment.has_low_attendance_warning %}
-            <div class="attendance-warning ml-4 mr-3">
-                
+            <div class="attendance-warning ml-4 mr-3">                
                 <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level!</p>
             </div>
             {% endif %}
         </div>
-    </div>    
-    <div class="row attendance-details">
-        <div class="col-12 detailed-attendance-card mb-4 mb-xl-0">
-            <p><strong>Total course classes:</strong> 
-            {% if active_enrollment.course.number_of_classes %}    
-                {{ active_enrollment.course.number_of_classes }}</p>
-            <p><strong>Past classes:</strong> {{ active_enrollment.total_completed_classes }}</p>                
-            <p><strong>Classes attended:</strong> {{ active_enrollment.classes_attended }}</p>
-            <p><strong>Classes missed:</strong> {{ active_enrollment.classes_missed }}</p>
-            <p><strong>Classes excused:</strong> {{ active_enrollment.classes_excused }}</p>
-            {% else %}
-                Not assigned yet</p>
-            {% endif %}
+    </div>
+    
+    <div class="attendance-details">
+        <div class="row detailed-attendance-card">
+            <!-- <div class="col-12">
+                <div class="circle-panel1">
+                    <h2>Attendance Details</h2>
+                </div>
+            
+            </div> -->
+            <div class="col-12 col-xl-6">
+                <div class="circle-panel1">
+                    <h2>Attendance Details</h2>
+                </div>
+                <div class="course-info-item mt-5">
+                    <div class="course-info-icon">
+                        <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Total Lessons</strong>
+                            {{ active_enrollment.course.number_of_classes|default:"Missing data" }}</p>
+                    </div>
+                </div>                    
+                <div class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-hourglass"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Past Lessons</strong>
+                        <span>{{ active_enrollment.total_completed_classes|default:"Missing data" }}</span>
+                    </div>
+                </div>                    
+            </div>
+            <div class="col-12 col-xl-6">
+                <div class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Lessons Attended</strong>
+                        <span>{{ active_enrollment.classes_attended|default:"Missing data" }}</span>
+                    </div>
+                </div>
+                <div class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-calendar-xmark"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Lessons Missed</strong>
+                        <span>{{ active_enrollment.classes_missed|default:"Missing data" }}</span>
+                    </div>
+                </div>
+                <div class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Excused Absences</strong>
+                    <span> {{ active_enrollment.classes_excused|default:"Missing data" }} </span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div class="col-12 col-lg-6 wrapper-attendance-accordion mt-0">
 
+    <div class="col-12 col-lg-6 wrapper-attendance-accordion mt-0">
         <!-- PARENT ACCORDION -->
         <div id="parentAttendanceAccordion" role="tablist">
-
             <div class="card mb-2 shadow-sm rounded">
                 <!-- PARENT HEADER -->
                 <div class="card-header" role="tab" id="parentAttendanceHeading">
