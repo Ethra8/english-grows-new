@@ -369,6 +369,7 @@ class CourseEnrollment(models.Model):
 
     @property
     def total_completed_classes(self):
+        # past classes
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
@@ -377,6 +378,9 @@ class CourseEnrollment(models.Model):
             status="scheduled"
         ).values("class_session").distinct().count()
 
+    @property
+    def upcoming_classes(self):
+        return self.total_assigned_classes - self.total_completed_classes
 
     @property
     def classes_attended(self):
