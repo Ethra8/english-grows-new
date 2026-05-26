@@ -1,3 +1,4 @@
+/* teal site bg #00686b / rgba(0, 104, 107) */
 #profile-header {
     margin-top: 100px;
 }
@@ -147,24 +148,24 @@
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-.next-class-card .teal-circle-panel {
+.teal-circle-panel {
     position: absolute;
-    top: -90px;
+    top: -70px;
     left: -170px;
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    /* background: #249188; */
-    background: linear-gradient(51deg,rgb(35, 144, 135) 10%, rgba(64, 201, 183, 1) 61%, rgba(106, 250, 225, 1) 80%);
-    color: white;
+    /* background: #008F8F; */
+    background: #00686B;
+    background: linear-gradient(63deg,rgba(0, 104, 107, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 2;
 }
 
-.next-class-card .circle-panel2 {
+.circle-panel2 {
     position: absolute;
-    top: -100px;
+    top: -80px;
     left: -150px;
     width: 380px;
     height: 380px;
@@ -176,7 +177,6 @@
     z-index: 1;
     border: solid 2px #ffffff;
 }
-
 
 .teal-circle-panel .icon-circle-bg {
     position: relative;
@@ -195,6 +195,7 @@
     top: 13px;
     left: 11px;
     font-size: 1.4rem;
+    color: whitesmoke;
 }
 
 .next-class-card .teal-circle-panel h2 {
@@ -284,6 +285,20 @@
     color: #ffffff;
 }
 
+.no-course-assigned {
+    padding: 1rem 2rem 1rem 18rem;
+    width: 100%;
+    /* margin-left: 0%; */
+}
+
+.no-course-assigned h2 {
+    color:#003366;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    margin-left: 0%;
+    padding-left: 0%;
+}
+
 .course-card {
     position: relative;
     overflow: hidden;
@@ -338,8 +353,8 @@
 
 .course-card .circle-panel1 .fa-solid {
     position: relative;
-    top: 7px;
-    left: 7px;
+    top: 5px;
+    left: 17px;
     font-size: 2.2rem;
 }
 
@@ -423,7 +438,7 @@
     width: 60%;
 }
 
-/* *** Attendace PROGRESS BAR *****/
+/* *** Current Attendace PROGRESS *****/
 
 .attendance-progress-card {
     position: relative;
@@ -488,8 +503,8 @@
 }
 
 .attendance-progress-card .info {
-    margin-left: 150px;
-    padding: 0 1rem 1rem 7rem;
+    /* margin-left: 150px; */
+    padding: 0 2rem 1rem 17rem;
     width: 100%;
     border: solid 3px #ffffff;
 }
@@ -512,6 +527,8 @@
     left: 13px;
     font-size: 1.8rem;
 }
+
+/**** Attendance Porgress bar ***/
 
 .attendance-progress {
     width: 100%;
@@ -572,7 +589,7 @@
 }
 
 
-/* ******* ATTENDANCE ACCORDION ********************* */
+/* ******* My Attendance ACCORDION ********************* */
 
 .wrapper-attendance-accordion {
     width: 100%;
@@ -591,7 +608,7 @@
 
 #parentAttendanceAccordion .card-body {
     padding: 0;
-    margin: 1rem; 
+    margin: 0.5rem; 
     height: 100%;
     max-height: 100%;
     /* width: 100%;  */
@@ -710,8 +727,7 @@
 }
 
 .account-settings-form {
-    background: linear-gradient(51deg,rgb(35, 144, 135) 10%, rgba(64, 201, 183, 1) 61%, rgba(106, 250, 225, 1) 80%);
-    /* width: fit-content; */
+    background: linear-gradient(57deg,rgba(0, 143, 143, 1) 0%, rgba(95, 240, 223, 1) 39%, rgba(193, 247, 227, 1) 72%);
     padding: 20px 20px;
     border: inset 2px #008f8f;
     margin: 0 auto 60px !important;
