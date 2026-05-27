@@ -457,7 +457,7 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
-    background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed;
+    background: url('/static/images/bg_4.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -2;
 }
