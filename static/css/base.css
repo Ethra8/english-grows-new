@@ -457,6 +457,17 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
+    background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed;
+    background-size: cover;
+    z-index: -2;
+}
+
+.overlay-globe {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
     background: url('/static/images/bg_4.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -2;
@@ -465,10 +476,11 @@ span.btt-link:hover {
 .index-top-video {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+    right: 0 !important;
+    min-width: 100vw;
+    min-height: 100vh;
+    object-fit: cover;
+    z-index: -1;
     pointer-events: none;
 }
 
