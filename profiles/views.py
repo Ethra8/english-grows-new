@@ -133,7 +133,7 @@ def my_course(request):
                 class_session__course=active_enrollment.course,
             )
             .select_related("class_session")
-            .order_by("-class_session__start_time")[:5]
+            .order_by("-class_session__start_time")
         )
 
     context = {
@@ -179,18 +179,26 @@ def my_attendance(request):
         )
         .order_by("-class_session__start_time")
     )
-    
-    class_session = (
-       Attendance.objects
-       .filter(
-           
-       ) 
+
+    recent_absences = (
+        Attendance.objects
+        .filter(
+            student=request.user,
+            class_session__course=active_enrollment.course,
+            status__in=["missed", "excused"],
+        )
+        .select_related(
+            "class_session",
+            "class_session__course",
+        )
+        .order_by("-class_session__start_time")
     )
 
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,
         "recent_attendance": recent_attendance,
+        "recent_absences": recent_absences
     }
 
     return render(request, "profiles/my_attendance.html", context)
