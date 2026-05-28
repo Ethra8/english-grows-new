@@ -410,6 +410,9 @@ class CourseEnrollment(models.Model):
             status="excused"
         ).values("class_session").distinct().count()
 
+    @property
+    def total_absences(self):
+        return self.classes_missed + self.classes_excused
 
     @property
     def attendance_percentage(self):

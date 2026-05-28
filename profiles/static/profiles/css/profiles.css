@@ -196,7 +196,11 @@
     top: 13px;
     left: 11px;
     font-size: 1.4rem;
-    color: whitesmoke;
+    color: transparent;
+    background: linear-gradient(63deg,rgba(255, 255, 255, 1) 7%, rgba(193, 247, 227, 1) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .next-class-card .teal-circle-panel h2 {
@@ -532,7 +536,7 @@
 
 .attendance-progress-card .info {
     /* margin-left: 150px; */
-    padding: 0 2rem 1rem 19rem;
+    padding: 1rem 2rem 1rem 19rem;
     width: 100%;
     min-height: 165px;
     border: solid 3px #ffffff;
@@ -630,7 +634,7 @@
     font-family: "Big Shoulders Display", sans-serif;    
     color: #c1f7e3;
     font-size: 2rem;
-    margin: 410px 2rem 1rem 15rem;
+    margin: 410px 2rem 1rem 11.5rem;
     line-height: 1.1;
 }
 

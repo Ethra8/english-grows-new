@@ -48,7 +48,7 @@
             <div class="attendance-percentage-card mt-3 mb-3">
                 <div class="mb-2">
                     <!-- <strong>Attendance</strong> -->
-                    <p>{{ active_enrollment.attendance_percentage }}%</p>
+                    <p>{{ active_enrollment.attendance_percentage|default:"0" }}%</p>
                     
                 </div>
 
@@ -56,7 +56,7 @@
                     class="attendance-progress"
                     value="{{ active_enrollment.attendance_percentage }}"
                     max="100">
-                    {{ active_enrollment.attendance_percentage }}%
+                    {{ active_enrollment.attendance_percentage|default:"0" }}%
                 </progress>
             </div>                            
 
@@ -72,7 +72,7 @@
         <div class="attendance-details1">
             <div class="col-12 col-md-5 detailed-attendance-card mx-auto">
                 <div class="circle-panel1">
-                    <h2>Attendance<br>Details</h2>
+                    <h2>Attendance<br><small>Details</small></h2>
                 </div>
                 <div class="circle-panel2"></div>
                 <div class="col-12">
@@ -83,7 +83,7 @@
 
                         <div class="course-info-text">
                             <strong>Lessons Attended</strong>
-                            <span>{{ active_enrollment.classes_attended|default:"Missing data" }}</span>
+                            <span>{{ active_enrollment.classes_attended|default:"0" }}</span>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
 
                         <div class="course-info-text">
                             <strong>Past Lessons</strong>
-                            <span>{{ active_enrollment.total_completed_classes|default:"Missing data" }}</span>
+                            <span>{{ active_enrollment.total_completed_classes|default:"0" }}</span>
                         </div>
                     </div>                    
                 </div>
@@ -118,21 +118,21 @@
         <div class="attendance-details2">
             <div class="col-12 col-md-5 detailed-attendance-card mx-auto">
                 <div class="circle-panel1">
-                    <h2>Absence<br>Details</h2>
+                    <h2>Absence<br><small>Details</small></h2>
                 </div>
                 <div class="circle-panel2"></div>
-                <!-- <div class="col-12">
+                <div class="col-12">
                     <div class="course-info-item">
                         <div class="course-info-icon">
-                            <i class="fa-regular fa-calendar-check"></i>
+                            <i class="fa-solid fa-user-xmark"></i>
                         </div>
 
                         <div class="course-info-text">
-                            <strong>Lessons Attended</strong>
-                            <span>{{ active_enrollment.classes_attended|default:"Missing data" }}</span>
+                            <strong>Total Absences</strong>
+                            <span>{{ active_enrollment.total_absences|default:"0" }}</span>
                         </div>
-                    </div>
-                </div> -->
+                    </div>            
+                </div>
                 <div class="col-12">
                     <div class="course-info-item">
                         <div class="course-info-icon">
@@ -141,7 +141,7 @@
 
                         <div class="course-info-text">
                             <strong>Lessons Missed</strong>
-                            <span>{{ active_enrollment.classes_missed|default:"Missing data" }}</span>
+                            <span>{{ active_enrollment.classes_missed|default:"0" }}</span>
                         </div>
                     </div>            
                 </div>
@@ -153,7 +153,7 @@
 
                         <div class="course-info-text">
                             <strong>Excused Absences</strong>
-                        <span> {{ active_enrollment.classes_excused|default:"Missing data" }} </span>
+                        <span> {{ active_enrollment.classes_excused|default:"0" }} </span>
                         </div>
                     </div> 
                 </div>
