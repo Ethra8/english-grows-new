@@ -54,6 +54,21 @@ def profile(request):
 def profile_settings(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    active_enrollment = (
+        CourseEnrollment.objects
+        .filter(
+            student=request.user,
+            status="active"
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .first()
+    )    
+
     if request.method == "POST":
         form = UserProfileForm(request.POST, instance=user_profile, user=request.user)
 
@@ -67,6 +82,7 @@ def profile_settings(request):
 
     context = {
         "profile": user_profile,
+        "active_enrollment": active_enrollment,
         "form": form,
     }
 
