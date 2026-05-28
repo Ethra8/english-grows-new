@@ -10,8 +10,8 @@
 }
 
 
-/* ****** BUTTONS **************************************** */
 
+/* ****** BUTTONS **************************************** */
 
 .btn-join-class {
     color: #ffffff;
@@ -48,6 +48,21 @@
     box-shadow: 0 1px 1px 0 #4b4b4b;
     color: aquamarine;
 }
+
+
+
+/* ********* WRAPPERS ************************************* */
+
+.wrapper-next-class-card,
+.wrapper-account-settings-form,
+.wrapper-attendance-progress-card {
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: rgba(106, 250, 225, 0.2);
+    margin: 0 auto 60px;
+}
+
 
 
 /*********************** SIDEBAR ***************************/
@@ -215,8 +230,7 @@
 }
 
 .next-class-card .info {
-    margin-left: 150px;
-    padding: 2rem 2rem 2rem 7rem;
+    padding: 2rem 2rem 2rem 16rem;
     width: 100%;
     border: outset 1px #008f8f;
 }
@@ -446,16 +460,6 @@
 
 
 
-/*********** MY CALENDAR PAGE ************************************/
-
-.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
-    box-shadow: 0 0 0 1px var(--fc-page-bg-color);
-    background-color: #00686B;
-    padding: 0.3rem;
-}
-
-
-
 /* ******** MY ATTENDANCE PAGE ******************************/
 
 .my-attendance {
@@ -601,7 +605,7 @@
 .attendance-details,
 .absence-details {
     border-radius: 10px;
-    padding: 12px;
+    padding: 8px;
     box-shadow: 0 2px 3px 0 #003366;
     /* min-width: 340px; */
     width: 49%;
@@ -821,16 +825,6 @@
 
 .profile-settings-page p {
     color: whitesmoke;
-}
-
-.wrapper-next-class-card,
-.wrapper-account-settings-form,
-.wrapper-attendance-progress-card {
-    border-radius: 10px;
-    padding: 12px;
-    box-shadow: 0 2px 3px 0 #003366;
-    background: rgba(106, 250, 225, 0.2);
-    margin: 0 auto 60px;
 }
 
 .account-settings-form {

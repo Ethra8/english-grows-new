@@ -1,0 +1,107 @@
+#my_calendar_page {
+    margin: 70px auto 60px !important;
+    max-width: 100%;
+}
+
+#my_calendar_page h1 {
+    color:#c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.8rem;
+}
+
+/* .wrapper-calendar, */
+.calendar-container {
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: rgba(106, 250, 225, 0.2);
+    margin: 0 auto 60px;
+}
+
+#calendar {
+    border-radius: 10px;
+    padding: 20px 12px 12px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: rgba(106, 250, 225, 0.2);
+    margin: 0 auto 60px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Week days title, e-g-: 18-24 May  */
+.fc-toolbar-title {
+    color:whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2rem;
+    border-radius: 5px;
+    max-width: 60%;
+    min-width: 400px;
+    padding: 0.5rem 70px;
+    background-color: #00686B;
+    border: outset 1px #008f8f;
+    box-shadow: 0 1px 2px 0 #003366;
+    text-align: center;
+    margin: 0 2rem !important;
+}
+
+/* Calendar general card content (timetable rows/cols) */
+.fc-view-harness {
+    background-color: #c1f7e3;
+    width: 100%;
+    border-radius: 50px;
+}
+
+/*  */
+.fc-view-harness-passive {
+    border-radius: 5px !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border: 1px solid rgb(181, 181, 181);
+}
+
+.fc th  {
+    background-color: #5ff0df;
+}
+
+/* Calendar date <th> table head content */
+.fc .fc-col-header-cell-cushion {
+    display: inline-block;
+    padding: 2px 4px;
+    color:#003366;
+    min-height: 3rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Monthly view: 'all-day' cell */
+.fc .fc-timegrid-axis-cushion {
+    max-width: 100px;
+}
+
+.fc .fc-timegrid-axis-frame {
+    /* default */
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    /* default */
+    background-color: rgb(234, 234, 234);
+}
+
+/* Monthly view: 'all-day' header row */
+.fc .fc-daygrid-day-frame {
+    min-height: 100%;
+    position: relative;
+    background-color: rgb(234, 234, 234);
+}
+
+/* Calendar events styling */
+.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
+    box-shadow: 0 0 0 1px var(--fc-page-bg-color);
+    background-color: #00686B;
+    padding: 0.3rem;
+}
+
+

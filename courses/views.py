@@ -5,13 +5,35 @@ from django.utils.dateparse import parse_datetime
 
 from .models import ClassSession, CourseEnrollment
 
+from profiles.models import UserProfile
 
 
 @login_required
 def my_calendar(request):
-    return render(request, "courses/my_calendar.html")
+    active_enrollment = (
+        CourseEnrollment.objects
+        .filter(
+            student=request.user,
+            status="active"
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .first()
+    )
+
+    context = {
+        "active_enrollment": active_enrollment,
+    }
 
 
+    return render(request, "courses/my_calendar.html", context)
+
+
+# displays my_calendar linked to in profile side-bar
 @login_required
 def my_calendar_events(request):
     start = request.GET.get("start")
