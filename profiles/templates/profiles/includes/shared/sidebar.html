@@ -34,7 +34,7 @@
             <span>Course Info</span>
         </a>
 
-        <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
+        <a href="{% url 'courses:my_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
             <i class="fa-solid fa-calendar-days"></i>
             <span>Class Calendar</span>
         </a>

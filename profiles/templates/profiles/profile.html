@@ -33,30 +33,32 @@
                     <h1>Dashboard</h1>
                 </div>
             </div>
-            <div class="next-class-card">
-                <div class="teal-circle-panel">
-                    <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div>
-                    <h2>Next Class</h2>
-                </div>
-                <div class="circle-panel2"></div>
-                <div class="info">
-                    {% if next_class %}
-                        <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
-                        <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
-                        <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
-                        {% if next_class.topic %} 
-                        <p><strong>Topic:</strong> {{ next_class.topic }}</p>
+            <div class="wrapper-next-class-card">
+                <div class="next-class-card">
+                    <div class="teal-circle-panel">
+                        <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div>
+                        <h2>Next Class</h2>
+                    </div>
+                    <div class="circle-panel2"></div>
+                    <div class="info">
+                        {% if next_class %}
+                            <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
+                            <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
+                            <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
+                            {% if next_class.topic %} 
+                            <p><strong>Topic:</strong> {{ next_class.topic }}</p>
+                            {% endif %}
+                            {% if next_class.meeting_link %}
+                                <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
+                                    <i class="fa-solid fa-video mr-2"></i>
+                                    Join Class <i class="fa-solid fa-chevron-right ml-5 float-right mt-1"></i>
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <p>No upcoming class scheduled yet.</p>
                         {% endif %}
-                        {% if next_class.meeting_link %}
-                            <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
-                                <i class="fa-solid fa-video mr-2"></i>
-                                Join Class <i class="fa-solid fa-chevron-right ml-5 float-right mt-1"></i>
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        <p>No upcoming class scheduled yet.</p>
-                    {% endif %}
 
+                    </div>
                 </div>
             </div>
             {% endif %}

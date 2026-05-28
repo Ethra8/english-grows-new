@@ -3,7 +3,7 @@
 {% load date_extras %}
 
 
-{% block extra_title %}| My Attendance{% endblock %}
+{% block extra_title %}| Attendance{% endblock %}
 
 
 {% block content %}
@@ -35,41 +35,42 @@
         </div>
     </div>
 
-
-    <div class="attendance-progress-card mb-4">
-
-        <div class="circle-panel1">
-            <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
-            <h2>Attendance<br>Rate</h2>
-        </div>
-        <div class="circle-panel2"></div>
-{% if active_enrollment %}                
-        <div class="info">
-            <div class="attendance-percentage-card mt-3 mb-3">
-                <div class="mb-2">
-                    <!-- <strong>Attendance</strong> -->
-                    <p>{{ active_enrollment.attendance_percentage|default:"0" }}%</p>
-                    
-                </div>
-
-                <progress
-                    class="attendance-progress"
-                    value="{{ active_enrollment.attendance_percentage }}"
-                    max="100">
-                    {{ active_enrollment.attendance_percentage|default:"0" }}%
-                </progress>
-            </div>                            
-
-            {% if active_enrollment.has_low_attendance_warning %}
-            <div class="attendance-warning ml-4 mr-3">                
-                <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level!</p>
+    <div class="wrapper-attendance-progress-card mb-4">
+        <div class="attendance-progress-card">
+            <div class="circle-panel1">
+                <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
+                <h2>Attendance<br>Rate</h2>
             </div>
-            {% endif %}
+            <div class="circle-panel2"></div>
+{% if active_enrollment %}                
+            <div class="info">
+                <div class="attendance-percentage-card mt-3 mb-3">
+                    <div class="mb-2">
+                        <!-- <strong>Attendance</strong> -->
+                        <p>{{ active_enrollment.attendance_percentage|default:"0" }}%</p>
+                        
+                    </div>
+
+                    <progress
+                        class="attendance-progress"
+                        value="{{ active_enrollment.attendance_percentage }}"
+                        max="100">
+                        {{ active_enrollment.attendance_percentage|default:"0" }}%
+                    </progress>
+                </div>                            
+
+                {% if active_enrollment.has_low_attendance_warning %}
+                <div class="attendance-warning ml-4 mr-3">                
+                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level!</p>
+                </div>
+                {% endif %}
+            </div>
         </div>
+
     </div>
     
-    <div class="row ">
-        <div class="attendance-details1">
+    <div class="row mt-5">
+        <div class="attendance-details">
             <div class="col-12 col-lg-5 detailed-attendance-card mx-auto">
                 <div class="circle-panel1">
                     <h2>Attendance<br><small>Details</small></h2>
@@ -153,12 +154,12 @@
                                         {% for attendance in recent_attendance %}
                                         <div class="card mb-1 shadow-sm">
 
-                                            <div class="card-header" role="tab" id="heading{{ forloop.counter }}">
+                                            <div class="card-header" role="tab" id="attendance_heading{{ forloop.counter }}">
                                                 <a class="collapsed text-light d-block"
                                                 data-toggle="collapse"
-                                                href="#collapse{{ forloop.counter }}"
+                                                href="#attendance_collapse{{ forloop.counter }}"
                                                 aria-expanded="false"
-                                                aria-controls="collapse{{ forloop.counter }}">
+                                                aria-controls="attendance_collapse{{ forloop.counter }}">
 
                                                     <div class="attendance-history-item d-flex align-items-center justify-content-between">
                                                         <div class="d-flex align-items-center">
@@ -169,10 +170,10 @@
                                                 </a>
                                             </div>
 
-                                            <div id="collapse{{ forloop.counter }}"
+                                            <div id="attendance_collapse{{ forloop.counter }}"
                                                 class="collapse"
                                                 role="tabpanel"
-                                                aria-labelledby="heading{{ forloop.counter }}"
+                                                aria-labelledby="attendance_heading{{ forloop.counter }}"
                                                 data-parent="#attendance_accordion">
 
                                                 <div class="card-body row">
@@ -200,7 +201,7 @@
                 </div>
             </div>
         </div>
-        <div class="attendance-details2">
+        <div class="absence-details">
             <div class="col-12 col-md-5 detailed-attendance-card mx-auto">
                 <div class="circle-panel1">
                     <h2>Absence<br><small>Details</small></h2>
@@ -285,10 +286,10 @@
                                         {% for absence in recent_absences %}
                                         <div class="card mb-1 shadow-sm">
 
-                                            <div class="card-header" role="tab" id="heading{{ forloop.counter }}">
+                                            <div class="card-header" role="tab" id="absences_heading{{ forloop.counter }}">
                                                 <a class="collapsed text-light d-block"
                                                 data-toggle="collapse"
-                                                href="#collapse{{ forloop.counter }}"
+                                                href="#absences_collapse{{ forloop.counter }}"
                                                 aria-expanded="false"
                                                 aria-controls="collapse{{ forloop.counter }}">
 
@@ -301,10 +302,10 @@
                                                 </a>
                                             </div>
 
-                                            <div id="collapse{{ forloop.counter }}"
+                                            <div id="absences_collapse{{ forloop.counter }}"
                                                 class="collapse"
                                                 role="tabpanel"
-                                                aria-labelledby="heading{{ forloop.counter }}"
+                                                aria-labelledby="absences_heading{{ forloop.counter }}"
                                                 data-parent="#absence_accordion">
 
                                                 <div class="card-body row">

@@ -218,7 +218,7 @@
     margin-left: 150px;
     padding: 2rem 2rem 2rem 7rem;
     width: 100%;
-    border: solid 3px #ffffff;
+    border: outset 1px #008f8f;
 }
 
 .next-class-card .info p {
@@ -384,7 +384,7 @@
     margin-left: 150px !important;
     padding: 2rem 2rem 2rem 9rem;
     width: 100%;
-    border: solid 3px #ffffff;
+    border: outset 1px #008f8f;
 }
 
 .course-card .info p {
@@ -443,6 +443,17 @@
     gap: 2rem;
     align-items: center;
 }
+
+
+
+/*********** MY CALENDAR PAGE ************************************/
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
+    box-shadow: 0 0 0 1px var(--fc-page-bg-color);
+    background-color: #00686B;
+    padding: 0.3rem;
+}
+
 
 
 /* ******** MY ATTENDANCE PAGE ******************************/
@@ -541,7 +552,7 @@
     padding: 1rem 2rem 1rem 19rem;
     width: 100%;
     min-height: 165px;
-    border: solid 3px #ffffff;
+    border: outset 1px #008f8f;
 }
 
 
@@ -587,21 +598,21 @@
 
 /*** Detailed Attendance **********/
 
-.attendance-details1,
-.attendance-details2 {
+.attendance-details,
+.absence-details {
     border-radius: 10px;
-    padding: 7px;
+    padding: 12px;
     box-shadow: 0 2px 3px 0 #003366;
     /* min-width: 340px; */
     width: 49%;
     background: rgba(106, 250, 225, 0.2);
 }
 
-.attendance-details1 {
+.attendance-details {
     margin-right: 1%;
 }
 
-.attendance-details2 {
+.absence-details {
     margin-left: 1%;
 }
 
@@ -671,7 +682,7 @@
     height: 100%;
     max-height: 100%;
     /* width: 100%;  */
-    background: rgba(106, 250, 225, 0);
+    background: rgba(106, 250, 225, 0.5);
     border-radius: 10px !important;
 }
 
@@ -692,7 +703,7 @@
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
-    border: solid 2px #003366;
+    border: outset 1px #003366;
     background: teal;
 }
 
@@ -812,11 +823,21 @@
     color: whitesmoke;
 }
 
+.wrapper-next-class-card,
+.wrapper-account-settings-form,
+.wrapper-attendance-progress-card {
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: rgba(106, 250, 225, 0.2);
+    margin: 0 auto 60px;
+}
+
 .account-settings-form {
     background: linear-gradient(57deg,rgba(0, 143, 143, 1) 0%, rgba(95, 240, 223, 1) 39%, rgba(193, 247, 227, 1) 72%);
-    padding: 20px 20px;
-    border: inset 2px #008f8f;
-    margin: 0 auto 60px !important;
+    padding: 20px;
+    border: outset 1px #008f8f;
+    margin: 0 auto;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
 }

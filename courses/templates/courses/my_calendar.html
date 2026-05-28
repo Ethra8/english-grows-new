@@ -1,0 +1,73 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block extra_title %}| Calendar{% endblock %}
+
+
+{% block content %}
+{% include "profiles/includes/shared/sidebar.html" %}
+<div class="container my-5">
+    <h1 class="mb-4">My Class Calendar</h1>
+
+    <div id="calendar"></div>
+</div>
+
+
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+
+            events: "{% url 'courses:my_calendar_events' %}",
+
+            firstDay: 1,
+            height: 'auto',
+
+            // only shows working hours 8-21h on calendar
+            slotMinTime: '08:00:00',
+            slotMaxTime: '21:00:00',
+            
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+
+            eventClick: function(info) {
+                const meetingLink = info.event.extendedProps.meeting_link;
+
+                if (meetingLink) {
+                    window.open(meetingLink, '_blank');
+                }
+            }
+        });
+
+        calendar.render();
+
+        // updates every 5mins
+        setInterval(function() {
+            calendar.refetchEvents();
+        }, 300000);
+    });
+</script>
+
+    {% endblock %}
