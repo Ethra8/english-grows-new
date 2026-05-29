@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import CourseType, Course, CourseTimetableSlot, CourseEnrollment, ClassSession, Attendance
+from .models import CourseType, Course, CourseTimetableSlot, CourseEnrollment, ClassSession, Attendance, BankHoliday
 
 
 @admin.register(CourseType)
@@ -277,4 +277,26 @@ class AttendanceAdmin(admin.ModelAdmin):
         "recorded_at",
         "was_punctual",
     )
-# Register your models here.
+
+
+@admin.register(BankHoliday)
+class BankHolidayAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "start_date",
+        "end_date",
+        "is_active",
+    )
+
+    list_filter = (
+        "is_active",
+        "start_date",
+    )
+
+    search_fields = (
+        "title",
+    )
+
+    ordering = (
+        "start_date",
+    )

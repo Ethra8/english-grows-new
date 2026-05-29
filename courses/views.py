@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
 
-from .models import ClassSession, CourseEnrollment
+from datetime import timedelta
+
+from .models import ClassSession, CourseEnrollment, BankHoliday
 
 from profiles.models import UserProfile
 
@@ -58,14 +61,30 @@ def my_calendar_events(request):
         .order_by("start_time")
     )
 
+    bank_holidays = (
+        BankHoliday.objects
+        .filter(
+            is_active=True,
+        )
+        .order_by("start_date")
+    )
+
     if start and end:
         start_date = parse_datetime(start)
         end_date = parse_datetime(end)
 
-        sessions = sessions.filter(
-            start_time__gte=start_date,
-            start_time__lt=end_date,
-        )
+        if start_date and end_date:
+            sessions = sessions.filter(
+                start_time__gte=start_date,
+                start_time__lt=end_date,
+            )
+
+            bank_holidays = bank_holidays.filter(
+                start_date__lt=end_date.date()
+            ).filter(
+                Q(end_date__isnull=True) |
+                Q(end_date__gte=start_date.date())
+            )
 
     events = []
 
@@ -81,5 +100,23 @@ def my_calendar_events(request):
                 "meeting_link": session.meeting_link,
             },
         })
+
+    for holiday in bank_holidays:
+        event = {
+            "id": f"holiday-{holiday.id}",
+            "title": holiday.title,
+            "start": holiday.start_date.isoformat(),
+            "allDay": True,
+            "display": "block",
+            "className": "bank-holiday-event",
+            "extendedProps": {
+                "type": "bank_holiday",
+            },
+        }
+
+        if holiday.end_date:
+            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
+
+        events.append(event)
 
     return JsonResponse(events, safe=False)

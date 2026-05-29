@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
         firstDay: 1,
         height: 'auto',
 
+        // Only show Monday-Friday
+        weekends: false,
+
         // Only shows working hours 8:00 - 21:00
         slotMinTime: '08:00:00',
         slotMaxTime: '21:00:00',

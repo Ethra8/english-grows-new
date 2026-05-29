@@ -104,4 +104,8 @@
     padding: 0.3rem;
 }
 
-
+.bank-holiday-event {
+    background-color: #8b0000 !important;
+    border-color: #8b0000 !important;
+    color: #fff !important;
+}

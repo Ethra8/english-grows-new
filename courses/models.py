@@ -547,3 +547,32 @@ class Attendance(models.Model):
     @property
     def was_punctual(self):
         return self.status == "attended" and self.minutes_late == 0
+
+
+class BankHoliday(models.Model):
+    title = models.CharField(max_length=200)
+
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="First day of the bank holiday."
+    )
+
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Optional. Leave empty for a single-day bank holiday."
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Only active holidays are shown in the calendar."
+    )
+
+    class Meta:
+        ordering = ["start_date"]
+        verbose_name = "Bank holiday"
+        verbose_name_plural = "Bank holidays"
+
+    def __str__(self):
+        return f"{self.title} - {self.start_date}"
