@@ -33,91 +33,114 @@
                 </div>
             </header>
         </div>
-        <div class="course-card">
-            <div class="circle-panel1">
-                <div class="icon-circle-bg"><i class="fa-solid fa-info"></i></div>
-                <h2>General<br>Info</h2>
-            </div>
-            <div class="circle-panel2"></div>
-            <div class="info row">
-                {% if active_enrollment %}
-                <div class="col-12 col-xl-6">
-                    {% if active_enrollment.course.total_hours %} 
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
-                        </div>
-
-                        <div class="course-info-text">
-                            <strong>Total Hours</strong>
-                            <span>{{ active_enrollment.course.total_hours }} hours</span>
-                    {% elif active_enrollment.course.course_type.default_hours %}
-                            <span>{{ active_enrollment.course.course_type.default_hours }} hours</span></p>
-                    {% else %}
-                            Not assigned yet</p>
-                    {% endif %}
-                        </div>
-                    </div>                    
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-regular fa-hourglass"></i>
-                        </div>
-
-                        <div class="course-info-text">
-                            <strong>Class Duration</strong>
-                            <span>{{ active_enrollment.course.class_duration|default:"Not confirmed yet" }} hours</span>
-                        </div>
-                    </div>                    
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-solid fa-list-ol"></i>
-                        </div>
-
-                        <div class="course-info-text">
-                            <strong>Number of Classes</strong>
-                            <span>{{ active_enrollment.course.number_of_classes|default:"Not confirmed yet" }}</span>
-                        </div>
-                    </div>                
+        <div class="wrapper-course-card">
+            <div class="course-card row">
+                <div class="circle-panel1">
+                    <div class="icon-circle-bg"><i class="fa-solid fa-info"></i></div>
+                    <h2>General<br>Info</h2>
                 </div>
-                <div class="col-12 col-xl-6">
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-regular fa-calendar-check"></i>
-                        </div>
+                <div class="circle-panel2"></div>
+                <div class="info row">
+                    {% if active_enrollment %}
+                    <div class="col-12 col-xl-6">
+                        {% if active_enrollment.course.total_hours %} 
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
+                            </div>
 
-                        <div class="course-info-text">
-                            <strong>Start date</strong>
-                            <span>{{ active_enrollment.course.start_date|ordinal_sup|safe |default:"Not confirmed yet" }}</span>
+                            <div class="course-info-text">
+                                <strong>Total Hours</strong>
+                                <span>{{ active_enrollment.course.total_hours }} hours</span>
+                        {% elif active_enrollment.course.course_type.default_hours %}
+                                <span>{{ active_enrollment.course.course_type.default_hours }} hours</span></p>
+                        {% else %}
+                                Not assigned yet</p>
+                        {% endif %}
+                            </div>
+                        </div>                    
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-regular fa-hourglass"></i>
+                            </div>
+
+                            <div class="course-info-text">
+                                <strong>Class Duration</strong>
+                                <span>{{ active_enrollment.course.class_duration|default:"Not confirmed yet" }} hours</span>
+                            </div>
+                        </div>                    
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-solid fa-list-ol"></i>
+                            </div>
+
+                            <div class="course-info-text">
+                                <strong>Number of Classes</strong>
+                                <span>{{ active_enrollment.course.number_of_classes|default:"Not confirmed yet" }}</span>
+                            </div>
+                        </div>                
+                    </div>
+
+                    <div class="col-12 col-xl-6">
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-regular fa-calendar-check"></i>
+                            </div>
+
+                            <div class="course-info-text">
+                                <strong>Start date</strong>
+                                <span>{{ active_enrollment.course.start_date|ordinal_sup|safe |default:"Not confirmed yet" }}</span>
+                            </div>
+                        </div>
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-regular fa-calendar-xmark"></i>
+                            </div>
+
+                            <div class="course-info-text">
+                                <strong>End date</strong>
+                                <span>{{ active_enrollment.course.end_date|ordinal_sup|safe |default:"Not confirmed yet" }}</span>
+                            </div>
+                        </div>
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div class="course-info-text">
+                                <strong>Timetable</strong>
+                                {% if active_enrollment.course.timetable_slots %}
+                                    {% for slot in timetable_slots %}                    
+                                    <span> {{ slot.get_day_of_week_display|slice:":3" }}:
+                                        {{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }}
+                                    </span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span> Not assigned yet</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </div>
-
-                        <div class="course-info-text">
-                            <strong>End date</strong>
-                            <span>{{ active_enrollment.course.end_date|ordinal_sup|safe |default:"Not confirmed yet" }}</span>
-                        </div>
-                    </div>
-                    <div class="course-info-item">
-                        <div class="course-info-icon">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-
-                        <div class="course-info-text">
-                            <strong>Teacher</strong>
-                            {% if active_enrollment.course.teacher %}                    
-                                <span> {{ active_enrollment.course.teacher.first_name|default:"Not Assigned yet" }} 
-                                    {{ active_enrollment.course.teacher.last_name }}</span>
-                            {% else %}
-                                <span> Not assigned yet</span>
-                            {% endif %}
+                    <div class="col-12">
+                        <div class="course-info-item">
+                            <div class="course-info-icon">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div class="course-info-text">
+                                <strong>Teacher</strong>
+                                {% if active_enrollment.course.teacher %}                    
+                                    <span> {{ active_enrollment.course.teacher.first_name|default:"Not Assigned yet" }} 
+                                        {{ active_enrollment.course.teacher.last_name }}</span>
+                                {% else %}
+                                    <span> Not assigned yet</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
+
         </div>
 
     {% else %}

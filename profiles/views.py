@@ -112,39 +112,23 @@ def my_course(request):
 
     enrollment_status = None
 
-    next_class = None
-    recent_attendance = Attendance.objects.none()
-
     if active_enrollment:
         enrollment_status = active_enrollment.status
 
-        next_class = (
-            ClassSession.objects
-            .filter(
-                course=active_enrollment.course,
-                is_cancelled=False,
-                start_time__gte=timezone.now()
-            )
-            .order_by("start_time")
-            .first()
-        )
+    timetable_slots = None
 
-        recent_attendance = (
-            Attendance.objects
-            .filter(
-                student=request.user,
-                class_session__course=active_enrollment.course,
-            )
-            .select_related("class_session")
-            .order_by("-class_session__start_time")
+    if active_enrollment:
+        timetable_slots = (
+            active_enrollment.course.timetable_slots
+            .all()
+            .order_by("day_of_week", "start_time")
         )
 
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,
         "enrollment_status": enrollment_status,
-        "next_class": next_class,
-        "recent_attendance": recent_attendance,
+        "timetable_slots": timetable_slots,
     }
 
     return render(request, "profiles/my_course.html", context)

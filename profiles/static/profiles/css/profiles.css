@@ -54,6 +54,7 @@
 /* ********* WRAPPERS ************************************* */
 
 .wrapper-next-class-card,
+.wrapper-course-card,
 .wrapper-account-settings-form,
 .wrapper-attendance-progress-card,
 .wrapper-attendance-details,
@@ -152,7 +153,7 @@
 }
 
 .profile-main h1 {
-    color:#c1f7e3;
+    color:whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
 }
@@ -290,7 +291,6 @@
 }
 
 .my-course .course-card {
-    width: 80%;
     border-radius: 10px;
     box-shadow: 0 2px 3px 0 #003366;
     min-width: 340px;
@@ -303,7 +303,7 @@
 
 .my-course header h1,
 .my-attendance header h1 {
-    color:#c1f7e3;
+    color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     margin-left: 0%;
     padding-left: 0%;
@@ -371,9 +371,9 @@
 .course-card .circle-panel1 {
     position: absolute;
     top: -70px;
-    left: -150px;
-    width: 380px;
-    height: 380px;
+    left: -220px;
+    width: 450px;
+    height: 450px;
     border-radius: 50%;
     /* background: #249188; */
     background: linear-gradient(63deg,rgba(0, 104, 107, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
@@ -385,10 +385,10 @@
 
 .course-card .circle-panel2 {
     position: absolute;
-    top: -80px;
-    left: -125px;
-    width: 380px;
-    height: 380px;
+    top: -65px;
+    left: -220px;
+    width: 460px;
+    height: 460px;
     border-radius: 50%;
     background: #003366;
     color: white;
@@ -401,7 +401,7 @@
 .course-card .circle-panel1 .icon-circle-bg {
     position: relative;
     top: 40px;
-    left: 0;
+    left: 60px;
     height: 50px;
     width: 50px;
     border-radius: 50%;
@@ -419,7 +419,7 @@
 
 .course-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
-    margin: 4rem 1rem 0 0;
+    margin: 4rem 1rem 0 60px;
     font-size: 2.5rem;
     font-weight: 500;
     line-height: 1.1;
@@ -427,8 +427,7 @@
 }
 
 .course-card .info {
-    margin-left: 150px !important;
-    padding: 2rem 2rem 2rem 9rem;
+    padding: 2rem 2rem 2rem 17rem;
     width: 100%;
     border: outset 1px #008f8f;
 }
@@ -850,14 +849,14 @@
 }
 
 .profile-settings-page h1 {
-    color: #c1f7e3;
+    color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
-    font-weight: 400;
+    /* font-weight: 400; */
     font-size: 2.8rem;
 }
 
 .profile-settings-page p {
-    color: whitesmoke;
+    color: white;
 }
 
 .account-settings-form {
