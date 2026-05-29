@@ -29,6 +29,8 @@ def profile(request):
 
     next_class = None
 
+    current_level = None
+
     if active_enrollment:
         next_class = (
             ClassSession.objects
@@ -40,9 +42,10 @@ def profile(request):
             .order_by("start_time")
             .first()
         )
-
+    
     context = {
         "profile": user_profile,
+        "current_level": current_level,
         "active_enrollment": active_enrollment,
         "next_class": next_class,
     }

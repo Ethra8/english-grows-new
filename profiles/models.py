@@ -86,21 +86,23 @@ class UserProfile(models.Model):
     ]
 
     LEVEL_UNKNOWN = "Pending"
-    LEVEL_A1 = "A1 Beginner"
-    LEVEL_A2 = "A2 Elementary"
-    LEVEL_B1 = "B1 Pre-Intermediate"
-    LEVEL_B2_1 = "B2.1 Low Intermediate"
-    LEVEL_B2_2 = "B2.2 High Intermediate"
-    LEVEL_C1_1 = "C1.1 Low Advance"
-    LEVEL_C1_2 = "C1.2 High Advance"
-    LEVEL_C2 = "C2 Proficiency"
+    LEVEL_A1 = "A1"
+    LEVEL_A2 = "A2"
+    LEVEL_B1_1 = "B1.1"
+    LEVEL_B1_2 = "B1.2"
+    LEVEL_B2_1 = "B2.1"
+    LEVEL_B2_2 = "B2.2"
+    LEVEL_C1_1 = "C1.1"
+    LEVEL_C1_2 = "C1.2"
+    LEVEL_C2 = "C2"
 
     LEVEL_CHOICES = [
         (LEVEL_UNKNOWN, "Pending"),
         (LEVEL_A1, "A1 Beginner"),
         (LEVEL_A2, "A2 Elementary"),
-        (LEVEL_B1, "B1 Pre-Intermediate"),
-        (LEVEL_B2_1, "B2.1 Low Intermediate"),
+        (LEVEL_B1_1, "B1.1 Pre-Intermediate"),
+        (LEVEL_B1_2, "B1.2 Low Intermediate"),
+        (LEVEL_B2_1, "B2.1 Intermediate"),
         (LEVEL_B2_2, "B2.2 High Intermediate"),
         (LEVEL_C1_1, "C1.1 Low Advance"),
         (LEVEL_C1_2, "C1.2 High Advance"),
@@ -150,10 +152,12 @@ class UserProfile(models.Model):
         blank=True
     )
 
-    level = models.CharField(
-        max_length=40,
+    current_level = models.CharField(
+        max_length=200,
         choices=LEVEL_CHOICES,
-        default=LEVEL_UNKNOWN
+        blank=True,
+        default="",
+        help_text="Current English level. Only admin should update this."
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

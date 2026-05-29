@@ -55,12 +55,13 @@
 
 .wrapper-next-class-card,
 .wrapper-account-settings-form,
-.wrapper-attendance-progress-card {
+.wrapper-attendance-progress-card,
+.wrapper-attendance-details,
+.wrapper-absence-details {
     border-radius: 10px;
-    padding: 8px;
+    padding: 4px;
     box-shadow: 0 2px 3px 0 #003366;
     background: rgba(106, 250, 225, 0.2);
-    margin: 0 auto 60px;
 }
 
 
@@ -154,6 +155,37 @@
     color:#c1f7e3;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
+}
+
+.dashboard-level-pill {
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    max-width: fit-content;
+    border: 2px solid #38d9c9;
+    border-radius: 999px;
+    background: #38d9c9;
+    box-shadow: 0 1px 2px 0 #003366;
+    font-family: "Big Shoulders Display", sans-serif;    
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0 0 0 .25rem; 
+}
+
+.dashboard-level-pill .current-level-label {
+    padding: 6px 14px;
+    color: #003366;
+}
+
+.dashboard-level-pill .current-level-value {
+    padding: 6px 22px 6px 16px;
+
+    background: rgba(0, 103, 108, 1);
+    color: #ffffff;
+
+    font-weight: 500;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
 }
 
 .next-class-card {
@@ -602,22 +634,23 @@
 
 /*** Detailed Attendance **********/
 
-.attendance-details,
-.absence-details {
+/* .wrapper-attendance-details,
+.wrapper-absence-details {
     border-radius: 10px;
     padding: 8px;
     box-shadow: 0 2px 3px 0 #003366;
-    /* min-width: 340px; */
     width: 49%;
     background: rgba(106, 250, 225, 0.2);
-}
+} */
 
-.attendance-details {
+.wrapper-attendance-details {
     margin-right: 1%;
+    width: 49%;
 }
 
-.absence-details {
+.wrapper-absence-details {
     margin-left: 1%;
+    width: 49%;
 }
 
 .detailed-attendance-card {

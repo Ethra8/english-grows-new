@@ -17,7 +17,7 @@ class UserProfileInline(admin.StackedInline):
         'company',
         'role',
         'country',
-        'level',
+        'current_level',
         'created_at',
         'updated_at',
     )
@@ -34,6 +34,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = (
         'username',
         'email',
+        'current_level',
         'is_active',
         'first_name',
         'last_name',
@@ -70,6 +71,15 @@ class CustomUserAdmin(UserAdmin):
         'first_name',
         'username',
     )
+
+    def current_level(self, obj):
+        if hasattr(obj, "profile") and obj.profile.current_level:
+            return obj.profile.current_level
+
+        return "-"
+
+    current_level.short_description = "Current Level"
+    
 
     def get_role(self, obj):
         if hasattr(obj, 'profile') and obj.profile.role:
@@ -169,12 +179,12 @@ class CompanyAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user',
+        'current_level',
         'get_first_name',
         'get_last_name',
         'get_email',
         'role',
         'company',
-        'level',
         'country',
         'created_at',
     )

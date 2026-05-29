@@ -75,11 +75,7 @@
     justify-content: center;
 }
 
-/* Monthly view: 'all-day' cell */
-.fc .fc-timegrid-axis-cushion {
-    max-width: 100px;
-}
-
+/* Monthly view: 'all-day' cell full */
 .fc .fc-timegrid-axis-frame {
     /* default */
     align-items: center;
@@ -88,6 +84,12 @@
     overflow: hidden;
     /* default */
     background-color: rgb(234, 234, 234);
+}
+
+/* Monthly view: 'all-day' cell text */
+.fc .fc-timegrid-axis-cushion {
+    max-width: 100px;
+    padding: 0.5rem 0.75rem;
 }
 
 /* Monthly view: 'all-day' header row */

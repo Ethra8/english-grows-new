@@ -33,6 +33,23 @@
                     <h1>Dashboard</h1>
                 </div>
             </div>
+
+            <div class="row mb-5">
+                <div class="col-12 dashboard-level-pill">
+                    <span class="current-level-label">Current level</span>
+
+                {% if request.user.profile.current_level %}
+                    <span class="current-level-value">
+                        {{ request.user.profile.get_current_level_display }}
+                    </span>
+                {% else %}
+                    <span class="current-level-value">
+                        Pending
+                    </span>
+                {% endif %}
+                </div>
+            </div>
+
             <div class="wrapper-next-class-card">
                 <div class="next-class-card">
                     <div class="teal-circle-panel">
@@ -62,6 +79,7 @@
                 </div>
             </div>
             {% endif %}
+
         </main>
 
     </div>
