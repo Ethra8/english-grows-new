@@ -38,7 +38,7 @@
     color: white;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
-    box-shadow: 0 2px 2px 1px #4b4b4b;
+    box-shadow: 0 1px 1px 1px #4b4b4b;
     border: outset 1px aquamarine;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -850,7 +850,7 @@
 /* *********** ACCOUNT SETTINGS PAGE ***************************** */
 
 .profile-settings-page {
-    margin: 70px 0 60px 7% !important;
+    padding: 70px 7%;
 }
 
 .profile-settings-page h1 {
@@ -861,7 +861,7 @@
 }
 
 .profile-settings-page p {
-    color: white;
+    font-weight: 500;
 }
 
 .account-settings-form {

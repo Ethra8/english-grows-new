@@ -115,6 +115,10 @@ a:hover {
     text-align: left;
 }
 
+.text-dark {
+    color: #003366 !important;
+}
+
 a.text-white:hover {
     color: #c1f7e3 !important;
 }
