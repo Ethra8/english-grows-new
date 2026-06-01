@@ -4,8 +4,8 @@
 }
 
 .profile-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
+    /* display: grid;
+    grid-template-columns: 280px 1fr; */
     min-height: 100vh;
 }
 
@@ -63,6 +63,7 @@
     padding: 4px;
     box-shadow: 0 2px 3px 0 #003366;
     background: rgba(106, 250, 225, 0.2);
+    /* overflow-block: visible; */
 }
 
 .wrapper-next-class-card {
@@ -154,7 +155,8 @@
 .profile-main {
     /* margin: 70px auto 70px 7%; */
     padding: 70px 7% 70px 7%;
-    /* width: fit-content; */
+    /* width: 100% ; */
+    /* min-width: 100% !important; */
 }
 
 .profile-main h1 {
@@ -647,14 +649,38 @@
     background: rgba(106, 250, 225, 0.2);
 } */
 
-.wrapper-attendance-details {
-    margin-right: 1%;
-    width: 49%;
+.row-details {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem !important;
+    align-items: center;
+    align-items: stretch;
+    width: 100%;
 }
 
+.row-details > .wrapper-attendance-details {
+    /* display: flex;
+    flex-direction: row;
+    gap: 2rem !important;
+    align-items: center;
+    min-width: 100%;
+    display: flex;
+    padding: 20px !important; */
+    flex: 1;
+
+}
+
+.wrapper-attendance-details {
+    /* margin-right: 1%;
+    width: 49%; */
+    /* min-width: 49%; */
+}
+
+
 .wrapper-absence-details {
-    margin-left: 1%;
-    width: 49%;
+    /* margin-left: 1%;
+    width: 49%; */
+    /* min-width: 49%; */
 }
 
 .detailed-attendance-card {

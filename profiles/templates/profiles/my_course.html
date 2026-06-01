@@ -3,7 +3,7 @@
 {% load date_extras %}
 
 
-{% block extra_title %}| My Course{% endblock %}
+{% block extra_title %}| Course Info{% endblock %}
 
 
 {% block content %}
@@ -12,11 +12,12 @@
 
 <section class="my-course">    
     <div class="overlay-birds"></div>
-    <div class="row">        
+    <div class="row d-flex flex-grow-1">        
         <div class="col-12 mb-4 ml-0 pl-0">
             <header>
+                {% if not active_enrollment %}
                 <h1>{{ active_enrollment.course.course_type.name }}</h1>
-                <!-- <p>View your course details.</p> -->
+                
                 <div class="course-info-item">
                     <div class="course-info-icon">
                     {% if enrollment_status == 'active' %}
@@ -31,6 +32,9 @@
                         <span>{{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
                     </div>
                 </div>
+                {% else %}
+                <h1>No active course assigned yet</h1>
+                {% endif %}
             </header>
         </div>
         <div class="wrapper-course-card">
@@ -41,8 +45,8 @@
                 </div>
                 <div class="circle-panel2"></div>
                 <div class="info row">
-                    {% if active_enrollment %}
-                    <div class="col-12 col-xl-6">
+    {% if active_enrollment %}
+                    <div class="col-12 col-lg-6">
                         {% if active_enrollment.course.total_hours %} 
                         <div class="course-info-item">
                             <div class="course-info-icon">
@@ -81,7 +85,7 @@
                         </div>                
                     </div>
 
-                    <div class="col-12 col-xl-6">
+                    <div class="col-12 col-lg-6">
                         <div class="course-info-item">
                             <div class="course-info-icon">
                                 <i class="fa-regular fa-calendar-check"></i>
@@ -144,11 +148,10 @@
         </div>
 
     {% else %}
-    <div class="profile-card">
-        <h2>No active course assigned yet</h2>
+    <div class="profile-card p-4">
+        <!-- <h2>No active course assigned yet</h2> -->
         <p>Your course information will appear here once you are enrolled in a course.</p>
     </div>
-
     {% endif %}
 
 </section>
