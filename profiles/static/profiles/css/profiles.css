@@ -65,6 +65,10 @@
     background: rgba(106, 250, 225, 0.2);
 }
 
+.wrapper-next-class-card {
+    min-width: max-content;
+}
+
 
 
 /*********************** SIDEBAR ***************************/
@@ -148,8 +152,9 @@
 /******************** MAIN PROFILE *********************************/
 
 .profile-main {
-    margin: 70px auto 60px 100px !important;
-    /* padding: 70px auto 60px 100px; */
+    /* margin: 70px auto 70px 7%; */
+    padding: 70px 7% 70px 7%;
+    /* width: fit-content; */
 }
 
 .profile-main h1 {
@@ -197,6 +202,7 @@
     border-radius: 10px;
     background: #c1f7e3;
     box-shadow: 0 2px 3px 0 #003366;
+    min-width: max-content;
 }
 
 .teal-circle-panel {
@@ -286,8 +292,7 @@
 /* ************* COURSE INFO ***************************************** */
 
 .my-course {
-    margin: 70px auto 60px 100px !important;
-    width: 80%;
+    padding: 70px 7%;
 }
 
 .my-course .course-card {
@@ -494,8 +499,8 @@
 /* ******** MY ATTENDANCE PAGE ******************************/
 
 .my-attendance {
-    margin: 70px auto 60px 100px !important;
-    width: 60%;
+    padding: 70px 7%;
+    width: stretch;
 }
 
 /* *** Current Attendace PROGRESS *****/
