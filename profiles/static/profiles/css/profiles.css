@@ -682,18 +682,18 @@ main.profile-main h1 {
 
 }
 
-.wrapper-attendance-details {
-    /* margin-right: 1%;
-    width: 49%; */
-    /* min-width: 49%; */
+/* .wrapper-attendance-details {
+    margin-right: 1%;
+    width: 49%; 
+    min-width: 49%;
 }
 
 
 .wrapper-absence-details {
-    /* margin-left: 1%;
-    width: 49%; */
-    /* min-width: 49%; */
-}
+    margin-left: 1%;
+    width: 49%; 
+    min-width: 49%;
+} */
 
 .detailed-attendance-card {
     position: relative;
@@ -957,8 +957,6 @@ main.profile-main h1 {
 
     .my-course .course-card {
         min-width: none !important;
-        /* max-width: 70% !important; */
-        /* padding: 0%; */
         margin: 0 auto;
     }
 
@@ -975,13 +973,14 @@ main.profile-main h1 {
     }
 
     main.profile-main {
-        padding: 70px 4%;
+        padding: 70px 7%;
+        min-width: 100%;
     }
 
     .next-class-card,
     .next-class-card .info {
         margin: 0 auto;
-        min-width: 100% !important;
+        /* min-width: 100% !important; */
     }
 
 
@@ -998,7 +997,7 @@ main.profile-main h1 {
 
     .course-card .info {
         min-width: none !important;
-        padding: 10.5rem 17% 2rem;
+        padding: 10.5rem 2rem 2rem;
     }
 
 
@@ -1006,6 +1005,12 @@ main.profile-main h1 {
 
 
 @media (max-width: 576px) {
+
+    main.profile-main {
+        padding: 70px 7%;
+        min-width: 100%;
+    }
+
 
     /* My DASHBOARD Page ************************* */
 
@@ -1060,8 +1065,17 @@ main.profile-main h1 {
 
     /* *** MY COURSE Page ******************************** */
 
-        .my-course {
+    .my-course {
         padding: 70px 7%;
+    }
+
+    .my-course header {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    .my-course .course-card .info {       
+        padding: 10.5rem 1rem 1rem;
     }
 
 
