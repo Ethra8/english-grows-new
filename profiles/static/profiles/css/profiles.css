@@ -7,6 +7,8 @@
     /* display: grid;
     grid-template-columns: 280px 1fr; */
     min-height: 100vh;
+    display: flex;
+    flex-grow: 1;
 }
 
 
@@ -83,7 +85,7 @@
 }
 
 .profile-sidebar h2 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 500;
     font-family: "Big Shoulders Display", sans-serif;
     color: #ffffff;
@@ -152,14 +154,11 @@
 
 /******************** MAIN PROFILE *********************************/
 
-.profile-main {
-    /* margin: 70px auto 70px 7%; */
+main.profile-main {
     padding: 70px 7% 70px 7%;
-    /* width: 100% ; */
-    /* min-width: 100% !important; */
 }
 
-.profile-main h1 {
+main.profile-main h1 {
     color:whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
@@ -207,7 +206,7 @@
     min-width: max-content;
 }
 
-.teal-circle-panel {
+.next-class-card .circle-panel1 {
     position: absolute;
     top: -70px;
     left: -170px;
@@ -222,7 +221,7 @@
     z-index: 2;
 }
 
-.circle-panel2 {
+.next-class-card .circle-panel2 {
     position: absolute;
     top: -80px;
     left: -150px;
@@ -237,7 +236,7 @@
     border: solid 2px #ffffff;
 }
 
-.teal-circle-panel .icon-circle-bg {
+.next-class-card .circle-panel1 .icon-circle-bg {
     position: relative;
     top: 20px;
     left: 0px;
@@ -249,7 +248,7 @@
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-.teal-circle-panel .fa-solid {
+.next-class-card .circle-panel1 .fa-solid {
     position: relative;
     top: 13px;
     left: 11px;
@@ -261,7 +260,7 @@
     -webkit-text-fill-color: transparent;
 }
 
-.next-class-card .teal-circle-panel h2 {
+.next-class-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     margin: 3rem 1rem 0 0;
     font-size: 2.5rem;
@@ -300,8 +299,16 @@
 .my-course .course-card {
     border-radius: 10px;
     box-shadow: 0 2px 3px 0 #003366;
-    min-width: 340px;
+    min-width: 300px;
     background: #c1f7e3;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    min-height: 230px;
+    border-radius: 10px;
+    background: #c1f7e3;
+    box-shadow: 0 2px 3px 0 #003366;
+
 }
 
 .my-course .course-card strong {
@@ -365,7 +372,7 @@
     padding-left: 0%;
 }
 
-.course-card {
+/* .course-card {
     position: relative;
     overflow: hidden;
     display: flex;
@@ -373,7 +380,7 @@
     border-radius: 10px;
     background: #c1f7e3;
     box-shadow: 0 2px 3px 0 #003366;
-}
+} */
 
 .course-card .circle-panel1 {
     position: absolute;
@@ -437,6 +444,11 @@
     padding: 2rem 2rem 2rem 17rem;
     width: 100%;
     border: outset 1px #008f8f;
+    min-width: 300px;
+}
+
+.course-card .info .col-lg-6 {
+    padding-left: 3rem !important;
 }
 
 .course-card .info p {
@@ -901,7 +913,156 @@
 
 
 
-@media (max-width: 991.99px) {
+@media (max-width: 1239px) {
+
+    .course-card .info{
+        padding: 10.5rem 2rem 2rem;
+        max-width: max-content;
+        justify-content: space-between !important;
+        /* width: max-content; */
+    }
+
+    .course-card .circle-panel1 {
+        top: -470px;
+        left: -170px;
+        width: 600px;
+        height: 600px;
+        background: linear-gradient(101deg,rgba(0, 104, 107, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    }
+
+    .course-card .circle-panel1 .icon-circle-bg {
+        top: 410px;
+        left: -10px;
+    }
+
+    .course-card .circle-panel1 h2 {
+        margin: 23rem 1rem 0 4rem;
+    }
+
+    .course-card .circle-panel2 {
+        top: -470px;
+        left: -160px;
+        width: 610px;
+        height: 610px;
+    }
+
+}
+
+
+@media (max-width: 991px) {
+
+    .profile-sidebar {
+        display: none;
+    }
+
+    .my-course .course-card {
+        min-width: none !important;
+        /* max-width: 70% !important; */
+        /* padding: 0%; */
+        margin: 0 auto;
+    }
+
+
+}
+
+
+@media (max-width: 767px) {
+
+    /*  My DASHBOARD Page ***************** */
+    
+    .profile-layout {
+        justify-content: space-around;
+    }
+
+    main.profile-main {
+        padding: 70px 4%;
+    }
+
+    .next-class-card,
+    .next-class-card .info {
+        margin: 0 auto;
+        min-width: 100% !important;
+    }
+
+
+    /* My COURSE Page ********************* */
+
+    .my-course {
+        padding: 70px 14%;
+    }
+
+    .my-course .course-card {
+        min-width: none !important;
+        padding: 0%;
+    }
+
+    .course-card .info {
+        min-width: none !important;
+        padding: 10.5rem 17% 2rem;
+    }
+
+
+}
+
+
+@media (max-width: 576px) {
+
+    /* My DASHBOARD Page ************************* */
+
+    .next-class-card,
+    .next-class-card .info {
+        margin: 0 auto;
+        min-width: 100%;
+    }
+
+    .next-class-card .info {
+        padding: 10.5rem 2rem 2rem;
+    }
+
+    .next-class-card .circle-panel1 {
+        top: -470px;
+        left: -170px;
+        width: 600px;
+        height: 600px;
+        background: linear-gradient(101deg,rgba(0, 104, 107, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    }
+
+    .next-class-card .info{
+        padding: 10.5rem 2rem 2rem;
+        max-width: max-content;
+        justify-content: space-between !important;
+        /* width: max-content; */
+    }
+
+    .next-class-card .circle-panel1 {
+        top: -470px;
+        left: -170px;
+        width: 600px;
+        height: 600px;
+        background: linear-gradient(101deg,rgba(0, 104, 107, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    }
+
+    .next-class-card .circle-panel1 .icon-circle-bg {
+        top: 410px;
+        left: -10px;
+    }
+
+    .next-class-card .circle-panel1 h2 {
+        margin: 23rem 1rem 0 4rem;
+    }
+
+    .next-class-card .circle-panel2 {
+        top: -470px;
+        left: -160px;
+        width: 610px;
+        height: 610px;
+    }
+
+    /* *** MY COURSE Page ******************************** */
+
+        .my-course {
+        padding: 70px 7%;
+    }
 
 
 }
