@@ -3,8 +3,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/calendar.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block extra_title %}| Calendar{% endblock %}
@@ -17,7 +15,7 @@
 <div id="my_calendar_page">
     <div class="container">
         <h1 class="mb-3">My Class Calendar</h1>
-        <div id="calendar" data-events-url="{% url 'profiles:my_calendar_events' %}"></div>></div>
+        <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:my_calendar_events' %}"></div>
     </div>
 </div>
 {% endblock %}
@@ -25,6 +23,8 @@
 {% block postloadjs %}
     {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<link rel="stylesheet" href="{% static 'profiles/css/calendar.css' %}">
 <script type="text/javascript" src="{% static 'profiles/js/calendar.js' %}"></script>
+
 {% endblock %}
     

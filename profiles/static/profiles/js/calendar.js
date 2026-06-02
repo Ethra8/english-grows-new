@@ -8,14 +8,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // refers to property data-events-urls of id="calendar"
     const eventsUrl = calendarEl.dataset.eventsUrl;
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridWeek',
+    // Mobile toolbar setup
+    function isMobileCalendar() {
+        return window.innerWidth <= 768;
+    }
 
-        headerToolbar: {
+    function getHeaderToolbar() {
+        if (isMobileCalendar()) {
+            return {
+                left: 'prev',
+                center: 'title',
+                right: 'next today dayGridMonth,timeGridWeek,listWeek'
+            };
+        }
+
+        return {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,listWeek'
-        },
+        };
+    }
+
+    function getFooterToolbar() {
+        return false;
+    }
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+
+        headerToolbar: getHeaderToolbar(),
+        footerToolbar: getFooterToolbar(),
 
         events: eventsUrl,
 
@@ -41,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (meetingLink) {
                 window.open(meetingLink, '_blank');
             }
+        },
+
+        windowResize: function () {
+            calendar.setOption('headerToolbar', getHeaderToolbar());
+            calendar.setOption('footerToolbar', getFooterToolbar());
         }
     });
 
