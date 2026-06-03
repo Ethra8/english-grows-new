@@ -217,7 +217,7 @@
 @media (max-width: 1200px) {
 
     #my_calendar_page {
-        min-width: 100%;
+        width: fit-content;
         max-width: 90%;
         padding: 0 2%;
         /* overflow-x: scroll; */
@@ -343,7 +343,7 @@
    FullCalendar Toolbar - Mobile
 ================================ */
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
     #my_calendar_page {
         min-width: 100%;
