@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
             return {
                 left: 'prev',
                 center: 'title',
-                right: 'next today dayGridMonth,timeGridWeek,listWeek'
+                right: 'next today,timeGridWeek,dayGridMonth,listMonth'
             };
         }
 
         return {
-            left: 'prev,next today',
+            left: 'prev',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,listWeek'
+            right: 'next today,timeGridWeek,dayGridMonth,listMonth'
         };
     }
 

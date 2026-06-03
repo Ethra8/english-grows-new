@@ -17,6 +17,7 @@
     /* background: rgba(106, 250, 225, 0.2); */
     margin: 0 auto 60px;
     min-width: 100%;
+    width: 100%;
 }
 
 #calendar {
@@ -29,23 +30,15 @@
     border-top-right-radius: 5px;
 }
 
-/* Title chunk */
-.my-calendar .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-    grid-row: 1;
-    grid-column: 1;
-    position: relative;
-    z-index: 1;
-}
-
 /* Title itself: Week date, e-g-: Jun 18-24 2026  */
 .fc-toolbar-title {
     color:whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2rem;
     border-radius: 5px;
-    width: 100%;
-    min-width: 300px;
-    padding: 0.5rem 70px;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 0.5rem 120px;
     background-color: #00686B;
     border: outset 1px #008f8f;
     box-shadow: 0 1px 2px 0 #003366;
@@ -121,221 +114,118 @@
     color: #fff !important;
 }
 
-
-/* ================================
-   FullCalendar Toolbar - Desktop
-================================ */
-
-.my-calendar .fc-footer-toolbar {
-    margin-bottom: 1.5rem;
+#my_calendar_page {
+    width: fit-content;
+    max-width: 90%;
+    padding: 0 2%;
+    /* overflow-x: scroll; */
 }
 
 .my-calendar .fc-header-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* gap: 1rem;
-    flex-wrap: wrap; */
+    position: relative;
+    display: grid !important;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    width: 100%;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
 }
 
-.my-calendar .fc-toolbar-chunk {
-    display: flex;
-    align-items: center;
+/* All toolbar chunks */
+.my-calendar .fc-header-toolbar .fc-toolbar-chunk {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    /* min-width: 0 !important; */
 }
 
-.my-calendar .fc-header-toolbar .fc-toolbar-chunk:first-child {
-    justify-content: flex-start;
-}
-
+/* Title chunk */
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-    justify-content: center;
+    grid-row: 1;
+    grid-column: 1;
+    position: relative;
+    z-index: 1;
 }
 
-.my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child {
-    justify-content: flex-end;
-    font-size: 5rem;
-}
-/* 
-.my-calendar .fc-toolbar-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin: 0;
-} */
-
-.my-calendar .fc-button {
-    border-radius: 6px;
-    border: none;
-    background: #003366;
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    box-shadow: none;
+/* Prev button chunk */
+.my-calendar .fc-header-toolbar .fc-toolbar-chunk:first-child {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    right: 1rem;
+    transform: translateY(-50%);
+    z-index: 5;
 }
 
-.my-calendar .fc-button-active {
-    background: #38d9c9 !important;
-    color: #003366 !important;
-}
-
-.my-calendar .fc-button:hover {
-    background: #00509e;
-    color: #ffffff;
-}
-
-.my-calendar .fc-button:focus {
-    box-shadow: none !important;
-}
-
-.my-calendar .fc-prev-button,
-.my-calendar .fc-next-button {
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child {
-    grid-row: 2;
+/* Right chunk : month/week/list*/
+.my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-today-button {
+    /* grid-row: 2;
     grid-column: 1;
     display: flex !important;
     justify-content: center !important;
     flex-wrap: wrap !important;
-    gap: 0.5rem;
-    min-width: max-content !important;
-} */
+    gap: 5rem;
+    min-width: max-content !important; */
+    background-color: #00686B !important;
+    color: antiquewhite;
+}
 
+/* Prev and next shared style */
+.my-calendar .fc-prev-button,
+.my-calendar .fc-next-button {
+    position: absolute !important;
+    width: 44px;
+    height: 44px;
+    padding: 0 !important;
+    /* display: inline-flex !important; */
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transform: translateY(-50%);
+    z-index: 5;
+    background-color: #003366 !important;
+}
+
+/* Next button */
+.my-calendar .fc-next-button {
+    top: 37px;
+    right: 1rem;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.my-calendar .fc-prev-button {
+    top: -62px;
+    left: 2rem;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+/* View buttons row: month / week / list */
+.my-calendar .fc-button-group {
+    position: relative;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 1rem;
+    width: 100% !important;
+    margin-left: 0%;
+    padding-left: 0%;
+}
 
 .my-calendar .fc-button-group .fc-button {
     margin: 0 !important;
     min-width: max-content;
 }
 
-/* ================================
-   FullCalendar Toolbar - Laptop
-=PX=============================== */
-@media (max-width: 1200px) {
+.my-calendar .fc-button {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.55rem !important;
+}
 
-    #my_calendar_page {
-        width: fit-content;
-        max-width: 90%;
-        padding: 0 2%;
-        /* overflow-x: scroll; */
-    }
-
-    .my-calendar .fc-header-toolbar {
-        position: relative;
-        display: grid !important;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        width: 100%;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-
-    /* All toolbar chunks */
-    .my-calendar .fc-header-toolbar .fc-toolbar-chunk {
-        width: 100% !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        min-width: 0 !important;
-    }
-
-    /* Title chunk */
-    /* .my-calendar .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-        grid-row: 1;
-        grid-column: 1;
-        position: relative;
-        z-index: 1;
-    } */
-
-    /* Title itself */
-    /* .my-calendar .fc-toolbar-title {
-        width: 100%;
-        text-align: center;
-        font-size: 1.25rem;
-        margin: 0;
-        padding: 1rem 4rem;
-        background: rgba(0, 51, 102, 0.65);
-        border: 1px solid rgba(0, 51, 102, 0.9);
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 51, 102, 0.35);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    } */
-
-    /* Prev button chunk */
-    .my-calendar .fc-header-toolbar .fc-toolbar-chunk:first-child {
-        position: absolute;
-        top: 100px;
-        right: 1rem;
-        transform: translateY(-50%);
-        /* width: auto !important; */
-        z-index: 5;
-    }
-
-    /* Right chunk : month/week/list*/
-    .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child>.fc-today-button {
-        /* grid-row: 2;
-        grid-column: 1;
-        display: flex !important;
-        justify-content: center !important;
-        flex-wrap: wrap !important;
-        gap: 0.5rem;
-        min-width: max-content !important; */
-    }
-
-    /* Next button */
-    .my-calendar .fc-next-button {
-        position: absolute !important;
-        top: -62px;
-        right: -4.5rem;
-        transform: translateY(-50%);
-        z-index: 5;
-    }
-
-    .my-calendar .fc-prev-button {
-        position: absolute !important;
-        top: -62px;
-        left: 1.5rem;
-        transform: translateY(-50%);
-        z-index: 5;
-    }
-
-    /* Prev and next shared style */
-    .my-calendar .fc-prev-button,
-    .my-calendar .fc-next-button {
-        width: 44px;
-        height: 44px;
-        padding: 0 !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-    }
-
-    /* View buttons row: month / week / list */
-    .my-calendar .fc-button-group {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 0;
-        width: 100% !important;
-        margin-left: 0%;
-        padding-left: 0%;
-    }
-
-    .my-calendar .fc-button-group .fc-button {
-        margin: 0 !important;
-        min-width: max-content;
-    }
-
-    .my-calendar .fc-button {
-        font-size: 0.8rem;
-        padding: 0.35rem 0.55rem !important;
-    }
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+    margin-left: 0 !important;
 }
 
 
@@ -371,19 +261,10 @@
         min-width: 0 !important;
     }
 
-    /* Title chunk */
-    /* .my-calendar .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-        grid-row: 1;
-        grid-column: 1;
-        position: relative;
-        z-index: 1;
-    } */
-
     /* Title itself */
     .my-calendar .fc-toolbar-title {
         width: 100%;
         margin: 0;
-        padding: 1rem 4rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -391,12 +272,13 @@
 
     /* Prev button chunk */
     .my-calendar .fc-header-toolbar .fc-toolbar-chunk:first-child {
-        position: absolute;
-        /* top: 50%; */
-        /* left: 1rem; */
-        transform: translateY(-50%);
-        /* width: auto !important; */
-        z-index: 5;
+        grid-row: 1;
+        grid-column: 1;
+        display: flex !important;
+        justify-content: center !important;
+        /* flex-wrap: wrap !important; */
+        gap: 2rem;
+        min-width: max-content !important;
     }
 
     /* Right chunk : month/week/list*/
@@ -405,58 +287,13 @@
         grid-column: 1;
         display: flex !important;
         justify-content: center !important;
-        /* flex-wrap: wrap !important; */
-        gap: 0.5rem;
-        min-width: max-content !important;
-    }
-
-    /* Next button */
-    .my-calendar .fc-next-button {
-        position: absolute !important;
-        top: 45px;
-        right: 0.5rem;
-        transform: translateY(-50%);
-        z-index: 5;
-    }
-
-    .my-calendar .fc-prev-button {
-        position: absolute !important;
-        top: -55px;
-        left: 1.5rem;
-        transform: translateY(-50%);
-        z-index: 5;    
-    }
-
-    /* Prev and next shared style */
-    .my-calendar .fc-prev-button,
-    .my-calendar .fc-next-button {
-        width: 44px;
-        height: 44px;
-        padding: 0 !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-    }
-
-    /* View buttons row: month / week / list */
-    .my-calendar .fc-button-group {
-        display: flex !important;
         flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 0;
-        width: 100% !important;
-        margin-left: 0%;
-        padding-left: 0%;
-    }
-
-    .my-calendar .fc-button-group .fc-button {
-        margin: 0 !important;
+        gap: 2rem;
+        min-width: max-content !important;
     }
 
     .my-calendar .fc-button {
         font-size: 0.8rem;
-        padding: 0.35rem 0.55rem !important;
     }
 }
 
@@ -476,19 +313,11 @@
         text-align: center;
     }
 
-    .my-calendar .fc-footer-toolbar .fc-button {
-        font-size: 0.75rem;
-        padding: 0.3rem 0.45rem !important;
-    }
-
-    .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
-        margin-left: none;
-    }
-
-    .fc-button-group .fc-today-button {
-        position: absolute !important;
-        top: 50px;
-        right: 50px;
-    }
 
 }
+
+
+
+
+
+
