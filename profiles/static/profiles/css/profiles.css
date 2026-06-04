@@ -102,18 +102,18 @@
     font-size: 1.3rem !important;
 }
 
-/* .sidebar-avatar {
-    width: 90px;
-    height: 90px;
+.sidebar-avatar {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-color: #5ff0df;
     color: #003b6f;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin: 0 auto 1rem;
-} */
+}
 
 .sidebar-user h3 {
     margin-bottom: 0.3rem;
@@ -123,9 +123,10 @@
     display: inline-block;
     border: 1px solid #5ff0df;
     border-radius: 999px;
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
     color: #5ff0df;
     font-size: 0.9rem;
+    min-width: 100%;
 }
 
 .sidebar-nav {
@@ -1083,4 +1084,23 @@ main.profile-main h1 {
     }
 
 
+    /* My ATTENDANCE Page ******************************* */
+
+    .my-attendance {
+        padding: 70px 3%;
+        width: stretch;
+    }
+
+    .my-attendance header .course-info-item strong {
+        font-size: 1.2rem;
+    }
+
+    .my-attendance header .course-info-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .my-attendance header .course-info-item .fa-solid {
+        font-size: 1.2rem;
+    }
 }
