@@ -65,6 +65,13 @@ def profile(request):
 def profile_settings(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    form = UserProfileForm(
+        request.POST,
+        request.FILES,
+        instance=user_profile,
+        user=request.user
+    )
+
     active_enrollment = (
         CourseEnrollment.objects
         .filter(
@@ -81,7 +88,12 @@ def profile_settings(request):
     )    
 
     if request.method == "POST":
-        form = UserProfileForm(request.POST, instance=user_profile, user=request.user)
+        form = UserProfileForm(
+            request.POST,
+            request.FILES,
+            instance=user_profile,
+            user=request.user
+        )
 
         if form.is_valid():
             form.save()
@@ -98,6 +110,7 @@ def profile_settings(request):
     }
 
     return render(request, "profiles/profile_settings.html", context)
+
 
 @login_required
 def my_course(request):

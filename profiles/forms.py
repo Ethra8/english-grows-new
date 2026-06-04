@@ -27,7 +27,9 @@ class UserProfileForm(forms.ModelForm):
             'email',
             'native_language',
             'country',
+            'profile_photo',
         ]
+
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -58,6 +60,12 @@ class UserProfileForm(forms.ModelForm):
                     'aria-label': 'Country selection',
                     'class': 'border-black rounded-0 profile-form-input',
                 })
+            
+            elif field_name == 'profile_photo':
+                field.widget.attrs.update({
+                    'class': 'border-black rounded-0 profile-form-input',
+                })
+            
             else:
                 field.widget.attrs.update({
                     'placeholder': placeholders[field_name],

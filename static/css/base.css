@@ -60,6 +60,12 @@ a:hover {
     padding-left: 0;
 }
 
+.nav-profile-photo {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
 #topnav {
     background-color: #003366;
     max-height: 104px;

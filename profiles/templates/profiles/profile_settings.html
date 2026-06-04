@@ -19,7 +19,7 @@
             <div class="wrapper-account-settings-form mt-5">
                 <div class="account-settings-form">
                     <p class="text-dark mb-4">Update your profile.</p>
-                    <form class="mt-3" action="{% url 'profiles:profile_settings' %}" method="POST">
+                    <form class="mt-3" action="{% url 'profiles:profile_settings' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <button class="btn btn-update text-uppercase mt-3" type="submit">

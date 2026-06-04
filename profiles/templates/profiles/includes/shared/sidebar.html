@@ -1,9 +1,13 @@
 <aside class="profile-sidebar">
 
     <div class="sidebar-user">
-        <div class="sidebar-avatar">
-            <i class="fa-solid fa-user"></i>
-        </div>
+        {% if request.user.profile.profile_photo %}
+            <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="profile-photo">
+        {% else %}
+            <div class="sidebar-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+        {% endif %}
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
         <!-- badge user type & company -->

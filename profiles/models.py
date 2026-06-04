@@ -160,6 +160,13 @@ class UserProfile(models.Model):
         help_text="Current English level. Only admin should update this."
     )
 
+    profile_photo = models.ImageField(
+        upload_to="profile_photos/",
+        null=True,
+        blank=True,
+        default="profile_photos/default_profile.png"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
