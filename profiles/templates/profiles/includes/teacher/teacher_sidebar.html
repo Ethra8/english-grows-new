@@ -1,6 +1,6 @@
 <aside class="profile-sidebar">
 
-    <div class="sidebar-user">
+    <div class="sidebar-user mb-3">
         {% if request.user.profile.profile_photo %}
             <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="profile-photo">
         {% else %}
@@ -10,23 +10,12 @@
         {% endif %}
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
-        <!-- badge user type & company -->
-        {% if request.user.profile.company %}
-            <span class="text-center mt-4">
-                <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
-                {{ request.user.profile.get_role_display }}
-                <br>
-                <strong>{{ request.user.profile.company.name }}</strong>
-            </span>
-        {% else %}
-            <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
-        {% endif %}
+        <!-- badge user role -->
+        <span class="text-center mt-4 mb-3">
+            <i class="fa-solid fa-graduation-cap mr-2 mr-2"></i> 
+            {{ request.user.profile.get_role_display }}
+        </span>
 
-        {% if active_enrollment %}
-            <p class="eg-font text-center mt-4 px-3"> {{ active_enrollment.course.course_type.name|default:"Pending confirmation" }}</p>
-        {% else %}
-            <p class="eg-font text-center mt-4">Not assigned yet</p>
-        {% endif %}    
     </div>
     <hr>
 
@@ -37,12 +26,12 @@
             <span>Dashboard</span>
         </a>
 
-        <a href="{% url 'profiles:my_course' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_course' %}active{% endif %}">
+        <a href="{% url 'profiles:teacher_courses' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_courses' %}active{% endif %}">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Course Info</span>
+            <span>My Courses</span>
         </a>
 
-        <a href="{% url 'profiles:my_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
+        <a href="{% url 'profiles:teacher_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_calendar' %}active{% endif %}">
             <i class="fa-regular fa-calendar-days"></i>
             <span>Class Calendar</span>
         </a>
@@ -57,12 +46,12 @@
             <span>Materials</span>
         </a>
 
-        <a href="{% url 'profiles:my_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
+        <a href="{% url 'profiles:teacher_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_attendance' %}active{% endif %}">
             <i class="fa-solid fa-list-check mr-2"></i>
-            <span>My Attendance</span>
+            <span>Attendance</span>
         </a>
 
-        <a href="{% url 'profiles:profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'profile_settings' %}active{% endif %}">
+        <a href="{% url 'profiles:teacher_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_profile_settings' %}active{% endif %}">
             <i class="fa-solid fa-user-gear"></i>
             <span>Account Settings</span>
         </a>

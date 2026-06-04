@@ -80,18 +80,26 @@
                   <div class="text-center">
                     {% if request.user.is_authenticated %}
                       {% if request.user.profile.profile_photo %}
-                        <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="nav-profile-photo">
+                      <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="nav-profile-photo">
                       {% else %}
-                        <div>
-                          <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
-                        </div>                    
+                      <div>
+                        <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
+                      </div>                    
                       {% endif %}
+                    {% else %}
+                      <div>
+                        <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
+                      </div>                    
                     {% endif %}
                      
                     {% if request.user.is_authenticated %}
-                      <p class="my-0 text-white">{{ user.username }}</p>
+                      {% if request.user.first_name %}
+                      <p class="my-0 text-white mt-1">{{ request.user.first_name }}</p>
+                      {% else %}
+                      <p class="my-0 text-white mt-1">{{ user.username }}</p>
+                      {% endif %}
                     {% else %}
-                      <p class="my-0 text-white">Login</p>
+                      <p class="my-0 text-white mt-1">Login</p>
                     {% endif %}
                   </div>
                 </a>

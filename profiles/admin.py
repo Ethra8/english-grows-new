@@ -18,6 +18,7 @@ class UserProfileInline(admin.StackedInline):
         'role',
         'country',
         'current_level',
+        'profile_photo',
         'created_at',
         'updated_at',
     )

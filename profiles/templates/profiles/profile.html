@@ -27,7 +27,17 @@
     <div class="overlay-birds"></div>
     <div class="profile-layout">
 
-        {% include "profiles/includes/shared/sidebar.html" %}
+        {% if request.user.profile.role == "employee" or request.user.profile.role == "individual" %}
+            {% include "profiles/includes/student/student_sidebar.html" %}
+        
+        {% elif request.user.profile.role == "company_admin" %}
+            {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+        
+        {% elif request.user.profile.role == "teacher" %}
+            {% include "profiles/includes/teacher/teacher_sidebar.html" %}
+                
+        {% endif %}
+
 
         <main class="profile-main">
             {% if request.user.profile.role == "company_admin" %}
@@ -37,7 +47,7 @@
                 {% include "profiles/includes/teacher/teacher_dashboard.html" %}
 
             {% elif request.user.profile.role == "employee" or request.user.profile.role == "individual" %}
-                {% include "profiles/includes/student_dashboard.html" %}
+                {% include "profiles/includes/student/student_dashboard.html" %}
 
             {% endif %}
         </main>
