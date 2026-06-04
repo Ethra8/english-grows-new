@@ -17,6 +17,7 @@
         {% else %}
             <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
         {% endif %}
+
         {% if active_enrollment %}
             <p class="eg-font text-center mt-4 px-3"> {{ active_enrollment.course.course_type.name|default:"Pending confirmation" }}</p>
         {% else %}
