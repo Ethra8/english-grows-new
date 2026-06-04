@@ -35,6 +35,7 @@ class UserProfileForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
 
         super().__init__(*args, **kwargs)
+        self.fields['profile_photo'].label = "Update your profile picture"
 
         if self.user:
             self.fields['first_name'].initial = self.user.first_name
@@ -65,14 +66,16 @@ class UserProfileForm(forms.ModelForm):
                 field.widget.attrs.update({
                     'class': 'border-black rounded-0 profile-form-input',
                 })
-            
+
+    
             else:
                 field.widget.attrs.update({
                     'placeholder': placeholders[field_name],
                     'class': 'border-black rounded-0 profile-form-input',
                 })
 
-            field.label = False
+            if field_name != 'profile_photo':
+                field.label = False
 
     def save(self, commit=True):
         profile = super().save(commit=False)

@@ -44,7 +44,7 @@
 
 /* Calendar WEEKLY general card content (timetable rows/cols) */
 .fc-view-harness {
-    background-color: rgba(245, 245, 245, 0.9);
+    background-color: rgba(245, 245, 245, 0.8);
     width: 100%;
     border-radius: 50px;
 }
@@ -59,7 +59,7 @@
 }
 
 .fc th  {
-    background-color: rgba(106, 250, 225, 0.7) /* #6afae1; */
+    background-color: rgba(106, 250, 225, 0.3) /* #6afae1; */
 }
 
 /* Calendar date <th> table head content */
@@ -102,7 +102,7 @@
 .fc .fc-daygrid-day-frame {
     min-height: 100%;
     position: relative;
-    background-color: rgb(234, 234, 234);
+    background-color: rgb(234, 234, 234, 0.1);
 }
 
 /* Calendar events styling */
@@ -119,6 +119,11 @@
 .fc-timegrid-more-link:hover {
     cursor: pointer;
     background-color: #01858a;
+}
+
+.fc .fc-list-day-text,
+.fc .fc-list-day-side-text {
+    color: #003366 !important;
 }
 
 .bank-holiday-event {

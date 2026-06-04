@@ -78,30 +78,30 @@
                 <a class="pt-0 pb-0" href="#" id="user-options" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   <div class="text-center">
-                  {% if request.user.is_authenticated %}
-                    {% if request.user.profile.profile_photo %}
+                    {% if request.user.is_authenticated %}
+                      {% if request.user.profile.profile_photo %}
                         <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="nav-profile-photo">
-                    {% else %}
+                      {% else %}
                         <div>
                           <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
                         </div>                    
+                      {% endif %}
                     {% endif %}
-                  {% endif %}
                      
                     {% if request.user.is_authenticated %}
-                    <p class="my-0 text-white">{{ user.username }}</p>
+                      <p class="my-0 text-white">{{ user.username }}</p>
                     {% else %}
-                    <p class="my-0 text-white">Login</p>
+                      <p class="my-0 text-white">Login</p>
                     {% endif %}
                   </div>
                 </a>
                 <div class="dropdown-menu border-0" aria-labelledby="user-options">
                   {% if request.user.is_authenticated %}
-                  <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my profile page">My Profile</a>
-                  <a href="{% url 'account_logout' %}" class="dropdown-item" aria-label="go to the log out page">Logout</a>
+                    <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my profile page">My Profile</a>
+                    <a href="{% url 'account_logout' %}" class="dropdown-item" aria-label="go to the log out page">Logout</a>
                   {% else %}
-                  <a href="{% url 'account_signup' %}" class="dropdown-item" aria-label="go to the account registration page">Register</a>
-                  <a href="{% url 'account_login' %}" class="dropdown-item" aria-label="go to the login page">Login</a>
+                    <a href="{% url 'account_signup' %}" class="dropdown-item" aria-label="go to the account registration page">Register</a>
+                    <a href="{% url 'account_login' %}" class="dropdown-item" aria-label="go to the login page">Login</a>
                   {% endif %}
                 </div>
               </li>

@@ -873,6 +873,7 @@ main.profile-main h1 {
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
+    max-width: 420px;
 }
 
 
@@ -1110,4 +1111,13 @@ main.profile-main h1 {
     .my-attendance header .course-info-item .fa-solid {
         font-size: 1.2rem;
     }
+
+
+    /* My ACCOUNT SETTINGS Page **************************** */
+
+    .account-settings-form {
+        max-width: 340px;
+    }
+
+
 }
