@@ -9,8 +9,8 @@ from django.utils.dateparse import parse_datetime
 
 from datetime import timedelta
 
-from .models import UserProfile
-from .forms import UserProfileForm
+from .models import UserProfile, TeacherProfile
+from .forms import UserProfileForm, TeacherProfileForm
 
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
@@ -576,48 +576,52 @@ def teacher_attendance(request):
 def teacher_profile_settings(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
-    form = UserProfileForm(
-        request.POST,
-        request.FILES,
-        instance=user_profile,
+    if user_profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    teacher_profile, created = TeacherProfile.objects.get_or_create(
         user=request.user
     )
 
-    active_enrollment = (
-        CourseEnrollment.objects
-        .filter(
-            student=request.user,
-            status="active"
-        )
-        .select_related(
-            "course",
-            "course__course_type",
-            "course__company",
-            "course__teacher",
-        )
-        .first()
-    )    
-
     if request.method == "POST":
-        form = UserProfileForm(
+        user_form = UserProfileForm(
             request.POST,
             request.FILES,
             instance=user_profile,
             user=request.user
         )
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your profile has been updated.")
-            return redirect("profiles:profile_settings")
+        teacher_form = TeacherProfileForm(
+            request.POST,
+            instance=teacher_profile
+        )
+
+        if user_form.is_valid() and teacher_form.is_valid():
+            user_form.save()
+            teacher_form.save()
+
+            messages.success(request, "Your teacher profile has been updated.")
+            return redirect("profiles:teacher_profile_settings")
 
     else:
-        form = UserProfileForm(instance=user_profile, user=request.user)
+        user_form = UserProfileForm(
+            instance=user_profile,
+            user=request.user
+        )
+
+        teacher_form = TeacherProfileForm(
+            instance=teacher_profile
+        )
 
     context = {
         "profile": user_profile,
-        "active_enrollment": active_enrollment,
-        "form": form,
+        "teacher_profile": teacher_profile,
+        "user_form": user_form,
+        "teacher_form": teacher_form,
     }
 
-    return render(request, "profiles/teacher/teacher_profile_settings.html", context)
+    return render(
+        request,
+        "profiles/teacher/teacher_profile_settings.html",
+        context
+    )

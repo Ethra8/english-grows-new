@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 
-from .models import UserProfile
+from .models import UserProfile, TeacherProfile
 
 
 class UserProfileForm(forms.ModelForm):
@@ -93,3 +93,12 @@ class UserProfileForm(forms.ModelForm):
             profile.save()
 
         return profile
+
+
+class TeacherProfileForm(forms.ModelForm):
+    class Meta:
+        model = TeacherProfile
+        fields = [
+            "bio",
+            "specialties",
+        ]

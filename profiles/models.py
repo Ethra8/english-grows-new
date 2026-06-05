@@ -170,6 +170,10 @@ class UserProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
+    def is_teacher(self):
+        return self.role == self.ROLE_TEACHER
+
+    @property
     def is_company_admin(self):
         return self.role == self.ROLE_COMPANY_ADMIN
 
@@ -193,3 +197,28 @@ def create_user_profile(sender, instance, created, **kwargs):
 
     if created:
         UserProfile.objects.get_or_create(user=instance)
+
+
+
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_profile"
+    )
+
+    bio = models.TextField(blank=True)
+
+    specialties = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Example: Business English, FCE, CAE, Kids, Conversation"
+    )
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.username

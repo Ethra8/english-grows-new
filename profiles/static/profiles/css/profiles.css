@@ -159,8 +159,9 @@
     text-decoration: none;
 }
 
-
-/******************** MAIN PROFILE *********************************/
+/* **************************************************|
+******** MAIN PROFILE *******************************|
+*****************************************************/
 
 main.profile-main {
     padding: 70px 7% 70px 7%;
@@ -171,6 +172,7 @@ main.profile-main h1 {
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
 }
+
 
 .dashboard-level-pill {
     display: inline-flex;
@@ -298,7 +300,12 @@ main.profile-main h1 {
 
 
 
-/* ************* COURSE INFO ***************************************** */
+/* **************************************************|
+******** COURSEs PAGE *******************************|
+*****************************************************/
+
+
+/* ********STUDENT: COURSE INFO **********************/
 
 .my-course {
     padding: 70px 7%;
@@ -307,7 +314,6 @@ main.profile-main h1 {
 .my-course .course-card {
     border-radius: 10px;
     box-shadow: 0 2px 3px 0 #003366;
-    /* min-width: 300px; */
     background: #c1f7e3;
     position: relative;
     overflow: hidden;
@@ -368,7 +374,6 @@ main.profile-main h1 {
 .no-course-assigned {
     padding: 1rem 2rem 1rem 18rem;
     width: 100%;
-    /* margin-left: 0%; */
 }
 
 .no-course-assigned h2 {
@@ -379,16 +384,6 @@ main.profile-main h1 {
     padding-left: 0%;
 }
 
-/* .course-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    min-height: 230px;
-    border-radius: 10px;
-    background: #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
-} */
-
 .course-card .circle-panel1 {
     position: absolute;
     top: -70px;
@@ -396,7 +391,6 @@ main.profile-main h1 {
     width: 450px;
     height: 450px;
     border-radius: 50%;
-    /* background: #249188; */
     background: linear-gradient(63deg,rgba(0, 104, 107, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
     color: white;
     padding-left: 205px;
@@ -516,8 +510,12 @@ main.profile-main h1 {
 }
 
 
+/* **************************************************|
+******** ATTENDANCE PAGE ****************************|
+*****************************************************/
 
-/* ******** MY ATTENDANCE PAGE ******************************/
+
+/* ******** STUDENT: MY ATTENDANCE PAGE *************/
 
 .my-attendance {
     padding: 70px 7%;
@@ -617,7 +615,7 @@ main.profile-main h1 {
 }
 
 
-/**** Attendance Porgress bar ***/
+/**** Attendance Progress bar ***/
 
 .attendance-progress {
     width: 100%;
@@ -849,7 +847,15 @@ main.profile-main h1 {
 }
 
 
-/* *********** ACCOUNT SETTINGS PAGE ***************************** */
+/* ***** TEACHER: ATTENDANCE PAGE *************/
+
+
+
+
+
+/* **************************************************|
+******** ACCOUNT SETTINGS PAGE **********************|
+*****************************************************/
 
 .profile-settings-page {
     padding: 70px 7%;
@@ -858,7 +864,6 @@ main.profile-main h1 {
 .profile-settings-page h1 {
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
-    /* font-weight: 400; */
     font-size: 2.8rem;
 }
 
@@ -879,6 +884,8 @@ main.profile-main h1 {
 
 
 @media (max-width: 1239px) {
+
+    /* STUDENT: Course page */
 
     .course-card .info {
         padding: 10.5rem 4% 2rem;
@@ -921,14 +928,21 @@ main.profile-main h1 {
         height: 610px;
     }
 
+    /* TEACHER: Course page */
+
+
 }
 
 
 @media (max-width: 991px) {
 
+    /*** SIDEBAR *********** */
+
     .profile-sidebar {
         display: none;
     }
+
+    /* STUDENT Course page */
 
     .my-course .course-card {
         min-width: none !important;
@@ -941,8 +955,8 @@ main.profile-main h1 {
 
 @media (max-width: 767px) {
 
-    /*  My DASHBOARD Page ***************** */
-    
+    /*  MAIN PROFILE ***************** */
+
     .profile-layout {
         justify-content: space-around;
     }
@@ -952,14 +966,15 @@ main.profile-main h1 {
         min-width: 100%;
     }
 
+    /*  STUDENT: My DASHBOARD Page ***************** */
+    
     .next-class-card,
     .next-class-card .info {
         margin: 0 auto;
-        /* min-width: 100% !important; */
     }
 
 
-    /* My COURSE Page ********************* */
+    /* STUDENT: My COURSE Page ******* */
 
     .my-course {
         padding: 70px 14%;
@@ -984,7 +999,7 @@ main.profile-main h1 {
     }
 
 
-    /* My ATTENDANCE Page ********************** */
+    /* STUDENT: My ATTENDANCE Page ****** */
 
     .my-attendance {
         margin: 0 auto;
@@ -1019,13 +1034,13 @@ main.profile-main h1 {
 
 @media (max-width: 576px) {
 
+    /* MAIN PROFILE ********************/
     main.profile-main {
         padding: 70px 7%;
         min-width: 100%;
     }
 
-
-    /* My DASHBOARD Page ************************* */
+    /* STUDENT: My DASHBOARD Page ***** */
 
     .next-class-card,
     .next-class-card .info {
