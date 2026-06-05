@@ -94,12 +94,12 @@
                      
                     {% if request.user.is_authenticated %}
                       {% if request.user.first_name %}
-                      <p class="my-0 text-white mt-1">{{ request.user.first_name }}</p>
+                      <p class="my-0 text-white text-center mt-1">{{ request.user.first_name }}</p>
                       {% else %}
-                      <p class="my-0 text-white mt-1">{{ user.username }}</p>
+                      <p class="my-0 text-white text-center mt-1">{{ user.username }}</p>
                       {% endif %}
                     {% else %}
-                      <p class="my-0 text-white mt-1">Login</p>
+                      <p class="my-0 text-white text-center mt-1">Login</p>
                     {% endif %}
                   </div>
                 </a>

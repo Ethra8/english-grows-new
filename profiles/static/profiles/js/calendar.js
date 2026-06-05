@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return {
             left: 'prev',
             center: 'title',
-            right: 'next today,timeGridWeek,dayGridMonth,listMonth'
+            right: 'next today,timeGridWeek,dayGridMonth,listMonth,multiMonthYear'
         };
     }
 

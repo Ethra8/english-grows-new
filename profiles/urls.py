@@ -9,8 +9,8 @@ urlpatterns = [
     path("student/student_profile_settings/", views.student_profile_settings, name="student_profile_settings"),    
     path("student/my_course/", views.my_course, name="my_course"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
-    path("student/my-calendar/", views.my_calendar, name="my_calendar"),
-    path("student/my-calendar/events/", views.my_calendar_events, name="my_calendar_events"),
+    path("student/my_calendar/", views.my_calendar, name="my_calendar"),
+    path("student/my_calendar/events/", views.my_calendar_events, name="my_calendar_events"),
     
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
