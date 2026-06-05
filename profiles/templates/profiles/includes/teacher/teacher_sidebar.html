@@ -33,12 +33,12 @@
 
         <a href="{% url 'profiles:teacher_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_calendar' %}active{% endif %}">
             <i class="fa-regular fa-calendar-days"></i>
-            <span>Class Calendar</span>
+            <span>Classes Calendar</span>
         </a>
 
         <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
             <i class="fa-solid fa-chart-line"></i>
-            <span>Assessment</span>
+            <span>Assessments</span>
         </a>
 
         <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
@@ -48,7 +48,7 @@
 
         <a href="{% url 'profiles:teacher_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_attendance' %}active{% endif %}">
             <i class="fa-solid fa-list-check mr-2"></i>
-            <span>Attendance</span>
+            <span>Attendances</span>
         </a>
 
         <a href="{% url 'profiles:teacher_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_profile_settings' %}active{% endif %}">

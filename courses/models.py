@@ -50,6 +50,7 @@ class Course(models.Model):
     STATUS_CHOICES = [
         ("confirmed", "Confirmed"),
         ("active", "Active"),
+        ("paused", "Paused"),
         ("completed", "Completed"),
         ("cancelled", "Cancelled"),
     ]

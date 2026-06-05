@@ -1,0 +1,250 @@
+.assigned-courses {
+    padding: 70px 7%;
+    width: 100%;
+}
+
+.assigned-courses .course-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: #c1f7e3;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    min-height: 230px;
+    border-radius: 10px;
+}
+
+.assigned-courses .course-card strong {
+    text-transform: capitalize;
+}
+
+.assigned-courses header .row.extra {
+    width: 100% !important;
+    max-width: 100% !important;
+    background-color: #003366;
+    border-radius: 5px;
+    padding: 0.25rem 2rem;
+    box-shadow: 0 2px 3px 0 #003366;
+    border: solid 2px rgba(0, 104, 107, 1);
+}
+
+.assigned-courses header h1,
+.my-attendance header h1 {
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    margin-left: 0%;
+    padding-left: 0%;
+    font-size: 2.8rem;
+}
+
+.assigned-courses header .course-info-item,
+.my-attendance header .course-info-item  {
+    border-bottom: none;
+}
+
+.assigned-courses header .course-info-icon,
+.my-attendance header .course-info-icon {
+    width: 50px;
+    height: 50px;
+    border: solid 2px #5ff0df;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+.assigned-courses header .extra .course-info-icon {
+    width: 40px;
+    height: 40px;
+    border: solid 2px #5ff0df;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+
+.assigned-courses header .course-info-item .fa-regular,
+.assigned-courses header .course-info-item .fa-solid,
+.my-attendance header .course-info-item .fa-regular,
+.my-attendance header .course-info-item .fa-solid {
+    color: #003366;
+    font-size: 1.4rem;
+}
+
+.assigned-courses header .course-info-text strong,
+.my-attendance header .course-info-item strong {
+    color: #c1f7e3;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.assigned-courses header .extra .course-info-text strong {
+    color: #c1f7e3;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+
+.assigned-courses header .course-info-text span,
+.my-attendance header .course-info-item span {
+    color: #ffffff;
+    font-size: 1.3rem;
+}
+
+.assigned-courses header .extra .course-info-text span {
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.no-course-assigned {
+    padding: 1rem 2rem 1rem 18rem;
+    width: 100%;
+}
+
+.no-course-assigned h2 {
+    color:#003366;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    margin-left: 0%;
+    padding-left: 0%;
+}
+
+.course-card .circle-panel1 {
+    position: absolute;
+    top: -70px;
+    left: -220px;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: linear-gradient(63deg,rgba(0, 104, 107, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    color: white;
+    padding-left: 205px;
+    padding-top: 90px;
+    z-index: 2;
+}
+
+.course-card .circle-panel2 {
+    position: absolute;
+    top: -65px;
+    left: -220px;
+    width: 460px;
+    height: 460px;
+    border-radius: 50%;
+    background: #003366;
+    color: white;
+    padding-left: 205px;
+    padding-top: 90px;
+    z-index: 1;
+    border: solid 2px #ffffff;
+}
+
+.course-card .circle-panel1 .icon-circle-bg {
+    position: relative;
+    top: 40px;
+    left: 60px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
+    border: solid 1px #c1f7e3;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+.course-card .circle-panel1 .fa-regular {
+    position: relative;
+    top: 12px;
+    left: 12px;
+    font-size: 1.5rem;
+}
+
+.course-card .circle-panel1 h2 {
+    font-family: "Big Shoulders Display", sans-serif;    
+    margin: 4rem 1rem 0 60px;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: #003366;
+}
+
+.course-card .info {
+    padding: 2rem 2rem 2rem 17rem;
+    width: 100%;
+    border: outset 1px #008f8f;
+    min-width: 300px;
+}
+
+.course-card .info .col-lg-6 {
+    padding-left: 3rem !important;
+}
+
+.course-card .info p {
+    color: #003366;
+}
+
+.course-info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(0, 128, 128, 0.15);
+}
+
+.course-info-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 3px 0 #003366;
+    border: solid 2px #5ff0df;
+    background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%);
+    color: #003366;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+.course-info-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.course-info-text strong {
+    color: #00426b;
+    font-weight: 700;
+}
+
+.course-info-text span {
+    color: #5f6363;
+}
+
+.teacher-item {
+    border: 1px solid rgba(0, 128, 128, 0.2);
+    border-radius: 12px;
+    padding: 0.9rem 1.2rem;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.teacher-text {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+}
+
+/********** Courses ACCORDION *****************/
+
+#teacherCoursesAccordion .card {
+    padding: 0;
+    margin: 0%; 
+    height: 100%;
+    max-height: 100%;
+    /* width: 100%;  */
+    background: rgba(0, 128, 128, 1);
+    border-radius: 10px !important;
+}
+
+#teacherCoursesAccordion .card-body {
+    background-color: whitesmoke;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}

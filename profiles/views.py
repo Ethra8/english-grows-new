@@ -362,7 +362,7 @@ def teacher_dashboard(request):
     })
 
 
-@login_required
+
 @login_required
 def teacher_courses(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -385,35 +385,50 @@ def teacher_courses(request):
         .order_by("name")
     )
 
+    total_courses = courses.count()
+    active_courses = courses.filter(status="active").count()
+    confirmed_courses = courses.filter(status="confirmed").count()
+    cancelled_courses = courses.filter(status="cancelled").count()
+    paused_courses = courses.filter(status="paused").count()
+
+    active_courses_list = courses.filter(status="active")
+
     context = {
         "profile": profile,
         "courses": courses,
-        "total_courses": courses.count(),
+        "total_courses": total_courses,
+        "active_courses": active_courses,
+        "confirmed_courses": confirmed_courses,
+        "cancelled_courses": cancelled_courses,
+        "paused_courses": paused_courses,
+        "active_courses_list": active_courses_list,  
     }
 
     return render(request, "profiles/teacher/teacher_courses.html", context)
 
+
 @login_required
 def teacher_calendar(request):
-    active_enrollment = (
-        CourseEnrollment.objects
-        .filter(
-            student=request.user,
-            status="active"
-        )
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+    
+    courses = (
+        Course.objects
+        .filter(teacher=request.user)
         .select_related(
-            "course",
-            "course__course_type",
-            "course__company",
-            "course__teacher",
+            "course_type",
+            "company",
+            "teacher",
         )
-        .first()
+        .order_by("name")
     )
 
     context = {
-        "active_enrollment": active_enrollment,
+        "profile": profile,
+        "courses": courses,
     }
-
 
     return render(request, "profiles/teacher/teacher_calendar.html", context)
 
@@ -421,24 +436,26 @@ def teacher_calendar(request):
 # TEACHER CALENDAR PAGE
 @login_required
 def teacher_calendar_events(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return JsonResponse([], safe=False)
+
     start = request.GET.get("start")
     end = request.GET.get("end")
 
-    active_course_ids = (
-        CourseEnrollment.objects
-        .filter(
-            student=request.user,
-            status="active",
-        )
-        .values_list("course_id", flat=True)
-    )
-
+    teacher_course_ids = (
+        Course.objects
+        .filter(teacher=request.user)
+        .values_list("id", flat=True)
+        )    
+    
     sessions = (
         ClassSession.objects
         .filter(
-            course_id__in=active_course_ids,
+            course_id__in=teacher_course_ids,
             is_cancelled=False,
-        )
+            )
         .select_related("course")
         .order_by("start_time")
     )
@@ -471,13 +488,25 @@ def teacher_calendar_events(request):
     events = []
 
     for session in sessions:
+
+        status_class = ""
+
+        if session.course.status == "confirmed":
+            status_class = "course-confirmed-event"
+        elif session.course.status == "paused":
+            status_class = "course-paused-event"
+        elif session.course.status == "cancelled":
+            status_class = "course-cancelled-event"
+
         events.append({
             "id": session.id,
             "title": session.title,
             "start": session.start_time.isoformat(),
             "end": session.end_time.isoformat() if session.end_time else None,
+            "className": status_class,
             "extendedProps": {
                 "course": session.course.name,
+                "course_status": session.course.status,
                 "class_number": session.class_number,
                 "meeting_link": session.meeting_link,
             },

@@ -244,6 +244,44 @@
     margin-left: 0 !important;
 }
 
+/* ================================
+   TEACHER CALENDAR
+================================ */
+
+/* Confirmed Courses */
+.course-confirmed-event {
+    background-color: #fff3cd !important;
+    border-color: #ffe69c !important;
+}
+
+ .course-confirmed-event .fc-event-time,
+ .course-confirmed-event .fc-event-title {
+    color: #664d03 !important;
+}
+
+/* Paused Courses */
+.course-paused-event {
+    background-color: #e9ecef !important;
+    border-color: #ced4da !important;
+}
+
+.course-paused-event .fc-event-time,
+.course-paused-event .fc-event-title {
+    color: #495057 !important;
+}
+
+/* Cancelled Courses */
+.course-cancelled-event {
+    background-color: #f8d7da !important;
+    border-color: #f5c2c7 !important;
+}
+
+.course-cancelled-event .fc-event-time,
+.course-cancelled-event .fc-event-title {
+    color: #842029 !important;
+}
+
+
 
 /* ================================
    FullCalendar Toolbar - Mobile

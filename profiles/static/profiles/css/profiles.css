@@ -313,14 +313,12 @@ main.profile-main h1 {
 
 .my-course .course-card {
     border-radius: 10px;
-    box-shadow: 0 2px 3px 0 #003366;
     background: #c1f7e3;
     position: relative;
     overflow: hidden;
     display: flex;
     min-height: 230px;
     border-radius: 10px;
-    background: #c1f7e3;
     box-shadow: 0 2px 3px 0 #003366;
 }
 
@@ -435,7 +433,7 @@ main.profile-main h1 {
 .course-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     margin: 4rem 1rem 0 60px;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 500;
     line-height: 1.1;
     color: #003366;
@@ -508,6 +506,27 @@ main.profile-main h1 {
     gap: 2rem;
     align-items: center;
 }
+
+/********** TEACHER: My COURSES Page *****************/
+
+#teacherCoursesAccordion .card {
+    padding: 0;
+    margin: 0%; 
+    height: 100%;
+    max-height: 100%;
+    /* width: 100%;  */
+    background: rgba(0, 128, 128, 1);
+    border-radius: 10px !important;
+}
+
+#teacherCoursesAccordion .card-body {
+    background-color: whitesmoke;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+
+
 
 
 /* **************************************************|
