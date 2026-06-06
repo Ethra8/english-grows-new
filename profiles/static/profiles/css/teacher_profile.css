@@ -23,7 +23,7 @@
 }
 
 .today-card-left {
-    flex: 0 0 230px;
+    flex: 0 0 25%;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -49,14 +49,14 @@
 }
 
 .today-title h3 {
-    margin: 0;
+    /* margin: 0; */
     color: #fff;
     font-family: "Big Shoulders Display", sans-serif;
 }
 
 .today-title span {
     color: #5eead4;
-    margin: 0 5rem 0 0;
+    margin: 0;
 }
 
 .today-class-info {
@@ -69,13 +69,21 @@
     overflow: hidden;
 }
 
+.today-class-main {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
 .today-time,
 .today-course,
 .today-students {
-    padding: 0.9rem 1.5rem;
+    padding: 0.9rem 1rem 0.9rem 1.5rem;
 }
 
 .today-time {
+    flex: 0 0 auto;
     color: #5eead4;
     font-weight: 700;
     background: rgba(0, 51, 102, 0.45);
@@ -84,6 +92,7 @@
 .today-course {
     color: #fff;
     flex: 1;
+    min-width: 0;
     border-left: 1px solid rgba(80, 230, 220, 0.2);
     border-right: 1px solid rgba(80, 230, 220, 0.2);
 }
@@ -347,14 +356,20 @@
 }
 
 
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
 
+    .assigned-courses,
+    .teacher-dashboard {
+        padding: 70px 4%;
+    }
+    
     .today-classes-card {
         flex-direction: column;
         align-items: stretch;
     }
 
     .today-card-left {
+        /* flex: 0 0 220px; */
         max-height: 70px;
     }
 
@@ -383,12 +398,18 @@
         max-width: calc((100% - 0.75rem) / 2);
     }
 
+        
 }
 
 
 
 @media (max-width: 575px) {
 
+    .assigned-courses,
+    .teacher-dashboard {
+        padding: 70px 2%;
+    }
+    
     .today-class-info {
         flex-direction: column;
         align-items: stretch;
@@ -399,4 +420,22 @@
         flex: 0 0 100%;
         max-width: 100%;
     }
+
+    .today-class-info {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .today-class-main {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .today-class-btn {
+        width: 100% !important;
+        margin: 0 auto;
+    }
+
+
 }
