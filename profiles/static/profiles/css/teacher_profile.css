@@ -693,37 +693,19 @@
         padding: 70px 2%;
     }
 
+    .assigned-courses header h1, 
+    .teacher-dashboard header h1, 
+    .my-attendance header h1 {
+        margin: 0;
+        text-align: center;
+    }
+
     .assigned-courses header .course-status-row .course-info-item {
         /* tablets: 2 per row */
         flex: 0 0 calc((100% - 0.75rem) / 2);
         max-width: calc((100% - 0.75rem) / 2);
     }
 
-    /* Course Assigned BY STATUS */
-
-    .course-action {
-        width: 100%;
-    }
-
-    /* .btn-course-details {
-        display: block;
-        text-align: center;
-    } */
-
-    .assigned-courses-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-    }
-
-    .assigned-course-row {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 1rem;
-    }
-
-    /* END Course Assigned BY STATUS */
         
 }
 
@@ -736,12 +718,6 @@
         align-items: stretch;
     }
     
-    .assigned-courses header .course-status-row .course-info-item {
-        /* phones: 1 per row */
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
     .today-class-info {
         flex-direction: column;
         align-items: stretch;
@@ -757,6 +733,33 @@
         width: 100% !important;
         margin: 0 auto;
     }
+
+        /* Course Assigned BY STATUS */
+
+    .course-action {
+        width: 100%;
+    }
+
+    .assigned-courses header .course-status-row .course-info-item {
+        /* phones: 1 per row */
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .assigned-courses-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .assigned-course-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem;
+    }
+
+    /* END Course Assigned BY STATUS */
 
 
 }
