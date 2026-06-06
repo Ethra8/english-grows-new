@@ -1,7 +1,124 @@
-.assigned-courses {
+.assigned-courses,
+.teacher-dashboard {
     padding: 70px 7%;
     width: 100%;
+    min-height: 100vh;
 }
+
+/* ***********************************
+|*  DASHBOARD *****************
+|*********************************** */
+
+
+
+.today-classes-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: rgba(0, 51, 102, 0.65);
+    border: 1px solid rgba(80, 230, 220, 0.45);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+}
+
+.today-card-left {
+    flex: 0 0 230px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.today-sessions-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.today-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: rgba(0, 150, 145, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.today-title h3 {
+    margin: 0;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+}
+
+.today-title span {
+    color: #5eead4;
+    margin: 0 5rem 0 0;
+}
+
+.today-class-info {
+    gap: 0;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 51, 102, 0.35);
+    border: 1px solid rgba(80, 230, 220, 0.25);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.today-time,
+.today-course,
+.today-students {
+    padding: 0.9rem 1.5rem;
+}
+
+.today-time {
+    color: #5eead4;
+    font-weight: 700;
+    background: rgba(0, 51, 102, 0.45);
+}
+
+.today-course {
+    color: #fff;
+    flex: 1;
+    border-left: 1px solid rgba(80, 230, 220, 0.2);
+    border-right: 1px solid rgba(80, 230, 220, 0.2);
+}
+
+.today-students {
+    color: #fff;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.today-students i {
+    color: #5eead4;
+}
+
+.today-class-btn {
+    border: 1px solid #5eead4;
+    color: #5eead4;
+    padding: 0.85rem 1.4rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    width: 200px !important;
+}
+
+.today-class-btn:hover {
+    background: rgba(94, 234, 212, 0.15);
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* ***********************************
+|*  ASSIGNED COURSES *****************
+|*********************************** */
 
 .assigned-courses .course-card {
     width: 100% !important;
@@ -16,21 +133,8 @@
     border-radius: 10px;
 }
 
-.assigned-courses .course-card strong {
-    text-transform: capitalize;
-}
-
-.assigned-courses header .row.extra {
-    width: 100% !important;
-    max-width: 100% !important;
-    background-color: #003366;
-    border-radius: 5px;
-    padding: 0.25rem 2rem;
-    box-shadow: 0 2px 3px 0 #003366;
-    border: solid 2px rgba(0, 104, 107, 1);
-}
-
 .assigned-courses header h1,
+.teacher-dashboard header h1,
 .my-attendance header h1 {
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
@@ -39,17 +143,26 @@
     font-size: 2.8rem;
 }
 
-.assigned-courses header .course-info-item,
-.my-attendance header .course-info-item  {
-    border-bottom: none;
+
+/* .extra row: Confirmed/paused/cancelled icons + num. */
+
+.assigned-courses header .extra {
+    width: 100% !important;
+    min-width: 100% !important;
+    padding: 0.25rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
-.assigned-courses header .course-info-icon,
-.my-attendance header .course-info-icon {
-    width: 50px;
-    height: 50px;
-    border: solid 2px #5ff0df;
+.assigned-courses header .extra .course-info-item {
+    width: 100%;
+    flex: 1 1 0;
+    background-color: rgba(0, 51, 102, 0.6);
     box-shadow: 0 2px 3px 0 #003366;
+    border: solid 2px rgba(0, 104, 107, 1);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
 }
 
 .assigned-courses header .extra .course-info-icon {
@@ -59,33 +172,16 @@
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-
-.assigned-courses header .course-info-item .fa-regular,
-.assigned-courses header .course-info-item .fa-solid,
-.my-attendance header .course-info-item .fa-regular,
-.my-attendance header .course-info-item .fa-solid {
+.assigned-courses header .extra .course-info-item .fa-regular,
+.assigned-courses header .extra .course-info-item .fa-solid {
     color: #003366;
     font-size: 1.4rem;
-}
-
-.assigned-courses header .course-info-text strong,
-.my-attendance header .course-info-item strong {
-    color: #c1f7e3;
-    font-size: 1.3rem;
-    font-weight: 500;
 }
 
 .assigned-courses header .extra .course-info-text strong {
     color: #c1f7e3;
     font-size: 1.1rem;
     font-weight: 400;
-}
-
-
-.assigned-courses header .course-info-text span,
-.my-attendance header .course-info-item span {
-    color: #ffffff;
-    font-size: 1.3rem;
 }
 
 .assigned-courses header .extra .course-info-text span {
@@ -231,6 +327,7 @@
     align-items: center;
 }
 
+
 /********** Courses ACCORDION *****************/
 
 #teacherCoursesAccordion .card {
@@ -239,7 +336,7 @@
     height: 100%;
     max-height: 100%;
     /* width: 100%;  */
-    background: rgba(0, 128, 128, 1);
+    background: #008f8f;
     border-radius: 10px !important;
 }
 
@@ -247,4 +344,59 @@
     background-color: whitesmoke;
     border-bottom-left-radius: 10px !important;
     border-bottom-right-radius: 10px !important;
+}
+
+
+@media (max-width: 1200px) {
+
+    .today-classes-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .today-card-left {
+        max-height: 70px;
+    }
+
+    .today-students {
+        display: none;
+    }
+
+    .today-time,
+    .today-course,
+    .today-students {
+        border: 0;
+    }
+
+    .today-calendar-btn {
+        text-align: center;
+    }
+
+    
+}
+
+
+@media (max-width: 991px) {
+    .assigned-courses header .course-status-row .course-info-item {
+        /* tablets: 2 per row */
+        flex: 0 0 calc((100% - 0.75rem) / 2);
+        max-width: calc((100% - 0.75rem) / 2);
+    }
+
+}
+
+
+
+@media (max-width: 575px) {
+
+    .today-class-info {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .assigned-courses header .course-status-row .course-info-item {
+        /* phones: 1 per row */
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }

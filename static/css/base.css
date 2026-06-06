@@ -64,6 +64,8 @@ a:hover {
     height: 50px;
     width: 50px;
     border-radius: 50%;
+    /* border: 1px solid whitesmoke; */
+    box-shadow: 0 2px 3px 0 #001a34;
 }
 
 #topnav {
@@ -788,14 +790,21 @@ span.vertical-line {
 
 
 @media (min-width: 576px) {
+    
     #bag.container, 
     #bag.container-sm {
         max-width: 98%;
     }
+
 }
 
 
 @media (max-width: 991.99px) {
+    
+    nav .dropdown-menu {
+        left: -80px !important;   
+    }
+
     .logo {
         height: 5rem;
         width: 5rem;
@@ -833,8 +842,9 @@ span.vertical-line {
     }
 
     .nav-link {
-        padding: 33px 0 .5rem;
+        padding: 1rem 0;
     }
+
 }
 
 

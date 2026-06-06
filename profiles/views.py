@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
-from datetime import timedelta
+from datetime import timedelta, datetime, time
 
 from .models import UserProfile, TeacherProfile
 from .forms import UserProfileForm, TeacherProfileForm
@@ -62,7 +62,7 @@ def profile(request):
 
 
 @login_required
-def student_profile_settings(request):
+def profile_settings(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
     form = UserProfileForm(
@@ -109,7 +109,7 @@ def student_profile_settings(request):
         "form": form,
     }
 
-    return render(request, "profiles/student/student_profile_settings.html", context)
+    return render(request, "profiles/profile_settings.html", context)
 
 
 # ******************
@@ -348,6 +348,31 @@ def teacher_dashboard(request):
     if request.user.profile.role != "teacher":
         return redirect("home")
 
+    today = timezone.localdate()
+
+    start_of_day = timezone.make_aware(
+        datetime.combine(today, time.min)
+    )
+
+    end_of_day = timezone.make_aware(
+        datetime.combine(today, time.max)
+    )
+
+    todays_sessions = (
+        ClassSession.objects
+        .filter(
+            course__teacher=request.user,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_day,
+            start_time__lte=end_of_day,
+        )
+
+    .select_related("course")
+    .prefetch_related("course__enrollments")
+    .order_by("start_time")
+    )
+
     courses = (
         Course.objects
         .filter(teacher=request.user)
@@ -357,8 +382,17 @@ def teacher_dashboard(request):
         )
     )
 
+    print("USER:", request.user)
+    print("TODAY:", today)
+    print("SESSIONS:", todays_sessions.count())
+
+    for session in todays_sessions:
+        print(session.course.name, session.start_time, session.is_cancelled)
+
     return render(request, "profiles/teacher/teacher_dashboard.html", {
         "courses": courses,
+        "todays_sessions": todays_sessions,
+        "today": today,
     })
 
 

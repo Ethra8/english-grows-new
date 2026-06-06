@@ -15,7 +15,7 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="assigned-courses vh-100">    
+<section class="assigned-courses">    
     <div class="overlay-birds"></div>
         
     <header class="mb-5">
@@ -23,9 +23,9 @@
             <div class="col-12 mb-4 ml-0 pl-0">
                 <h1>My Assigned Courses</h1>
             </div>
-
-            {% if courses %}
-            <div class="col-12 px-0 mb-2">
+        </div>
+        {% if courses %}
+        <div class="extra mb-4 mt-4">
                 <div class="course-info-item">
                     <div class="course-info-icon">
                         <i class="fa-regular fa-circle-play"></i>
@@ -36,10 +36,7 @@
                         <span>{{ active_courses }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row extra mb-4 mx-0">
-            <div class="col-12 col-lg-4 d-flex justify-content-center">
+
                 <div class="course-info-item">
                     <div class="course-info-icon">
                         <i class="fa-regular fa-circle-check"></i>
@@ -50,8 +47,6 @@
                         <span>{{ confirmed_courses }}</span>
                     </div>
                 </div>                                       
-            </div>
-            <div class="col-12 col-lg-4 d-flex justify-content-center">
                 <div class="course-info-item">
                     <div class="course-info-icon">
                         <i class="fa-regular fa-circle-pause"></i>
@@ -62,8 +57,6 @@
                         <span>{{ paused_courses }}</span>
                     </div>
                 </div>                                       
-            </div>
-            <div class="col-12 col-lg-4 d-flex justify-content-center">
                 <div class="course-info-item">
                     <div class="course-info-icon">
                         <i class="fa-regular fa-circle-xmark"></i>
@@ -74,7 +67,6 @@
                         <span>{{ cancelled_courses }}</span>
                     </div>
                 </div>                                       
-            </div>
         </div>
         {% endif %}
     </header>

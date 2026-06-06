@@ -67,7 +67,7 @@
     <header class="container-fluid fixed-top w-100 p-0">
 
         <div id="topnav" class="row d-none d-lg-flex m-0">
-          <div class="col-12 col-sm-3 my-auto py-1 py-lg-0 text-center text-lg-left">
+          <div class="col-12 col-sm-3 my-auto py-lg-0 text-center text-lg-left">
             <a href="{% url 'home' %}" class="nav-link" aria-label="go to the home page">
               <img src="{% static 'images/logo_englishgrows.png' %}" alt="logo" class="logo">
             </a>
@@ -105,12 +105,22 @@
                 </a>
                 <div class="dropdown-menu border-0" aria-labelledby="user-options">
                   {% if request.user.is_authenticated %}
-                    <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my profile page">My Profile</a>
+                    {% if request.user.profile.role == "teacher" %}
+                      <a href="{% url 'profiles:teacher_dashboard' %}" class="dropdown-item" aria-label="go to my teacher dashboard">
+                        My Profile
+                      </a>
+                    {% else %}
+                      <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my profile page">
+                        My Profile
+                      </a>
+                    {% endif %}
+
                     <a href="{% url 'account_logout' %}" class="dropdown-item" aria-label="go to the log out page">Logout</a>
+
                   {% else %}
                     <a href="{% url 'account_signup' %}" class="dropdown-item" aria-label="go to the account registration page">Register</a>
                     <a href="{% url 'account_login' %}" class="dropdown-item" aria-label="go to the login page">Login</a>
-                  {% endif %}
+                  {% endif %}                
                 </div>
               </li>
               {% block bag_icon %}
