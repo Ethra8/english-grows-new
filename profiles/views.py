@@ -348,6 +348,7 @@ def teacher_dashboard(request):
     if request.user.profile.role != "teacher":
         return redirect("home")
 
+    # Shows Today's Sessions
     today = timezone.localdate()
 
     start_of_day = timezone.make_aware(
@@ -382,13 +383,6 @@ def teacher_dashboard(request):
         )
     )
 
-    print("USER:", request.user)
-    print("TODAY:", today)
-    print("SESSIONS:", todays_sessions.count())
-
-    for session in todays_sessions:
-        print(session.course.name, session.start_time, session.is_cancelled)
-
     return render(request, "profiles/teacher/teacher_dashboard.html", {
         "courses": courses,
         "todays_sessions": todays_sessions,
@@ -419,6 +413,7 @@ def teacher_courses(request):
         .order_by("name")
     )
 
+
     total_courses = courses.count()
     active_courses = courses.filter(status="active").count()
     confirmed_courses = courses.filter(status="confirmed").count()
@@ -439,6 +434,46 @@ def teacher_courses(request):
     }
 
     return render(request, "profiles/teacher/teacher_courses.html", context)
+
+
+
+@login_required
+def teacher_course_detail(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user
+    )
+
+    enrollments = (
+        course.enrollments
+        .select_related("student", "student__profile")
+        .filter(status="active")
+    )
+
+    sessions = (
+        course.class_sessions
+        .all()
+        .order_by("start_time")
+    )
+
+    context = {
+        "profile": profile,
+        "course": course,
+        "enrollments": enrollments,
+        "sessions": sessions,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_course_detail.html",
+        context
+    )
 
 
 @login_required

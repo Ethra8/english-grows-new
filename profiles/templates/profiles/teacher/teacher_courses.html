@@ -71,7 +71,7 @@
         {% endif %}
     </header>
 
-    <div class="wrapper-course-card w-100">
+    <!-- <div class="wrapper-course-card w-100">
         <div class="course-card row">
             <div class="circle-panel1">
                 <div class="icon-circle-bg"><i class="fa-regular fa-circle-play"></i></div>
@@ -143,8 +143,101 @@
                 {% endif %}
                 </div>
             </div>
+        </div> -->
+
+        <div class="wrapper-course-card">
+            <div class="assigned-courses-panel">
+
+                <div class="assigned-courses-header">
+                    <div class="assigned-courses-title">
+                        <div class="assigned-courses-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h2>Assigned Courses</h2>
+                    </div>
+
+                    <select id="courseStatusFilter" class="course-status-filter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="paused">Paused</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="assigned-courses-list">
+
+                    {% for course in courses %}
+                    <div class="assigned-course-row" data-status="{{ course.status }}">
+
+                        <div class="course-main-info">
+                            <div class="course-row-icon">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+
+                            <div>
+                                <h3>{{ course.name }}</h3>
+
+                                <span class="status-badge status-{{ course.status }}">
+                                    {{ course.get_status_display }}
+                                </span>
+
+                                <p>
+                                    <i class="fa-regular fa-calendar-days mr-1"></i>
+                                    {{ course.start_date|date:"D, j M" }}
+                                    {% if course.end_date %}
+                                        – {{ course.end_date|date:"D, j M" }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- <div class="course-stat">
+                            <i class="fa-solid fa-user-group"></i>
+                            <strong>{{ course.enrollments.all|length }}</strong>
+                            <span>Students</span>
+                        </div> -->
+
+                        <!-- <div class="course-stat">
+                            <i class="fa-solid fa-desktop"></i>
+                            <strong>{{ course.class_sessions.all|length }}</strong>
+                            <span>Class Sessions</span>
+                        </div>
+ -->
+                        <div class="course-stat completion-stat">
+                            <div
+                                class="completion-ring"
+                                style="--completion: {{ course.completion_percentage }};"
+                            ></div>
+
+                            <strong>{{ course.completion_percentage }}%</strong>
+                            <span>Completed</span>
+                        </div>
+
+                        <div class="course-action">
+                            <a href="{% url 'profiles:teacher_course_detail' course.id %}" class="btn-course-details">
+                                View Details
+                                <i class="fa-solid fa-chevron-right ml-2"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    {% empty %}
+                        <p class="text-white p-3">No courses assigned yet.</p>
+                    {% endfor %}
+
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 {% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
+{% endblock %}
+    

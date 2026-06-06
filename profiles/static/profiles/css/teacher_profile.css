@@ -1,6 +1,6 @@
 .assigned-courses,
 .teacher-dashboard {
-    padding: 70px 7%;
+    padding: 70px 5%;
     width: 100%;
     min-height: 100vh;
 }
@@ -9,7 +9,7 @@
 |*  DASHBOARD *****************
 |*********************************** */
 
-
+/* Today's Classes *******************/
 
 .today-classes-card {
     width: 100%;
@@ -124,6 +124,10 @@
     text-decoration: none;
 }
 
+/* END Today's Classes ********************/
+
+
+
 
 /* ***********************************
 |*  ASSIGNED COURSES *****************
@@ -198,7 +202,9 @@
     font-size: 1.1rem;
 }
 
-.no-course-assigned {
+/* ACTIVE COURSES CARD ************************************ */
+
+/* .no-course-assigned {
     padding: 1rem 2rem 1rem 18rem;
     width: 100%;
 }
@@ -334,17 +340,16 @@
     flex-direction: row;
     gap: 2rem;
     align-items: center;
-}
+} */
 
 
-/********** Courses ACCORDION *****************/
+/** Courses ACCORDION ************/
 
-#teacherCoursesAccordion .card {
+/* #teacherCoursesAccordion .card {
     padding: 0;
     margin: 0%; 
     height: 100%;
     max-height: 100%;
-    /* width: 100%;  */
     background: #008f8f;
     border-radius: 10px !important;
 }
@@ -353,15 +358,298 @@
     background-color: whitesmoke;
     border-bottom-left-radius: 10px !important;
     border-bottom-right-radius: 10px !important;
+} */
+
+/* END ACTIVE COURSES CARD ********************** */
+
+/* Courses BY STATUS ***************************** */
+
+.assigned-courses-panel {
+    width: 100%;
+    background: linear-gradient(180deg, #bdf6df, #004b5d);
+    border: 3px solid #55e0d2;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
 }
+
+.assigned-courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 2rem;
+}
+
+.assigned-courses-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.assigned-courses-title h2 {
+    margin: 0;
+    color: #003366;
+    font-family: "Big Shoulders Display", sans-serif;
+}
+
+.assigned-courses-icon,
+.course-row-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #008b87;
+    color: #bdf6df;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,.35);
+}
+
+.course-status-filter {
+    background: transparent;
+    border: 1px solid #008b87;
+    border-radius: 8px;
+    padding: .6rem 2.5rem .6rem 1rem;
+    color: #003366;
+    font-weight: 600;
+}
+
+.assigned-courses-list {
+    background: rgba(0, 51, 102, 0.82);
+    border-radius: 10px;
+    margin: 0 .3rem .3rem;
+    padding: 1rem 1.5rem;
+}
+
+.assigned-course-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.3rem 0;
+    border-bottom: 1px solid rgba(94, 234, 212, 0.25);
+}
+
+.assigned-course-row:last-child {
+    border-bottom: none;
+}
+
+.course-main-info {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+}
+
+.course-main-info h3 {
+    color: #fff;
+    margin: 0 0 .35rem;
+    font-size: 1.1rem;
+}
+
+.course-main-info p {
+    color: #c8eee9;
+    margin: .45rem 0 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: .2rem .75rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background: #23c99a;
+}
+
+.status-confirmed {
+    background: #f5c542;
+    color: #003366;
+}
+
+.status-paused {
+    background: #adb5bd;
+}
+
+.status-cancelled {
+    background: #e95757;
+}
+
+.course-stat {
+    color: #dff;
+    border-left: 1px solid rgba(94, 234, 212, 0.2);
+    padding-left: 1.5rem;
+}
+
+.course-stat i {
+    color: #5eead4;
+    margin-right: .5rem;
+}
+
+.course-stat strong {
+    color: #fff;
+    font-size: 1.7rem;
+    margin-right: .4rem;
+}
+
+.course-stat span {
+    display: block;
+    margin-top: .2rem;
+}
+
+.completion-ring {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: .5rem;
+    vertical-align: middle;
+    background:
+        conic-gradient(
+            #5eead4 calc(var(--completion) * 1%),
+            rgba(255, 255, 255, 0.2) 0
+        );
+    position: relative;
+}
+
+.completion-ring::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    background: rgba(0, 51, 102, 0.95);
+    border-radius: 50%;
+}
+.course-action {
+    justify-self: end !important;
+    align-self: center;
+}
+
+.btn-course-details {
+    border: 1px solid #5eead4;
+    color: #5eead4;
+    padding: .7rem 1.3rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-course-details:hover {
+    background: rgba(94, 234, 212, .15);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* END Course BY STATUS ***************** */
+
+
+/* COURSE DETAILS Page *************************** */
+/* 
+.course-level {
+    text-transform: uppercase;
+    background: rgba(0, 51, 102, 0.45);
+    border: 2px solid rgba(94, 234, 212, 0.75);
+    border-radius: 50px;
+    padding: 0.5rem 2.5rem;
+    color: #fff;
+    width: fit-content;
+}
+
+.course-level strong {
+    color: #5eead4;
+} */
+
+.course-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+}
+
+.course-detail-item {
+    background: rgba(0, 51, 102, 0.45);
+    border: 1px solid rgba(94, 234, 212, 0.25);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    color: #fff;
+}
+
+.course-detail-item strong {
+    display: block;
+    color: #5eead4;
+    margin-bottom: 0.35rem;
+}
+
+.course-detail-item span {
+    display: block;
+}
+
+.completion-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.students-list h4 {
+    color: #fff;
+    margin-bottom: 0;
+}
+
+.students-list h4 span {
+    font-size: 1rem;
+    color: #5eead4;
+    margin-top: 0;
+}
+
+.student-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 51, 102, 0.45);
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #fff;
+}
+
+.student-row span {
+    display: block;
+    color: #c8eee9;
+}
+
+.student-level {
+    background: rgba(94, 234, 212, 0.15);
+    border: 1px solid rgba(94, 234, 212, 0.5);
+    border-radius: 20px;
+    padding: 0.35rem 0.9rem;
+    color: #5eead4 !important;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .course-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+
 
 
 @media (max-width: 1250px) {
 
     .assigned-courses,
     .teacher-dashboard {
-        padding: 70px 4%;
+        padding: 70px 2%;
     }
+
+    /* Today's Classes ********** */
     
     .today-classes-card {
         flex-direction: column;
@@ -387,28 +675,75 @@
         text-align: center;
     }
 
+    /* END Today's Classes */
+
+    /* ASSIGNED COURSES Page: Courses Assigned  */
+    .assigned-course-row {
+        grid-template-columns: 2fr 1fr auto;
+        gap: 0;
+    }
+
+    .course-stat {
+        display: none;
+        /* border-left: none;
+        padding-left: 0; */
+    }
+
+    .btn-course-details {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
     
 }
 
 
 @media (max-width: 991px) {
+
+    .assigned-courses,
+    .teacher-dashboard {
+        padding: 70px 2%;
+    }
+
     .assigned-courses header .course-status-row .course-info-item {
         /* tablets: 2 per row */
         flex: 0 0 calc((100% - 0.75rem) / 2);
         max-width: calc((100% - 0.75rem) / 2);
     }
 
+    /* Course Assigned BY STATUS */
+
+    .course-action {
+        width: 100%;
+    }
+
+    /* .btn-course-details {
+        display: block;
+        text-align: center;
+    } */
+
+    .assigned-courses-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .assigned-course-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem;
+    }
+
+    /* END Course Assigned BY STATUS */
         
 }
 
 
 
 @media (max-width: 575px) {
-
-    .assigned-courses,
-    .teacher-dashboard {
-        padding: 70px 2%;
-    }
     
     .today-class-info {
         flex-direction: column;
@@ -439,3 +774,9 @@
 
 
 }
+
+/* MUST STAY AT THE END OF CSS FILE */
+.assigned-course-row.course-hidden {
+    display: none !important;
+}    
+

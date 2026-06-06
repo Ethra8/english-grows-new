@@ -72,6 +72,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "course_type",
+        "course_level",
         "status",
         "total_hours",
         "class_duration",
@@ -91,6 +92,8 @@ class CourseAdmin(admin.ModelAdmin):
         "course_type",
         "company",
         "start_date",
+        "course_level",
+        "teacher",
     )
 
     search_fields = (

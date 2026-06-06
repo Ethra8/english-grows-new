@@ -1,0 +1,139 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+
+{% block extra_title %}| My Groups {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="assigned-courses">    
+    <div class="overlay-birds"></div>
+        
+    <header class="mb-5">
+        <div class="row">        
+            <div class="col-12 mb-4 ml-0 pl-0">
+                <h1>{{ course.name }}</h1>
+            </div>
+        </div>
+        <div class="col-12 dashboard-level-pill">
+            <span class="current-level-label">Level</span>
+
+        {% if course.course_level %}
+            <span class="current-level-value">
+                {{ course.course_level }}
+            </span>
+        {% else %}
+            <span class="current-level-value">
+                Pending
+            </span>
+        {% endif %}
+        </div>
+
+    </header>
+
+
+    <div class="wrapper-course-card">
+
+        <div class="assigned-courses-list">
+
+            <div class="course-detail-grid">
+
+                <div class="course-detail-item">
+                    <strong><i class="fa-regular fa-building mr-2"></i>Company</strong>
+                    <span>{{ course.company|default:"Individual course" }}</span>
+                </div>
+
+                <div class="course-detail-item">
+                    <strong><i class="fa-solid fa-arrows-rotate mr-2"></i>Total Hours</strong>
+                    <span>{{ course.total_hours }}</span>
+                </div>
+
+                <div class="course-detail-item">
+                    <strong><i class="fa-regular fa-calendar-check mr-2"></i>Start Date</strong>
+                    <span>{{ course.start_date|date:"D, j M Y" }}</span>
+                </div>
+
+                <div class="course-detail-item">
+                    <strong><i class="fa-regular fa-calendar-xmark mr-2"></i>End Date</strong>
+                    <span>{{ course.end_date|date:"D, j M Y"|default:"Not assigned" }}</span>
+                </div>
+
+                <div class="course-detail-item">
+                    <strong><i class="fa-regular fa-clock mr-2"></i>Timetable</strong>
+                    {% if course.timetable_slots.all %}
+                        {% for slot in course.timetable_slots.all %}
+                            <span>
+                                {{ slot.get_day_of_week_display }}:
+                                {{ slot.start_time|time:"H:i" }} -
+                                {{ slot.end_time|time:"H:i" }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <span>Not assigned</span>
+                    {% endif %}
+                </div>
+
+                <div class="course-detail-item completion-detail">
+                    <strong>Course Completion</strong>
+
+                    <div class="completion-inline">
+                        <div
+                            class="completion-ring"
+                            style="--completion: {{ course.completion_percentage }};"
+                        ></div>
+
+                        <span>{{ course.completion_percentage }}%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="students-list mt-4">
+                <h4><i class="fa-solid fa-user-group mr-2"></i>Student List
+                    <br>
+                    <span>Number of Students: {{ enrollments|length }}</span>
+                </h4>
+
+                {% if enrollments %}
+
+                    {% for enrollment in enrollments %}
+                        <div class="student-row">
+                            <div>
+                                <strong>
+                                    {{ enrollment.student.get_full_name|default:enrollment.student.username }}
+                                </strong>
+                                <span>{{ enrollment.student.email }}</span>
+                            </div>
+
+                            <span class="student-level">
+                                {{ enrollment.student.profile.current_level|default:"Pending" }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-white">No students enrolled yet.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
+{% endblock %}
+    

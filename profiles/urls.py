@@ -13,10 +13,15 @@ urlpatterns = [
     path("student/my_calendar/events/", views.my_calendar_events, name="my_calendar_events"),
 
     path("teacher/teacher_dashboard/", views.teacher_dashboard, name="teacher_dashboard"),
+    
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
+    path("teacher/courses/<int:course_id>/", views.teacher_course_detail, name="teacher_course_detail"),
+    
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),
-    path("teacher/teacher_profile_settings/", views.teacher_profile_settings, name="teacher_profile_settings"),    
+
     path("teacher/teacher_attendance/", views.teacher_attendance, name="teacher_attendance"),
+    
+    path("teacher/teacher_profile_settings/", views.teacher_profile_settings, name="teacher_profile_settings"),    
 ]
 

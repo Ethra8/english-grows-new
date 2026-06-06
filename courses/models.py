@@ -63,6 +63,12 @@ class Course(models.Model):
 
     name = models.CharField(max_length=200)
 
+    course_level = models.CharField(
+        max_length=30,
+        blank=True,
+        help_text="Current CEFR level, e.g. B2, C1."
+    )
+
     total_hours = models.DecimalField(
         max_digits=5,
         decimal_places=1,
@@ -247,6 +253,24 @@ class Course(models.Model):
             "students_count": len(enrolled_students),
             "total_scheduled_classes": scheduled_class_count,
         }
+
+    @property
+    def completion_percentage(self):
+        now = timezone.now()
+
+        total_sessions = self.class_sessions.filter(
+            is_cancelled=False
+        ).count()
+
+        completed_sessions = self.class_sessions.filter(
+            is_cancelled=False,
+            start_time__lt=now,
+        ).count()
+
+        if total_sessions == 0:
+            return 0
+
+        return round((completed_sessions / total_sessions) * 100)
 
     def __str__(self):
         return self.name
