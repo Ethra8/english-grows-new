@@ -546,20 +546,6 @@
 
 
 /* COURSE DETAILS Page *************************** */
-/* 
-.course-level {
-    text-transform: uppercase;
-    background: rgba(0, 51, 102, 0.45);
-    border: 2px solid rgba(94, 234, 212, 0.75);
-    border-radius: 50px;
-    padding: 0.5rem 2.5rem;
-    color: #fff;
-    width: fit-content;
-}
-
-.course-level strong {
-    color: #5eead4;
-} */
 
 .course-detail-grid {
     display: grid;
