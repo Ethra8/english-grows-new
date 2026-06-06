@@ -25,55 +25,55 @@
     </header>
 
 
-    <div class="wrapper-next-class-card">
-<div class="today-classes-card">
+    <div class="wrapper-next-class-card mt-5">
+        <div class="today-classes-card">
 
-    <div class="today-card-left">
-        <div class="today-icon">
-            <i class="fa-regular fa-calendar-days"></i>
-        </div>
-
-        <div class="today-title">
-            <h3>Today's Classes</h3>
-            <span>{{ today|ordinal_sup|safe }}</span>
-        </div>
-    </div>
-
-    <div class="today-sessions-list">
-        {% if todays_sessions %}
-            {% for session in todays_sessions %}
-                <div class="today-class-info">
-                    <div class="today-time">
-                        {{ session.start_time|time:"H:i" }}
-                    </div>
-
-                    <div class="today-course">
-                        <strong>{{ session.course.name }}</strong>
-                    </div>
-
-                    <!-- <div class="today-students">
-                        <i class="fa-solid fa-user-group"></i>
-                        <span>{{ session.course.enrollments.all|length }} Students</span>
-                    </div> -->
-
-                    {% if session.meeting_link %}
-                        <a href="{{ session.meeting_link }}" class="today-class-btn btn" target="_blank"  rel="noopener">
-                            <i class="fa-solid fa-video mr-2"></i> Start Class
-                        </a>
-                    {% else %}
-                        <a href="{% url 'profiles:teacher_calendar' %}" class="today-class-btn">
-                            <i class="fa-regular fa-calendar-days"></i> Open Calendar
-                        </a>
-                    {% endif %}
+            <div class="today-card-left">
+                <div class="today-icon">
+                    <i class="fa-regular fa-calendar-days"></i>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>No upcoming class scheduled yet.</p>
-        {% endif %}
-    </div>
 
-</div>
-</div>
+                <div class="today-title">
+                    <h3>Today's Classes</h3>
+                    <span>{{ today|ordinal_sup|safe }}</span>
+                </div>
+            </div>
+
+            <div class="today-sessions-list">
+                {% if todays_sessions %}
+                    {% for session in todays_sessions %}
+                        <div class="today-class-info">
+                            <div class="today-time">
+                                {{ session.start_time|time:"H:i" }}
+                            </div>
+
+                            <div class="today-course">
+                                <strong>{{ session.course.name }}</strong>
+                            </div>
+
+                            <!-- <div class="today-students">
+                                <i class="fa-solid fa-user-group"></i>
+                                <span>{{ session.course.enrollments.all|length }} Students</span>
+                            </div> -->
+
+                            {% if session.meeting_link %}
+                                <a href="{{ session.meeting_link }}" class="today-class-btn btn" target="_blank"  rel="noopener">
+                                    <i class="fa-solid fa-video mr-2"></i> Start Class
+                                </a>
+                            {% else %}
+                                <a href="{% url 'profiles:teacher_calendar' %}" class="today-class-btn btn">
+                                    <i class="fa-regular fa-calendar-days mr-2"></i> To Calendar
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No upcoming class scheduled yet.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
 
 </section>
 {% endblock %}
