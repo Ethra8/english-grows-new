@@ -20,10 +20,17 @@
         
     <header class="mb-5">
         <div class="row">        
-            <div class="col-12 mb-4 ml-0 pl-0">
-                <h1>{{ course.name }}</h1>
+            <div class="col-12 mb-4 ml-0 pl-0 d-flex align-items-center">
+                <h1 class="mb-0">
+                {% if enrollments|length == 1 %}
+                    <i class="fa-solid fa-user mr-3"></i>
+                {% else %}
+                    <i class="fa-solid fa-user-group mr-3"></i>
+                {% endif %}
+                    {{ course.name }}
+                </h1>
             </div>
-        </div>
+        </div>        
         <div class="col-12 dashboard-level-pill">
             <span class="current-level-label">Level</span>
 
@@ -98,7 +105,7 @@
             </div>
 
             <div class="students-list mt-4">
-                <h4><i class="fa-solid fa-user-group mr-2"></i>Student List
+                <h4><i class="fa-regular fa-address-book mr-2"></i></i>Student List
                     <br>
                     <span>Number of Students: {{ enrollments|length }}</span>
                 </h4>
