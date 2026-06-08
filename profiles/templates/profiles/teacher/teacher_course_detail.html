@@ -1,6 +1,7 @@
 {% extends "profiles/profile.html" %}
 {% load static %}
 {% load date_extras %}
+{% load course_extras %}
 
 
 {% block extra_title %}| My Groups {% endblock %}
@@ -19,7 +20,10 @@
     <div class="overlay-birds"></div>
         
     <header class="mb-5">
-        <div class="row">        
+        <div class="row">
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses"><a href="{% url 'profiles:teacher_courses' %}" class="text-white"><i class="fa-solid fa-arrow-left-long mr-3"></i>Back to My Courses</a></p>
+            </div>    
             <div class="col-12 mb-4 ml-0 pl-0 d-flex align-items-center">
                 <h1 class="mb-0">
                 {% if enrollments|length == 1 %}
@@ -51,9 +55,9 @@
     <div class="wrapper-course-card">
 
         <div class="assigned-courses-list">
-
+            
+            <h4><i class="fa-solid fa-circle-info mr-3"></i>General Info</h4>
             <div class="course-detail-grid">
-
                 <div class="course-detail-item">
                     <strong><i class="fa-regular fa-building mr-2"></i>Company</strong>
                     <span>{{ course.company|default:"Individual course" }}</span>
@@ -61,17 +65,38 @@
 
                 <div class="course-detail-item">
                     <strong><i class="fa-solid fa-arrows-rotate mr-2"></i>Total Hours</strong>
-                    <span>{{ course.total_hours }}</span>
+                    <span>{{ course.total_hours|clean_decimal }} h.</span>
                 </div>
 
                 <div class="course-detail-item">
-                    <strong><i class="fa-regular fa-calendar-check mr-2"></i>Start Date</strong>
-                    <span>{{ course.start_date|date:"D, j M Y" }}</span>
+                    <strong><i class="fa-solid fa-chalkboard-user mr-2"></i>Total Classes</strong>
+                    <span>{{ course.number_of_classes|default:"Not assigned" }}</span>
+                </div>
+            </div>
+
+            <h4 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h4>
+            <div class="course-detail-grid">          
+                <div class="course-detail-item">
+                    <span>                        
+                       <strong>
+                            <i class="fa-regular fa-calendar-check mr-2"></i>
+                            Starts: 
+                            <span>{{ course.start_date|date:"D, j M" }}</span>
+                        </strong>
+                        <strong>
+                            <i class="fa-regular fa-calendar-xmark mr-2"></i>
+                            Ends: 
+                            <span>{{ course.end_date|date:"D, j M"|default:"Not assigned" }}</span>
+                        </strong>                        
+                    </span>
                 </div>
 
                 <div class="course-detail-item">
-                    <strong><i class="fa-regular fa-calendar-xmark mr-2"></i>End Date</strong>
-                    <span>{{ course.end_date|date:"D, j M Y"|default:"Not assigned" }}</span>
+                    <strong><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i></i>Class Duration</strong>
+                    <span>{{ course.class_duration|default:"Not assigned" }} h.</span>
+                    {% if course.has_short_final_class %}
+                    <span class="bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Last class: {{ course.final_class_duration }} h.</span>
+                    {% endif %}
                 </div>
 
                 <div class="course-detail-item">
@@ -79,16 +104,19 @@
                     {% if course.timetable_slots.all %}
                         {% for slot in course.timetable_slots.all %}
                             <span>
-                                {{ slot.get_day_of_week_display }}:
-                                {{ slot.start_time|time:"H:i" }} -
-                                {{ slot.end_time|time:"H:i" }}
+                                <p>{{ slot.get_day_of_week_display|slice:":3" }}:</p>
+                                {{ slot.start_time|time:"H.i" }} -
+                                {{ slot.end_time|time:"H.i" }}
                             </span>
                         {% endfor %}
                     {% else %}
                         <span>Not assigned</span>
                     {% endif %}
                 </div>
-
+            </div>
+      
+            <h4 class="mt-3 mb-3"><i class="fa-regular fa-chart-bar mr-3"></i>Stats</h4>
+            <div class="course-detail-grid">                         
                 <div class="course-detail-item completion-detail">
                     <strong>Course Completion</strong>
 
@@ -101,8 +129,16 @@
                         <span>{{ course.completion_percentage }}%</span>
                     </div>
                 </div>
-
+                <div class="course-detail-item">
+                    <strong><i class="fa-solid fa-clipboard-check mr-2"></i>Completed Classes</strong>
+                    <span>{{ course.completed_sessions|default:"Not assigned" }}</span>
+                </div>
+                <div class="course-detail-item">
+                    <strong><i class="fa-solid fa-arrows-turn-right mr-2"></i>Remaining Classes</strong>
+                    <span>{{ course.remaining_sessions|default:"Not assigned" }}</span>
+                </div>
             </div>
+
 
             <div class="students-list mt-4">
                 <h4><i class="fa-regular fa-address-book mr-2"></i></i>Student List

@@ -132,8 +132,41 @@ class Course(models.Model):
             return None
 
         # ceil() to make num. of classes a whole number
-        # eg: 6.66 classes = 7 classes
+        # Pushes upwards; eg: 6.66 classes = 7 classes
         return ceil(self.total_hours / self.class_duration)
+
+
+    @property
+    def final_class_duration(self):
+        """
+        The duration of the last class of the course,
+        if total_hours / class_duration is not a full number,
+        then last class' duration varies to adapt to total_hours
+        agreed with company/funds
+        """
+        if not self.total_hours or not self.class_duration:
+            return None
+
+        full_classes = self.total_hours // self.class_duration
+        remainder = self.total_hours % self.class_duration
+
+        if remainder == 0:
+            return self.class_duration
+
+        return remainder
+
+
+    @property
+    def has_short_final_class(self):
+        """
+        Boolean, returns True if last class is shorter,
+        then final_class_duration is served after
+        """
+        if not self.total_hours or not self.class_duration:
+            return False
+
+        return self.total_hours % self.class_duration != 0
+
 
     def generate_class_sessions(self):
         """
@@ -177,6 +210,8 @@ class Course(models.Model):
         enrolled_students = [enrollment.student for enrollment in active_enrollments]
 
         if not enrolled_students:
+
+
             raise ValidationError(
                 "This course has no active enrolled students."
             )
@@ -258,23 +293,36 @@ class Course(models.Model):
     def completion_percentage(self):
         now = timezone.now()
 
-        total_sessions = self.class_sessions.filter(
-            is_cancelled=False
-        ).count()
-
-        completed_sessions = self.class_sessions.filter(
-            is_cancelled=False,
-            start_time__lt=now,
-        ).count()
-
-        if total_sessions == 0:
+        if self.total_sessions == 0:
             return 0
 
-        return round((completed_sessions / total_sessions) * 100)
+        return round((self.completed_sessions / self.total_sessions) * 100)
 
     def __str__(self):
         return self.name
 
+    @property
+    def total_sessions(self):
+        return self.class_sessions.filter(
+            is_cancelled=False
+        ).count()
+
+
+    @property
+    def completed_sessions(self):
+        now = timezone.now()
+
+        return self.class_sessions.filter(
+            is_cancelled=False,
+            start_time__lt=now,
+        ).count()
+
+    @property
+    def remaining_sessions(self):
+        return max(
+            self.total_sessions - self.completed_sessions,
+            0
+        )
 
 class CourseTimetableSlot(models.Model):
     """

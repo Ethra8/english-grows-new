@@ -383,11 +383,13 @@ def teacher_dashboard(request):
         )
     )
 
-    return render(request, "profiles/teacher/teacher_dashboard.html", {
+    context = {
         "courses": courses,
         "todays_sessions": todays_sessions,
         "today": today,
-    })
+    }
+
+    return render(request, "profiles/teacher/teacher_dashboard.html", context)
 
 
 
@@ -462,18 +464,22 @@ def teacher_course_detail(request, course_id):
         .order_by("start_time")
     )
 
+    now = timezone.now()
+
+    completed_sessions = course.class_sessions.filter(
+        is_cancelled=False,
+        start_time__lt=now,
+    ).count()
+
     context = {
         "profile": profile,
         "course": course,
         "enrollments": enrollments,
         "sessions": sessions,
+        "completed_sessions": completed_sessions,
     }
 
-    return render(
-        request,
-        "profiles/teacher/teacher_course_detail.html",
-        context
-    )
+    return render(request, "profiles/teacher/teacher_course_detail.html", context)
 
 
 @login_required

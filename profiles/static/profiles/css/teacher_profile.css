@@ -546,10 +546,21 @@
 
 
 /* COURSE DETAILS Page *************************** */
+.back-to-my-assigned-courses,
+.back-to-my-assigned-courses a {
+    color: #5eead4 !important;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0 auto 2rem 0;
+}
+
+.back-to-my-assigned-courses i {
+    cursor: pointer;
+}
 
 .course-detail-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
 }
 
@@ -564,11 +575,25 @@
 .course-detail-item strong {
     display: block;
     color: #5eead4;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.3rem;
 }
 
 .course-detail-item span {
     display: block;
+}
+
+.course-detail-item strong span {
+    display: inline;
+    color: #fff;
+    margin-bottom: 0 !important;
+    font-weight: 400;
+}
+
+.course-detail-item p {
+    display: inline;
+    color: #fff;
+    margin-bottom: 0;
+    font-weight: 600;
 }
 
 .completion-inline {
@@ -577,9 +602,9 @@
     gap: 0.75rem;
 }
 
-.students-list h4 {
+.assigned-courses-list h4 {
     color: #fff;
-    margin-bottom: 0;
+    margin-bottom: 0.8rem;
 }
 
 .students-list h4 span {
@@ -614,19 +639,6 @@
     font-weight: 700;
 }
 
-@media (max-width: 768px) {
-    .course-detail-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .student-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-}
-
-
 
 @media (max-width: 1250px) {
 
@@ -660,7 +672,6 @@
     .today-calendar-btn {
         text-align: center;
     }
-
     /* END Today's Classes */
 
     /* ASSIGNED COURSES Page: Courses Assigned  */
@@ -671,8 +682,6 @@
 
     .course-stat {
         display: none;
-        /* border-left: none;
-        padding-left: 0; */
     }
 
     .btn-course-details {
@@ -680,6 +689,12 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+    }
+
+    .course-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
     }
 
     
@@ -706,7 +721,22 @@
         max-width: calc((100% - 0.75rem) / 2);
     }
 
-        
+    
+}
+
+
+
+@media (max-width: 768px) {
+    .course-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
 }
 
 
@@ -758,11 +788,10 @@
         align-items: stretch !important;
         gap: 1rem;
     }
-
     /* END Course Assigned BY STATUS */
 
-
 }
+
 
 /* MUST STAY AT THE END OF CSS FILE */
 .assigned-course-row.course-hidden {
