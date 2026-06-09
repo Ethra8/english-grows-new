@@ -112,9 +112,9 @@ def profile_settings(request):
     return render(request, "profiles/profile_settings.html", context)
 
 
-# ******************
-# STUDENT PROFILE  *
-# ******************
+# ************************************|
+# STUDENT PROFILE  *******************|
+# ************************************|
 
 # STUDENT COURSE INFO PAGE
 @login_required
@@ -339,9 +339,9 @@ def my_attendance(request):
     return render(request, "profiles/student/my_attendance.html", context)
 
 
-# ******************
-# TEACHER PROFILE  *
-# ******************
+# ***********************************************|
+# TEACHER PROFILE  ******************************|
+# ***********************************************|
 
 @login_required
 def teacher_dashboard(request):
@@ -399,6 +399,14 @@ def teacher_classes_list(request):
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+    now = timezone.now()
+    today = timezone.localdate()
+
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    start_of_month = today.replace(day=1)
+
     sessions = (
         ClassSession.objects
         .filter(course__teacher=request.user)
@@ -406,13 +414,34 @@ def teacher_classes_list(request):
             "course",
             "course__course_type",
             "course__company",
-            "course__teacher",
+        )
+        .prefetch_related(
+            "course__enrollments",
+            "course__enrollments__student",
+            "course__enrollments__student__profile",
         )
         .order_by("start_time")
     )
 
+    for session in sessions:
+        session_date = timezone.localdate(session.start_time)
+
+        if session.is_cancelled:
+            session.class_period = "cancelled"
+        elif session.start_time < now:
+            session.class_period = "past"
+        elif session_date == today:
+            session.class_period = "today"
+        elif start_of_week <= session_date <= end_of_week:
+            session.class_period = "weekly"
+        elif session_date.month == today.month and session_date.year == today.year:
+            session.class_period = "monthly"
+        else:
+            session.class_period = "termly"
+
     context = {
         "sessions": sessions,
+        "now": now,
     }
 
     return render(request, "profiles/teacher/teacher_classes_list.html", context)

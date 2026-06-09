@@ -147,12 +147,99 @@
 
 
 
+/* ***********************************|
+|***  CLASSES LIST Page **************|
+|*********************************** */
+
+.class-main-info h3 {
+    color: #5ff0df;
+    margin: 0 0 .35rem;
+    font-size: 1.1rem;
+}
+
+.classes-list-filter {
+    background-color: rgba(0, 51, 102, 0.6);
+    box-shadow: 0 2px 3px 0 #003366;
+    border: solid 2px #5eead4;
+    border-radius: 8px;
+    padding: .6rem 2.5rem .6rem 1rem;
+    color: whitesmoke;
+    font-weight: 600;
+    /* box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5); */
+}
+
+.class-list-group-name {
+    /* color: #dff; */
+    padding-left: 1.5rem;
+    min-width: 200px;
+    width: 15rem;
+}
+
+
+.class-list-date,
+.class-list-student-num {
+    color: #dff;
+    border-left: 1px solid rgba(94, 234, 212, 0.2);
+    padding-left: 1.5rem;
+    min-width: 200px;
+    width: 15rem;
+}
+
+.class-list-date i,
+.class-list-student-num i {
+    color: #5eead4;
+    margin-right: .5rem;
+}
+
+.class-list-date strong,
+.class-list-student-num strong {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-right: .4rem;
+}
+
+.class-list-date span,
+.class-list-student-num span {
+    display: block;
+    margin-top: .2rem;
+}
+
+
+
+/* ***********************************|
+|***  CLASSES LIST Page **************|
+|***  &
+|***  TEACHER_COURSES Page ***********|
+|*********************************** */
+
+.status-active {
+    background: #23c99a;
+}
+
+.status-confirmed {
+    background: #f5c542;
+    color: #003366;
+}
+
+.status-paused {
+    background: #adb5bd;
+}
+
+.status-cancelled {
+    background: #e95757;
+}
+
+.status-completed {
+    background: rgba(94, 234, 212, 0.15);
+    border: 0.5px solid #004b5d;
+}
+
 
 /* ***********************************|
 |*  TEACHER_COURSES Page ************|
 |*********************************** */
 
-.assigned-courses .course-card {
+/* .assigned-courses .course-card {
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 10px;
@@ -163,7 +250,7 @@
     display: flex;
     min-height: 230px;
     border-radius: 10px;
-}
+} */
 
 /* .extra ROW: Confirmed/paused/cancelled icons + num. */
 
@@ -215,7 +302,7 @@
 
 .assigned-courses-panel {
     width: 100%;
-    background: linear-gradient(180deg, #bdf6df, #004b5d);
+    background: rgba(0, 139, 135, 0.55);
     border: 3px solid #55e0d2;
     border-radius: 10px;
     overflow: hidden;
@@ -237,7 +324,7 @@
 
 .assigned-courses-title h2 {
     margin: 0;
-    color: #003366;
+    color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
 }
 
@@ -246,7 +333,8 @@
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: #008b87;
+    /* background: #008b87; */
+    background: #003366;
     color: #bdf6df;
     display: flex;
     align-items: center;
@@ -264,18 +352,23 @@
 }
 
 .course-status-filter:focus,
-.course-status-filter:focus-visible {
-    border-color: #008b87 !important;
+.course-status-filter:focus-visible,
+.classes-list-filter:focus,
+.classes-list-filter:focus-visible {
+    border: solid 2px #5eead4 !important;
     outline: none !important;
     box-shadow: 0 0 0 3px rgba(0, 139, 135, 0.25) !important;
 }
 
-.course-status-filter option {
-    background-color: transparent;
+.course-status-filter option,
+.classes-list-filter option {
+    background-color: whitesmoke;
+    color: #003366;
     border-radius: 5px;
 }
 
-.course-status-filter option:checked {
+.course-status-filter option:checked,
+.classes-list-filter option:checked {
     background-color: #008b87 !important;
 }
 
@@ -286,7 +379,8 @@
     padding: 1rem 1.5rem;
 }
 
-.assigned-course-row {
+.assigned-course-row,
+.assigned-class-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr auto;
     align-items: center;
@@ -295,11 +389,13 @@
     border-bottom: 1px solid rgba(94, 234, 212, 0.25);
 }
 
-.assigned-course-row:last-child {
+.assigned-course-row:last-child,
+.assigned-class-row:last-child {
     border-bottom: none;
 }
 
-.course-main-info {
+.course-main-info,
+.class-main-info {
     display: flex;
     align-items: center;
     gap: 1.3rem;
@@ -311,7 +407,8 @@
     font-size: 1.1rem;
 }
 
-.course-main-info p {
+.course-main-info p,
+.class-main-info p {
     color: #c8eee9;
     margin: .45rem 0 0;
 }
@@ -347,6 +444,8 @@
     color: #dff;
     border-left: 1px solid rgba(94, 234, 212, 0.2);
     padding-left: 1.5rem;
+    min-width: 200px;
+    width: 15rem;
 }
 
 .course-stat i {
@@ -356,7 +455,7 @@
 
 .course-stat strong {
     color: #fff;
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     margin-right: .4rem;
 }
 
@@ -508,17 +607,8 @@
 }
 
 
-/* ***********************************|
-|***  CLASSES LIST Page **************|
-|*********************************** */
-
-
-
-
-
 @media (max-width: 1250px) {
 
-    
     .teacher-dashboard,
     .teacher-classes-list,
     .assigned-courses {
@@ -553,7 +643,8 @@
     /* END Today's Classes */
 
     /* ASSIGNED COURSES Page: Courses Assigned  */
-    .assigned-course-row {
+    .assigned-course-row,
+    .assigned-class-row {
         grid-template-columns: 2fr 1fr auto;
         gap: 0;
     }
@@ -663,7 +754,8 @@
         gap: 1rem;
     }
 
-    .assigned-course-row {
+    .assigned-course-row,
+    .assigned-class-row {
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
@@ -675,7 +767,8 @@
 
 
 /* MUST STAY AT THE END OF CSS FILE */
-.assigned-course-row.course-hidden {
+.assigned-course-row.course-hidden,
+.assigned-class-row.class-hidden {
     display: none !important;
 }    
 

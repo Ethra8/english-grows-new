@@ -25,6 +25,7 @@
             </div>
         </div>
         {% if sessions %}
+        {% if session.start_time > now %}
         <nav class="mb-4 mt-4">
             <ul>
                 <li class="course-info-item">
@@ -44,7 +45,7 @@
                     </div>
 
                     <div class="course-info-text">
-                        <strong>Confirmed</strong>
+                        <strong>This Week</strong>
                         <span>{{ confirmed_courses }}</span>
                     </div>
                 </liv>                                       
@@ -54,7 +55,7 @@
                     </div>
 
                     <div class="course-info-text">
-                        <strong>Paused</strong>
+                        <strong>This Month</strong>
                         <span>{{ paused_courses }}</span>
                     </div>
                 </li>                                       
@@ -64,12 +65,13 @@
                     </div>
 
                     <div class="course-info-text">
-                        <strong>Cancelled</strong>
+                        <strong>This Term</strong>
                         <span>{{ cancelled_courses }}</span>
                     </div>
                 </li>                                       
             </ul>
         </nav>
+        {% endif %}
         {% endif %}
     </header>
 
@@ -79,63 +81,96 @@
                 <div class="assigned-courses-header">
                     <div class="assigned-courses-title">
                         <div class="assigned-courses-icon">
-                            <i class="fa-solid fa-book-open"></i>
+                            <i class="fa-solid fa-chalkboard-user"></i>
                         </div>
-                        <h2>Assigned Courses</h2>
+                        <h2>Scheduled Classes</h2>
                     </div>
 
-                    <select id="courseStatusFilter" class="course-status-filter">
-                        <option value="all">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="paused">Paused</option>
-                        <option value="cancelled">Cancelled</option>
+                    <select id="classesListFilter" class="classes-list-filter">
+                        <option value="all">All Classes</option>
+                        <option value="today">Today</option>
+                        <option value="weekly" selected>This Week</option>
+                        <option value="monthly">This Month</option>
+                        <option value="termly">This Term</option>
                     </select>
                 </div>
 
                 <div class="assigned-courses-list">
 
-                    {% for course in courses %}
-                    <div class="assigned-course-row" data-status="{{ course.status }}">
+                    {% for session in sessions %}
+                        <div class="assigned-class-row"
+                            data-period="{{ session.class_period }}"
+                            data-cancelled="{{ session.is_cancelled|yesno:'cancelled,active' }}">
 
-                        <div class="course-main-info">
-                            <div class="course-row-icon">
-                                <i class="fa-solid fa-book-open"></i>
-                            </div>
-
-                            <div>
-                                <h3>{{ course.name }}</h3>
-                                <span class="status-badge status-{{ course.status }}">
-                                    {{ course.get_status_display }}
-                                </span>
-                                <p>
-                                    <i class="fa-regular fa-calendar-days mr-1"></i>
-                                    {{ course.start_date|date:"D, j M" }}
-                                    {% if course.end_date %}
-                                        – {{ course.end_date|date:"D, j M" }}
+                            <div class="class-main-info">
+                                <div class="">
+                                    {% if session.class_period == "today" %}
+                                        <span class="status-badge status-today">
+                                            Today
+                                        </span>
+                                    {% endif %}                                    <!-- <i class="fa-solid fa-book-open-reader"></i> -->
+                                    {% if session.is_cancelled %}
+                                        <span class="status-badge status-cancelled">Cancelled</span>
+                                    {% elif session.start_time < now %}
+                                        <span class="status-badge status-completed">Completed</span>
+                                    {% else %}
+                                        <span class="status-badge status-active">Upcoming</span>
                                     {% endif %}
-                                </p>
+                                </div>
+
+                                <div class="class-list-group-name">
+                                    <h3>{{ session.course.name }}</h3>
+                                    <p>Lesson {{ session.class_number }}</p>
+
+                                    <!-- <p><i class="fa-solid fa-calendar-day mr-1"></i>
+                                        {{ session.start_time|date:"D, j M" }}
+                                    </p>
+
+                                    <p>
+                                        <i class="fa-regular fa-clock mr-1"></i>
+                                        {{ session.start_time|time:"H:i" }} -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p> -->
+                                </div>
+
+                                <div class="class-list-date">
+                                    <p><i class="fa-solid fa-calendar-day mr-1"></i>
+                                        {{ session.start_time|date:"D, j M" }}
+                                    </p>
+
+                                    <p>
+                                        <i class="fa-regular fa-clock mr-1"></i>
+                                        {{ session.start_time|time:"H:i" }} -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p>
+
+                                </div>
                             </div>
-                        </div>
- -->
-                        <div class="course-stat completion-stat">
-                            <div class="completion-ring" style="--completion: {{ course.completion_percentage }};"></div>
-                            <strong>{{ course.completion_percentage }}%</strong>
-                            <span>Completed</span>
-                        </div>
 
-                        <div class="course-action">
-                            <a href="{% url 'profiles:teacher_course_detail' course.id %}" class="btn-course-details">
-                                View Details
-                                <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a>
-                        </div>
+                            <div class="class-list-student-num">
+                                <strong>
+                                    {% if session.course.enrollments.count <= 1 %}
+                                        <i class="fa-regular fa-user"></i>
+                                    {% elif session.course.enrollments.count == 2 %}
+                                        <i class="fa-solid fa-people-arrows"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-users-line"></i>
+                                    {% endif %}
+                                </strong>
+                                <span>{{ session.course.enrollments.count }} {% if session.course.enrollments.count <= 1 %}Student{% else %}Students{% endif %}</span>
+                            </div>
 
-                    </div>
+                            <div class="course-action">
+                                <a href="#" class="btn-course-details">
+                                    View Class
+                                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                                </a>
+                            </div>
+
+                        </div>
                     {% empty %}
-                        <p class="text-white p-3">No courses assigned yet.</p>
+                        <p class="text-white p-3">Your scheduled classes will display here when sessions are created.</p>
                     {% endfor %}
-
                 </div>
             </div>
         </div>

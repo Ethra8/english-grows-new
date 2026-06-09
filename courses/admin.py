@@ -25,7 +25,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class CourseEnrollmentInline(admin.TabularInline):
     model = CourseEnrollment
-    extra = 1
+    extra = 0
     autocomplete_fields = (
         "student",
     )
@@ -193,7 +193,7 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
 
 class AttendanceInline(admin.TabularInline):
     model = Attendance
-    extra = 1
+    extra = 0
 
     autocomplete_fields = (
         "student",

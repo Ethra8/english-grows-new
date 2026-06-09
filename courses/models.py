@@ -210,8 +210,6 @@ class Course(models.Model):
         enrolled_students = [enrollment.student for enrollment in active_enrollments]
 
         if not enrolled_students:
-
-
             raise ValidationError(
                 "This course has no active enrolled students."
             )
@@ -324,6 +322,13 @@ class Course(models.Model):
             0
         )
 
+from datetime import datetime, timedelta
+
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils import timezone
+
+
 class CourseTimetableSlot(models.Model):
     """
     Weekly timetable slot for a course.
@@ -373,6 +378,79 @@ class CourseTimetableSlot(models.Model):
             "start_time",
             "end_time",
         )
+
+    def clean(self):
+        if self.start_time and self.end_time:
+            if self.start_time >= self.end_time:
+                raise ValidationError("End time must be after start time.")
+
+    def save(self, *args, **kwargs):
+        old_slot = None
+
+        if self.pk:
+            old_slot = CourseTimetableSlot.objects.get(pk=self.pk)
+
+        super().save(*args, **kwargs)
+
+        if old_slot:
+            timetable_changed = (
+                old_slot.day_of_week != self.day_of_week or
+                old_slot.start_time != self.start_time or
+                old_slot.end_time != self.end_time
+            )
+
+            if timetable_changed:
+                self.update_future_class_sessions(old_slot)
+
+    def update_future_class_sessions(self, old_slot):
+        """
+        Update only future, non-cancelled class sessions that belonged
+        to this timetable slot before it was changed.
+        """
+
+        now = timezone.now()
+        current_timezone = timezone.get_current_timezone()
+
+        future_sessions = self.course.class_sessions.filter(
+            start_time__gte=now,
+            is_cancelled=False,
+        ).order_by("start_time")
+
+        for session in future_sessions:
+            old_local_start = timezone.localtime(session.start_time)
+            old_local_end = timezone.localtime(session.end_time)
+
+            belongs_to_old_slot = (
+                old_local_start.isoweekday() == old_slot.day_of_week and
+                old_local_start.time() == old_slot.start_time and
+                old_local_end.time() == old_slot.end_time
+            )
+
+            if not belongs_to_old_slot:
+                continue
+
+            old_session_date = old_local_start.date()
+
+            day_difference = self.day_of_week - old_slot.day_of_week
+            new_session_date = old_session_date + timedelta(days=day_difference)
+
+            new_start = timezone.make_aware(
+                datetime.combine(new_session_date, self.start_time),
+                current_timezone
+            )
+
+            new_end = timezone.make_aware(
+                datetime.combine(new_session_date, self.end_time),
+                current_timezone
+            )
+
+            if new_start < now:
+                continue
+
+            session.start_time = new_start
+            session.end_time = new_end
+
+            session.save(update_fields=["start_time", "end_time"])
 
     def __str__(self):
         return (
@@ -431,21 +509,49 @@ class CourseEnrollment(models.Model):
         unique_together = ("course", "student")
         ordering = ["course", "student"]
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new and self.status == "active":
+            self.create_future_attendance_records()
+
+    def create_future_attendance_records(self):
+        future_sessions = self.course.class_sessions.filter(
+            start_time__gte=self.enrolled_at,
+            is_cancelled=False,
+        )
+
+        for session in future_sessions:
+            Attendance.objects.get_or_create(
+                student=self.student,
+                class_session=session,
+                defaults={
+                    "status": "scheduled",
+                }
+            )
+
     def __str__(self):
         return f"{self.student} - {self.course}"
 
     @property
-    def total_assigned_classes(self):
+    def eligible_sessions(self):
         return self.course.class_sessions.filter(
-            is_cancelled=False
-        ).count()
+            start_time__gte=self.enrolled_at,
+            is_cancelled=False,
+        )
+
+    @property
+    def total_assigned_classes(self):
+        return self.eligible_sessions.count()
 
     @property
     def total_completed_classes(self):
-        # past classes
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
+            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
         ).exclude(
             status="scheduled"
@@ -460,16 +566,17 @@ class CourseEnrollment(models.Model):
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
+            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
             status="attended"
         ).values("class_session").distinct().count()
-
 
     @property
     def classes_missed(self):
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
+            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
             status="missed"
         ).values("class_session").distinct().count()
@@ -479,6 +586,7 @@ class CourseEnrollment(models.Model):
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
+            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
             status="excused"
         ).values("class_session").distinct().count()
@@ -504,6 +612,7 @@ class CourseEnrollment(models.Model):
             return False
 
         return self.attendance_percentage < 75
+    
 
 class ClassSession(models.Model):
     """
@@ -550,6 +659,24 @@ class ClassSession(models.Model):
                 name="unique_course_session_start_time"
             )
         ]
+
+
+    def save(self, *args, **kwargs):
+        old_meeting_link = None
+
+        if self.pk:
+            old_session = ClassSession.objects.get(pk=self.pk)
+            old_meeting_link = old_session.meeting_link
+
+        super().save(*args, **kwargs)
+
+        if self.meeting_link and self.meeting_link != old_meeting_link:
+            self.course.class_sessions.exclude(
+                pk=self.pk
+            ).update(
+                meeting_link=self.meeting_link
+            )
+
 
     def __str__(self):
         return f"{self.course} - {self.start_time:%d/%m/%Y %H:%M}"

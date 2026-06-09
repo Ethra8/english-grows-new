@@ -1,6 +1,7 @@
 {% extends "profiles/profile.html" %}
 {% load static %}
 {% load date_extras %}
+{% load course_extras %}
 
 
 {% block extra_title %}| Course Info{% endblock %}
@@ -55,9 +56,9 @@
 
                             <div class="course-info-text">
                                 <strong>Total Hours</strong>
-                                <span>{{ active_enrollment.course.total_hours }} hours</span>
+                                <span>{{ active_enrollment.course.total_hours|clean_decimal }} hours</span>
                         {% elif active_enrollment.course.course_type.default_hours %}
-                                <span>{{ active_enrollment.course.course_type.default_hours }} hours</span></p>
+                                <span>{{ active_enrollment.course.course_type.default_hours|clean_decimal }} hours</span></p>
                         {% else %}
                                 Not assigned yet</p>
                         {% endif %}
