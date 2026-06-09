@@ -121,30 +121,13 @@
                                 <div class="class-list-group-name">
                                     <h3>{{ session.course.name }}</h3>
                                     <p>Lesson {{ session.class_number }}</p>
-
-                                    <!-- <p><i class="fa-solid fa-calendar-day mr-1"></i>
-                                        {{ session.start_time|date:"D, j M" }}
-                                    </p>
-
-                                    <p>
-                                        <i class="fa-regular fa-clock mr-1"></i>
-                                        {{ session.start_time|time:"H:i" }} -
-                                        {{ session.end_time|time:"H:i" }}
-                                    </p> -->
-                                </div>
-
-                                <div class="class-list-date">
+                                    
                                     <p><i class="fa-solid fa-calendar-day mr-1"></i>
-                                        {{ session.start_time|date:"D, j M" }}
-                                    </p>
-
-                                    <p>
-                                        <i class="fa-regular fa-clock mr-1"></i>
-                                        {{ session.start_time|time:"H:i" }} -
-                                        {{ session.end_time|time:"H:i" }}
+                                        {{ session.start_time|date:"D, j M" }} | {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                                     </p>
 
                                 </div>
+
                             </div>
 
                             <div class="class-list-student-num">

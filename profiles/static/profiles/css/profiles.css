@@ -1,4 +1,5 @@
 /* teal site bg #00686b / rgba(0, 104, 107) */
+/* teal sidebar #008f8f; */
 #profile-header {
     margin-top: 100px;
 }
@@ -225,7 +226,7 @@ main.profile-main h1 {
     height: 380px;
     border-radius: 50%;
     /* background: #008F8F; */
-    background: #00686B;
+    background: #008f8f;
     background: linear-gradient(63deg,rgba(0, 104, 107, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
     padding-left: 205px;
     padding-top: 90px;
@@ -745,13 +746,13 @@ main.profile-main h1 {
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
     border: outset 1px #003366;
-    background: teal;
+    background: #008f8f;;
 }
 
 #parentAttendanceHeading,
 #parentAbsenceHeading {
     color: white;
-    background-color: teal;
+    background-color: #008f8f;;
     border-radius: 10px;
 }
 
@@ -779,7 +780,7 @@ main.profile-main h1 {
 #parentAttendanceHeading.card-header,
 #parentAbsenceHeading.card-header {
     color: white;
-    background-color: teal;
+    background-color: #008f8f;
     border-radius: 10px;
     padding: 0.5rem;
     display: flex;
