@@ -392,12 +392,37 @@ def teacher_dashboard(request):
     return render(request, "profiles/teacher/teacher_dashboard.html", context)
 
 
+@login_required
+def teacher_classes_list(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    sessions = (
+        ClassSession.objects
+        .filter(course__teacher=request.user)
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .order_by("start_time")
+    )
+
+    context = {
+        "sessions": sessions,
+    }
+
+    return render(request, "profiles/teacher/teacher_classes_list.html", context)
+
 
 @login_required
 def teacher_courses(request):
     profile = get_object_or_404(UserProfile, user=request.user)
 
-    if profile.role != "teacher":
+    if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
     courses = (
@@ -440,7 +465,7 @@ def teacher_courses(request):
 
 
 @login_required
-def teacher_course_detail(request, course_id):
+def teacher_course_details(request, course_id):
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
@@ -479,7 +504,7 @@ def teacher_course_detail(request, course_id):
         "completed_sessions": completed_sessions,
     }
 
-    return render(request, "profiles/teacher/teacher_course_detail.html", context)
+    return render(request, "profiles/teacher/teacher_course_details.html", context)
 
 
 @login_required

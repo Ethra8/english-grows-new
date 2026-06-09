@@ -1,0 +1,153 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+
+{% block extra_title %}| My Groups {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="teacher-classes-list">    
+    <div class="overlay-birds"></div>
+        
+    <header class="mb-5">
+        <div class="row">        
+            <div class="col-12 mb-4 ml-0 pl-0">
+                <h1>My Classes</h1>
+            </div>
+        </div>
+        {% if sessions %}
+        <nav class="mb-4 mt-4">
+            <ul>
+                <li class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-circle-play"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Total Classes</strong>
+                        <span>{{ sessions.count }}</span>
+                    </div>
+                </li>
+
+                <liv class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Confirmed</strong>
+                        <span>{{ confirmed_courses }}</span>
+                    </div>
+                </liv>                                       
+                <li class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-circle-pause"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Paused</strong>
+                        <span>{{ paused_courses }}</span>
+                    </div>
+                </li>                                       
+                <li class="course-info-item">
+                    <div class="course-info-icon">
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    </div>
+
+                    <div class="course-info-text">
+                        <strong>Cancelled</strong>
+                        <span>{{ cancelled_courses }}</span>
+                    </div>
+                </li>                                       
+            </ul>
+        </nav>
+        {% endif %}
+    </header>
+
+        <div class="wrapper-course-card">
+            <div class="assigned-courses-panel">
+
+                <div class="assigned-courses-header">
+                    <div class="assigned-courses-title">
+                        <div class="assigned-courses-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h2>Assigned Courses</h2>
+                    </div>
+
+                    <select id="courseStatusFilter" class="course-status-filter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="paused">Paused</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="assigned-courses-list">
+
+                    {% for course in courses %}
+                    <div class="assigned-course-row" data-status="{{ course.status }}">
+
+                        <div class="course-main-info">
+                            <div class="course-row-icon">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+
+                            <div>
+                                <h3>{{ course.name }}</h3>
+                                <span class="status-badge status-{{ course.status }}">
+                                    {{ course.get_status_display }}
+                                </span>
+                                <p>
+                                    <i class="fa-regular fa-calendar-days mr-1"></i>
+                                    {{ course.start_date|date:"D, j M" }}
+                                    {% if course.end_date %}
+                                        – {{ course.end_date|date:"D, j M" }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+ -->
+                        <div class="course-stat completion-stat">
+                            <div class="completion-ring" style="--completion: {{ course.completion_percentage }};"></div>
+                            <strong>{{ course.completion_percentage }}%</strong>
+                            <span>Completed</span>
+                        </div>
+
+                        <div class="course-action">
+                            <a href="{% url 'profiles:teacher_course_detail' course.id %}" class="btn-course-details">
+                                View Details
+                                <i class="fa-solid fa-chevron-right ml-2"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    {% empty %}
+                        <p class="text-white p-3">No courses assigned yet.</p>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
+{% endblock %}
+    
