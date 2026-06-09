@@ -100,20 +100,20 @@
                     {% for session in sessions %}
                         <div class="assigned-class-row"
                             data-period="{{ session.class_period }}"
-                            data-cancelled="{{ session.is_cancelled|yesno:'cancelled,active' }}">
+                            data-today="{{ session.is_today|yesno:'true,false' }}"
+                            data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
+                            data-monthly="{{ session.is_this_month|yesno:'true,false' }}"
+                            data-past="{{ session.is_list_past|yesno:'true,false' }}">
 
                             <div class="class-main-info">
                                 <div class="">
-                                    {% if session.class_period == "today" %}
-                                        <span class="status-badge status-today">
-                                            Today
-                                        </span>
-                                    {% endif %}                                    <!-- <i class="fa-solid fa-book-open-reader"></i> -->
                                     {% if session.is_cancelled %}
                                         <span class="status-badge status-cancelled">Cancelled</span>
                                     {% elif session.start_time < now %}
-                                        <span class="status-badge status-completed">Completed</span>
-                                    {% else %}
+                                        <span class="status-badge status-completed">Completed</span>                                    
+                                    {% elif session.class_period == "today" %}
+                                        <span class="status-badge status-today">Today</span>
+                                    {% else %}                                   <!-- <i class="fa-solid fa-book-open-reader"></i> -->
                                         <span class="status-badge status-active">Upcoming</span>
                                     {% endif %}
                                 </div>

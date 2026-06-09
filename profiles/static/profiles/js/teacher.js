@@ -39,8 +39,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         rows.forEach(function (row) {
             const rowPeriod = row.getAttribute("data-period");
+            const rowMatchesSelectedPeriod =
+                row.getAttribute(`data-${selectedPeriod}`) === "true";
 
-            if (selectedPeriod === "all" || rowPeriod === selectedPeriod) {
+            if (
+                selectedPeriod === "all" ||
+                rowPeriod === selectedPeriod ||
+                rowMatchesSelectedPeriod
+            ) {
                 row.classList.remove("class-hidden");
             } else {
                 row.classList.add("class-hidden");

@@ -229,6 +229,11 @@
     text-transform: uppercase;
 }
 
+.status-today {
+    background: #c1f7e3;
+    color: #003366;
+}
+
 .status-active {
     background: #23c99a;
 }

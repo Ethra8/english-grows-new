@@ -405,8 +405,6 @@ def teacher_classes_list(request):
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
 
-    start_of_month = today.replace(day=1)
-
     sessions = (
         ClassSession.objects
         .filter(course__teacher=request.user)
@@ -426,15 +424,30 @@ def teacher_classes_list(request):
     for session in sessions:
         session_date = timezone.localdate(session.start_time)
 
+        session.is_today = session_date == today
+
+        session.is_this_week = (
+            start_of_week <= session_date <= end_of_week
+            and session.start_time >= now
+        )
+
+        session.is_this_month = (
+            session_date.month == today.month
+            and session_date.year == today.year
+            and session.start_time >= now
+        )
+
+        session.is_list_past = session.start_time < now
+
         if session.is_cancelled:
             session.class_period = "cancelled"
-        elif session.start_time < now:
-            session.class_period = "past"
-        elif session_date == today:
+        elif session.is_today:
             session.class_period = "today"
-        elif start_of_week <= session_date <= end_of_week:
+        elif session.is_list_past:
+            session.class_period = "past"
+        elif session.is_this_week:
             session.class_period = "weekly"
-        elif session_date.month == today.month and session_date.year == today.year:
+        elif session.is_this_month:
             session.class_period = "monthly"
         else:
             session.class_period = "termly"
