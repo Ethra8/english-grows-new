@@ -459,7 +459,7 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
-    background: rgba(0, 103, 108, 1); 
+    background: linear-gradient(260deg,rgba(0, 103, 108, 0.85) 17%, rgba(0, 136, 143, 0.86) 100%);
     z-index: -1;
 }
 

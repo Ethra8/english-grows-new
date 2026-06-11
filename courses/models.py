@@ -77,12 +77,28 @@ class Course(models.Model):
         help_text="Actual number of hours for this course."
     )
 
+    # Include logic to adapt to whether class_duration
+    # or timeslots are introduced first
+    CLASS_DURATION_SOURCE_CHOICES = [
+        ("manual", "Manually set"),
+        ("auto", "Calculated from timetable"),
+    ]
+
     class_duration = models.DecimalField(
-        max_digits=3,
-        decimal_places=1,
+        max_digits=4,
+        decimal_places=2,
         null=True,
         blank=True,
-        help_text="Duration of each class in hours, e.g. 1.0, 1.5 or 2.0."
+        help_text="Duration of each class in hours, e.g. 1.25, 1.50, 0.75 or 2.00."
+    )
+
+    # Include logic to adapt to whether class_duration
+    # or timeslots are introduced first
+    class_duration_source = models.CharField(
+        max_length=10,
+        choices=CLASS_DURATION_SOURCE_CHOICES,
+        blank=True,
+        help_text="Shows whether class duration was manually set or calculated from timetable slots."
     )
 
     company = models.ForeignKey(
@@ -118,10 +134,56 @@ class Course(models.Model):
     # If admin creates a Course and leaves total_hours empty,
     # Django automatically copies the hours from the CourseType.
     def save(self, *args, **kwargs):
+        # Include logic to adapt to whether class_duration
+        # or timeslots are introduced first
+        is_new = self.pk is None
+        old_class_duration = None
+
+        if self.pk:
+            old_course = Course.objects.get(pk=self.pk)
+            old_class_duration = old_course.class_duration
+
         if self.total_hours is None and self.course_type.default_hours is not None:
             self.total_hours = self.course_type.default_hours
 
+        if self.class_duration and (
+            is_new or self.class_duration != old_class_duration
+        ):
+            self.class_duration_source = "manual"
+
         super().save(*args, **kwargs)
+
+
+    def format_duration(self, duration):
+        """
+        Converts decimal hours into a readable duration.
+
+        Examples:
+        0.50 -> 30 min
+        0.75 -> 45 min
+        1.00 -> 1 h
+        1.50 -> 1 h 30 min
+        """
+
+        if duration is None:
+            return ""
+
+        total_minutes = int(duration * 60)
+
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+
+        if hours == 0:
+            return f"{minutes} min"
+
+        if minutes == 0:
+            return f"{hours} h"
+
+        return f"{hours} h {minutes} min"
+    
+    @property
+    def class_duration_display(self):
+        return self.format_duration(self.class_duration)
 
     @property
     def number_of_classes(self):
@@ -135,6 +197,37 @@ class Course(models.Model):
         # Pushes upwards; eg: 6.66 classes = 7 classes
         return ceil(self.total_hours / self.class_duration)
 
+    def update_class_duration_from_timetable(self):
+        """
+        Calculates class_duration from timetable slots.
+        Only works when all timetable slots have the same duration.
+        """
+
+        slots = self.timetable_slots.all()
+
+        if not slots.exists():
+            return
+
+        durations = set()
+
+        for slot in slots:
+            duration = slot.duration_in_hours
+            durations.add(duration)
+
+        if len(durations) > 1:
+            raise ValidationError(
+                "All timetable slots must have the same duration if class duration is calculated automatically."
+            )
+
+        calculated_duration = durations.pop()
+
+        Course.objects.filter(pk=self.pk).update(
+            class_duration=calculated_duration,
+            class_duration_source="auto",
+        )
+
+        self.class_duration = calculated_duration
+        self.class_duration_source = "auto"
 
     @property
     def final_class_duration(self):
@@ -155,6 +248,9 @@ class Course(models.Model):
 
         return remainder
 
+    @property
+    def final_class_duration_display(self):
+        return self.format_duration(self.final_class_duration)
 
     @property
     def has_short_final_class(self):
@@ -166,6 +262,10 @@ class Course(models.Model):
             return False
 
         return self.total_hours % self.class_duration != 0
+
+    @property
+    def class_duration_display(self):
+        return self.format_duration(self.class_duration)
 
 
     def generate_class_sessions(self):
@@ -214,8 +314,6 @@ class Course(models.Model):
                 "This course has no active enrolled students."
             )
 
-        class_duration_minutes = int(self.class_duration * Decimal("60"))
-
         sessions_created = 0
         attendances_created = 0
         scheduled_class_count = 0
@@ -239,8 +337,11 @@ class Course(models.Model):
                     timezone.get_current_timezone()
                 )
 
-                aware_end = aware_start + timedelta(
-                    minutes=class_duration_minutes
+                naive_end = datetime.combine(current_date, slot.end_time)
+
+                aware_end = timezone.make_aware(
+                    naive_end,
+                    timezone.get_current_timezone()
                 )
 
                 class_number = scheduled_class_count + 1
@@ -379,10 +480,33 @@ class CourseTimetableSlot(models.Model):
             "end_time",
         )
 
+    @property
+    def duration_in_hours(self):
+        start_datetime = datetime.combine(datetime.today(), self.start_time)
+        end_datetime = datetime.combine(datetime.today(), self.end_time)
+
+        duration = end_datetime - start_datetime
+        minutes = duration.total_seconds() / 60
+
+        return Decimal(minutes / 60).quantize(Decimal("0.01"))
+
     def clean(self):
         if self.start_time and self.end_time:
             if self.start_time >= self.end_time:
                 raise ValidationError("End time must be after start time.")
+
+        if self.course_id and self.start_time and self.end_time:
+            course = self.course
+
+            if (
+                course.class_duration
+                and course.class_duration_source != "auto"
+                and self.duration_in_hours != course.class_duration
+            ):
+                raise ValidationError(
+                    f"This slot duration is {self.duration_in_hours} hours, "
+                    f"but the course class duration is {course.class_duration} hours."
+                )
 
     def save(self, *args, **kwargs):
         old_slot = None
@@ -390,7 +514,11 @@ class CourseTimetableSlot(models.Model):
         if self.pk:
             old_slot = CourseTimetableSlot.objects.get(pk=self.pk)
 
+        self.full_clean()
         super().save(*args, **kwargs)
+
+        if self.course.class_duration_source != "manual":
+            self.course.update_class_duration_from_timetable()
 
         if old_slot:
             timetable_changed = (
@@ -403,11 +531,6 @@ class CourseTimetableSlot(models.Model):
                 self.update_future_class_sessions(old_slot)
 
     def update_future_class_sessions(self, old_slot):
-        """
-        Update only future, non-cancelled class sessions that belonged
-        to this timetable slot before it was changed.
-        """
-
         now = timezone.now()
         current_timezone = timezone.get_current_timezone()
 
@@ -449,7 +572,6 @@ class CourseTimetableSlot(models.Model):
 
             session.start_time = new_start
             session.end_time = new_end
-
             session.save(update_fields=["start_time", "end_time"])
 
     def __str__(self):
@@ -458,6 +580,7 @@ class CourseTimetableSlot(models.Model):
             f"{self.get_day_of_week_display()} "
             f"{self.start_time:%H:%M} - {self.end_time:%H:%M}"
         )
+
 
 class CourseEnrollment(models.Model):
     """

@@ -69,13 +69,23 @@ class CourseTimetableSlotInline(admin.TabularInline):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
+
+    @admin.display(description="Class Duration")
+    def class_duration_display(self, obj):
+        return obj.class_duration_display
+
+    @admin.display(description="Final Class Duration")
+    def final_class_duration_display(self, obj):
+        return obj.final_class_duration_display
+
+
     list_display = (
         "name",
         "course_type",
         "course_level",
         "status",
         "total_hours",
-        "class_duration",
+        "class_duration_display",
         "number_of_classes",
         "company",
         "teacher",
@@ -83,7 +93,26 @@ class CourseAdmin(admin.ModelAdmin):
         "end_date",
     )
 
+    fields = (
+        "name",
+        "course_type",
+        "course_level",
+        "status",
+        "total_hours",
+        "class_duration",
+        "class_duration_display",
+        "class_duration_source",
+        "number_of_classes",
+        "final_class_duration_display",
+        "company",
+        "teacher",
+        "start_date",
+        "end_date",
+    )
+
     readonly_fields = (
+        "class_duration_display",
+        "final_class_duration_display",
         "number_of_classes",
     )
 
@@ -115,6 +144,15 @@ class CourseAdmin(admin.ModelAdmin):
     actions = (
         "generate_class_sessions",
     )
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+
+        course = form.instance
+
+        if course.class_duration_source == "auto":
+            course.update_class_duration_from_timetable()
+
 
     def generate_class_sessions(self, request, queryset):
         for course in queryset:
