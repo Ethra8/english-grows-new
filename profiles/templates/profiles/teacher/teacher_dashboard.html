@@ -23,6 +23,54 @@
         <div class="col-12 pl-0">
             <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
         </div>
+        <hr>
+
+        {% if courses %}
+        <div class="extra mb-4 mt-4">
+            <div class="course-info-item">
+                <div class="course-info-icon">
+                    <i class="fa-regular fa-circle-play"></i>
+                </div>
+
+                <div class="course-info-text">
+                    <strong>Active</strong>
+                    <span>{{ active_courses }}</span>
+                </div>
+            </div>
+
+            <div class="course-info-item">
+                <div class="course-info-icon">
+                    <i class="fa-regular fa-circle-check"></i>
+                </div>
+
+                <div class="course-info-text">
+                    <strong>Confirmed</strong>
+                    <span>{{ confirmed_courses }}</span>
+                </div>
+            </div>                                       
+            <div class="course-info-item">
+                <div class="course-info-icon">
+                    <i class="fa-regular fa-circle-pause"></i>
+                </div>
+
+                <div class="course-info-text">
+                    <strong>Paused</strong>
+                    <span>{{ paused_courses }}</span>
+                </div>
+            </div>                                       
+            <div class="course-info-item">
+                <div class="course-info-icon">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </div>
+
+                <div class="course-info-text">
+                    <strong>Cancelled</strong>
+                    <span>{{ cancelled_courses }}</span>
+                </div>
+            </div>                                       
+        </div>
+        {% endif %}    
+    
     </header>
 
 

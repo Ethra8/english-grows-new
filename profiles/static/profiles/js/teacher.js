@@ -25,17 +25,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Function to render Teacher CLASSES LIST on teacher_classes_list page
-// depending on WHEN in the <select> element
+// depending on selected period from desktop buttons or mobile select
 document.addEventListener("DOMContentLoaded", function () {
     const filter = document.getElementById("classesListFilter");
+    const filterButtons = document.querySelectorAll(".classes-filter-btn");
     const rows = document.querySelectorAll(".assigned-class-row");
+    const noClassesMessage = document.getElementById("noClassesMessage");
 
-    if (!filter || rows.length === 0) {
+    if (!filter) {
         return;
+    }
+
+    function setActiveButton(selectedPeriod) {
+        filterButtons.forEach(function (button) {
+            if (button.dataset.filter === selectedPeriod) {
+                button.classList.add("active");
+            } else {
+                button.classList.remove("active");
+            }
+        });
     }
 
     function applyClassFilter() {
         const selectedPeriod = filter.value;
+        let visibleRows = 0;
 
         rows.forEach(function (row) {
             const rowPeriod = row.getAttribute("data-period");
@@ -48,13 +61,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 rowMatchesSelectedPeriod
             ) {
                 row.classList.remove("class-hidden");
+                visibleRows++;
             } else {
                 row.classList.add("class-hidden");
             }
         });
+
+        if (noClassesMessage) {
+            if (visibleRows === 0) {
+                noClassesMessage.classList.remove("class-hidden");
+            } else {
+                noClassesMessage.classList.add("class-hidden");
+            }
+        }
+
+        setActiveButton(selectedPeriod);
     }
 
     filter.addEventListener("change", applyClassFilter);
+
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const selectedPeriod = button.dataset.filter;
+
+            filter.value = selectedPeriod;
+            applyClassFilter();
+        });
+    });
 
     applyClassFilter();
 });

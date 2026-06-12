@@ -24,6 +24,7 @@ h2 {
 hr {
     border: outset 1px #6afae1;
     border-radius: 50%;
+    width: 100%;
 }
 
 p {

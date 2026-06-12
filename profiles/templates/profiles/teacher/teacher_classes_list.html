@@ -25,74 +25,40 @@
                 <h1>My Classes</h1>
             </div>
         </div>
-        {% if sessions %}
-        {% if session.start_time > now %}
-        <nav class="mb-4 mt-4">
-            <ul>
-                <li class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-play"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>Total Classes</strong>
-                        <span>{{ sessions.count }}</span>
-                    </div>
-                </li>
-
-                <liv class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-check"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>This Week</strong>
-                        <span>{{ confirmed_courses }}</span>
-                    </div>
-                </liv>                                       
-                <li class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-pause"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>This Month</strong>
-                        <span>{{ paused_courses }}</span>
-                    </div>
-                </li>                                       
-                <li class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-xmark"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>This Term</strong>
-                        <span>{{ cancelled_courses }}</span>
-                    </div>
-                </li>                                       
-            </ul>
-        </nav>
-        {% endif %}
-        {% endif %}
+        <hr>
     </header>
 
         <div class="wrapper-course-card">
             <div class="assigned-courses-panel">
 
                 <div class="assigned-courses-header">
-                    <div class="assigned-courses-title">
-                        <div class="assigned-courses-icon">
-                            <i class="fa-solid fa-chalkboard-user"></i>
-                        </div>
-                        <h2>Upcoming Classes</h2>
-                    </div>
+                    <div class="classes-filter-buttons">
+                        <button type="button" class="classes-filter-btn" data-filter="all">
+                            All Classes
+                        </button>
 
+                        <button type="button" class="classes-filter-btn" data-filter="today">
+                            Today
+                        </button>
+
+                        <button type="button" class="classes-filter-btn active" data-filter="weekly">
+                            This Week
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="monthly">
+                            This Month
+                        </button>
+
+                        <!-- <button type="button" class="classes-filter-btn" data-filter="termly">
+                            This Term
+                        </button> -->
+                    </div>
                     <select id="classesListFilter" class="classes-list-filter">
                         <option value="all">All Classes</option>
                         <option value="today">Today</option>
                         <option value="weekly" selected>This Week</option>
                         <option value="monthly">This Month</option>
-                        <option value="termly">This Term</option>
+                        <!-- <option value="termly">This Term</option> -->
                     </select>
                 </div>
 
@@ -107,16 +73,9 @@
                             data-past="{{ session.is_list_past|yesno:'true,false' }}">
 
                             <div class="class-main-info">
-                                <div class="">
-                                    {% if session.is_cancelled %}
-                                        <span class="status-badge status-cancelled">Cancelled</span>
-                                    {% elif session.start_time < now %}
-                                        <span class="status-badge status-completed">Completed</span>                                    
-                                    {% elif session.class_period == "today" %}
-                                        <span class="status-badge status-today">Today</span>
-                                    {% else %}                                   <!-- <i class="fa-solid fa-book-open-reader"></i> -->
-                                        <span class="status-badge status-active">Upcoming</span>
-                                    {% endif %}
+                                
+                                <div class="assigned-course-level">
+                                    <span class="level-{{ session.course.course_level|lower|cut:'.' }}">{{ session.course.course_level|default:"Pending" }}</span>                                   
                                 </div>
 
                                 <div class="class-list-group-name">
@@ -126,6 +85,15 @@
                                     <p><i class="fa-solid fa-calendar-day mr-1"></i>
                                         {{ session.start_time|date:"D, j M" }} | {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                                     </p>
+                                    {% if session.is_cancelled %}
+                                        <span class="status-badge status-cancelled mt-2">Cancelled</span>
+                                    {% elif session.start_time < now %}
+                                        <span class="status-badge status-completed mt-2">Completed</span>                                    
+                                    {% elif session.class_period == "today" %}
+                                        <span class="status-badge status-today mt-2">Today</span>
+                                    {% else %}                                  
+                                        <span class="status-badge status-active mt-2">Upcoming</span>
+                                    {% endif %}
 
                                 </div>
 
@@ -155,6 +123,9 @@
                     {% empty %}
                         <p class="text-white p-3">Your scheduled classes will display here when sessions are created.</p>
                     {% endfor %}
+                    <p id="noClassesMessage" class="text-white p-3 class-hidden">
+                        No upcoming classes to show for this filter.
+                    </p>
                 </div>
             </div>
         </div>

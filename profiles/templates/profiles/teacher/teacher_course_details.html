@@ -65,131 +65,207 @@
                     <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
                 </div>
                 <div class="course-meta-text">
-                    <strong>Average Assistance</strong>
-                    <span>{{ average_attendance }}%</span>
+                    <strong>Attendance</strong>
+                    <span>
+                        {% if average_attendance < 70 %}
+                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                        {% endif %}
+                        {{ average_attendance }}%
+                    </span>
                 </div>
             </div>
 
         </div>    
+        <hr>
 
-        <div class="classes-timeline-card mt-4">
-            <div class="timeline-header">
-                <div>
-                    <h3>Course Progress</h3>
-                    <p>{{ completed_classes }} completed · {{ remaining_classes }} remaining</p>
-                </div>
-
-                <strong>{{ completion_percentage }}%</strong>
-            </div>
-
-            <div class="classes-progress-bar">
-                <div 
-                    class="classes-progress-fill"
-                    style="--progress-width: {{ completion_percentage }}%;">
-                </div>
-            </div>
-
-            <div class="timeline-labels">
-                <span>
-                    <i class="fa-solid fa-clipboard-check"></i>
-                    {{ completed_classes }} completed
-                </span>
-                <span>
-                    <i class="fa-solid fa-person-chalkboard"></i>
-                    {{ remaining_classes }} upcoming
-                </span>
-                <span>
-                    {{ total_classes }} total classes
-                </span>
-            </div>
-        </div>            
    
     </header>
 
     <div class="course-details-two-col">
         <!-- LEFT COLUMN -->
-        <div class="wrapper-course-details">
+        <div class="course-details-masonry">
+            <div class="wrapper-course-details">
 
-            <div class="assigned-courses-list">
-                
-                <h3><i class="fa-solid fa-circle-info mr-3 mt-4"></i>General Info</h3>
-                <div class="course-detail-grid">
-                    <div class="course-detail-item">
-                        <strong><i class="fa-regular fa-building mr-2"></i>Company: <span>{{ course.company|default:"Individual course" }}</span></strong>
-                        <hr>
-                        <strong><i class="fa-solid fa-arrows-rotate mr-2"></i>Total Hours: <span>{{ course.total_hours|clean_decimal }} h.</span></strong>   
-                        <hr>              
-                        <strong><i class="fa-solid fa-chalkboard-user mr-2"></i>Total Classes: <span>{{ course.number_of_classes|default:"Not assigned" }}</span></strong>
+                <div class="classes-timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <h3>Course Progress</h3>
+                            <!-- <p>{{ completed_classes }} completed · {{ remaining_classes }} remaining</p> -->
+                        </div>
+
+                        <strong>{{ completion_percentage }}%</strong>
                     </div>
-                </div>
 
-                <h3 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h3>
-                <div class="course-detail-grid">          
-                    <div class="course-detail-item">
-                        <strong>
-                            <i class="fa-regular fa-calendar-check mr-2"></i>
-                            Dates: 
-                            <span>{{ course.start_date|date:"D, j M"|default:"Not assigned" }} - {{ course.end_date|date:"D, j M"|default:"Not assigned" }}</span>
-                        </strong>
-                        <hr>
-                        <strong><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>Class Duration: <span>{{ course.class_duration_display|default:"Not assigned" }}</span></strong>                        
-                        {% if course.has_short_final_class %}
-                        <strong><i class="fa-solid fa-triangle-exclamation mr-2"></i>Last Class Duration: <span>{{ course.final_class_duration_display }}</span></strong>
-                        {% endif %}
-                        <hr>
-                        <strong><i class="fa-regular fa-clock mr-2"></i>Timetable:
-                        {% if formatted_timetable %}
-                            {% for timetable in formatted_timetable %}
-                                <span>
-                                    {{ timetable.days }}, {{ timetable.start }} - {{ timetable.end }}
-                                </span>
-                            {% endfor %}
-                        {% else %}
-                            <span>Not assigned</span>
-                        {% endif %}
-                        </strong>
-                    </div>
-                </div>
-                    
-            </div>
-        </div>
-
-        <!-- RIGHT COLUMN -->
-        <div class="wrapper-course-details">
-            <div class="assigned-courses-list">
-                <div class="course-detail-grid"> 
-                    <div class="students-list mt-4">
-                        <h3><i class="fa-regular fa-address-book mr-3"></i>Student List
-                            <!-- <br>
-                            <span>Number of Students: {{ enrollments|length }}</span> -->
-                        </h3>
-
-                        {% if enrollments %}
-                        <div class="student-row-parent">
-                            {% for enrollment in enrollments %}
-                                <div class="student-row">
-                                    <div>
-                                        <strong>
-                                            {{ enrollment.student.get_full_name|default:enrollment.student.username }}
-                                        </strong>
-                                        <a href="mailto: {{ enrollment.student.email }}">
-                                            <span>{{ enrollment.student.email }}</span>
-                                        </a>
-                                    </div>
-
-                                    <span class="student-level">
-                                        {{ enrollment.student.profile.current_level|default:"Pending" }}
-                                    </span>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-white">No students enrolled yet.</p>
-                        {% endif %}
+                    <div class="classes-progress-bar">
+                        <div 
+                            class="classes-progress-fill"
+                            style="--progress-width: {{ completion_percentage }}%;">
                         </div>
                     </div>
+
+                    <div class="timeline-labels">
+                        <span>
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            {{ completed_classes }} completed
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-person-chalkboard"></i>
+                            {{ remaining_classes }} upcoming
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                            {{ total_classes }} total classes
+                        </span>
+                    </div>
+                </div>            
+            </div>    
+
+            <div class="wrapper-course-details">
+   
+                <div class="course-details-child">
+                    
+                    <h3 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h3>
+                    
+                    <div class="course-detail-grid">          
+                        <div class="course-detail-item">
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-regular fa-calendar-check mr-2"></i>
+                                    Dates:
+                                </span>
+                                <span>
+                                    {{ course.start_date|date:"D, j M"|default:"Not assigned" }} -
+                                    {{ course.end_date|date:"D, j M"|default:"Not assigned" }}
+                                </span>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
+                                    Class Duration:
+                                </span>
+                                <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
+                            </div>
+
+                            {% if course.has_short_final_class %}
+                                <div class="detail-row">
+                                    <span>
+                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                                        Last Class Duration:
+                                    </span>
+                                    <span>{{ course.final_class_duration_display }}</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-regular fa-clock mr-2"></i>
+                                    Timetable:
+                                </span>
+
+                                <span>
+                                    {% if formatted_timetable %}
+                                        {% for timetable in formatted_timetable %}
+                                            {{ timetable.days }}, {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        Not assigned
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                        </div>                
+                    </div>
+                        
                 </div>
             </div>
-        </div>
+
+            <div class="wrapper-course-details">
+
+                <div class="course-details-child">
+                    
+                    <h3><i class="fa-solid fa-circle-info mr-3 mt-4"></i>General Info</h3>
+                    <div class="course-detail-grid">
+                        <div class="course-detail-item">
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-solid fa-building mr-2"></i>
+                                    Company:
+                                </span>
+                                <span>{{ course.company|default:"Individual course" }}</span>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-solid fa-arrows-rotate mr-2"></i>
+                                    Total Hours:
+                                </span>
+                                <span>{{ course.total_hours|clean_decimal }} h.</span>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-solid fa-chalkboard-user mr-2"></i>
+                                    Total Classes:
+                                </span>
+                                <span>{{ course.number_of_classes|default:"Not assigned" }}</span>
+                            </div>
+
+                        </div>                
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="wrapper-course-details">
+                <div class="course-details-child">
+                    <div class="student-list-header">
+                        <h3 class="mt-3 mb-3">
+                            <i class="fa-regular fa-address-book mr-3"></i>
+                            Student List
+                        </h3>
+
+                        {% if bcc_student_emails %}
+                            <a 
+                                href="mailto:?bcc={{ bcc_student_emails }}"
+                                class="email-all-btn">
+                                <i class="fa-solid fa-envelope mr-2"></i>
+                                Email all
+                                <i class="fa-solid fa-chevron-right ml-2"></i>
+                            </a>
+                        {% endif %}
+                    </div>                    
+                    <!-- <h3><i class="fa-regular fa-address-book mr-3"></i>Student List</h3> -->
+                    <div class="course-detail-grid"> 
+
+                            {% if enrollments %}
+                            <div class="student-row-parent">
+                                {% for enrollment in enrollments %}
+                                    <div class="student-row">
+                                        <div>
+                                            <strong>
+                                                {{ enrollment.student.get_full_name|default:enrollment.student.username }}
+                                            </strong>
+                                            <a href="mailto: {{ enrollment.student.email }}">
+                                                <span>{{ enrollment.student.email }}</span>
+                                            </a>
+                                        </div>
+
+                                        <span class="student-level">
+                                            {{ enrollment.student.profile.current_level|default:"Pending" }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-white">No students enrolled yet.</p>
+                            {% endif %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
 </section>
 

@@ -378,16 +378,38 @@ def teacher_dashboard(request):
     courses = (
         Course.objects
         .filter(teacher=request.user)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
         .prefetch_related(
             "enrollments__student__profile",
-            "class_sessions"
+            "class_sessions",
         )
+        .order_by("name")
     )
 
+
+    total_courses = courses.count()
+    active_courses = courses.filter(status="active").count()
+    confirmed_courses = courses.filter(status="confirmed").count()
+    cancelled_courses = courses.filter(status="cancelled").count()
+    paused_courses = courses.filter(status="paused").count()
+
+    active_courses_list = courses.filter(status="active")
+
     context = {
+        "profile": profile,
         "courses": courses,
         "todays_sessions": todays_sessions,
         "today": today,
+        "total_courses": total_courses,
+        "active_courses": active_courses,
+        "confirmed_courses": confirmed_courses,
+        "cancelled_courses": cancelled_courses,
+        "paused_courses": paused_courses,
+        "active_courses_list": active_courses_list,  
     }
 
     return render(request, "profiles/teacher/teacher_dashboard.html", context)
@@ -479,6 +501,7 @@ def teacher_courses(request):
         .prefetch_related(
             "enrollments__student__profile",
             "class_sessions",
+            "timetable_slots",    
         )
         .order_by("name")
     )
@@ -500,7 +523,7 @@ def teacher_courses(request):
         "confirmed_courses": confirmed_courses,
         "cancelled_courses": cancelled_courses,
         "paused_courses": paused_courses,
-        "active_courses_list": active_courses_list,  
+        "active_courses_list": active_courses_list,
     }
 
     return render(request, "profiles/teacher/teacher_courses.html", context)
@@ -588,6 +611,15 @@ def teacher_course_details(request, course_id):
             "end": end,
         })
 
+    # create list of all ss emails to send groupal email
+    student_emails = [
+        enrollment.student.email
+        for enrollment in enrollments
+        if enrollment.student.email
+    ]
+
+    bcc_student_emails = ",".join(student_emails)
+
     context = {
         "profile": profile,
         "course": course,
@@ -601,6 +633,7 @@ def teacher_course_details(request, course_id):
         "completion_percentage": completion_percentage,
         "average_attendance": average_attendance,
         "formatted_timetable": formatted_timetable,
+        "bcc_student_emails": bcc_student_emails,
     }
 
     return render(

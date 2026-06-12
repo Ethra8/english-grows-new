@@ -25,6 +25,8 @@
                 <h1>My Assigned Courses</h1>
             </div>
         </div>
+        <hr>
+
         {% if courses %}
         <div class="extra mb-4 mt-4">
                 <div class="course-info-item">
@@ -70,18 +72,19 @@
                 </div>                                       
         </div>
         {% endif %}
+        <hr>
     </header>
 
     <div class="wrapper-course-card">
         <div class="assigned-courses-panel">
 
             <div class="assigned-courses-header">
-                <div class="assigned-courses-title">
+                <!-- <div class="assigned-courses-title">
                     <div class="assigned-courses-icon">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
                     <h2>Assigned Courses</h2>
-                </div>
+                </div> -->
 
                 <select id="courseStatusFilter" class="course-status-filter">
                     <option value="all">All Status</option>
@@ -98,27 +101,35 @@
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
                     <div class="course-main-info">
-                        <div class="course-row-icon">
-                            <i class="fa-solid fa-book-open"></i>
+
+                        <div class="assigned-course-level">
+                            <span class="level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
                         </div>
 
                         <div>
-                            <h3>{{ course.name }}</h3>
+                            <h3>
+                                {% if course.company %}
+                                    <i class="fa-regular fa-building mr-2"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-book-open-reader mr-2"></i>
+                                {% endif %}
+                                {{ course.name }}
+                            </h3>
 
                             <span class="status-badge status-{{ course.status }}">
                                 {{ course.get_status_display }}
                             </span>
 
                             <p>
-                                <i class="fa-regular fa-calendar-days mr-1"></i>
-                                {{ course.start_date|date:"D, j M" }}
-                                {% if course.end_date %}
-                                    – {{ course.end_date|date:"D, j M" }}
-                                {% endif %}
-                            </p>
+                                <!-- <i class="fa-regular fa-clock mr-1"></i> -->
+                                {{ course.timetable_display }}
+                            </p>                        
                         </div>
                     </div>
--->
+                    <!-- <div class="assigned-course-level">
+                        <span>{{ course.course_level }}</span>
+
+                    </div> -->
                     <div class="course-stat completion-stat">
                         <div
                             class="completion-ring"

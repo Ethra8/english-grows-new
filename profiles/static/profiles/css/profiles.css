@@ -473,10 +473,10 @@ main.profile-main h1 {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
-    border: solid 2px #5ff0df;
-    background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%);
-    color: #003366;
+    border: outset 2px #5ff0df;
+    /* background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%); */
+    background: #C1F7E3;
+    background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #003366;
     box-shadow: 0 2px 3px 0 #003366;
 }
 
