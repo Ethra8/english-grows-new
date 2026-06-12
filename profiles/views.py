@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from datetime import timedelta, datetime, time
+from collections import defaultdict
 
 from .models import UserProfile, TeacherProfile
 from .forms import UserProfileForm, TeacherProfileForm
@@ -533,20 +534,80 @@ def teacher_course_details(request, course_id):
 
     now = timezone.now()
 
-    completed_sessions = course.class_sessions.filter(
+    total_classes = course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    completed_classes = course.class_sessions.filter(
         is_cancelled=False,
         start_time__lt=now,
     ).count()
+
+    remaining_classes = total_classes - completed_classes
+
+    completion_percentage = 0
+    if total_classes:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+
+    attendance_percentages = []
+
+    for enrollment in enrollments:
+        total_completed = enrollment.total_completed_classes
+
+        if total_completed > 0:
+            attendance_percentages.append(
+                (enrollment.classes_attended / total_completed) * 100
+            )
+
+    average_attendance = 0
+    if attendance_percentages:
+        average_attendance = round(
+            sum(attendance_percentages) / len(attendance_percentages)
+        )
+    
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M")
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
 
     context = {
         "profile": profile,
         "course": course,
         "enrollments": enrollments,
         "sessions": sessions,
-        "completed_sessions": completed_sessions,
+
+        # Progress timeline data
+        "total_classes": total_classes,
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "completion_percentage": completion_percentage,
+        "average_attendance": average_attendance,
+        "formatted_timetable": formatted_timetable,
     }
 
-    return render(request, "profiles/teacher/teacher_course_details.html", context)
+    return render(
+        request,
+        "profiles/teacher/teacher_course_details.html",
+        context
+    )
 
 
 @login_required

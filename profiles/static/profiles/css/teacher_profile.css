@@ -385,7 +385,7 @@
 .assigned-courses-list {
     background: rgba(0, 51, 102, 0.82);
     border-radius: 10px;
-    margin: 0 .3rem .3rem;
+    margin: 0;
     padding: 1rem 1.5rem;
     /* width: 50%; */
 }
@@ -565,7 +565,7 @@
 }
 
 .course-meta-icon i {
-    color: #c1f7e3 ;
+    color: #5eead4 ;
     font-size: 1.8rem;
 }
 
@@ -579,9 +579,10 @@
 
 .course-meta-text strong {
     display: block;
-    color: #5ef2dc;
+    color: #c1f7e3;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.7rem;
+    font-weight: 400;
     text-transform: capitalize;
     letter-spacing: 0.04em;
     margin-bottom: 0;
@@ -688,6 +689,7 @@
     margin-top: 0.75rem;
     margin-bottom: 0.3rem;
     line-height: 2;
+    font-weight: 400;
 }
 
 .course-detail-item span {
@@ -695,7 +697,8 @@
     margin-bottom: 0.5rem;
 }
 
-.course-detail-item hr {
+.course-detail-item hr,
+.student-row hr {
     border: 1px solid rgba(94, 234, 212, 0.2);
     border-radius: 0;
 }
@@ -714,14 +717,82 @@
     font-weight: 600;
 }
 
-.course-detail-grid.completion-inline {
-    /* display: flex; */
+/* .course-detail-grid.completion-inline {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+} */
+
+/* **** TIMELINE COURSE COMPLETION */
+.classes-timeline-card {
+    background: rgba(0, 51, 102, 0.65);
+    border: 1px solid rgba(92, 255, 231, 0.45);
+    border-radius: 14px;
+    padding: 1.5rem;
+    color: #fff;
 }
 
-.assigned-courses-list h4 {
-    color: #fff;
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.timeline-header h3 {
+    color: #c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-header p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.9rem;
+}
+
+.timeline-header strong {
+    color: #5cffe7;
+    font-size: 1.35rem;
+}
+
+.classes-progress-bar {
+    width: 100%;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.classes-progress-fill {
+    width: var(--progress-width);
+    height: 100%;
+    background: #5cffe7;
+    border-radius: 999px;
+}
+
+.timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.85rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.timeline-labels i {
+    color: #5cffe7;
+    margin-right: 0.35rem;
+}
+/* ***** END TIMELINE */
+
+
+.assigned-courses-list h3 {
+    color: #c1f7e3;
+    font-family: "Big Shoulders Display", sans-serif;
+
     margin-bottom: 0.8rem;
 }
 
@@ -731,15 +802,23 @@
     margin-top: 0;
 }
 
+.student-row-parent {
+    background: rgba(0, 51, 102, 0.45);
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    border: 1px solid rgba(94, 234, 212, 0.2);
+}
+
 .student-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(0, 51, 102, 0.45);
-    border: 1px solid rgba(94, 234, 212, 0.2);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
+    /* background: rgba(0, 51, 102, 0.45); */
+    border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+    /* border-radius: 10px; */
+    padding: 0.75rem 0.75rem;
+    margin-bottom: 1rem;
+    margin-top: 0.75rem;
     color: #fff;
 }
 
@@ -887,7 +966,7 @@
 
 
 
-@media (max-width: 575px) {
+@media (max-width: 576px) {
     
     .today-class-info {
         flex-direction: column;
@@ -936,6 +1015,18 @@
         gap: 1rem;
     }
     /* END Course Assigned BY STATUS */
+
+/* COURSE DETAILS page ***************/
+
+/* Timeline Course completion */
+    .timeline-header {
+        flex-direction: column;
+    }
+
+    .timeline-labels {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
 
 }
 

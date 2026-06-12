@@ -62,15 +62,48 @@
 
             <div class="course-meta-card meta-completion">
                 <div class="course-meta-icon">
-                    <div class="completion-ring" style="--completion: {{ course.completion_percentage }};"></div>
+                    <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
                 </div>
                 <div class="course-meta-text">
-                    <strong>Completion</strong>
-                    <span>{{ course.completion_percentage }}%</span>
+                    <strong>Average Assistance</strong>
+                    <span>{{ average_attendance }}%</span>
                 </div>
             </div>
 
         </div>    
+
+        <div class="classes-timeline-card mt-4">
+            <div class="timeline-header">
+                <div>
+                    <h3>Course Progress</h3>
+                    <p>{{ completed_classes }} completed · {{ remaining_classes }} remaining</p>
+                </div>
+
+                <strong>{{ completion_percentage }}%</strong>
+            </div>
+
+            <div class="classes-progress-bar">
+                <div 
+                    class="classes-progress-fill"
+                    style="--progress-width: {{ completion_percentage }}%;">
+                </div>
+            </div>
+
+            <div class="timeline-labels">
+                <span>
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    {{ completed_classes }} completed
+                </span>
+                <span>
+                    <i class="fa-solid fa-person-chalkboard"></i>
+                    {{ remaining_classes }} upcoming
+                </span>
+                <span>
+                    {{ total_classes }} total classes
+                </span>
+            </div>
+        </div>            
+   
     </header>
 
     <div class="course-details-two-col">
@@ -79,7 +112,7 @@
 
             <div class="assigned-courses-list">
                 
-                <h4><i class="fa-solid fa-circle-info mr-3 mt-4"></i>General Info</h4>
+                <h3><i class="fa-solid fa-circle-info mr-3 mt-4"></i>General Info</h3>
                 <div class="course-detail-grid">
                     <div class="course-detail-item">
                         <strong><i class="fa-regular fa-building mr-2"></i>Company: <span>{{ course.company|default:"Individual course" }}</span></strong>
@@ -100,7 +133,7 @@
                     </div> -->
                 </div>
 
-                <h4 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h4>
+                <h3 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h3>
                 <div class="course-detail-grid">          
                     <div class="course-detail-item">
                         <strong>
@@ -111,22 +144,20 @@
                         <hr>
                         <strong><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>Class Duration: <span>{{ course.class_duration_display|default:"Not assigned" }}</span></strong>                        
                         {% if course.has_short_final_class %}
-                        <span class="bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Last class: {{ course.final_class_duration_display }}</span>
+                        <strong><i class="fa-solid fa-triangle-exclamation mr-2"></i>Last Class Duration: <span>{{ course.final_class_duration_display }}</span></strong>
                         {% endif %}
                         <hr>
-                        <strong><i class="fa-regular fa-clock mr-2"></i>Timetable</strong>
-                        {% if course.timetable_slots.all %}
-                            {% for slot in course.timetable_slots.all %}
+                        <strong><i class="fa-regular fa-clock mr-2"></i>Timetable:
+                        {% if formatted_timetable %}
+                            {% for timetable in formatted_timetable %}
                                 <span>
-                                    <p>{{ slot.get_day_of_week_display|slice:":3" }}:</p>
-                                    {{ slot.start_time|time:"H.i" }} -
-                                    {{ slot.end_time|time:"H.i" }}
+                                    {{ timetable.days }}, {{ timetable.start }} - {{ timetable.end }}
                                 </span>
                             {% endfor %}
                         {% else %}
                             <span>Not assigned</span>
                         {% endif %}
-
+                        </strong>
                     </div>
 
                     <!-- <div class="course-detail-item">
@@ -153,17 +184,8 @@
                     </div> -->
                 </div>
         
-                <h4 class="mt-3 mb-3"><i class="fa-regular fa-chart-bar mr-3"></i>Sessions Info</h4>
-                <div class="course-detail-grid completion-inline">                         
-                    <div class=" course-detail-item">
-                        <strong><i class="fa-solid fa-clipboard-check mr-2"></i>Completed Classes</strong>
-                        <span>{{ course.completed_sessions|default:"Not assigned" }}</span>
-                    </div>
-                    <div class="course-detail-item">
-                        <strong><i class="fa-solid fa-arrows-turn-right mr-2"></i>Remaining Classes</strong>
-                        <span>{{ course.remaining_sessions|default:"Not assigned" }}</span>
-                    </div>
-                </div>
+                <!-- <h4 class="mt-3 mb-3"><i class="fa-regular fa-chart-bar mr-3"></i>Sessions Info</h4> -->
+            
             </div>
         </div>
 
@@ -172,13 +194,13 @@
             <div class="assigned-courses-list">
                 <div class="course-detail-grid"> 
                     <div class="students-list mt-4">
-                        <h4><i class="fa-regular fa-address-book mr-2"></i></i>Student List
+                        <h3><i class="fa-regular fa-address-book mr-3"></i>Student List
                             <!-- <br>
                             <span>Number of Students: {{ enrollments|length }}</span> -->
-                        </h4>
+                        </h3>
 
                         {% if enrollments %}
-
+                        <div class="student-row-parent">
                             {% for enrollment in enrollments %}
                                 <div class="student-row">
                                     <div>
@@ -198,6 +220,7 @@
                         {% else %}
                             <p class="text-white">No students enrolled yet.</p>
                         {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
