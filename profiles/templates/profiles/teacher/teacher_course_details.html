@@ -121,16 +121,6 @@
                         <hr>              
                         <strong><i class="fa-solid fa-chalkboard-user mr-2"></i>Total Classes: <span>{{ course.number_of_classes|default:"Not assigned" }}</span></strong>
                     </div>
-
-                    <!-- <div class="course-detail-item">
-                        <strong><i class="fa-solid fa-arrows-rotate mr-2"></i>Total Hours</strong>
-                        <span>{{ course.total_hours|clean_decimal }} h.</span>
-                    </div> -->
-
-                    <!-- <div class="course-detail-item">
-                        <strong><i class="fa-solid fa-chalkboard-user mr-2"></i>Total Classes</strong>
-                        <span>{{ course.number_of_classes|default:"Not assigned" }}</span>
-                    </div> -->
                 </div>
 
                 <h3 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h3>
@@ -159,33 +149,8 @@
                         {% endif %}
                         </strong>
                     </div>
-
-                    <!-- <div class="course-detail-item">
-                        <strong><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i></i>Class Duration</strong>
-                        <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
-                        {% if course.has_short_final_class %}
-                        <span class="bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Last class: {{ course.final_class_duration_display }}</span>
-                        {% endif %}
-                    </div> -->
-
-                    <!-- <div class="course-detail-item">
-                        <strong><i class="fa-regular fa-clock mr-2"></i>Timetable</strong>
-                        {% if course.timetable_slots.all %}
-                            {% for slot in course.timetable_slots.all %}
-                                <span>
-                                    <p>{{ slot.get_day_of_week_display|slice:":3" }}:</p>
-                                    {{ slot.start_time|time:"H.i" }} -
-                                    {{ slot.end_time|time:"H.i" }}
-                                </span>
-                            {% endfor %}
-                        {% else %}
-                            <span>Not assigned</span>
-                        {% endif %}
-                    </div> -->
                 </div>
-        
-                <!-- <h4 class="mt-3 mb-3"><i class="fa-regular fa-chart-bar mr-3"></i>Sessions Info</h4> -->
-            
+                    
             </div>
         </div>
 
@@ -207,9 +172,9 @@
                                         <strong>
                                             {{ enrollment.student.get_full_name|default:enrollment.student.username }}
                                         </strong>
-                    
-                    
-                                        <span>{{ enrollment.student.email }}</span>
+                                        <a href="mailto: {{ enrollment.student.email }}">
+                                            <span>{{ enrollment.student.email }}</span>
+                                        </a>
                                     </div>
 
                                     <span class="student-level">

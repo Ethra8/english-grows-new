@@ -822,6 +822,10 @@
     color: #fff;
 }
 
+.student-row a span:hover {
+    color: #5eead4 !important;
+}
+
 .student-row span {
     display: block;
     color: #c8eee9;
