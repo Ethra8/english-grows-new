@@ -66,100 +66,81 @@
     
     <header class="container-fluid fixed-top w-100 p-0">
 
-        <div id="topnav" class="row d-none d-lg-flex m-0">
-          <div class="col-12 col-sm-3 my-auto py-lg-0 text-center text-lg-left">
-            <a href="{% url 'home' %}" class="nav-link" aria-label="go to the home page">
-              <img src="{% static 'images/logo_englishgrows.png' %}" alt="logo" class="logo">
-            </a>
-          </div>
-          <div class="col-12 col-md-9 my-auto py-1 py-lg-0">
-            <ul class="list-inline list-unstyled text-right my-0">
-              <li class="list-inline-item dropdown">
-                <a class="pt-0 pb-0" href="#" id="user-options" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  <div class="text-center">
-                    {% if request.user.is_authenticated %}
-                      {% if request.user.profile.profile_photo %}
-                      <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="nav-profile-photo">
-                      {% else %}
-                      <div>
-                        <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
-                      </div>                    
-                      {% endif %}
-                    {% else %}
-                      <div>
-                        <i class="fa-solid fa-circle-user fa-lg icon-nav mt-3"></i>
-                      </div>                    
-                    {% endif %}
-                     
-                    {% if request.user.is_authenticated %}
-                      {% if request.user.first_name %}
-                      <p class="my-0 text-white text-center mt-1">{{ request.user.first_name }}</p>
-                      {% else %}
-                      <p class="my-0 text-white text-center mt-1">{{ user.username }}</p>
-                      {% endif %}
-                    {% else %}
-                      <p class="my-0 text-white text-center mt-1">Login</p>
-                    {% endif %}
-                  </div>
-                </a>
-                <div class="dropdown-menu border-0" aria-labelledby="user-options">
-                  {% if request.user.is_authenticated %}
-                    {% if request.user.profile.role == "teacher" %}
-                      <a href="{% url 'profiles:teacher_dashboard' %}" class="dropdown-item" aria-label="go to my teacher dashboard">
-                        My Profile
-                      </a>
-                    {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
-                      <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my teacher dashboard">
-                        My Profile
-                      </a>
-                    {% else %}
-                      <a href="{% url 'profiles:profile' %}" class="dropdown-item" aria-label="go to my profile page">
-                        My Profile
-                      </a>
-                    {% endif %}
-
-                    <a href="{% url 'account_logout' %}" class="dropdown-item" aria-label="go to the log out page">Logout</a>
-
+      <div id="topnav" class="row d-none d-lg-flex m-0">
+        <div class="col-12 col-sm-3 my-auto py-lg-0 text-center text-lg-left">
+          <a href="{% url 'home' %}" class="nav-link" aria-label="go to the home page">
+            <img src="{% static 'images/logo_englishgrows.png' %}" alt="logo" class="logo">
+          </a>
+        </div>
+        <div class="col-12 col-md-9 my-auto py-1 py-lg-0">
+          <ul class="list-inline list-unstyled text-right my-0">
+            {% if request.user.is_authenticated %}
+              <li>
+                <div class="text-center">
+                  {% if request.user.profile.role == "teacher" %}
+                    <a href="{% url 'profiles:teacher_dashboard' %}" aria-label="go to my teacher dashboard">
+                      <i class="fa-regular fa-user"></i>
+                    </a>
+                  {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
+                    <a href="{% url 'profiles:profile' %}" aria-label="go to my student dashboard">
+                      <i class="fa-regular fa-user"></i>
+                    </a>
                   {% else %}
-                    <a href="{% url 'account_signup' %}" class="dropdown-item" aria-label="go to the account registration page">Register</a>
-                    <a href="{% url 'account_login' %}" class="dropdown-item" aria-label="go to the login page">Login</a>
-                  {% endif %}                
+                    <a href="{% url 'profiles:profile' %}" aria-label="go to my profile page">
+                      <i class="fa-regular fa-user"></i>
+                    </a>
+                  {% endif %}
                 </div>
               </li>
-              {% block bag_icon %}
-              {% endblock %}
-
-              {% block sidebar %}
-              {% endblock %}
-            <!-- bag_icon logic: To be exported to invidual_lessons.html
-              <li class="list-inline-item pr-5">
-                <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
-                  href="" aria-label="go to your bag page to update quantity, and see subtotals">
-                  <div class="text-center">
-                    <div><i class="fas fa-shopping-bag fa-lg icon-nav"></i></div>
-                    <p class="my-0 text-white turquoise-hover">
-                      {% if grand_total %}
-                      {{ grand_total|floatformat:2 }} €
-                      {% else %}
-                      0.00 €
-                      {% endif %}
-                    </p>
-                  </div>
+                    
+              <li>
+                <a href="{% url 'account_logout' %}">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </a>
-              </li> 
-            -->
-            </ul>
-          </div>
+              </li>
+
+            {% else %}
+              <li>
+                <a href="{% url 'account_login' %}" class="btn-navbar">
+                    Login
+                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                </a>
+              </li>
+            {% endif %}
+
+            {% block bag_icon %}
+            {% endblock %}
+
+            {% block sidebar %}
+            {% endblock %}
+          <!-- bag_icon logic: To be exported to invidual_lessons.html
+            <li class="list-inline-item pr-5">
+              <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
+                href="" aria-label="go to your bag page to update quantity, and see subtotals">
+                <div class="text-center">
+                  <div><i class="fas fa-shopping-bag fa-lg icon-nav"></i></div>
+                  <p class="my-0 text-white turquoise-hover">
+                    {% if grand_total %}
+                    {{ grand_total|floatformat:2 }} €
+                    {% else %}
+                    0.00 €
+                    {% endif %}
+                  </p>
+                </div>
+              </a>
+            </li> 
+          -->
+          </ul>
         </div>
+      </div>
       
-        {% block nav %}
-        <div class="row bg-custom-dark pr-3">
-          <nav class="navbar navbar-dark navbar-expand-lg w-100 pb-0">
-            {% include 'includes/mobile_top_header.html' %}
-          </nav>
-        </div>
-        {% endblock %}
+      {% block nav %}
+      <div class="row bg-custom-dark pr-3">
+        <nav class="navbar navbar-dark navbar-expand-lg w-100 pb-0">
+          {% include 'includes/mobile_top_header.html' %}
+        </nav>
+      </div>
+      {% endblock %}
     </header>
 
     <!-- <div class="overlay1"></div> -->

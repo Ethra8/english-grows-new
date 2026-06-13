@@ -19,8 +19,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from profiles import views as profile_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("accounts/redirect/", profile_views.login_redirect, name="login_redirect"),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
     path('courses/', include('courses.urls')),

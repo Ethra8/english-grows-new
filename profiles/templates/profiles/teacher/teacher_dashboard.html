@@ -114,11 +114,11 @@
                             </div> -->
 
                             {% if session.meeting_link %}
-                                <a href="{{ session.meeting_link }}" class="today-class-btn btn" target="_blank"  rel="noopener">
+                                <a href="{{ session.meeting_link }}" class="btn-class-today btn" target="_blank"  rel="noopener">
                                     <i class="fa-solid fa-video mr-2"></i> Start Class
                                 </a>
                             {% else %}
-                                <a href="{% url 'profiles:teacher_calendar' %}" class="today-class-btn btn">
+                                <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn">
                                     <i class="fa-regular fa-calendar-days mr-2"></i> To Calendar
                                 </a>
                             {% endif %}

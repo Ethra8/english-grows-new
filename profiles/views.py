@@ -16,6 +16,17 @@ from .forms import UserProfileForm, TeacherProfileForm
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
 
+
+@login_required
+def login_redirect(request):
+    profile = request.user.profile
+
+    if profile.role == "teacher":
+        return redirect("profiles:teacher_dashboard")
+
+    return redirect("profiles:profile")
+
+
 # STUDENT for UserProfile
 @login_required
 def profile(request):

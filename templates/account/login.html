@@ -4,16 +4,16 @@
 {% load crispy_forms_tags %}
 {% load account %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}{% trans "Sign in to your account" %}{% endblock %}
 
 {% block inner_content %}
 
 <div class="auth-intro mb-4">
-    <p>
+    <!-- <p>
         {% blocktrans %}
         Sign in with your email and password.
         {% endblocktrans %}
-    </p>
+    </p> -->
 
     <p>
         {% blocktrans %}
@@ -36,15 +36,15 @@
         />
     {% endif %}
 
-    <button class="btn btn-custom mb-3" type="submit">
+    <button class="btn mb-3" type="submit">
         {% trans "Sign In" %}
     </button>
 
     <br>
 
-    <a class="button secondaryAction" href="{% url 'account_reset_password' %}">
+    <!-- <a class="button secondaryAction" href="{% url 'account_reset_password' %}">
         {% trans "Forgot Password?" %}
-    </a>
+    </a> -->
 </form>
 
 {% endblock %}

@@ -41,6 +41,130 @@ a:hover {
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+/* **** BUTTONS *********************************************** */
+
+.btn {
+    border-radius: 7px !important;
+}
+
+.btn-navbar {
+    border: 1px solid #5eead4;
+    color: #5eead4;
+    padding: 0.6rem 1.1rem;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 400;
+    width: 200px !important;
+}
+
+.btn-navbar:hover {
+    background: rgba(94, 234, 212, 0.15);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-custom {
+    width: 100%;
+    /* max-width: 320px;  */
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background: #003366;
+    color: white;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: outset 1px aquamarine;
+    box-shadow: 0 1px 3px 0 #484a4d;    
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-custom:hover {
+    background: teal;
+    color: white;
+    /* font-weight: 600; */
+}
+
+#contact-form .btn-custom,
+#subscribe-form .btn-custom {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.btn-custom-teal {
+    width: 100%;
+    /* max-width: 320px; */
+    background: teal;
+    color: white;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: outset 2px aquamarine;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-custom-teal:hover {
+    background: #003366;
+    color: white;
+}
+
+.index-cta-button {
+    background: #003366 ;
+    color: #c1f7e3;
+    border: 1px solid #003366;
+    min-width: 220px;
+    font-size: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+
+.index-cta-button:hover,
+.index-cta-button:active,
+.index-cta-button:focus {
+    background-color: #c1f7e3;
+    color: #003366;
+    font-weight: 400;
+}
+
+.btn-outline-custom {
+    background: teal;
+    color: white !important; /* use important to override link colors for <a> elements */
+    border: 1px outset #003366;
+}
+
+.btn-outline-custom:hover,
+.btn-outline-custom:active,
+.btn-outline-custom:focus {
+    background: aquamarine;
+    color: #003366 !important;
+    font-weight: 700;
+}
+
+.btn-bg-light {
+    background-color: aquamarine;
+    color: #003366 !important;
+    border: inset 2px teal;
+}
+
+.border-black {
+    border: 1px solid #003366 !important;
+    border-radius: 5px !important;
+}
+
+/* back to top button */
+.btt-button {
+    height: 42px;
+    width: 42px;
+    position: fixed;
+    color: teal;
+    bottom: 10px;
+    right: 10px;
+    border: medium solid teal;
+    background-color: #003366;
+    border-radius: 10px !important;
+}
+
+
+/* *** ROWS: General Config ************************************/
+
 .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -61,6 +185,8 @@ a:hover {
     padding-left: 0;
 }
 
+/* *** NAVBAR ***************************************************/
+
 .nav-profile-photo {
     height: 50px;
     width: 50px;
@@ -74,6 +200,19 @@ a:hover {
     max-height: 104px;
     width: 100%;
     padding: 0 2%;
+}
+
+#topnav .fa-user,
+#topnav .fa-arrow-right-from-bracket {
+    color:#c1f7e3 !important;
+    margin-bottom: 0;
+    padding: 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+#topnav .fa-user:hover,
+#topnav .fa-arrow-right-from-bracket:hover {
+    color: whitesmoke !important;
 }
 
 #main-nav {
@@ -147,9 +286,14 @@ a.text-white:hover {
     color: #fff;
 } */
 
-.list-inline-item {
-    padding-right: 14px;
+ul li {
+    display: inline-block;
+    max-width: fit-content;
 }
+
+/* .list-inline-item {
+    padding-right: 14px;
+} */
 
 .list-inline-item p:hover,
 .list-inline-item .icon-nav:hover {
@@ -321,109 +465,6 @@ footer a {
 .dropdown-menu {
     background-color: #c1f7e3;
     box-shadow: 0 1px 3px 0 #737577;    
-}
-
-
-
-/** BUTTTONS **/
-
-.btn-custom {
-    width: 100%;
-    /* max-width: 320px;  */
-    border-radius: 10px;
-    font-size: 1.1rem;
-    background: #003366;
-    color: white;
-    text-transform: uppercase;
-    padding: 0.5rem 1rem;
-    border: outset 1px aquamarine;
-    box-shadow: 0 1px 3px 0 #484a4d;    
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-custom:hover {
-    background: teal;
-    color: white;
-    /* font-weight: 600; */
-}
-
-#contact-form .btn-custom,
-#subscribe-form .btn-custom {
-    max-width: 100% !important;
-    width: 100% !important;
-}
-
-.btn-custom-teal {
-    width: 100%;
-    /* max-width: 320px; */
-    background: teal;
-    color: white;
-    text-transform: uppercase;
-    padding: 0.5rem 1rem;
-    border: outset 2px aquamarine;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-custom-teal:hover {
-    background: #003366;
-    color: white;
-}
-
-.index-cta-button {
-    background: #003366 ;
-    color: #c1f7e3;
-    border: 1px solid #003366;
-    min-width: 220px;
-    font-size: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
-    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
-}
-
-.index-cta-button:hover,
-.index-cta-button:active,
-.index-cta-button:focus {
-    background-color: #c1f7e3;
-    color: #003366;
-    font-weight: 400;
-}
-
-.btn-outline-custom {
-    background: teal;
-    color: white !important; /* use important to override link colors for <a> elements */
-    border: 1px outset #003366;
-}
-
-.btn-outline-custom:hover,
-.btn-outline-custom:active,
-.btn-outline-custom:focus {
-    background: aquamarine;
-    color: #003366 !important;
-    font-weight: 700;
-}
-
-.btn-bg-light {
-    background-color: aquamarine;
-    color: #003366 !important;
-    border: inset 2px teal;
-}
-
-.border-black {
-    border: 1px solid #003366 !important;
-    border-radius: 5px !important;
-}
-
-/* back to top button */
-.btt-button {
-    height: 42px;
-    width: 42px;
-    position: fixed;
-    color: teal;
-    bottom: 10px;
-    right: 10px;
-    border: medium solid teal;
-    background-color: #003366;
-    border-radius: 10px !important;
 }
 
 .btt-link {
