@@ -70,7 +70,7 @@
 
                     <select id="courseStatusFilter" class="course-status-select">
                         <option value="all">All Status</option>
-                        <option value="active selected" selected>Active</option>
+                        <option value="active" selected>Active</option>
                         <option value="confirmed">Confirmed</option>
                         <option value="paused">Paused</option>
                         <option value="cancelled">Cancelled</option>
@@ -102,7 +102,7 @@
                                 {% endif %}
                                 {{ course.name }}
                             </h3>
-
+                            <span id="course_level_inline" class="level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
                             <span class="status-badge status-{{ course.status }}">
                                 {{ course.get_status_display }}
                             </span>

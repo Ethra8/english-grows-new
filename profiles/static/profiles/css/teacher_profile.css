@@ -33,6 +33,115 @@
 }
 
 
+/* META in HEADERS */
+
+
+.meta-row {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.teacher-dashboard .meta-row {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.course-header-meta-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.meta-card,
+.course-meta-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+
+    min-height: fit-content;
+    padding: 0.15rem 2rem 0.15rem 0.25rem;
+
+    border: 1.5px solid rgba(94, 242, 220, 0.75);
+    border-radius: 999px;
+
+    background: rgba(193, 247, 227, 0.65);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.meta-card::after,
+.course-meta-card::after {
+    content: "";
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 90px;
+    height: 90px;
+
+    /* background: rgba(94, 242, 220, 0.09); */
+    border-radius: 50%;
+}
+
+.meta-icon,
+.course-meta-icon {
+    z-index: 1;
+
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #003366;
+    border: 1px solid rgba(94, 242, 220, 0.75);
+}
+
+.meta-icon i,
+.course-meta-icon i {
+    color: #5eead4 ;
+    font-size: 1.8rem;
+}
+
+.course-meta-icon .completion-ring {
+    margin-left: 0.5rem;
+}
+
+.meta-text,
+.course-meta-text {
+    z-index: 1;
+}
+
+.meta-text strong,
+.course-meta-text strong {
+    display: block;
+    color: #003366;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 0.04em;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.meta-text span,
+.course-meta-text span {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+
+
+
 /* *** LEVELS PILLS for Teacher_classes_List / Teacher_courses ******/
 /* Beginner */
 .level-a1 {
@@ -391,7 +500,7 @@ header .extra .item-text span {
 |*********************************** */
 
 .status-badge {
-    display: inline-block;
+    /* display: inline-block; */
     padding: .2rem .75rem;
     border-radius: 20px;
     color: #fff;
@@ -635,6 +744,11 @@ header .extra .item-text span {
     border-bottom: 1px solid rgba(94, 234, 212, 0.25);
 }
 
+#course_level_inline {
+    display: none;
+}
+
+
 .assigned-course-row:last-child,
 .assigned-class-row:last-child {
     border-bottom: none;
@@ -664,25 +778,26 @@ header .extra .item-text span {
 .course-main-info p,
 .class-main-info p {
     color: #c8eee9;
-    margin: .45rem 0 0;
+    margin: .45rem 0;
 }
 
 .assigned-course-level {
     /* background: rgba(94, 234, 212, 0.15); */
     padding: 0 0.5rem;
     height: 100%;
-    min-height:auto;
+    min-height: auto;
     align-content: center;
 }
 
-.assigned-course-level span {
-    /* background: rgba(94, 234, 212, 0.15); */
+.assigned-course-level span, 
+.course-main-info span {
     border: 1px solid rgba(94, 234, 212, 0.5);
     border-radius: 20px;
     padding: 0.2rem 1rem !important;
-    /* color: #5eead4 !important; */
     font-weight: 700;
     width: fit-content;
+    margin: 0 0.5rem;
+    font-size: .75rem;
 }
 
 .course-stat {
@@ -758,92 +873,7 @@ header .extra .item-text span {
     cursor: pointer;
 }
 
-.course-header-meta-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.course-meta-card {
-    position: relative;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-
-    min-height: fit-content;
-    padding: 0.15rem 2rem 0.15rem 0.25rem;
-
-    border: 1.5px solid rgba(94, 242, 220, 0.75);
-    border-radius: 999px;
-
-    background: rgba(4, 242, 220, 0.45);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.course-meta-card::after {
-    content: "";
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 90px;
-    height: 90px;
-
-    /* background: rgba(94, 242, 220, 0.09); */
-    border-radius: 50%;
-}
-
-.course-meta-icon {
-    z-index: 1;
-
-    width: 55px;
-    height: 55px;
-    min-width: 55px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-    background: #003366;
-    border: 1px solid rgba(94, 242, 220, 0.75);
-}
-
-.course-meta-icon i {
-    color: #5eead4 ;
-    font-size: 1.8rem;
-}
-
-.course-meta-icon .completion-ring {
-    margin-left: 0.5rem;
-}
-
-.course-meta-text {
-    z-index: 1;
-}
-
-.course-meta-text strong {
-    display: block;
-    color: #003366;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.7rem;
-    font-weight: 500;
-    text-transform: capitalize;
-    letter-spacing: 0.04em;
-    margin-bottom: 0;
-    margin-top: 0;
-}
-
-.course-meta-text span {
-    color: #ffffff;
-    font-size: 1.4rem;
-    font-weight: 400;
-}
-
+/* META FOR Course Datisl PAge */
 /* Level background icon */
 .course-meta-card.meta-level::after {
     content: "\f5fd"; /* fa-layer-group */
@@ -1148,7 +1178,7 @@ header .extra .item-text span {
 
 .student-row span {
     display: block;
-    color: #c8eee9;
+    color: #c1f7e3;
 }
 
 .student-level {
@@ -1204,6 +1234,10 @@ header .extra .item-text span {
         gap: 0;
     }
 
+    .class-list-student-num {
+        display: none;
+    }
+
     .course-stat {
         display: none;
     }
@@ -1211,8 +1245,12 @@ header .extra .item-text span {
     .btn-course-details {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         text-align: center;
+    }
+
+    .course-action {
+        padding-left: 1.5rem;
     }
 
     .course-header-meta-row {
@@ -1269,8 +1307,18 @@ header .extra .item-text span {
     }
 
     .course-status-buttons,
-    .classes-filter-buttons {
+    .classes-filter-buttons,
+    .assigned-course-level {
         display: none;
+    }
+
+    #course_level_inline {
+        display: inline-block;
+    }
+
+    .class-list-group-name,
+    .course-list-group-name {
+        border-left: none;
     }
 
     /* .assigned-courses header .course-status-row .item {
@@ -1328,8 +1376,12 @@ header .extra .item-text span {
         width: 100%;
     }
 
-    .class-list-student-num {
-        display: none;
+    .assigned-course-row,
+    .assigned-class-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem;
     }
 
 }
@@ -1378,13 +1430,6 @@ header .extra .item-text span {
         gap: 1rem;
     }
 
-    .assigned-course-row,
-    .assigned-class-row {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 1rem;
-    }
     /* END Course Assigned BY STATUS */
 
 /* COURSE DETAILS page ***************/
