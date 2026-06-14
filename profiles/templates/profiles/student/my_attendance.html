@@ -19,12 +19,12 @@
                 <!-- <p>Check your attendance to your current course: <strong>{{ active_enrollment.course.course_type.name }}</strong>.</p> -->
                 <div class="row mt-3 w-100">
                     <div class="col-12 pl-0">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-solid fa-list-check"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Lessons Attended</strong>
                                 <span>{{ active_enrollment.classes_attended|default:"0" }} / {{ active_enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
@@ -79,36 +79,36 @@
                     </div>
                     <div class="circle-panel2"></div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-solid fa-list-check"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Lessons Attended</strong>
                                 <span>{{ active_enrollment.classes_attended|default:"0" }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Past Lessons</strong>
                                 <span>{{ active_enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
                         </div>                    
                     </div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Upcoming Lessons</strong>
                                 <span>{{ active_enrollment.upcoming_classes|default:"0" }}</span>
                             </div>
@@ -210,36 +210,36 @@
                     </div>
                     <div class="circle-panel2"></div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-solid fa-user-xmark"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Total Absences</strong>
                                 <span>{{ active_enrollment.total_absences|default:"0" }}</span>
                             </div>
                         </div>            
                     </div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-regular fa-calendar-xmark"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Lessons Missed</strong>
                                 <span>{{ active_enrollment.classes_missed|default:"0" }}</span>
                             </div>
                         </div>            
                     </div>
                     <div class="col-12">
-                        <div class="course-info-item">
-                            <div class="course-info-icon">
+                        <div class="item">
+                            <div class="item-icon">
                                 <i class="fa-regular fa-calendar-minus"></i>
                             </div>
 
-                            <div class="course-info-text">
+                            <div class="item-text">
                                 <strong>Excused Absences</strong>
                             <span> {{ active_enrollment.classes_excused|default:"0" }} </span>
                             </div>

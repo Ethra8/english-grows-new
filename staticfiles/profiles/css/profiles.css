@@ -325,36 +325,36 @@ main.profile-main h1 {
     font-size: 2.8rem;
 }
 
-.my-course header .course-info-item,
-.my-attendance header .course-info-item  {
+.my-course header .item,
+.my-attendance header .item  {
     border-bottom: none;
 }
 
-.my-course header .course-info-icon,
-.my-attendance header .course-info-icon {
+.my-course header .item-icon,
+.my-attendance header .item-icon {
     width: 50px;
     height: 50px;
     border: solid 2px #5ff0df;
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-.my-course header .course-info-item .fa-regular,
-.my-course header .course-info-item .fa-solid,
-.my-attendance header .course-info-item .fa-regular,
-.my-attendance header .course-info-item .fa-solid {
+.my-course header .item .fa-regular,
+.my-course header .item .fa-solid,
+.my-attendance header .item .fa-regular,
+.my-attendance header .item .fa-solid {
     color: #003366;
     font-size: 1.7rem;
 }
 
-.my-course header .course-info-text strong,
-.my-attendance header .course-info-item strong {
+.my-course header .item-text strong,
+.my-attendance header .item strong {
     color: #c1f7e3;
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-.my-course header .course-info-text span,
-.my-attendance header .course-info-item span {
+.my-course header .item-text span,
+.my-attendance header .item span {
     color: #ffffff;
     font-size: 1.3rem;
 }
@@ -456,7 +456,7 @@ main.profile-main h1 {
     color: #003366;
 }
 
-.course-info-item {
+.item {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -464,7 +464,7 @@ main.profile-main h1 {
     border-bottom: 1px solid rgba(0, 128, 128, 0.15);
 }
 
-.course-info-icon {
+.item-icon {
     width: 36px;
     height: 36px;
     min-width: 36px;
@@ -480,18 +480,18 @@ main.profile-main h1 {
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-.course-info-text {
+.item-text {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
 }
 
-.course-info-text strong {
+.item-text strong {
     color: #00426b;
     font-weight: 700;
 }
 
-.course-info-text span {
+.item-text span {
     color: #5f6363;
 }
 

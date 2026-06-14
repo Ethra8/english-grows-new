@@ -32,62 +32,124 @@ document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll(".assigned-class-row");
     const noClassesMessage = document.getElementById("noClassesMessage");
 
-    if (!filter) {
+    if (!filter || rows.length === 0) {
         return;
     }
 
-    function setActiveButton(selectedPeriod) {
+    function setActiveButton(selectedFilter) {
         filterButtons.forEach(function (button) {
-            if (button.dataset.filter === selectedPeriod) {
-                button.classList.add("active");
-            } else {
-                button.classList.remove("active");
-            }
+            button.classList.toggle(
+                "active",
+                button.dataset.filter === selectedFilter
+            );
         });
     }
 
+    function rowMatchesFilter(row, selectedFilter) {
+        if (selectedFilter === "all") {
+            return true;
+        }
+
+        if (row.dataset.period === selectedFilter) {
+            return true;
+        }
+
+        if (row.dataset[selectedFilter] === "true") {
+            return true;
+        }
+
+        return false;
+    }
+
     function applyClassFilter() {
-        const selectedPeriod = filter.value;
+        const selectedFilter = filter.value;
         let visibleRows = 0;
 
         rows.forEach(function (row) {
-            const rowPeriod = row.getAttribute("data-period");
-            const rowMatchesSelectedPeriod =
-                row.getAttribute(`data-${selectedPeriod}`) === "true";
+            const shouldShow = rowMatchesFilter(row, selectedFilter);
 
-            if (
-                selectedPeriod === "all" ||
-                rowPeriod === selectedPeriod ||
-                rowMatchesSelectedPeriod
-            ) {
-                row.classList.remove("class-hidden");
+            row.hidden = !shouldShow;
+
+            if (shouldShow) {
                 visibleRows++;
-            } else {
-                row.classList.add("class-hidden");
             }
         });
 
         if (noClassesMessage) {
-            if (visibleRows === 0) {
-                noClassesMessage.classList.remove("class-hidden");
-            } else {
-                noClassesMessage.classList.add("class-hidden");
-            }
+            noClassesMessage.hidden = visibleRows > 0;
         }
 
-        setActiveButton(selectedPeriod);
+        setActiveButton(selectedFilter);
     }
 
     filter.addEventListener("change", applyClassFilter);
 
     filterButtons.forEach(function (button) {
         button.addEventListener("click", function () {
-            const selectedPeriod = button.dataset.filter;
-
-            filter.value = selectedPeriod;
+            filter.value = button.dataset.filter;
             applyClassFilter();
         });
     });
 
     applyClassFilter();
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const statusSelect = document.getElementById("courseStatusFilter");
+    const statusButtons = document.querySelectorAll(".course-status-btn");
+    const courseRows = document.querySelectorAll(".assigned-course-row");
+    const noCoursesFilterMessage = document.getElementById("noCoursesFilterMessage");
+
+    if (!statusSelect) {
+        return;
+    }
+
+    const defaultStatus = "active";
+
+    function setActiveStatusButton(selectedStatus) {
+        statusButtons.forEach(function (button) {
+            button.classList.toggle(
+                "active",
+                button.dataset.status === selectedStatus
+            );
+        });
+    }
+
+    function applyStatusFilter(selectedStatus) {
+        let visibleRows = 0;
+
+        courseRows.forEach(function (row) {
+            const rowStatus = row.dataset.status;
+
+            const shouldShow =
+                selectedStatus === "all" || rowStatus === selectedStatus;
+
+            row.classList.toggle("course-hidden", !shouldShow);
+
+            if (shouldShow) {
+                visibleRows++;
+            }
+        });
+
+        if (noCoursesFilterMessage) {
+            noCoursesFilterMessage.hidden = visibleRows > 0;
+        }
+
+        statusSelect.value = selectedStatus;
+        setActiveStatusButton(selectedStatus);
+    }
+
+    statusSelect.addEventListener("change", function () {
+        applyStatusFilter(statusSelect.value);
+    });
+
+    statusButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            applyStatusFilter(button.dataset.status);
+        });
+    });
+
+    applyStatusFilter(defaultStatus);
 });

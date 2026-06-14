@@ -8,6 +8,7 @@
     min-height: 100vh;
 }
 
+
 /* ***HEADERS *******************************************************/
 .teacher-classes-list header h1,
 .assigned-courses header h1,
@@ -19,6 +20,18 @@
     padding-left: 0%;
     font-size: 2.8rem;
 }
+
+
+/* WRAPPERS *********************************************************/
+
+.wrapper-assigned-classes-panel,
+.wrapper-assigned-courses-panel {
+    border-radius: 10px;
+    padding: 4px;
+    box-shadow: 0 2px 3px 0 #003366;
+    background: rgba(106, 250, 225, 0.2);
+}
+
 
 /* *** LEVELS PILLS for Teacher_classes_List / Teacher_courses ******/
 /* Beginner */
@@ -102,16 +115,18 @@
 
 /* .extra ROW: Confirmed/paused/cancelled icons + num. */
 
+
+
 header .extra {
-    width: 100% !important;
-    min-width: 100% !important;
+    width: 100%;
+    min-width: 100%;
     padding: 0.25rem 0;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
 }
 
-header .extra .course-info-item {
+header .extra .item {
     width: 100%;
     flex: 1 1 0;
     background-color: rgba(0, 51, 102, 0.6);
@@ -121,26 +136,26 @@ header .extra .course-info-item {
     padding: 0.75rem 1.5rem;
 }
 
-header .extra .course-info-icon {
+header .extra .item-icon {
     width: 40px;
     height: 40px;
     border: solid 2px #5ff0df;
     box-shadow: 0 2px 3px 0 #003366;
 }
 
-header .extra .course-info-item .fa-regular,
-header .extra .course-info-item .fa-solid {
+header .extra .item .fa-regular,
+header .extra .item .fa-solid {
     color: #003366;
     font-size: 1.4rem;
 }
 
-header .extra .course-info-text strong {
+header .extra .item-text strong {
     color: #c1f7e3;
     font-size: 1.1rem;
     font-weight: 400;
 }
 
-header .extra .course-info-text span {
+header .extra .item-text span {
     color: #ffffff;
     font-size: 1.1rem;
 }
@@ -150,6 +165,50 @@ header .extra .course-info-text span {
 |*********************************** */
 
 /* Today's Classes *******************/
+
+.teacher-dashboard header .active-courses {
+    width: fit-content;
+    min-width: fit-content;
+    padding: 0.25rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.teacher-dashboard header .active-courses .item {
+    width: 100%;
+    flex: 1 1 0;
+    background-color: rgba(0, 51, 102, 0.6);
+    box-shadow: 0 2px 3px 0 #003366;
+    border: solid 2px rgba(0, 104, 107, 1);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+}
+
+.teacher-dashboard header .icon {
+    width: 40px;
+    height: 40px;
+    border: solid 2px #5ff0df;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+.teacher-dashboard header .active-courses .item .fa-regular,
+.teacher-dashboard header .active-courses .item .fa-solid {
+    color: #003366;
+    font-size: 1.4rem;
+}
+
+.teacher-dashboard header .active-courses .item-text strong {
+    color: #c1f7e3;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.teacher-dashboard header .active-courses .item-text span {
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
 
 .today-classes-card {
     width: 100%;
@@ -373,13 +432,11 @@ header .extra .course-info-text span {
 |*  TEACHER_COURSES Page ************|
 |*********************************** */
 
-
-
 /* Courses BY STATUS ***************************** */
 
-.assigned-courses-panel {
+.assigned-courses-panel,
+.assigned-classes-panel {
     width: 100%;
-    /* background: rgba(0, 139, 135, 0.55); */
     background: rgba(0, 51, 102, 0.65);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 10px;
@@ -387,21 +444,104 @@ header .extra .course-info-text span {
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
 }
 
-.assigned-courses-header {
+.assigned-courses-header,
+.assigned-classes-header {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    margin: 2rem auto;
+    margin: 0 auto;
 }
 
+.course-status-filter-header,
+.assigned-classes-filter-header {
+    width: 100%;
+    padding: 1rem;
+}
+
+.course-status-buttons,
 .classes-filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.course-status-btn,
+.classes-filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 70px;
+    border: 1px solid rgba(106, 250, 225, 0.45);
+    border-radius: 10px;
+    background: rgba(0, 51, 102, 0.45);
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 3px 0 #003366;
+}
+
+.course-status-btn.active::after,
+.classes-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #5eead4;
+    filter: drop-shadow(0 3px 4px rgba(0, 51, 102, 0.45));
+}
+
+.course-status-btn i,
+.classes-filter-btn i {
+    font-size: 1.3rem;
+    color: #5eead4;
+}
+
+.course-status-btn strong,
+.classes-filter-btn strong {
+    background: rgba(106, 250, 225, 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    height: 35px;
+    width: 35px;
+}
+
+.course-status-btn.active,
+.course-status-btn:hover,
+.classes-filter-btn.active,
+.classes-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    color: #fff;
+}
+
+.assigned-courses-header select,
+.assigned-classes-header select {
+    display: none;
+}
+
+/* .classes-filter-buttons {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-}
+} */
 
-.classes-filter-btn {
-    border: 1px solid #6afae1;
+/* .classes-filter-btn {
+    border: 1px solid #5eead4;
     background: transparent;
     color: #6afae1;
     border-radius: 10px;
@@ -419,7 +559,7 @@ header .extra .course-info-text span {
 
 .classes-list-filter {
     display: none;
-}
+} */
 
 .assigned-courses-icon {
     width: 45px;
@@ -633,13 +773,13 @@ header .extra .course-info-text span {
     align-items: center;
     gap: 1.2rem;
 
-    min-height: 95px;
+    min-height: fit-content;
     padding: 0.15rem 2rem 0.15rem 0.25rem;
 
     border: 1.5px solid rgba(94, 242, 220, 0.75);
     border-radius: 999px;
 
-    background: rgba(4, 242, 220, 0.55);
+    background: rgba(4, 242, 220, 0.45);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -660,9 +800,9 @@ header .extra .course-info-text span {
 .course-meta-icon {
     z-index: 1;
 
-    width: 72px;
-    height: 72px;
-    min-width: 72px;
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
 
     display: flex;
     align-items: center;
@@ -1110,24 +1250,33 @@ header .extra .course-info-text span {
         text-align: center;
     }
 
+    /* ASSIGNED COURSES & CLASSES LIST Pages ***********************/
+
+    .assigned-courses-header,
+    .assigned-classes-header {
+        justify-content: stretch;
+    }
+
+    .assigned-courses-header select,
+    .assigned-classes-header select {
+        width: fit-content;
+        justify-content: stretch;
+        display: block;
+        background: rgba(94, 234, 212, 0.75);
+        color: #003366;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+
+    .course-status-buttons,
     .classes-filter-buttons {
         display: none;
     }
 
-    .classes-list-filter {
-        display: block;
-        width: 100%;
-    }
-
-    .assigned-courses-header {
-        justify-content: stretch;
-    }
-
-    .assigned-courses header .course-status-row .course-info-item {
-        /* tablets: 2 per row */
+    /* .assigned-courses header .course-status-row .item {
         flex: 0 0 calc((100% - 0.75rem) / 2);
         max-width: calc((100% - 0.75rem) / 2);
-    }
+    } */
 
     .course-details-masonry {
         grid-template-columns: 1fr;
@@ -1140,12 +1289,19 @@ header .extra .course-info-text span {
         grid-column: 1;
         grid-row: auto;
     }
+
     
 }
 
 
 
 @media (max-width: 768px) {
+
+    .wrapper-assigned-classes-panel,
+    .wrapper-assigned-courses-panel {
+        margin: 0 auto;
+    }
+
     .course-detail-grid {
         grid-template-columns: 1fr;
     }
@@ -1161,7 +1317,6 @@ header .extra .course-info-text span {
     .course-meta-card {
         padding: 0.15rem 1rem 0.15rem 0.25rem;
     }
-
 
     .student-row {
         flex-direction: column;
@@ -1210,13 +1365,14 @@ header .extra .course-info-text span {
         width: 100%;
     }
 
-    .assigned-courses header .course-status-row .course-info-item {
+    .assigned-courses header .course-status-row .item {
         /* phones: 1 per row */
         flex: 0 0 100%;
         max-width: 100%;
     }
 
-    .assigned-courses-header {
+    .assigned-courses-header,
+    .assigned-classes-header {
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;

@@ -22,81 +22,68 @@
     <header class="mb-5">
         <div class="row">        
             <div class="col-12 mb-4 ml-0 pl-0">
-                <h1>My Assigned Courses</h1>
+                <h1>Assigned Courses & Levels</h1>
             </div>
         </div>
-        <hr>
-
-        {% if courses %}
-        <div class="extra mb-4 mt-4">
-                <div class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-play"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>Active</strong>
-                        <span>{{ active_courses }}</span>
-                    </div>
-                </div>
-
-                <div class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-check"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>Confirmed</strong>
-                        <span>{{ confirmed_courses }}</span>
-                    </div>
-                </div>                                       
-                <div class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-pause"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>Paused</strong>
-                        <span>{{ paused_courses }}</span>
-                    </div>
-                </div>                                       
-                <div class="course-info-item">
-                    <div class="course-info-icon">
-                        <i class="fa-regular fa-circle-xmark"></i>
-                    </div>
-
-                    <div class="course-info-text">
-                        <strong>Cancelled</strong>
-                        <span>{{ cancelled_courses }}</span>
-                    </div>
-                </div>                                       
-        </div>
-        {% endif %}
         <hr>
     </header>
 
-    <div class="wrapper-course-card">
+    <div class="wrapper-assigned-courses-panel">
         <div class="assigned-courses-panel">
-
             <div class="assigned-courses-header">
-                <!-- <div class="assigned-courses-title">
-                    <div class="assigned-courses-icon">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <h2>Assigned Courses</h2>
-                </div> -->
 
-                <select id="courseStatusFilter" class="course-status-filter">
-                    <option value="all">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="paused">Paused</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
+                <div class="course-status-filter-header">
+
+                    <div class="course-status-buttons">
+
+                        <button type="button" class="course-status-btn active" data-status="active">
+                            <i class="fa-regular fa-circle-play"></i>
+                            <span>Active</span>
+                            <strong>{{ active_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="confirmed">
+                            <i class="fa-regular fa-circle-check"></i>
+                            <span>Confirmed</span>
+                            <strong>{{ confirmed_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="paused">
+                            <i class="fa-regular fa-circle-pause"></i>
+                            <span>Paused</span>
+                            <strong>{{ paused_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="cancelled">
+                            <i class="fa-regular fa-circle-xmark"></i>
+                            <span>Cancelled</span>
+                            <strong>{{ cancelled_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="all">
+                            <!-- <i class="fa-solid fa-border-all"></i> -->
+                            <span>All Status</span>
+                            <strong>{{ courses|length }}</strong>
+                        </button>
+
+                    </div>
+
+                    <select id="courseStatusFilter" class="course-status-select">
+                        <option value="all">All Status</option>
+                        <option value="active selected" selected>Active</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="paused">Paused</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+
+                </div>            
             </div>
 
             <div class="assigned-courses-list">
-
+                {% if courses|length == 0 %}
+                    <p class="text-white p-3">No courses assigned yet.</p>
+                {% endif %}    
+    
                 {% for course in courses %}
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
@@ -121,15 +108,10 @@
                             </span>
 
                             <p>
-                                <!-- <i class="fa-regular fa-clock mr-1"></i> -->
                                 {{ course.timetable_display }}
                             </p>                        
                         </div>
                     </div>
-                    <!-- <div class="assigned-course-level">
-                        <span>{{ course.course_level }}</span>
-
-                    </div> -->
                     <div class="course-stat completion-stat">
                         <div
                             class="completion-ring"
@@ -148,10 +130,10 @@
                     </div>
 
                 </div>
-                {% empty %}
-                    <p class="text-white p-3">No courses assigned yet.</p>
                 {% endfor %}
-
+                <p id="noCoursesFilterMessage" class="text-white p-3 course-hidden" hidden>
+                    No courses to show for this filter.
+                </p>
             </div>
         </div>
     </div>

@@ -19,63 +19,74 @@
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
 
-    <header class="row mb-4">
+    <header>
+        <div class="row mb-4">
         <div class="col-12 pl-0">
             <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
         </div>
         <hr>
 
-        {% if courses %}
-        <div class="wrapper-next-class-card mt-3 w-100">
-        <div class="today-classes-card">
+        <div class="col-12">
+            <div class="active-courses">
+                <div class="item">
+                    <div class="item-icon">
+                        <i class="fa-regular fa-circle-play"></i>
+                    </div>
 
-        <div class="extra">
-            <div class="course-info-item">
-                <div class="course-info-icon">
-                    <i class="fa-regular fa-circle-play"></i>
+                    <div class="item-text">
+                        <strong>Active Courses</strong>
+                        <span>{{ active_courses|default:"0" }}</span>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="course-info-text">
-                    <strong>Active</strong>
-                    <span>{{ active_courses }}</span>
+        <div class="course-header-meta-row">
+
+            <div class="course-meta-card meta-level">
+                <div class="course-meta-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div class="course-meta-text">
+                        <strong>Active Courses</strong>
+                        <span>{{ active_courses|default:"0" }}</span>
                 </div>
             </div>
 
-            <div class="course-info-item">
-                <div class="course-info-icon">
-                    <i class="fa-regular fa-circle-check"></i>
+            <div class="course-meta-card meta-students">
+                <div class="course-meta-icon">
+                    {% if enrollments|length == 1 %}
+                    <i class="fa-solid fa-user"></i>
+                    {% elif enrollments|length >= 3 %}
+                    <i class="fa-solid fa-users"></i>
+                    {% else %}
+                    <i class="fa-solid fa-user-group"></i>
+                    {% endif %}        
                 </div>
+                <div class="course-meta-text">
+                    <strong>Students</strong>
+                    <span>{{ enrollments|length }}</span>
+                </div>
+            </div>
 
-                <div class="course-info-text">
-                    <strong>Confirmed</strong>
-                    <span>{{ confirmed_courses }}</span>
+            <div class="course-meta-card meta-completion">
+                <div class="course-meta-icon">
+                    <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
                 </div>
-            </div>                                       
-            <div class="course-info-item">
-                <div class="course-info-icon">
-                    <i class="fa-regular fa-circle-pause"></i>
+                <div class="course-meta-text">
+                    <strong>Attendance</strong>
+                    <span>
+                        {% if average_attendance < 70 %}
+                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                        {% endif %}
+                        {{ average_attendance }}%
+                    </span>
                 </div>
+            </div>
 
-                <div class="course-info-text">
-                    <strong>Paused</strong>
-                    <span>{{ paused_courses }}</span>
-                </div>
-            </div>                                       
-            <div class="course-info-item">
-                <div class="course-info-icon">
-                    <i class="fa-regular fa-circle-xmark"></i>
-                </div>
-
-                <div class="course-info-text">
-                    <strong>Cancelled</strong>
-                    <span>{{ cancelled_courses }}</span>
-                </div>
-            </div>                                       
-        </div>
-        </div>
-        </div>
-        {% endif %}    
-    
+        </div>    
+        <hr>
+    </div>
     </header>
 
 

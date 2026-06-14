@@ -455,23 +455,36 @@ def teacher_classes_list(request):
         .order_by("start_time")
     )
 
+    class_filter_counts = {
+        "upcoming": 0,
+        "today": 0,
+        "weekly": 0,
+        "past": 0,
+        "all": 0,
+    }
+
     for session in sessions:
         session_date = timezone.localdate(session.start_time)
 
-        session.is_today = session_date == today
+        session.is_today = (
+            session_date == today
+            and not session.is_cancelled
+        )
 
         session.is_this_week = (
             start_of_week <= session_date <= end_of_week
-            and session.start_time >= now
+            and not session.is_cancelled
         )
 
-        session.is_this_month = (
-            session_date.month == today.month
-            and session_date.year == today.year
-            and session.start_time >= now
+        session.is_upcoming = (
+            session.end_time >= now
+            and not session.is_cancelled
         )
 
-        session.is_list_past = session.start_time < now
+        session.is_list_past = (
+            session.end_time < now
+            and not session.is_cancelled
+        )
 
         if session.is_cancelled:
             session.class_period = "cancelled"
@@ -479,19 +492,33 @@ def teacher_classes_list(request):
             session.class_period = "today"
         elif session.is_list_past:
             session.class_period = "past"
-        elif session.is_this_week:
-            session.class_period = "weekly"
-        elif session.is_this_month:
-            session.class_period = "monthly"
+        elif session.is_upcoming:
+            session.class_period = "upcoming"
         else:
             session.class_period = "termly"
+
+        class_filter_counts["all"] += 1
+
+        if session.is_upcoming:
+            class_filter_counts["upcoming"] += 1
+
+        if session.is_today:
+            class_filter_counts["today"] += 1
+
+        if session.is_this_week:
+            class_filter_counts["weekly"] += 1
+
+        if session.is_list_past:
+            class_filter_counts["past"] += 1
 
     context = {
         "sessions": sessions,
         "now": now,
+        "class_filter_counts": class_filter_counts,
     }
 
     return render(request, "profiles/teacher/teacher_classes_list.html", context)
+
 
 
 @login_required
