@@ -29,55 +29,82 @@
 
             <div class="meta-row">
 
-                <div class="meta-card meta-level">
+                <div class="meta-card meta-courses">
                     <div class="meta-icon">
                         <i class="fa-regular fa-circle-play"></i>
                     </div>
                     <div class="meta-text">
-                            <strong>Active Courses</strong>
-                            <span>{{ active_courses|default:"0" }}</span>
-                    </div>
-                </div>
-                <div class="meta-card meta-level">
-                    <div class="meta-icon">
-                        <i class="fa-regular fa-circle-play"></i>
-                    </div>
-                    <div class="meta-text">
-                            <strong>Active Courses</strong>
-                            <span>{{ active_courses|default:"0" }}</span>
+                        <strong>Active Courses</strong>
+                        <span>{{ active_courses|default:"0" }}</span>
                     </div>
                 </div>
 
                 <div class="meta-card meta-students">
                     <div class="meta-icon">
-                        {% if enrollments|length == 1 %}
-                        <i class="fa-solid fa-user"></i>
-                        {% elif enrollments|length >= 3 %}
-                        <i class="fa-solid fa-users"></i>
+                        {% if total_students == 1 %}
+                            <i class="fa-solid fa-user"></i>
+                        {% elif total_students >= 3 %}
+                            <i class="fa-solid fa-users"></i>
                         {% else %}
-                        <i class="fa-solid fa-user-group"></i>
-                        {% endif %}        
+                            <i class="fa-solid fa-user-group"></i>
+                        {% endif %}
                     </div>
                     <div class="meta-text">
                         <strong>Students</strong>
-                        <span>{{ enrollments|length }}</span>
+                        <span>{{ total_students|default:"0" }}</span>
                     </div>
                 </div>
 
-                <div class="meta-card meta-completion">
+                <div class="meta-card meta-sessions">
                     <div class="meta-icon">
-                        <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
+                        <i class="fa-solid fa-calendar-week"></i>
                     </div>
                     <div class="meta-text">
-                        <strong>Attendance</strong>
+                        <strong>Weekly Sessions</strong>
+                        <span>{{ total_weekly_sessions|default:"0" }}</span>
+                    </div>
+                </div>
+
+                <div class="meta-card meta-completed">
+                    <div class="meta-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="meta-text">
+                        <strong>Completed</strong>
                         <span>
-                            {{ average_attendance }}%
+                            {{ completed_weekly_sessions|default:"0" }}
+                            ({{ completed_weekly_percentage|default:"0" }}%)
                         </span>
                     </div>
                 </div>
 
-            </div>    
-        <!-- <hr> -->
+                <div class="meta-card meta-upcoming">
+                    <div class="meta-icon">
+                        <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
+                    </div>
+                    <div class="meta-text">
+                        <strong>Upcoming</strong>
+                        <span>
+                            {{ upcoming_weekly_sessions|default:"0" }}
+                            ({{ upcoming_weekly_percentage|default:"0" }}%)
+                        </span>
+                    </div>
+                </div>
+
+                <div class="meta-card meta-attendance">
+                    <div class="meta-icon">
+                        <div class="completion-ring" style="--completion: {{ attendance_completed_percentage|default:'0' }};"></div>
+                    </div>
+                    <div class="meta-text">
+                        <strong>Attendance Submitted</strong>
+                        <span>
+                            {{ attendance_completed_sessions|default:"0" }}
+                            ({{ attendance_completed_percentage|default:"0" }}%)
+                        </span>
+                    </div>
+                </div>
+
+            </div> 
         </div>
     </header>
 

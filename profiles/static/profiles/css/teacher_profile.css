@@ -35,15 +35,15 @@
 
 /* META in HEADERS */
 
-
 .meta-row {
     display: grid;
     gap: 1.5rem;
     margin: 2rem 0;
+    width: 100%;
 }
 
 .teacher-dashboard .meta-row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .course-header-meta-row {
@@ -124,7 +124,7 @@
     display: block;
     color: #003366;
     font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 500;
     text-transform: capitalize;
     letter-spacing: 0.04em;
@@ -1287,6 +1287,11 @@ header .extra .item-text span {
         margin: 0;
         text-align: center;
     }
+
+    .teacher-dashboard .meta-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 
     /* ASSIGNED COURSES & CLASSES LIST Pages ***********************/
 

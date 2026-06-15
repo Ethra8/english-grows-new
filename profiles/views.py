@@ -355,35 +355,42 @@ def my_attendance(request):
 # TEACHER PROFILE  ******************************|
 # ***********************************************|
 
+from datetime import datetime, time, timedelta
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.utils import timezone
+
+from courses.models import Course, ClassSession, Attendance
+
+
 @login_required
 def teacher_dashboard(request):
-    if request.user.profile.role != "teacher":
+    profile = request.user.profile
+
+    if profile.role != "teacher":
         return redirect("home")
 
-    # Shows Today's Sessions
     today = timezone.localdate()
+    now = timezone.now()
 
+    # Today range
     start_of_day = timezone.make_aware(
         datetime.combine(today, time.min)
     )
-
     end_of_day = timezone.make_aware(
         datetime.combine(today, time.max)
     )
 
-    todays_sessions = (
-        ClassSession.objects
-        .filter(
-            course__teacher=request.user,
-            course__status="active",
-            is_cancelled=False,
-            start_time__gte=start_of_day,
-            start_time__lte=end_of_day,
-        )
+    # Week range: Monday - Sunday
+    start_of_week_date = today - timedelta(days=today.weekday())
+    end_of_week_date = start_of_week_date + timedelta(days=6)
 
-    .select_related("course")
-    .prefetch_related("course__enrollments")
-    .order_by("start_time")
+    start_of_week = timezone.make_aware(
+        datetime.combine(start_of_week_date, time.min)
+    )
+    end_of_week = timezone.make_aware(
+        datetime.combine(end_of_week_date, time.max)
     )
 
     courses = (
@@ -401,26 +408,102 @@ def teacher_dashboard(request):
         .order_by("name")
     )
 
-
-    total_courses = courses.count()
     active_courses = courses.filter(status="active").count()
-    confirmed_courses = courses.filter(status="confirmed").count()
-    cancelled_courses = courses.filter(status="cancelled").count()
-    paused_courses = courses.filter(status="paused").count()
 
-    active_courses_list = courses.filter(status="active")
+    todays_sessions = (
+        ClassSession.objects
+        .filter(
+            course__teacher=request.user,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_day,
+            start_time__lte=end_of_day,
+        )
+        .select_related("course")
+        .prefetch_related("course__enrollments")
+        .order_by("start_time")
+    )
+
+    weekly_sessions = (
+        ClassSession.objects
+        .filter(
+            course__teacher=request.user,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_week,
+            start_time__lte=end_of_week,
+        )
+        .select_related("course")
+        .prefetch_related("attendance_set")
+    )
+
+    total_weekly_sessions = weekly_sessions.count()
+
+    completed_weekly_sessions = weekly_sessions.filter(
+        start_time__lt=now
+    ).count()
+
+    upcoming_weekly_sessions = weekly_sessions.filter(
+        start_time__gte=now
+    ).count()
+
+    attendance_completed_sessions = (
+        weekly_sessions
+        .filter(attendance_records__status__in=["attended", "missed", "excused"])
+        .distinct()
+        .count()
+    )
+    
+    def get_percentage(value, total):
+        if total == 0:
+            return 0
+        return round((value / total) * 100)
+
+    completed_weekly_percentage = get_percentage(
+        completed_weekly_sessions,
+        total_weekly_sessions
+    )
+
+    upcoming_weekly_percentage = get_percentage(
+        upcoming_weekly_sessions,
+        total_weekly_sessions
+    )
+
+    attendance_completed_percentage = get_percentage(
+        attendance_completed_sessions,
+        total_weekly_sessions
+    )
+
+    total_students = (
+        courses
+        .filter(status="active")
+        .filter(enrollments__status="active")
+        .values("enrollments__student")
+        .distinct()
+        .count()
+    )
 
     context = {
         "profile": profile,
         "courses": courses,
         "todays_sessions": todays_sessions,
         "today": today,
-        "total_courses": total_courses,
         "active_courses": active_courses,
-        "confirmed_courses": confirmed_courses,
-        "cancelled_courses": cancelled_courses,
-        "paused_courses": paused_courses,
-        "active_courses_list": active_courses_list,  
+
+        # Students
+        "total_students": total_students,
+
+        # Weekly data
+        "total_weekly_sessions": total_weekly_sessions,
+
+        "completed_weekly_sessions": completed_weekly_sessions,
+        "completed_weekly_percentage": completed_weekly_percentage,
+
+        "upcoming_weekly_sessions": upcoming_weekly_sessions,
+        "upcoming_weekly_percentage": upcoming_weekly_percentage,
+
+        "attendance_completed_sessions": attendance_completed_sessions,
+        "attendance_completed_percentage": attendance_completed_percentage,
     }
 
     return render(request, "profiles/teacher/teacher_dashboard.html", context)
