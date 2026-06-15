@@ -89,6 +89,7 @@
     font-size: 1.8rem;
     font-weight: 500;
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
     color: #ffffff;
     line-height: 1.3 !important;
     text-transform: capitalize;
@@ -174,6 +175,7 @@ main.profile-main h1 {
     color:whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
+    letter-spacing: 0.03em;
 }
 
 .dashboard-level-pill {
@@ -186,6 +188,7 @@ main.profile-main h1 {
     background: #38d9c9;
     box-shadow: 0 1px 2px 0 #003366;
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     font-size: 1.5rem;
     font-weight: 700;
     padding: 0 0 0 .25rem; 
@@ -274,6 +277,7 @@ main.profile-main h1 {
 
 .next-class-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     margin: 3rem 1rem 0 0;
     font-size: 2.5rem;
     font-weight: 500;
@@ -332,6 +336,7 @@ main.profile-main h1 {
 .my-attendance header h1 {
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
     margin-left: 0%;
     padding-left: 0%;
     font-size: 2.8rem;
@@ -379,6 +384,7 @@ main.profile-main h1 {
 .no-course-assigned h2 {
     color:#003366;
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
     font-size: 1.8rem;
     margin-left: 0%;
     padding-left: 0%;
@@ -434,6 +440,7 @@ main.profile-main h1 {
 
 .course-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     margin: 4rem 1rem 0 60px;
     font-size: 2rem;
     font-weight: 500;
@@ -552,6 +559,7 @@ main.profile-main h1 {
 
 .attendance-progress-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     margin: 5.2rem 2rem 0 50px;
     font-size: 2rem;
     font-weight: 600;
@@ -602,6 +610,7 @@ main.profile-main h1 {
 
 .attendance-percentage-card p {
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     color: #003366;
     font-size: 2rem;
     margin-bottom: 0%;
@@ -688,6 +697,7 @@ main.profile-main h1 {
 
 .detailed-attendance-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
     color: #c1f7e3;
     font-size: 2rem;
     margin: 410px 2rem 1rem 11.5rem;
@@ -866,6 +876,7 @@ main.profile-main h1 {
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
+    letter-spacing: 0.03em;
 }
 
 .profile-settings-page p {
@@ -884,7 +895,13 @@ main.profile-main h1 {
 
 
 
-@media (max-width: 1239px) {
+@media (max-width: 1250px) {
+   
+    .profile-sidebar {
+        max-width:200px;
+        min-width: 200px;
+        padding: 0.75rem;
+    }
 
     /* STUDENT: Course page */
 
@@ -928,8 +945,6 @@ main.profile-main h1 {
         width: 610px;
         height: 610px;
     }
-
-    /* TEACHER: Course page */
 
 
 }

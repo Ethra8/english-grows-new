@@ -11,7 +11,6 @@ body {
     flex-direction: column;  
 }
 
-
 #checkout-page.container {
     max-width: 95% !important;
 }
@@ -273,6 +272,7 @@ a.text-white:hover {
 
 .eg-font {
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
 }
 
 .logo {
@@ -495,6 +495,12 @@ span.btt-link:hover {
 }
 
 /* Overlays - transparencies to improve accessibility/ readibility */
+
+.overlay-birds,
+.overlay-dark-teal {
+    pointer-events: none;
+}
+
 .overlay-dark-teal {
     height: 100%;
     width: 100%;
@@ -585,6 +591,7 @@ span.btt-link:hover {
     font-family: "Big Shoulders Display", sans-serif;
     font-weight: 500;
     font-size: 5rem !important;
+    letter-spacing: 0.03em;
 }
 
 #index h1 {
@@ -653,6 +660,7 @@ span.btt-link:hover {
 #individual-services .card-body h3 {
     color: #fff;
     font-family: "Big Shoulders Display" !important;
+    letter-spacing: 0.03em;
     font-size: 1.5rem;
     font-weight: 600;
 }
@@ -748,6 +756,7 @@ span.vertical-line {
 
 #bag-grand-total {
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
     color: #fff;
     font-size: 2rem;
 }

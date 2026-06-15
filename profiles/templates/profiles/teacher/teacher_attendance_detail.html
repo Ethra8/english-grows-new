@@ -1,0 +1,130 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+
+{% block extra_title %}| Attendance Detail {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="teacher-attendance-page take-attendance-page">
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    <header>
+        <p class="back-to-attendance">
+            <a href="{% url 'profiles:teacher_attendance' %}">
+                <i class="fa-solid fa-arrow-left-long mr-2"></i>
+                Back to Attendance
+            </a>
+        </p>
+
+        <h1>Attendance Detail</h1>
+        <p>
+            {{ class_session.course.name }} ·
+            {{ class_session.start_time|date:"D, d M Y" }} ·
+            {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
+        </p>
+    </header>
+
+    <div class="attendance-summary-grid detail-summary-buttons">
+
+        <div class="attendance-summary-card success">
+            <i class="fa-solid fa-check"></i>
+            <div>
+                <strong>{{ present_count }}</strong>
+                <span>Attended</span>
+            </div>
+        </div>
+
+        <div class="attendance-summary-card danger">
+            <i class="fa-solid fa-xmark"></i>
+            <div>
+                <strong>{{ missed_count }}</strong>
+                <span>Missed</span>
+            </div>
+        </div>
+
+        <div class="attendance-summary-card warning">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <div>
+                <strong>{{ excused_count }}</strong>
+                <span>Excused</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="take-attendance-card">
+
+        <div class="take-attendance-card-header">
+            <div>
+                <h2>Registered Attendance</h2>
+                <p>{{ total_count }} student record{{ total_count|pluralize }} saved for this session.</p>
+            </div>
+
+            <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="attendance-primary-btn">
+                Edit Attendance
+            </a>
+        </div>
+
+        <div class="take-attendance-list">
+
+            {% for attendance in attendances %}
+                <div class="take-attendance-row">
+
+                    <div class="student-main-info">
+                        <div class="student-avatar">
+                            {% if attendance.student.profile.profile_photo %}
+                                <img src="{{ attendance.student.profile.profile_photo.url }}" alt="{{ attendance.student.get_full_name }}">
+                            {% else %}
+                                <i class="fa-solid fa-user"></i>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <h3>
+                                {% if attendance.student.get_full_name %}
+                                    {{ attendance.student.get_full_name }}
+                                {% else %}
+                                    {{ attendance.student.email }}
+                                {% endif %}
+                            </h3>
+                            <span>{{ attendance.student.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-status">
+                        {% if attendance.status == "attended" %}
+                            <span class="status-pill completed">Attended</span>
+                        {% elif attendance.status == "missed" %}
+                            <span class="status-pill missed">Missed</span>
+                        {% elif attendance.status == "excused" %}
+                            <span class="status-pill pending">Excused</span>
+                        {% else %}
+                            <span class="status-pill pending">{{ attendance.status|title }}</span>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% empty %}
+                <p class="attendance-empty-message">No attendance has been registered for this session yet.</p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

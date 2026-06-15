@@ -83,14 +83,14 @@
                                 </div>
 
                                 <div class="today-course">
+                                    <span class="level assigned-course-level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
+                                        {{ session.course.course_level|default:"Pending" }}
+                                    </span>
 
                                     <strong>{{ session.course.name }}</strong>
                                     - Lesson {{ session.class_number }}
 
                                 <!-- <div class="assigned-course-level"> -->
-                                    <span class="assigned-course-level level-{{ session.course.course_level|lower|cut:'.' }}">
-                                        {{ session.course.course_level|default:"Pending" }}
-                                    </span>
                                 <!-- </div> -->
 
                                 </div>

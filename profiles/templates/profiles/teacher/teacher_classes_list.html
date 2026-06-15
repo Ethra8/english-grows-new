@@ -30,8 +30,8 @@
 
     <div class="wrapper-assigned-classes-panel">
         <div class="assigned-classes-panel">
+            
             <div class="assigned-classes-header">
-
                 <div class="assigned-classes-filter-header">
 
                     <div class="classes-filter-buttons">
@@ -67,9 +67,8 @@
                         </button>
 
                     </div>
-
-                    <select id="classesListFilter" class="classes-list-filter">
-                        <option value="upcoming" selected>Upcoming</option>
+                    <select id="classesListFilter" class="mobile-filter-select">
+                        <option value="upcoming">Upcoming</option>
                         <option value="today">Today</option>
                         <option value="weekly">This Week</option>
                         <option value="past">Past</option>
@@ -99,7 +98,7 @@
                             <div class="class-main-info">
 
                                 <div class="assigned-course-level">
-                                    <span class="level-{{ session.course.course_level|lower|cut:'.' }}">
+                                    <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
                                         {{ session.course.course_level|default:"Pending" }}
                                     </span>
                                 </div>
@@ -107,7 +106,7 @@
                                 <div class="class-list-group-name">
                                     <h3>{{ session.course.name }} <span class="text-white">- Lesson {{ session.class_number }}</span></h3>
                                     <!-- <p>Lesson {{ session.class_number }}</p> -->
-
+                                    <span id="session_level_inline" class="level level-{{ session.course.course_level|lower|cut:'.' }}">{{ session.course.course_level }}</span>
                                     <p>
                                         <i class="fa-solid fa-calendar-day mr-1"></i>
                                         {{ session.start_time|date:"D, j M" }} |
@@ -178,4 +177,4 @@
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 
 {% endblock %}
-    
+     

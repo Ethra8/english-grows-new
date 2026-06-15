@@ -90,7 +90,7 @@
                     <div class="course-main-info">
 
                         <div class="assigned-course-level">
-                            <span class="level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+                            <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
                         </div>
 
                         <div class="course-list-group-name">
@@ -102,7 +102,7 @@
                                 {% endif %}
                                 {{ course.name }}
                             </h3>
-                            <span id="course_level_inline" class="level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+                            <span id="course_level_inline" class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
                             <p>{{ course.timetable_display }}</p>
                             <span class="status-badge status-{{ course.status }}">{{ course.get_status_display }}</span>
                         

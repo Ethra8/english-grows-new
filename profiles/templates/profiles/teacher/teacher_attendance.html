@@ -1,0 +1,147 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+{% block extra_title %}| Attendance {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="teacher-attendance-page">
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    <header>
+        <h1>Attendance</h1>
+        <p>Take attendance for your classes</p>
+    </header>
+
+    <div class="attendance-summary-grid two-cards">
+
+        <div class="attendance-summary-card warning">
+            <i class="fa-regular fa-clock"></i>
+            <div>
+                <!-- <strong>{{ pending_count }}</strong> -->
+                <span>Pending Attendance</span>
+                <small>{{ pending_count }} Sessions</small>
+            </div>
+        </div>
+
+        <div class="attendance-summary-card success">
+            <i class="fa-regular fa-circle-check"></i>
+            <div>
+                <!-- <strong>{{ completed_count }}</strong> -->
+                <span>Completed Attendance</span>
+                <small>{{ completed_count }} Sessions</small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="attendance-filter-card two-filters mt-0">
+
+        <button class="attendance-filter-btn active" data-filter="pending" type="button">
+            <i class="fa-regular fa-clock"></i>
+            Pending
+            <span>{{ pending_count }}</span>
+        </button>
+
+        <button class="attendance-filter-btn" data-filter="completed" type="button">
+            <i class="fa-regular fa-circle-check"></i>
+            Completed
+            <span>{{ completed_count }}</span>
+        </button>
+
+    </div>
+
+    <div class="attendance-list-card">
+
+        <div class="attendance-list-header">
+            <h2 id="attendanceListTitle">Pending Attendance</h2>
+
+            <div class="attendance-tools">
+                <input type="date" id="attendanceDateFilter">
+                <input type="text" id="attendanceSearchInput" placeholder="Search class or group...">
+            </div>
+        </div>
+
+        <div class="attendance-list">
+
+            {% for session in sessions %}
+                <div class="attendance-row"
+                     data-status="{{ session.attendance_filter_status }}"
+                     data-search="{{ session.course.name|lower }} {{ session.course.course_type.name|lower }}"
+                     data-date="{{ session.start_time|date:'Y-m-d' }}">
+
+                    <div class="attendance-level">
+                        {{ session.course.course_level }}
+                    </div>
+
+                    <div class="attendance-class-info">
+                        <h3>{{ session.course.name }}</h3>
+                        <span>{{ session.course.course_type.name }}</span>
+                    </div>
+
+                    <div class="attendance-time">
+                        <i class="fa-regular fa-calendar"></i>
+                        <div>
+                            <strong>{{ session.start_time|date:"D, d M" }}</strong>
+                            <span>{{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-students">
+                        <i class="fa-solid fa-users"></i>
+                        <div>
+                            <strong>{{ session.students_count }}</strong>
+                            <span>Students</span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-status">
+                        {% if session.attendance_filter_status == "completed" %}
+                            <span class="status-pill completed">Completed</span>
+                        {% else %}
+                            <span class="status-pill pending">Pending</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="attendance-action">
+                        {% if session.attendance_filter_status == "completed" %}
+                            <a href="{% url 'profiles:teacher_attendance_detail' session.id %}" class="attendance-secondary-btn">
+                                View
+                            </a>
+                        {% else %}
+                            <a href="{% url 'profiles:teacher_take_attendance' session.id %}" class="attendance-primary-btn">
+                                Take Attendance
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% empty %}
+                <p class="attendance-empty-message">No attendance sessions found.</p>
+            {% endfor %}
+
+        </div>
+
+        <p id="attendanceNoResults" class="attendance-empty-message d-none">
+            No classes found for this filter.
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

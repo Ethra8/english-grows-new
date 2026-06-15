@@ -59,6 +59,7 @@
 
 .allauth-headings-custom {
     font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
     font-weight: 500;
     color: #003366;
     font-size: 3rem;

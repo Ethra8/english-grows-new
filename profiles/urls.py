@@ -14,7 +14,11 @@ urlpatterns = [
     # Teacher pages
     path("teacher/teacher_dashboard/", views.teacher_dashboard, name="teacher_dashboard"),
     path("teacher/teacher_classes_list/", views.teacher_classes_list, name="teacher_classes_list"),
+    
     path("teacher/teacher_attendance/", views.teacher_attendance, name="teacher_attendance"),
+    path("teacher/attendance/<int:session_id>/take/", views.teacher_take_attendance, name="teacher_take_attendance"),
+    path("teacher/attendance/<int:session_id>/detail/", views.teacher_attendance_detail, name="teacher_attendance_detail"),
+    
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
     path("teacher/courses/<int:course_id>/", views.teacher_course_details, name="teacher_course_details"),
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),

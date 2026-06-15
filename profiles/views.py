@@ -890,15 +890,22 @@ def teacher_calendar_events(request):
     return JsonResponse(events, safe=False)
 
 
+
 @login_required
 def teacher_attendance(request):
     profile = get_object_or_404(UserProfile, user=request.user)
 
-    active_enrollment = (
-        CourseEnrollment.objects
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    now = timezone.now()
+
+    sessions_queryset = (
+        ClassSession.objects
         .filter(
-            student=request.user,
-            status="active"
+            course__teacher=request.user,
+            start_time__lte=now,
+            is_cancelled=False,
         )
         .select_related(
             "course",
@@ -906,54 +913,184 @@ def teacher_attendance(request):
             "course__company",
             "course__teacher",
         )
-        .first()
+        .prefetch_related("course__enrollments")
+        .order_by("-start_time")
     )
 
-    if not active_enrollment:
-        return render(request, "profiles/teacher/teacher_attendance.html", {
-            "profile": profile,
-            "active_enrollment": None,
-            "recent_attendance": [],
-            "recent_missed_classes": [],
-            "recent_excused_classes": [],
-        })
+    sessions = []
 
-    recent_attendance = (
-        Attendance.objects
-        .filter(
-            student=request.user,
-            class_session__course=active_enrollment.course,
-            status="attended",
-        )
-        .select_related(
-            "class_session",
-            "class_session__course",
-        )
-        .order_by("-class_session__start_time")
-    )
+    pending_count = 0
+    completed_count = 0
 
-    recent_absences = (
-        Attendance.objects
-        .filter(
-            student=request.user,
-            class_session__course=active_enrollment.course,
-            status__in=["missed", "excused"],
-        )
-        .select_related(
-            "class_session",
-            "class_session__course",
-        )
-        .order_by("-class_session__start_time")
-    )
+    final_attendance_statuses = [
+        "attended",
+        "missed",
+        "excused",
+    ]
+
+    for session in sessions_queryset:
+        final_attendance_exists = Attendance.objects.filter(
+            class_session=session,
+            status__in=final_attendance_statuses,
+        ).exists()
+
+        session.students_count = session.course.enrollments.filter(
+            status="active"
+        ).count()
+
+        if final_attendance_exists:
+            session.attendance_filter_status = "completed"
+            completed_count += 1
+        else:
+            session.attendance_filter_status = "pending"
+            pending_count += 1
+
+        sessions.append(session)
 
     context = {
         "profile": profile,
-        "active_enrollment": active_enrollment,
-        "recent_attendance": recent_attendance,
-        "recent_absences": recent_absences
+        "sessions": sessions,
+        "pending_count": pending_count,
+        "completed_count": completed_count,
     }
 
     return render(request, "profiles/teacher/teacher_attendance.html", context)
+
+
+
+@login_required
+def teacher_take_attendance(request, session_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    class_session = get_object_or_404(
+        ClassSession.objects.select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        ),
+        id=session_id,
+        course__teacher=request.user,
+    )
+
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            course=class_session.course,
+            status="active",
+        )
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+            "student__email",
+        )
+    )
+
+    existing_attendance = Attendance.objects.filter(
+        class_session=class_session
+    )
+
+    attendance_by_student_id = {
+        attendance.student_id: attendance
+        for attendance in existing_attendance
+    }
+
+    for enrollment in enrollments:
+        enrollment.current_attendance = attendance_by_student_id.get(
+            enrollment.student_id
+        )
+
+    if request.method == "POST":
+        for enrollment in enrollments:
+            status = request.POST.get(f"attendance_{enrollment.student_id}")
+
+            if status in ["attended", "missed", "excused"]:
+                Attendance.objects.update_or_create(
+                    student=enrollment.student,
+                    class_session=class_session,
+                    defaults={
+                        "status": status,
+                    }
+                )
+
+        messages.success(request, "Attendance saved successfully.")
+        return redirect(
+            "profiles:teacher_attendance_detail",
+            session_id=class_session.id,
+        )
+
+    context = {
+        "profile": profile,
+        "class_session": class_session,
+        "enrollments": enrollments,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_take_attendance.html",
+        context,
+    )
+
+
+@login_required
+def teacher_attendance_detail(request, session_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    class_session = get_object_or_404(
+        ClassSession.objects.select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        ),
+        id=session_id,
+        course__teacher=request.user,
+    )
+
+    attendances = (
+        Attendance.objects
+        .filter(class_session=class_session)
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+            "student__email",
+        )
+    )
+
+    present_count = attendances.filter(status="attended").count()
+    missed_count = attendances.filter(status="missed").count()
+    excused_count = attendances.filter(status="excused").count()
+    total_count = attendances.count()
+
+    context = {
+        "profile": profile,
+        "class_session": class_session,
+        "attendances": attendances,
+        "present_count": present_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_count": total_count,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_attendance_detail.html",
+        context,
+    )
 
 
 
