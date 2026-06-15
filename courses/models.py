@@ -291,7 +291,7 @@ class Course(models.Model):
             )
 
             return (
-                f"{days} "
+                f"{days} | "
                 f"{first_start.strftime('%H:%M')} - "
                 f"{first_end.strftime('%H:%M')}"
             )

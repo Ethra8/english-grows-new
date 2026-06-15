@@ -318,6 +318,27 @@ header .extra .item-text span {
     font-size: 1.1rem;
 }
 
+.teacher-dashboard .meta-card.meta-students::after {
+    content: "\f0c0"; /* fa-users */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(106, 250, 225, 0.3);
+    position: absolute;
+    top: 35px;
+    right: -5px;
+}
+
+.teacher-dashboard .meta-card.meta-courses::after {
+    content: "\f144"; /* fa-circle-play */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(106, 250, 225, 0.3);
+    position: absolute;
+    top: 35px;
+    right: -5px;
+}
 
 .today-classes-card {
     width: 100%;
@@ -342,6 +363,7 @@ header .extra .item-text span {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    box-sizing: border-box;
 }
 
 .today-sessions-list p {
@@ -491,7 +513,12 @@ header .extra .item-text span {
     padding-left: 1.5rem;
 }
 
-
+.class-list-group-name h3 span,
+.course-list-group-name h3 span {
+    color: whitesmoke;
+    font-weight: 300 !important;
+    font-size: 1.4rem;
+}
 
 /* ***********************************|
 |***  CLASSES LIST Page **************|
@@ -564,14 +591,14 @@ header .extra .item-text span {
 .course-status-filter-header,
 .assigned-classes-filter-header {
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
 }
 
 .course-status-buttons,
 .classes-filter-buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1rem;
+    gap: 0.25rem;
 }
 
 .course-status-btn,
@@ -591,6 +618,8 @@ header .extra .item-text span {
     font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 2px 3px 0 #003366;
+    min-width: 0;
+    white-space: nowrap;
 }
 
 .course-status-btn.active::after,
@@ -737,11 +766,20 @@ header .extra .item-text span {
 .assigned-course-row,
 .assigned-class-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
     align-items: center;
     gap: 1.5rem;
     padding: 1.3rem 0;
     border-bottom: 1px solid rgba(94, 234, 212, 0.25);
+
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.assigned-course-row > *,
+.assigned-class-row > * {
+    min-width: 0 !important;
 }
 
 #course_level_inline {
@@ -796,8 +834,9 @@ header .extra .item-text span {
     padding: 0.2rem 1rem !important;
     font-weight: 700;
     width: fit-content;
-    margin: 0 0.5rem;
+    margin: 0 1rem 0 0;
     font-size: .75rem;
+    position: relative;
 }
 
 .course-stat {
@@ -848,9 +887,14 @@ header .extra .item-text span {
     background: rgba(0, 51, 102, 0.95);
     border-radius: 50%;
 }
+
 .course-action {
     justify-self: end !important;
     align-self: center;
+}
+
+.course-actions .btn {
+    white-space: nowrap;
 }
 
 
