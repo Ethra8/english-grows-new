@@ -13,12 +13,17 @@
 
 <section class="my-course">    
     <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    
     <div class="row">        
         <div class="col-12 mb-4 ml-0 pl-0">
             <header>
             {% if active_enrollment %}
                 <h1>{{ active_enrollment.course.course_type.name }}</h1>
-                
+                <hr>
+                        <p class="text-white mt-4 mb-4">Code of your current course: <strong>{{ active_enrollment.course.name }}</strong></p>
+
                 <div class="item">
                     <div class="item-icon">
                     {% if enrollment_status == 'active' %}

@@ -13,9 +13,12 @@
 {% include "profiles/includes/student/student_sidebar.html" %}
 
 <div class="overlay-birds"></div>
+<div class="overlay-dark-teal"></div>
+
 <div id="my_calendar_page">
     <div class="container">
         <h1 class="mb-5">My Class Calendar</h1>
+        <hr>
         <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:my_calendar_events' %}"></div>
     </div>
 </div>

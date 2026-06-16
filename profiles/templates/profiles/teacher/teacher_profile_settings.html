@@ -6,6 +6,12 @@
 {% block extra_title %}| Account Settings{% endblock %}
 
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
 {% block content %}
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
@@ -13,11 +19,13 @@
 <section class="profile-settings-page">
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
+    <header>
+        <h1>Account Settings</h1>
+        <hr>
+    </header>    
 
     <div class="row">
         <div class="col-12">
-            <h1>Account Settings</h1>
-
             <div class="wrapper-account-settings-form mt-5">
                 <div class="account-settings-form">
                     <p class="text-dark mb-4">Update your profile.</p>

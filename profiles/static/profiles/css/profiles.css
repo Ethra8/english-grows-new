@@ -1,17 +1,45 @@
 /* teal site bg #00686b / rgba(0, 104, 107) */
 /* teal sidebar #008f8f; */
-#profile-header {
-    margin-top: 100px;
-}
 
 .profile-layout {
-    /* display: grid;
-    grid-template-columns: 280px 1fr; */
     min-height: 100vh;
     display: flex;
     flex-grow: 1;
 }
 
+
+/* *** PAGES & SECTIONS ************************************/
+
+main.profile-main,
+.my-course,
+.my-attendance,
+.profile-settings-page {
+    padding: 70px 7%;
+    width: 100%;
+}
+
+
+/* *** HEADERS *********************************************/
+
+#profile-header {
+    margin-top: 100px;
+}
+
+
+/* *** H1 **************************************************/
+
+main.profile-main h1,
+.my-course header h1,
+.my-attendance header h1,
+.profile-settings-page header h1 {
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.03em;
+    margin-left: 0%;
+    margin-bottom: 3rem;
+    padding-left: 0%;
+}
 
 
 /* ****** BUTTONS **************************************** */
@@ -67,6 +95,7 @@
     box-shadow: 0 2px 3px 0 #003366;
     background: rgba(106, 250, 225, 0.2);
     /* overflow-block: visible; */
+    max-width: fit-content;
 }
 
 .wrapper-next-class-card {
@@ -167,17 +196,6 @@
 ******** MAIN PROFILE *******************************|
 *****************************************************/
 
-main.profile-main {
-    padding: 70px 7% 70px 7%;
-}
-
-main.profile-main h1 {
-    color:whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 2.8rem;
-    letter-spacing: 0.03em;
-}
-
 .dashboard-level-pill {
     display: inline-flex;
     align-items: center;
@@ -216,9 +234,11 @@ main.profile-main h1 {
     display: flex;
     min-height: 230px;
     border-radius: 10px;
-    background: rgba(193, 247, 227, 0.8);
+    /* background: rgba(193, 247, 227, 0.8); */
+    background-color: whitesmoke;
     box-shadow: 0 2px 3px 0 #003366;
     min-width: 290px;
+    max-width: fit-content;
 }
 
 .next-class-card .circle-panel1 {
@@ -286,9 +306,10 @@ main.profile-main h1 {
 }
 
 .next-class-card .info {
-    padding: 2rem 2rem 2rem 16rem;
+    padding: 2rem 2rem 2rem 17rem;
     width: 100%;
     border: outset 1px #008f8f;
+    max-width: fit-content;
 }
 
 .next-class-card .info p {
@@ -307,19 +328,13 @@ main.profile-main h1 {
 
 
 /* **************************************************|
-******** COURSEs PAGE *******************************|
+******** STUDENT COURSE INFO Page*******************************|
 *****************************************************/
-
-
-/* ********STUDENT: COURSE INFO **********************/
-
-.my-course {
-    padding: 70px 7%;
-}
 
 .my-course .course-card {
     border-radius: 10px;
-    background: #c1f7e3;
+    /* background: #c1f7e3; */
+    background-color: whitesmoke;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -332,23 +347,11 @@ main.profile-main h1 {
     text-transform: capitalize;
 }
 
-.my-course header h1,
-.my-attendance header h1 {
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    margin-left: 0%;
-    padding-left: 0%;
-    font-size: 2.8rem;
-}
-
-.my-course header .item,
-.my-attendance header .item  {
+.my-course header .item {
     border-bottom: none;
 }
 
-.my-course header .item-icon,
-.my-attendance header .item-icon {
+.my-course header .item-icon{
     width: 50px;
     height: 50px;
     border: solid 2px #5ff0df;
@@ -356,22 +359,18 @@ main.profile-main h1 {
 }
 
 .my-course header .item .fa-regular,
-.my-course header .item .fa-solid,
-.my-attendance header .item .fa-regular,
-.my-attendance header .item .fa-solid {
+.my-course header .item .fa-solid {
     color: #003366;
     font-size: 1.7rem;
 }
 
-.my-course header .item-text strong,
-.my-attendance header .item strong {
+.my-course header .item-text strong {
     color: #c1f7e3;
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-.my-course header .item-text span,
-.my-attendance header .item span {
+.my-course header .item-text span {
     color: #ffffff;
     font-size: 1.3rem;
 }
@@ -480,7 +479,7 @@ main.profile-main h1 {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    border: outset 2px #5ff0df;
+    border: outset 1px #5ff0df;
     /* background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%); */
     background: #C1F7E3;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #003366;
@@ -519,18 +518,20 @@ main.profile-main h1 {
 
 
 /* **************************************************|
-******** ATTENDANCE PAGE ****************************|
+******** STUDENT: My ATTENDANCE PAGE ****************************|
 *****************************************************/
 
-
-/* ******** STUDENT: MY ATTENDANCE PAGE *************/
-
 .my-attendance {
-    padding: 70px 7%;
     width: stretch;
 }
 
 /* *** Current Attendace PROGRESS *****/
+.wrapper-attendance-progress-card,
+.wrapper-absence-details,
+.wrapper-attendance-details {
+    width: 100%;
+    max-width: 100% !important;
+}
 
 .attendance-progress-card {
     position: relative;
@@ -538,7 +539,8 @@ main.profile-main h1 {
     display: flex;
     /* min-height: 230px; */
     border-radius: 10px;
-    background: rgba(193, 247, 227, 0.8);
+    /* background: rgba(193, 247, 227, 0.8); */
+    background-color: whitesmoke;
     box-shadow: 0 2px 3px 0 #003366;
 }
 
@@ -589,8 +591,8 @@ main.profile-main h1 {
 
 .attendance-progress-card .circle-panel2 {
     position: absolute;
-    top: -150px;
-    left: -140px;
+    top: -120px;
+    left: -150px;
     width: 400px;
     height: 400px;
     border-radius: 50%;
@@ -666,6 +668,9 @@ main.profile-main h1 {
 
 
 /*** Detailed Attendance **********/
+.row-details>.row {
+    width: 100%;
+}
 
 .row-details>.row {
     display: flex;
@@ -858,29 +863,17 @@ main.profile-main h1 {
 }
 
 
-/* ***** TEACHER: ATTENDANCE PAGE *************/
-
-
-
-
 
 /* **************************************************|
 ******** ACCOUNT SETTINGS PAGE **********************|
 *****************************************************/
 
-.profile-settings-page {
-    padding: 70px 7%;
-}
-
-.profile-settings-page h1 {
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 2.8rem;
-    letter-spacing: 0.03em;
-}
-
 .profile-settings-page p {
     font-weight: 500;
+}
+
+.wrapper-account-settings-form {
+    width: 50%;
 }
 
 .account-settings-form {
@@ -890,7 +883,7 @@ main.profile-main h1 {
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
-    max-width: 100%;
+    min-width: 100%;
 }
 
 
@@ -920,6 +913,7 @@ main.profile-main h1 {
 
     .course-card .info .col:last-child {
         padding-left: 2rem;
+        border-bottom: none;
     }
 
     .course-card .circle-panel1 {
@@ -952,6 +946,19 @@ main.profile-main h1 {
 
 @media (max-width: 991px) {
 
+    /* *** H1 **************************************************/
+
+    main.profile-main h1,
+    .my-course header h1,
+    .my-attendance header h1,
+    .my-attendance header p,
+    .profile-settings-page header h1,
+    .profile-settings-page header p {
+        padding: 0 4%;
+    }
+
+
+
     /*** SIDEBAR *********** */
 
     .profile-sidebar {
@@ -964,6 +971,25 @@ main.profile-main h1 {
         min-width: none !important;
         margin: 0 auto;
     }
+
+    /* ACCOUNT SETTINGS Page */
+    .profile-settings-page {
+        padding: 70px 2%;
+    }
+
+    .wrapper-account-settings-form {
+        width: 100%;
+    }
+
+    /* .account-settings-form {
+        background: linear-gradient(57deg,rgba(0, 143, 143, 1) 0%, rgba(95, 240, 223, 1) 39%, rgba(193, 247, 227, 1) 72%);
+        padding: 20px;
+        border: outset 1px #008f8f;
+        margin: 0 auto;
+        box-shadow: 0 1px 3px 0 #003366;
+        border-radius: 10px;
+        width: 100%;
+    } */
 
 
 }
@@ -1138,10 +1164,6 @@ main.profile-main h1 {
 
 
     /* My ACCOUNT SETTINGS Page **************************** */
-
-    .account-settings-form {
-        max-width: 340px;
-    }
 
 
 }
