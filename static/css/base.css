@@ -171,7 +171,11 @@ a:hover {
 
 /* override padding of x clase in alert messages to improve display, and avoid having close 'x' on top of message text */
 .alert-dismissible .close {
-    padding: 0 !important;
+    padding: .05rem !important;
+    margin-right: 5px !important;
+    position: relative;
+    top: -10px;
+    right: -15px;
 }
 
 .main-bg {
@@ -709,12 +713,14 @@ span.vertical-line {
     margin-right: 7%;
 }
 
-.alert{
-    background-color: teal;
-    color: white;
+.alert {
+    background-color: whitesmoke;
+    color: teal;
     border-radius: 10px;
     padding: .75rem 1rem !important;
-    margin: -15px;
+    /* margin: 0 50px 0 0; */
+    position: fixed;
+    right: 20px;
 }
 
 
