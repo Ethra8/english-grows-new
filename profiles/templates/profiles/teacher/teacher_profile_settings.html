@@ -22,13 +22,13 @@
     <header>
         <h1>Account Settings</h1>
         <hr>
+        <p class="text-white mb-4 mt-4">Update your profile information.</p>    
     </header>    
 
-    <div class="row">
-        <div class="col-12">
-            <div class="wrapper-account-settings-form mt-5">
+    <div class="row mt-5">
+        <div class="col-12 pl-0 pr-0">
+            <div class="wrapper-account-settings-form">
                 <div class="account-settings-form">
-                    <p class="text-dark mb-4">Update your profile.</p>
                     <form class="mt-3" action="{% url 'profiles:teacher_profile_settings' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ user_form|crispy }}

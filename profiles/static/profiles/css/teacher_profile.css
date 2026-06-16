@@ -26,12 +26,17 @@
 
 /**** WRAPPERS *******************************************************/
 
+.wrapper-today-class-card,
 .wrapper-assigned-classes-panel,
 .wrapper-assigned-courses-panel {
     border-radius: 10px;
     padding: 4px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
+}
+
+.wrapper-today-class-card {
+    width: 100%;
 }
 
 
@@ -44,9 +49,13 @@
     width: 100%;
 }
 
+.teacher-dashboard header .meta-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+}
+
 .teacher-dashboard .meta-row {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
 }
 
 .course-header-meta-row {
@@ -66,12 +75,13 @@
     gap: 1.2rem;
 
     min-height: fit-content;
-    padding: 0.15rem 2rem 0.15rem 0.25rem;
+    padding: 0.25rem 2rem 0.15rem 0.15rem;
 
-    border: 1.5px solid rgba(94, 242, 220, 0.75);
-    border-radius: 999px;
+    border: 1.5px solid rgba(94, 242, 220, 0.35);
+    border-radius: 50px;
+    background-color: rgba(0, 51, 102, 0.7);
 
-    background: rgba(193, 247, 227, 0.65);
+    /* background: rgba(193, 247, 227, 0.65); */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -103,13 +113,14 @@
     justify-content: center;
 
     border-radius: 50%;
-    background: #003366;
-    border: 1px solid rgba(94, 242, 220, 0.75);
+    /* background: rgba(0, 104, 107, 0.9); */
+    background-color: rgba(0, 51, 102, 0.6);
+    border: 1px solid rgba(94, 242, 220, 0.35);
 }
 
 .meta-icon i,
 .course-meta-icon i {
-    color: #5eead4 ;
+    color: rgba(94, 242, 220, 0.9);
     font-size: 1.8rem;
 }
 
@@ -125,7 +136,8 @@
 .meta-text strong,
 .course-meta-text strong {
     display: block;
-    color: #003366;
+    /* color: rgba(94, 242, 220, 0.9); */
+    color: #ffffff;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.5rem;
     font-weight: 500;
@@ -137,8 +149,9 @@
 
 .meta-text span,
 .course-meta-text span {
-    color: #ffffff;
-    font-size: 1.4rem;
+    /* color: #ffffff; */
+    color: rgba(94, 242, 220, 0.9);
+    font-size: 1.2rem;
     font-weight: 400;
 }
 
@@ -206,22 +219,116 @@
 
 .btn-class-today,
 .btn-course-details,
-.btn-email-all {
+.btn-email-all,
+.edit-attendance-btn {
     border: 1px solid #5eead4;
     color: #5eead4;
     padding: 0.85rem 1.4rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 400;
-    width: 200px !important;
+    width: max-content !important;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(94, 234, 212, 0.1);
 }
 
 .btn-class-today:hover,
 .btn-course-details:hover,
-.btn-email-all:hover {
+.btn-email-all:hover,
+.edit-attendance-btn:hover {
     background: rgba(94, 234, 212, 0.15);
     color: #fff;
     text-decoration: none;
+}
+
+.btn-class-today i,
+.btn-course-details i,
+.btn-email-all i {
+    display: inline-flex;
+    top: 0.15rem;
+    position: relative;
+}
+
+.edit-attendance-btn i {
+    display: inline-flex;
+    position: relative;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.course-status-btn,
+.classes-filter-btn,
+.attendance-filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 70px;
+    border: 1px solid rgba(106, 250, 225, 0.45);
+    border-radius: 10px;
+    background: rgba(0, 51, 102, 0.45);
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.course-status-btn.active::after,
+.classes-filter-btn.active::after,
+.attendance-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #5eead4;
+    filter: drop-shadow(0 3px 4px rgba(0, 51, 102, 0.45));
+}
+
+.course-status-btn i,
+.classes-filter-btn i,
+.attendance-filter-btn i {
+    font-size: 1.3rem;
+    color: #5eead4;
+}
+
+.course-status-btn strong,
+.classes-filter-btn strong,
+.attendance-filter-btn strong {
+    background: rgba(106, 250, 225, 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    font-size: 1.2rem;
+    height: 35px;
+    width: 35px;
+}
+
+.course-status-btn.active,
+.course-status-btn:hover,
+.classes-filter-btn.active,
+.classes-filter-btn:hover,
+.attendance-filter-btn.active,
+.attendance-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    color: #fff;
 }
 
 
@@ -242,7 +349,7 @@ header .extra .item {
     width: 100%;
     flex: 1 1 0;
     background-color: rgba(0, 51, 102, 0.6);
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border: solid 2px rgba(0, 104, 107, 1);
     border-radius: 10px;
     padding: 0.75rem 1.5rem;
@@ -252,7 +359,7 @@ header .extra .item-icon {
     width: 40px;
     height: 40px;
     border: solid 2px #5ff0df;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 header .extra .item .fa-regular,
@@ -273,12 +380,17 @@ header .extra .item-text span {
 }
 
 /* ***********************************|
-|*  DASHBOARD Page ************|
+|*  DASHBOARD Page *******************|
 |*********************************** */
 
-/* Today's Classes *******************/
+/* *** HEADER ***************************** */
 
-.teacher-dashboard header .active-courses {
+.teacher-dashboard header .meta-card {
+    padding: 0.5rem 2rem 0.5rem 3rem;
+    background-color: rgba(0, 51, 102, 0.9);
+}
+
+/* .teacher-dashboard header .active-courses {
     width: fit-content;
     min-width: fit-content;
     padding: 0.25rem 0;
@@ -291,17 +403,10 @@ header .extra .item-text span {
     width: 100%;
     flex: 1 1 0;
     background-color: rgba(0, 51, 102, 0.6);
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border: solid 2px rgba(0, 104, 107, 1);
     border-radius: 10px;
     padding: 0.75rem 1.5rem;
-}
-
-.teacher-dashboard header .icon {
-    width: 40px;
-    height: 40px;
-    border: solid 2px #5ff0df;
-    box-shadow: 0 2px 3px 0 #003366;
 }
 
 .teacher-dashboard header .active-courses .item .fa-regular,
@@ -319,39 +424,62 @@ header .extra .item-text span {
 .teacher-dashboard header .active-courses .item-text span {
     color: #ffffff;
     font-size: 1.1rem;
+} */
+
+.teacher-dashboard .completion-ring {
+    left: 0.2rem;
 }
 
-.teacher-dashboard .meta-card.meta-students::after {
-    content: "\f0c0"; /* fa-users */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.3);
-    position: absolute;
-    top: 35px;
-    right: -5px;
-}
-
-.teacher-dashboard .meta-card.meta-courses::after {
+.teacher-dashboard header .meta-card.meta-courses::after {
     content: "\f144"; /* fa-circle-play */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.3);
+    color: rgba(94, 242, 220, 0.2);
+    position: absolute;
+    top: 30px;
+    right: -5px;
+    rotate: calc(-15deg);
+}
+
+.teacher-dashboard header .meta-card.meta-students::after {
+    content: "\f500"; /* fa-user-group */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    /* color: rgba(106, 250, 225, 0.3); */
+    color: rgba(94, 242, 220, 0.2);
+    position: absolute;
+    top: 35px;
+    right: 15px;
+}
+
+.teacher-dashboard header .meta-card.meta-attendance::after {
+    content: "\f46c"; /* fa-clipboard-check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    /* color: rgba(106, 250, 225, 0.3); */
+    color: rgba(94, 242, 220, 0.2);
     position: absolute;
     top: 35px;
     right: -5px;
+    rotate: calc(-15deg);
 }
 
+/* Today's Classes *******************/
+
 .today-classes-card {
+    min-width: 100% !important;
     width: 100%;
     display: flex;
     align-items: center;
     gap: 2rem;
-    background: rgba(0, 51, 102, 0.65);
+    background-color: rgba(0, 51, 102, 0.75);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 12px;
     padding: 1rem 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .today-card-left {
@@ -415,8 +543,7 @@ header .extra .item-text span {
 }
 
 .today-time,
-.today-course,
-.today-students {
+.today-course {
     padding: 0.9rem 1rem 0.9rem 1.5rem;
 }
 
@@ -436,7 +563,7 @@ header .extra .item-text span {
     border-right: 1px solid rgba(80, 230, 220, 0.2);
 }
 
-.today-students {
+/* .today-students {
     color: #fff;
     display: flex;
     gap: 0.5rem;
@@ -445,7 +572,7 @@ header .extra .item-text span {
 
 .today-students i {
     color: #5eead4;
-}
+} */
 
 
 /* END Today's Classes ********************/
@@ -469,7 +596,7 @@ header .extra .item-text span {
 
 .classes-list-filter {
     background-color: rgba(0, 51, 102, 0.6);
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border: solid 2px #5eead4;
     border-radius: 8px;
     padding: .6rem 2.5rem .6rem 1rem;
@@ -593,14 +720,6 @@ header .extra .item-text span {
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
 }
 
-/* .assigned-courses-panel h2,
-.assigned-classes-panel h2 {
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-weight: 400;
-    font-size: 1.5rem;
-} */
-
 .assigned-courses-header,
 .assigned-classes-header {
     display: flex;
@@ -616,78 +735,11 @@ header .extra .item-text span {
 }
 
 .course-status-buttons,
-.classes-filter-buttons {
+.classes-filter-buttons,
+.attendance-filter-card.two-filters {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 0.25rem;
-}
-
-.course-status-btn,
-.classes-filter-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    min-height: 70px;
-    border: 1px solid rgba(106, 250, 225, 0.45);
-    border-radius: 10px;
-    background: rgba(0, 51, 102, 0.45);
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 400;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 2px 3px 0 #003366;
-    min-width: 0;
-    white-space: nowrap;
-}
-
-.course-status-btn.active::after,
-.classes-filter-btn.active::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -14px;
-    transform: translateX(-50%);
-
-    width: 0;
-    height: 0;
-
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 14px solid #5eead4;
-    filter: drop-shadow(0 3px 4px rgba(0, 51, 102, 0.45));
-}
-
-.course-status-btn i,
-.classes-filter-btn i {
-    font-size: 1.3rem;
-    color: #5eead4;
-}
-
-.course-status-btn strong,
-.classes-filter-btn strong {
-    background: rgba(106, 250, 225, 0.18);
-    border-radius: 999px;
-    padding: 0.25rem 0.65rem;
-    color: #fff;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-    font-size: 1.2rem;
-    height: 35px;
-    width: 35px;
-}
-
-.course-status-btn.active,
-.course-status-btn:hover,
-.classes-filter-btn.active,
-.classes-filter-btn:hover {
-    background: rgba(0, 155, 155, 0.25);
-    border-color: #5eead4;
-    color: #fff;
 }
 
 .assigned-courses-header select,
@@ -750,7 +802,7 @@ header .extra .item-text span {
     border: outset 2px #5ff0df;
     background: #C1F7E3;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #003366;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
     cursor: pointer;
 }
@@ -933,14 +985,17 @@ header .extra .item-text span {
 **************************************** */
 
 .back-to-my-assigned-courses,
-.back-to-my-assigned-courses a {
+.back-to-my-assigned-courses a,
+.back-to-attendance,
+.back-to-attendance a {
     color: #5eead4 !important;
     font-size: 1.1rem;
     font-weight: 400;
     margin: 0 auto 2rem 0;
 }
 
-.back-to-my-assigned-courses i {
+.back-to-my-assigned-courses i,
+.back-to-attendance i {
     cursor: pointer;
 }
 
@@ -1016,7 +1071,7 @@ header .extra .item-text span {
     width: 100%;
     border-radius: 10px;
     padding: 4px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
 }
 
@@ -1041,7 +1096,7 @@ header .extra .item-text span {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .course-detail-item {
@@ -1059,7 +1114,7 @@ header .extra .item-text span {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
 } */
 
@@ -1094,14 +1149,14 @@ header .extra .item-text span {
 
 .course-detail-item strong span {
     display: inline;
-    color: #fff;
+    color: whitesmoke;
     margin-bottom: 0 !important;
     font-weight: 400;
 }
 
 .course-detail-item p {
     display: inline;
-    color: #fff;
+    color: whitesmoke;
     margin-bottom: 0;
     font-weight: 600;
 }
@@ -1251,6 +1306,10 @@ header .extra .item-text span {
 .student-row span {
     display: block;
     color: #c1f7e3;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
 }
 
 .student-level {
@@ -1268,45 +1327,27 @@ header .extra .item-text span {
 
 
 
-/* .teacher-attendance-page {
-    padding: 4rem 6%;
-    min-height: 100vh;
-    background: #007f7f;
-    color: #ffffff;
-} */
+/*****************************************|
+|**** ATTENDANCE Pages: 
+    - Teacher_attendance.html
+    - teacher_take_attendance.html
+    - teacher_attendance_detail.html
+|******************************************|
+|**************************************** */
 
 .teacher-attendance-page > *:not(.overlay-birds):not(.overlay-dark-teal) {
     position: relative;
     z-index: 2;
 }
 
-.teacher-attendance-page header {
-    /* border-bottom: 1px solid rgba(95, 255, 234, 0.45); */
-    padding-bottom: 2.5rem;
-    margin-bottom: 2rem;
-}
-
-/* .teacher-attendance-page header h1 {
-    margin: 0 0 0.6rem;
-    color: #ffffff;
-    font-size: 3rem;
-    font-weight: 700;
-} */
-
 .teacher-attendance-page header p {
     margin: 0;
-    color: #bffaf4;
+    color: whitesmoke;
     font-size: 1.1rem;
+    padding: 0.25rem 1rem;
 }
 
 /* Summary cards */
-
-.attendance-summary-grid.two-cards {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(280px, 360px));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
 
 .attendance-summary-card {
     min-height: 145px;
@@ -1321,7 +1362,7 @@ header .extra .item-text span {
 }
 
 .attendance-summary-card i {
-    color: #5fffea;
+    /* color: #5fffea; */
     font-size: 2rem;
 }
 
@@ -1334,7 +1375,7 @@ header .extra .item-text span {
     color: #ffffff;
     font-size: 2.4rem;
     line-height: 1;
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .attendance-summary-card span {
@@ -1350,60 +1391,6 @@ header .extra .item-text span {
     font-size: 0.95rem;
 }
 
-/* Filter buttons */
-
-.attendance-filter-card.two-filters {
-    display: grid;
-    grid-template-columns: repeat(2, 285px);
-    justify-content: start;
-    background: rgba(0, 48, 92, 0.92);
-    border: 1px solid rgba(95, 255, 234, 0.45);
-    border-radius: 12px;
-    padding: 0.6rem;
-    margin-bottom: 1rem;
-}
-
-.attendance-filter-btn {
-    position: relative;
-    min-height: 58px;
-    background: transparent;
-    border: 1px solid rgba(95, 255, 234, 0.35);
-    color: #d7fffb;
-    border-radius: 8px;
-    font-size: 1.05rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.attendance-filter-btn i {
-    margin-right: 0.5rem;
-    color: #5fffea;
-}
-
-.attendance-filter-btn span {
-    margin-left: 0.6rem;
-    padding: 0.25rem 0.6rem;
-    background: rgba(95, 255, 234, 0.18);
-    border-radius: 999px;
-    color: #ffffff;
-}
-
-.attendance-filter-btn.active {
-    background: rgba(95, 255, 234, 0.14);
-    border-color: #5fffea;
-    color: #ffffff;
-}
-
-.attendance-filter-btn.active::after {
-    content: "";
-    position: absolute;
-    bottom: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 13px solid transparent;
-    border-right: 13px solid transparent;
-    border-top: 13px solid #5fffea;
-}
 
 /* Main list card */
 
@@ -1423,11 +1410,15 @@ header .extra .item-text span {
     margin-bottom: 1.8rem;
 }
 
-.attendance-list-header h2 {
-    margin: 0;
+.attendance-list-header h2,
+.take-attendance-card-header h2,
+.attendance-detail-card-header h2 {
     color: #ffffff;
+    margin: 0 0 0.4rem;
     font-size: 1.8rem;
-    font-weight: 700;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
 }
 
 .attendance-tools {
@@ -1454,6 +1445,17 @@ header .extra .item-text span {
     outline: none;
     border-color: #5fffea;
     box-shadow: 0 0 0 3px rgba(95, 255, 234, 0.12);
+}
+
+#attendanceDateFilter {
+    color-scheme: light;
+    cursor: pointer;
+}
+
+#attendanceDateFilter::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: .9;
+    cursor: pointer;
 }
 
 /* Rows */
@@ -1540,10 +1542,10 @@ header .extra .item-text span {
 .status-pill {
     display: inline-block;
     width: max-content;
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem;
     border-radius: 999px;
     font-size: 0.9rem;
-    font-weight: 800;
+    font-weight: 500;
 }
 
 .status-pill.pending {
@@ -1556,6 +1558,9 @@ header .extra .item-text span {
     color: #4dffb5;
 }
 
+.attendance-radio-pill input:checked + .status-pill {
+    border: 1px solid whitesmoke;
+}
 /* Buttons */
 
 .attendance-primary-btn,
@@ -1590,29 +1595,11 @@ header .extra .item-text span {
 }
 
 /* Empty messages */
-
 .attendance-empty-message {
     text-align: left;
     padding: 2rem 1.5rem;
     color: #bffaf4;
     font-size: 1rem;
-}
-
-
-
-.back-to-attendance {
-    margin-bottom: 1rem;
-}
-
-.back-to-attendance a {
-    color: #5fffea;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.back-to-attendance a:hover {
-    color: #ffffff;
-    text-decoration: none;
 }
 
 .take-attendance-info-grid {
@@ -1647,31 +1634,32 @@ header .extra .item-text span {
     color: #bffaf4;
 }
 
-.take-attendance-card {
-    background: rgba(0, 48, 92, 0.92);
+.take-attendance-card,
+.attendance-detail-card {
+    background: rgba(0, 48, 92, 0.75);
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-radius: 12px;
     padding: 1.6rem;
-    width: fit-content;
+    width: 850px;
 }
 
-.take-attendance-card-header {
+.take-attendance-card-header,
+.attendance-detail-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 5rem;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.take-attendance-card-header h2 {
-    color: #ffffff;
-    margin: 0 0 0.4rem;
-    font-size: 1.8rem;
-}
-
-.take-attendance-card-header p {
+.take-attendance-card-header p,
+.attendance-detail-card-header p {
     margin: 0;
     color: #bffaf4;
+}
+
+.take-attendance-card-header span {
+    display: block;
 }
 
 .mark-all-actions {
@@ -1686,7 +1674,7 @@ header .extra .item-text span {
     background: transparent;
     border: 1px solid #5fffea;
     color: #5fffea;
-    font-weight: 800;
+    font-weight: 500;
     cursor: pointer;
 }
 
@@ -1699,12 +1687,16 @@ header .extra .item-text span {
     background: rgba(95, 255, 234, 0.14);
 }
 
+.take-attendance-list {
+    border-top: 1px solid rgba(95, 255, 234, 0.22);
+}
+
 .take-attendance-row {
     display: grid;
-    grid-template-columns: 2fr auto;
+    grid-template-columns: 4fr 1fr;
     gap: 1.5rem;
     align-items: center;
-    padding: 1.3rem 1rem;
+    padding: 1.3rem 0;
     border-bottom: 1px solid rgba(95, 255, 234, 0.22);
 }
 
@@ -1773,10 +1765,12 @@ header .extra .item-text span {
     align-items: center;
     gap: 0.45rem;
     min-height: 46px;
+    padding: 0.6rem 1rem;
     border-radius: 999px;
     border: 1px solid rgba(95, 255, 234, 0.35);
     color: #d7fffb;
-    font-weight: 800;
+    font-weight: 500;
+    font-size: 1rem;
     transition: all 0.2s ease;
 }
 
@@ -1821,24 +1815,36 @@ header .extra .item-text span {
     min-width: 180px;
 }
 
+/* .attendance-summary-card.success {
+    background: rgba(35, 201, 154, 0.3);
+}
+
+.attendance-summary-card.danger {
+    background: rgba(255, 90, 90, 0.3);
+}
+
+.attendance-summary-card.warning {
+    background: rgba(255, 179, 71, 0.3);
+} */
+
 .status-pill.missed,
 .attendance-summary-card.danger i {
     color: #ff5a5a;
 }
 
 .status-pill.missed {
-    background: rgba(255, 90, 90, 0.16);
+    background: rgba(255, 90, 90, 0.25);
 }
 
 .attendance-summary-grid.detail-summary-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 190px);
+    grid-template-columns: repeat(3, 1fr);
     justify-content: start;
-    gap: 0.5rem;
-    background: rgba(0, 48, 92, 0.92);
+    gap: 0.2rem;
+    background: rgba(0, 104, 107, 0.45);
     border: 1px solid rgba(95, 255, 234, 0.45);
-    border-radius: 12px;
-    padding: 0.6rem;
+    border-radius: 10px;
+    padding: 0.2rem;
     margin-bottom: 1.5rem;
     width: fit-content;
 }
@@ -1848,9 +1854,10 @@ header .extra .item-text span {
     padding: 0.8rem 1.2rem;
     border-radius: 8px;
     box-shadow: none;
-    background: transparent;
+    /* background: rgba(0, 48, 92, 0.7); */
     border: 1px solid rgba(95, 255, 234, 0.35);
     gap: 0.7rem;
+    justify-content: flex-start;
 }
 
 .detail-summary-buttons .attendance-summary-card i {
@@ -1864,7 +1871,8 @@ header .extra .item-text span {
 .detail-summary-buttons .attendance-summary-card span {
     margin: 0;
     font-size: 1.05rem;
-    font-weight: 800;
+    font-weight: 500;
+    padding-left: 1rem;
 }
 
 .detail-summary-buttons .attendance-summary-card div {
@@ -1878,6 +1886,8 @@ header .extra .item-text span {
     background: rgba(95, 255, 234, 0.18);
     padding: 0.25rem 0.6rem;
     border-radius: 999px;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 500;
 }
 
 .detail-summary-buttons .attendance-summary-card span {
@@ -1906,13 +1916,8 @@ header .extra .item-text span {
         max-height: 70px;
     }
 
-    .today-students {
-        display: none;
-    }
-
     .today-time,
-    .today-course,
-    .today-students {
+    .today-course {
         border: 0;
     }
 
@@ -1964,12 +1969,23 @@ header .extra .item-text span {
     /* ATTENDANCE Page ******************************* */
     .teacher-attendance-page {
         margin-left: 0;
-        padding: 3rem 2rem;
+        padding: 70px 4%;
     }
 
     .attendance-row {
         grid-template-columns: 60px 1.5fr 1.3fr 0.9fr 0.9fr 160px;
     }
+
+    .take-attendance-card,
+    .attendance-detail-card {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .attendance-summary-grid.detail-summary-buttons {
+        width: 100%;
+    }
+
 
 }
 
@@ -1978,22 +1994,32 @@ header .extra .item-text span {
 
     .teacher-dashboard,
     .teacher-classes-list,
-    .assigned-courses {
+    .assigned-courses,
+    .teacher-attendance-page {
         padding: 70px 2%;
     }
     
+    .teacher-attendance-page header {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
     .teacher-dashboard header h1,
     .teacher-classes-list header h1,
     .assigned-courses header h1, 
-    .my-attendance header h1 {
+    .teacher-attendance-page header h1 {
         margin: 0;
         text-align: center;
     }
 
-    .teacher-dashboard .meta-row {
-        grid-template-columns: repeat(2, 1fr);
+    .teacher-dashboard header .meta-row {
+        gap: 0.5rem;
     }
 
+    .teacher-dashboard header .meta-card {
+        padding: 0.15rem 1rem 0.15rem 1.5em;
+        border-radius: 10px;
+    }
 
     /* ASSIGNED COURSES & CLASSES LIST Pages ***********************/
 
@@ -2029,11 +2055,6 @@ header .extra .item-text span {
         border-left: none;
     }
 
-    /* .assigned-courses header .course-status-row .item {
-        flex: 0 0 calc((100% - 0.75rem) / 2);
-        max-width: calc((100% - 0.75rem) / 2);
-    } */
-
     .course-details-masonry {
         grid-template-columns: 1fr;
     }
@@ -2048,10 +2069,6 @@ header .extra .item-text span {
 
     /* ATTENDANCE Page **********************************/
     .attendance-summary-grid.two-cards {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .attendance-filter-card.two-filters {
         grid-template-columns: 1fr 1fr;
     }
 
@@ -2086,46 +2103,30 @@ header .extra .item-text span {
 
     /* TAKE ATTENDANCE Page ******************************/
     .attendance-summary-grid.detail-summary-buttons {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
         justify-content: stretch;
-        /* gap: 0;
-        background: rgba(0, 48, 92, 0.92);
-        border: 1px solid rgba(95, 255, 234, 0.45);
-        border-radius: 12px;
-        padding: 0.6rem;
-        margin-bottom: 1.5rem; */
     }
 
     .take-attendance-info-grid {
         grid-template-columns: 1fr;
     }
 
-    .take-attendance-card-header {
-        flex-direction: column;
-    }
 
-    .mark-all-actions {
-        width: 100%;
+    .take-attendance-list {
         flex-direction: column;
     }
 
     .take-attendance-row {
-        grid-template-columns: 1fr;
-    }
-
-    .attendance-radio-group {
-        grid-template-columns: 1fr;
-    }
-
-    .take-attendance-save-bar {
+        display: flex;
         flex-direction: column;
+        align-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .take-attendance-save-bar .attendance-primary-btn,
     .take-attendance-save-bar .attendance-secondary-btn {
         width: 100%;
     }
+    
 
 }
 
@@ -2150,6 +2151,10 @@ header .extra .item-text span {
         grid-template-columns: repeat(1, 1fr);
     }
 
+    .teacher-dashboard header .meta-card {
+        border-radius: 50px;
+    }
+
     .course-meta-card {
         padding: 0.15rem 1rem 0.15rem 0.25rem;
     }
@@ -2172,12 +2177,51 @@ header .extra .item-text span {
         gap: 1rem;
     }
 
+    /* ATTENDANCE Pages */
+    .course-status-buttons, .classes-filter-buttons, .attendance-filter-card.two-filters {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    /* TAKE ATTENDANCE Page ******************************/
+    .attendance-summary-grid.detail-summary-buttons {
+        grid-template-columns: repeat(1, 1fr);
+        justify-content: stretch;
+        margin: auto;
+    }
+
+    .take-attendance-card,
+    .attendance-detail-card {
+        width: 100%;
+    }
+
+    .take-attendance-card-header {
+        flex-direction: column-reverse;
+    }
+
+    .attendance-detail-card-header {
+        flex-direction: column;
+    }
+
+    .attendance-detail-card-header .edit-attendance-text {
+        display: none;
+    }
+
+    .edit-attendance-btn {
+        padding: 0.75rem;
+    }
+
+    .edit-attendance-btn i {
+        margin: 0;
+    }
+
 }
 
 
 
 @media (max-width: 576px) {
-    
+
+    .teacher-dashboard header .meta-row,
     .teacher-dashboard .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
@@ -2245,14 +2289,9 @@ header .extra .item-text span {
     .teacher-attendance-page {
         padding: 2rem 1rem;
     }
-
+    
     .teacher-attendance-page header h1 {
         font-size: 2.3rem;
-    }
-
-    .attendance-summary-grid.two-cards,
-    .attendance-filter-card.two-filters {
-        grid-template-columns: 1fr;
     }
 
     .attendance-summary-card {
@@ -2264,8 +2303,51 @@ header .extra .item-text span {
         display: none;
     }
 
+    .course-status-buttons, .classes-filter-buttons, .attendance-filter-card.two-filters {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 0.75rem;
+    }
+
+    .attendance-filter-btn {
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 2rem;        
+    }
+
+    .attendance-filter-btn i {
+        margin-right: 0.8rem;
+    }
+
+    .cattendance-filter-btn span {
+        text-align: left;
+    }
+
+    .attendance-filter-btn strong {
+        margin-left: auto;
+    }
+
     .attendance-tools {
         flex-direction: column;
+    }
+
+    /* TAKE ATTENDANCE Page ******************************/
+    .attendance-summary-grid.detail-summary-buttons {
+        width: 100%;
+    }
+
+    .mark-all-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+
+}
+
+
+
+@media (max-width: 350px) {
+    .student-main-info span {
+        display: none;
     }
 
 }

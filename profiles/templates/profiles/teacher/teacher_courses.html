@@ -19,9 +19,9 @@
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
         
-    <header class="mb-5">
-        <div class="row">        
-            <div class="col-12 ml-0 pl-0">
+    <header>
+        <div class="row" >        
+            <div class="col-12 ml-0 pl-0 mb-4">
                 <h1>Assigned Courses & Levels</h1>
             </div>
         </div>
@@ -120,6 +120,7 @@
 
                     <div class="course-action">
                         <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details">
+                            <i class="fa-regular fa-eye mr-2"></i>
                             View Details
                             <i class="fa-solid fa-chevron-right ml-2"></i>
                         </a>

@@ -24,8 +24,9 @@
             </a>
         </p>
 
-        <h1>Take Attendance</h1>
-        <p>{{ class_session.course.name }} · {{ class_session.start_time|date:"D, d M Y" }} · {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+        <h1 class="mb-5 mt-4">Take Attendance</h1>
+        <p class="mb-4">{{ class_session.course.name }} <br><span class="text-white"> {{ class_session.start_time|date:"D, d M Y" }} · {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</span></p>
+        <hr>
     </header>
 
     <div class="take-attendance-info-grid">
@@ -64,8 +65,37 @@
             <div class="take-attendance-card-header">
                 <div>
                     <h2>Student Register</h2>
-                    <p>Mark each student as attended, missed, or excused.</p>
-                </div>
+                    <p>Mark each student as:</p>
+                    <div class="attendance-summary-grid detail-summary-buttons mt-3 mb-3">
+
+                        <div class="attendance-summary-card success">
+                            <div class="status-pill completed">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <span>Attended</span>
+                            </div>
+                        </div>
+
+                        <div class="attendance-summary-card danger">
+                            <div class="status-pill missed">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </div>
+                            <div>
+                                <span>Missed</span>
+                            </div>
+                        </div>
+
+                        <div class="attendance-summary-card warning">
+                            <div class="status-pill pending">
+                                <i class="fa-solid fa-user-minus"></i>
+                            </div>
+                            <div>
+                                <span>Excused</span>
+                            </div>
+                        </div>
+
+                    </div>
 
                 <div class="mark-all-actions">
                     <button type="button" class="mark-all-btn" data-status="attended">
@@ -75,6 +105,10 @@
                         Mark all missed
                     </button>
                 </div>
+
+
+                </div>
+
             </div>
 
             <div class="take-attendance-list">
@@ -107,13 +141,12 @@
 
                             <label class="attendance-radio-pill attended">
                                 <input type="radio"
-                                       name="attendance_{{ enrollment.student.id }}"
-                                       value="attended"
-                                       {% if enrollment.current_attendance.status == "attended" %}checked{% endif %}>
-                                <span>
-                                    <i class="fa-solid fa-check"></i>
-                                    Attended
-                                </span>
+                                        name="attendance_{{ enrollment.student.id }}"
+                                        value="attended"
+                                        {% if enrollment.current_attendance.status == "attended" %}checked{% endif %}>
+                                <div class="status-pill completed">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </div>
                             </label>
 
                             <label class="attendance-radio-pill missed">
@@ -121,10 +154,9 @@
                                        name="attendance_{{ enrollment.student.id }}"
                                        value="missed"
                                        {% if enrollment.current_attendance.status == "missed" %}checked{% endif %}>
-                                <span>
-                                    <i class="fa-solid fa-xmark"></i>
-                                    Missed
-                                </span>
+                                <div class="status-pill missed">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                </div>
                             </label>
 
                             <label class="attendance-radio-pill excused">
@@ -132,10 +164,9 @@
                                        name="attendance_{{ enrollment.student.id }}"
                                        value="excused"
                                        {% if enrollment.current_attendance.status == "excused" %}checked{% endif %}>
-                                <span>
-                                    <i class="fa-solid fa-circle-exclamation"></i>
-                                    Excused
-                                </span>
+                                <div class="status-pill pending">
+                                    <i class="fa-solid fa-user-minus"></i>
+                                </div>
                             </label>
 
                         </div>
@@ -147,17 +178,17 @@
 
             </div>
 
-        </div>
 
-        <div class="take-attendance-save-bar">
-            <a href="{% url 'profiles:teacher_attendance' %}" class="attendance-secondary-btn">
-                Cancel
-            </a>
+            <div class="take-attendance-save-bar">
+                <a href="{% url 'profiles:teacher_attendance' %}" class="attendance-secondary-btn">
+                    Cancel
+                </a>
 
-            <button type="submit" class="attendance-primary-btn">
-                <i class="fa-regular fa-floppy-disk mr-2"></i>
-                Save Attendance
-            </button>
+                <button type="submit" class="attendance-primary-btn">
+                    <i class="fa-regular fa-floppy-disk mr-2"></i>
+                    Save Attendance
+                </button>
+            </div>
         </div>
 
     </form>

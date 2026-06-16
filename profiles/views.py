@@ -483,6 +483,26 @@ def teacher_dashboard(request):
         .count()
     )
 
+    attendance_records = Attendance.objects.filter(
+        class_session__course__teacher=request.user,
+        class_session__course__status="active",
+        status__in=["attended", "missed", "excused"],
+    )
+
+    total_attendance_records = attendance_records.count()
+
+    attended_records = attendance_records.filter(
+        status="attended"
+    ).count()
+
+    if total_attendance_records > 0:
+        total_attendance_rate = round(
+            (attended_records / total_attendance_records) * 100
+        )
+    else:
+        total_attendance_rate = 0
+
+
     context = {
         "profile": profile,
         "courses": courses,
@@ -504,6 +524,7 @@ def teacher_dashboard(request):
 
         "attendance_completed_sessions": attendance_completed_sessions,
         "attendance_completed_percentage": attendance_completed_percentage,
+        "total_attendance_rate": total_attendance_rate,
     }
 
     return render(request, "profiles/teacher/teacher_dashboard.html", context)

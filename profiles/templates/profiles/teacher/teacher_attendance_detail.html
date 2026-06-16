@@ -18,62 +18,75 @@
 
     <header>
         <p class="back-to-attendance">
-            <a href="{% url 'profiles:teacher_attendance' %}">
+            <a href="{% url 'profiles:teacher_attendance' %}" class="text-white">
                 <i class="fa-solid fa-arrow-left-long mr-2"></i>
                 Back to Attendance
             </a>
         </p>
 
-        <h1>Attendance Detail</h1>
-        <p>
-            {{ class_session.course.name }} ·
-            {{ class_session.start_time|date:"D, d M Y" }} ·
-            {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
+        <h1 class="mb-5 mt-5">Attendance Detail</h1>
+        <hr>
+
+        <p><strong>
+            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            {{ class_session.course.name }}
+        </strong></p>
+        <p class="mb-4">
+            <i class="fa-solid fa-calendar-day mr-4"></i>
+            {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
         </p>
+        <hr>
     </header>
 
-    <div class="attendance-summary-grid detail-summary-buttons">
+    <div class="attendance-detail-card">
 
-        <div class="attendance-summary-card success">
-            <i class="fa-solid fa-check"></i>
-            <div>
-                <strong>{{ present_count }}</strong>
-                <span>Attended</span>
-            </div>
-        </div>
-
-        <div class="attendance-summary-card danger">
-            <i class="fa-solid fa-xmark"></i>
-            <div>
-                <strong>{{ missed_count }}</strong>
-                <span>Missed</span>
-            </div>
-        </div>
-
-        <div class="attendance-summary-card warning">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <div>
-                <strong>{{ excused_count }}</strong>
-                <span>Excused</span>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="take-attendance-card">
-
-        <div class="take-attendance-card-header">
+        <div class="attendance-detail-card-header">
             <div>
                 <h2>Registered Attendance</h2>
                 <p>{{ total_count }} student record{{ total_count|pluralize }} saved for this session.</p>
             </div>
 
-            <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="attendance-primary-btn">
-                Edit Attendance
+            <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="edit-attendance-btn">
+                <i class="fa-regular fa-pen-to-square"></i>
+                <span class="edit-attendance-text">Edit Attendance</span>
             </a>
         </div>
 
-        <div class="take-attendance-list">
+        <div class="attendance-summary-grid detail-summary-buttons">
+
+            <div class="attendance-summary-card success">
+                <div class="status-pill completed">
+                    <i class="fa-solid fa-user-check"></i>
+                    <strong>{{ present_count }}</strong>
+                </div>
+                <div>
+                    <span>Attended</span>
+                </div>
+            </div>
+
+            <div class="attendance-summary-card danger">
+                <div class="status-pill missed">
+                    <i class="fa-solid fa-user-xmark"></i>
+                    <strong>{{ missed_count }}</strong>
+                </div>
+                <div>
+                    <span>Missed</span>
+                </div>
+            </div>
+
+            <div class="attendance-summary-card warning">
+                <div class="status-pill pending">
+                    <i class="fa-solid fa-user-minus"></i>
+                    <strong>{{ excused_count }}</strong>
+                </div>
+                <div>
+                    <span>Excused</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="take-attendance-list mt-5">
 
             {% for attendance in attendances %}
                 <div class="take-attendance-row">
@@ -88,24 +101,18 @@
                         </div>
 
                         <div>
-                            <h3>
-                                {% if attendance.student.get_full_name %}
-                                    {{ attendance.student.get_full_name }}
-                                {% else %}
-                                    {{ attendance.student.email }}
-                                {% endif %}
-                            </h3>
+                            <h3>{{ attendance.student.get_full_name|default:attendance.student.username }}</h3>
                             <span>{{ attendance.student.email }}</span>
                         </div>
                     </div>
 
                     <div class="attendance-status">
                         {% if attendance.status == "attended" %}
-                            <span class="status-pill completed">Attended</span>
+                            <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
                         {% elif attendance.status == "missed" %}
-                            <span class="status-pill missed">Missed</span>
+                            <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
                         {% elif attendance.status == "excused" %}
-                            <span class="status-pill pending">Excused</span>
+                            <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
                         {% else %}
                             <span class="status-pill pending">{{ attendance.status|title }}</span>
                         {% endif %}
@@ -115,7 +122,6 @@
             {% empty %}
                 <p class="attendance-empty-message">No attendance has been registered for this session yet.</p>
             {% endfor %}
-
         </div>
 
     </div>

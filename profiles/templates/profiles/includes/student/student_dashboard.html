@@ -1,24 +1,20 @@
 {% load date_extras %}
 
-            <div class="row mb-4">
-                <div class="col-12 pl-0">
-                    <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
-                </div>
-            </div>
+            <header>
+                <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
+                <hr>
+            </header>
 
             <div class="row mb-5">
                 <div class="col-12 dashboard-level-pill">
                     <span class="current-level-label">My Level</span>
-
-                {% if request.user.profile.current_level %}
                     <span class="current-level-value">
+                    {% if request.user.profile.current_level %}    
                         {{ request.user.profile.get_current_level_display }}
-                    </span>
-                {% else %}
-                    <span class="current-level-value">
+                    {% else %}
                         Pending
+                    {% endif %}    
                     </span>
-                {% endif %}
                 </div>
             </div>
 
@@ -32,7 +28,7 @@
                     <div class="info">
                         {% if next_class %}
                             <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
-                            <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }}</p>
+                            <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
                             <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
                             {% if next_class.topic %} 
                             <p><strong>Topic:</strong> {{ next_class.topic }}</p>

@@ -61,7 +61,7 @@
 .wrapper-absence-details {
     border-radius: 10px;
     padding: 4px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
     /* overflow-block: visible; */
 }
@@ -203,7 +203,7 @@ main.profile-main h1 {
     min-height: 230px;
     border-radius: 10px;
     background: #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: max-content;
 }
 
@@ -246,7 +246,7 @@ main.profile-main h1 {
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .next-class-card .circle-panel1 .fa-solid {
@@ -283,7 +283,7 @@ main.profile-main h1 {
 .profile-card {
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: 340px;
     max-width: 70%;
     background: rgba(255, 255, 255, 0.9);
@@ -299,7 +299,7 @@ main.profile-main h1 {
 
 .my-course .course-card {
     border-radius: 10px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: 300px;
     background: #c1f7e3;
     position: relative;
@@ -308,7 +308,7 @@ main.profile-main h1 {
     min-height: 230px;
     border-radius: 10px;
     background: #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 
 }
 
@@ -335,7 +335,7 @@ main.profile-main h1 {
     width: 50px;
     height: 50px;
     border: solid 2px #5ff0df;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .my-course header .item .fa-regular,
@@ -380,7 +380,7 @@ main.profile-main h1 {
     min-height: 230px;
     border-radius: 10px;
     background: #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 } */
 
 .course-card .circle-panel1 {
@@ -422,7 +422,7 @@ main.profile-main h1 {
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .course-card .circle-panel1 .fa-solid {
@@ -473,11 +473,11 @@ main.profile-main h1 {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border: solid 2px #5ff0df;
     background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%);
     color: #003366;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .item-text {
@@ -527,7 +527,7 @@ main.profile-main h1 {
     /* min-height: 230px; */
     border-radius: 10px;
     background: #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .attendance-progress-card .circle-panel1 {
@@ -564,7 +564,7 @@ main.profile-main h1 {
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .circle-panel1 .fa-solid {
@@ -618,7 +618,7 @@ main.profile-main h1 {
     height: 25px;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
 }
 
@@ -657,7 +657,7 @@ main.profile-main h1 {
 .wrapper-absence-details {
     border-radius: 10px;
     padding: 8px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     width: 49%;
     background: rgba(106, 250, 225, 0.2);
 } */
@@ -703,7 +703,7 @@ main.profile-main h1 {
     max-width: 100%;
     border-radius: 10px;
     padding: 125px 20px 20px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* min-width: 340px; */
     /* width: 100%; */
     background: rgba(255, 255, 255, 0.9);
@@ -863,7 +863,7 @@ main.profile-main h1 {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .attendance-history-text {

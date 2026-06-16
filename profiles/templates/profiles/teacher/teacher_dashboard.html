@@ -24,13 +24,9 @@
             <div class="col-12 pl-0">
                 <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
             </div>
-            <hr>
 
             <div class="meta-row">
                 <div class="meta-card meta-courses">
-                    <div class="meta-icon">
-                        <i class="fa-regular fa-circle-play"></i>
-                    </div>
                     <div class="meta-text">
                         <strong>Active Courses</strong>
                         <span>{{ active_courses|default:"0" }}</span>
@@ -38,27 +34,28 @@
                 </div>
 
                 <div class="meta-card meta-students">
-                    <div class="meta-icon">
-                        {% if total_students == 1 %}
-                            <i class="fa-solid fa-user"></i>
-                        {% elif total_students >= 3 %}
-                            <i class="fa-solid fa-users"></i>
-                        {% else %}
-                            <i class="fa-solid fa-user-group"></i>
-                        {% endif %}
-                    </div>
                     <div class="meta-text">
                         <strong>Students</strong>
                         <span>{{ total_students|default:"0" }}</span>
                     </div>
                 </div>
 
+                <div class="meta-card meta-attendance">
+                    <div class="meta-text">
+                        <strong>Attendance Rate</strong>
+                        <span>
+                            {{ total_attendance_rate|default:"0" }}%
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>    
+        </div>
+        <hr>
+   
     </header>
 
 
-    <div class="wrapper-next-class-card mt-5">
+    <div class="wrapper-today-class-card mt-5">
         
         <div class="today-classes-card">
 
@@ -95,10 +92,6 @@
 
                                 </div>
                             </div>    
-                            <!-- <div class="today-students">
-                                <i class="fa-solid fa-user-group"></i>
-                                <span>{{ session.course.enrollments.all|length }} Students</span>
-                            </div> -->
 
                             {% if session.meeting_link %}
                                 <a href="{{ session.meeting_link }}" class="btn-class-today btn" target="_blank"  rel="noopener">

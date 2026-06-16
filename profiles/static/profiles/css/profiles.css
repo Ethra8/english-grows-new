@@ -92,14 +92,14 @@ main.profile-main h1,
 .wrapper-absence-details {
     border-radius: 10px;
     padding: 4px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
     /* overflow-block: visible; */
     max-width: fit-content;
 }
 
 .wrapper-next-class-card {
-    min-width: max-content;
+    min-width: fit-content;
 }
 
 
@@ -207,9 +207,10 @@ main.profile-main h1,
     box-shadow: 0 1px 2px 0 #003366;
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    font-size: 1.5rem;
-    font-weight: 700;
-    padding: 0 0 0 .25rem; 
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0 0 0 .25rem;
+    margin-top: 2rem;
 }
 
 .dashboard-level-pill .current-level-label {
@@ -220,7 +221,7 @@ main.profile-main h1,
 .dashboard-level-pill .current-level-value {
     padding: 6px 22px 6px 16px;
 
-    background: rgba(0, 103, 108, 1);
+    background: #003366;
     color: #ffffff;
 
     font-weight: 500;
@@ -236,7 +237,7 @@ main.profile-main h1,
     border-radius: 10px;
     /* background: rgba(193, 247, 227, 0.8); */
     background-color: whitesmoke;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: 290px;
     max-width: fit-content;
 }
@@ -259,7 +260,7 @@ main.profile-main h1,
 .next-class-card .circle-panel2 {
     position: absolute;
     top: -80px;
-    left: -150px;
+    left: -155px;
     width: 380px;
     height: 380px;
     border-radius: 50%;
@@ -280,7 +281,7 @@ main.profile-main h1,
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .next-class-card .circle-panel1 .fa-solid {
@@ -299,8 +300,8 @@ main.profile-main h1,
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
     margin: 3rem 1rem 0 0;
-    font-size: 2.5rem;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 600;
     line-height: 1.1;
     color: #003366;
 }
@@ -319,7 +320,7 @@ main.profile-main h1,
 .profile-card {
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: 340px;
     max-width: 70%;
     background: rgba(255, 255, 255, 0.9);
@@ -340,7 +341,7 @@ main.profile-main h1,
     display: flex;
     min-height: 230px;
     border-radius: 10px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .my-course .course-card strong {
@@ -355,7 +356,7 @@ main.profile-main h1,
     width: 50px;
     height: 50px;
     border: solid 2px #5ff0df;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .my-course header .item .fa-regular,
@@ -427,7 +428,7 @@ main.profile-main h1,
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .course-card .circle-panel1 .fa-solid {
@@ -483,7 +484,7 @@ main.profile-main h1,
     /* background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%); */
     background: #C1F7E3;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #003366;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .item-text {
@@ -541,7 +542,7 @@ main.profile-main h1,
     border-radius: 10px;
     /* background: rgba(193, 247, 227, 0.8); */
     background-color: whitesmoke;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .attendance-progress-card .circle-panel1 {
@@ -579,7 +580,7 @@ main.profile-main h1,
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(0, 51, 102, 1) 87%, rgba(0, 45, 89, 1) 100%);
     border: solid 1px #c1f7e3;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .circle-panel1 .fa-solid {
@@ -634,7 +635,7 @@ main.profile-main h1,
     height: 25px;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
 }
 
@@ -683,7 +684,7 @@ main.profile-main h1,
     max-width: 100%;
     border-radius: 10px;
     padding: 125px 20px 20px;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(255, 255, 255, 0.9);
     z-index: 2;
 }
@@ -840,7 +841,7 @@ main.profile-main h1,
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    box-shadow: 0 2px 3px 0 #003366;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .attendance-history-text {
