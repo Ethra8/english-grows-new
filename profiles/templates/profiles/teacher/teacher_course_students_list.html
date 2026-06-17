@@ -148,9 +148,29 @@
                                             </a>
                                         </div>
 
-                                        <span class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2">
+                                        <button type="button"
+                                                class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
+                                                onclick="toggleLevelForm('{{ enrollment.id }}')">
                                             {{ enrollment.student.profile.current_level|default:"?" }}
-                                        </span>
+                                        </button>  
+                                        <form method="POST"
+                                            action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
+                                            class="d-none"
+                                            id="level-form-{{ enrollment.id }}">
+
+                                            {% csrf_token %}
+
+                                            <select name="current_level">
+                                                {% for value, label in level_choices %}
+                                                    <option value="{{ value }}"
+                                                        {% if enrollment.student.profile.current_level == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <button type="submit">Save</button>
+                                        </form>                                  
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -170,6 +190,16 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script>
+function toggleLevelForm(enrollmentId) {
+    const form = document.getElementById(`level-form-${enrollmentId}`);
 
+    if (!form) {
+        return;
+    }
+
+    form.classList.toggle("d-none");
+}
+</script>
 {% endblock %}
     

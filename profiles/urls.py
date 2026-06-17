@@ -22,6 +22,7 @@ urlpatterns = [
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
     path("teacher/courses/<int:course_id>/", views.teacher_course_details, name="teacher_course_details"),
     path("teacher/courses/<int:course_id>/enrollments/", views.teacher_course_students_list, name="teacher_course_students_list"),
+    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/update-level/", views.update_student_level, name="update_student_level"),
 
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),

@@ -915,6 +915,7 @@ def teacher_course_students_list(request, course_id):
         "average_attendance": average_attendance,
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
+        "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
     return render(
@@ -922,6 +923,41 @@ def teacher_course_students_list(request, course_id):
         "profiles/teacher/teacher_course_students_list.html",
         context
     )
+
+
+@login_required
+def update_student_level(request, course_id, enrollment_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment,
+        id=enrollment_id,
+        course=course
+    )
+
+    profile = enrollment.student.profile
+
+    if request.method == "POST":
+        new_level = request.POST.get("current_level")
+
+        valid_levels = [level[0] for level in UserProfile.LEVEL_CHOICES]
+
+        if new_level in valid_levels:
+            profile.current_level = new_level
+            profile.save()
+            messages.success(request, "Student level updated successfully.")
+        else:
+            messages.error(request, "Invalid level selected.")
+
+    return redirect(
+        "profiles:teacher_course_students_list",
+        course_id=course.id
+    )
+
 
 
 @login_required
