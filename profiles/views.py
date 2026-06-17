@@ -925,6 +925,111 @@ def teacher_course_students_list(request, course_id):
     )
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
+
+from courses.models import Course, CourseEnrollment, Attendance
+from .models import UserProfile
+
+
+@login_required
+def teacher_student_detail(request, course_id, enrollment_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    attendances = (
+        Attendance.objects
+        .filter(
+            student=student,
+            class_session__course=course
+        )
+        .select_related("class_session")
+        .order_by("-class_session__start_time")
+    )
+
+    total_attendance_records = attendances.count()
+    attended_count = attendances.filter(status="attended").count()
+    missed_count = attendances.filter(status="missed").count()
+    excused_count = attendances.filter(status="excused").count()
+   
+    completed_classes = course.class_sessions.filter(
+        start_time__lt=timezone.now(),
+        is_cancelled=False,
+    ).count()
+
+    if total_attendance_records > 0:
+        attendance_percentage = round(
+            (attended_count / completed_classes) * 100
+        )
+    else:
+        attendance_percentage = 0
+
+
+    total_classes = course.number_of_classes or course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    remaining_classes = max(total_classes - completed_classes, 0)
+
+    if total_classes > 0:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+    else:
+        completion_percentage = 0
+
+    recent_attendance = attendances[:5]
+
+    context = {
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
+
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "total_classes": total_classes,
+        "completion_percentage": completion_percentage,
+
+        "recent_attendance": recent_attendance,
+        "active_tab": "overview",
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_student_detail.html",
+        context
+    )
+
+
+
 @login_required
 def update_student_level(request, course_id, enrollment_id):
     course = get_object_or_404(
@@ -954,8 +1059,9 @@ def update_student_level(request, course_id, enrollment_id):
             messages.error(request, "Invalid level selected.")
 
     return redirect(
-        "profiles:teacher_course_students_list",
-        course_id=course.id
+        "profiles:teacher_student_detail",
+        course_id=course.id,
+        enrollment_id=enrollment.id
     )
 
 

@@ -63,20 +63,6 @@
             </div>
         </div>
 
-        <!-- <div class="course-meta-card meta-attendance">
-            <div class="course-meta-icon">
-                <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
-            </div>
-            <div class="course-meta-text">
-                <strong>Attendance</strong>
-                <span>
-                    {% if average_attendance < 70 %}
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    {% endif %}
-                    {{ average_attendance }}%
-                </span>
-            </div>
-        </div> -->
         <div class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
@@ -264,6 +250,10 @@
                             <div class="student-row-parent">
                                 {% for enrollment in enrollments %}
                                     <div class="student-row">
+                                        <span class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2">
+                                            {{ enrollment.student.profile.current_level|default:"?" }}
+                                        </span>
+
                                         <div>
                                             <strong>
                                                 {{ enrollment.student.get_full_name|default:enrollment.student.username }}
@@ -272,10 +262,6 @@
                                                 <span>{{ enrollment.student.email }}</span>
                                             </a>
                                         </div>
-
-                                        <span class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2">
-                                            {{ enrollment.student.profile.current_level|default:"?" }}
-                                        </span>
                                     </div>
                                 {% endfor %}
                             {% else %}

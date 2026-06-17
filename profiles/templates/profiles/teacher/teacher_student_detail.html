@@ -1,0 +1,359 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+{% load course_extras %}
+
+
+{% block extra_title %}| Student Page {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+
+<section class="teacher-student-detail-page">
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    <div class="mb-4">
+        <a href="{% url 'profiles:teacher_course_students_list' course.id %}" class="text-white">
+            <i class="fa-solid fa-arrow-left-long mr-3"></i>
+            Back to Course Students
+        </a>
+    </div>
+
+    <!-- Header -->
+    <div class="student-detail-header">
+
+        <div class="student-main-info">
+
+            <div class="student-avatar-large">
+                {% if student_profile.profile_photo %}
+                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
+                {% else %}
+                    <i class="fa-solid fa-user"></i>
+                {% endif %}
+            </div>
+
+            <div>
+                <h1>
+                    {{ student.get_full_name|default:student.username }}
+                </h1>
+
+                <p>{{ student.email }}</p>
+
+                <div class="student-meta-line">
+                    <span>
+                        <i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Student" }}
+                    </span>
+
+                    <span class="student-active-dot"></span>
+                    <span>Active</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="student-header-actions">
+
+            <a href="mailto:{{ student.email }}" class="student-action-btn">
+                <i class="fa-regular fa-envelope mr-2"></i>
+                Message
+            </a>
+
+            <a href="#" class="student-action-btn">
+                <i class="fa-solid fa-pen mr-2"></i>
+                Edit Profile
+            </a>
+
+            <a href="#" class="student-action-btn student-action-btn-green">
+                <i class="fa-regular fa-calendar-check mr-2"></i>
+                Attendance
+            </a>
+
+            <div class="student-level-area">
+                <small>Current Level</small>
+
+                <button type="button"
+                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mr-2"
+                        onclick="toggleLevelForm('{{ enrollment.id }}')">
+                    {{ student_profile.current_level|default:"?" }}
+                </button>
+
+                <form method="POST"
+                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
+                      class="d-none student-level-form"
+                      id="level-form-{{ enrollment.id }}">
+
+                    {% csrf_token %}
+
+                    <select name="current_level">
+                        {% for value, label in level_choices %}
+                            <option value="{{ value }}"
+                                {% if student_profile.current_level == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Inside navbar -->
+    <nav class="student-detail-tabs">
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}"
+           class="{% if active_tab == 'overview' %}active{% endif %}">
+            Overview
+        </a>
+
+        <a href="#">
+            Progress
+        </a>
+
+        <a href="#">
+            Courses
+        </a>
+
+        <a href="#">
+            Notes
+        </a>
+
+        <a href="#">
+            History
+        </a>
+    </nav>
+
+    <!-- Overview content -->
+    <div class="student-overview-grid">
+
+                        <!-- Current Course -->
+        <article class="student-detail-card">
+            <h2>
+                <!-- <i class="fa-solid fa-briefcase mr-2"></i> -->
+                Current Course
+            </h2>
+
+            <div class="current-course-block">
+
+                <div class="course-icon-box">
+                    <!-- <i class="fa-solid fa-briefcase"></i> -->
+                </div>
+
+                <div>
+                    <h3>{{ course.name }}</h3>
+                    <hr>
+                    <div class="student-course-details">
+                        <div class="detail-row">
+                            <span>Course Type</span>
+                            <strong>{{ course.course_type|default:"Not assigned" }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Teacher</span>
+                            <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Total Hours</span>
+                            <strong>{{ course.total_hours|clean_decimal }} h.</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Class Duration</span>
+                            <strong>{{ course.class_duration_display|default:"Not assigned" }}</strong>
+                        </div>
+
+                        {% if course.has_short_final_class %}
+                            <div class="detail-row">
+                                <span>
+                                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                                    Last Class Duration:
+                                </span>
+                                <span>{{ course.final_class_duration_display }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="detail-row">
+                            <span>TOTAL Classes</span>
+                            <strong>{{ total_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Past Classes</span>
+                            <strong>{{ completed_classes }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="{% url 'profiles:teacher_course_details' course.id %}" class="student-card-link">
+                View course details
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </article>
+
+        <!-- Attendance Overview -->
+        <article class="student-detail-card">
+            <h2>
+                <i class="fa-regular fa-calendar-check mr-2"></i>
+                Attendance Overview
+            </h2>
+
+            <div class="student-ring-layout">
+
+                <div class="progress-ring"
+                     style="--percentage: {{ attendance_percentage }};">
+                    <div class="progress-ring-inner">
+                        <strong>{{ attendance_percentage }}%</strong>
+                        <span>Attendance</span>
+                    </div>
+                </div>
+
+                <div class="student-stat-list">
+                    <div class="detail-row">
+                        <span>Attended:</span>
+                        <strong>{{ attended_count }} / {{ completed_classes }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Missed:</span>
+                        <strong>{{ missed_count }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Excused:</span>
+                        <strong>{{ excused_count }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Past Classes:</span>
+                        <strong>{{ completed_classes }}</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="#" class="student-card-link">
+                View full attendance
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </article>
+
+        <!-- Course Progress -->
+        <article class="student-detail-card">
+            <h2>
+                <i class="fa-solid fa-chart-simple mr-2"></i>
+                Course Progress
+            </h2>
+
+            <div class="student-ring-layout">
+
+                <div class="progress-ring"
+                     style="--percentage: {{ completion_percentage }};">
+                    <div class="progress-ring-inner">
+                        <strong>{{ completion_percentage }}%</strong>
+                        <span>Completed</span>
+                    </div>
+                </div>
+
+                <div class="student-stat-list">
+                    <div class="detail-row">
+                        <span>Completed Classes:</span>
+                        <strong>{{ completed_classes }} / {{ total_classes }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Remaining Classes:</span>
+                        <strong>{{ remaining_classes }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Total Classes:</span>
+                        <strong>{{ total_classes }}</strong>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Course Completion:</span>
+                        <strong>{{ completion_percentage }}%</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="#" class="student-card-link">
+                View detailed progress
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </article>
+
+        <!-- Recent Attendance -->
+        <article class="student-detail-card">
+            <h2>
+                <i class="fa-solid fa-list-check mr-2"></i>
+                Recent Attendance
+            </h2>
+
+            <div class="recent-attendance-list">
+
+                {% for attendance in recent_attendance %}
+                    <div class="recent-attendance-row">
+
+                        <div>
+                            {% if attendance.status == "attended" %}
+                                <i class="fa-solid fa-check attendance-icon attended"></i>
+                            {% elif attendance.status == "missed" %}
+                                <i class="fa-solid fa-xmark attendance-icon missed"></i>
+                            {% elif attendance.status == "excused" %}
+                                <i class="fa-solid fa-minus attendance-icon excused"></i>
+                            {% endif %}
+                        </div>
+
+                        <div class="recent-attendance-info">
+                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small>
+                            <span>
+                                Lesson {{ attendance.class_session.class_number }}
+                                · {{ course.name }}
+                            </span>
+                        </div>
+
+                        <span class="attendance-status-pill status-{{ attendance.status }}">
+                            {{ attendance.get_status_display }}
+                        </span>
+
+                    </div>
+                {% empty %}
+                    <p class="text-white-50">No attendance records yet.</p>
+                {% endfor %}
+
+            </div>
+
+            <a href="#" class="student-card-link">
+                View all attendance
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </article>
+
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

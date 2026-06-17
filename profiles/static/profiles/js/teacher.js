@@ -277,3 +277,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+// UPDATE STUDENT LEVEL Form
+function toggleLevelForm(enrollmentId) {
+    const form = document.getElementById(`level-form-${enrollmentId}`);
+
+    if (!form) {
+        return;
+    }
+
+    form.classList.toggle("d-none");
+}

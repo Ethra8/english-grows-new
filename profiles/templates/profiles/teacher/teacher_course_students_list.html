@@ -63,20 +63,6 @@
             </div>
         </div>
 
-        <!-- <div class="course-meta-card meta-attendance">
-            <div class="course-meta-icon">
-                <div class="completion-ring" style="--completion: {{ average_attendance }};"></div>
-            </div>
-            <div class="course-meta-text">
-                <strong>Attendance</strong>
-                <span>
-                    {% if average_attendance < 70 %}
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    {% endif %}
-                    {{ average_attendance }}%
-                </span>
-            </div>
-        </div> -->
         <div class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
@@ -139,15 +125,6 @@
                             <div class="student-row-parent">
                                 {% for enrollment in enrollments %}
                                     <div class="student-row">
-                                        <div>
-                                            <strong>
-                                                {{ enrollment.student.get_full_name|default:enrollment.student.username }}
-                                            </strong>
-                                            <a href="mailto: {{ enrollment.student.email }}">
-                                                <span>{{ enrollment.student.email }}</span>
-                                            </a>
-                                        </div>
-
                                         <button type="button"
                                                 class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
                                                 onclick="toggleLevelForm('{{ enrollment.id }}')">
@@ -171,8 +148,28 @@
 
                                             <button type="submit">Save</button>
                                         </form>                                  
+
+
+                                        <div>
+                                            <strong>
+                                                {{ enrollment.student.get_full_name|default:enrollment.student.username }}
+                                            </strong>
+                                            <a href="mailto: {{ enrollment.student.email }}">
+                                                <span>{{ enrollment.student.email }}</span>
+                                            </a>
+                                        </div>
+
+
+                                        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="btn-to-student-detail">
+                                            <i class="fa-regular fa-eye mr-2"></i>
+                                            View
+                                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                                        </a>
+
                                     </div>
+
                                 {% endfor %}
+
                             {% else %}
                                 <p class="text-white">No students enrolled yet.</p>
                             {% endif %}
@@ -190,16 +187,5 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
-<script>
-function toggleLevelForm(enrollmentId) {
-    const form = document.getElementById(`level-form-${enrollmentId}`);
-
-    if (!form) {
-        return;
-    }
-
-    form.classList.toggle("d-none");
-}
-</script>
 {% endblock %}
     
