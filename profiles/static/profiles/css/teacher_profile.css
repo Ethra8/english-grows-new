@@ -3,6 +3,8 @@
 .teacher-dashboard,
 .teacher-classes-list,
 .assigned-courses,
+.teacher-course-details,
+.teacher-course-students-list,
 .teacher-attendance-page {
     padding: 70px 5%;
     width: 100%;
@@ -13,6 +15,8 @@
 /* *** HEADERS *******************************************************/
 .teacher-classes-list header h1,
 .assigned-courses header h1,
+.teacher-course-details header h1,
+.teacher-course-students-list header h1,
 .teacher-dashboard header h1,
 .teacher-attendance-page header h1 {
     color: whitesmoke;
@@ -79,7 +83,7 @@
 
     border: 1.5px solid rgba(94, 242, 220, 0.35);
     border-radius: 50px;
-    background-color: rgba(0, 51, 102, 0.7);
+    background-color: rgba(0, 51, 102, 0.85);
 
     /* background: rgba(193, 247, 227, 0.65); */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -151,34 +155,54 @@
 .course-meta-text span {
     /* color: #ffffff; */
     color: rgba(94, 242, 220, 0.9);
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 400;
+}
+
+.course-details-info-icon {
+    z-index: 1;
+
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    /* background: rgba(0, 104, 107, 0.9); */
+    background-color: rgba(0, 51, 102, 0.6);
+    border: 1px solid rgba(94, 242, 220, 0.35);
+}
+
+.course-details-info-icon i {
+    color: rgba(94, 242, 220, 0.9);
+    font-size: 1rem;
 }
 
 
 
-
 /* *** LEVELS PILLS for Teacher_classes_List / Teacher_courses ******/
-/* Beginner */
+
 .level-a1 {
     color: whitesmoke;
     background: rgba(114, 255, 117, 0.75);
-    border-color: rgba(127, 255, 212, 0.5);
+    border: outset 1px rgba(127, 255, 212, 0.5);
 }
 
 .level-a2 {
     color: whitesmoke;
     background: rgba(255, 147, 114, 0.75);
-    border-color: rgba(127, 255, 212, 0.5);
+    border: outset 1px rgba(127, 255, 212, 0.5);
 }
 
-/* Intermediate */
 .level-b1,
 .level-b11,
 .level-b12 {
     color: whitesmoke;
     background: rgba(24, 77, 250, 0.75);
-    border-color: rgba(106, 250, 225, 0.55);
+    border: outset 1px rgba(106, 250, 225, 0.55);
 }
 
 .level-b2,
@@ -186,33 +210,30 @@
 .level-b22 {
     color: whitesmoke;
     background: rgba(122, 1, 182, 0.75);
-    border-color: rgba(106, 250, 225, 0.55);
+    border: outset 1px rgba(106, 250, 225, 0.55);
 }
 
-/* Advanced */
 .level-c1,
 .level-c11,
 .level-c12 {
     color: whitesmoke;
     background: rgba(1, 138, 88, 0.75);
-    border-color: rgba(193, 247, 227, 0.65);
+    border: outset 1px rgba(193, 247, 227, 0.65);
 }
 
-/* Proficiency */
 .level-c2,
 .level-c21,
 .level-c22 {
     color: whitesmoke;
     background: rgba(203, 255, 60, 0.75);
-    border-color: rgba(193, 247, 227, 0.65);
+    border: outset 1px rgba(193, 247, 227, 0.65);
 }
 
-/* Pending Level / Unknown */
 .level-pending,
 .level-unknown {
     color: whitesmoke;
     background: rgba(83, 85, 86, 0.5);
-    border-color: rgba(216, 231, 239, 0.35);
+    border: outset 1px rgba(216, 231, 239, 0.35);
 }
 
 /* *** BUTTONS ************************************************** */
@@ -227,7 +248,7 @@
     border-radius: 8px;
     text-decoration: none;
     font-weight: 400;
-    width: max-content !important;
+    width: max-content;
     display: flex;
     justify-content: space-between;
     background: rgba(94, 234, 212, 0.1);
@@ -435,7 +456,7 @@ header .extra .item-text span {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(94, 242, 220, 0.1);
     position: absolute;
     top: 30px;
     right: -5px;
@@ -448,21 +469,22 @@ header .extra .item-text span {
     font-weight: 900;
     font-size: 5.5rem;
     /* color: rgba(106, 250, 225, 0.3); */
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(94, 242, 220, 0.1);
     position: absolute;
     top: 35px;
     right: 15px;
 }
 
-.teacher-dashboard header .meta-card.meta-attendance::after {
+.teacher-dashboard header .meta-card.meta-attendance::after,
+.teacher-course-details .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
     /* color: rgba(106, 250, 225, 0.3); */
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(94, 242, 220, 0.1);
     position: absolute;
-    top: 35px;
+    top: 25px;
     right: -5px;
     rotate: calc(-15deg);
 }
@@ -757,33 +779,6 @@ header .extra .item-text span {
     display: none;
 }
 
-/* .classes-filter-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-} */
-
-/* .classes-filter-btn {
-    border: 1px solid #5eead4;
-    background: transparent;
-    color: #6afae1;
-    border-radius: 10px;
-    padding: 0.65rem 1.1rem;
-    font-weight: 400;
-    font-size: 1.1rem;
-    cursor: pointer;
-}
-
-.classes-filter-btn.active,
-.classes-filter-btn:hover {
-    background: #009b9b;
-    color: #fff;
-}
-
-.classes-list-filter {
-    display: none;
-} */
-
 .assigned-courses-icon {
     width: 45px;
     height: 45px;
@@ -803,8 +798,6 @@ header .extra .item-text span {
 }
 
 .course-status-filter {
-    /* background: #c1f7e3;
-    border: 1px solid #008b87; */
     border-radius: 10px;
     padding: .6rem 2.5rem .6rem 1rem;
     color: #003366;
@@ -905,20 +898,16 @@ header .extra .item-text span {
     margin: .45rem 0;
 }
 
-.assigned-course-level {
-    /* background: rgba(94, 234, 212, 0.15); */
+/* .assigned-course-level {
     padding: 0 0.5rem;
     height: 100%;
     min-height: auto;
     align-content: center;
-}
+} */
 
 .assigned-course-level span.status-badge, 
 .course-main-info span.status-badge,
-.class-main-info span.status-badge
-.course-main-info span.level,
-.class-main-info span.level,
-.today-course span.level {
+.class-main-info span.status-badge {
     border: 1px solid rgba(94, 234, 212, 0.5);
     border-radius: 20px;
     padding: 0.2rem 1rem !important;
@@ -985,14 +974,13 @@ header .extra .item-text span {
 .course-actions .btn {
     white-space: nowrap;
 }
-
-
 /* END Course BY STATUS ***************** */
 
 
-/*****************************************
-**** COURSE_DETAIL Page *****************
-**************************************** */
+
+/*****************************************|
+|**** COURSE_DETAIL Page *****************|
+|*****************************************/
 
 .back-to-my-assigned-courses,
 .back-to-my-assigned-courses a,
@@ -1009,14 +997,50 @@ header .extra .item-text span {
     cursor: pointer;
 }
 
-/* META FOR Course Datisl PAge */
+.teacher-course-details header .header-last-child,
+.teacher-course-students-list header .header-last-child {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.teacher-course-details header .header-last-child > div:first-child,
+.teacher-course-students-list header .header-last-child > div:first-child {
+    display: flex;
+}
+
+.teacher-course-details header h2,
+.teacher-course-students-list header h2 {
+    color: #c1f7e3;
+    /* font-family: "Big Shoulders Display", sans-serif; */
+    font-size: 1.1rem;
+    /* border-top: #003366 1.5px solid; */
+    /* width: fit-content; */
+    margin-top: 0;
+    padding-top: 0;
+    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+}
+
+.teacher-course-details header .header-last-child > div:last-child,
+.teacher-course-students-list header .header-last-child > div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.teacher-course-details header .header-last-child span,
+.teacher-course-students-list header .header-last-child span {
+    width: 50px;
+}
+
+/* META: Course Details Page *********************/
 /* Level background icon */
 .course-meta-card.meta-level::after {
     content: "\f5fd"; /* fa-layer-group */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.3);
+    color: rgba(106, 250, 225, 0.1);
     position: absolute;
     top: 35px;
     right: -5px;
@@ -1028,7 +1052,7 @@ header .extra .item-text span {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.3);
+    color: rgba(106, 250, 225, 0.1);
     position: absolute;
     top: 35px;
     right: -5px;
@@ -1048,8 +1072,8 @@ header .extra .item-text span {
 
     background:
         conic-gradient(
-            rgba(94, 242, 220, 0.3) 0deg 70deg,
-            rgba(94, 242, 220, 0.12) 70deg 360deg
+            rgba(94, 242, 220, 0.15) 0deg 70deg,
+            rgba(94, 242, 220, 0.07) 70deg 360deg
         );
 
     opacity: 1;
@@ -1065,8 +1089,46 @@ header .extra .item-text span {
 
 }
 
+.metric-icon {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            #5fffea calc(var(--percentage) * 1%),
+            rgba(105, 255, 235, 0.18) 0
+        );
+}
+
+.progress-ring::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: #043f68;
+}
+
+.metric-icon i {
+    position: relative;
+    z-index: 2;
+    color: #5fffea;
+    font-size: 1.2rem;
+}
+
+/* PAGE GRID CONFIG */
 .course-details-two-col {
     width: 100%;
+    margin-top: 4rem;
 }
 
 .course-details-masonry {
@@ -1087,46 +1149,26 @@ header .extra .item-text span {
 
 /* LEFT COLUMN boxes */
 .wrapper-course-details:nth-child(1),
-.wrapper-course-details:nth-child(2),
-.wrapper-course-details:nth-child(3) {
+.wrapper-course-details:nth-child(2) {
     grid-column: 1;
 }
 
 /* RIGHT COLUMN: Student List */
-.wrapper-course-details:nth-child(4) {
+.wrapper-course-details:nth-child(3) {
     grid-column: 2;
     grid-row: 1 / span 3;
 }
 
-.course-details-child {
-    width: 100%;
+/* BOTH COLUMNS */
+.wrapper-course-details h4 i {
+    color: #c1f7e3 ;
 }
 
 .course-detail-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
-
-.course-detail-item {
-    background: rgba(0, 51, 102, 0.45);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    color: #fff;
-}
-
-.wrapper-course-details h4 i {
-    color: #c1f7e3 ;
-}
-
-/* .course-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-} */
 
 .course-detail-item {
     background: rgba(0, 51, 102, 0.45);
@@ -1134,6 +1176,8 @@ header .extra .item-text span {
     border: 1px solid rgba(94, 234, 212, 0.25);
     padding: 1rem 1.25rem;
     color: #fff;
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .course-detail-item strong {
@@ -1177,7 +1221,7 @@ header .extra .item-text span {
     align-items: center;
     width: 100%;
     gap: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid rgba(94, 234, 212, 0.2);
 }
 
@@ -1185,6 +1229,14 @@ header .extra .item-text span {
 .student-row:last-child {
     border-bottom: none;
 }
+
+/* .detail-row strong {
+    color: #5eead4;
+    font-weight: 500;
+    position: relative;
+    top: -10px;
+    left: 1rem;
+} */
 
 .detail-row span:first-child {
     color: #5eead4;
@@ -1197,82 +1249,13 @@ header .extra .item-text span {
     text-align: left;
 }
 
-/* **** TIMELINE COURSE COMPLETION */
-.classes-timeline-card {
-    background: rgba(0, 51, 102, 0.85);
-    border: 1px solid rgba(92, 255, 231, 0.45);
-    border-radius: 10px;
-    padding: 1.5rem;
-    color: #fff;
-    border: 1px solid rgba(94, 234, 212, 0.8);
-}
-
-.timeline-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.timeline-header h3 {
-    color: #c1f7e3;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-size: 1.8rem;
-    font-weight: 400;
-    margin-bottom: 0.25rem;
-}
-
-.timeline-header p {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.9rem;
-}
-
-.timeline-header strong {
-    font-family: "Big Shoulders Display", sans-serif;
-    color: #5cffe7;
-    font-size: 1.35rem;
-    letter-spacing: 0.03em;
-}
-
-.classes-progress-bar {
-    width: 100%;
-    height: 14px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.classes-progress-fill {
-    width: var(--progress-width);
-    height: 100%;
-    background: #5cffe7;
-    border-radius: 999px;
-}
-
-.timeline-labels {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 0.85rem;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.82);
-}
-
-.timeline-labels i {
-    color: #5cffe7;
-    margin-right: 0.35rem;
-}
-/* ***** END TIMELINE */
-
 .course-details-child {
     background: rgba(0, 51, 102, 0.82);
     border-radius: 10px;
     margin: 0;
     padding: 1rem 1.5rem;
     border: 1px solid rgba(94, 234, 212, 0.8);
+    width: 100%;
 }
 
 .course-details-child h3 {
@@ -1282,11 +1265,12 @@ header .extra .item-text span {
     letter-spacing: 0.03em;
 }
 
-.student-list-header {
+.student-list-header-buttons {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content:flex-start;
     gap: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .student-row-parent {
@@ -1294,6 +1278,8 @@ header .extra .item-text span {
     padding: 0 1.25rem;
     border-radius: 10px;
     border: 1px solid rgba(94, 234, 212, 0.2);
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .student-row {
@@ -1314,22 +1300,10 @@ header .extra .item-text span {
 }
 
 .student-row span {
-    display: block;
     color: #c1f7e3;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1rem;
-    align-items: center;
 }
 
-.student-level {
-    background: rgba(94, 234, 212, 0.15);
-    border: 1px solid rgba(94, 234, 212, 0.5);
-    border-radius: 20px;
-    padding: 0.35rem 0.9rem;
-    color: #5eead4 !important;
-    font-weight: 700;
-}
 
 /*****************************************
 **** COURSE_DETAIL Page *****************
@@ -1354,7 +1328,7 @@ header .extra .item-text span {
     margin: 0;
     color: whitesmoke;
     font-size: 1.1rem;
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 1rem 0.25rem 0;
 }
 
 /* Summary cards */
@@ -1491,7 +1465,7 @@ header .extra .item-text span {
     display: none;
 }
 
-.attendance-level {
+.level {
     width: 48px;
     height: 48px;
     border-radius: 9px;
@@ -1501,6 +1475,7 @@ header .extra .item-text span {
     justify-content: center;
     color: whitesmoke;
     font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .attendance-class-info h3 {
@@ -1905,13 +1880,28 @@ header .extra .item-text span {
 }
 
 
+@media (max-width: 1367px) {
+    /* left column in Course Details page */
+    .detail-row {
+        grid-template-columns: 1fr;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+    }
+
+}
+
 
 @media (max-width: 1250px) {
 
     .teacher-dashboard,
     .teacher-classes-list,
-    .assigned-courses {
-        padding: 70px 2%;
+    .assigned-courses,
+    .teacher-course-students-list,
+    .teacher-course-details {
+        padding: 70px 4%;
     }
 
     /* Today's Classes ********** */
@@ -1976,6 +1966,33 @@ header .extra .item-text span {
         gap: 1.2rem;
     }
 
+    /* COURSE DETAILS Page */
+    /* .detail-row {
+        grid-template-columns: 1fr;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+    } */
+
+    .student-list-header-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
+
+    /* .student-list-header-buttons a {
+        margin: 0 1.5rem 0.5rem; 
+    } */
+
+    .student-row {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row-reverse;
+    }
+
     /* ATTENDANCE Page ******************************* */
     .teacher-attendance-page {
         margin-left: 0;
@@ -2002,33 +2019,21 @@ header .extra .item-text span {
 
 @media (max-width: 992px) {
 
-    .teacher-dashboard,
+    /* .teacher-dashboard,
     .teacher-classes-list,
     .assigned-courses,
+    .teacher-course-details,
     .teacher-attendance-page {
         padding: 70px 2%;
-    }
-    
-    .teacher-attendance-page header {
-        padding-left: 4%;
-        padding-right: 4%;
-    }
-
-    .teacher-dashboard header h1,
-    .teacher-classes-list header h1,
-    .assigned-courses header h1, 
-    .teacher-attendance-page header h1 {
-        margin: 0;
-        text-align: center;
-    }
+    } */
 
     .teacher-dashboard header .meta-row {
         gap: 0.5rem;
     }
 
     .teacher-dashboard header .meta-card {
-        padding: 0.15rem 1rem 0.15rem 1.5em;
-        border-radius: 10px;
+        padding: 0.15rem 1rem 0.15rem 2.5em;
+        /* border-radius: 10px; */
     }
 
     /* ASSIGNED COURSES & CLASSES LIST Pages ***********************/
@@ -2043,10 +2048,7 @@ header .extra .item-text span {
         width: fit-content;
         justify-content: stretch;
         display: block;
-        background: rgba(94, 234, 212, 0.75);
-        color: #003366;
         padding: 0.5rem 1rem;
-        border-radius: 8px;
     }
 
     .course-status-buttons,
@@ -2076,6 +2078,18 @@ header .extra .item-text span {
         grid-column: 1;
         grid-row: auto;
     }
+
+    .student-list-header-buttons {
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .student-list-header-buttons a {
+        margin: 0 1.5rem 0.5rem; 
+    }
+
 
     /* ATTENDANCE Page **********************************/
     .attendance-summary-grid.two-cards {
@@ -2136,7 +2150,6 @@ header .extra .item-text span {
     .take-attendance-save-bar .attendance-secondary-btn {
         width: 100%;
     }
-    
 
 }
 
@@ -2166,13 +2179,27 @@ header .extra .item-text span {
     }
 
     .btn-class-today {
-        width: 100% !important;
-        margin: 0 auto;
+        width: calc(100% - 3rem);
+        margin: 1.5rem;
+        box-sizing: border-box;    
     }
 
     .wrapper-assigned-classes-panel,
     .wrapper-assigned-courses-panel {
         margin: 0 auto;
+    }
+
+    /* COURSE DETAILS Page ***********************/
+    .classes-timeline-card {
+        grid-template-columns: 1fr 1fr;
+        gap: 0rem;
+        border-radius: 10px;
+        padding: 1.5rem 2rem;
+    }
+
+    .timeline-header .progress-data {
+        grid-template-columns: 1fr;
+        display: grid;
     }
 
     .course-detail-grid {
@@ -2185,10 +2212,6 @@ header .extra .item-text span {
 
     .course-header-meta-row {
         grid-template-columns: repeat(1, 1fr);
-    }
-
-    .teacher-dashboard header .meta-card {
-        border-radius: 50px;
     }
 
     .course-meta-card {
@@ -2256,11 +2279,27 @@ header .extra .item-text span {
 
 
 @media (max-width: 576px) {
+    
+    .teacher-dashboard header,
+    .teacher-classes-list header,
+    .assigned-courses header,
+    .teacher-course-details header,
+    .teacher-course-students-list header,    
+    .teacher-attendance-page header {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
 
     .teacher-dashboard header .meta-row,
     .teacher-dashboard .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
+
+    .teacher-dashboard header .meta-card {
+        padding: 0.15rem 1rem 0.15rem 1rem;
+        border-radius: 10px;
+    }
+
 
     /* Course Assigned BY STATUS */
 
@@ -2286,6 +2325,12 @@ header .extra .item-text span {
     /* COURSE DETAILS page ***************/
 
     /* Timeline Course completion */
+
+    .classes-timeline-card {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
     .timeline-header {
         flex-direction: column;
     }
@@ -2296,8 +2341,31 @@ header .extra .item-text span {
     }
 
     .detail-row {
-        grid-template-columns: 1fr;
         gap: 0.25rem;
+    }
+
+    .course-details-child {
+        padding: 0;
+    }
+
+    .course-details-child h3 {
+        padding: 1rem 1.5rem;
+        /* margin-bottom: 1.5rem; */
+    }
+
+    .student-list-header-buttons {
+        flex-direction: column;
+        gap: 0;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
+
+    .course-details-child .student-list-header h3 {
+        padding: 1.5rem 1rem 0.5rem 1.5rem;
+    }
+
+    .student-list-header-buttons a {
+        margin: 0 1.5rem 0.5rem; 
     }
 
     /* ** ATTENDANCE Page */
@@ -2305,8 +2373,15 @@ header .extra .item-text span {
         padding: 2rem 1rem;
     }
     
+    .teacher-classes-list header h1,
+    .assigned-courses header h1,
+    .teacher-course-details header h1,
+    .teacher-course-students-list header h1,
+    .teacher-dashboard header h1,
     .teacher-attendance-page header h1 {
-        font-size: 2.3rem;
+        margin-left: 0%;
+        padding-left: 0%;
+        font-size: 2rem;
     }
 
     .attendance-summary-card {

@@ -16,7 +16,7 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="teacher-course-details">    
+<section class="teacher-course-students-list">    
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
         
@@ -24,9 +24,9 @@
         <div class="row mb-3">
             <div class="col-12 mb-2">
                 <p class="back-to-my-assigned-courses">
-                    <a href="{% url 'profiles:teacher_courses' %}" class="text-white">
+                    <a href="{% url 'profiles:teacher_course_details' course.id %}" class="text-white">
                         <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                        Back to My Courses
+                        Back to Course Details
                     </a>
                 </p>
             </div>
@@ -103,133 +103,8 @@
         </div>
     </div>
 
-    <div class="course-details-two-col">
-        <!-- LEFT COLUMN -->
-        <div class="course-details-masonry">
-            <div class="wrapper-course-details">
-   
-                <div class="course-details-child">
-                    
-                    <h3 class="mt-3 mb-3"><i class="fa-regular fa-calendar-days mr-3"></i>Dates & Timetable</h3>
-                    
-                    <div class="course-detail-grid">          
-                        <div class="course-detail-item">
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-regular fa-calendar mr-2"></i>
-                                    Start Date:
-                                </span>
-                                <span>
-                                    {{ course.start_date|date:"D, j M"|default:"Not assigned" }}
-                                </span>
-                            </div>
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-regular fa-calendar mr-2"></i>
-                                    End Date:
-                                </span>
-                                <span>
-                                    {{ course.end_date|date:"D, j M"|default:"Not assigned" }}
-                                </span>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-regular fa-clock mr-2"></i>
-                                    Timetable:
-                                </span>
-
-                                <span>
-                                    {% if formatted_timetable %}
-                                        {% for timetable in formatted_timetable %}
-                                            {{ timetable.days }}
-                                            <br>
-                                            {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        Not assigned
-                                    {% endif %}
-                                </span>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
-                                    Class Duration:
-                                </span>
-                                <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
-                            </div>
-
-                            {% if course.has_short_final_class %}
-                                <div class="detail-row">
-                                    <span>
-                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                                        Last Class Duration:
-                                    </span>
-                                    <span>{{ course.final_class_duration_display }}</span>
-                                </div>
-                            {% endif %}
-
-                        </div>                
-                    </div>
-                        
-                </div>
-            </div>
-
-            <div class="wrapper-course-details">
-
-                <div class="course-details-child">
-                    
-                    <h3><i class="fa-solid fa-circle-info mr-3 mt-3"></i>General Info</h3>
-                    <div class="course-detail-grid">
-                        <div class="course-detail-item">
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-building mr-2"></i>
-                                    Company:
-                                </span>
-                                <span>{{ course.company|default:"Individual course" }}</span>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-arrows-rotate mr-2"></i>
-                                    Total Hours:
-                                </span>
-                                <span>{{ course.total_hours|clean_decimal }} h.</span>
-                            </div>
-                        </div>
-                        <div class="course-detail-item">
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-chalkboard-user mr-2"></i>
-                                    Total Classes:
-                                </span>
-                                <span>{{ course.number_of_classes|default:"Not assigned" }}</span>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-rotate-left mr-2"></i>
-                                    Completed Classes:
-                                </span>
-                                <span>{{ completed_classes|default:"0" }}</span>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-rotate-right mr-2"></i>
-                                    Remaining Classes:
-                                </span>
-                                <span>{{ remaining_classes|default:"0" }}</span>
-                            </div>
-
-                        </div>                
-                    </div>
-                </div>
-            </div>
+    <!-- <div class="course-details-two-col">
+        <div class="course-details-masonry"> -->
 
             <!-- RIGHT COLUMN -->
             <div class="wrapper-course-details">
@@ -250,11 +125,11 @@
                                 <i class="fa-solid fa-chevron-right ml-2"></i>
                             </a>
                         {% endif %}
-                            <a href="{% url 'profiles:teacher_course_students_list' course.id %}" class="btn-email-all">
+                            <!-- <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-email-all">
                                 <i class="fa-regular fa-eye mr-2"></i>
                                 View
                                 <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a>
+                            </a> -->
                         </div>    
                     </div>                    
                     <!-- <h3><i class="fa-regular fa-address-book mr-3"></i>Student List</h3> -->

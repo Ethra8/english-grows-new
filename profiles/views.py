@@ -811,6 +811,146 @@ def teacher_calendar(request):
     return render(request, "profiles/teacher/teacher_calendar.html", context)
 
 
+@login_required
+def teacher_course_students_list(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user
+    )
+
+    enrollments = (
+        course.enrollments
+        .select_related("student", "student__profile")
+        .filter(status="active")
+    )
+
+    sessions = (
+        course.class_sessions
+        .all()
+        .order_by("start_time")
+    )
+
+    now = timezone.now()
+
+    total_classes = course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    completed_classes = course.class_sessions.filter(
+        is_cancelled=False,
+        start_time__lt=now,
+    ).count()
+
+    remaining_classes = total_classes - completed_classes
+
+    completion_percentage = 0
+    if total_classes:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+
+    attendance_percentages = []
+
+    for enrollment in enrollments:
+        total_completed = enrollment.total_completed_classes
+
+        if total_completed > 0:
+            attendance_percentages.append(
+                (enrollment.classes_attended / total_completed) * 100
+            )
+
+    average_attendance = 0
+    if attendance_percentages:
+        average_attendance = round(
+            sum(attendance_percentages) / len(attendance_percentages)
+        )
+    
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M")
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
+
+    # create list of all ss emails to send groupal email
+    student_emails = [
+        enrollment.student.email
+        for enrollment in enrollments
+        if enrollment.student.email
+    ]
+
+    bcc_student_emails = ",".join(student_emails)
+
+    context = {
+        "profile": profile,
+        "course": course,
+        "enrollments": enrollments,
+        "sessions": sessions,
+
+        # Progress timeline data
+        "total_classes": total_classes,
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "completion_percentage": completion_percentage,
+        "average_attendance": average_attendance,
+        "formatted_timetable": formatted_timetable,
+        "bcc_student_emails": bcc_student_emails,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_course_students_list.html",
+        context
+    )
+
+
+@login_required
+def teacher_calendar(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+    
+    courses = (
+        Course.objects
+        .filter(teacher=request.user)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by("name")
+    )
+
+    context = {
+        "profile": profile,
+        "courses": courses,
+    }
+
+    return render(request, "profiles/teacher/teacher_calendar.html", context)
+
+
+
 # TEACHER CALENDAR PAGE
 @login_required
 def teacher_calendar_events(request):
