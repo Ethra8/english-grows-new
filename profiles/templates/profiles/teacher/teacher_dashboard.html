@@ -76,16 +76,17 @@
                         <div class="today-class-info">
                             <div class="today-class-main">
                                 <div class="today-time">
-                                    {{ session.start_time|time:"H:i" }}
+                                    {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                                 </div>
 
                                 <div class="today-course">
-                                    <span class="level assigned-course-level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
+                                    <span class="attendance-level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
                                         {{ session.course.course_level|default:"Pending" }}
                                     </span>
-
-                                    <strong>{{ session.course.name }}</strong>
-                                    - Lesson {{ session.class_number }}
+                                    <div class="course-name-and-class-num">
+                                        <strong>{{ session.course.name }}</strong>
+                                        <span class="class-number">Lesson {{ session.class_number }}</span>
+                                    </div>
 
                                 <!-- <div class="assigned-course-level"> -->
                                 <!-- </div> -->
@@ -95,7 +96,9 @@
 
                             {% if session.meeting_link %}
                                 <a href="{{ session.meeting_link }}" class="btn-class-today btn" target="_blank"  rel="noopener">
-                                    <i class="fa-solid fa-video mr-2"></i> Start Class
+                                    <i class="fa-solid fa-video mr-2"></i>
+                                    Start Class
+                                    <i class="fa-solid fa-chevron-right ml-2"></i>
                                 </a>
                             {% else %}
                                 <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn">

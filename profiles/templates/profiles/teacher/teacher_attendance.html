@@ -69,9 +69,11 @@
                             data-search="{{ session.course.name|lower }} {{ session.course.course_type.name|lower }}"
                             data-date="{{ session.start_time|date:'Y-m-d' }}">
 
-                            <div class="attendance-level">
-                                {{ session.course.course_level }}
-                            </div>
+                                <div class="assigned-course-level">
+                                    <span class="attendance-level level-{{ session.course.course_level|lower|cut:'.' }}">
+                                        {{ session.course.course_level|default:"Pending" }}
+                                    </span>
+                                </div>
 
                             <div class="attendance-class-info">
                                 <h3>{{ session.course.name }}</h3>
@@ -112,7 +114,7 @@
                                 {% else %}
                                     <a href="{% url 'profiles:teacher_take_attendance' session.id %}" class="btn-course-details">
                                         <i class="fa-solid fa-clipboard-list mr-2"></i>
-                                        Take Attendance
+                                        Take Att.
                                         <i class="fa-solid fa-chevron-right ml-2"></i>
                                     </a>
                                 {% endif %}
