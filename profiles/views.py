@@ -925,13 +925,6 @@ def teacher_course_students_list(request, course_id):
     )
 
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from django.utils import timezone
-
-from courses.models import Course, CourseEnrollment, Attendance
-from .models import UserProfile
-
 
 @login_required
 def teacher_student_detail(request, course_id, enrollment_id):
@@ -998,7 +991,16 @@ def teacher_student_detail(request, course_id, enrollment_id):
     else:
         completion_percentage = 0
 
-    recent_attendance = attendances[:5]
+    recent_attendance = (
+        Attendance.objects
+        .filter(
+            student=student,
+            class_session__course=course,
+            status__in=["attended", "missed", "excused"],
+        )
+        .select_related("class_session")
+        .order_by("-class_session__start_time")[:5]
+    )
 
     context = {
         "course": course,
