@@ -144,7 +144,7 @@
                 <!-- <i class="fa-solid fa-briefcase mr-2"></i> -->
                 Current Course
             </h2>
-
+            <hr>
             <div class="current-course-block">
 
                 <div class="course-icon-box">
@@ -211,7 +211,7 @@
                 <i class="fa-regular fa-calendar-check mr-2"></i>
                 Attendance Overview
             </h2>
-
+            <hr>
             <div class="student-ring-layout">
 
                 <div class="progress-ring"
@@ -258,7 +258,7 @@
                 <i class="fa-solid fa-chart-simple mr-2"></i>
                 Course Progress
             </h2>
-
+            <hr>
             <div class="student-ring-layout">
 
                 <div class="progress-ring"
@@ -300,46 +300,33 @@
         </article>
 
         <!-- Recent Attendance -->
-        <article class="student-detail-card">
+        <article class="student-detail-card recent-attendance-card">
             <h2>
                 <i class="fa-solid fa-list-check mr-2"></i>
                 Recent Attendance
             </h2>
-
+            <hr>
             <div class="recent-attendance-list">
-
                 {% for attendance in recent_attendance %}
                     <div class="recent-attendance-row">
 
-                        <div>
-                            {% if attendance.status == "attended" %}
-                                <i class="fa-solid fa-check attendance-icon attended"></i>
-                            {% elif attendance.status == "missed" %}
-                                <i class="fa-solid fa-xmark attendance-icon missed"></i>
-                            {% elif attendance.status == "excused" %}
-                                <i class="fa-solid fa-minus attendance-icon excused"></i>
-                            {% endif %}
-                        </div>
-
                         <div class="recent-attendance-info">
-                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small>
+                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small><br>
                             <span>
-                                Lesson {{ attendance.class_session.class_number }}
-                                · {{ course.name }}
+                               {{ course.name }}<br>
+                                ·  Lesson {{ attendance.class_session.class_number }} 
                             </span>
                         </div>
 
-                        <span class="attendance-status-pill status-{{ attendance.status }}">
+                        <span class="status-pill status-{{ attendance.status }} status-badge">
                             {{ attendance.get_status_display }}
                         </span>
 
                     </div>
                 {% empty %}
-                    <p class="text-white-50">No attendance records yet.</p>
+                    <p class="text-white-50">No completed attendance records yet.</p>
                 {% endfor %}
-
             </div>
-
             <a href="#" class="student-card-link">
                 View all attendance
                 <i class="fa-solid fa-arrow-right"></i>
