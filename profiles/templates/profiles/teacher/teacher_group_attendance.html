@@ -1,0 +1,119 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+{% load course_extras %}
+
+
+{% block extra_title %}| Group Attendance Records {% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="teacher-group-attendance-page">
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    <p class="back-to-my-assigned-courses">
+        <a href="#" class="text-white js-back-link">
+            <i class="fa-solid fa-arrow-left-long mr-3"></i>
+            Go Back
+        </a>    
+    </p>
+
+    <header class="attendance-header">
+        <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+            {{ course.course_level }}
+        </span>
+
+        <div>
+            <h1>Attendance Records</h1>
+            <p class="pb-0">{{ course.name }} | {{ course.total_hours }} h.</p>
+            <p class="pt-0">{{ course.course_type }}</p>
+        </div>
+    </header>
+
+    <div class="attendance-record-card">
+
+        <h2>
+            <i class="fa-solid fa-clipboard-list mr-2"></i>
+            Class Attendance Records
+        </h2>
+
+        {% if class_sessions %}
+            <div class="attendance-record-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Class</th>
+                            <th>Time</th>
+                            <th>Attendance</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for session in class_sessions %}
+                            <tr>
+                                <td>
+                                    {{ session.start_time|date:"D, j M Y" }}
+                                </td>
+
+                                <td>
+                                    <span>Lesson {{ session.class_number }}</span>
+                                </td>
+
+                                <td>
+                                    {{ session.start_time|time:"H:i" }} -
+                                    {{ session.end_time|time:"H:i" }}
+                                </td>
+
+                                <td>
+                                    <span class="attendance-summary">
+                                        {{ session.attended_count }} attended
+                                    </span>
+
+                                    <span class="attendance-summary missed">
+                                        {{ session.missed_count }} missed
+                                    </span>
+
+                                    <span class="attendance-summary excused">
+                                        {{ session.excused_count }} excused
+                                    </span>
+                                </td>
+
+                                <td class="text-right">
+                                    <a href="{% url 'profiles:teacher_attendance_detail' session.id %}"
+                                    class="attendance-detail-btn">
+                                        View
+                                        <i class="fa-solid fa-chevron-right ml-2"></i>
+                                    </a>                                
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-white">No class sessions found for this group.</p>
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

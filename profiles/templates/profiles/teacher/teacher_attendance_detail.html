@@ -1,7 +1,10 @@
 {% extends "profiles/profile.html" %}
 {% load static %}
+{% load date_extras %}
+{% load course_extras %}
 
-{% block extra_title %}| Attendance Detail {% endblock %}
+
+{% block extra_title %}| Class Attendance Record {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
@@ -12,30 +15,34 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="teacher-attendance-page take-attendance-page">
+<section class="teacher-attendance-page take-attendance-page teacher-attendance-detail-page">
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
 
     <header>
         <p class="back-to-attendance">
-            <a href="{% url 'profiles:teacher_attendance' %}" class="text-white">
-                <i class="fa-solid fa-arrow-left-long mr-2"></i>
-                Back to Attendance
-            </a>
+            <a href="#" class="text-white js-back-link">
+                <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                Go Back
+            </a>    
         </p>
 
         <h1 class="mb-5 mt-5">Attendance Detail</h1>
         <hr>
 
         <p><strong>
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            <i class="fa-solid fa-barcode mr-3"></i>
             {{ class_session.course.name }}
         </strong></p>
+        <p class="mb-0">
+            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            Lesson {{ class_session.class_number }}
+        </p>
+
         <p class="mb-4">
-            <i class="fa-solid fa-calendar-day mr-4"></i>
+            <i class="fa-solid fa-calendar-day mr-3"></i>
             {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
         </p>
-        <hr>
     </header>
 
     <div class="attendance-detail-card">
@@ -52,7 +59,7 @@
             </a>
         </div>
 
-        <div class="attendance-summary-grid detail-summary-buttons">
+        <div class="detail-summary-buttons">
 
             <div class="attendance-summary-card success">
                 <div class="status-pill completed">

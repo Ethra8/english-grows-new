@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import JsonResponse
 
 from django.contrib.auth.decorators import login_required
@@ -786,30 +786,89 @@ def teacher_course_details(request, course_id):
 
 
 @login_required
-def teacher_calendar(request):
+def teacher_group_attendance(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    now = timezone.now()
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    class_sessions = (
+        course.class_sessions
+        .filter(start_time__lt=now)
+        .annotate(
+            attended_count=Count(
+                "attendance_records",
+                filter=Q(attendance_records__status="attended"),
+            ),
+            missed_count=Count(
+                "attendance_records",
+                filter=Q(attendance_records__status="missed"),
+            ),
+            excused_count=Count(
+                "attendance_records",
+                filter=Q(attendance_records__status="excused"),
+            ),
+        )
+        .order_by("-start_time")
+    )   
+ 
+    context = {
+        "course": course,
+        "class_sessions": class_sessions,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_group_attendance.html",
+        context,
+    )
+
+
+@login_required
+def teacher_session_attendance_detail(request, session_id):
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
-    
-    courses = (
-        Course.objects
-        .filter(teacher=request.user)
+
+    session = get_object_or_404(
+        ClassSession.objects.select_related("course"),
+        id=session_id,
+        course__teacher=request.user,
+        start_time__lt=timezone.now(),
+    )
+
+    attendance_records = (
+        session.attendance_records
         .select_related(
-            "course_type",
-            "company",
-            "teacher",
+            "student",
+            "student__profile",
         )
-        .order_by("name")
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+        )
     )
 
     context = {
-        "profile": profile,
-        "courses": courses,
+        "session": session,
+        "course": session.course,
+        "attendance_records": attendance_records,
     }
 
-    return render(request, "profiles/teacher/teacher_calendar.html", context)
-
+    return render(
+        request,
+        "profiles/teacher/teacher_session_attendance_detail.html",
+        context,
+    )
 
 @login_required
 def teacher_course_students_list(request, course_id):
@@ -1068,6 +1127,8 @@ def update_student_level(request, course_id, enrollment_id):
 
 
 
+
+# TEACHER CALENDAR PAGE
 @login_required
 def teacher_calendar(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -1094,8 +1155,6 @@ def teacher_calendar(request):
     return render(request, "profiles/teacher/teacher_calendar.html", context)
 
 
-
-# TEACHER CALENDAR PAGE
 @login_required
 def teacher_calendar_events(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -1311,7 +1370,7 @@ def teacher_take_attendance(request, session_id):
         enrollment.current_attendance = attendance_by_student_id.get(
             enrollment.student_id
         )
-
+    
     if request.method == "POST":
         for enrollment in enrollments:
             status = request.POST.get(f"attendance_{enrollment.student_id}")

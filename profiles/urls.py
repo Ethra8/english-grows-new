@@ -21,6 +21,16 @@ urlpatterns = [
     
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
     path("teacher/courses/<int:course_id>/", views.teacher_course_details, name="teacher_course_details"),
+    path(
+    "teacher/courses/<int:course_id>/attendance/",
+    views.teacher_group_attendance,
+    name="teacher_group_attendance",
+    ),
+    path(
+    "teacher/sessions/<int:session_id>/attendance/",
+    views.teacher_session_attendance_detail,
+    name="teacher_session_attendance_detail",
+    ),
     path("teacher/courses/<int:course_id>/enrollments/", views.teacher_course_students_list, name="teacher_course_students_list"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/",views.teacher_student_detail, name="teacher_student_detail"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/update-level/", views.update_student_level, name="update_student_level"),

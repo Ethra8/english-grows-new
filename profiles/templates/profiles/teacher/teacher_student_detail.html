@@ -22,10 +22,10 @@
     <div class="overlay-dark-teal"></div>
 
     <div class="mb-4">
-        <a href="{% url 'profiles:teacher_course_students_list' course.id %}" class="text-white">
+        <a href="#" class="text-white js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
-            Back to Course Students
-        </a>
+            Go Back
+        </a>    
     </div>
 
     <!-- Header -->
@@ -37,7 +37,11 @@
                 {% if student_profile.profile_photo %}
                     <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
                 {% else %}
-                    <i class="fa-solid fa-user"></i>
+                    {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
+                        <i class="fa-solid fa-user-tie"></i>
+                    {% elif student_profile.role == "individual" %}
+                        <i class="fa-regular fa-user"></i>
+                    {% endif %}
                 {% endif %}
             </div>
 
@@ -140,11 +144,9 @@
 
                         <!-- Current Course -->
         <article class="student-detail-card">
-            <h2>
-                <!-- <i class="fa-solid fa-briefcase mr-2"></i> -->
-                Current Course
-            </h2>
+            <h2>Current Course</h2>
             <hr>
+
             <div class="current-course-block">
 
                 <div class="course-icon-box">
@@ -153,7 +155,7 @@
 
                 <div>
                     <h3>{{ course.name }}</h3>
-                    <hr>
+
                     <div class="student-course-details">
                         <div class="detail-row">
                             <span>Course Type</span>
@@ -306,6 +308,41 @@
                 Recent Attendance
             </h2>
             <hr>
+            
+        <div class="detail-summary-buttons">
+
+            <div class="attendance-summary-card success">
+                <div class="status-pill completed">
+                    <i class="fa-solid fa-user-check"></i>
+                    <strong>{{ attended_count }}</strong>
+                </div>
+                <div>
+                    <span>Attended</span>
+                </div>
+            </div>
+
+            <div class="attendance-summary-card danger">
+                <div class="status-pill missed">
+                    <i class="fa-solid fa-user-xmark"></i>
+                    <strong>{{ missed_count }}</strong>
+                </div>
+                <div>
+                    <span>Missed</span>
+                </div>
+            </div>
+
+            <div class="attendance-summary-card warning">
+                <div class="status-pill pending">
+                    <i class="fa-solid fa-user-minus"></i>
+                    <strong>{{ excused_count }}</strong>
+                </div>
+                <div>
+                    <span>Excused</span>
+                </div>
+            </div>
+
+        </div>
+
             <div class="recent-attendance-list">
                 {% for attendance in recent_attendance %}
                     <div class="recent-attendance-row">
@@ -318,9 +355,17 @@
                             </span>
                         </div>
 
-                        <span class="status-pill status-{{ attendance.status }} status-badge">
-                            {{ attendance.get_status_display }}
-                        </span>
+                    <div class="attendance-status">
+                        {% if attendance.status == "attended" %}
+                            <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
+                        {% elif attendance.status == "missed" %}
+                            <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
+                        {% elif attendance.status == "excused" %}
+                            <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
+                        {% else %}
+                            <span class="status-pill pending">{{ attendance.status|title }}</span>
+                        {% endif %}
+                    </div>
 
                     </div>
                 {% empty %}

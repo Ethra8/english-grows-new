@@ -1,5 +1,8 @@
 {% extends "profiles/profile.html" %}
 {% load static %}
+{% load date_extras %}
+{% load course_extras %}
+
 
 {% block extra_title %}| Take Attendance {% endblock %}
 
@@ -12,50 +15,37 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="teacher-attendance-page take-attendance-page">
+<section class="teacher-attendance-page take-attendance-page teacher-take-attendance-page">
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
 
     <header>
         <p class="back-to-attendance">
-            <a href="{% url 'profiles:teacher_attendance' %}">
-                <i class="fa-solid fa-arrow-left-long mr-2"></i>
-                Back to Attendance
-            </a>
+            <a href="#" class="text-white js-back-link">
+                <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                Go Back
+            </a>    
         </p>
 
         <h1 class="mb-5 mt-4">Take Attendance</h1>
-        <p class="mb-4">{{ class_session.course.name }} <br><span class="text-white"> {{ class_session.start_time|date:"D, d M Y" }} · {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</span></p>
         <hr>
+
+        <!-- <p>
+            <strong>
+                <i class="fa-solid fa-clipboard-user mr-3"></i>
+                {{ class_session.course.name }}
+            </strong> 
+            · Lesson {{ class_session.class_number }}
+        </p>
+
+        <p class="mb-4">
+            <i class="fa-regular fa-calendar mr-3"></i>
+            {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
+        </p>
+        <hr> -->
+
     </header>
 
-    <div class="take-attendance-info-grid">
-
-        <div class="take-attendance-info-card">
-            <i class="fa-solid fa-layer-group"></i>
-            <div>
-                <strong>{{ class_session.course.course_level }}</strong>
-                <span>Course Level</span>
-            </div>
-        </div>
-
-        <div class="take-attendance-info-card">
-            <i class="fa-solid fa-users"></i>
-            <div>
-                <strong>{{ enrollments|length }}</strong>
-                <span>Students</span>
-            </div>
-        </div>
-
-        <div class="take-attendance-info-card">
-            <i class="fa-regular fa-calendar"></i>
-            <div>
-                <strong>{{ class_session.start_time|date:"D, d M" }}</strong>
-                <span>{{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</span>
-            </div>
-        </div>
-
-    </div>
 
     <form method="POST" class="take-attendance-form">
         {% csrf_token %}
@@ -64,52 +54,72 @@
 
             <div class="take-attendance-card-header">
                 <div>
-                    <h2>Student Register</h2>
-                    <p>Mark each student as:</p>
-                    <div class="attendance-summary-grid detail-summary-buttons mt-3 mb-3">
+                    <p>
+                        <strong>
+                            <i class="fa-solid fa-clipboard-user mr-3"></i>
+                            {{ class_session.course.name }}
+                        </strong> 
+                        · Lesson {{ class_session.class_number }}
+                    </p>
+                    <p>
+                        <i class="fa-regular fa-calendar mr-3"></i>
+                        {{ class_session.start_time|date:"D, d M Y" }}
+                    </p>
+                    <p class="mb-4">
+                        <i class="fa-regular fa-calendar mr-3"></i>
+                        {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
+                    </p>
+                </div>
+                <div class="mark-all-actions">
+                    <button type="button" class="mark-all-btn mark-all-attended-btn" data-status="attended">
+                       <i class="fa-solid fa-users-viewfinder mr-2"></i> ALL <i class="fa-solid fa-user-check ml-2"></i>
+                    </button>
+                    <button type="button" class="mark-all-btn mark-all-missed-btn" data-status="missed">
+                        <i class="fa-solid fa-users-viewfinder mr-2"></i> ALL <i class="fa-solid fa-user-xmark ml-2"></i>
+                    </button>
+                    <button type="button" class="mark-all-btn mark-all-excused-btn" data-status="excused">
+                        <i class="fa-solid fa-users-viewfinder mr-2"></i> ALL <i class="fa-solid fa-user-minus ml-2"></i>
+                    </button>
+                </div>
 
-                        <div class="attendance-summary-card success">
-                            <div class="status-pill completed">
-                                <i class="fa-solid fa-user-check"></i>
-                            </div>
-                            <div>
-                                <span>Attended</span>
-                            </div>
+            </div>    
+            <div class="w-100">
+                <p>Mark each student as:</p>
+                <div class="detail-summary-buttons mt-3 mb-3">
+
+                    <div class="attendance-summary-card">
+                        <div class="status-pill completed">
+                            <i class="fa-solid fa-user-check"></i>
                         </div>
-
-                        <div class="attendance-summary-card danger">
-                            <div class="status-pill missed">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </div>
-                            <div>
-                                <span>Missed</span>
-                            </div>
+                        <div>
+                            <span>Attended</span>
                         </div>
-
-                        <div class="attendance-summary-card warning">
-                            <div class="status-pill pending">
-                                <i class="fa-solid fa-user-minus"></i>
-                            </div>
-                            <div>
-                                <span>Excused</span>
-                            </div>
-                        </div>
-
                     </div>
 
-                <div class="mark-all-actions">
-                    <button type="button" class="mark-all-btn" data-status="attended">
-                        Mark all attended
-                    </button>
-                    <button type="button" class="mark-all-btn secondary" data-status="missed">
-                        Mark all missed
-                    </button>
+                    <div class="attendance-summary-card">
+                        <div class="status-pill missed">
+                            <i class="fa-solid fa-user-xmark"></i>
+                        </div>
+                        <div>
+                            <span>Missed</span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-summary-card">
+                        <div class="status-pill pending">
+                            <i class="fa-solid fa-user-minus"></i>
+                        </div>
+                        <div>
+                            <span>Excused</span>
+                        </div>
+                    </div>
+
                 </div>
 
 
-                </div>
 
             </div>
+
 
             <div class="take-attendance-list">
 
@@ -130,7 +140,7 @@
                                     {% if enrollment.student.get_full_name %}
                                         {{ enrollment.student.get_full_name }}
                                     {% else %}
-                                        {{ enrollment.student.email }}
+                                        {{ enrollment.student.username }}
                                     {% endif %}
                                 </h3>
                                 <span>{{ enrollment.student.email }}</span>
@@ -180,11 +190,11 @@
 
 
             <div class="take-attendance-save-bar">
-                <a href="{% url 'profiles:teacher_attendance' %}" class="attendance-secondary-btn">
-                    Cancel
+                <a href="{% url 'profiles:teacher_attendance' %}" class="take-attendance-cancel-btn">
+                   <i class="fa-regular fa-circle-xmark mr-2"></i> Cancel
                 </a>
 
-                <button type="submit" class="attendance-primary-btn">
+                <button type="submit" class="take-attendance-save-btn">
                     <i class="fa-regular fa-floppy-disk mr-2"></i>
                     Save Attendance
                 </button>
