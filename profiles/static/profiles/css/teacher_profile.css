@@ -135,7 +135,7 @@
 }
 
 .teacher-dashboard header .meta-card.meta-attendance::after,
-.teacher-course-details .course-meta-card.meta-attendance::after,
+.teacher-course-details-page .course-meta-card.meta-attendance::after,
 .teacher-course-students-list .course-meta-card.meta-attendance::after,
 .teacher-student-detail-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
@@ -246,13 +246,13 @@
 .level-a1 {
     color: whitesmoke;
     background: rgba(114, 255, 117, 0.75);
-    border: outset 1px rgba(127, 255, 212, 0.5);
+    border: outset 1px rgba(114, 255, 117, 0.75);
 }
 
 .level-a2 {
     color: whitesmoke;
     background: rgba(255, 147, 114, 0.75);
-    border: outset 1px rgba(127, 255, 212, 0.5);
+    border: outset 1px rgba(255, 147, 114, 0.75);
 }
 
 .level-b1,
@@ -260,7 +260,7 @@
 .level-b12 {
     color: whitesmoke;
     background: rgba(24, 77, 250, 0.75);
-    border: outset 1px rgba(106, 250, 225, 0.55);
+    border: outset 1px rgba(24, 77, 250, 0.75);
 }
 
 .level-b2,
@@ -268,7 +268,7 @@
 .level-b22 {
     color: whitesmoke;
     background: rgba(122, 1, 182, 0.75);
-    border: outset 1px rgba(106, 250, 225, 0.55);
+    border: outset 1px rgba(122, 1, 182, 0.75);
 }
 
 .level-c1,
@@ -276,15 +276,15 @@
 .level-c12 {
     color: whitesmoke;
     background: rgba(1, 138, 88, 0.75);
-    border: outset 1px rgba(193, 247, 227, 0.65);
+    border: outset 1px rgba(1, 138, 88, 0.75);
 }
 
 .level-c2,
 .level-c21,
 .level-c22 {
     color: whitesmoke;
-    background: rgba(203, 255, 60, 0.75);
-    border: outset 1px rgba(193, 247, 227, 0.65);
+    background: rgba(255, 229, 60, 0.75);
+    border: outset 1px rgba(255, 229, 60, 0.75);
 }
 
 .level-pending,
@@ -323,13 +323,18 @@
     text-decoration: none;
 }
 
-.btn-class-today i,
-.btn-course-details i,
+.btn-class-today i, 
 .btn-email-all i,
 .btn-to-student-detail i {
     display: inline-flex;
     top: 0.15rem;
     position: relative;
+}
+
+.btn-course-details i {
+    position: relative;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
 }
 
 .edit-attendance-btn i {
@@ -381,10 +386,14 @@
 }
 
 .course-status-btn i,
-.classes-filter-btn i,
-.attendance-filter-btn i {
+.classes-filter-btn i {
     font-size: 1.3rem;
     color: #5eead4;
+}
+
+.attendance-filter-btn i {
+    font-size: 1.3rem;
+    /* color: #5eead4; */
 }
 
 .course-status-btn strong,
@@ -405,14 +414,18 @@
 .course-status-btn.active,
 .course-status-btn:hover,
 .classes-filter-btn.active,
-.classes-filter-btn:hover,
-.attendance-filter-btn.active,
-.attendance-filter-btn:hover {
+.classes-filter-btn:hover {
     background: rgba(0, 155, 155, 0.25);
     border-color: #5eead4;
     color: #fff;
 }
 
+.attendance-filter-btn.active,
+.attendance-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    /* color: #fff; */
+}
 
 
 /*  !!! DELETE ???????????? !!!!!! */
@@ -664,10 +677,9 @@ header .extra .item-text span {
 
 /* ***********************************|
 |***  CLASSES LIST Page **************|
-|***  &
-|***  TEACHER_COURSES Page ***********|
+|***  & TEACHER_COURSES Page *********|
 |*********************************** */
-
+/* status-badges both for levels status of course and today/past/upcoming classes */
 .status-badge {
     /* display: inline-block; */
     padding: .2rem .75rem;
@@ -685,43 +697,42 @@ header .extra .item-text span {
 .status-today {
     background: #c1f7e3;
     color: #003366;
+    border: 1px outset #c1f7e3 !important;
 }
 
-.status-active {
+.status-active,
+.status-upcoming {
     background: #23c99a;
+    border: 1px outset #23c99a !important;
 }
 
-.status-confirmed {
+.status-confirmed,
+.status-excused {
     background: #f5c542;
     color: #003366;
+    border: 1px outset #f5c542 !important;
 }
 
 .status-paused {
     background: #adb5bd;
+    border: 1px outset #adb5bd !important;
 }
 
-.status-cancelled {
+.status-cancelled,
+.status-missed {
     background: #e95757;
+    border: 1px outset #e95757 !important;
 }
 
 .status-completed {
     background: rgba(94, 234, 212, 0.15);
-    border: 0.5px solid #004b5d;
+    border: 0.5px solid rgba(94, 234, 212, 0.15) !important;
 }
 
 .status-attended {
     background: #23c99a;
+    border: 1px outset #23c99a !important;
 }
-
-.status-excused {
-    background: #f5c542;
-    color: #003366;
-}
-
-.status-missed {
-    background: #e95757;
-}
-
 
 
 /* ***********************************|
@@ -956,11 +967,7 @@ header .extra .item-text span {
 
 .course-action {
     justify-self: end !important;
-    align-self: center;
-}
 
-.course-actions .btn {
-    white-space: nowrap;
 }
 /* END Course BY STATUS ***************** */
 
@@ -985,19 +992,19 @@ header .extra .item-text span {
     cursor: pointer;
 }
 
-.teacher-course-details header .header-last-child,
+.teacher-course-details-page header .header-last-child,
 .teacher-course-students-list header .header-last-child {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
 }
 
-.teacher-course-details header .header-last-child > div:first-child,
+.teacher-course-details-page header .header-last-child > div:first-child,
 .teacher-course-students-list header .header-last-child > div:first-child {
     display: flex;
 }
 
-.teacher-course-details header h2,
+.teacher-course-details-page header h2,
 .teacher-course-students-list header h2 {
     color: #c1f7e3;
     /* font-family: "Big Shoulders Display", sans-serif; */
@@ -1009,14 +1016,14 @@ header .extra .item-text span {
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
 }
 
-.teacher-course-details header .header-last-child > div:last-child,
+.teacher-course-details-page header .header-last-child > div:last-child,
 .teacher-course-students-list header .header-last-child > div:last-child {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.teacher-course-details header .header-last-child span,
+.teacher-course-details-page header .header-last-child span,
 .teacher-course-students-list header .header-last-child span {
     width: 50px;
 }
@@ -1270,6 +1277,17 @@ header .extra .item-text span {
     margin-top: 0.5rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
+.teacher-course-details-page .student-row-parent {
+    /* background: rgba(0, 51, 102, 0.45); */
+    background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    padding: 0 1.25rem;
+    border-radius: 10px;
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
 
 .student-row {
     /* display: flex;
@@ -2253,7 +2271,7 @@ header .extra .item-text span {
     .teacher-classes-list,
     .assigned-courses,
     .teacher-course-students-list,
-    .teacher-course-details,
+    .teacher-course-details-page,
     .teacher-student-detail-page,
     .teacher-attendance-page,
     .teacher-attendance-detail.page {
@@ -2303,7 +2321,7 @@ header .extra .item-text span {
     .btn-course-details {
         display: inline-flex;
         align-items: center;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         text-align: center;
     }
 
@@ -2427,7 +2445,13 @@ header .extra .item-text span {
     .assigned-courses-header select::after,
     .assigned-classes-header select::after {
         border: 1px outset #008b87;
-    
+    }
+
+    .assigned-courses-list {
+        background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+        border-radius: 10px;
+        margin: 0;
+        padding: 1rem 0;
     }
 
     .course-status-buttons,
@@ -2436,9 +2460,14 @@ header .extra .item-text span {
         display: none;
     }
 
-    #course_level_inline,
-    #session_level_inline {
-        display: inline-block;
+    #course_level_inline, #session_level_inline {
+        display: inline-flex;
+        align-items: i;
+        justify-content: center;
+        width: 48px;
+        height: 26px;
+        border-radius: 50px;
+        margin-bottom: 0;
     }
 
     .class-list-group-name,
@@ -2559,9 +2588,13 @@ header .extra .item-text span {
 
     /* *** BUTTONS **************************************** */
 
+    /* Courses page */
+    .assigned-courses-page .btn-course-details {
+        width: fit-content;
+    }
+
     /* Attendance page */
     /* Classes List page */
-    /* Courses page */
     .btn-course-details {
         width: 100%;
     }
@@ -2604,27 +2637,27 @@ header .extra .item-text span {
 
     /* *** COURSE DETAILS Page ************************************/
     /* *** COURSE STUDENTS LIST Page *******************************/
-    .teacher-course-details .course-detail-grid,
+    .teacher-course-details-page .course-detail-grid,
     .teacher-course-students-list .course-detail-grid {
         grid-template-columns: 1fr;
     }
 
-    .teacher-course-details .course-details-two-col,
+    .teacher-course-details-page .course-details-two-col,
     .teacher-course-students-list .course-details-two-col {
         grid-template-columns: 1fr;
     }
 
-    .teacher-course-details .course-header-meta-row,
+    .teacher-course-details-page .course-header-meta-row,
     .teacher-course-students-list .course-header-meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 
-    .teacher-course-details .course-meta-card,
+    .teacher-course-details-page .course-meta-card,
     .teacher-course-students-list .course-meta-card {
         padding: 0.15rem 1rem 0.15rem 0.25rem;
     }
 
-    .teacher-course-details .student-row,
+    .teacher-course-details-page .student-row,
     .teacher-course-students-list .student-row {
         flex-direction: column;
         align-items: flex-start;
@@ -2771,7 +2804,7 @@ header .extra .item-text span {
     }
 
     /* *** COURSES Page *****************************/
-    .assigned-courses header .course-status-row .item {
+    .assigned-courses-page header .course-status-row .item {
         /* phones: 1 per row */
         flex: 0 0 100%;
         max-width: 100%;
@@ -2780,6 +2813,10 @@ header .extra .item-text span {
     
     /* *** COURSES Page *****************************/
     /* *** CLASSES LIST Page ************************/
+    .student-row-parent {
+        /* background: rgba(0, 51, 102, 0.45); */
+        padding: 0;
+    }
     
     /* Course Assigned BY STATUS */
     .course-action {

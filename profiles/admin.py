@@ -109,7 +109,7 @@ class CompanyUserProfileInline(admin.TabularInline):
         'get_last_name',
         'get_email',
         'role',
-        'level',
+        'current_level',
         'country',
     )
 

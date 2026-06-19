@@ -36,13 +36,13 @@
                     <div class="attendance-filter-card two-filters">
 
                         <button class="attendance-filter-btn active" data-filter="pending" type="button">
-                            <i class="fa-regular fa-clock"></i>
+                            <span class="status-pill pending"><i class="fa-solid fa-clipboard-question"></i></span>
                             <span>Pending</span>
                             <strong>{{ pending_count }}</strong>
                         </button>
 
                         <button class="attendance-filter-btn" data-filter="completed" type="button">
-                            <i class="fa-regular fa-circle-check"></i>
+                            <span class="status-pill completed"><i class="fa-solid fa-clipboard-check"></i></span>
                             <span>Completed</span>
                             <strong>{{ completed_count }}</strong>
                         </button>
@@ -87,14 +87,6 @@
                                     <span>{{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</span>
                                 </div>
                             </div>
-
-                            <!-- <div class="attendance-students">
-                                <i class="fa-solid fa-users"></i>
-                                <div>
-                                    <strong>{{ session.students_count }}</strong>
-                                    <span>Students</span>
-                                </div>
-                            </div> -->
 
                             <div class="attendance-status">
                                 {% if session.attendance_filter_status == "completed" %}

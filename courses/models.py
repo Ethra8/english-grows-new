@@ -395,10 +395,30 @@ class Course(models.Model):
                     }
                 )
 
-                selected_sessions.append(class_session)
-
+                # Avoid class_number/ session =none is these were previously created
                 if created:
                     sessions_created += 1
+                else:
+                    fields_to_update = []
+
+                    if class_session.class_number != class_number:
+                        class_session.class_number = class_number
+                        fields_to_update.append("class_number")
+
+                    if class_session.title != f"{self.name} - Lesson {class_number}":
+                        class_session.title = f"{self.name} - Lesson {class_number}"
+                        fields_to_update.append("title")
+
+                    if class_session.end_time != aware_end:
+                        class_session.end_time = aware_end
+                        fields_to_update.append("end_time")
+
+                    if fields_to_update:
+                        class_session.save(update_fields=fields_to_update)
+                    selected_sessions.append(class_session)
+
+                    if created:
+                        sessions_created += 1
 
                 scheduled_class_count += 1
 

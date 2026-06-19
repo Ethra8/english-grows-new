@@ -48,18 +48,30 @@ a:hover {
 
 .btn-navbar {
     border: 1px solid #5eead4;
-    color: #5eead4;
+    color: whitesmoke;
     padding: 0.6rem 1.1rem;
     border-radius: 7px;
     text-decoration: none;
     font-weight: 400;
     width: 200px !important;
+    margin: 0 0.3rem;
+    transition: all 0.2s ease;
 }
 
 .btn-navbar:hover {
     background: rgba(94, 234, 212, 0.15);
-    color: #fff;
+    color: #c1f7e3;
     text-decoration: none;
+}
+
+.btn-navbar i {
+    color: inherit;
+    transition: inherit;
+}
+
+.btn-navbar i:hover {
+    color: inherit;
+    transition: inherit;
 }
 
 .btn-custom {
@@ -205,17 +217,16 @@ a:hover {
     padding: 0 2%;
 }
 
-#topnav .fa-user,
+#topnav .fa-user, 
 #topnav .fa-arrow-right-from-bracket {
-    color:#c1f7e3 !important;
+    color: whitesmoke !important;
     margin-bottom: 0;
-    padding: 0 1rem;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
 }
 
 #topnav .fa-user:hover,
 #topnav .fa-arrow-right-from-bracket:hover {
-    color: whitesmoke !important;
+    color: #c1f7e3 !important;
 }
 
 #main-nav {
@@ -899,7 +910,7 @@ span.vertical-line {
     }
 
     .nav-link {
-        padding: 1rem 0;
+        padding: 0;
     }
 
 }

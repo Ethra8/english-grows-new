@@ -106,13 +106,13 @@
                                 <div class="class-list-group-name">
                                     <h3>{{ session.course.name }} <span class="text-white">- Lesson {{ session.class_number }}</span></h3>
                                     <!-- <p>Lesson {{ session.class_number }}</p> -->
-                                    <span id="session_level_inline" class="level level-{{ session.course.course_level|lower|cut:'.' }}">{{ session.course.course_level }}</span>
                                     <p>
                                         <i class="fa-solid fa-calendar-day mr-1"></i>
                                         {{ session.start_time|date:"D, j M" }} |
                                         {{ session.start_time|time:"H:i" }} -
                                         {{ session.end_time|time:"H:i" }}
                                     </p>
+                                    <span id="session_level_inline" class="level level-{{ session.course.course_level|lower|cut:'.' }}">{{ session.course.course_level }}</span>
 
                                     {% if session.is_cancelled %}
                                         <span class="status-badge status-cancelled mt-2">Cancelled</span>
@@ -121,7 +121,7 @@
                                     {% elif session.class_period == "today" %}
                                         <span class="status-badge status-today mt-2">Today</span>
                                     {% else %}
-                                        <span class="status-badge status-active mt-2">Upcoming</span>
+                                        <span class="status-badge status-upcoming mt-2">Upcoming</span>
                                     {% endif %}
                                 </div>
 
