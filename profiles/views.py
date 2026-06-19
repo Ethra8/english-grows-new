@@ -870,6 +870,7 @@ def teacher_session_attendance_detail(request, session_id):
         context,
     )
 
+
 @login_required
 def teacher_course_students_list(request, course_id):
     profile = get_object_or_404(UserProfile, user=request.user)

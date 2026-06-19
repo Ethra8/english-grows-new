@@ -76,7 +76,7 @@
                                 </div>
 
                             <div class="attendance-class-info">
-                                <h3>{{ session.course.name }}</h3>
+                                <h3>{{ session.course.name }} - <span>Lesson {{ session.class_number }}</span></h3>
                                 <span>{{ session.course.course_type.name }}</span>
                             </div>
 
@@ -88,13 +88,13 @@
                                 </div>
                             </div>
 
-                            <div class="attendance-students">
+                            <!-- <div class="attendance-students">
                                 <i class="fa-solid fa-users"></i>
                                 <div>
                                     <strong>{{ session.students_count }}</strong>
                                     <span>Students</span>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="attendance-status">
                                 {% if session.attendance_filter_status == "completed" %}
@@ -114,7 +114,7 @@
                                 {% else %}
                                     <a href="{% url 'profiles:teacher_take_attendance' session.id %}" class="btn-course-details">
                                         <i class="fa-solid fa-clipboard-list mr-2"></i>
-                                        Take Att.
+                                        <!-- Take Att. -->
                                         <i class="fa-solid fa-chevron-right ml-2"></i>
                                     </a>
                                 {% endif %}

@@ -21,9 +21,10 @@
 
     <header>
         <div class="row">
-            <div class="col-12 pl-0">
+            <div class="col-12 pl-0 mb-4">
                 <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
             </div>
+            <hr>
 
             <div class="meta-row">
                 <div class="meta-card meta-courses">
@@ -50,12 +51,11 @@
                 </div>
             </div>
         </div>
-        <hr>
    
     </header>
 
 
-    <div class="wrapper-today-class-card mt-5">
+    <div class="wrapper-today-class-card mt-3">
         
         <div class="today-classes-card">
 
@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    <div class="meta-row">
+    <div class="meta-row mt-5">
 
         <div class="meta-card meta-sessions">
             <div class="meta-icon">

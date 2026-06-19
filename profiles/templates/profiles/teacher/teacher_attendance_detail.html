@@ -15,7 +15,7 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="teacher-attendance-page take-attendance-page teacher-attendance-detail-page teacher-page">
+<section class="teacher-attendance-detail-page teacher-page">
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
 
@@ -29,20 +29,23 @@
 
         <h1 class="mb-5 mt-5">Attendance Detail</h1>
         <hr>
+        <div class="d-flex justify-start">
+            <p class="pr-5">
+                <strong>
+                    <i class="fa-solid fa-barcode mr-3"></i>
+                    {{ class_session.course.name }}
+                </strong>
+            </p>
+            <p class="mb-0">
+                <i class="fa-solid fa-chalkboard-user mr-3"></i>
+                Lesson {{ class_session.class_number }}
+            </p>
 
-        <p><strong>
-            <i class="fa-solid fa-barcode mr-3"></i>
-            {{ class_session.course.name }}
-        </strong></p>
-        <p class="mb-0">
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
-            Lesson {{ class_session.class_number }}
-        </p>
-
-        <p class="mb-4">
-            <i class="fa-solid fa-calendar-day mr-3"></i>
-            {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
-        </p>
+            <p class="mb-4">
+                <i class="fa-solid fa-calendar-day mr-3"></i>
+                {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
+            </p>
+        </div>
     </header>
 
     <div class="attendance-detail-card">
@@ -59,7 +62,7 @@
             </a>
         </div>
 
-        <div class="detail-summary-buttons">
+        <div class="wrapper-attendance-summary-card">
 
             <div class="attendance-summary-card success">
                 <div class="status-pill completed">
