@@ -878,13 +878,27 @@ main.profile-main h1,
 }
 
 .account-settings-form {
-    background: linear-gradient(57deg,rgba(0, 143, 143, 1) 0%, rgba(95, 240, 223, 1) 39%, rgba(193, 247, 227, 1) 72%);
-    padding: 20px;
+    background: linear-gradient(23deg, rgba(0, 51, 102, 0.65), rgba(0, 103, 108, 0.65));    padding: 20px;
     border: outset 1px #008f8f;
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 10px;
     min-width: 100%;
+    color: whitesmoke;
+}
+
+.account-settings-form label {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #C1F7E3;
+    border-top: outset 1px #008f8f;
+    padding-top: 1rem;
+    width: 100%;
+}
+
+#id_specialties_helptext {
+    color: lightgray !important;
 }
 
 
