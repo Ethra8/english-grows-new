@@ -303,7 +303,7 @@
 .btn-to-student-detail {
     border: 1px solid #5eead4;
     color: #5eead4;
-    padding: 0.85rem 1.4rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 400;
@@ -333,8 +333,10 @@
 
 .btn-course-details i {
     position: relative;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-right: 0.5rem;
+    /* justify-content: space-between; */
+    padding: 0.2rem 0.8rem;
 }
 
 .edit-attendance-btn i {
@@ -1389,6 +1391,10 @@ header .extra .item-text span {
     font-size: 0.85rem;
 }
 
+.teacher-attendance-page .attendance-status {
+    padding: 0.35rem 0rem;
+}
+
 .status-attended {
     background: rgba(72, 209, 144, 0.25);
     color: #7dffc1;
@@ -1431,13 +1437,19 @@ header .extra .item-text span {
     cursor: pointer;
 }
 
+.teacher-attendance-detail-page header > div.d-flex {
+    flex-direction: column;
+}
+
+
 /* Main list card */
 
 .attendance-list-card {
     min-height: 260px;
     background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     border: 1px solid rgba(95, 255, 234, 0.45);
-    border-radius: 12px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     padding: 1.6rem;
 }
 
@@ -1507,7 +1519,7 @@ header .extra .item-text span {
     gap: 0.7rem;
 }
 
-.attendance-time i,
+/* .attendance-time i, */
 .attendance-students i {
     color: #5fffea;
     font-size: 1.1rem;
@@ -1541,7 +1553,7 @@ header .extra .item-text span {
 
 .attendance-row {
     display: grid;
-    grid-template-columns: 70px 2fr 2fr 0.5fr 0.5fr;
+    grid-template-columns: 70px 3fr 2fr 0.5fr;
     align-items: center;
     align-content: space-around;
     gap: 1.2rem;
@@ -2383,9 +2395,14 @@ header .extra .item-text span {
         grid-template-columns: 60px 1.5fr 1.3fr 0.9fr 0.9fr 160px;
     } */
 
+    .take-attendance-card {
+        width: 95%;
+        /* margin: 0 auto; */
+    }
+
     .take-attendance-card,
     .attendance-detail-card {
-        width: 95%;
+        width: 100%;
         /* margin: 0 auto; */
     }
 
@@ -2595,7 +2612,7 @@ header .extra .item-text span {
 
     /* Attendance page */
     /* Classes List page */
-    .btn-course-details {
+    .teacher-classes-list .btn-course-details {
         width: 100%;
     }
 
@@ -2695,6 +2712,10 @@ header .extra .item-text span {
     .teacher-attendance-detail-page .attendance-detail-card-header p:first-child {
         padding: 1rem;
     }
+
+    #attendanceListTitle {
+        padding: 1rem 1rem 0rem;
+    }
     
     .attendance-radio-group {
         display: flex;
@@ -2711,6 +2732,7 @@ header .extra .item-text span {
     
     .attendance-detail-card-header {
         flex-direction: column;
+        padding: 1rem;
     }
 
     .attendance-detail-card-header .edit-attendance-text {
@@ -2877,6 +2899,13 @@ header .extra .item-text span {
         padding: 2rem 1rem;
     }
 
+    .attendance-list-card {
+        min-height: 260px;
+        background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+        border: 1px solid rgba(95, 255, 234, 0.45);
+        padding: .6rem;
+    }
+
     .attendance-filter-btn {
         justify-content: flex-start;
         text-align: left;
@@ -2887,7 +2916,7 @@ header .extra .item-text span {
         margin-right: 0.8rem;
     }
 
-    .cattendance-filter-btn span {
+    .attendance-filter-btn span {
         text-align: left;
     }
 
@@ -2977,7 +3006,7 @@ header .extra .item-text span {
 
 
 
-@media (max-width: 350px) {
+@media (max-width: 370px) {
 
     /* Student Detail page */
     /* Attendance Detail page */
@@ -2995,6 +3024,10 @@ header .extra .item-text span {
     .teacher-take-attendance-page .wrapper-attendance-summary-card span {
         padding-right: 0 !important;
         border: none;
+    }
+
+    #attendanceListTitle {
+        padding-left: 1rem;
     }
 
 

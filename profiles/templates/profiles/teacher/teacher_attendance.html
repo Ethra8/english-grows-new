@@ -81,20 +81,19 @@
                             </div>
 
                             <div class="attendance-time">
-                                <i class="fa-regular fa-calendar"></i>
+                                <div class="attendance-status">
+                                    {% if session.attendance_filter_status == "completed" %}
+                                        <span class="status-pill completed"><i class="fa-solid fa-clipboard-check"></i></span>
+                                    {% else %}
+                                        <span class="status-pill pending"><i class="fa-solid fa-clipboard-question"></i></span>
+                                    {% endif %}
+                                </div>
                                 <div>
                                     <strong>{{ session.start_time|date:"D, d M" }}</strong>
                                     <span>{{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</span>
                                 </div>
                             </div>
 
-                            <div class="attendance-status">
-                                {% if session.attendance_filter_status == "completed" %}
-                                    <span class="status-pill completed"><i class="fa-solid fa-clipboard-check"></i></span>
-                                {% else %}
-                                    <span class="status-pill pending"><i class="fa-solid fa-clipboard-question"></i></span>
-                                {% endif %}
-                            </div>
 
                             <div class="attendance-action">
                                 {% if session.attendance_filter_status == "completed" %}
