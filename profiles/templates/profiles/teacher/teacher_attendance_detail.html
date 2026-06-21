@@ -29,22 +29,19 @@
 
         <h1 class="mb-5 mt-5">Attendance Detail</h1>
         <hr>
-        <div class="d-flex justify-start">
-            <p class="pr-5">
-                <strong>
-                    <i class="fa-solid fa-barcode mr-3"></i>
-                    {{ class_session.course.name }}
-                </strong>
-            </p>
-            <p class="mb-0">
-                <i class="fa-solid fa-chalkboard-user mr-3"></i>
-                Lesson {{ class_session.class_number }}
-            </p>
-
-            <p class="mb-4">
-                <i class="fa-solid fa-calendar-day mr-3"></i>
-                {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
-            </p>
+        <div class="wrapper-attendance-course-info">
+            <div>
+                <p><strong><i class="fa-solid fa-chalkboard-user mr-3"></i>
+                    {{ class_session.course.name }}</strong></p>
+                <p><strong><i class="fa-solid fa-clipboard-user mr-3"></i></strong> 
+                    Lesson {{ class_session.class_number }}</p>
+            </div>
+            <div>   
+                <p><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
+                    {{ class_session.start_time|date:"D, d M Y" }}</p>
+                <p><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
+                    {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+            </div>     
         </div>
     </header>
 
@@ -57,8 +54,8 @@
             </div>
 
             <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="edit-attendance-btn">
-                <i class="fa-regular fa-pen-to-square"></i>
-                <span class="edit-attendance-text">Edit Attendance</span>
+                <i class="fa-regular fa-pen-to-square mr-3"></i>
+                <span>Edit</span>
             </a>
         </div>
 

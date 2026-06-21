@@ -42,20 +42,12 @@
                 <h2><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }} | {{ course.total_hours|clean_decimal }} h.</h2>
             </div>
         </div>
-        <div>
-            <a href="{% url 'profiles:teacher_group_attendance' course.id %}"
-                class="group-attendance-btn">
-                    <i class="fa-solid fa-clipboard-check mr-2"></i>
-                    Group Attendance Records
-                    <i class="fa-solid fa-chevron-right ml-2"></i>
-            </a>
-        </div>
     </header>
 
     <hr>
 
     <div class="course-header-meta-row">
-        <div class="course-meta-card meta-students">
+        <a href="{% url 'profiles:teacher_course_students_list' course.id %}"  class="course-meta-card meta-students">
             <div class="course-meta-icon">
                 {% if enrollments|length == 1 %}
                 <i class="fa-solid fa-user"></i>
@@ -66,23 +58,22 @@
                 {% endif %}        
             </div>
             <div class="course-meta-text">
-                <strong>Students</strong>
+                <strong>Students<i class="fa-solid fa-angles-right ml-3"></i></strong>
                 <span>{{ enrollments|length }}</span>
             </div>
-        </div>
+        </a>
 
-        <div class="course-meta-card metric-card meta-attendance">
+        <a href="{% url 'profiles:teacher_group_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
                 <i class="fa-solid fa-clipboard-check"></i>
             </div>
             <div class="course-meta-text">
-                <strong>Attendance</strong>
+                <strong>Attendance<i class="fa-solid fa-angles-right ml-3"></i></strong>
                 <span>{{ average_attendance }} %</span>
             </div>
-        </div>
-
+        </a>
 
         <div class="course-meta-card metric-card meta-completion">
             <div class="metric-icon completion-icon"

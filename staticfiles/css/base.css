@@ -318,7 +318,7 @@ footer a {
 .btn-custom {
     width: 100%;
     /* max-width: 320px;  */
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 1.1rem;
     background: #003366;
     color: white;
@@ -363,7 +363,7 @@ footer a {
     border: 1px solid #003366;
     min-width: 220px;
     font-size: 1rem;
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
     transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
 }
@@ -621,7 +621,7 @@ span.vertical-line {
 .alert{
     background-color: teal;
     color: white;
-    border-radius: 10px;
+    border-radius: 8px;
     padding-right: 15px;
 }
 

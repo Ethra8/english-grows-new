@@ -96,7 +96,7 @@
     align-self: center;
     width: 30px;
     background-color: var(--selected-bg);
-    border-radius: 10px;
+    border-radius: 8px;
     margin: 0;
     padding: 0;
     transform: translateY(-17px);
@@ -226,7 +226,7 @@
     width: 64px;
     margin: 0 0 10px 40%;
     background-color: #eee;
-    border-radius: 10px;
+    border-radius: 8px;
     transform: none;
 }
 

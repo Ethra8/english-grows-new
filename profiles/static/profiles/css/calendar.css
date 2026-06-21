@@ -12,12 +12,12 @@
 
 /* .wrapper-calendar, */
 #my_calendar_page .container {
-    border-radius: 10px;
+    border-radius: 8px;
     min-width: 100%;
 }
 
 #calendar {
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 20px 12px 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* background: rgba(106, 250, 225, 0.2); */

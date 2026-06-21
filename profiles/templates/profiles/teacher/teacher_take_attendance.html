@@ -29,20 +29,21 @@
 
         <h1 class="mb-5 mt-4">Take Attendance</h1>
         <hr>
-
-        <p>
-            <strong>
-                <i class="fa-solid fa-clipboard-user mr-3"></i>
-                {{ class_session.course.name }}
-            </strong> 
-            · Lesson {{ class_session.class_number }}
-        </p>
-
-        <p class="mb-4">
-            <i class="fa-regular fa-calendar mr-3"></i>
-            {{ class_session.start_time|date:"D, d M Y" }} | {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}
-        </p>
-        <hr>
+        <div class="wrapper-attendance-course-info">
+            <div>
+                <p><strong><i class="fa-solid fa-clipboard-user mr-3"></i>
+                    {{ class_session.course.name }}</strong></p>
+                <p><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
+                    Lesson {{ class_session.class_number }}</p>
+            </div>
+            <div>   
+                <p><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
+                    {{ class_session.start_time|date:"D, d M Y" }}</p>
+                <p><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
+                    {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+            </div>     
+        </div>
+        <!-- <hr> -->
 
     </header>
 
@@ -55,7 +56,7 @@
             <div class="take-attendance-card-header">
             <div class="w-100">
                 <p>Mark each student as:</p>
-                <div class="wrapper-attendance-summary-card mt-3 mb-3">
+                <div class="wrapper-attendance-summary-card">
 
                     <div class="attendance-summary-card">
                         <div class="status-pill completed">
