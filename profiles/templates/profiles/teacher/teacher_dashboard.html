@@ -27,28 +27,34 @@
             <hr>
 
             <div class="meta-row">
-                <div class="meta-card meta-courses">
-                    <div class="meta-text">
-                        <strong>Active Courses</strong>
-                        <span>{{ active_courses|default:"0" }}</span>
+
+                <a href="{% url 'profiles:teacher_courses' %}">
+                    <div class="meta-card meta-courses">
+                        <div class="meta-text">
+                            <strong>Active Courses<i class="fa-solid fa-angles-right ml-3"></i></strong>
+                            <span>{{ active_courses|default:"0" }}</span>
+                        </div>
                     </div>
-                </div>
+                </a>
 
                 <div class="meta-card meta-students">
                     <div class="meta-text">
-                        <strong>Students</strong>
+                        <strong>Students<i class="fa-solid fa-angles-right ml-3"></i></strong>
                         <span>{{ total_students|default:"0" }}</span>
                     </div>
                 </div>
 
-                <div class="meta-card meta-attendance">
-                    <div class="meta-text">
-                        <strong>Attendance Rate</strong>
-                        <span>
-                            {{ total_attendance_rate|default:"0" }}%
-                        </span>
+                <a href="{% url 'profiles:teacher_attendance' %}">
+                    <div class="meta-card meta-attendance">
+                        <div class="meta-text">
+                            <strong>Attendance<i class="fa-solid fa-angles-right ml-3"></i></strong>
+                            <span>
+                                {{ total_attendance_rate|default:"0" }}%
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </a>
+
             </div>
         </div>
    

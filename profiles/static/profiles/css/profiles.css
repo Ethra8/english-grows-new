@@ -62,6 +62,8 @@ main.profile-main h1,
 }
 
 .profile-settings-page .btn-update {
+    display: flex;
+    justify-content: space-around ;
     width: 100%;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -874,12 +876,13 @@ main.profile-main h1,
 }
 
 .wrapper-account-settings-form {
-    width: 50%;
+    width: 70%;
 }
 
 .account-settings-form {
-    background: linear-gradient(23deg, rgba(0, 51, 102, 0.65), rgba(0, 103, 108, 0.65));    padding: 20px;
-    border: outset 1px #008f8f;
+    background: linear-gradient(23deg, rgba(0, 51, 102, 0.65), rgba(94, 234, 212, 0.65)); 
+    padding: 2rem;
+    border: 1px solid rgba(94, 234, 212, 0.85);
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 #003366;
     border-radius: 8px;

@@ -58,7 +58,7 @@
 
 .teacher-dashboard header .meta-row {
     grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+    gap: 1rem;
 }
 
 .teacher-dashboard .meta-row {
@@ -586,7 +586,12 @@ header .extra .item-text span {
     font-weight: 700;
     background: rgba(0, 51, 102, 0.45);
     width: 170px;
-    min-height: max-content;
+    min-height: 40px !important;
+    height: 70px !important;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .today-course {
@@ -2341,9 +2346,10 @@ header .wrapper-attendance-course-info p {
     }
 
     .today-card-left {
-        max-height: 70px;
+        /* max-height: 70px; */
+        padding: 1.5rem 1.5rem 0.15rem;
     }
-
+    
     .today-time,
     .today-course {
         border: 0;
@@ -2703,8 +2709,12 @@ header .wrapper-attendance-course-info p {
     }
 
 
-
     /* *** DASHBOARD ************************************** */
+    
+    .teacher-dashboard header .meta-row,
+    .teacher-dashboard .meta-row {
+        grid-template-columns: repeat(1, 1fr);
+    }
 
     .today-class-info {
         flex-direction: column;
@@ -2912,14 +2922,13 @@ header .wrapper-attendance-course-info p {
 
 
     /* *** DASHBOARD ********************************/
-    .teacher-dashboard header .meta-row,
-    .teacher-dashboard .meta-row {
-        grid-template-columns: repeat(1, 1fr);
+    .teacher-dashboard header .meta-card {
+        padding: 0.25rem 2rem;
+        /* border-radius: 8px; */
     }
 
-    .teacher-dashboard header .meta-card {
-        padding: 0.15rem 1rem 0.15rem 1rem;
-        border-radius: 8px;
+    .today-classes-card {
+        padding: 1rem 0.5rem;
     }
 
     /* *** COURSES Page *****************************/
