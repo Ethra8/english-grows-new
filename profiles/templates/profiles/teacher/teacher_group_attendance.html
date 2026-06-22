@@ -21,24 +21,31 @@
     <div class="overlay-birds"></div>
     <div class="overlay-dark-teal"></div>
 
-    <p class="back-to-my-assigned-courses">
-        <a href="#" class="text-white js-back-link">
-            <i class="fa-solid fa-arrow-left-long mr-3"></i>
-            Go Back
-        </a>    
-    </p>
-
-    <header class="attendance-header">
-        <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-            {{ course.course_level }}
-        </span>
-
-        <div>
-            <h1>Attendance Records</h1>
-            <p class="pb-0">{{ course.name }} | {{ course.total_hours }} h.</p>
-            <p class="pt-0">{{ course.course_type }}</p>
+    <header class="mb-2">
+        <div class="row mb-3">
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses">
+                    <a href="#" class="text-white js-back-link">
+                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                        Go Back
+                    </a>    
+                </p>
+            </div>
+        </div>    
+        <div class="header-last-child">
+            <div>
+                <span class="level level-{{ course.course_level|lower|cut:'.' }} mr-4">
+                    {{ course.course_level|default:"Pending" }}
+                </span>
+                <h1>{{ course.name }}</h1>
+            </div>
+            <div>
+                <h2><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }} | {{ course.total_hours|clean_decimal }} h.</h2>
+            </div>
         </div>
     </header>
+
+    <hr>
 
     <div class="attendance-record-card">
 

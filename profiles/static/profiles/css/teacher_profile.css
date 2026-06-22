@@ -943,19 +943,22 @@
 }
 
 .teacher-course-details-page header .header-last-child,
-.teacher-course-students-list header .header-last-child {
+.teacher-course-students-list header .header-last-child,
+.teacher-group-attendance-page header .header-last-child {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
 }
 
 .teacher-course-details-page header .header-last-child > div:first-child,
-.teacher-course-students-list header .header-last-child > div:first-child {
+.teacher-course-students-list header .header-last-child > div:first-child,
+.teacher-group-attendance-page header .header-last-child > div:first-child {
     display: flex;
 }
 
 .teacher-course-details-page header h2,
-.teacher-course-students-list header h2 {
+.teacher-course-students-list header h2,
+.teacher-group-attendance-page header h2 {
     color: #c1f7e3;
     font-size: 1.1rem;
     margin-top: 0;
@@ -964,14 +967,16 @@
 }
 
 .teacher-course-details-page header .header-last-child > div:last-child,
-.teacher-course-students-list header .header-last-child > div:last-child {
+.teacher-course-students-list header .header-last-child > div:last-child,
+.teacher-group-attendance-page header .header-last-child > div:last-child {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .teacher-course-details-page header .header-last-child span,
-.teacher-course-students-list header .header-last-child span {
+.teacher-course-students-list header .header-last-child span,
+.teacher-group-attendance-page header .header-last-child span {
     width: 50px;
 }
 
@@ -1240,16 +1245,10 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-
 .student-row {
-    /* display: flex;
-    align-items: center;
-    justify-content: space-between; */
     display: grid;
     grid-template-columns: 60px 1fr auto;
-    /* background: rgba(0, 51, 102, 0.45); */
     border-bottom: 1px solid rgba(94, 234, 212, 0.2);
-    /* border-radius: 8px; */
     padding: 0.25rem 0.75rem 0.75rem 0rem;
     margin-bottom: 1rem;
     margin-top: 0.75rem;
@@ -1266,13 +1265,13 @@
 }
 
 
-/*****************************************
-**** COURSE_DETAIL Page *****************
+/*****************************************|
+**** COURSE_DETAIL Page ******************|
 **************************************** */
 
 
-/*****************************************
-**** COURSE_ATTENDANCE Records Page *****************
+/******************************************|
+**** COURSE_ATTENDANCE Records Page *******|
 **************************************** */
 
 .teacher-group-attendance-page {
@@ -1608,11 +1607,7 @@ header .wrapper-attendance-course-info p {
 /* Wrapper of attendace-summary-cards */
 .wrapper-attendance-summary-card {
     display: flex;
-    /* justify-content: space-around; */
-    /* flex-wrap: wrap; */
     gap: 0.2rem;
-    /* background: linear-gradient(283deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85)); */
-    /* border: 1px solid rgba(95, 255, 234, 0.25); */
     border-radius: 8px;
     padding: 0.2rem;
     margin: 1rem auto 2rem;
@@ -1626,7 +1621,6 @@ header .wrapper-attendance-course-info p {
     padding: 0.5rem 0.8rem;
     border-radius: 8px;
     box-shadow: none;
-    /* background: rgba(0, 48, 92, 0.7); */
     border: 1px solid rgba(95, 255, 234, 0.35);
     gap: 0.7rem;
     justify-content: flex-start;
@@ -1666,8 +1660,6 @@ header .wrapper-attendance-course-info p {
 /* Take Attendance page: SUMMARY CARDS *****/
 .teacher-take-attendance-page .wrapper-attendance-summary-card {
     gap: 0.1rem;
-    /* background: rgba(95, 255, 234, 0.15); */
-    /* border: none; */
     padding: 0 !important;
     margin-bottom: 1.5rem;
     width: 100%;
@@ -2235,6 +2227,16 @@ header .wrapper-attendance-course-info p {
 }
 
 
+/*****************************************|
+**** COURSE_STUDENTS_LIST Page ******************|
+**************************************** */
+
+.teacher-course-students-list .course-details-child h3 {
+    padding: 0 0 1rem;
+}
+
+
+
 
 @media (max-width: 1367px) {
     /* left column in Course Details page */
@@ -2483,7 +2485,7 @@ header .wrapper-attendance-course-info p {
         flex-direction: row;
         gap: 1rem;
         align-items: center;
-        margin-bottom: 1.5rem;
+        /* margin-bottom: 1.5rem; */
     }
 
     .student-list-header-buttons a {

@@ -46,138 +46,88 @@
 
     <hr>
 
-    <div class="course-header-meta-row">
-        <div class="course-meta-card meta-students">
-            <div class="course-meta-icon">
-                {% if enrollments|length == 1 %}
-                <i class="fa-solid fa-user"></i>
-                {% elif enrollments|length >= 3 %}
-                <i class="fa-solid fa-users"></i>
-                {% else %}
-                <i class="fa-solid fa-user-group"></i>
-                {% endif %}        
-            </div>
-            <div class="course-meta-text">
-                <strong>Students</strong>
-                <span>{{ enrollments|length }}</span>
-            </div>
-        </div>
+    <div class="wrapper-course-details">
+        <div class="course-details-child">
+            <div class="student-list-header">
+                <h3><i class="fa-regular fa-address-book mr-3"></i>
+                    Student List : {{ enrollments|length }} Students
+                </h3>
 
-        <div class="course-meta-card metric-card meta-attendance">
-            <div class="metric-icon completion-icon"
-                style="--percentage: {{ average_attendance|default:0 }};">
-                <span class="progress-ring"></span>
-                <i class="fa-solid fa-clipboard-check"></i>
-            </div>
-            <div class="course-meta-text">
-                <strong>Attendance</strong>
-                <span>{{ average_attendance }} %</span>
-            </div>
-        </div>
+                {% if bcc_student_emails %}
+                <div class="student-list-header-buttons">
+                    <a 
+                        href="mailto:?bcc={{ bcc_student_emails }}"
+                        class="btn-email-all">
+                        <i class="fa-solid fa-envelope mr-2"></i>
+                        Email all
+                        <i class="fa-solid fa-chevron-right ml-2"></i>
+                    </a>
+                {% endif %}
+                    <!-- <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-email-all">
+                        <i class="fa-regular fa-eye mr-2"></i>
+                        View
+                        <i class="fa-solid fa-chevron-right ml-2"></i>
+                    </a> -->
+                </div>    
+            </div>                    
+            <!-- <h3><i class="fa-regular fa-address-book mr-3"></i>Student List</h3> -->
+            <div class="course-detail-grid"> 
 
+                    {% if enrollments %}
+                    <div class="student-row-parent">
+                        {% for enrollment in enrollments %}
+                            <div class="student-row">
+                                <button type="button"
+                                        class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
+                                        onclick="toggleLevelForm('{{ enrollment.id }}')">
+                                    {{ enrollment.student.profile.current_level|default:"?" }}
+                                </button>  
+                                <form method="POST"
+                                    action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
+                                    class="d-none"
+                                    id="level-form-{{ enrollment.id }}">
 
-        <div class="course-meta-card metric-card meta-completion">
-            <div class="metric-icon completion-icon"
-                style="--percentage: {{ completion_percentage|default:0 }};">
-                <span class="progress-ring"></span>
-                <i class="fa-solid fa-arrow-trend-up"></i>
-            </div>
-            <div class="course-meta-text">
-                <strong>Completion</strong>
-                <span>{{ completion_percentage }} %</span>
-            </div>
-        </div>
-    </div>
+                                    {% csrf_token %}
 
-    <!-- <div class="course-details-two-col">
-        <div class="course-details-masonry"> -->
+                                    <select name="current_level">
+                                        {% for value, label in level_choices %}
+                                            <option value="{{ value }}"
+                                                {% if enrollment.student.profile.current_level == value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
 
-            <!-- RIGHT COLUMN -->
-            <div class="wrapper-course-details">
-                <div class="course-details-child">
-                    <div class="student-list-header">
-                        <h3 class="mt-3 mb-3">
-                            <i class="fa-regular fa-address-book mr-3"></i>
-                            Student List
-                        </h3>
-
-                        {% if bcc_student_emails %}
-                        <div class="student-list-header-buttons">
-                            <a 
-                                href="mailto:?bcc={{ bcc_student_emails }}"
-                                class="btn-email-all">
-                                <i class="fa-solid fa-envelope mr-2"></i>
-                                Email all
-                                <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a>
-                        {% endif %}
-                            <!-- <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-email-all">
-                                <i class="fa-regular fa-eye mr-2"></i>
-                                View
-                                <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a> -->
-                        </div>    
-                    </div>                    
-                    <!-- <h3><i class="fa-regular fa-address-book mr-3"></i>Student List</h3> -->
-                    <div class="course-detail-grid"> 
-
-                            {% if enrollments %}
-                            <div class="student-row-parent">
-                                {% for enrollment in enrollments %}
-                                    <div class="student-row">
-                                        <button type="button"
-                                                class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
-                                                onclick="toggleLevelForm('{{ enrollment.id }}')">
-                                            {{ enrollment.student.profile.current_level|default:"?" }}
-                                        </button>  
-                                        <form method="POST"
-                                            action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
-                                            class="d-none"
-                                            id="level-form-{{ enrollment.id }}">
-
-                                            {% csrf_token %}
-
-                                            <select name="current_level">
-                                                {% for value, label in level_choices %}
-                                                    <option value="{{ value }}"
-                                                        {% if enrollment.student.profile.current_level == value %}selected{% endif %}>
-                                                        {{ label }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-
-                                            <button type="submit">Save</button>
-                                        </form>                                  
+                                    <button type="submit">Save</button>
+                                </form>                                  
 
 
-                                        <div>
-                                            <strong>
-                                                {{ enrollment.student.get_full_name|default:enrollment.student.username }}
-                                            </strong>
-                                            <a href="mailto: {{ enrollment.student.email }}">
-                                                <span>{{ enrollment.student.email }}</span>
-                                            </a>
-                                        </div>
+                                <div>
+                                    <strong>
+                                        {{ enrollment.student.get_full_name|default:enrollment.student.username }}
+                                    </strong>
+                                    <a href="mailto: {{ enrollment.student.email }}">
+                                        <span>{{ enrollment.student.email }}</span>
+                                    </a>
+                                </div>
 
 
-                                        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="btn-to-student-detail">
-                                            <i class="fa-regular fa-eye mr-2"></i>
-                                            View
-                                            <i class="fa-solid fa-chevron-right ml-2"></i>
-                                        </a>
+                                <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="btn-to-student-detail">
+                                    <i class="fa-regular fa-eye mr-2"></i>
+                                    View
+                                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                                </a>
 
-                                    </div>
-
-                                {% endfor %}
-
-                            {% else %}
-                                <p class="text-white">No students enrolled yet.</p>
-                            {% endif %}
                             </div>
+
+                        {% endfor %}
+
+                    {% else %}
+                        <p class="text-white">No students enrolled yet.</p>
+                    {% endif %}
                     </div>
-                </div>
             </div>
-        </div>    
+        </div>
     </div>
 </section>
 
