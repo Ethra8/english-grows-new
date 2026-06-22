@@ -1,11 +1,5 @@
 .fa, .fa-brands, .fa-regular, .fa-solid, .fab, .far, .fas {
-    /* -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    display: var(--fa-display, inline-block);
-    font-style: normal;
-    font-variant: normal; */
     line-height: 1.5 !important;
-    /* text-rendering: auto; */
 }
 
 
@@ -88,10 +82,7 @@
 
     border: 1.5px solid rgba(94, 242, 220, 0.35);
     border-radius: 50px;
-    /* background-color: rgba(0, 51, 102, 0.85); */
     background: linear-gradient(123deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
-
-    /* background: rgba(193, 247, 227, 0.65); */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -112,7 +103,6 @@
 
 .teacher-dashboard header .meta-card {
     padding: 0.5rem 2rem 0.5rem 3rem;
-    /* background-color: rgba(0, 51, 102, 0.9); */
     background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
 }
 
@@ -152,7 +142,6 @@
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    /* color: rgba(106, 250, 225, 0.3); */
     color: rgba(94, 242, 220, 0.1);
     position: absolute;
     top: 25px;
@@ -192,7 +181,6 @@
 .meta-text strong,
 .course-meta-text strong {
     display: block;
-    /* color: rgba(94, 242, 220, 0.9); */
     color: #ffffff;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.5rem;
@@ -223,7 +211,6 @@
     justify-content: center;
 
     border-radius: 50%;
-    /* background: rgba(0, 104, 107, 0.9); */
     background-color: rgba(0, 51, 102, 0.6);
     border: 1px solid rgba(94, 242, 220, 0.35);
 }
@@ -240,7 +227,6 @@
     width: 48px;
     height: 48px;
     border-radius: 9px;
-    /* background: linear-gradient(135deg, #006fff, #6a4cff); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -345,7 +331,6 @@
     position: relative;
     font-size: 1.2rem;
     margin-right: 0.5rem;
-    /* justify-content: space-between; */
     padding: 0.2rem 0.8rem;
 }
 
@@ -440,60 +425,9 @@
 }
 
 
-/*  !!! DELETE ???????????? !!!!!! */
-/* .extra ROW: Confirmed/paused/cancelled icons + num. */
-
-/* header .extra {
-    width: 100%;
-    min-width: 100%;
-    padding: 0.25rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-header .extra .item {
-    width: 100%;
-    flex: 1 1 0;
-    background-color: rgba(0, 51, 102, 0.6);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    border: solid 2px rgba(0, 104, 107, 1);
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-}
-
-header .extra .item-icon {
-    width: 40px;
-    height: 40px;
-    border: solid 2px #5ff0df;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-header .extra .item .fa-regular,
-header .extra .item .fa-solid {
-    color: #003366;
-    font-size: 1.4rem;
-}
-
-header .extra .item-text strong {
-    color: #c1f7e3;
-    font-size: 1.1rem;
-    font-weight: 400;
-}
-
-header .extra .item-text span {
-    color: #ffffff;
-    font-size: 1.1rem;
-} */
-
-
-
 /* ***********************************|
 |*  DASHBOARD Page *******************|
 |*********************************** */
-
-/* *** HEADER ***************************** */
-
 
 /* Today's Classes *******************/
 
@@ -1023,10 +957,7 @@ header .extra .item-text span {
 .teacher-course-details-page header h2,
 .teacher-course-students-list header h2 {
     color: #c1f7e3;
-    /* font-family: "Big Shoulders Display", sans-serif; */
     font-size: 1.1rem;
-    /* border-top: #003366 1.5px solid; */
-    /* width: fit-content; */
     margin-top: 0;
     padding-top: 0;
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
@@ -1202,7 +1133,6 @@ header .extra .item-text span {
 
 .course-detail-item span {
     display: block;
-    /* margin-bottom: 0.5rem; */
 }
 
 .course-detail-item hr,
@@ -1245,8 +1175,6 @@ header .extra .item-text span {
     color: whitesmoke;
     font-weight: 500;
     position: relative;
-    /* top: -10px;
-    left: 1rem; */
 }
 
 .detail-row span:first-child {
@@ -1263,7 +1191,6 @@ header .extra .item-text span {
 .course-details-child,
 .course-info-child,
 .course-student-list-child {
-    /* background: rgba(0, 51, 102, 0.82); */
     background: linear-gradient(176deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     margin: 0;
@@ -1275,7 +1202,6 @@ header .extra .item-text span {
 .wrapper-course-details h3 {
     color: #c1f7e3;
     font-family: "Big Shoulders Display", sans-serif;
-    /* margin-bottom: 0.8rem; */
     letter-spacing: 0.03em;
 }
 
@@ -1306,7 +1232,6 @@ header .extra .item-text span {
 }
 
 .teacher-course-details-page .student-row-parent {
-    /* background: rgba(0, 51, 102, 0.45); */
     background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     padding: 0 1.25rem;
     border-radius: 8px;
@@ -1753,34 +1678,6 @@ header .wrapper-attendance-course-info p {
     gap: 0.5rem;
 }
 
-/* .take-attendance-info-card {
-    background: rgba(0, 48, 92, 0.75);
-    border: 1px solid rgba(95, 255, 234, 0.35);
-    border-radius: 8px;
-    padding: 0.5rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-direction: row;
-    justify-content: flex-start;
-    width: 300px;
-}
-
-.take-attendance-info-card i {
-    color: #5fffea;
-    font-size: 1.6rem;
-}
-
-.take-attendance-info-card strong {
-    display: block;
-    color: #ffffff;
-    font-size: 1.1rem;
-}
-
-.take-attendance-info-card span {
-    color: #bffaf4;
-} */
-
 .take-attendance-card, 
 .attendance-detail-card {
     /* background: rgba(0, 48, 92, 0.75); */
@@ -1938,8 +1835,6 @@ header .wrapper-attendance-course-info p {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.7rem;
-    /* background: rgba(253, 253, 253, 0.2); */
-    /* background: rgba(0, 48, 92, 0.55); */
     padding: 0.4rem 0.7rem;
     border-radius: 6px;
     border: 1.5px outset rgba(95, 255, 234, 0.22);
@@ -2093,7 +1988,6 @@ header .wrapper-attendance-course-info p {
     color: #bffaf4;
     font-size: 0.9rem;
 }
-/* ************************************ */
 
 
 /*****************************************|
@@ -2218,8 +2112,6 @@ header .wrapper-attendance-course-info p {
 }
 
 .student-course-details .detail-row {
-    /* display: flex;
-    justify-content: space-between; */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -2387,7 +2279,6 @@ header .wrapper-attendance-course-info p {
     .btn-course-details {
         display: inline-flex;
         align-items: center;
-        /* justify-content: space-between; */
         text-align: center;
     }
 
@@ -2409,16 +2300,6 @@ header .wrapper-attendance-course-info p {
         gap: 1.2rem;
     }
 
-    /* COURSE DETAILS Page */
-    /* .detail-row {
-        grid-template-columns: 1fr;
-        align-items: center;
-        width: 100%;
-        gap: 1rem;
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(94, 234, 212, 0.2);
-    } */
-
     .student-list-header-buttons {
         flex-direction: column;
         gap: 0.5rem;
@@ -2426,15 +2307,6 @@ header .wrapper-attendance-course-info p {
         margin-bottom: 1.5rem;
     }
 
-    /* .student-list-header-buttons a {
-        margin: 0 1.5rem 0.5rem; 
-    } */
-
-    /* .student-row {
-        display: flex;
-        justify-content: flex-end;
-        flex-direction: row-reverse;
-    } */
 
     /* ATTENDANCE Page ******************************* */
     .course-status-buttons, 
@@ -2445,10 +2317,6 @@ header .wrapper-attendance-course-info p {
         gap: 0.25rem;
     }
 
-    /* .attendance-row {
-        grid-template-columns: 60px 1.5fr 1.3fr 0.9fr 0.9fr 160px;
-    } */
-
     .take-attendance-card {
         width: 95%;
         /* margin: 0 auto; */
@@ -2458,12 +2326,8 @@ header .wrapper-attendance-course-info p {
     .attendance-detail-card,
     header .wrapper-attendance-course-info {
         width: 100%;
-        /* margin: 0 auto; */
     }
 
-    /* .wrapper-attendance-summary-card {
-        width: 100%;
-    } */
 
     /* STUDENT DETAIL Page ****************************/
     .student-overview-grid {
@@ -2548,29 +2412,9 @@ header .wrapper-attendance-course-info p {
         color: white;
     }
 
-    /* .classes-filter-select:focus {
-        outline: none;
-        border-color: #00676C;
-        box-shadow: 0 0 0 3px rgba(0, 103, 108, 0.15);
-    }
- */
-
     .select-wrapper {
         position: relative;
     }
-
-    /* .select-wrapper::after {
-        content: "";
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        width: 8px;
-        height: 8px;
-        border-right: 2px solid #008b87;
-        border-bottom: 2px solid #008b87;
-        transform: translateY(-60%) rotate(45deg);
-        pointer-events: none;
-    } */
 
     .assigned-courses-list {
         background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
@@ -2819,13 +2663,6 @@ header .wrapper-attendance-course-info p {
         padding-left: 0%;
     }
 
-    /* .wrapper-attendance-summary-card {
-        display: grid;
-        grid-template-columns: 1fr;
-        margin: 1.5rem auto;
-        width: 100% !important;
-    } */
-
     .teacher-attendance-detail-page .wrapper-attendance-summary-card {
         display: grid;
         grid-template-columns: 1fr;
@@ -2952,7 +2789,6 @@ header .wrapper-attendance-course-info p {
     /* *** COURSES Page *****************************/
     /* *** CLASSES LIST Page ************************/
     .teacher-course-details-page .student-row-parent {
-        /* background: rgba(0, 51, 102, 0.45); */
         padding: 0;
     }
 
@@ -2986,7 +2822,6 @@ header .wrapper-attendance-course-info p {
 
     .course-details-child h3 {
         padding: 1rem 1.5rem;
-        /* margin-bottom: 1.5rem; */
     }
 
     .student-list-header-buttons {
@@ -3054,10 +2889,8 @@ header .wrapper-attendance-course-info p {
     .teacher-take-attendance-page .wrapper-attendance-summary-card {
         flex-direction: row;
         display: flex;
-        /* justify-content: flex-start; */
         align-content: space-around;
         min-height: 80px;
-        /* align-items: stretch; */
     }
 
     .teacher-take-attendance-page .attendance-summary-card {
@@ -3133,10 +2966,6 @@ header .wrapper-attendance-course-info p {
     }
 
     /* *** TAKE ATTENDANCE Page **********************************/
-    /* .teacher-take-attendance-page .wrapper-attendance-summary-card {
-        grid-template-columns: repeat(1, 1fr);
-        margin: auto;
-    } */
 
     .teacher-take-attendance-page .wrapper-attendance-summary-card span {
         padding-right: 0 !important;
