@@ -1182,7 +1182,7 @@ header .extra .item-text span {
 }
 
 .course-detail-item {
-    background: rgba(0, 51, 102, 0.45);
+    background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.25);
     padding: 1rem 1.25rem;
@@ -1232,7 +1232,7 @@ header .extra .item-text span {
     align-items: center;
     width: 100%;
     gap: 1rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0;
     border-bottom: 1px solid rgba(94, 234, 212, 0.2);
 }
 
@@ -1260,21 +1260,32 @@ header .extra .item-text span {
     text-align: left;
 }
 
-.course-details-child {
+.course-details-child,
+.course-info-child,
+.course-student-list-child {
     /* background: rgba(0, 51, 102, 0.82); */
     background: linear-gradient(176deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     margin: 0;
-    padding: 1rem 1.5rem;
+    padding: 1rem .5rem 0.5rem;
     border: 1px solid rgba(94, 234, 212, 0.8);
     width: 100%;
 }
 
-.course-details-child h3 {
+.wrapper-course-details h3 {
     color: #c1f7e3;
     font-family: "Big Shoulders Display", sans-serif;
-    margin-bottom: 0.8rem;
+    /* margin-bottom: 0.8rem; */
     letter-spacing: 0.03em;
+}
+
+.course-details-child h3,
+.course-info-child h3 {
+    padding: 1rem 1.5rem;
+}
+
+.student-list-header {
+    padding: 1rem 1.5rem;
 }
 
 .student-list-header-buttons {
@@ -1296,7 +1307,7 @@ header .extra .item-text span {
 
 .teacher-course-details-page .student-row-parent {
     /* background: rgba(0, 51, 102, 0.45); */
-    background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     padding: 0 1.25rem;
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.2);
@@ -1314,7 +1325,7 @@ header .extra .item-text span {
     /* background: rgba(0, 51, 102, 0.45); */
     border-bottom: 1px solid rgba(94, 234, 212, 0.2);
     /* border-radius: 8px; */
-    padding: 0.25rem 0.75rem 0.75rem;
+    padding: 0.25rem 0.75rem 0.75rem 0rem;
     margin-bottom: 1rem;
     margin-top: 0.75rem;
     color: #fff;
@@ -2258,8 +2269,7 @@ header .wrapper-attendance-course-info p {
     flex: 1;
 }
 
-.student-stat-list p,
-.detail-row {
+.student-stat-list p {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -2349,7 +2359,7 @@ header .wrapper-attendance-course-info p {
         /* max-height: 70px; */
         padding: 1.5rem 1.5rem 0.15rem;
     }
-    
+
     .today-time,
     .today-course {
         border: 0;

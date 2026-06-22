@@ -880,7 +880,7 @@ main.profile-main h1,
 }
 
 .account-settings-form {
-    background: linear-gradient(23deg, rgba(0, 51, 102, 0.65), rgba(94, 234, 212, 0.65)); 
+    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
     padding: 2rem;
     border: 1px solid rgba(94, 234, 212, 0.85);
     margin: 0 auto;
