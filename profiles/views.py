@@ -1436,7 +1436,7 @@ def teacher_attendance_detail(request, session_id):
         )
     )
 
-    present_count = attendances.filter(status="attended").count()
+    attended_count = attendances.filter(status="attended").count()
     missed_count = attendances.filter(status="missed").count()
     excused_count = attendances.filter(status="excused").count()
     total_count = attendances.count()
@@ -1445,7 +1445,7 @@ def teacher_attendance_detail(request, session_id):
         "profile": profile,
         "class_session": class_session,
         "attendances": attendances,
-        "present_count": present_count,
+        "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_count": total_count,

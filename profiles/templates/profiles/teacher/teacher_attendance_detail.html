@@ -23,9 +23,17 @@
         <p class="back-to-attendance">
             <a href="{% url 'profiles:teacher_attendance' %}" class="text-white">
                 <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                Back to All Attendances
+                To All Attendances
             </a>    
         </p>
+
+        <div class="mb-4">
+            <a href="{% url 'profiles:teacher_group_attendance' class_session.course.id %}" class="text-white">
+                <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                To Group Attendance
+            </a>    
+        </div>
+
 
         <h1 class="mb-5 mt-5">Attendance Detail</h1>
         <hr>
@@ -64,7 +72,7 @@
             <div class="attendance-summary-card success">
                 <div class="status-pill completed">
                     <i class="fa-solid fa-user-check"></i>
-                    <strong>{{ present_count }}</strong>
+                    <strong>{{ attended_count }}</strong>
                 </div>
                 <div>
                     <span>Attended</span>

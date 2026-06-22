@@ -1276,9 +1276,9 @@
 **************************************** */
 
 .teacher-group-attendance-page {
-    max-width: 1400px;
+    max-width: calc(100vw - 300px);
     margin: 0 auto;
-    padding: 3rem 1rem;
+    /* padding: 3rem 1rem; */
 }
 
 .attendance-header {
@@ -1304,6 +1304,7 @@
     border-radius: 0.75rem;
     padding: 1.5rem;
     box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+    max-width: fit-content;
 }
 
 .attendance-record-card h2 {
@@ -1312,11 +1313,14 @@
 }
 
 .attendance-record-table {
+    max-width: fit-content;
     overflow-x: auto;
+    border-collapse: collapse;
 }
 
 .attendance-record-table table {
-    width: 100%;
+    max-width: fit-content;
+    overflow-x: auto;
     border-collapse: collapse;
 }
 
@@ -1331,6 +1335,31 @@
     color: #5fffea;
     font-weight: 700;
     text-align: left;
+}
+
+.attendance-record-table th:nth-child(1),
+.attendance-record-table td:nth-child(1) {
+    min-width: 130px;
+}
+
+.attendance-record-table th:nth-child(2),
+.attendance-record-table td:nth-child(2) {
+    min-width: 130px;
+}
+
+.attendance-record-table th:nth-child(3),
+.attendance-record-table td:nth-child(3) {
+    min-width: 180px;
+}
+
+.attendance-record-table th:nth-child(4),
+.attendance-record-table td:nth-child(4) {
+    min-width: 260px;
+}
+
+.attendance-record-table th:nth-child(5),
+.attendance-record-table td:nth-child(5) {
+    min-width: 120px;
 }
 
 .attendance-status {
@@ -1586,7 +1615,7 @@ header .wrapper-attendance-course-info p {
     /* border: 1px solid rgba(95, 255, 234, 0.25); */
     border-radius: 8px;
     padding: 0.2rem;
-    margin: 1.5rem auto 2rem;
+    margin: 1rem auto 2rem;
     width: 100%;
 }
 
@@ -1684,7 +1713,7 @@ header .wrapper-attendance-course-info p {
     background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-radius: 8px;
-    padding: 2.5rem 1.6rem;
+    padding: 1.6rem;
     width: 80%;
     margin: auto;
 }
@@ -2224,20 +2253,14 @@ header .wrapper-attendance-course-info p {
 
 @media (max-width: 1250px) {
 
-    .teacher-dashboard,
-    .teacher-classes-list,
-    .assigned-courses,
-    .teacher-course-students-list,
-    .teacher-course-details-page,
-    .teacher-student-detail-page,
-    .teacher-attendance-page,
-    .teacher-attendance-detail.page {
+    .teacher-page {
         padding: 70px 4%;
     }
 
     .teacher-attendance-page {
         margin-left: 0;
     }
+
 
     /* *** DASHBOARD ****************************************** */
     /* Today's Classes ********** */
@@ -2543,6 +2566,12 @@ header .wrapper-attendance-course-info p {
         margin-left: 0;
         margin-top: 1rem;
         padding: 0.4rem 0.7rem;
+    }
+
+    /* GROUP ATTENDANCE Page */
+    .teacher-group-attendance-page {
+        max-width: 100vw;
+        margin: 0 auto;
     }
 
 

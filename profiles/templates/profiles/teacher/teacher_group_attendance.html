@@ -64,7 +64,7 @@
                         {% for session in class_sessions %}
                             <tr>
                                 <td>
-                                    {{ session.start_time|date:"D, j M Y" }}
+                                    {{ session.start_time|date:"D, j M" }}
                                 </td>
 
                                 <td>
@@ -77,22 +77,25 @@
                                 </td>
 
                                 <td>
-                                    <span class="attendance-summary">
-                                        {{ session.attended_count }} attended
-                                    </span>
+                                    <div class="status-pill completed">
+                                        <i class="fa-solid fa-user-check"></i>
+                                        <strong>{{ session.attended_count }}</strong>
+                                    </div>
 
-                                    <span class="attendance-summary missed">
-                                        {{ session.missed_count }} missed
-                                    </span>
+                                    <div class="status-pill missed">
+                                        <i class="fa-solid fa-user-xmark"></i>
+                                        <strong>{{ session.missed_count }}</strong>
+                                    </div>
 
-                                    <span class="attendance-summary excused">
-                                        {{ session.excused_count }} excused
-                                    </span>
+                                    <div class="status-pill pending">
+                                        <i class="fa-solid fa-user-minus"></i>
+                                        <strong>{{ session.excused_count }}</strong>
+                                    </div>
                                 </td>
 
                                 <td class="text-right">
                                     <a href="{% url 'profiles:teacher_attendance_detail' session.id %}"
-                                    class="attendance-detail-btn">
+                                    class="attendance-detail-btn btn-course-details">
                                         View
                                         <i class="fa-solid fa-chevron-right ml-2"></i>
                                     </a>                                
