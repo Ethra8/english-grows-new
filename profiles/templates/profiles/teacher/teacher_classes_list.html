@@ -26,13 +26,11 @@
         <hr>
     </header>
 
-   
-
-    <div class="row">
+    <div class="all-assigned-classes">
         <div class="wrapper-assigned-classes-panel">
             <!-- UPCOMING PANEL -->
             <div>
-                <div class="assigned-classes-panel">
+                <div class="assigned-classes-panel" data-panel-status="upcoming">
 
                     <div class="assigned-classes-header"
                         data-toggle="collapse"
@@ -41,14 +39,8 @@
                         aria-controls="upcomingClassesCollapse">
 
                         <div class="assigned-classes-filter-header">
-                            <h2>
-                                <i class="fa-solid fa-forward mr-2"></i>
-                                Upcoming Classes
-                                <strong>{{ class_filter_counts.upcoming.all }}</strong>
-                            </h2>
-
-                            <!-- <p class="text-white mb-0">Future sessions you're teaching</p> -->
-
+                            <h2><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>
+                                Upcoming Classes<strong>{{ class_filter_counts.upcoming.all }}</strong></h2>
                             <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
                         </div>
                     </div>
@@ -58,27 +50,40 @@
                         <div class="classes-filter-buttons">
 
                             <button type="button" class="classes-filter-btn active"
-                                    data-status="upcoming" data-filter="today">
-                                <i class="fa-solid fa-calendar-day"></i>
+                                    data-filter="today">
+                                <!-- <i class="fa-solid fa-calendar-day"></i> -->
                                 <span>Today</span>
                                 <strong>{{ class_filter_counts.upcoming.today }}</strong>
                             </button>
 
                             <button type="button" class="classes-filter-btn"
-                                    data-status="upcoming" data-filter="weekly">
-                                <i class="fa-solid fa-calendar-week"></i>
+                                    data-filter="weekly">
+                                <!-- <i class="fa-solid fa-calendar-week"></i> -->
                                 <span>This Week</span>
                                 <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
                             </button>
 
                             <button type="button" class="classes-filter-btn"
-                                    data-status="upcoming" data-filter="monthly">
-                                <i class="fa-solid fa-calendar-days"></i>
+                                    data-filter="monthly">
+                                <!-- <i class="fa-solid fa-calendar-days"></i> -->
                                 <span>This Month</span>
                                 <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
                             </button>
+                            <button type="button" class="classes-filter-btn"
+                                    data-filter="all">
+                                <!-- <i class="fa-solid fa-calendar-days"></i> -->
+                                <span>All</span>
+                                <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                            </button>
 
                         </div>
+                        
+                        <select class="mobile-filter-select classes-panel-select">
+                            <option value="all">All</option>
+                            <option value="today">Today</option>
+                            <option value="weekly">This Week</option>
+                            <option value="monthly">This Month</option>
+                        </select>                        
 
                         <div class="assigned-courses-list">
                             {% for session in sessions %}
@@ -86,6 +91,9 @@
                                     {% include "profiles/includes/teacher/class_session_row.html" %}
                                 {% endif %}
                             {% endfor %}
+
+                            <p class="no-classes-message text-white p-3" hidden>
+                                No upcoming classes apply to the selected filter.</p>
                         </div>
 
                     </div>
@@ -94,10 +102,10 @@
             </div>
         </div>
 
-        <div class="wrapper-assigned-classes-panel">
+        <div class="wrapper-assigned-classes-panel ">
             <!-- COMPLETED PANEL -->
             <div>
-                <div class="assigned-classes-panel">
+                <div class="assigned-classes-panel" data-panel-status="completed">
 
                     <div class="assigned-classes-header"
                         data-toggle="collapse"
@@ -107,12 +115,10 @@
 
                         <div class="assigned-classes-filter-header">
                             <h2>
-                                <i class="fa-solid fa-circle-check mr-2"></i>
-                                Completed Classes
+                                <i class="fa-solid fa-clock-rotate-left mr-3"></i>
+                                Past Classes
                                 <strong>{{ class_filter_counts.completed.all }}</strong>
                             </h2>
-
-                            <!-- <p class="text-white mb-0">Past sessions you've taught</p> -->
 
                             <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
                         </div>
@@ -123,27 +129,41 @@
                         <div class="classes-filter-buttons">
 
                             <button type="button" class="classes-filter-btn"
-                                    data-status="completed" data-filter="today">
-                                <i class="fa-solid fa-calendar-day"></i>
+                                    data-filter="today">
+                                <!-- <i class="fa-solid fa-calendar-day"></i> -->
                                 <span>Today</span>
                                 <strong>{{ class_filter_counts.completed.today }}</strong>
                             </button>
 
                             <button type="button" class="classes-filter-btn"
-                                    data-status="completed" data-filter="weekly">
-                                <i class="fa-solid fa-calendar-week"></i>
+                                    data-filter="weekly">
+                                <!-- <i class="fa-solid fa-calendar-week"></i> -->
                                 <span>This Week</span>
                                 <strong>{{ class_filter_counts.completed.weekly }}</strong>
                             </button>
 
                             <button type="button" class="classes-filter-btn"
-                                    data-status="completed" data-filter="monthly">
-                                <i class="fa-solid fa-calendar-days"></i>
+                                    data-filter="monthly">
+                                <!-- <i class="fa-solid fa-calendar-days"></i> -->
                                 <span>This Month</span>
                                 <strong>{{ class_filter_counts.completed.monthly }}</strong>
                             </button>
 
+                            <button type="button" class="classes-filter-btn"
+                                    data-filter="all">
+                                <!-- <i class="fa-solid fa-calendar-days"></i> -->
+                                <span>All</span>
+                                <strong>{{ class_filter_counts.completed.all }}</strong>
+                            </button>
+
                         </div>
+                        
+                        <select class="mobile-filter-select classes-panel-select">
+                            <option value="all">All</option>
+                            <option value="today">Today</option>
+                            <option value="weekly">This Week</option>
+                            <option value="monthly">This Month</option>
+                        </select>                        
 
                         <div class="assigned-courses-list">
                             {% for session in sessions %}
@@ -151,6 +171,8 @@
                                     {% include "profiles/includes/teacher/class_session_row.html" %}
                                 {% endif %}
                             {% endfor %}
+                            <p class="no-classes-message text-white p-3" hidden>
+                                No completed classes apply to the selected filter.</p>
                         </div>
 
                     </div>

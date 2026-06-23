@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+
+// COURSES Page
 // Function for larger devices - buttons filter Courses Assigned to teacher
 document.addEventListener("DOMContentLoaded", function () {
     const statusSelect = document.getElementById("courseStatusFilter");
@@ -101,207 +104,69 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// Function to render Teacher CLASSES LIST on teacher_classes_list page
-// Teacher classes list filter: desktop buttons + mobile select
+
+// CLASSES LIST Selector buttons & select element
 document.addEventListener("DOMContentLoaded", function () {
-    const filter = document.getElementById("classesListFilter");
-    const rows = document.querySelectorAll(".assigned-class-row");
+    const panels = document.querySelectorAll(".assigned-classes-panel");
 
-    if (!filter || rows.length === 0) {
-        return;
-    }
+    panels.forEach(function (panel) {
+        const filterButtons = panel.querySelectorAll(".classes-filter-btn");
+        const mobileSelect = panel.querySelector(".classes-panel-select");
+        const rows = panel.querySelectorAll(".assigned-class-row");
+        const noClassesMessage = panel.querySelector(".no-classes-message");
 
-    filter.addEventListener("change", function () {
-        const selectedFilter = filter.value;
+        function applyPanelFilter(selectedFilter) {
+            let visibleRows = 0;
 
-        rows.forEach(function (row) {
-            if (selectedFilter === "all") {
-                row.classList.remove("class-hidden");
-                return;
+            rows.forEach(function (row) {
+                const shouldShow =
+                    selectedFilter === "all" ||
+                    row.dataset[selectedFilter] === "true";
+
+                row.classList.toggle("class-hidden", !shouldShow);
+
+                if (shouldShow) {
+                    visibleRows++;
+                }
+            });
+
+            filterButtons.forEach(function (button) {
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter === selectedFilter
+                );
+            });
+
+            if (mobileSelect) {
+                mobileSelect.value = selectedFilter;
             }
 
-            const rowValue = row.getAttribute("data-" + selectedFilter);
-
-            if (rowValue === "true") {
-                row.classList.remove("class-hidden");
-            } else {
-                row.classList.add("class-hidden");
+            if (noClassesMessage) {
+                noClassesMessage.hidden = visibleRows > 0;
             }
+        }
+
+        filterButtons.forEach(function (button) {
+            button.addEventListener("click", function (event) {
+                event.stopPropagation();
+                applyPanelFilter(button.dataset.filter);
+            });
         });
+
+        if (mobileSelect) {
+            mobileSelect.addEventListener("change", function (event) {
+                event.stopPropagation();
+                applyPanelFilter(event.target.value);
+            });
+        }
+        // today upcoming classes is pre-selected on page load
+        applyPanelFilter("today");
     });
 });
 
 
-// TEACHER CLASSES LIST PAGE
-document.addEventListener("DOMContentLoaded", function () {
-    const panel = document.querySelector(".assigned-classes-panel");
 
-    if (!panel) {
-        return;
-    }
-
-    const mobileFilter = panel.querySelector("#classesListFilter");
-    const filterButtons = panel.querySelectorAll(".classes-filter-btn");
-    const rows = panel.querySelectorAll(".assigned-class-row");
-    const noClassesMessage = panel.querySelector("#noClassesMessage");
-
-    if (rows.length === 0) {
-        return;
-    }
-
-    function rowMatchesFilter(row, selectedStatus, selectedPeriod) {
-        const rowStatus = row.dataset.statusGroup;
-
-        if (rowStatus !== selectedStatus) {
-            return false;
-        }
-
-        if (selectedPeriod === "all") {
-            return true;
-        }
-
-        return row.dataset[selectedPeriod] === "true";
-    }
-
-    function applyClassFilter(selectedStatus, selectedPeriod) {
-        let visibleRows = 0;
-
-        rows.forEach(function (row) {
-            const shouldShow = rowMatchesFilter(
-                row,
-                selectedStatus,
-                selectedPeriod
-            );
-
-            row.hidden = !shouldShow;
-
-            if (shouldShow) {
-                visibleRows++;
-            }
-        });
-
-        filterButtons.forEach(function (button) {
-            const isActive =
-                button.dataset.status === selectedStatus &&
-                button.dataset.filter === selectedPeriod;
-
-            button.classList.toggle("active", isActive);
-        });
-
-        if (mobileFilter) {
-            mobileFilter.value = `${selectedStatus}:${selectedPeriod}`;
-        }
-
-        if (noClassesMessage) {
-            noClassesMessage.hidden = visibleRows > 0;
-        }
-    }
-
-    filterButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-            const selectedStatus = button.dataset.status;
-            const selectedPeriod = button.dataset.filter;
-
-            applyClassFilter(selectedStatus, selectedPeriod);
-        });
-    });
-
-    if (mobileFilter) {
-        mobileFilter.addEventListener("change", function (event) {
-            const [selectedStatus, selectedPeriod] = event.target.value.split(":");
-
-            applyClassFilter(selectedStatus, selectedPeriod);
-        });
-    }
-
-    applyClassFilter("upcoming", "all");
-});// TEACHER CLASSES LIST PAGE
-document.addEventListener("DOMContentLoaded", function () {
-    const panel = document.querySelector(".assigned-classes-panel");
-
-    if (!panel) {
-        return;
-    }
-
-    const mobileFilter = panel.querySelector("#classesListFilter");
-    const filterButtons = panel.querySelectorAll(".classes-filter-btn");
-    const rows = panel.querySelectorAll(".assigned-class-row");
-    const noClassesMessage = panel.querySelector("#noClassesMessage");
-
-    if (rows.length === 0) {
-        return;
-    }
-
-    function rowMatchesFilter(row, selectedStatus, selectedPeriod) {
-        const rowStatus = row.dataset.statusGroup;
-
-        if (rowStatus !== selectedStatus) {
-            return false;
-        }
-
-        if (selectedPeriod === "all") {
-            return true;
-        }
-
-        return row.dataset[selectedPeriod] === "true";
-    }
-
-    function applyClassFilter(selectedStatus, selectedPeriod) {
-        let visibleRows = 0;
-
-        rows.forEach(function (row) {
-            const shouldShow = rowMatchesFilter(
-                row,
-                selectedStatus,
-                selectedPeriod
-            );
-
-            row.hidden = !shouldShow;
-
-            if (shouldShow) {
-                visibleRows++;
-            }
-        });
-
-        filterButtons.forEach(function (button) {
-            const isActive =
-                button.dataset.status === selectedStatus &&
-                button.dataset.filter === selectedPeriod;
-
-            button.classList.toggle("active", isActive);
-        });
-
-        if (mobileFilter) {
-            mobileFilter.value = `${selectedStatus}:${selectedPeriod}`;
-        }
-
-        if (noClassesMessage) {
-            noClassesMessage.hidden = visibleRows > 0;
-        }
-    }
-
-    filterButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-            const selectedStatus = button.dataset.status;
-            const selectedPeriod = button.dataset.filter;
-
-            applyClassFilter(selectedStatus, selectedPeriod);
-        });
-    });
-
-    if (mobileFilter) {
-        mobileFilter.addEventListener("change", function (event) {
-            const [selectedStatus, selectedPeriod] = event.target.value.split(":");
-
-            applyClassFilter(selectedStatus, selectedPeriod);
-        });
-    }
-
-    applyClassFilter("upcoming", "all");
-});
-
-
-
+// ATTENDANCE page
 document.addEventListener("DOMContentLoaded", function () {
     const filterButtons = document.querySelectorAll(".attendance-filter-btn");
     const rows = document.querySelectorAll(".attendance-row");

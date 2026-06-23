@@ -369,7 +369,7 @@ h2 {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 400;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     min-width: 0;
@@ -416,13 +416,20 @@ h2 {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
-    font-size: 1.2rem;
     height: 35px;
     width: 35px;
 }
 
+.course-status-btn strong,
+.classes-filter-btn strong,
+.attendance-filter-btn strong {
+    font-size: 1.2rem;
+}
+
 .assigned-classes-filter-header strong {
-    font-size: 1.8rem !important;
+    font-size: 1.8rem;
+    margin-left: 1.5rem;
+    text-align: center !important;
 }
 
 .course-status-btn.active,
@@ -452,7 +459,8 @@ h2 {
     padding: 1rem 1.2rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
-/* GENRAL INFO Card */
+
+/* GENERAL INFO Card ***********/
 .dashboard-general-info-card {
     min-width: 100% !important;
     width: 100%;
@@ -460,17 +468,10 @@ h2 {
     align-items: baseline;
     flex-direction: column;
     gap: 0.25rem;
-    /* background-color: rgba(0, 51, 102, 0.75); */
-    /* background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
-    border: 1px solid rgba(80, 230, 220, 0.85);
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); */
 }
 
 
-/* Today's Classes *******************/
-
+/* TODAY'S CLASSES Card *******/
 .today-classes-card {
     min-width: 100% !important;
     width: 100%;
@@ -478,12 +479,6 @@ h2 {
     flex-direction: row;
     align-items: center;
     gap: 2rem;
-    /* background-color: rgba(0, 51, 102, 0.75); */
-    /* background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
-    border: 1px solid rgba(80, 230, 220, 0.85);
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); */
 }
 
 .today-card-left {
@@ -589,6 +584,12 @@ h2 {
 |***  CLASSES LIST Page **************************************|
 |*********************************************************** */
 
+.all-assigned-classes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
 .assigned-classes-filter-header {
     display: flex;
     flex-direction: row;
@@ -602,13 +603,14 @@ h2 {
 .assigned-classes-filter-header i {
     color: whitesmoke;
     font-size: 2rem;
-    padding: 2rem;
+    padding: 0.25rem 0.5rem 0.25rem 0rem;
     cursor: pointer;
+    align-self: center;
 }
 
 .classes-filter-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.25rem;
 }
 
@@ -691,10 +693,14 @@ h2 {
 
 /* ***********************************|
 |***  CLASSES LIST Page **************|
-|***  & TEACHER_COURSES Page *********|
+|***  & 
+|***  COURSES Page *******************|
 |*********************************** */
 
-/* status-badges both for levels status of course and today/past/upcoming classes */
+/* STATUS BADGES for:
+- levels & status of course 
+- today/past/upcoming classes ********/
+
 .status-badge {
     /* display: inline-block; */
     padding: .2rem .75rem;
@@ -748,13 +754,12 @@ h2 {
     background: #23c99a;
     border: 1px outset #23c99a !important;
 }
+/* END of STATUS- BADGES *************/
 
 
-/* ***********************************|
-|*  TEACHER_COURSES Page ************|
-|*********************************** */
-
-/* Courses BY STATUS ***************************** */
+/*** Courses/Classes FILTER BY STATUS:
+- Courses: active/confirmed/paused/completed
+- Classes: Upcoming/Complete/ & today/weekly/monthly/all ******* */
 
 .assigned-courses-panel,
 .assigned-classes-panel {
@@ -788,7 +793,7 @@ h2 {
 
 .course-status-buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.25rem;
 }
 
@@ -798,9 +803,53 @@ h2 {
     gap: 0.25rem;
 }
 
-.assigned-courses-header select,
-.assigned-classes-header select {
+#upcomingClassesCollapse select,
+#completedClassesCollapse select {
     display: none;
+    width: 100% !important;
+    /* max-width: 320px; */
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: inset 2px #5ff0df;
+    /* border-radius: 8px; */
+    background-color: whitesmoke;
+    color: #003366;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+#upcomingClassesCollapse select option,
+#completedClassesCollapse select option {
+    background: whitesmoke;
+    color: #003366;
+}
+
+#upcomingClassesCollapse select:focus,
+#completedClassesCollapse select:focus {
+    /* background: #003366 !important;
+    color: white; */
+    border: 3px inset #00fee1 !important;
+    outline: none;
+}
+
+#upcomingClassesCollapse select option:hover,
+#upcomingClassesCollapse select option:focus
+#completedClassesCollapse select option:hover,
+#completedClassesCollapse select option:focus {
+    background: red !important;
+    color: white;
 }
 
 .assigned-courses-icon {
@@ -835,7 +884,7 @@ h2 {
     cursor: pointer;
 }
 
-.course-status-filter:hover,
+/* .course-status-filter:hover,
 .course-status-filter:focus,
 .course-status-filter:focus-visible,
 .classes-list-filter:hover,
@@ -845,7 +894,7 @@ h2 {
     border: solid 2px #5eead4 !important;
     outline: none !important;
     box-shadow: 0 0 0 3px rgba(0, 139, 135, 0.25) !important;
-}
+} */
 
 .course-status-filter option,
 .classes-list-filter option {
@@ -860,7 +909,6 @@ h2 {
 }
 
 .assigned-courses-list {
-    /* background: rgba(0, 51, 102, 0.82); */
     background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     margin: 0;
@@ -989,7 +1037,7 @@ h2 {
     justify-self: end !important;
 
 }
-/* END Course BY STATUS ***************** */
+/* END Course/Class filter BY STATUS ***************** */
 
 
 
@@ -2315,6 +2363,17 @@ header .wrapper-attendance-course-info p {
 
 
 
+@media (min-width: 1367.99px) and (max-width: 1700px) {
+
+    /* CLASS LIST Page ******************* */
+    .teacher-classes-list.teacher-page {
+        padding: 70px 2% !important;
+    }
+
+
+}
+
+
 
 @media (max-width: 1367px) {
     /* left column in Course Details page */
@@ -2326,6 +2385,25 @@ header .wrapper-attendance-course-info p {
         padding: 0.5rem 1rem;
         border-bottom: 1px solid rgba(94, 234, 212, 0.2);
     }
+
+    
+    /*****************************************************|
+    |*** CLASSES LIST Page  ******************************|
+    |*****************************************************/
+
+    .wrapper-assigned-classes-panel {
+        margin: 1rem auto;
+    }
+
+    .all-assigned-classes {
+        grid-template-columns: 1fr;
+    }
+
+    .wrapper-assigned-classes-panel {
+        margin: 1rem auto;
+        width: 100%;
+    }
+
 
 }
 
@@ -2368,7 +2446,7 @@ header .wrapper-attendance-course-info p {
     }
 
     /******************************************************/
-    /* COURSES Page (All assigned) ********************** */
+    /* COURSES Page (All courses assigned) ************** */
     /******************************************************/
 
     .assigned-course-row,
@@ -2377,19 +2455,36 @@ header .wrapper-attendance-course-info p {
         gap: 1.5rem;
     }
 
-    .class-list-student-num {
+    .course-status-buttons {
         display: none;
+    }
+
+    #upcomingClassesCollapse select,
+    #completedClassesCollapse select,
+    #upcomingClassesCollapse select option,
+    #completedClassesCollapse select option {
+        display: block !important;
     }
 
     .course-stat {
         display: none;
     }
+
+
+    /******************************************************/
+    /* CLASSES LIST Page ******************************** */
+    /******************************************************/
+
+    /* include: class-list-student.html */
+    .class-list-student-num {
+        display: none;
+    }
     
-    .btn-course-details {
+    /* .btn-course-details {
         display: inline-flex;
         align-items: center;
         text-align: center;
-    }
+    } */
 
     .course-action {
         padding-left: 1.5rem;
@@ -2433,7 +2528,6 @@ header .wrapper-attendance-course-info p {
     /* ATTENDACE Page ***************************** */
     /******************************************************/
     
-    .course-status-buttons, 
     .attendance-filter-card.two-filters {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -2514,55 +2608,6 @@ header .wrapper-attendance-course-info p {
         justify-content: stretch;
     }
 
-    .assigned-courses-header select,
-    .assigned-classes-header select {
-        display: block;
-        width: 100% !important;
-        /* max-width: 320px; */
-        padding: 0.75rem 1rem;
-        padding-right: 3rem;
-        font-size: 1.2rem;
-        font-weight: 500;
-        border: 2px solid #d9d9d9;
-        border-radius: 8px;
-        background-color: whitesmoke;
-        color: #003366;
-        cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-
-        background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 1rem;
-        transition: all 0.2s ease;
-    }
-
-    .assigned-courses-header option,
-    .assigned-classes-header option {
-        background: whitesmoke;
-        color: #003366;
-    }
-
-    .assigned-courses-header option:hover,
-    .assigned-courses-header option:focus {
-        background: #003366 !important;
-        color: white;
-    }
-
-    .assigned-courses-header option:hover + .select-arrow,
-    .assigned-courses-header option:focus + .select-arrow {
-        background: #003366 !important;
-        color: white;
-    }
-
-    .select-wrapper {
-        position: relative;
-    }
-
     .assigned-courses-list {
         background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
         border-radius: 8px;
@@ -2570,7 +2615,6 @@ header .wrapper-attendance-course-info p {
         padding: 1rem 0;
     }
 
-    .course-status-buttons,
     .classes-filter-buttons,
     .assigned-course-level {
         display: none;
@@ -2726,9 +2770,9 @@ header .wrapper-attendance-course-info p {
 
     /* *** BUTTONS **************************************** */
 
-    /* Courses page */
-    /* Attendance page */
-    /* Classes List page */
+    /* Courses page *******************************/
+    /* Attendance page ****************************/
+    /* Classes List page **************************/
     .assigned-courses-page .btn-course-details,
     .teacher-classes-list .btn-course-details {
         width: fit-content;
@@ -2775,10 +2819,15 @@ header .wrapper-attendance-course-info p {
     |*** CLASSES LIST Page  ******************************|
     |*****************************************************/
 
-    .wrapper-assigned-classes-panel,
+
+    /*****************************************************|
+    |*** COURSES Page  ******************************|
+    |*****************************************************/
+
     .wrapper-assigned-courses-panel {
-        margin: 0 auto;
+        margin: 1rem auto;
     }
+
 
     /* *** COURSE DETAILS Page ****************************/
     /* *** COURSE STUDENTS LIST Page **********************/
@@ -2826,7 +2875,6 @@ header .wrapper-attendance-course-info p {
 
     /* !!! Also ATTENDANCE Page !!! ********************** */
     .course-status-buttons, 
-    .classes-filter-buttons, 
     .attendance-filter-card.two-filters {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
@@ -2968,6 +3016,26 @@ header .wrapper-attendance-course-info p {
         padding: 1rem 0.5rem;
     }
 
+
+    /*****************************************************|
+    |*** CLASSES LIST Page  *********************************|
+    |*****************************************************/
+
+    .assigned-classes-filter-header h2 {
+        padding: 0.25rem 0;
+        font-size: 1.6rem;
+        font-weight: 400;
+    }
+
+    .assigned-classes-filter-header i {
+    font-size: 1.6rem;
+    }
+
+    .assigned-classes-filter-header strong {
+        font-size: 1.3rem;
+        margin-left: 0.8rem;
+    }
+
     
     /*****************************************************|
     |*** COURSES Page  ***********************************|
@@ -3050,7 +3118,6 @@ header .wrapper-attendance-course-info p {
     /* *** CLASSES LIST Page ******************************/
     /* *** ATTENDANCE Page ********************************/
     .course-status-buttons, 
-    .classes-filter-buttons, 
     .attendance-filter-card.two-filters {
         grid-template-columns: repeat(1, 1fr);
         gap: 0.75rem;
