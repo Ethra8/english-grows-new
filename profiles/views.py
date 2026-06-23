@@ -355,15 +355,6 @@ def my_attendance(request):
 # TEACHER PROFILE  ******************************|
 # ***********************************************|
 
-from datetime import datetime, time, timedelta
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
-from django.utils import timezone
-
-from courses.models import Course, ClassSession, Attendance
-
-
 @login_required
 def teacher_dashboard(request):
     profile = request.user.profile
@@ -543,9 +534,14 @@ def teacher_classes_list(request):
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
 
+    start_of_month = today.replace(day=1)
+
     sessions = (
         ClassSession.objects
-        .filter(course__teacher=request.user)
+        .filter(
+            course__teacher=request.user,
+            course__status="active",
+        )
         .select_related(
             "course",
             "course__course_type",
@@ -560,60 +556,72 @@ def teacher_classes_list(request):
     )
 
     class_filter_counts = {
-        "upcoming": 0,
-        "today": 0,
-        "weekly": 0,
-        "past": 0,
-        "all": 0,
+        "upcoming": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
+        "completed": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
     }
 
     for session in sessions:
         session_date = timezone.localdate(session.start_time)
 
-        session.is_today = (
-            session_date == today
-            and not session.is_cancelled
-        )
-
-        session.is_this_week = (
-            start_of_week <= session_date <= end_of_week
-            and not session.is_cancelled
-        )
-
         session.is_upcoming = (
-            session.end_time >= now
+            session.start_time > now
             and not session.is_cancelled
         )
 
-        session.is_list_past = (
+        session.is_completed = (
             session.end_time < now
             and not session.is_cancelled
         )
 
-        if session.is_cancelled:
-            session.class_period = "cancelled"
-        elif session.is_today:
-            session.class_period = "today"
-        elif session.is_list_past:
-            session.class_period = "past"
-        elif session.is_upcoming:
-            session.class_period = "upcoming"
-        else:
-            session.class_period = "termly"
+        session.is_today = session_date == today
+        session.is_this_week = start_of_week <= session_date <= end_of_week
+        session.is_this_month = (
+            session_date.year == today.year
+            and session_date.month == today.month
+        )
 
-        class_filter_counts["all"] += 1
+        if session.is_cancelled:
+            session.class_status_group = "cancelled"
+        elif session.is_upcoming:
+            session.class_status_group = "upcoming"
+        elif session.is_completed:
+            session.class_status_group = "completed"
+        else:
+            session.class_status_group = "in_progress"
 
         if session.is_upcoming:
-            class_filter_counts["upcoming"] += 1
+            class_filter_counts["upcoming"]["all"] += 1
 
-        if session.is_today:
-            class_filter_counts["today"] += 1
+            if session.is_today:
+                class_filter_counts["upcoming"]["today"] += 1
 
-        if session.is_this_week:
-            class_filter_counts["weekly"] += 1
+            if session.is_this_week:
+                class_filter_counts["upcoming"]["weekly"] += 1
 
-        if session.is_list_past:
-            class_filter_counts["past"] += 1
+            if session.is_this_month:
+                class_filter_counts["upcoming"]["monthly"] += 1
+
+        if session.is_completed:
+            class_filter_counts["completed"]["all"] += 1
+
+            if session.is_today:
+                class_filter_counts["completed"]["today"] += 1
+
+            if session.is_this_week:
+                class_filter_counts["completed"]["weekly"] += 1
+
+            if session.is_this_month:
+                class_filter_counts["completed"]["monthly"] += 1
 
     context = {
         "sessions": sessions,
@@ -1269,6 +1277,7 @@ def teacher_attendance(request):
         ClassSession.objects
         .filter(
             course__teacher=request.user,
+            course__status="active",
             start_time__lte=now,
             is_cancelled=False,
         )

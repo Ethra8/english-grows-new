@@ -1,0 +1,68 @@
+<div class="assigned-class-row"
+     data-status-group="{{ session.class_status_group }}"
+     data-today="{{ session.is_today|yesno:'true,false' }}"
+     data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
+     data-monthly="{{ session.is_this_month|yesno:'true,false' }}">
+
+    <div class="class-main-info">
+
+        <div class="assigned-course-level">
+            <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+                {{ session.course.course_level|default:"Pending" }}
+            </span>
+        </div>
+
+        <div class="class-list-group-name">
+            <h3>
+                {{ session.course.name }}
+                <span class="text-white">- Lesson {{ session.class_number }}</span>
+            </h3>
+
+            <p>
+                <i class="fa-solid fa-calendar-day mr-1"></i>
+                {{ session.start_time|date:"D, j M" }} |
+                {{ session.start_time|time:"H:i" }} -
+                {{ session.end_time|time:"H:i" }}
+            </p>
+
+            {% if session.class_status_group == "completed" %}
+                <span class="status-badge status-completed mt-2">Completed</span>
+            {% elif session.is_today %}
+                <span class="status-badge status-today mt-2">Today</span>
+            {% else %}
+                <span class="status-badge status-upcoming mt-2">Upcoming</span>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="class-list-student-num">
+        <strong>
+            {% if session.course.enrollments.count <= 1 %}
+                <i class="fa-solid fa-user"></i>
+            {% elif session.course.enrollments.count == 2 %}
+                <i class="fa-solid fa-people-arrows"></i>
+            {% else %}
+                <i class="fa-solid fa-users-line"></i>
+            {% endif %}
+        </strong>
+
+        <span>
+            {{ session.course.enrollments.count }}
+            {% if session.course.enrollments.count <= 1 %}
+                Student
+            {% else %}
+                Students
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="course-action">
+        <a href="#" class="btn-course-details">
+            <i class="fa-regular fa-eye mr-2"></i>
+            View
+            <i class="fa-solid fa-chevron-right ml-2"></i>
+        </a>
+    </div>
+
+</div>

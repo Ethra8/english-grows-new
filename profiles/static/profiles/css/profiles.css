@@ -909,9 +909,9 @@ main.profile-main h1,
 @media (max-width: 1250px) {
    
     .profile-sidebar {
-        max-width:200px;
-        min-width: 200px;
-        padding: 0.75rem;
+        max-width: 170px;
+        min-width: 170px;
+        padding: 2rem 0.25rem;
     }
 
     /* STUDENT: Course page */

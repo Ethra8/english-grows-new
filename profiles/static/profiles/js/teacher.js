@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+// TEACHER CLASSES LIST PAGE
 document.addEventListener("DOMContentLoaded", function () {
     const panel = document.querySelector(".assigned-classes-panel");
 
@@ -148,19 +149,29 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    function rowMatchesFilter(row, selectedFilter) {
-        if (selectedFilter === "all") {
+    function rowMatchesFilter(row, selectedStatus, selectedPeriod) {
+        const rowStatus = row.dataset.statusGroup;
+
+        if (rowStatus !== selectedStatus) {
+            return false;
+        }
+
+        if (selectedPeriod === "all") {
             return true;
         }
 
-        return row.dataset[selectedFilter] === "true";
+        return row.dataset[selectedPeriod] === "true";
     }
 
-    function applyClassFilter(selectedFilter) {
+    function applyClassFilter(selectedStatus, selectedPeriod) {
         let visibleRows = 0;
 
         rows.forEach(function (row) {
-            const shouldShow = rowMatchesFilter(row, selectedFilter);
+            const shouldShow = rowMatchesFilter(
+                row,
+                selectedStatus,
+                selectedPeriod
+            );
 
             row.hidden = !shouldShow;
 
@@ -170,14 +181,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         filterButtons.forEach(function (button) {
-            button.classList.toggle(
-                "active",
-                button.dataset.filter === selectedFilter
-            );
+            const isActive =
+                button.dataset.status === selectedStatus &&
+                button.dataset.filter === selectedPeriod;
+
+            button.classList.toggle("active", isActive);
         });
 
         if (mobileFilter) {
-            mobileFilter.value = selectedFilter;
+            mobileFilter.value = `${selectedStatus}:${selectedPeriod}`;
         }
 
         if (noClassesMessage) {
@@ -187,19 +199,105 @@ document.addEventListener("DOMContentLoaded", function () {
 
     filterButtons.forEach(function (button) {
         button.addEventListener("click", function () {
-            const selectedFilter = button.dataset.filter;
-            applyClassFilter(selectedFilter);
+            const selectedStatus = button.dataset.status;
+            const selectedPeriod = button.dataset.filter;
+
+            applyClassFilter(selectedStatus, selectedPeriod);
         });
     });
 
     if (mobileFilter) {
         mobileFilter.addEventListener("change", function (event) {
-            const selectedFilter = event.target.value;
-            applyClassFilter(selectedFilter);
+            const [selectedStatus, selectedPeriod] = event.target.value.split(":");
+
+            applyClassFilter(selectedStatus, selectedPeriod);
         });
     }
 
-    applyClassFilter("upcoming");
+    applyClassFilter("upcoming", "all");
+});// TEACHER CLASSES LIST PAGE
+document.addEventListener("DOMContentLoaded", function () {
+    const panel = document.querySelector(".assigned-classes-panel");
+
+    if (!panel) {
+        return;
+    }
+
+    const mobileFilter = panel.querySelector("#classesListFilter");
+    const filterButtons = panel.querySelectorAll(".classes-filter-btn");
+    const rows = panel.querySelectorAll(".assigned-class-row");
+    const noClassesMessage = panel.querySelector("#noClassesMessage");
+
+    if (rows.length === 0) {
+        return;
+    }
+
+    function rowMatchesFilter(row, selectedStatus, selectedPeriod) {
+        const rowStatus = row.dataset.statusGroup;
+
+        if (rowStatus !== selectedStatus) {
+            return false;
+        }
+
+        if (selectedPeriod === "all") {
+            return true;
+        }
+
+        return row.dataset[selectedPeriod] === "true";
+    }
+
+    function applyClassFilter(selectedStatus, selectedPeriod) {
+        let visibleRows = 0;
+
+        rows.forEach(function (row) {
+            const shouldShow = rowMatchesFilter(
+                row,
+                selectedStatus,
+                selectedPeriod
+            );
+
+            row.hidden = !shouldShow;
+
+            if (shouldShow) {
+                visibleRows++;
+            }
+        });
+
+        filterButtons.forEach(function (button) {
+            const isActive =
+                button.dataset.status === selectedStatus &&
+                button.dataset.filter === selectedPeriod;
+
+            button.classList.toggle("active", isActive);
+        });
+
+        if (mobileFilter) {
+            mobileFilter.value = `${selectedStatus}:${selectedPeriod}`;
+        }
+
+        if (noClassesMessage) {
+            noClassesMessage.hidden = visibleRows > 0;
+        }
+    }
+
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const selectedStatus = button.dataset.status;
+            const selectedPeriod = button.dataset.filter;
+
+            applyClassFilter(selectedStatus, selectedPeriod);
+        });
+    });
+
+    if (mobileFilter) {
+        mobileFilter.addEventListener("change", function (event) {
+            const [selectedStatus, selectedPeriod] = event.target.value.split(":");
+
+            applyClassFilter(selectedStatus, selectedPeriod);
+        });
+    }
+
+    applyClassFilter("upcoming", "all");
 });
 
 

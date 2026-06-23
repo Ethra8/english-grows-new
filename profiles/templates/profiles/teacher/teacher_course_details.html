@@ -58,7 +58,7 @@
                 {% endif %}        
             </div>
             <div class="course-meta-text">
-                <strong>Students<i class="fa-solid fa-angles-right ml-3"></i></strong>
+                <strong>Students<i class="fa-solid fa-angle-right ml-3"></i></strong>
                 <span>{{ enrollments|length }}</span>
             </div>
         </a>
@@ -70,7 +70,7 @@
                 <i class="fa-solid fa-clipboard-check"></i>
             </div>
             <div class="course-meta-text">
-                <strong>Attendance<i class="fa-solid fa-angles-right ml-3"></i></strong>
+                <strong>Attendance<i class="fa-solid fa-angle-right ml-3"></i></strong>
                 <span>{{ average_attendance }} %</span>
             </div>
         </a>
@@ -218,58 +218,18 @@
 
             <!-- RIGHT COLUMN -->
             <div class="wrapper-course-details">
-                <div class="course-student-list-child">
-                    <div class="student-list-header">
-                        <h3 class="mb-4">
-                            <i class="fa-regular fa-address-book mr-3"></i>
-                            Student List
-                        </h3>
+                <div class="course-materials-child">
+                        <h3><i class="fa-solid fa-folder-open mr-3"></i>
+                            Course Materials</h3>
 
-                        {% if bcc_student_emails %}
-                        <div class="student-list-header-buttons">
-                            <a 
-                                href="mailto:?bcc={{ bcc_student_emails }}"
-                                class="btn-email-all">
-                                <i class="fa-solid fa-envelope mr-2"></i>
-                                Email all
-                                <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a>
-                        {% endif %}
-                            <a href="{% url 'profiles:teacher_course_students_list' course.id %}" class="btn-email-all">
-                                <i class="fa-regular fa-eye mr-2"></i>
-                                View
-                                <i class="fa-solid fa-chevron-right ml-2"></i>
-                            </a>
-                        </div>    
-                    </div>                    
-                    <!-- <h3><i class="fa-regular fa-address-book mr-3"></i>Student List</h3> -->
-                    <div class="course-detail-grid"> 
-
-                            {% if enrollments %}
-                            <div class="student-row-parent">
-                                {% for enrollment in enrollments %}
-                                    <div class="student-row">
-                                        <span class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2">
-                                            {{ enrollment.student.profile.current_level|default:"?" }}
-                                        </span>
-
-                                        <div>
-                                            <strong>
-                                                {{ enrollment.student.get_full_name|default:enrollment.student.username }}
-                                            </strong>
-                                            <a href="mailto: {{ enrollment.student.email }}">
-                                                <span>{{ enrollment.student.email }}</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <p class="text-white">No students enrolled yet.</p>
-                            {% endif %}
-                            </div>
-                    </div>
+                        <a href="https://www.cambridge.es/en/catalogue/business-english/professional-vocational-titles/business-vocabulary-in-use" class="btn-course-details" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-regular fa-eye mr-2"></i>
+                            View
+                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                        </a>
                 </div>
             </div>
+
         </div>    
     </div>
 </section>
