@@ -40,13 +40,32 @@
 
                         <div class="assigned-classes-filter-header">
                             <h2><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>
-                                Upcoming Classes<strong>{{ class_filter_counts.upcoming.all }}</strong></h2>
+                                Upcoming Classes</h2>
                             <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
                         </div>
+
+                        <!-- <div class="assigned-classes-overview-smaller-devices">
+                            <h3 class="classes-filter-btn">
+                                <span>Today</span>
+                                <strong>{{ class_filter_counts.upcoming.today }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>This Week</span>
+                                <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>This Month</span>
+                                <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>All</span>
+                                <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                            </h3>
+                        </div> -->
                     </div>
 
                     <div id="upcomingClassesCollapse" class="collapse show classes-panel-collapse">
-
+                        
                         <div class="classes-filter-buttons">
 
                             <button type="button" class="classes-filter-btn active"
@@ -69,6 +88,7 @@
                                 <span>This Month</span>
                                 <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
                             </button>
+
                             <button type="button" class="classes-filter-btn"
                                     data-filter="all">
                                 <!-- <i class="fa-solid fa-calendar-days"></i> -->
@@ -78,11 +98,30 @@
 
                         </div>
                         
+                        <div class="assigned-classes-overview-smaller-devices">
+                            <h3 class="classes-filter-btn">
+                                <span>Today</span>
+                                <strong>{{ class_filter_counts.upcoming.today }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>This Week</span>
+                                <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>This Month</span>
+                                <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+                            </h3>
+                            <h3 class="classes-filter-btn">
+                                <span>All</span>
+                                <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                            </h3>
+                        </div>
+
                         <select class="mobile-filter-select classes-panel-select">
-                            <option value="all">All</option>
                             <option value="today">Today</option>
                             <option value="weekly">This Week</option>
                             <option value="monthly">This Month</option>
+                            <option value="all">All</option>
                         </select>                        
 
                         <div class="assigned-courses-list">
@@ -117,7 +156,7 @@
                             <h2>
                                 <i class="fa-solid fa-clock-rotate-left mr-3"></i>
                                 Past Classes
-                                <strong>{{ class_filter_counts.completed.all }}</strong>
+                                <!-- <strong>{{ class_filter_counts.completed.all }}</strong> -->
                             </h2>
 
                             <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
@@ -158,13 +197,13 @@
 
                         </div>
                         
-                        <select class="mobile-filter-select classes-panel-select">
-                            <option value="all">All</option>
+                        <!-- <select class="mobile-filter-select classes-panel-select">
                             <option value="today">Today</option>
                             <option value="weekly">This Week</option>
                             <option value="monthly">This Month</option>
+                            <option value="all">All</option>
                         </select>                        
-
+ -->
                         <div class="assigned-courses-list">
                             {% for session in sessions %}
                                 {% if session.class_status_group == "completed" %}

@@ -37,25 +37,25 @@
                     <div class="course-status-buttons">
 
                         <button type="button" class="course-status-btn active" data-status="active">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <!-- <i class="fa-regular fa-circle-play"></i> -->
                             <span>Active</span>
                             <strong>{{ active_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="confirmed">
-                            <i class="fa-regular fa-circle-check"></i>
+                            <!-- <i class="fa-regular fa-circle-check"></i> -->
                             <span>Confirmed</span>
                             <strong>{{ confirmed_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="paused">
-                            <i class="fa-regular fa-circle-pause"></i>
+                            <!-- <i class="fa-regular fa-circle-pause"></i> -->
                             <span>Paused</span>
                             <strong>{{ paused_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="cancelled">
-                            <i class="fa-regular fa-circle-xmark"></i>
+                            <!-- <i class="fa-regular fa-circle-xmark"></i> -->
                             <span>Cancelled</span>
                             <strong>{{ cancelled_courses }}</strong>
                         </button>
@@ -67,15 +67,14 @@
                         </button>
 
                     </div>
-                    <div class="select-wrapper">
-                        <select id="courseStatusFilter" class="course-status-select">
-                            <option value="all">All Status</option>
-                            <option value="active" selected>Active</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="paused">Paused</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-                    </div>
+  
+                    <select id="courseStatusFilter" class="course-status-select">
+                        <option value="active" selected>Active</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="paused">Paused</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="all">All Status</option>
+                    </select>
                 </div>            
             </div>
 
