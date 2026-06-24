@@ -310,7 +310,7 @@ h2 {
 .btn-to-student-detail {
     border: 1px solid #5eead4;
     color: #5eead4;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 400;
@@ -546,7 +546,7 @@ h2 {
 
 .today-time,
 .today-course {
-    padding: 0.9rem 1rem 0.9rem 1.5rem;
+    padding: 0.9rem 1rem;
     margin: 0 auto;
 }
 
@@ -555,9 +555,9 @@ h2 {
     color: #5eead4;
     font-weight: 700;
     background: rgba(0, 51, 102, 0.45);
-    width: 170px;
-    min-height: 40px !important;
-    height: 70px !important;
+    /* width: 170px;
+    min-height: 40px !important; */
+    height: 70px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -1102,7 +1102,7 @@ h2 {
 .teacher-course-students-list header h2,
 .teacher-group-attendance-page header h2 {
     color: #c1f7e3;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     margin-top: 0;
     padding-top: 0;
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
@@ -2394,6 +2394,34 @@ header .wrapper-attendance-course-info p {
 
 
 
+@media (max-width: 1600px) {
+
+    /******************************************************/
+    /* DASHBOARD Page *********************************** */
+    /******************************************************/
+    
+    /* Today's Classes ********** */
+    
+    .today-classes-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.5rem;
+    }
+
+    .today-card-left {
+        padding: 1.5rem 1.5rem 0.15rem;
+    }
+
+    .today-time,
+    .today-course {
+        border: 0;
+    }
+
+
+}
+
+
+
 @media (min-width: 1367.99px) and (max-width: 1700px) {
 
     /* CLASS LIST Page ******************* */
@@ -2455,26 +2483,7 @@ header .wrapper-attendance-course-info p {
     /* DASHBOARD Page *********************************** */
     /******************************************************/
     
-    /* Today's Classes ********** */
     
-    .today-classes-card {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 0.5rem;
-    }
-
-    .today-card-left {
-        padding: 1.5rem 1.5rem 0.15rem;
-    }
-
-    .today-time,
-    .today-course {
-        border: 0;
-    }
-
-    .today-calendar-btn {
-        text-align: center;
-    }
 
     /******************************************************/
     /* COURSES Page (All courses assigned) ************** */
@@ -2511,9 +2520,9 @@ header .wrapper-attendance-course-info p {
         text-align: center;
     } */
 
-    .course-action {
+    /* .course-action {
         padding-left: 1.5rem;
-    }
+    } */
 
     /* .course-header-meta-row {
         grid-template-columns: repeat(3, 1fr);
@@ -2696,7 +2705,7 @@ header .wrapper-attendance-course-info p {
     .attendance-row {
         grid-template-columns: 1fr;
         gap: 0.8rem;
-        padding: 1.4rem 1rem;
+        padding: 1.4rem 1rem 1rem;
     }
 
 
@@ -2789,10 +2798,10 @@ header .wrapper-attendance-course-info p {
     /* Courses page *******************************/
     /* Attendance page ****************************/
     /* Classes List page **************************/
-    .assigned-courses-page .btn-course-details,
+    /* .assigned-courses-page .btn-course-details,
     .teacher-classes-list .btn-course-details {
         width: fit-content;
-    }
+    } */
 
 
     /*****************************************************|
@@ -2819,15 +2828,20 @@ header .wrapper-attendance-course-info p {
     .today-time {
         width: 100%;
         border-bottom: 1px solid rgba(80, 230, 220, 0.25);
+        height: 50px;
     }
 
     .today-course {
         width: 100%;
     }
 
-    .btn-class-today {
-        width: calc(100% - 3rem);
-        margin: 1.5rem;
+    .btn-class-today,
+    .btn-course-details,
+    .btn-email-all,
+    .edit-attendance-btn,
+    .btn-to-student-detail  {
+        width: 100%;
+        margin: 0;
         box-sizing: border-box;    
     }
 
@@ -2908,6 +2922,13 @@ header .wrapper-attendance-course-info p {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 1rem;
+        padding: 1.5rem 1.4rem 1rem;
+    }
+
+    .class-list-group-name, .course-list-group-name {
+        border-left: none;
+        padding-left: 0;
+        padding-bottom: 0.75rem;
     }
 
     /* !!! Also ATTENDANCE Page !!! ********************** */
