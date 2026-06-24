@@ -57,9 +57,13 @@
                         <i class="fa-regular fa-user mr-2"></i>
                         {{ student_profile.get_role_display|default:"Student" }}
                     </span>
-
-                    <span class="student-active-dot"></span>
-                    <span>Active</span>
+                </div>
+                <div class="student-meta-line mt-3">
+                    {% if student.is_active %}
+                        <span class="status-badge status-active">Active</span>
+                    {% else %}
+                        <span class="status-badge status-inactive">Inactive</span>
+                    {% endif %}
                 </div>
             </div>
 
@@ -68,17 +72,17 @@
         <div class="student-header-actions">
 
             <a href="mailto:{{ student.email }}" class="student-action-btn">
-                <i class="fa-regular fa-envelope mr-2"></i>
+                <i class="fa-regular fa-envelope mr-3"></i>
                 Message
             </a>
 
             <a href="#" class="student-action-btn">
-                <i class="fa-solid fa-pen mr-2"></i>
+                <i class="fa-solid fa-pen mr-3"></i>
                 Edit Profile
             </a>
 
-            <a href="#" class="student-action-btn student-action-btn-green">
-                <i class="fa-regular fa-calendar-check mr-2"></i>
+            <a href="#" class="student-action-btn">
+                <i class="fa-regular fa-calendar-check mr-3"></i>
                 Attendance
             </a>
 
@@ -192,18 +196,14 @@
                             <strong>{{ total_classes }}</strong>
                         </div>
 
-                        <div class="detail-row">
-                            <span>Past Classes</span>
-                            <strong>{{ completed_classes }}</strong>
-                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <a href="{% url 'profiles:teacher_course_details' course.id %}" class="student-card-link">
+            <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
                 View course details
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
         </article>
 
@@ -248,9 +248,9 @@
 
             </div>
 
-            <a href="#" class="student-card-link">
+            <a href="#" class="btn-course-details mt-3">
                 View full attendance
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
         </article>
 
@@ -295,9 +295,9 @@
 
             </div>
 
-            <a href="#" class="student-card-link">
+            <a href="#" class="btn-course-details mt-3">
                 View detailed progress
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
         </article>
 
@@ -372,9 +372,9 @@
                     <p class="text-white-50">No completed attendance records yet.</p>
                 {% endfor %}
             </div>
-            <a href="#" class="student-card-link">
+            <a href="#" class="btn-course-details mt-3">
                 View all attendance
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
         </article>
 
