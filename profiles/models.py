@@ -5,9 +5,10 @@ from django.dispatch import receiver
 
 from django.shortcuts import get_object_or_404
 
-
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+
+from courses.models import Course
 
 
 class Company(models.Model):
@@ -337,3 +338,137 @@ class StudentAcademicProfile(models.Model):
 
     def __str__(self):
         return f"Academic Profile - {self.student}"
+
+
+SUBSKILLS = {
+    "speaking": [
+        ("range", "Range"),
+        ("fluency", "Fluency"),
+        ("accuracy", "Accuracy"),
+        ("pronunciation", "Pronunciation & Intonation"),
+        ("interaction", "Interaction"),
+    ],
+
+    "reading": [
+        ("scanning", "Scanning"),
+        ("skimming", "Skimming"),
+        ("reading_comprehension", "Reading Comprehension"),
+    ],
+
+    "listening": [
+        ("gist", "Listening for Gist"),
+        ("specific_information", "Listening for Specific Information"),
+        ("detail", "Listening for Detail"),
+    ],
+
+    "writing": [
+        ("organization", "Organization"),
+        ("cohesion", "Cohesion & Coherence"),
+        ("vocabulary_grammar", "Vocabulary & Grammar"),
+        ("register", "Register"),
+    ],
+}
+
+SUBSKILL_CHOICES = [
+    choice
+    for subskills in SUBSKILLS.values()
+    for choice in subskills
+]
+
+class StudentSkillAssessment(models.Model):
+    SKILL_AREA_CHOICES = [
+        ("speaking", "Speaking"),
+        ("reading", "Reading"),
+        ("writing", "Writing"),
+        ("listening", "Listening"),
+    ]
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="skill_assessments",
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="student_skill_assessments",
+    )
+
+    skill = models.CharField(
+        max_length=20,
+        choices=SKILL_AREA_CHOICES,
+    )
+
+    teacher_notes = models.TextField(blank=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("student", "course", "skill")
+
+    def __str__(self):
+        return (
+            f"{self.student.get_full_name()} · "
+            f"{self.course.name} · "
+            f"{self.get_skill_display()}"
+        )
+
+    @property
+    def average_percentage(self):
+        subskills = self.subskill_assessments.all()
+
+        if not subskills.exists():
+            return 0
+
+        total = sum(
+            subskill.percentage
+            for subskill in subskills
+        )
+
+        return round(total / subskills.count())
+
+
+
+class StudentSubSkillAssessment(models.Model):
+    RATING_CHOICES = [
+        ("needs_work", "Needs Work"),
+        ("developing", "Developing"),
+        ("secure", "Secure"),
+        ("strong", "Strong"),
+    ]
+
+    skill_assessment = models.ForeignKey(
+        StudentSkillAssessment,
+        on_delete=models.CASCADE,
+        related_name="subskill_assessments",
+    )
+
+    subskill = models.CharField(
+        max_length=50,
+        choices=SUBSKILL_CHOICES,
+    )
+
+    percentage = models.PositiveSmallIntegerField(
+        default=0,
+    )
+
+    rating = models.CharField(
+        max_length=20,
+        choices=RATING_CHOICES,
+        default="developing",
+    )
+
+    teacher_notes = models.TextField(blank=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("skill_assessment", "subskill")
+        ordering = ["subskill"]
+
+    def __str__(self):
+        return (
+            f"{self.skill_assessment.get_skill_display()} → "
+            f"{self.get_subskill_display()}"
+        )

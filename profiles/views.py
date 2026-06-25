@@ -11,8 +11,8 @@ from datetime import timedelta, datetime, time
 import calendar
 from collections import defaultdict
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile
-from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment
+from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSubSkillAssessmentForm
 
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
@@ -26,6 +26,7 @@ def login_redirect(request):
         return redirect("profiles:teacher_dashboard")
 
     return redirect("profiles:profile")
+
 
 
 # STUDENT for UserProfile
@@ -72,6 +73,7 @@ def profile(request):
     }
 
     return render(request, "profiles/profile.html", context)
+
 
 
 @login_required
@@ -167,6 +169,7 @@ def my_course(request):
     return render(request, "profiles/student/my_course.html", context)
 
 
+
 # STUDENT CALENDAR PAGE
 @login_required
 def my_calendar(request):
@@ -191,6 +194,7 @@ def my_calendar(request):
 
 
     return render(request, "profiles/student/my_calendar.html", context)
+
 
 
 # STUDENT CALENDAR PAGE
@@ -279,6 +283,7 @@ def my_calendar_events(request):
     return JsonResponse(events, safe=False)
 
 
+
 # STUDENT ATTENDANCE PAGE
 @login_required
 def my_attendance(request):
@@ -346,10 +351,10 @@ def my_attendance(request):
     return render(request, "profiles/student/my_attendance.html", context)
 
 
+
 # ***********************************************|
 # TEACHER PROFILE  ******************************|
 # ***********************************************|
-
 
 @login_required
 def teacher_dashboard(request):
@@ -583,6 +588,7 @@ def teacher_dashboard(request):
     }
 
     return render(request, "profiles/teacher/teacher_dashboard.html", context)
+
 
 
 @login_required
@@ -904,6 +910,7 @@ def teacher_group_attendance(request, course_id):
     )
 
 
+
 @login_required
 def teacher_session_attendance_detail(request, session_id):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -941,6 +948,7 @@ def teacher_session_attendance_detail(request, session_id):
         "profiles/teacher/teacher_session_attendance_detail.html",
         context,
     )
+
 
 
 @login_required
@@ -1153,7 +1161,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "completion_percentage": completion_percentage,
 
         "recent_attendance": recent_attendance,
-        "active_tab": "overview",
+        # "active_tab": "overview",
     }
 
     return render(
@@ -1161,6 +1169,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "profiles/teacher/teacher_student_detail.html",
         context
     )
+
 
 
 @login_required
@@ -1253,6 +1262,7 @@ def update_student_level(request, course_id, enrollment_id):
         course_id=course.id,
         enrollment_id=enrollment.id
     )
+
 
 
 def student_attendance_record(request, course_id, enrollment_id):
@@ -1397,6 +1407,176 @@ def update_student_attendance_status(request, course_id, enrollment_id, attendan
     )
 
 
+
+@login_required
+def student_skills_overview(request, course_id, enrollment_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_icons = {
+        "speaking": "fa-solid fa-microphone",
+        "reading": "fa-solid fa-book-open",
+        "writing": "fa-solid fa-pen",
+        "listening": "fa-solid fa-headphones",
+    }
+
+    subskills_by_skill = {
+        "speaking": [
+            "range",
+            "fluency",
+            "accuracy",
+            "pronunciation",
+            "interaction",
+        ],
+        "reading": [
+            "scanning",
+            "skimming",
+            "reading_comprehension",
+        ],
+        "listening": [
+            "gist",
+            "specific_information",
+            "detail",
+        ],
+        "writing": [
+            "organization",
+            "cohesion",
+            "vocabulary_grammar",
+            "register",
+        ],
+    }
+
+    valid_skill_values = [
+        skill_value
+        for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES
+    ]
+
+    for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES:
+        skill_assessment, created = StudentSkillAssessment.objects.get_or_create(
+            student=student,
+            course=course,
+            skill=skill_value,
+        )
+
+        for subskill_value in subskills_by_skill[skill_value]:
+            StudentSubSkillAssessment.objects.get_or_create(
+                skill_assessment=skill_assessment,
+                subskill=subskill_value,
+            )
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+            skill__in=valid_skill_values,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skills = []
+
+    for assessment in skill_assessments:
+        skills.append({
+            "assessment": assessment,
+            "name": assessment.get_skill_display(),
+            "icon": skill_icons.get(
+                assessment.skill,
+                "fa-solid fa-chart-simple"
+            ),
+            "percentage": assessment.average_percentage,
+            "subskills": assessment.subskill_assessments.all(),
+        })
+
+    academic_profile = getattr(student, "academic_profile", None)
+
+    context = {
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "academic_profile": academic_profile,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/student_skills_overview.html",
+        context,
+    )
+
+
+@login_required
+def edit_student_subskill_assessment(request, course_id, enrollment_id, subskill_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment,
+        id=enrollment_id,
+        course=course,
+    )
+
+    subskill = get_object_or_404(
+        StudentSubSkillAssessment,
+        id=subskill_id,
+        skill_assessment__student=enrollment.student,
+        skill_assessment__course=course,
+    )
+
+    if request.method == "POST":
+        form = StudentSubSkillAssessmentForm(
+            request.POST,
+            instance=subskill,
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "profiles:student_skills_overview",
+                course_id=course.id,
+                enrollment_id=enrollment.id,
+            )
+    else:
+        form = StudentSubSkillAssessmentForm(instance=subskill)
+
+    context = {
+        "course": course,
+        "enrollment": enrollment,
+        "student": enrollment.student,
+        "student_profile": enrollment.student.profile,
+        "subskill": subskill,
+        "form": form,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/edit_student_subskill_assessment.html",
+        context,
+    )
+
+
+
 # TEACHER CALENDAR PAGE
 @login_required
 def teacher_calendar(request):
@@ -1424,6 +1604,7 @@ def teacher_calendar(request):
     return render(request, "profiles/teacher/teacher_calendar.html", context)
 
 
+# Create Calendar EVENTS
 @login_required
 def teacher_calendar_events(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -1671,6 +1852,7 @@ def teacher_take_attendance(request, session_id):
         "profiles/teacher/teacher_take_attendance.html",
         context,
     )
+
 
 
 @login_required

@@ -1553,25 +1553,6 @@ div:has(> .student-action-btn) {
     padding: 0.35rem 0rem;
 }
 
-/* .status-attended {
-    background: rgba(72, 209, 144, 0.25);
-    color: #7dffc1;
-} */
-
-/* .status-missed {
-    background: rgba(255, 88, 88, 0.25);
-    color: #ff9b9b;
-} */
-
-/* .status-excused {
-    background: rgba(255, 196, 87, 0.25);
-    color: #ffd98a;
-} */
-
-/* .status-scheduled {
-    background: rgba(95, 255, 234, 0.18);
-    color: #5fffea;
-} */
 
 /* ** ALL Attendance PAGES: status-pill *********/
 
@@ -2214,7 +2195,9 @@ header .wrapper-attendance-course-info p {
 |*****************************************/
 
 
-.teacher-student-detail-page {
+.teacher-student-detail-page,
+.teacher-student-skills-page,
+.teacher-edit-skill-page {
     color: #fff;
 }
 
@@ -2446,6 +2429,141 @@ header .wrapper-attendance-course-info p {
     border-color: whitesmoke;
 }
 
+
+/************************************************|
+**** STUDENT SKILLS OVERVIEW Page *************|
+*********************************************** */
+
+.chart-bar span {
+    width: calc(var(--progress) * 1%);
+}
+
+.student-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    margin-top: 2rem;
+}
+
+.student-skill-card,
+.student-skills-chart-card,
+.student-skills-notes-card {
+    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: whitesmoke;
+}
+
+.skill-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skill-card-header i {
+    color: #5fffea;
+    font-size: 1.4rem;
+}
+
+.skill-card-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.skill-ring {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #5fffea calc(var(--skill-progress) * 1%),
+            rgba(255,255,255,0.16) 0
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-ring > div {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: #003366;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-ring strong {
+    font-size: 1.4rem;
+}
+
+.skill-ring span {
+    font-size: 0.75rem;
+    color: #c1f7e3;
+}
+
+.skill-details strong {
+    color: #5fffea;
+    font-size: 0.9rem;
+}
+
+.skill-details ul {
+    padding-left: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.skill-trend {
+    margin-top: 1rem;
+    color: #5fffea;
+}
+
+.student-skills-bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 50px;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.chart-row div {
+    height: 10px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.chart-row div span {
+    display: block;
+    height: 100%;
+    background: #5fffea;
+    border-radius: 999px;
+}
+
+@media (max-width: 1200px) {
+    .student-skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .student-skills-grid,
+    .student-skills-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 
 

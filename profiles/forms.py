@@ -1,8 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal
-
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal, StudentSubSkillAssessment
 
 class UserProfileForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -143,3 +142,22 @@ class StudentAcademicProfileForm(forms.ModelForm):
         self.fields["learning_goals"].queryset = LearningGoal.objects.filter(
             is_active=True
         )
+
+
+
+class StudentSubSkillAssessmentForm(forms.ModelForm):
+    class Meta:
+        model = StudentSubSkillAssessment
+        fields = [
+            "percentage",
+            "rating",
+            "teacher_notes",
+        ]
+
+        widgets = {
+            "percentage": forms.NumberInput(attrs={
+                "min": 0,
+                "max": 100,
+            }),
+            "teacher_notes": forms.Textarea(attrs={"rows": 4}),
+        }
