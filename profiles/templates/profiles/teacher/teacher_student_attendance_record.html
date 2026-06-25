@@ -80,11 +80,14 @@
                     <i class="fa-solid fa-pen mr-3"></i>
                     Edit Profile
                 </a> -->
-
-                <a href="#" class="student-action-btn">
+                <button type="button" id="editAttendanceBtn" class="student-action-btn">
+                    <i class="fa-solid fa-pen mr-2"></i>
+                    Edit Attendance
+                </button>
+                <!-- <a href="#" class="student-action-btn">
                     <i class="fa-solid fa-pen mr-3"></i>
                     Edit Attendance
-                </a>
+                </a> -->
             </div>
             <div class="student-level-area">
                 <small>Current Level</small>
@@ -119,9 +122,9 @@
 
     </div>
 
-    <div class="student-overview-grid">
+    <div class="student-overview-grid mt-4">
 
-        <article class="student-detail-card recent-attendance-card mt-4">
+        <article class="student-detail-card recent-attendance-card">
             <h2>
                 <i class="fa-solid fa-list-check mr-2"></i>
                 Attendance Records
@@ -176,7 +179,7 @@
 
                     <div class="attendance-status">
                         {% if attendance.status == "attended" %}
-                            <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
+                            <span class="status-pill attended"><i class="fa-solid fa-user-check"></i></span>
                         {% elif attendance.status == "missed" %}
                             <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
                         {% elif attendance.status == "excused" %}
@@ -185,6 +188,25 @@
                             <span class="status-pill pending">{{ attendance.status|title }}</span>
                         {% endif %}
                     </div>
+
+                    <form class="attendance-edit-form d-none"
+                        method="POST"
+                        action="{% url 'profiles:update_student_attendance_status' course.id enrollment.id attendance.id %}">
+                        {% csrf_token %}
+
+                        <button type="submit" name="status" value="attended" class="status-pill attended">
+                            <i class="fa-solid fa-user-check"></i>
+                        </button>
+
+                        <button type="submit" name="status" value="missed" class="status-pill missed">
+                            <i class="fa-solid fa-user-xmark"></i>
+                        </button>
+
+                        <button type="submit" name="status" value="excused" class="status-pill pending">
+                            <i class="fa-solid fa-user-minus"></i>
+                        </button>
+                    </form>
+
 
                     </div>
                 {% empty %}
@@ -203,4 +225,25 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const editBtn = document.getElementById("editAttendanceBtn");
+
+    if (!editBtn) {
+        return;
+    }
+
+    editBtn.addEventListener("click", function () {
+        document.querySelectorAll(".attendance-current-status").forEach(function (item) {
+            item.classList.toggle("d-none");
+        });
+
+        document.querySelectorAll(".attendance-edit-form").forEach(function (form) {
+            form.classList.toggle("d-none");
+        });
+
+        editBtn.classList.toggle("active");
+    });
+});
+</script>
 {% endblock %}

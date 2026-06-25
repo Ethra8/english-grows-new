@@ -1,0 +1,65 @@
+.wrapper-account-settings-form {
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: rgba(106, 250, 225, 0.2);
+    max-width: fit-content;
+    width: 70%;
+}
+
+.account-settings-form {
+    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    padding: 2rem;
+    border: 1px solid rgba(94, 234, 212, 0.85);
+    margin: 0 auto;
+    box-shadow: 0 1px 3px 0 #003366;
+    border-radius: 8px;
+    min-width: 100%;
+    color: whitesmoke;
+    line-height: 1.7;
+}
+
+.account-settings-form label {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: #C1F7E3;
+    border-top: outset 1px #008f8f;
+    padding-top: 1rem;
+    width: 100%;
+}
+
+#id_specialties_helptext {
+    color: lightgray !important;
+}
+
+/* ********************************************* */
+/* *** ACADEMIC STUDENT PROFILE FORM *************/
+/* ********************************************* */
+
+.account-settings-form .form-check {
+    position: relative;
+    padding-left: 1.25rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: .25rem;
+}
+
+/* Form : Academic Student Profile */
+label.form-check-label {
+    text-transform: capitalize;
+    border-top: none;
+    padding-top: 0;
+    color: whitesmoke;
+    font-weight: 400;
+}
+
+
+
+@media (max-width: 991px) {
+
+    .wrapper-account-settings-form {
+        width: 100%;
+    }
+
+}

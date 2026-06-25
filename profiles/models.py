@@ -3,6 +3,10 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from django.shortcuts import get_object_or_404
+
+
+from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 
 
@@ -222,3 +226,114 @@ class TeacherProfile(models.Model):
 
     def __str__(self):
         return self.user.get_full_name() or self.user.username
+
+
+# TO be able to update learning_goals in student profile
+# ALSO from the Admin Panel
+class LearningGoal(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class StudentAcademicProfile(models.Model):
+
+    LEARNING_GOAL_CHOICES = [
+        ("conversation", "Conversation Fluency"),
+        ("grammar_accuracy", "Grammar Accuracy"),
+        ("vocabulary", "Vocabulary Building"),
+        ("pronunciation", "Pronunciation"),
+        ("listening", "Listening Confidence"),
+        ("business_english", "Business English"),
+        ("emails", "Professional Emails"),
+        ("meetings", "Meetings"),
+        ("presentations", "Presentations"),
+        ("exam_prep", "Exam Preparation"),
+    ]
+
+    SKILL_AREA_CHOICES = [
+        ("speaking", "Speaking"),
+        ("listening", "Listening"),
+        ("reading", "Reading"),
+        ("writing", "Writing"),
+        ("grammar", "Grammar"),
+        ("vocabulary", "Vocabulary"),
+        ("pronunciation", "Pronunciation"),
+        ("fluency", "Fluency"),
+        ("accuracy", "Accuracy"),
+        ("confidence", "Confidence"),
+    ]
+
+    student = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="academic_profile"
+    )
+
+    current_level = models.CharField(
+        max_length=10,
+        choices=UserProfile.LEVEL_CHOICES,
+        blank=True,
+        null=True
+    )
+
+    target_level = models.CharField(
+        max_length=10,
+        choices=UserProfile.LEVEL_CHOICES,
+        blank=True,
+        null=True
+    )
+
+    learning_goals = models.ManyToManyField(
+        LearningGoal,
+        blank=True,
+        related_name="student_academic_profiles"
+    )
+
+    strengths = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    weaknesses = models.JSONField(
+        default=list,
+        blank=True
+    )   
+    
+    teacher_notes = models.TextField(blank=True)
+
+    participation = models.CharField(
+        max_length=20,
+        choices=[
+            ("excellent", "Excellent"),
+            ("good", "Good"),
+            ("average", "Average"),
+            ("needs_support", "Needs Support"),
+        ],
+        blank=True,
+        null=True
+    )
+
+    risk_status = models.CharField(
+        max_length=20,
+        choices=[
+            ("low", "Low"),
+            ("medium", "Medium"),
+            ("high", "High"),
+        ],
+        default="low"
+    )
+
+    next_review_date = models.DateField(blank=True, null=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Academic Profile - {self.student}"

@@ -11,8 +11,8 @@ from datetime import timedelta, datetime, time
 import calendar
 from collections import defaultdict
 
-from .models import UserProfile, TeacherProfile
-from .forms import UserProfileForm, TeacherProfileForm
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile
+from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm
 
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
@@ -76,54 +76,48 @@ def profile(request):
 
 @login_required
 def profile_settings(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
+    profile_user = request.user
 
-    form = UserProfileForm(
-        request.POST,
-        request.FILES,
-        instance=user_profile,
-        user=request.user
-    )
+    profile = get_object_or_404(UserProfile, user=profile_user)
 
-    active_enrollment = (
-        CourseEnrollment.objects
-        .filter(
-            student=request.user,
-            status="active"
-        )
-        .select_related(
-            "course",
-            "course__course_type",
-            "course__company",
-            "course__teacher",
-        )
-        .first()
-    )    
+    # Security: only allow the user themselves or teachers/admins
+    if profile_user != request.user:
+        if request.user.profile.role != "teacher" and not request.user.is_staff:
+            return redirect("home")
 
     if request.method == "POST":
         form = UserProfileForm(
             request.POST,
             request.FILES,
-            instance=user_profile,
-            user=request.user
+            instance=profile,
+            user=profile_user,
         )
 
         if form.is_valid():
             form.save()
-            messages.success(request, "Your profile has been updated.")
-            return redirect("profiles:profile_settings")
+
+            profile_user.first_name = form.cleaned_data["first_name"]
+            profile_user.last_name = form.cleaned_data["last_name"]
+            profile_user.email = form.cleaned_data["email"]
+            profile_user.save()
+
+            return redirect("profiles:profile_settings", user_id=profile_user.id)
 
     else:
-        form = UserProfileForm(instance=user_profile, user=request.user)
+        form = UserProfileForm(
+            instance=profile,
+            user=profile_user,
+        )
 
     context = {
-        "profile": user_profile,
-        "active_enrollment": active_enrollment,
         "form": form,
+        "profile": profile,
+        "profile_user": profile_user,
     }
 
     return render(request, "profiles/profile_settings.html", context)
 
+    
 
 # ************************************|
 # STUDENT PROFILE  *******************|
@@ -1169,6 +1163,62 @@ def teacher_student_detail(request, course_id, enrollment_id):
     )
 
 
+@login_required
+def student_academic_profile_settings(request, course_id, enrollment_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+
+    academic_profile, created = StudentAcademicProfile.objects.get_or_create(
+        student=student
+    )
+
+    if request.method == "POST":
+        form = StudentAcademicProfileForm(
+            request.POST,
+            instance=academic_profile,
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "profiles:teacher_student_detail",
+                course_id=course.id,
+                enrollment_id=enrollment.id,
+            )
+    else:
+        form = StudentAcademicProfileForm(instance=academic_profile)
+
+    context = {
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student.profile,
+        "academic_profile": academic_profile,
+        "form": form,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/student_academic_profile_settings.html",
+        context,
+    )
+
+
 
 @login_required
 def update_student_level(request, course_id, enrollment_id):
@@ -1307,6 +1357,43 @@ def student_attendance_record(request, course_id, enrollment_id):
         request,
         "profiles/teacher/teacher_student_attendance_record.html",
         context
+    )
+
+
+# FROM STUDENT DETAIL Page --> ATTENDANCE RECORD Page
+# Update attendance directly
+@login_required
+def update_student_attendance_status(request, course_id, enrollment_id, attendance_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment,
+        id=enrollment_id,
+        course=course,
+    )
+
+    attendance = get_object_or_404(
+        Attendance,
+        id=attendance_id,
+        student=enrollment.student,
+        class_session__course=course,
+    )
+
+    if request.method == "POST":
+        status = request.POST.get("status")
+
+        if status in ["attended", "missed", "excused"]:
+            attendance.status = status
+            attendance.save()
+
+    return redirect(
+        "profiles:student_attendance_record",
+        course_id=course.id,
+        enrollment_id=enrollment.id,
     )
 
 

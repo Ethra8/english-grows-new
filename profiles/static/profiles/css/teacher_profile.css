@@ -1444,6 +1444,15 @@ div:has(> .student-action-btn) {
 **************************************** */
 
 
+/************************************************|
+**** COURSE_STUDENTS_LIST Page ******************|
+*********************************************** */
+
+.teacher-course-students-list .course-details-child h3 {
+    padding: 0 0 1rem;
+}
+
+
 /******************************************|
 **** COURSE_ATTENDANCE Records Page *******|
 **************************************** */
@@ -1547,24 +1556,55 @@ div:has(> .student-action-btn) {
     padding: 0.35rem 0rem;
 }
 
-.status-attended {
+/* .status-attended {
     background: rgba(72, 209, 144, 0.25);
     color: #7dffc1;
-}
+} */
 
-.status-missed {
+/* .status-missed {
     background: rgba(255, 88, 88, 0.25);
     color: #ff9b9b;
-}
+} */
 
-.status-excused {
+/* .status-excused {
     background: rgba(255, 196, 87, 0.25);
     color: #ffd98a;
-}
+} */
 
-.status-scheduled {
+/* .status-scheduled {
     background: rgba(95, 255, 234, 0.18);
     color: #5fffea;
+} */
+
+/* ** ALL Attendance PAGES: status-pill *********/
+
+.status-pill {
+    display: inline-block;
+    width: max-content;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.status-pill.pending,
+.status-pill.excused {
+    background: rgba(255, 179, 71, 0.18);
+    color: #ffb347;
+    border: 1px outset #ffb347;
+}
+
+.status-pill.completed,
+.status-pill.attended {
+    background: rgba(77, 255, 181, 0.18);
+    color: #4dffb5;
+    border: 1px outset #4dffb5;
+}
+
+.status-pill.missed {
+    background: rgba(255, 88, 88, 0.25);
+    color: #ff9b9b;
+    border: 1px outset #ff9b9b;
 }
 
 
@@ -1733,27 +1773,6 @@ div:has(> .student-action-btn) {
 
 .attendance-row.course-hidden {
     display: none;
-}
-
-/* ** ALL Attendance PAGES: status-pill *********/
-
-.status-pill {
-    display: inline-block;
-    width: max-content;
-    padding: 0.4rem 0.8rem;
-    border-radius: 999px;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.status-pill.pending {
-    background: rgba(255, 179, 71, 0.18);
-    color: #ffb347;
-}
-
-.status-pill.completed {
-    background: rgba(77, 255, 181, 0.16);
-    color: #4dffb5;
 }
 
 
@@ -2208,7 +2227,6 @@ header .wrapper-attendance-course-info p {
     border: 1px solid rgba(0, 194, 178, 0.35);
     border-radius: 8px;
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
-    /* width: fit-content; */
 }
 
 .student-detail-header {
@@ -2302,6 +2320,12 @@ header .wrapper-attendance-course-info p {
 
 .student-detail-card {
     padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start; */
+    align-self: flex-end;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .student-detail-card h2 {
@@ -2413,14 +2437,18 @@ header .wrapper-attendance-course-info p {
     margin-bottom: 0;
 }
 
+/************************************************|
+**** STUDENT ATTENDANCE RECORD Page *************|
+*********************************************** */
 
-/*****************************************|
-**** COURSE_STUDENTS_LIST Page ******************|
-**************************************** */
-
-.teacher-course-students-list .course-details-child h3 {
-    padding: 0 0 1rem;
+.attendance-edit-form button {
+    border-width: 1px;
 }
+
+.attendance-edit-form button:hover {
+    border-color: whitesmoke;
+}
+
 
 
 
@@ -2606,7 +2634,7 @@ header .wrapper-attendance-course-info p {
 
     .student-overview-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
 
@@ -2619,9 +2647,7 @@ header .wrapper-attendance-course-info p {
     /*****************************************************|
     |*** STUDENT DETAIL Page *******************************|
     |*****************************************************/
-    .recent-attendance-card {
-        grid-column: span 2;
-    }
+
 }
 
 
@@ -3082,6 +3108,10 @@ header .wrapper-attendance-course-info p {
     .student-detail-tabs {
         overflow-x: auto;
         gap: 1.25rem;
+    }
+
+    .student-overview-grid {
+        grid-template-columns: 1fr;
     }
 
     .student-ring-row {

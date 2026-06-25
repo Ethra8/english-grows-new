@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Company, UserProfile
+from django import forms
+
+from .models import Company, UserProfile, StudentAcademicProfile, LearningGoal
 
 
 User = get_user_model()
@@ -97,6 +99,8 @@ class CustomUserAdmin(UserAdmin):
 
     get_company.short_description = 'Company'
     get_company.admin_order_field = 'profile__company__name'
+
+
 
 class CompanyUserProfileInline(admin.TabularInline):
     model = UserProfile
@@ -229,6 +233,48 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.user.email or '-'
 
     get_email.short_description = 'Email'
+
+
+
+class StudentAcademicProfileAdminForm(forms.ModelForm):
+    strengths = forms.MultipleChoiceField(
+        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    weaknesses = forms.MultipleChoiceField(
+        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    class Meta:
+        model = StudentAcademicProfile
+        fields = "__all__"
+
+@admin.register(StudentAcademicProfile)
+class StudentAcademicProfileAdmin(admin.ModelAdmin):
+    form = StudentAcademicProfileAdminForm
+
+    list_display = (
+        "student",
+        "current_level",
+        "target_level",
+        "participation",
+        "risk_status",
+        "next_review_date",
+        "updated_at",
+    )
+
+    filter_horizontal = ("learning_goals",)
+
+
+@admin.register(LearningGoal)
+class LearningGoalAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "is_active", "order")
+    list_editable = ("is_active", "order")
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.unregister(User)

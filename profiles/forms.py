@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 
-from .models import UserProfile, TeacherProfile
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal
 
 
 class UserProfileForm(forms.ModelForm):
@@ -102,3 +102,44 @@ class TeacherProfileForm(forms.ModelForm):
             "bio",
             "specialties",
         ]
+
+
+class StudentAcademicProfileForm(forms.ModelForm):
+    strengths = forms.MultipleChoiceField(
+        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    weaknesses = forms.MultipleChoiceField(
+        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    class Meta:
+        model = StudentAcademicProfile
+        fields = [
+            "current_level",
+            "target_level",
+            "learning_goals",
+            "strengths",
+            "weaknesses",
+            "teacher_notes",
+            "participation",
+            "risk_status",
+            "next_review_date",
+        ]
+
+        widgets = {
+            "learning_goals": forms.CheckboxSelectMultiple,
+            "next_review_date": forms.DateInput(attrs={"type": "date"}),
+            "teacher_notes": forms.Textarea(attrs={"rows": 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["learning_goals"].queryset = LearningGoal.objects.filter(
+            is_active=True
+        )

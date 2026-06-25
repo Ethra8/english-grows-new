@@ -76,15 +76,11 @@
                     Message
                 </a>
 
-                <a href="#" class="student-action-btn">
-                    <i class="fa-solid fa-pen mr-3"></i>
-                    Edit Profile
+                <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}"
+                class="student-action-btn">
+                    <i class="fa-solid fa-graduation-cap mr-3"></i>
+                    Edit Academic Profile
                 </a>
-
-                <!-- <a href="#" class="student-action-btn">
-                    <i class="fa-regular fa-calendar-check mr-3"></i>
-                    Attendance
-                </a> -->
             </div>
             <div class="student-level-area">
                 <small>Current Level</small>
@@ -148,158 +144,169 @@
 
                         <!-- Current Course -->
         <article class="student-detail-card">
-            
-            <h2><i class="fa-solid fa-circle-info mr-3"></i>Current Course</h2>
-            <hr>
+            <div>
 
-            <div class="current-course-block">
+                <h2><i class="fa-solid fa-circle-info mr-3"></i>Current Course</h2>
+                <hr>
 
-                <div class="course-icon-box">
-                    <!-- <i class="fa-solid fa-briefcase"></i> -->
-                </div>
+                <div class="current-course-block">
 
-                <div>
-                    <h3>{{ course.name }}</h3>
-
-                    <div class="student-course-details">
-                        <div class="detail-row">
-                            <span>Course Type</span>
-                            <strong>{{ course.course_type|default:"Not assigned" }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Total Hours</span>
-                            <strong>{{ course.total_hours|clean_decimal }} h.</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Class Duration</span>
-                            <strong>{{ course.class_duration_display|default:"Not assigned" }}</strong>
-                        </div>
-
-                        {% if course.has_short_final_class %}
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                                    Last Class Duration:
-                                </span>
-                                <span>{{ course.final_class_duration_display }}</span>
-                            </div>
-                        {% endif %}
-
-                        <div class="detail-row">
-                            <span>Total Classes</span>
-                            <strong>{{ total_classes }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Teacher</span>
-                            <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
-                        </div>
-
+                    <div class="course-icon-box">
+                        <!-- <i class="fa-solid fa-briefcase"></i> -->
                     </div>
-                </div>
 
-            </div>
+                    <div>
+                        <h3>{{ course.name }}</h3>
+
+                        <div class="student-course-details">
+                            <div class="detail-row">
+                                <span>Course Type</span>
+                                <strong>{{ course.course_type|default:"Not assigned" }}</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Total Hours</span>
+                                <strong>{{ course.total_hours|clean_decimal }} h.</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Class Duration</span>
+                                <strong>{{ course.class_duration_display|default:"Not assigned" }}</strong>
+                            </div>
+
+                            {% if course.has_short_final_class %}
+                                <div class="detail-row">
+                                    <span>
+                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                                        Last Class Duration:
+                                    </span>
+                                    <span>{{ course.final_class_duration_display }}</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="detail-row">
+                                <span>Total Classes</span>
+                                <strong>{{ total_classes }}</strong>
+                            </div>
+
+                            <div class="detail-row">
+                                <span>Teacher</span>
+                                <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div> 
 
             <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
                 View course details
                 <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
+
         </article>
 
         <!-- Attendance Overview -->
         <article class="student-detail-card">
-            <h2>
-                <i class="fa-regular fa-calendar-check mr-2"></i>
-                Attendance Overview
-            </h2>
-            <hr>
-            <div class="student-ring-layout">
+            <div>
+                <h2>
+                    <i class="fa-regular fa-calendar-check mr-2"></i>
+                    Attendance Overview
+                </h2>
 
-                <div class="progress-ring"
-                     style="--percentage: {{ attendance_percentage }};">
-                    <div class="progress-ring-inner">
-                        <strong>{{ attendance_percentage }}%</strong>
-                        <span>Attendance</span>
+                <hr>
+
+                <div class="student-ring-layout">
+
+                    <div class="progress-ring"
+                        style="--percentage: {{ attendance_percentage }};">
+                        <div class="progress-ring-inner">
+                            <strong>{{ attendance_percentage }}%</strong>
+                            <span>Attendance</span>
+                        </div>
                     </div>
+
+                    <div class="student-stat-list">
+                        <div class="detail-row">
+                            <span>Attended:</span>
+                            <strong>{{ attended_count }} / {{ completed_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Missed:</span>
+                            <strong>{{ missed_count }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Excused:</span>
+                            <strong>{{ excused_count }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Past Classes:</span>
+                            <strong>{{ completed_classes }}</strong>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="student-stat-list">
-                    <div class="detail-row">
-                        <span>Attended:</span>
-                        <strong>{{ attended_count }} / {{ completed_classes }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Missed:</span>
-                        <strong>{{ missed_count }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Excused:</span>
-                        <strong>{{ excused_count }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Past Classes:</span>
-                        <strong>{{ completed_classes }}</strong>
-                    </div>
-                </div>
-
             </div>
 
             <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
                 View full attendance
                 <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
+
         </article>
 
         <!-- Course Progress -->
         <article class="student-detail-card">
-            <h2>
-                <i class="fa-solid fa-chart-simple mr-2"></i>
-                Course Progress
-            </h2>
-            <hr>
-            <div class="student-ring-layout">
+            <div>
+                <h2>
+                    <i class="fa-solid fa-chart-simple mr-2"></i>
+                    Course Progress
+                </h2>
+                <hr>
+                <div class="student-ring-layout">
 
-                <div class="progress-ring"
-                     style="--percentage: {{ completion_percentage }};">
-                    <div class="progress-ring-inner">
-                        <strong>{{ completion_percentage }}%</strong>
-                        <span>Completed</span>
+                    <div class="progress-ring"
+                        style="--percentage: {{ completion_percentage }};">
+                        <div class="progress-ring-inner">
+                            <strong>{{ completion_percentage }}%</strong>
+                            <span>Completed</span>
+                        </div>
                     </div>
+
+                    <div class="student-stat-list">
+                        <div class="detail-row">
+                            <span>Completed Classes:</span>
+                            <strong>{{ completed_classes }} / {{ total_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Remaining Classes:</span>
+                            <strong>{{ remaining_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Total Classes:</span>
+                            <strong>{{ total_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Course Completion:</span>
+                            <strong>{{ completion_percentage }}%</strong>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="student-stat-list">
-                    <div class="detail-row">
-                        <span>Completed Classes:</span>
-                        <strong>{{ completed_classes }} / {{ total_classes }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Remaining Classes:</span>
-                        <strong>{{ remaining_classes }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Total Classes:</span>
-                        <strong>{{ total_classes }}</strong>
-                    </div>
-
-                    <div class="detail-row">
-                        <span>Course Completion:</span>
-                        <strong>{{ completion_percentage }}%</strong>
-                    </div>
-                </div>
-
             </div>
 
             <a href="#" class="btn-course-details mt-3">
                 View detailed progress
                 <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
+            
         </article>
 
     </div>
