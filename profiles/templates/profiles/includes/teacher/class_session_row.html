@@ -26,11 +26,11 @@
             </p>
 
             {% if session.class_status_group == "completed" %}
-                <span class="status-badge status-completed mt-2">Completed</span>
+                <span class="status-badge completed mt-2">Completed</span>
             {% elif session.is_today %}
-                <span class="status-badge status-today mt-2">Today</span>
+                <span class="status-badge today mt-2">Today</span>
             {% else %}
-                <span class="status-badge status-upcoming mt-2">Upcoming</span>
+                <span class="status-badge upcoming mt-2">Upcoming</span>
             {% endif %}
         </div>
 

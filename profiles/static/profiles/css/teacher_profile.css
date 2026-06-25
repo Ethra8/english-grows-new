@@ -760,8 +760,8 @@ div:has(> .student-action-btn) {
 |*********************************** */
 
 /* STATUS BADGES for:
-- levels & status of course 
-- today/past/upcoming classes ********/
+- Status of course 
+- Status of Classes: today/past/upcoming classes ********/
 
 .status-badge {
     /* display: inline-block; */
@@ -777,47 +777,44 @@ div:has(> .student-action-btn) {
     text-align: center;
 }
 
-.status-today {
+.status-badge.today {
     background: #c1f7e3;
     color: #003366;
     border: 1px outset #c1f7e3 !important;
 }
 
-.status-active,
-.status-upcoming,
-.status-attended {
+.status-badge.active,
+.status-badge.upcoming {
     background: #23c99a;
     border: 1px outset #23c99a !important;
 }
 
-.status-confirmed,
-.status-excused {
+.status-badge.confirmed {
     background: #f5c542;
     color: #003366;
     border: 1px outset #f5c542 !important;
 }
 
-.status-paused {
+.status-badge.paused {
     background: #6d7175;
     border: 1px outset #6d7175 !important;
 }
 
-.status-cancelled,
-.status-missed,
-.status-inactive {
+.status-badge.cancelled,
+.status-badge.inactive {
     background: #e95757;
     border: 1px outset #e95757 !important;
 }
 
-.status-completed {
+.status-badge.completed {
     background: rgba(94, 234, 212, 0.15);
     border: 0.5px solid rgba(94, 234, 212, 0.15) !important;
 }
 
-/* END of STATUS- BADGES *************/
+/* END of STATUS-BADGES *************/
 
 
-/*** Courses/Classes FILTER BY STATUS:
+/*** Courses/Classes FILTER BY STATUS: **************************|
 - Courses: active/confirmed/paused/completed
 - Classes: Upcoming/Complete/ & today/weekly/monthly/all ******* */
 
