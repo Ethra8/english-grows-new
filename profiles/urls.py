@@ -26,6 +26,8 @@ urlpatterns = [
     path("teacher/courses/<int:course_id>/enrollments/", views.teacher_course_students_list, name="teacher_course_students_list"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/",views.teacher_student_detail, name="teacher_student_detail"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/update-level/", views.update_student_level, name="update_student_level"),
+    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/attendance/", views.student_attendance_record, name="student_attendance_record"),
+
 
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),

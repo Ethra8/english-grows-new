@@ -377,6 +377,12 @@ h2 {
     text-decoration: none;
 }
 
+div:has(> .student-action-btn) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* gap: 0.5rem; */
+}
+
 .btn-class-today i, 
 .btn-email-all i,
 .btn-to-student-detail i {
@@ -2208,14 +2214,29 @@ header .wrapper-attendance-course-info p {
 .student-detail-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
+    min-height: 220px;
     padding: 2rem;
 }
 
-.student-detail-main {
+.student-header-actions {
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.student-header-actions > div:first-child {
+    display: flex;
+    gap: 1rem;
+    align-content: stretch;
+    flex-wrap: wrap !important;
+}
+
+.student-level-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .student-overview-grid {
@@ -2223,21 +2244,6 @@ header .wrapper-attendance-course-info p {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 2fr;
     gap: 1rem;
-}
-
-.active-dot {
-    width: 0.65rem;
-    height: 0.65rem;
-    border-radius: 50%;
-    background: #42d66b;
-}
-
-.student-level-area {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.45rem;
-    padding: 1.25rem 0 0;
 }
 
 .student-level-area small {
@@ -2345,9 +2351,13 @@ header .wrapper-attendance-course-info p {
     height: 8rem;
     border-radius: 50%;
     background:
-        conic-gradient(
+        /* conic-gradient(
             #42d66b calc(var(--percentage) * 1%),
             rgba(255,255,255,0.12) 0
+        ); */
+        conic-gradient(
+            #5fffea calc(var(--percentage) * 1%),
+            rgba(105, 255, 235, 0.18) 0
         );
     display: flex;
     align-items: center;
@@ -2594,17 +2604,6 @@ header .wrapper-attendance-course-info p {
     /* STUDENT DETAIL Page ********************** */
     /******************************************************/
 
-    .student-detail-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-    }
-
-    .student-level-area {
-        align-items: flex-start;
-        width: 100%;
-    }
-
     .student-overview-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -2804,6 +2803,33 @@ header .wrapper-attendance-course-info p {
         max-width: 100vw;
         margin: 0 auto;
     }
+
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  ****************************|
+    |*****************************************************/
+    .student-detail-header {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .student-header-actions {
+        flex-direction: column-reverse;
+    }
+
+    .student-level-area {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-top: 2rem;
+    }
+
+    div:has(> .student-action-btn) {
+    /* display: grid;
+    grid-template-columns: repeat(2, 1fr); */
+    /* gap: 0.5rem; */
+    padding-top: 1rem;
+    width: 100%;
+}
 
 
 }
@@ -3047,7 +3073,7 @@ header .wrapper-attendance-course-info p {
     /*****************************************************|
     |*** STUDENT DETAIL Page  ****************************|
     |*****************************************************/
-    
+
     .student-detail-main {
         flex-direction: column;
         align-items: flex-start;
@@ -3341,21 +3367,9 @@ header .wrapper-attendance-course-info p {
         padding: 2.5rem 0.75rem 0.75rem;
     }
     
-    .student-header-actions {
-        flex-direction: column-reverse;
-        display: flex;
-        width: 100%;
-        gap: 0.25rem;
-        padding: 1rem;
-    }
 
     .student-level-area {
-        padding: 0 0 1.25rem;
-    }
-
-    .student-action-btn {
-        width: 100%;
-        justify-content: flex-start;
+        padding: 1.25rem 0 0;
     }
 
 
@@ -3396,6 +3410,30 @@ header .wrapper-attendance-course-info p {
     #attendanceListTitle {
         padding-left: 1rem;
     }
+
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  *************************|
+    |*****************************************************/
+    .student-header-actions {
+        /* flex-direction: column-reverse;
+        display: flex; */
+        width: 100%;
+        gap: 0.25rem;
+        padding: 1rem;
+    }
+
+    div:has(> .student-action-btn) {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 0.5rem;
+        padding-top: 1rem;
+    }
+
+    .student-action-btn {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
 
 
 }

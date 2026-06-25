@@ -70,27 +70,27 @@
         </div>
 
         <div class="student-header-actions">
+            <div>
+                <a href="mailto:{{ student.email }}" class="student-action-btn">
+                    <i class="fa-regular fa-envelope mr-3"></i>
+                    Message
+                </a>
 
-            <a href="mailto:{{ student.email }}" class="student-action-btn">
-                <i class="fa-regular fa-envelope mr-3"></i>
-                Message
-            </a>
+                <a href="#" class="student-action-btn">
+                    <i class="fa-solid fa-pen mr-3"></i>
+                    Edit Profile
+                </a>
 
-            <a href="#" class="student-action-btn">
-                <i class="fa-solid fa-pen mr-3"></i>
-                Edit Profile
-            </a>
-
-            <a href="#" class="student-action-btn">
-                <i class="fa-regular fa-calendar-check mr-3"></i>
-                Attendance
-            </a>
-
+                <!-- <a href="#" class="student-action-btn">
+                    <i class="fa-regular fa-calendar-check mr-3"></i>
+                    Attendance
+                </a> -->
+            </div>
             <div class="student-level-area">
                 <small>Current Level</small>
 
                 <button type="button"
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mr-2"
+                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2"
                         onclick="toggleLevelForm('{{ enrollment.id }}')">
                     {{ student_profile.current_level|default:"?" }}
                 </button>
@@ -148,7 +148,8 @@
 
                         <!-- Current Course -->
         <article class="student-detail-card">
-            <h2>Current Course</h2>
+            
+            <h2><i class="fa-solid fa-circle-info mr-3"></i>Current Course</h2>
             <hr>
 
             <div class="current-course-block">
@@ -164,11 +165,6 @@
                         <div class="detail-row">
                             <span>Course Type</span>
                             <strong>{{ course.course_type|default:"Not assigned" }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Teacher</span>
-                            <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
                         </div>
 
                         <div class="detail-row">
@@ -192,8 +188,13 @@
                         {% endif %}
 
                         <div class="detail-row">
-                            <span>TOTAL Classes</span>
+                            <span>Total Classes</span>
                             <strong>{{ total_classes }}</strong>
+                        </div>
+
+                        <div class="detail-row">
+                            <span>Teacher</span>
+                            <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
                         </div>
 
                     </div>
@@ -248,7 +249,7 @@
 
             </div>
 
-            <a href="#" class="btn-course-details mt-3">
+            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
                 View full attendance
                 <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
@@ -300,84 +301,6 @@
                 <i class="fa-solid fa-arrow-right ml-3"></i>
             </a>
         </article>
-
-        <!-- Recent Attendance -->
-        <article class="student-detail-card recent-attendance-card">
-            <h2>
-                <i class="fa-solid fa-list-check mr-2"></i>
-                Recent Attendance
-            </h2>
-            <hr>
-            
-        <div class="wrapper-attendance-summary-card">
-
-            <div class="attendance-summary-card success">
-                <div class="status-pill completed">
-                    <i class="fa-solid fa-user-check"></i>
-                    <strong>{{ attended_count }}</strong>
-                </div>
-                <div>
-                    <span>Attended</span>
-                </div>
-            </div>
-
-            <div class="attendance-summary-card danger">
-                <div class="status-pill missed">
-                    <i class="fa-solid fa-user-xmark"></i>
-                    <strong>{{ missed_count }}</strong>
-                </div>
-                <div>
-                    <span>Missed</span>
-                </div>
-            </div>
-
-            <div class="attendance-summary-card warning">
-                <div class="status-pill pending">
-                    <i class="fa-solid fa-user-minus"></i>
-                    <strong>{{ excused_count }}</strong>
-                </div>
-                <div>
-                    <span>Excused</span>
-                </div>
-            </div>
-
-        </div>
-
-            <div class="recent-attendance-list">
-                {% for attendance in recent_attendance %}
-                    <div class="recent-attendance-row">
-
-                        <div class="recent-attendance-info">
-                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small><br>
-                            <span>
-                               {{ course.name }}<br>
-                                ·  Lesson {{ attendance.class_session.class_number }} 
-                            </span>
-                        </div>
-
-                    <div class="attendance-status">
-                        {% if attendance.status == "attended" %}
-                            <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
-                        {% elif attendance.status == "missed" %}
-                            <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
-                        {% elif attendance.status == "excused" %}
-                            <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
-                        {% else %}
-                            <span class="status-pill pending">{{ attendance.status|title }}</span>
-                        {% endif %}
-                    </div>
-
-                    </div>
-                {% empty %}
-                    <p class="text-white-50">No completed attendance records yet.</p>
-                {% endfor %}
-            </div>
-            <a href="#" class="btn-course-details mt-3">
-                View all attendance
-                <i class="fa-solid fa-arrow-right ml-3"></i>
-            </a>
-        </article>
-
 
     </div>
 
