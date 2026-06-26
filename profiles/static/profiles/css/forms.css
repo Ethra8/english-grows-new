@@ -8,11 +8,11 @@
 }
 
 .account-settings-form {
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 122, 120, 0.85));
     padding: 2rem;
     border: 1px solid rgba(94, 234, 212, 0.85);
     margin: 0 auto;
-    box-shadow: 0 1px 3px 0 #003366;
+    box-shadow: 0 1px 3px 0 #0B355F;
     border-radius: 8px;
     min-width: 100%;
     color: whitesmoke;
@@ -24,7 +24,7 @@
     font-weight: 500;
     font-size: 1.2rem;
     color: #C1F7E3;
-    border-top: outset 1px #008f8f;
+    border-top: outset 1px #007A78;
     padding-top: 1rem;
     width: 100%;
 }

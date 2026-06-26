@@ -21,7 +21,7 @@
     padding: 20px 12px 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* background: rgba(106, 250, 225, 0.2); */
-    background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));    margin: 0 auto 60px;
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 122, 120, 0.65));    margin: 0 auto 60px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -36,8 +36,8 @@
     max-width: 100%;
     min-width: 50%;
     padding: 0.5rem 120px;
-    background-color: #003366;
-    border: outset 1px #008f8f;
+    background-color: #0B355F;
+    border: outset 1px #007A78;
     box-shadow: 0 1px 2px 0 #404143;
     text-align: center;
     margin-bottom: 2rem !important;
@@ -71,7 +71,7 @@
 .fc .fc-col-header-cell-cushion {
     display: inline-block;
     padding: 2px 4px;
-    color:#003366;
+    color:#0B355F;
     min-height: 3rem !important;
     display: flex;
     align-items: center;
@@ -83,7 +83,7 @@
 
 /* day numbers in monthly grid */
 .fc .fc-daygrid-day-number {
-    color: #003366;
+    color: #0B355F;
 }
 
 /* Monthly view: 'all-day' cell full */
@@ -115,7 +115,7 @@
 .fc-timegrid-event.fc-event-mirror, 
 .fc-timegrid-more-link {
     box-shadow: 0 0 0 1px var(--fc-page-bg-color);
-    background-color: #00686B;
+    background-color: #007A78;
     padding: 0.3rem;
 }
 
@@ -128,7 +128,7 @@
 
 .fc .fc-list-day-text,
 .fc .fc-list-day-side-text {
-    color: #003366 !important;
+    color: #0B355F !important;
 }
 
 .bank-holiday-event {
@@ -197,7 +197,7 @@
     border-radius: 6px;
     transform: translateY(-50%);
     z-index: 5;
-    background-color: #003366 !important;
+    background-color: #0B355F !important;
     color: whitesmoke !important;
     box-shadow: 0 1px 2px 0 #404143;
 }
@@ -236,7 +236,7 @@
 
 .fc .fc-button-group > .fc-button {
     padding: 0.35rem 0.55rem !important;
-    box-shadow: 0 1px 2px 0 #003366;
+    box-shadow: 0 1px 2px 0 #0B355F;
 }
 
 .fc .fc-button-group > .fc-button.fc-button-active,

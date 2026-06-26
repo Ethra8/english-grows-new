@@ -30,7 +30,9 @@ urlpatterns = [
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/attendance/<int:attendance_id>/update/", views.update_student_attendance_status, name="update_student_attendance_status"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/academic-profile/", views.student_academic_profile_settings, name="student_academic_profile_settings"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/skills/", views.student_skills_overview, name="student_skills_overview"),
-    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/skills/subskills/<int:subskill_id>/edit/", views.edit_student_subskill_assessment, name="edit_student_subskill_assessment"),
+    path("teacher/student-skill/<int:skill_assessment_id>/edit/", views.teacher_edit_student_skill, name="teacher_edit_student_skill"),
+
+    path("teacher/classes/<int:session_id>/pending-reschedule/", views.mark_class_pending_reschedule, name="mark_class_pending_reschedule"),
 
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),

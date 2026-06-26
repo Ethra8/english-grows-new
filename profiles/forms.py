@@ -1,7 +1,8 @@
 from django import forms
+from django.forms import inlineformset_factory
 from crispy_forms.helper import FormHelper
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal, StudentSubSkillAssessment
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal, StudentSkillAssessment, StudentSubSkillAssessment
 
 class UserProfileForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -145,19 +146,27 @@ class StudentAcademicProfileForm(forms.ModelForm):
 
 
 
-class StudentSubSkillAssessmentForm(forms.ModelForm):
+class StudentSkillAssessmentForm(forms.ModelForm):
+    class Meta:
+        model = StudentSkillAssessment
+        fields = [
+            "teacher_notes",
+        ]
+
+
+class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
     class Meta:
         model = StudentSubSkillAssessment
         fields = [
-            "percentage",
             "rating",
             "teacher_notes",
         ]
 
-        widgets = {
-            "percentage": forms.NumberInput(attrs={
-                "min": 0,
-                "max": 100,
-            }),
-            "teacher_notes": forms.Textarea(attrs={"rows": 4}),
-        }
+
+StudentSubSkillAssessmentFormSet = inlineformset_factory(
+    StudentSkillAssessment,
+    StudentSubSkillAssessment,
+    form=StudentSubSkillAssessmentInlineForm,
+    extra=0,
+    can_delete=False,
+)

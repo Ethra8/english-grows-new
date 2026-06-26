@@ -6,14 +6,16 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.forms import inlineformset_factory
+
+import json
 
 from datetime import timedelta, datetime, time
 import calendar
 from collections import defaultdict
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment
-from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSubSkillAssessmentForm
-
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillTermSnapshot
+from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
 
@@ -1065,6 +1067,84 @@ def teacher_course_students_list(request, course_id):
     )
 
 
+# BUILD STD SKILLS GRAPH
+def build_skill_progress_chart_data(student, course):
+    snapshots = (
+        StudentSkillTermSnapshot.objects
+        .filter(
+            skill_assessment__student=student,
+            skill_assessment__course=course,
+        )
+        .select_related("skill_assessment")
+        .order_by("recorded_at")
+    )
+
+    chart_labels = []
+
+    for snapshot in snapshots:
+        if snapshot.term_label not in chart_labels:
+            chart_labels.append(snapshot.term_label)
+
+    skill_chart_values = {
+        "Speaking": [],
+        "Reading": [],
+        "Writing": [],
+        "Listening": [],
+    }
+
+    for skill_name in skill_chart_values.keys():
+        skill_value = skill_name.lower()
+
+        for label in chart_labels:
+            matching_snapshot = None
+
+            for snapshot in snapshots:
+                if (
+                    snapshot.skill_assessment.skill == skill_value
+                    and snapshot.term_label == label
+                ):
+                    matching_snapshot = snapshot
+                    break
+
+            skill_chart_values[skill_name].append(
+                matching_snapshot.percentage if matching_snapshot else None
+            )
+
+    return {
+        "labels": chart_labels,
+        "datasets": [
+            {
+                "label": "Speaking",
+                "data": skill_chart_values["Speaking"],
+                "borderColor": "#00b894",
+                "backgroundColor": "#00b894",
+                "tension": 0.35,
+            },
+            {
+                "label": "Reading",
+                "data": skill_chart_values["Reading"],
+                "borderColor": "#1e6bff",
+                "backgroundColor": "#1e6bff",
+                "tension": 0.35,
+            },
+            {
+                "label": "Writing",
+                "data": skill_chart_values["Writing"],
+                "borderColor": "#ff7a00",
+                "backgroundColor": "#ff7a00",
+                "tension": 0.35,
+            },
+            {
+                "label": "Listening",
+                "data": skill_chart_values["Listening"],
+                "borderColor": "#7c3aed",
+                "backgroundColor": "#7c3aed",
+                "tension": 0.35,
+            },
+        ],
+    }
+
+
 
 @login_required
 def teacher_student_detail(request, course_id, enrollment_id):
@@ -1089,6 +1169,11 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
     student = enrollment.student
     student_profile = student.profile
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
 
     attendances = (
         Attendance.objects
@@ -1161,7 +1246,12 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "completion_percentage": completion_percentage,
 
         "recent_attendance": recent_attendance,
-        # "active_tab": "overview",
+        "chart_data_json": json.dumps(chart_data),
+    }
+
+    chart_data = {
+        "labels": [],
+        "datasets": [],
     }
 
     return render(
@@ -1436,37 +1526,6 @@ def student_skills_overview(request, course_id, enrollment_id):
         "listening": "fa-solid fa-headphones",
     }
 
-    subskills_by_skill = {
-        "speaking": [
-            "range",
-            "fluency",
-            "accuracy",
-            "pronunciation",
-            "interaction",
-        ],
-        "reading": [
-            "scanning",
-            "skimming",
-            "reading_comprehension",
-        ],
-        "listening": [
-            "gist",
-            "specific_information",
-            "detail",
-        ],
-        "writing": [
-            "organization",
-            "cohesion",
-            "vocabulary_grammar",
-            "register",
-        ],
-    }
-
-    valid_skill_values = [
-        skill_value
-        for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES
-    ]
-
     for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES:
         skill_assessment, created = StudentSkillAssessment.objects.get_or_create(
             student=student,
@@ -1474,11 +1533,16 @@ def student_skills_overview(request, course_id, enrollment_id):
             skill=skill_value,
         )
 
-        for subskill_value in subskills_by_skill[skill_value]:
+        for subskill_value, subskill_label in SUBSKILLS.get(skill_value, []):
             StudentSubSkillAssessment.objects.get_or_create(
                 skill_assessment=skill_assessment,
                 subskill=subskill_value,
             )
+
+    valid_skill_values = [
+        skill_value
+        for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES
+    ]
 
     skill_assessments = (
         StudentSkillAssessment.objects
@@ -1496,16 +1560,24 @@ def student_skills_overview(request, course_id, enrollment_id):
     for assessment in skill_assessments:
         skills.append({
             "assessment": assessment,
+            "assessment_id": assessment.id,
+            "skill_value": assessment.skill,
             "name": assessment.get_skill_display(),
             "icon": skill_icons.get(
                 assessment.skill,
-                "fa-solid fa-chart-simple"
+                "fa-solid fa-chart-simple",
             ),
             "percentage": assessment.average_percentage,
+            "teacher_notes": assessment.teacher_notes,
             "subskills": assessment.subskill_assessments.all(),
         })
 
     academic_profile = getattr(student, "academic_profile", None)
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
 
     context = {
         "course": course,
@@ -1514,6 +1586,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "student_profile": student_profile,
         "skills": skills,
         "academic_profile": academic_profile,
+        "chart_data_json": json.dumps(chart_data),
     }
 
     return render(
@@ -1523,57 +1596,137 @@ def student_skills_overview(request, course_id, enrollment_id):
     )
 
 
+
 @login_required
-def edit_student_subskill_assessment(request, course_id, enrollment_id, subskill_id):
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        teacher=request.user,
+def teacher_edit_student_skill(request, skill_assessment_id):
+    skill_assessment = get_object_or_404(
+        StudentSkillAssessment.objects.select_related(
+            "student",
+            "course",
+        ).prefetch_related(
+            "subskill_assessments",
+        ),
+        id=skill_assessment_id,
+        course__teacher=request.user,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment,
-        id=enrollment_id,
-        course=course,
-    )
+    skill = StudentSkillAssessment.SKILL_AREA_CHOICES
 
-    subskill = get_object_or_404(
-        StudentSubSkillAssessment,
-        id=subskill_id,
-        skill_assessment__student=enrollment.student,
-        skill_assessment__course=course,
-    )
 
     if request.method == "POST":
-        form = StudentSubSkillAssessmentForm(
+        form = StudentSkillAssessmentForm(
             request.POST,
-            instance=subskill,
+            instance=skill_assessment,
         )
 
-        if form.is_valid():
+        formset = StudentSubSkillAssessmentFormSet(
+            request.POST,
+            instance=skill_assessment,
+        )
+
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
+            # Clear old prefetched subskills cache
+            if hasattr(skill_assessment, "_prefetched_objects_cache"):
+                skill_assessment._prefetched_objects_cache = {}
+
+            current_term = timezone.localdate().strftime("%d %b %Y")
+
+            StudentSkillTermSnapshot.objects.update_or_create(
+                skill_assessment=skill_assessment,
+                term_label=current_term,
+                defaults={
+                    "percentage": skill_assessment.average_percentage,
+                },
+            )
+
+            enrollment = get_object_or_404(
+                CourseEnrollment,
+                student=skill_assessment.student,
+                course=skill_assessment.course,
+            )
+
             return redirect(
                 "profiles:student_skills_overview",
-                course_id=course.id,
+                course_id=skill_assessment.course.id,
                 enrollment_id=enrollment.id,
             )
+
     else:
-        form = StudentSubSkillAssessmentForm(instance=subskill)
+        form = StudentSkillAssessmentForm(
+            instance=skill_assessment,
+        )
+
+        formset = StudentSubSkillAssessmentFormSet(
+            instance=skill_assessment,
+        )
 
     context = {
-        "course": course,
-        "enrollment": enrollment,
-        "student": enrollment.student,
-        "student_profile": enrollment.student.profile,
-        "subskill": subskill,
+        "skill_assessment": skill_assessment,
         "form": form,
+        "formset": formset,
+        "skill": skill,
     }
 
     return render(
         request,
-        "profiles/teacher/edit_student_subskill_assessment.html",
+        "profiles/teacher/teacher_edit_student_skill.html",
         context,
     )
+
+
+# @login_required
+# def teacher_edit_student_subskill(request, course_id, enrollment_id, subskill_id):
+#     course = get_object_or_404(
+#         Course,
+#         id=course_id,
+#         teacher=request.user,
+#     )
+
+#     enrollment = get_object_or_404(
+#         CourseEnrollment,
+#         id=enrollment_id,
+#         course=course,
+#     )
+
+#     subskill = get_object_or_404(
+#         StudentSubSkillAssessment,
+#         id=subskill_id,
+#         skill_assessment__student=enrollment.student,
+#         skill_assessment__course=course,
+#     )
+
+#     if request.method == "POST":
+#         form = StudentSubSkillAssessmentForm(
+#             request.POST,
+#             instance=subskill,
+#         )
+
+#         if form.is_valid():
+#             form.save()
+#             return redirect(
+#                 "profiles:student_skills_overview",
+#                 course_id=course.id,
+#                 enrollment_id=enrollment.id,
+#             )
+#     else:
+#         form = StudentSubSkillAssessmentForm(instance=subskill)
+
+#     context = {
+#         "course": course,
+#         "enrollment": enrollment,
+#         "student": enrollment.student,
+#         "student_profile": enrollment.student.profile,
+#         "subskill": subskill,
+#         # "form": form,
+#     }
+
+#     return render(
+#         request,
+#         "profiles/teacher/teacher_edit_student_subskill.html",
+#         context,
+#     )
 
 
 
@@ -1908,6 +2061,34 @@ def teacher_attendance_detail(request, session_id):
         context,
     )
 
+
+# SET A CLASS IN CLASS_LIST Page
+# As PENDING to Reschedule
+@login_required
+def mark_class_pending_reschedule(request, session_id):
+    session = get_object_or_404(
+        ClassSession,
+        id=session_id,
+        course__teacher=request.user,
+    )
+
+    if request.method == "POST":
+        session.status = ClassSession.STATUS_PENDING_RESCHEDULE
+        session.is_cancelled = True
+        session.save(update_fields=["status", "is_cancelled"])
+
+        session.attendance_records.filter(
+            status=Attendance.STATUS_SCHEDULED
+        ).update(
+            status=Attendance.STATUS_PENDING_RESCHEDULE
+        )
+
+        messages.success(
+            request,
+            "Class marked as pending reschedule."
+        )
+
+    return redirect("profiles:teacher_classes_list")
 
 
 # TEACHER PROFILE SETTINGS

@@ -22,7 +22,7 @@ h2 {
 
 
 /* *** HEADERS *******************************************************/
-.teacher-page header h1 {
+.teacher-page h1 {
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
@@ -93,7 +93,7 @@ h2 {
 
     border: 1.5px solid rgba(94, 242, 220, 0.35);
     border-radius: 50px;
-    background: linear-gradient(123deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -111,7 +111,7 @@ h2 {
 
 .teacher-dashboard .dashboard-general-info-card .meta-card {
     padding: 0.5rem 1.5rem 0.5rem 3rem ;
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
 }
 
 .completion-ring {
@@ -133,7 +133,7 @@ h2 {
     content: "";
     position: absolute;
     inset: 5px;
-    background: rgba(0, 51, 102, 0.95);
+    background: rgba(11, 53, 95, 0.95);
     border-radius: 50%;
 }
 
@@ -201,7 +201,8 @@ h2 {
 }
 
 .meta-icon,
-.course-meta-icon {
+.course-meta-icon,
+.student-skill-card h2 span {
     z-index: 1;
     width: 55px;
     height: 55px;
@@ -210,12 +211,13 @@ h2 {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: rgba(0, 51, 102, 0.6);
+    background-color: rgba(11, 53, 95, 0.6);
     border: 1px solid rgba(94, 242, 220, 0.35);
 }
 
 .meta-icon i,
-.course-meta-icon i {
+.course-meta-icon i,
+.student-skill-card h2 span i {
     color: rgba(94, 242, 220, 0.9);
     font-size: 1.8rem;
 }
@@ -262,7 +264,7 @@ h2 {
     justify-content: center;
 
     border-radius: 50%;
-    background-color: rgba(0, 51, 102, 0.6);
+    background-color: rgba(11, 53, 95, 0.6);
     border: 1px solid rgba(94, 242, 220, 0.35);
 }
 
@@ -284,6 +286,11 @@ h2 {
     color: whitesmoke;
     font-weight: 500;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.teacher-classes-list .level {
+    width: 36px;
+    height: 36px;
 }
 
 
@@ -348,7 +355,8 @@ h2 {
 .btn-email-all,
 .edit-attendance-btn,
 .btn-to-student-detail,
-.student-action-btn {
+.student-action-btn,
+.skill-edit-link {
     border: 1px solid #5eead4;
     color: #5eead4;
     padding: 0.25rem 0.85rem;
@@ -371,7 +379,8 @@ h2 {
 .btn-email-all:hover,
 .edit-attendance-btn:hover,
 .btn-to-student-detail:hover,
-.student-action-btn:hover  {
+.student-action-btn:hover,
+.skill-edit-link:hover  {
     background: rgba(94, 234, 212, 0.15);
     color: #fff;
     text-decoration: none;
@@ -415,7 +424,7 @@ div:has(> .student-action-btn) {
     min-height: 70px;
     border: 1px solid rgba(106, 250, 225, 0.45);
     border-radius: 8px;
-    background: rgba(0, 51, 102, 0.45);
+    background: rgba(11, 53, 95, 0.45);
     color: whitesmoke;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
@@ -442,7 +451,7 @@ div:has(> .student-action-btn) {
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
     border-top: 14px solid #5eead4;
-    filter: drop-shadow(0 3px 4px rgba(0, 51, 102, 0.45));
+    filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
 }
 
 .course-status-btn i,
@@ -505,8 +514,8 @@ div:has(> .student-action-btn) {
 |*********************************** */
 
 .dashboard-card {
-    /* background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: rgba(0, 51, 102, 0.75);
+    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
+    background: rgba(11, 53, 95, 0.75);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     padding: 1rem 1.2rem;
@@ -582,7 +591,7 @@ div:has(> .student-action-btn) {
     gap: 0;
     display: flex;
     align-items: center;
-    background: linear-gradient(345deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.35));
+    background: linear-gradient(345deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.35));
     border: 1px solid rgba(80, 230, 220, 0.25);
     border-radius: 8px;
     overflow: hidden;
@@ -607,7 +616,7 @@ div:has(> .student-action-btn) {
     flex: 0 0 auto;
     color: #5eead4;
     font-weight: 700;
-    background: rgba(0, 51, 102, 0.45);
+    background: rgba(11, 53, 95, 0.45);
     height: 70px;
     border-radius: 8px;
     display: flex;
@@ -637,8 +646,8 @@ div:has(> .student-action-btn) {
     flex-direction: column;
     border-radius: 8px;
     padding: 1rem;
-    /* background: linear-gradient(123deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: rgba(0, 51, 102, 0.75);
+    /* background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
+    background: rgba(11, 53, 95, 0.75);
 }
 
 /* ***********************************************************|
@@ -647,8 +656,8 @@ div:has(> .student-action-btn) {
 
 .all-assigned-classes {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
 }
 
 .assigned-classes-filter-header {
@@ -687,7 +696,7 @@ div:has(> .student-action-btn) {
 }
 
 .classes-list-filter {
-    background-color: rgba(0, 51, 102, 0.6);
+    background-color: rgba(11, 53, 95, 0.6);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     border: solid 2px #5eead4;
     border-radius: 8px;
@@ -739,11 +748,11 @@ div:has(> .student-action-btn) {
     margin-top: .2rem;
 }
 
-.class-list-group-name,
+/* .class-list-group-name,
 .course-list-group-name {
     border-left: 1px solid rgba(94, 234, 212, 0.2);
     padding-left: 1.5rem;
-}
+} */
 
 .class-list-group-name .text-white,
 .course-list-group-name .text-white {
@@ -763,8 +772,7 @@ div:has(> .student-action-btn) {
 - Status of course 
 - Status of Classes: today/past/upcoming classes ********/
 
-.status-badge {
-    /* display: inline-block; */
+/* .status-badge {
     padding: .2rem .75rem;
     border-radius: 20px;
     color: #fff;
@@ -775,11 +783,25 @@ div:has(> .student-action-btn) {
     min-width: 100px;
     max-width: 100px;
     text-align: center;
+} */
+
+.status-badge {
+    display: inline-block;
+    padding: .2rem .75rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    text-align: center;
 }
 
 .status-badge.today {
     background: #c1f7e3;
-    color: #003366;
+    color: #0B355F;
     border: 1px outset #c1f7e3 !important;
 }
 
@@ -791,11 +813,12 @@ div:has(> .student-action-btn) {
 
 .status-badge.confirmed {
     background: #f5c542;
-    color: #003366;
+    color: #0B355F;
     border: 1px outset #f5c542 !important;
 }
 
-.status-badge.paused {
+.status-badge.paused,
+.status-badge.pending-reschedule {
     background: #6d7175;
     border: 1px outset #6d7175 !important;
 }
@@ -821,7 +844,7 @@ div:has(> .student-action-btn) {
 .assigned-courses-panel,
 .assigned-classes-panel {
     width: 100%;
-    background: rgba(0, 51, 102, 0.65);
+    background: rgba(11, 53, 95, 0.65);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
@@ -903,7 +926,7 @@ div:has(> .student-action-btn) {
     font-weight: 500;
     border: inset 2px #5ff0df;
     background-color: whitesmoke;
-    color: #003366;
+    color: #0B355F;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -922,7 +945,7 @@ div:has(> .student-action-btn) {
 #completedClassesCollapse select option,
 .assigned-courses-header select option {
     background: whitesmoke;
-    color: #003366;
+    color: #0B355F;
 }
 
 #upcomingClassesCollapse select:focus,
@@ -938,7 +961,7 @@ div:has(> .student-action-btn) {
     border-radius: 50%;
     border: outset 1px #5ff0df;
     background: #C1F7E3;
-    background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #003366;
+    background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #0B355F;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -946,19 +969,19 @@ div:has(> .student-action-btn) {
 }
 
 .assigned-courses-icon i {
-    color: #003366;
+    color: #0B355F;
     font-size: 1.5rem;
 }
 
 .course-status-filter {
     border-radius: 8px;
     padding: .6rem 2.5rem .6rem 1rem;
-    color: #003366;
+    color: #0B355F;
     font-weight: 600;
     border: outset 2px #5ff0df;
     background: #C1F7E3;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);
-    color: #003366;
+    color: #0B355F;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
     cursor: pointer;
@@ -967,17 +990,17 @@ div:has(> .student-action-btn) {
 .course-status-filter option,
 .classes-list-filter option {
     background-color: whitesmoke;
-    color: #003366;
+    color: #0B355F;
     border-radius: 5px;
 }
 
 .course-status-filter option:checked,
 .classes-list-filter option:checked {
-    background: linear-gradient(235deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(235deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
 }
 
 .assigned-courses-list {
-    background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(270deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     margin: 0;
     padding: 1rem 1.5rem;
@@ -988,7 +1011,7 @@ div:has(> .student-action-btn) {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
     align-items: center;
-    gap: 1.5rem;
+    /* gap: 1.5rem; */
     padding: 1.3rem 0;
     border-bottom: 1px solid rgba(94, 234, 212, 0.25);
     width: 100%;
@@ -1042,7 +1065,7 @@ div:has(> .student-action-btn) {
 .assigned-course-level span.status-badge, 
 .course-main-info span.status-badge,
 .class-main-info span.status-badge {
-    border: 1px solid rgba(94, 234, 212, 0.5);
+    /* border: 1px solid rgba(94, 234, 212, 0.5); */
     border-radius: 20px;
     padding: 0.2rem 1rem !important;
     font-weight: 700;
@@ -1280,7 +1303,7 @@ div:has(> .student-action-btn) {
 }
 
 .course-detail-item {
-    background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.25);
     padding: 1rem 1.25rem;
@@ -1359,7 +1382,7 @@ div:has(> .student-action-btn) {
 .course-details-child,
 .course-info-child,
 .course-materials-child {
-    background: linear-gradient(176deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(176deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border-radius: 8px;
     margin: 0;
     padding: 1rem .5rem 0.5rem;
@@ -1399,7 +1422,7 @@ div:has(> .student-action-btn) {
 }
 
 .student-row-parent {
-    background: rgba(0, 51, 102, 0.45);
+    background: rgba(11, 53, 95, 0.45);
     padding: 0 1.25rem;
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.2);
@@ -1408,7 +1431,7 @@ div:has(> .student-action-btn) {
 }
 
 .teacher-course-details-page .student-row-parent {
-    background: linear-gradient(23deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     padding: 0 1.25rem;
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.2);
@@ -1621,7 +1644,7 @@ div:has(> .student-action-btn) {
 
 .attendance-list-card {
     min-height: fit-content;
-    background: linear-gradient(27deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(27deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -1742,7 +1765,7 @@ div:has(> .student-action-btn) {
     gap: 1.2rem;
     padding: 1.3rem 1rem;
     border: 1px solid rgba(95, 255, 234, 0.22);
-    background: linear-gradient(183deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(183deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
 }
 
 .attendance-row:last-child {
@@ -1764,7 +1787,7 @@ header .wrapper-attendance-course-info {
     grid-template-columns: 1fr 1fr;
     border: 1px solid rgba(95, 255, 234, 0.25);
     border-radius: 8px;
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
     padding: 1rem 2rem;
     align-items: center;
     align-content: center;
@@ -1781,6 +1804,10 @@ header .wrapper-attendance-course-info p {
     padding: 0%;
     margin: 0%;
     line-height: 2;
+}
+
+header .wrapper-attendance-course-info strong {
+    font-size: 1.2rem;
 }
 
 /* Wrapper of attendace-summary-cards */
@@ -1881,7 +1908,7 @@ header .wrapper-attendance-course-info p {
 .take-attendance-card, 
 .attendance-detail-card {
     /* background: rgba(0, 48, 92, 0.75); */
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-radius: 8px;
     padding: 1.6rem;
@@ -2021,6 +2048,10 @@ header .wrapper-attendance-course-info p {
     align-items: center;
     padding: 1.3rem 0;
     border-bottom: 1px solid rgba(95, 255, 234, 0.22);
+}
+
+.take-attendance-list .student-main-info h3 {
+    font-size: 1.2rem;
 }
 
 .take-attendance-row:last-child {
@@ -2203,7 +2234,7 @@ header .wrapper-attendance-course-info p {
 
 .student-detail-header,
 .student-detail-card {
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
     border: 1px solid rgba(0, 194, 178, 0.35);
     border-radius: 8px;
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
@@ -2263,7 +2294,7 @@ header .wrapper-attendance-course-info p {
     border-radius: 0.45rem;
     padding: 0.45rem 0.75rem;
     background: #00c2b2;
-    color: #003366;
+    color: #0B355F;
     font-weight: 700;
 }
 
@@ -2331,7 +2362,7 @@ header .wrapper-attendance-course-info p {
 .progress-ring-inner {
     width: 6rem;
     height: 6rem;
-    background: #003366;
+    background: #0B355F;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -2417,6 +2448,37 @@ header .wrapper-attendance-course-info p {
     margin-bottom: 0;
 }
 
+/* Skills Graph SnapShot */
+.skills-progress-section {
+    margin-top: 2rem;
+}
+
+.skills-chart-card {
+    background: whitesmoke;
+    border: 2px inset rgba(95, 255, 234, 0.45);
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    min-height: 380px;
+}
+
+.skills-chart-header h2 {
+    color: #003366;
+    margin-bottom: 1.5rem;
+}
+
+.skills-chart-canvas-wrap {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+#skillsProgressChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+
 /************************************************|
 **** STUDENT ATTENDANCE RECORD Page *************|
 *********************************************** */
@@ -2448,7 +2510,7 @@ header .wrapper-attendance-course-info p {
 .student-skill-card,
 .student-skills-chart-card,
 .student-skills-notes-card {
-    background: linear-gradient(135deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.75));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 8px;
     padding: 1.5rem;
@@ -2457,26 +2519,53 @@ header .wrapper-attendance-course-info p {
 
 .skill-card-header {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+    /* gap: 1rem; */
 }
 
-.skill-card-header i {
-    color: #5fffea;
-    font-size: 1.4rem;
+.skill-card-header h2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: baseline;
+}
+
+.skill-card-header h2 span {
+    margin-right: 1.2rem;
+}
+
+.skill-card-header h2 i {
+    margin-left: 1rem;
+}
+
+.skill-card-edit {
+    display: flex;
+    justify-content: baseline;
+    align-content: baseline;
+
+    /* margin-bottom: 1.5rem; */
+}
+
+.skill-card-edit .skill-edit-link {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;    
 }
 
 .skill-card-body {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.2rem;
-    align-items: center;
-    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+    align-items: flex-start;
+    margin: 1.5rem 0;
 }
 
 .skill-ring {
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     background:
         conic-gradient(
@@ -2486,13 +2575,14 @@ header .wrapper-attendance-course-info p {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 1.5rem 1rem;
 }
 
 .skill-ring > div {
-    width: 78px;
-    height: 78px;
+    width: 98px;
+    height: 98px;
     border-radius: 50%;
-    background: #003366;
+    background: #0B355F;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2513,10 +2603,10 @@ header .wrapper-attendance-course-info p {
     font-size: 0.9rem;
 }
 
-.skill-details ul {
+/* .skill-details ul {
     padding-left: 1rem;
     margin-bottom: 0.8rem;
-}
+} */
 
 .skill-trend {
     margin-top: 1rem;
@@ -2552,18 +2642,70 @@ header .wrapper-attendance-course-info p {
     border-radius: 999px;
 }
 
-@media (max-width: 1200px) {
-    .student-skills-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
+/************************************************|
+**** EDIT STD SKILLS Page *************|
+*********************************************** */
+
+.subskills-edit-list-three {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1rem;
 }
 
-@media (max-width: 768px) {
-    .student-skills-grid,
-    .student-skills-bottom-grid {
-        grid-template-columns: 1fr;
-    }
+.subskills-edit-list-four {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1rem;
 }
+
+.subskill-edit-card {
+    background: rgba(11, 53, 95, 0.95);
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    padding: 0.5rem 1rem 0.25rem;
+    border-radius: 8px;
+}
+
+.subskill-edit-card h3 {
+    color:#5ff0df;
+    font-weight: 400;
+}
+
+.subskill-edit-card .form-group {
+    color: whitesmoke;
+    margin-top: 1rem;
+}
+
+.subskill-edit-card .form-group select {
+    border-radius: 8px !important;
+    margin-left: 0.5rem !important;
+    width: 160px;
+}
+
+.subskill-edit-card p {
+    color: #b5b5b5;
+}
+
+.skill-notes-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.skill-notes-card p {
+    color: whitesmoke;
+}
+
 
 
 
@@ -2590,6 +2732,16 @@ header .wrapper-attendance-course-info p {
         border: 0;
     }
 
+    /*****************************************************|
+    |*** STD. SKILLS OVERVIEW Page  **********************|
+    |*****************************************************/
+
+    .student-skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+        margin-top: 2rem;
+    }
 
 }
 
@@ -2601,6 +2753,23 @@ header .wrapper-attendance-course-info p {
     .teacher-classes-list.teacher-page {
         padding: 70px 2% !important;
     }
+
+    /* .assigned-course-row,
+    .assigned-class-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    } */
+
+    /* Course Assigned BY STATUS */
+    /* .course-action {
+        width: 100%;
+    }
+
+    .btn-course-details {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    } */
 
 
 }
@@ -2626,16 +2795,19 @@ header .wrapper-attendance-course-info p {
 
     .wrapper-assigned-classes-panel {
         margin: 1rem auto;
-    }
-
-    .all-assigned-classes {
-        grid-template-columns: 1fr;
-    }
-
-    .wrapper-assigned-classes-panel {
-        margin: 1rem auto;
         width: 100%;
     }
+
+    /* .all-assigned-classes {
+        grid-template-columns: 1fr;
+    } */
+
+    .assigned-course-row,
+    .assigned-class-row {
+        grid-template-columns: 2fr 1fr auto;
+        gap: 1.5rem;
+    }
+
 
 
 }
@@ -2665,12 +2837,6 @@ header .wrapper-attendance-course-info p {
     /******************************************************/
     /* COURSES Page (All courses assigned) ************** */
     /******************************************************/
-
-    .assigned-course-row,
-    .assigned-class-row {
-        grid-template-columns: 2fr 1fr auto;
-        gap: 1.5rem;
-    }
 
     .course-stat {
         display: none;
@@ -2794,15 +2960,15 @@ header .wrapper-attendance-course-info p {
     }
 
     .assigned-courses-list {
-        background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+        background: linear-gradient(270deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
         border-radius: 8px;
         margin: 0;
         padding: 1rem 0;
     }
 
-    .assigned-course-level {
+    /* .assigned-course-level {
         display: none;
-    }
+    } */
 
     #course_level_inline, #session_level_inline {
         display: inline-flex;
@@ -3234,6 +3400,29 @@ header .wrapper-attendance-course-info p {
         align-items: flex-start;
     }
 
+    /*****************************************************|
+    |*** STD. SKILLS OVERVIEW Page  **********************|
+    |*****************************************************/
+
+    .student-skills-grid,
+    .student-skills-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .subskills-edit-list-three {
+        display: flex;
+        /* grid-template-columns: 1fr 1fr; */
+        flex-wrap: wrap;
+        /* gap: 1rem; */
+        justify-content: space-evenly;
+        background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+        border: 1px solid rgba(95, 255, 234, 0.35);
+        border-radius: 8px;
+        padding: 1rem;
+        /* flex-grow: 10; */
+    }
+
+
 
 }
 
@@ -3400,7 +3589,7 @@ header .wrapper-attendance-course-info p {
 
     .attendance-list-card {
         min-height: 260px;
-        background: linear-gradient(270deg, rgba(0, 51, 102, 0.95), rgba(0, 103, 108, 0.65));
+        background: linear-gradient(270deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
         border: 1px solid rgba(95, 255, 234, 0.45);
         padding: .6rem;
     }
@@ -3517,6 +3706,23 @@ header .wrapper-attendance-course-info p {
         padding: 1.25rem 0 0;
     }
 
+    /*****************************************************|
+    |*** EDIT STD SKILLS Page  *************************|
+    |*****************************************************/
+
+    .subskills-edit-list-three {
+        display: flex;
+        /* grid-template-columns: 1fr 1fr; */
+        flex-wrap: wrap;
+        /* gap: 1rem; */
+        justify-content: space-evenly;
+        background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+        border: 1px solid rgba(95, 255, 234, 0.35);
+        border-radius: 8px;
+        padding: 1rem;
+        /* flex-grow: 10; */
+    }
+
 
 }
 
@@ -3568,10 +3774,10 @@ header .wrapper-attendance-course-info p {
     }
 
     div:has(> .student-action-btn) {
-        display: grid;
+        /* display: grid; */
         grid-template-columns: repeat(1, 1fr);
         gap: 0.5rem;
-        padding-top: 1rem;
+        /* padding-top: 1rem; */
     }
 
     .student-action-btn {

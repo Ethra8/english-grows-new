@@ -1,0 +1,99 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_title %}| Edit Skill Assessment{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+
+<section class="student-skill-edit-page teacher-page">
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
+    <div class="mb-4">
+        <a href="#" class="text-white js-back-link">
+            <i class="fa-solid fa-arrow-left-long mr-3"></i>
+            Go Back
+        </a>
+    </div>
+
+    <header>
+        <h1>
+            Edit {{ skill_assessment.get_skill_display }}
+        </h1>
+
+        <p>
+            {% if skill_assessment.student.name %} {{ skill_assessment.student.get_full_name }} {% else %} {{ skill_assessment.student.username }} {% endif %} ·
+            {{ skill_assessment.course.name }}
+        </p>
+    </header>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+
+
+        {{ formset.management_form }}
+
+        {% if skill_assessment.skill == "listening" %}
+        <div class="subskills-edit-list-three">
+        {% elif skill_assessment.skill == "reading" %}
+        <div class="subskills-edit-list-three">
+        {% else %}    
+        <div class="subskills-edit-list-four">
+        {% endif %}
+        
+            {% for subform in formset %}
+                <div class="subskill-edit-card">
+
+                    {{ subform.id }}
+
+                    <h3>
+                        {{ subform.instance.get_subskill_display }}
+                    </h3>
+
+                    <div class="form-group">
+                        {{ subform.rating.label_tag }}
+                        {{ subform.rating }}
+                        {{ subform.rating.errors }}
+                    </div>
+
+                    <p>
+                        Current result:
+                        <strong>{{ subform.instance.percentage }}%</strong>
+                    </p>
+
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="skill-notes-card">
+            <h2>General notes for {{ skill_assessment.get_skill_display }}</h2>
+
+            <p>{{ form.teacher_notes.label_tag }}</p>
+            {{ form.teacher_notes }}
+            {{ form.teacher_notes.errors }}
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">
+            Save skill assessment
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

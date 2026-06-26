@@ -43,7 +43,7 @@
                 <div class="account-settings-form">
 
                     <form class="mt-3"
-                          action="{% url 'profiles:edit_student_subskill_assessment' course.id enrollment.id subskill.id %}"
+                          action="{% url 'profiles:teacher_edit_student_subskill' course.id enrollment.id subskill.id %}"
                           method="POST">
                         {% csrf_token %}
 
@@ -71,4 +71,9 @@
 
 </section>
 
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}

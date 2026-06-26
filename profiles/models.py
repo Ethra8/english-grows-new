@@ -342,23 +342,22 @@ class StudentAcademicProfile(models.Model):
 
 SUBSKILLS = {
     "speaking": [
-        ("range", "Range"),
         ("fluency", "Fluency"),
-        ("accuracy", "Accuracy"),
-        ("pronunciation", "Pronunciation & Intonation"),
+        ("accuracy_and_range", "Accuracy & Range"),
+        ("pronunciation", "Pronunciation"),
         ("interaction", "Interaction"),
     ],
 
     "reading": [
-        ("scanning", "Scanning"),
-        ("skimming", "Skimming"),
-        ("reading_comprehension", "Reading Comprehension"),
+        ("scanning", "Scanning - Specific Information"),
+        ("skimming", "Skimming - Gist (General Idea)"),
+        ("detailed", "Deep Understanding"),
     ],
 
     "listening": [
-        ("gist", "Listening for Gist"),
-        ("specific_information", "Listening for Specific Information"),
-        ("detail", "Listening for Detail"),
+        ("gist", "Gist (General Idea)"),
+        ("specific_information", "Specific Information"),
+        ("detailed", "Deep Understanding"),
     ],
 
     "writing": [
@@ -434,9 +433,18 @@ class StudentSubSkillAssessment(models.Model):
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
+        ("meeting", "Meeting"),
         ("confident", "Confident"),
         ("strong", "Strong"),
     ]
+
+    RATING_PERCENTAGES = {
+        "needs_work": 25,
+        "developing": 45,
+        "meeting": 60,
+        "confident": 80,
+        "strong": 100,
+    }
 
     skill_assessment = models.ForeignKey(
         StudentSkillAssessment,
@@ -450,7 +458,8 @@ class StudentSubSkillAssessment(models.Model):
     )
 
     percentage = models.PositiveSmallIntegerField(
-        default=0,
+        default=45,
+        editable=False,
     )
 
     rating = models.CharField(
@@ -467,8 +476,43 @@ class StudentSubSkillAssessment(models.Model):
         unique_together = ("skill_assessment", "subskill")
         ordering = ["subskill"]
 
+    def save(self, *args, **kwargs):
+        self.percentage = self.RATING_PERCENTAGES.get(
+            self.rating,
+            45,
+        )
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return (
             f"{self.skill_assessment.get_skill_display()} → "
             f"{self.get_subskill_display()}"
+        )
+
+
+
+# Creates a Snapshot every time teacher assesses SKILLS
+# To then read snapshots in time to create 
+# visual STUDENT PROGRESS GRAPH
+class StudentSkillTermSnapshot(models.Model):
+    skill_assessment = models.ForeignKey(
+        StudentSkillAssessment,
+        on_delete=models.CASCADE,
+        related_name="term_snapshots",
+    )
+
+    term_label = models.CharField(max_length=50)  # e.g. "Term 1", "Jun 2026"
+    percentage = models.PositiveSmallIntegerField()
+    recorded_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("skill_assessment", "term_label")
+        ordering = ["recorded_at"]
+
+    def __str__(self):
+        return (
+            f"{self.skill_assessment.student.get_full_name()} · "
+            f"{self.skill_assessment.get_skill_display()} · "
+            f"{self.term_label}: {self.percentage}%"
         )

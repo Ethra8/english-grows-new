@@ -209,12 +209,12 @@
 
                 </div>
             </div> 
-
-            <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
-                View course details
-                <i class="fa-solid fa-arrow-right ml-3"></i>
-            </a>
-
+            <div>
+                <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
+                    View course details
+                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                </a>
+            </div>
         </article>
 
         <!-- Attendance Overview -->
@@ -261,12 +261,12 @@
 
                 </div>
             </div>
-
-            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
-                View full attendance
-                <i class="fa-solid fa-arrow-right ml-3"></i>
-            </a>
-
+            <div>
+                <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
+                    View full attendance
+                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                </a>
+            </div>
         </article>
 
         <!-- Course Progress -->
@@ -311,14 +311,24 @@
 
                 </div>
             </div>
-
-            <a href="#" class="btn-course-details mt-3">
-                View detailed progress
-                <i class="fa-solid fa-arrow-right ml-3"></i>
-            </a>
-
+            <div>
+                <a href="#" class="btn-course-details mt-3">
+                    View detailed progress
+                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                </a>
+            </div>
         </article>
+        <section class="skills-progress-section">
+            <div class="skills-chart-card">
+                <div class="skills-chart-header">
+                    <h2>Skills Progress Over Time</h2>
+                </div>
 
+                <div class="skills-chart-canvas-wrap">
+                    <canvas id="skillsProgressChart"></canvas>
+                </div>
+            </div>
+        </section>    
     </div>
 
 </section>
@@ -327,5 +337,56 @@
 
 {% block postloadjs %}
 {{ block.super }}
+{{ chart_data_json|json_script:"skills-chart-data" }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // DISPLAY STD SKILLS PROGRESS CHART
+document.addEventListener("DOMContentLoaded", function () {
+
+    // const chartData = JSON.parse(chartDataEl.textContent);
+    const chartEl = document.getElementById("skillsProgressChart");
+
+    if (!chartEl) {
+        return;
+    }
+
+    const chartData = JSON.parse("{{ chart_data_json|escapejs }}");
+
+    if (!chartData.labels || chartData.labels.length === 0) {
+        chartEl.parentElement.innerHTML = `
+            <p class="text-dark">
+                No skill progress data yet. Save a skill assessment first.
+            </p>
+        `;
+        return;
+    }
+
+    new Chart(chartEl, {
+        type: "line",
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + "%";
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: "bottom",
+                }
+            }
+        }
+    });
+});
+
+</script>
 {% endblock %}

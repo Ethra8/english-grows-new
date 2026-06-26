@@ -32,6 +32,16 @@
             {% else %}
                 <span class="status-badge upcoming mt-2">Upcoming</span>
             {% endif %}
+            <form
+            method="POST"
+            action="{% url 'profiles:mark_class_pending_reschedule' session.id %}">
+                {% csrf_token %}
+                <button type="submit" class="status-badge pending-reschedule">
+                    RESCHEDULE
+                    <i class="fa-solid fa-rotate-right ml-1"></i>
+                </button>
+            </form>
+                <!-- <span class="status-badge paused mt-2 ml-2">Reschedule <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal ml-2"></i></span> -->
         </div>
 
     </div>

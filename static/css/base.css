@@ -79,7 +79,7 @@ a:hover {
     /* max-width: 320px;  */
     border-radius: 8px;
     font-size: 1.1rem;
-    background: #003366;
+    background: #0B355F;
     color: white;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
@@ -112,14 +112,14 @@ a:hover {
 }
 
 .btn-custom-teal:hover {
-    background: #003366;
+    background: #0B355F;
     color: white;
 }
 
 .index-cta-button {
-    background: #003366 ;
+    background: #0B355F ;
     color: #c1f7e3;
-    border: 1px solid #003366;
+    border: 1px solid #0B355F;
     min-width: 220px;
     font-size: 1rem;
     border-radius: 8px;
@@ -131,32 +131,32 @@ a:hover {
 .index-cta-button:active,
 .index-cta-button:focus {
     background-color: #c1f7e3;
-    color: #003366;
+    color: #0B355F;
     font-weight: 400;
 }
 
 .btn-outline-custom {
     background: teal;
     color: white !important; /* use important to override link colors for <a> elements */
-    border: 1px outset #003366;
+    border: 1px outset #0B355F;
 }
 
 .btn-outline-custom:hover,
 .btn-outline-custom:active,
 .btn-outline-custom:focus {
     background: aquamarine;
-    color: #003366 !important;
+    color: #0B355F !important;
     font-weight: 700;
 }
 
 .btn-bg-light {
     background-color: aquamarine;
-    color: #003366 !important;
+    color: #0B355F !important;
     border: inset 2px teal;
 }
 
 .border-black {
-    border: 1px solid #003366 !important;
+    border: 1px solid #0B355F !important;
     border-radius: 5px !important;
 }
 
@@ -169,7 +169,7 @@ a:hover {
     bottom: 10px;
     right: 10px;
     border: medium solid teal;
-    background-color: #003366;
+    background-color: #0B355F;
     border-radius: 10px !important;
 }
 
@@ -211,7 +211,7 @@ a:hover {
 }
 
 #topnav {
-    background-color: #003366;
+    background-color: #0B355F;
     max-height: 104px;
     width: 100%;
     padding: 0 2%;
@@ -278,7 +278,7 @@ a:hover {
 }
 
 .text-dark {
-    color: #003366 !important;
+    color: #0B355F !important;
 }
 
 a.text-white:hover {
@@ -335,7 +335,7 @@ ul li {
 /* Footer */
 .footer {
     bottom: 0;
-    background-color: #003366;
+    background-color: #0B355F;
     width: 100%;
     padding: 17px;
     position: relative;
@@ -366,12 +366,12 @@ footer a {
 
 #subscribe-link:hover{
     background-color: aquamarine;
-    color: #003366 !important;
+    color: #0B355F !important;
     font-weight: 600;
 }
 
 #subscribe-link a:hover {
-    color: #003366 !important;
+    color: #0B355F !important;
 } 
 
 .icons-social {
@@ -391,7 +391,7 @@ footer a {
 
 .fa-search {
     font-size: 1.5rem;
-    color: #003366;
+    color: #0B355F;
     margin-right: 1rem;
     margin-top: 1rem;
     background-color: white;
@@ -426,7 +426,7 @@ footer a {
 
 /* custom backgrounds */
 .bg-custom-dark {
-    background-color: #003366;
+    background-color: #0B355F;
     color: white;
 }
 
@@ -435,7 +435,7 @@ footer a {
 }
 
 .bg-custom {
-    background: #003366 !important;
+    background: #0B355F !important;
 }
 
 /* custom fonts */
@@ -444,12 +444,12 @@ footer a {
 }
 
 .text-dark {
-    color: #003366;
+    color: #0B355F;
 }
 
 .larger-title {
     font-size: 2.8rem;
-    color: #003366;
+    color: #0B355F;
 }
 
 .charmonman-regular {
@@ -576,7 +576,7 @@ span.btt-link:hover {
 }
 
 .clean-link {
-    color: #003366;
+    color: #0B355F;
     font-size: 1rem; 
 }
 
@@ -639,7 +639,7 @@ span.btt-link:hover {
 
 #index .footer {
     bottom: 0;
-    background-color: #003366;
+    background-color: #0B355F;
     width: 100%;
     padding: 17px;
     position: relative;
@@ -662,8 +662,8 @@ span.btt-link:hover {
 
 #individual-services .card-body {
     border-radius: 0;
-    border-top: solid 2px #003366;
-    background-color: #003366;
+    border-top: solid 2px #0B355F;
+    background-color: #0B355F;
     color: white;
     height: 100px !important;
     /* Flexbox centering */
@@ -829,7 +829,7 @@ span.vertical-line {
 /* About */
 #about a {
     font-weight: 600;
-    color: #003366;
+    color: #0B355F;
 }
 
 

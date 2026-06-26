@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from math import ceil
 
+
 class CourseType(models.Model):
     """
     General type/category of course.
@@ -479,11 +480,6 @@ class Course(models.Model):
             0
         )
 
-from datetime import datetime, timedelta
-
-from django.core.exceptions import ValidationError
-from django.db import models
-from django.utils import timezone
 
 
 class CourseTimetableSlot(models.Model):
@@ -802,6 +798,18 @@ class ClassSession(models.Model):
     Class 3
     """
 
+    STATUS_SCHEDULED = "scheduled"
+    STATUS_PENDING_RESCHEDULE = "pending_reschedule"
+    STATUS_CANCELLED = "cancelled"
+    STATUS_COMPLETED = "completed"
+
+    STATUS_CHOICES = [
+        (STATUS_SCHEDULED, "Scheduled"),
+        (STATUS_PENDING_RESCHEDULE, "Pending reschedule"),
+        (STATUS_CANCELLED, "Cancelled"),
+        (STATUS_COMPLETED, "Completed"),
+    ]
+
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
@@ -825,6 +833,12 @@ class ClassSession(models.Model):
     meeting_link = models.URLField(blank=True)
 
     topic = models.CharField(max_length=200, blank=True)
+
+    status = models.CharField(
+        max_length=30,
+        choices=STATUS_CHOICES,
+        default=STATUS_SCHEDULED,
+    )    
 
     is_cancelled = models.BooleanField(default=False)
 
@@ -882,7 +896,10 @@ class Attendance(models.Model):
         ("missed", "Missed"),
         ("excused", "Excused"),
         ("cancelled", "Cancelled"),
+        ("pending_reschedule", "Pending reschedule"),
     ]
+
+    STATUS_PENDING_RESCHEDULE = "pending_reschedule"
 
     class_session = models.ForeignKey(
         ClassSession,

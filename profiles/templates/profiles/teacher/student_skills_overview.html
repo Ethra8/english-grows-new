@@ -153,15 +153,20 @@
             <article class="student-skill-card">
 
                 <div class="skill-card-header">
-                    <i class="{{ skill.icon }}"></i>
-                    <div>
-                        <h2>{{ skill.name }}</h2>
-                        <span>{{ skill.subskills|length }} subskills tracked</span>
+                    
+                    <h2>
+                        <span><i class="{{ skill.icon }} mr-3"></i></span>
+                        {{ skill.name }}
+                    </h2>
+                    <div class="skill-card-edit mt-4">
+                        <a href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
+                        class="skill-edit-link"
+                        title="Edit {{ skill.name }}">
+                            <i class="fa-regular fa-pen-to-square mr-2"></i> Edit Skill
+                        </a>
                     </div>
-                </div>
 
-                <div class="skill-card-body">
-
+                    <hr>
                     <div class="skill-ring"
                          style="--skill-progress: {{ skill.percentage|default:'0' }};">
                         <div>
@@ -169,32 +174,22 @@
                             <span>Overall</span>
                         </div>
                     </div>
+                </div>
 
+                <div class="skill-card-body">
                     <div class="skill-details">
+
+                        <p>{{ skill.subskills|length }} subskills tracked</p>
 
                         {% for subskill in skill.subskills %}
                             {% with progress=subskill.percentage|default:0 %}
-                                <div class="subskill-row">
-
-                                    <div class="subskill-main">
+                                <div class="subskill-row">                      
+                                    <div class="subskill-main mt-3">
                                         <strong>{{ subskill.get_subskill_display }}</strong>
-                                        <span>{{ subskill.get_rating_display }}</span>
+                                        <br>
+                                        <span>{{ subskill.get_rating_display }} ({{ progress }}%)</span>                                    
+                                        <!-- <strong class="subskill-percentage">{{ progress }}%</strong> -->
                                     </div>
-
-                                    <div class="subskill-progress" style="--progress: {{ progress }};">
-                                        <span></span>
-                                    </div>
-
-                                    <strong class="subskill-percentage">
-                                        {{ progress }}%
-                                    </strong>
-
-                                    <a href="{% url 'profiles:edit_student_subskill_assessment' course.id enrollment.id subskill.id %}"
-                                       class="subskill-edit-link"
-                                       title="Edit {{ subskill.get_subskill_display }}">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </a>
-
                                 </div>
                             {% endwith %}
                         {% empty %}
@@ -204,7 +199,13 @@
                         {% endfor %}
 
                     </div>
-
+                    <!-- <div class="skill-card-edit">
+                        <a href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
+                        class="skill-edit-link"
+                        title="Edit {{ skill.name }}">
+                            <i class="fa-regular fa-pen-to-square mr-2"></i> Edit Skill
+                        </a>
+                    </div> -->
                 </div>
 
             </article>
@@ -218,29 +219,17 @@
 
     <div class="student-skills-bottom-grid">
 
-        <article class="student-skills-chart-card">
-            <h2>Skills Progress</h2>
+        <section class="skills-progress-section">
+            <div class="skills-chart-card">
+                <div class="skills-chart-header">
+                    <h2>Skills Progress Over Time</h2>
+                </div>
 
-            <div class="simple-skills-chart">
-                {% for skill in skills %}
-                    {% with progress=skill.percentage|default:0 %}
-                        <div class="chart-row" style="--progress: {{ progress }};">
-                            <span>{{ skill.name }}</span>
-
-                            <div class="chart-bar">
-                                <span></span>
-                            </div>
-
-                            <strong>{{ progress }}%</strong>
-                        </div>
-                    {% endwith %}
-                {% empty %}
-                    <p class="text-white-50">
-                        No skill data available yet.
-                    </p>
-                {% endfor %}
+                <div class="skills-chart-canvas-wrap">
+                    <canvas id="skillsProgressChart"></canvas>
+                </div>
             </div>
-        </article>
+        </section>
 
         <article class="student-skills-notes-card">
             <div class="d-flex justify-content-between align-items-center">
@@ -261,7 +250,66 @@
         </article>
 
     </div>
+<!-- <p class="text-white">
+    Chart data: {{ chart_data_json }}
+</p> -->
 
 </section>
 
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+{{ chart_data_json|json_script:"skills-chart-data" }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // DISPLAY STD SKILLS PROGRESS CHART
+document.addEventListener("DOMContentLoaded", function () {
+
+    // const chartData = JSON.parse(chartDataEl.textContent);
+    const chartEl = document.getElementById("skillsProgressChart");
+
+    if (!chartEl) {
+        return;
+    }
+
+    const chartData = JSON.parse("{{ chart_data_json|escapejs }}");
+
+    if (!chartData.labels || chartData.labels.length === 0) {
+        chartEl.parentElement.innerHTML = `
+            <p class="text-dark">
+                No skill progress data yet. Save a skill assessment first.
+            </p>
+        `;
+        return;
+    }
+
+    new Chart(chartEl, {
+        type: "line",
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + "%";
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: "bottom",
+                }
+            }
+        }
+    });
+});
+
+</script>
 {% endblock %}

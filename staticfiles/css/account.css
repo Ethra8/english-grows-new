@@ -31,7 +31,7 @@
     /* max-width: 320px;  */
     border-radius: 5px;
     font-size: 1.1rem;
-    background: #003366;
+    background: #0B355F;
     color: white;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
@@ -59,7 +59,7 @@
 .allauth-headings-custom {
     font-family: "Big Shoulders Display", sans-serif;
     font-weight: 500;
-    color: #003366;
+    color: #0B355F;
     font-size: 3rem;
 }
 
@@ -72,7 +72,7 @@
 .form-group input:not([class='qty-input']),
 .form-group textarea,
 .allauth-form-inner-content input:not([type='checkbox']) {
-    border-color: #003366;
+    border-color: #0B355F;
     border-radius: 5px;
 }
 
@@ -101,7 +101,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: #003366;
+    background-color: #0B355F;
     border: 2px solid #fff;
     padding: .375rem .75rem;
     font-size: 1rem;
@@ -120,7 +120,7 @@
 }
 
 .allauth-form-inner-content a {
-    color: #003366; /* text-info */
+    color: #0B355F; /* text-info */
     font-weight: 500;
 }
 
