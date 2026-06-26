@@ -434,7 +434,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
-        ("secure", "Secure"),
+        ("confident", "Confident"),
         ("strong", "Strong"),
     ]
 
