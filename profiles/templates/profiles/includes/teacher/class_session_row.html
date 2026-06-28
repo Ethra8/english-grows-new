@@ -32,16 +32,20 @@
             {% else %}
                 <span class="status-badge upcoming mt-2">Upcoming</span>
             {% endif %}
-            <form
-            method="POST"
-            action="{% url 'profiles:mark_class_pending_reschedule' session.id %}">
-                {% csrf_token %}
-                <button type="submit" class="status-badge pending-reschedule">
+            {% if session.is_today or session.is_upcoming %}
+                <button
+                    type="button"
+                    class="status-badge pending-reschedule mt-2 js-open-reschedule-modal"
+                    data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+                    data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                    data-class-date="{{ session.start_time|date:'D, j M' }}"
+                    data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
+                >
+                    <i class="fa-solid fa-rotate-right mr-2"></i>
                     RESCHEDULE
-                    <i class="fa-solid fa-rotate-right ml-1"></i>
+                    <i class="fa-solid fa-angles-right ml-2"></i>
                 </button>
-            </form>
-                <!-- <span class="status-badge paused mt-2 ml-2">Reschedule <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal ml-2"></i></span> -->
+            {% endif %}            
         </div>
 
     </div>
@@ -76,3 +80,4 @@
     </div>
 
 </div>
+

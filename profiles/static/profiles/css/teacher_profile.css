@@ -13,6 +13,64 @@ h2 {
 }
 
 
+/* MODAL: Confirm Reschedule Action on Class List */
+.reschedule-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 20, 25, 0.75);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.reschedule-modal-overlay.is-visible {
+    display: flex;
+}
+
+.reschedule-modal-box {
+    max-width: 520px;
+    width: 100%;
+    background: #062f35;
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 22px;
+    padding: 2rem;
+    color: #ffffff;
+}
+
+.reschedule-modal-class-name {
+    color: #5fffea;
+    font-weight: 700;
+}
+
+.reschedule-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.reschedule-modal-cancel,
+.reschedule-modal-confirm {
+    border: none;
+    border-radius: 999px;
+    padding: 0.75rem 1.4rem;
+    cursor: pointer;
+}
+
+.reschedule-modal-cancel {
+    background: rgba(255, 127, 127, 0.65);
+    color: #ffffff;
+}
+
+.reschedule-modal-confirm {
+    background: #189f03;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+
 /* *** SECTIONS & PAGES *********************************************/
 .teacher-page {
     padding: 70px 5%;
@@ -757,10 +815,19 @@ div:has(> .student-action-btn) {
 } */
 
 .class-list-group-name .text-white,
-.course-list-group-name .text-white {
+.assigned-courses-page .course-list-group-name .text-white {
     color: whitesmoke;
     font-weight: 300 !important;
     font-size: 1.4rem;
+}
+
+.teacher-reschedule-page .course-list-group-name h3 {
+    font-weight: 500;
+}
+
+.teacher-reschedule-page .course-list-group-name p .text-white {
+    font-weight: 300 !important;
+    font-size: 1rem;
 }
 
 
@@ -795,9 +862,9 @@ div:has(> .student-action-btn) {
     font-size: .75rem;
     font-weight: 700;
     text-transform: uppercase;
-    width: 140px;
-    min-width: 140px;
-    max-width: 140px;
+    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
     text-align: center;
 }
 
@@ -2747,6 +2814,16 @@ header .wrapper-attendance-course-info strong {
     color: whitesmoke;
 }
 
+/******************************************************/
+/* RESCHEDULE Pages *********************************** */
+/******************************************************/
+
+.teacher-reschedule-detail-page form {
+    background-color: #003366;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 320px;
+}
 
 
 
@@ -3021,10 +3098,6 @@ header .wrapper-attendance-course-info strong {
         padding: 1rem 0;
     }
 
-    /* .assigned-course-level {
-        display: none;
-    } */
-
     #course_level_inline, #session_level_inline {
         display: inline-flex;
         align-items: i;
@@ -3056,7 +3129,6 @@ header .wrapper-attendance-course-info strong {
         flex-direction: row;
         gap: 1rem;
         align-items: center;
-        /* margin-bottom: 1.5rem; */
     }
 
     .student-list-header-buttons a {
@@ -3776,6 +3848,9 @@ header .wrapper-attendance-course-info strong {
         /* flex-grow: 10; */
     }
 
+    .assigned-course-level {
+        display: none;
+    }
 
 }
 

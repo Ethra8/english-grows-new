@@ -274,3 +274,40 @@ function toggleLevelForm(enrollmentId) {
 
     form.classList.toggle("d-none");
 }
+
+
+// Class List page:
+// Reschedule MODAL to Confirm/Cancel Reschedule Action
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("rescheduleModal");
+    const cancelButton = document.getElementById("cancelRescheduleModal");
+    const confirmForm = document.getElementById("rescheduleConfirmForm");
+    const classNameText = document.getElementById("rescheduleModalClassName");
+    const openButtons = document.querySelectorAll(".js-open-reschedule-modal");
+
+    if (!modal || !cancelButton || !confirmForm) {
+        return;
+    }
+
+    openButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const actionUrl = button.dataset.actionUrl;
+            const classTitle = button.dataset.classTitle;
+
+            confirmForm.setAttribute("action", actionUrl);
+            classNameText.textContent = classTitle;
+
+            modal.classList.add("is-visible");
+        });
+    });
+
+    cancelButton.addEventListener("click", function () {
+        modal.classList.remove("is-visible");
+    });
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.classList.remove("is-visible");
+        }
+    });
+});

@@ -33,7 +33,9 @@ urlpatterns = [
     path("teacher/student-skill/<int:skill_assessment_id>/edit/", views.teacher_edit_student_skill, name="teacher_edit_student_skill"),
 
     path("teacher/classes/<int:session_id>/pending-reschedule/", views.mark_class_pending_reschedule, name="mark_class_pending_reschedule"),
-
+    path("teacher/reschedule-classes/", views.teacher_reschedule_classes, name="teacher_reschedule_classes"),
+    path("teacher/reschedule-classes/<int:session_id>/", views.reschedule_class_detail, name="reschedule_class_detail"),
+    
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),
 

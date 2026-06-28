@@ -2179,6 +2179,33 @@ def mark_class_pending_reschedule(request, session_id):
     return redirect("profiles:teacher_classes_list")
 
 
+
+@login_required
+def teacher_reschedule_classes(request):
+    pending_sessions = (
+        ClassSession.objects
+        .filter(
+            course__teacher=request.user,
+            status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("start_time")
+    )
+
+    return render(
+        request,
+        "profiles/teacher/teacher_reschedule_classes.html",
+        {
+            "pending_sessions": pending_sessions,
+        }
+    )
+
+
+
 # TEACHER PROFILE SETTINGS
 @login_required
 def teacher_profile_settings(request):
@@ -2232,4 +2259,73 @@ def teacher_profile_settings(request):
         request,
         "profiles/teacher/teacher_profile_settings.html",
         context
+    )
+
+
+# CHOOSE NEW TIME & DATE
+# To Reschedule Pending Class
+@login_required
+def reschedule_class_detail(request, session_id):
+    session = get_object_or_404(
+        ClassSession,
+        id=session_id,
+        course__teacher=request.user,
+        status=ClassSession.STATUS_PENDING_RESCHEDULE,
+    )
+
+    if request.method == "POST":
+        new_date = request.POST.get("new_date")
+        new_start_time = request.POST.get("new_start_time")
+
+        if not new_date or not new_start_time:
+            messages.error(request, "Please choose both a new date and start time.")
+            return redirect(
+                "profiles:reschedule_class_detail",
+                session_id=session.id,
+            )
+
+        old_duration = session.end_time - session.start_time
+
+        naive_start = datetime.strptime(
+            f"{new_date} {new_start_time}",
+            "%Y-%m-%d %H:%M",
+        )
+
+        new_start = timezone.make_aware(
+            naive_start,
+            timezone.get_current_timezone(),
+        )
+
+        new_end = new_start + old_duration
+
+        session.start_time = new_start
+        session.end_time = new_end
+        session.status = ClassSession.STATUS_SCHEDULED
+        session.is_cancelled = False
+        session.save(update_fields=[
+            "start_time",
+            "end_time",
+            "status",
+            "is_cancelled",
+        ])
+
+        session.attendance_records.filter(
+            status=Attendance.STATUS_PENDING_RESCHEDULE
+        ).update(
+            status=Attendance.STATUS_SCHEDULED
+        )
+
+        messages.success(
+            request,
+            "Class successfully rescheduled."
+        )
+
+        return redirect("profiles:teacher_reschedule_classes")
+
+    return render(
+        request,
+        "profiles/teacher/reschedule_class_detail.html",
+        {
+            "session": session,
+        }
     )

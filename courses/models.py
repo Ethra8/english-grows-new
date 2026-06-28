@@ -890,6 +890,13 @@ class Attendance(models.Model):
     - group company classes
 
     '''
+    STATUS_SCHEDULED = "scheduled"
+    STATUS_ATTENDED = "attended"
+    STATUS_MISSED = "missed"
+    STATUS_EXCUSED = "excused"
+    STATUS_CANCELLED = "cancelled"
+    STATUS_PENDING_RESCHEDULE = "pending_reschedule"
+
     ATTENDANCE_STATUS_CHOICES = [
         ("scheduled", "Scheduled"),
         ("attended", "Attended"),
@@ -898,8 +905,6 @@ class Attendance(models.Model):
         ("cancelled", "Cancelled"),
         ("pending_reschedule", "Pending reschedule"),
     ]
-
-    STATUS_PENDING_RESCHEDULE = "pending_reschedule"
 
     class_session = models.ForeignKey(
         ClassSession,
@@ -914,9 +919,9 @@ class Attendance(models.Model):
     )
 
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=ATTENDANCE_STATUS_CHOICES,
-        default="scheduled"
+        default=STATUS_SCHEDULED,
     )
 
     minutes_late = models.PositiveIntegerField(
