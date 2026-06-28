@@ -2674,6 +2674,9 @@ header .wrapper-attendance-course-info strong {
 .teacher-skill-note h4 {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
+    background: #003366;
+    color: #5fffea;
+    padding: 0 0.5rem;
 }
 
 .teacher-skill-note p {

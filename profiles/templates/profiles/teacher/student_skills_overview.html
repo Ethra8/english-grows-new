@@ -223,38 +223,60 @@
 
     <div class="student-skills-bottom-grid">
 
-        <section class="skills-progress-section">
+        <article class="skills-progress-section">
             <div class="skills-chart-card">
                 <div class="skills-chart-header">
-                    <h2>Skills Progress Over Time</h2>
+                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Skills Progress Over Time</h2>
                 </div>
 
                 <div class="skills-chart-canvas-wrap">
                     <canvas id="skillsProgressChart"></canvas>
                 </div>
             </div>
-        </section>
-
+        </article>
         <article class="student-skills-notes-card">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Teacher Notes</h2>
+                <h2 class="mb-0"><i class="fa-solid fa-file-pen mr-2"></i>Teacher Notes</h2>
                 <!-- <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}">
                     <i class="fa-solid fa-pen mr-2"></i>
                     Edit
                 </a> -->
             </div>
+            <hr>
 
-            {% if skill_notes %}
-                {% for skill in skill_notes %}
-                    <div class="teacher-skill-note">
-                        <h4>{{ skill.get_skill_display }}</h4>
-                        <p>{{ skill.teacher_notes|linebreaksbr }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No skill notes have been added yet.</p>
-            {% endif %}
-        </article>
+            {% for note in skill_note_display %}
+            <div class="teacher-skill-note">
+                <h4>{{ note.skill }}</h4>
+
+                {% if note.strengths %}
+                    <p>
+                        <strong>Strengths:</strong>
+                        {% for subskill in note.strengths %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.developing %}
+                    <p>
+                        <strong>Developing areas:</strong>
+                        {% for subskill in note.developing %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.needs_work %}
+                    <p>
+                        <strong>Needs work:</strong>
+                        {% for subskill in note.needs_work %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        {% endfor %}        
+        </article>    
 
     </div>
 <!-- <p class="text-white">

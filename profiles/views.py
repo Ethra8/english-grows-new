@@ -1588,11 +1588,16 @@ def student_skills_overview(request, course_id, enrollment_id):
         .filter(
             student=student,
             course=course,
-            skill__in=valid_skill_values,
         )
         .prefetch_related("subskill_assessments")
         .order_by("skill")
     )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
 
     skills = []
 
@@ -1638,6 +1643,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "academic_profile": academic_profile,
         "chart_data_json": json.dumps(chart_data),
         "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
     }
 
     return render(
