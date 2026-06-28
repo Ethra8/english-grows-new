@@ -3705,6 +3705,11 @@ header .wrapper-attendance-course-info strong {
         gap: 0.75rem;
     }
 
+    .student-level-area {
+        padding: 1.25rem 0 0;
+    }
+
+
     /*****************************************************|
     |*** ALL ATTENDANCE PageS  ***************************|
     |*****************************************************/
@@ -3826,10 +3831,6 @@ header .wrapper-attendance-course-info strong {
         padding: 2.5rem 0.75rem 0.75rem;
     }
     
-
-    .student-level-area {
-        padding: 1.25rem 0 0;
-    }
 
     /*****************************************************|
     |*** EDIT STD SKILLS Page  *************************|
