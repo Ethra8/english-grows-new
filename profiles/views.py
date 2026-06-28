@@ -728,7 +728,6 @@ def teacher_courses(request):
         .order_by("name")
     )
 
-
     total_courses = courses.count()
     active_courses = courses.filter(status="active").count()
     confirmed_courses = courses.filter(status="confirmed").count()
@@ -1145,6 +1144,30 @@ def build_skill_progress_chart_data(student, course):
     }
 
 
+# Helper to display Teacher notes (+ future automated reports ???)
+def build_skill_note_display(skill_assessment):
+    subskills = skill_assessment.subskill_assessments.all()
+
+    return {
+        "skill": skill_assessment.get_skill_display(),
+        "strengths": [
+            subskill.get_subskill_display()
+            for subskill in subskills
+            if subskill.rating in ["strong", "confident"]
+        ],
+        "developing": [
+            subskill.get_subskill_display()
+            for subskill in subskills
+            if subskill.rating in ["meeting", "developing"]
+        ],
+        "needs_work": [
+            subskill.get_subskill_display()
+            for subskill in subskills
+            if subskill.rating == "needs_work"
+        ],
+        "plain_notes": skill_assessment.teacher_notes,
+    }
+
 
 @login_required
 def teacher_student_detail(request, course_id, enrollment_id):
@@ -1227,6 +1250,21 @@ def teacher_student_detail(request, course_id, enrollment_id):
         .order_by("-class_session__start_time")[:5]
     )
 
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
     context = {
         "course": course,
         "enrollment": enrollment,
@@ -1247,6 +1285,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
         "recent_attendance": recent_attendance,
         "chart_data_json": json.dumps(chart_data),
+        "skill_note_display": skill_note_display,
     }
 
     chart_data = {
@@ -1572,6 +1611,17 @@ def student_skills_overview(request, course_id, enrollment_id):
             "subskills": assessment.subskill_assessments.all(),
         })
 
+    skill_notes = (
+    StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+    
+
     academic_profile = getattr(student, "academic_profile", None)
 
     chart_data = build_skill_progress_chart_data(
@@ -1587,6 +1637,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "skills": skills,
         "academic_profile": academic_profile,
         "chart_data_json": json.dumps(chart_data),
+        "skill_notes": skill_notes,
     }
 
     return render(
@@ -1630,6 +1681,9 @@ def teacher_edit_student_skill(request, skill_assessment_id):
             # Clear old prefetched subskills cache
             if hasattr(skill_assessment, "_prefetched_objects_cache"):
                 skill_assessment._prefetched_objects_cache = {}
+
+            skill_assessment.teacher_notes = skill_assessment.generate_teacher_notes()
+            skill_assessment.save(update_fields=["teacher_notes", "updated_at"])
 
             current_term = timezone.localdate().strftime("%d %b %Y")
 
@@ -2026,7 +2080,7 @@ def teacher_attendance_detail(request, session_id):
         course__teacher=request.user,
     )
 
-    attendances = (
+    attendances = list(
         Attendance.objects
         .filter(class_session=class_session)
         .select_related(
@@ -2040,10 +2094,38 @@ def teacher_attendance_detail(request, session_id):
         )
     )
 
-    attended_count = attendances.filter(status="attended").count()
-    missed_count = attendances.filter(status="missed").count()
-    excused_count = attendances.filter(status="excused").count()
-    total_count = attendances.count()
+    enrollments_by_student_id = {
+        enrollment.student_id: enrollment
+        for enrollment in CourseEnrollment.objects.filter(
+            course=class_session.course,
+            student_id__in=[
+                attendance.student_id
+                for attendance in attendances
+            ],
+        )
+    }
+
+    for attendance in attendances:
+        attendance.enrollment = enrollments_by_student_id.get(
+            attendance.student_id
+        )
+
+    attended_count = sum(
+        1 for attendance in attendances
+        if attendance.status == "attended"
+    )
+
+    missed_count = sum(
+        1 for attendance in attendances
+        if attendance.status == "missed"
+    )
+
+    excused_count = sum(
+        1 for attendance in attendances
+        if attendance.status == "excused"
+    )
+
+    total_count = len(attendances)
 
     context = {
         "profile": profile,

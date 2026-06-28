@@ -123,14 +123,18 @@
 
     </div>
 
+    <!-- Inside navbar -->
     <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}"
-           class="{% if request.resolver_match.url_name == 'teacher_student_detail' %}active{% endif %}">
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
             Overview
         </a>
 
-        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}"
-           class="{% if request.resolver_match.url_name == 'student_skills_overview' %}active{% endif %}">
+        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
+            Attendance
+        </a>
+
+        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}"    
+           class="active">
             Skills
         </a>
 
@@ -234,18 +238,21 @@
         <article class="student-skills-notes-card">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Teacher Notes</h2>
-                <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}">
+                <!-- <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}">
                     <i class="fa-solid fa-pen mr-2"></i>
                     Edit
-                </a>
+                </a> -->
             </div>
 
-            {% if academic_profile.teacher_notes %}
-                <p>{{ academic_profile.teacher_notes|linebreaksbr }}</p>
+            {% if skill_notes %}
+                {% for skill in skill_notes %}
+                    <div class="teacher-skill-note">
+                        <h4>{{ skill.get_skill_display }}</h4>
+                        <p>{{ skill.teacher_notes|linebreaksbr }}</p>
+                    </div>
+                {% endfor %}
             {% else %}
-                <p>
-                    No academic profile notes have been added yet.
-                </p>
+                <p>No skill notes have been added yet.</p>
             {% endif %}
         </article>
 
@@ -264,7 +271,8 @@
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // DISPLAY STD SKILLS PROGRESS CHART
+// DISPLAY STD SKILLS PROGRESS CHART:
+// ATTENTION: Do not move to JS file, it doesn't work there...
 document.addEventListener("DOMContentLoaded", function () {
 
     // const chartData = JSON.parse(chartDataEl.textContent);

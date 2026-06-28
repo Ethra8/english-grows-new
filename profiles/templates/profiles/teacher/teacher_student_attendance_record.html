@@ -75,19 +75,6 @@
                     <i class="fa-regular fa-envelope mr-3"></i>
                     Message
                 </a>
-
-                <!-- <a href="#" class="student-action-btn">
-                    <i class="fa-solid fa-pen mr-3"></i>
-                    Edit Profile
-                </a> -->
-                <button type="button" id="editAttendanceBtn" class="student-action-btn">
-                    <i class="fa-solid fa-pen mr-2"></i>
-                    Edit Attendance
-                </button>
-                <!-- <a href="#" class="student-action-btn">
-                    <i class="fa-solid fa-pen mr-3"></i>
-                    Edit Attendance
-                </a> -->
             </div>
             <div class="student-level-area">
                 <small>Current Level</small>
@@ -122,13 +109,53 @@
 
     </div>
 
+    <!-- Inside navbar -->
+    <nav class="student-detail-tabs">
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
+            Overview
+        </a>
+
+        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}"    
+           class="active">
+            Attendance
+        </a>
+
+        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
+            Skills
+        </a>
+
+        <a href="#">
+            Courses
+        </a>
+
+        <a href="#">
+            Notes
+        </a>
+
+        <a href="#">
+            History
+        </a>
+    </nav>
+
     <div class="student-overview-grid mt-4">
 
-        <article class="student-detail-card recent-attendance-card">
-            <h2>
-                <i class="fa-solid fa-list-check mr-2"></i>
-                Attendance Records
-            </h2>
+        <article class="recent-attendance-card">
+            <div class="recent-attendance-card-header">
+                <h2>
+                    <i class="fa-solid fa-list-check mr-2"></i>
+                    Attendance Records
+                </h2>
+                <div class="mb-3">
+                    <strong>Past Classes:</strong>
+                    <span>{{ completed_classes }}</span>
+                </div>
+
+                <button type="button" id="editAttendanceBtn" class="student-edit-attendance-btn">
+                    <i class="fa-regular fa-pen-to-square mr-2"></i>
+                    Edit
+                </button>
+            </div>
+
             <hr>
             
         <div class="wrapper-attendance-summary-card">

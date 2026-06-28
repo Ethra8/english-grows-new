@@ -116,8 +116,19 @@
                         </div>
 
                         <div>
-                            <h3>{{ attendance.student.get_full_name|default:attendance.student.username }}</h3>
-                            <span>{{ attendance.student.email }}</span>
+                            <h3>
+                                {% if attendance.enrollment %}
+                                    <a href="{% url 'profiles:teacher_student_detail' class_session.course.id attendance.enrollment.id %}"
+                                    class="student-detail-link">
+                                        {{ attendance.student.get_full_name|default:attendance.student.username }}
+                                    </a>
+                                {% else %}
+                                    {{ attendance.student.get_full_name|default:attendance.student.username }}
+                                {% endif %}
+                            </h3>
+                            <a href="mailto: {{ attendance.student.email }}">                              
+                                <span>{{ attendance.student.email }}</span>
+                            </a>
                         </div>
                     </div>
 

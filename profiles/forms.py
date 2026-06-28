@@ -159,7 +159,7 @@ class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
         model = StudentSubSkillAssessment
         fields = [
             "rating",
-            "teacher_notes",
+            # "teacher_notes",
         ]
 
 

@@ -427,6 +427,45 @@ class StudentSkillAssessment(models.Model):
 
         return round(total / subskills.count())
 
+    def generate_teacher_notes(self):
+        subskills = self.subskill_assessments.all()
+
+        if not subskills.exists():
+            return ""
+
+        strengths = []
+        developing = []
+        needs_work = []
+
+        for subskill in subskills:
+            label = subskill.get_subskill_display()
+
+            if subskill.rating in ["strong", "confident"]:
+                strengths.append(label)
+            elif subskill.rating in ["meeting", "developing"]:
+                developing.append(label)
+            elif subskill.rating == "needs_work":
+                needs_work.append(label)
+
+        notes = []
+
+        if strengths:
+            notes.append(
+                f"Strengths: {', '.join(strengths)}."
+            )
+
+        if developing:
+            notes.append(
+                f"Developing areas: {', '.join(developing)}."
+            )
+
+        if needs_work:
+            notes.append(
+                f"Needs work: {', '.join(needs_work)}."
+            )
+
+        return "\n".join(notes)
+
 
 
 class StudentSubSkillAssessment(models.Model):
@@ -468,7 +507,7 @@ class StudentSubSkillAssessment(models.Model):
         default="developing",
     )
 
-    teacher_notes = models.TextField(blank=True)
+    # teacher_notes = models.TextField(blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 

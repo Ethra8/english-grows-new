@@ -127,9 +127,13 @@
 
     <!-- Inside navbar -->
     <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}"
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}"    
            class="active">
             Overview
+        </a>
+
+        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
+            Attendance
         </a>
 
         <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
@@ -179,7 +183,7 @@
                                 <strong>{{ course.total_hours|clean_decimal }} h.</strong>
                             </div>
 
-                            <div class="detail-row">
+                            <!-- <div class="detail-row">
                                 <span>Class Duration</span>
                                 <strong>{{ course.class_duration_display|default:"Not assigned" }}</strong>
                             </div>
@@ -202,7 +206,7 @@
                             <div class="detail-row">
                                 <span>Teacher</span>
                                 <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -211,7 +215,8 @@
             </div> 
             <div>
                 <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
-                    View course details
+                    <i class="fa-regular fa-eye mr-3"></i>                    
+                    details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
                 </a>
             </div>
@@ -221,7 +226,7 @@
         <article class="student-detail-card">
             <div>
                 <h2>
-                    <i class="fa-regular fa-calendar-check mr-2"></i>
+                    <i class="fa-solid fa-clipboard-list mr-2"></i>
                     Attendance Overview
                 </h2>
 
@@ -243,7 +248,7 @@
                             <strong>{{ attended_count }} / {{ completed_classes }}</strong>
                         </div>
 
-                        <div class="detail-row">
+                        <!-- <div class="detail-row">
                             <span>Missed:</span>
                             <strong>{{ missed_count }}</strong>
                         </div>
@@ -256,14 +261,15 @@
                         <div class="detail-row">
                             <span>Past Classes:</span>
                             <strong>{{ completed_classes }}</strong>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
             </div>
             <div>
                 <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
-                    View full attendance
+                    <i class="fa-regular fa-eye mr-3"></i>
+                    details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
                 </a>
             </div>
@@ -293,7 +299,7 @@
                             <strong>{{ completed_classes }} / {{ total_classes }}</strong>
                         </div>
 
-                        <div class="detail-row">
+                        <!-- <div class="detail-row">
                             <span>Remaining Classes:</span>
                             <strong>{{ remaining_classes }}</strong>
                         </div>
@@ -306,30 +312,79 @@
                         <div class="detail-row">
                             <span>Course Completion:</span>
                             <strong>{{ completion_percentage }}%</strong>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
             </div>
             <div>
                 <a href="#" class="btn-course-details mt-3">
-                    View detailed progress
+                    <i class="fa-regular fa-eye mr-3"></i>                    
+                    details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
                 </a>
             </div>
         </article>
-        <section class="skills-progress-section">
+    </div>
+
+    <div class="student-details-skills-overview-grid">
+        <article class="skills-progress-section">
             <div class="skills-chart-card">
                 <div class="skills-chart-header">
-                    <h2>Skills Progress Over Time</h2>
+                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Skills Progress Over Time</h2>
                 </div>
 
                 <div class="skills-chart-canvas-wrap">
                     <canvas id="skillsProgressChart"></canvas>
                 </div>
             </div>
-        </section>    
-    </div>
+        </article>
+        <article class="student-skills-notes-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0"><i class="fa-solid fa-file-pen mr-2"></i>Teacher Notes</h2>
+                <!-- <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}">
+                    <i class="fa-solid fa-pen mr-2"></i>
+                    Edit
+                </a> -->
+            </div>
+            <hr>
+
+            {% for note in skill_note_display %}
+            <div class="teacher-skill-note">
+                <h4>{{ note.skill }}</h4>
+
+                {% if note.strengths %}
+                    <p>
+                        <strong>Strengths:</strong>
+                        {% for subskill in note.strengths %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.developing %}
+                    <p>
+                        <strong>Developing areas:</strong>
+                        {% for subskill in note.developing %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.needs_work %}
+                    <p>
+                        <strong>Needs work:</strong>
+                        {% for subskill in note.needs_work %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        {% endfor %}        
+        </article>    
+    </div>  
+    
+ 
 
 </section>
 
@@ -341,7 +396,8 @@
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // DISPLAY STD SKILLS PROGRESS CHART
+// DISPLAY STD SKILLS PROGRESS CHART
+// ATTENTION: Do not move to JS file, it doesn't work there...
 document.addEventListener("DOMContentLoaded", function () {
 
     // const chartData = JSON.parse(chartDataEl.textContent);

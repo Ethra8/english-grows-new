@@ -356,12 +356,14 @@ h2 {
 .edit-attendance-btn,
 .btn-to-student-detail,
 .student-action-btn,
+.student-edit-attendance-btn,
 .skill-edit-link {
     border: 1px solid #5eead4;
     color: #5eead4;
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
+    text-transform: capitalize;
     font-weight: 400;
     width: max-content;
     max-height: fit-content;
@@ -380,6 +382,7 @@ h2 {
 .edit-attendance-btn:hover,
 .btn-to-student-detail:hover,
 .student-action-btn:hover,
+.student-edit-attendance-btn:hover,
 .skill-edit-link:hover  {
     background: rgba(94, 234, 212, 0.15);
     color: #fff;
@@ -389,7 +392,6 @@ h2 {
 div:has(> .student-action-btn) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* gap: 0.5rem; */
 }
 
 .btn-class-today i, 
@@ -1577,7 +1579,14 @@ div:has(> .student-action-btn) {
 }
 
 
-/* ** ALL Attendance PAGES: status-pill *********/
+/************************************************************|
+|**** ATTENDANCE Pages: 
+    - Teacher_attendance.html
+    - teacher_take_attendance.html
+    - teacher_attendance_detail.html
+|************************************************************/
+
+/* ** !!! ALL Attendance PAGES (ONLY Attendance Pags): status-pill *********/
 
 .status-pill {
     display: inline-block;
@@ -1610,14 +1619,7 @@ div:has(> .student-action-btn) {
 
 
 
-/************************************************************|
-|**** ATTENDANCE Pages: 
-    - Teacher_attendance.html
-    - teacher_take_attendance.html
-    - teacher_attendance_detail.html
-|************************************************************|
-
-|**** ATTENDANCE Page ************************************ */
+/**** ATTENDANCE Page ************************************ */
 
 .teacher-take-attendance-page header,
 .teacher-attendance-detail-page header {
@@ -2054,6 +2056,16 @@ header .wrapper-attendance-course-info strong {
     font-size: 1.2rem;
 }
 
+.take-attendance-list .student-main-info h3 a {
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+.take-attendance-list .student-main-info h3 a:hover {
+    text-decoration: none;
+    color: #5ff0df;
+}
+
 .take-attendance-row:last-child {
     border-bottom: none;
 }
@@ -2233,7 +2245,8 @@ header .wrapper-attendance-course-info strong {
 }
 
 .student-detail-header,
-.student-detail-card {
+.student-detail-card,
+.recent-attendance-card {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
     border: 1px solid rgba(0, 194, 178, 0.35);
     border-radius: 8px;
@@ -2329,7 +2342,8 @@ header .wrapper-attendance-course-info strong {
     border-radius: 999px;
 }
 
-.student-detail-card {
+.student-detail-card,
+.recent-attendance-card {
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -2339,7 +2353,8 @@ header .wrapper-attendance-course-info strong {
     justify-content: space-between;
 }
 
-.student-detail-card h2 {
+.student-detail-card h2,
+.recent-attendance-card h2 {
     font-size: 1.5rem;
     margin-bottom: 1.25rem;
 }
@@ -2448,11 +2463,14 @@ header .wrapper-attendance-course-info strong {
     margin-bottom: 0;
 }
 
-/* Skills Graph SnapShot */
-.skills-progress-section {
+.student-details-skills-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     margin-top: 2rem;
+    gap: 1.5rem;
 }
 
+/* Skills Graph SnapShot */
 .skills-chart-card {
     background: whitesmoke;
     border: 2px inset rgba(95, 255, 234, 0.45);
@@ -2482,6 +2500,13 @@ header .wrapper-attendance-course-info strong {
 /************************************************|
 **** STUDENT ATTENDANCE RECORD Page *************|
 *********************************************** */
+
+/* .recent-attendance-card-header {
+    display: flex;
+    flex-direction: column;
+    align-content: baseline;
+    flex-wrap: wrap;
+} */
 
 .attendance-edit-form button {
     border-width: 1px;
@@ -2517,6 +2542,13 @@ header .wrapper-attendance-course-info strong {
     color: whitesmoke;
 }
 
+.student-skill-card p {
+    font-weight: 600;
+    text-transform: capitalize;
+    width: 100%;
+    border-bottom: #008b87 1px solid;
+}
+
 .skill-card-header {
     display: flex;
     flex-direction: column;
@@ -2544,8 +2576,6 @@ header .wrapper-attendance-course-info strong {
     display: flex;
     justify-content: baseline;
     align-content: baseline;
-
-    /* margin-bottom: 1.5rem; */
 }
 
 .skill-card-edit .skill-edit-link {
@@ -2561,6 +2591,10 @@ header .wrapper-attendance-course-info strong {
     gap: 2.2rem;
     align-items: flex-start;
     margin: 1.5rem 0;
+}
+
+.skill-details {
+    width: 100%;
 }
 
 .skill-ring {
@@ -2603,11 +2637,6 @@ header .wrapper-attendance-course-info strong {
     font-size: 0.9rem;
 }
 
-/* .skill-details ul {
-    padding-left: 1rem;
-    margin-bottom: 0.8rem;
-} */
-
 .skill-trend {
     margin-top: 1rem;
     color: #5fffea;
@@ -2640,6 +2669,15 @@ header .wrapper-attendance-course-info strong {
     height: 100%;
     background: #5fffea;
     border-radius: 999px;
+}
+
+.teacher-skill-note h4 {
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.teacher-skill-note p {
+    text-justify: none;
 }
 
 
@@ -2809,6 +2847,13 @@ header .wrapper-attendance-course-info strong {
     }
 
 
+    /******************************************************/
+    /* COURSE DETAILS Page ***************************** */
+    /******************************************************/
+    .student-detail-header {
+        flex-direction: column;
+        align-items: start;
+    }
 
 }
 
@@ -2917,6 +2962,13 @@ header .wrapper-attendance-course-info strong {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
+    }
+
+    .student-details-skills-overview-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin-top: 2rem;
+        gap: 1.5rem;
     }
 
 
@@ -3114,10 +3166,10 @@ header .wrapper-attendance-course-info strong {
     /*****************************************************|
     |*** STUDENT DETAIL Page  ****************************|
     |*****************************************************/
-    .student-detail-header {
+    /* .student-detail-header {
         flex-direction: column;
         align-items: start;
-    }
+    } */
 
     .student-header-actions {
         flex-direction: column-reverse;
@@ -3131,12 +3183,9 @@ header .wrapper-attendance-course-info strong {
     }
 
     div:has(> .student-action-btn) {
-    /* display: grid;
-    grid-template-columns: repeat(2, 1fr); */
-    /* gap: 0.5rem; */
-    padding-top: 1rem;
-    width: 100%;
-}
+        padding-top: 1rem;
+        width: 100%;
+    }
 
 
 }
@@ -3399,6 +3448,7 @@ header .wrapper-attendance-course-info strong {
         flex-direction: column;
         align-items: flex-start;
     }
+
 
     /*****************************************************|
     |*** STD. SKILLS OVERVIEW Page  **********************|
@@ -3766,18 +3816,14 @@ header .wrapper-attendance-course-info strong {
     |*** STUDENT DETAIL Page  *************************|
     |*****************************************************/
     .student-header-actions {
-        /* flex-direction: column-reverse;
-        display: flex; */
         width: 100%;
         gap: 0.25rem;
         padding: 1rem;
     }
 
     div:has(> .student-action-btn) {
-        /* display: grid; */
         grid-template-columns: repeat(1, 1fr);
         gap: 0.5rem;
-        /* padding-top: 1rem; */
     }
 
     .student-action-btn {
