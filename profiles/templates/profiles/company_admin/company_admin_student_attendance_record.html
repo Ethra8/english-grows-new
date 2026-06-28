@@ -126,15 +126,18 @@
         <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}" class="active">
             Attendance
         </a>
-
         <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
             Skills
         </a>
 
+        <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
+            Progress
+        </a>
         <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
             Notes
         </a>
     </nav>
+
 
     <div class="student-overview-grid mt-4">
 

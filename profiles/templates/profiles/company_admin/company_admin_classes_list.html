@@ -1,0 +1,200 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+{% block extra_title %}| Company Classes {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+
+<section class="company-admin-classes-list teacher-classes-list teacher-page">    
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+        
+    <header>
+        <div class="row">        
+            <div class="col-12 mb-4 ml-0 pl-0">
+                <h1>Company Classes</h1>
+            </div>
+        </div>
+        <hr>
+    </header>
+
+    <div class="all-assigned-classes">
+
+        <div class="wrapper-assigned-classes-panel">
+            <div class="assigned-classes-panel" data-panel-status="upcoming">
+
+                <div class="assigned-classes-header"
+                     data-toggle="collapse"
+                     data-target="#upcomingClassesCollapse"
+                     aria-expanded="true"
+                     aria-controls="upcomingClassesCollapse">
+
+                    <div class="assigned-classes-filter-header">
+                        <h2>
+                            <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>
+                            Upcoming Classes
+                        </h2>
+                        <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
+                    </div>
+                </div>
+
+                <div id="upcomingClassesCollapse" class="collapse show classes-panel-collapse">
+                    
+                    <div class="classes-filter-buttons">
+
+                        <button type="button" class="classes-filter-btn active" data-filter="today">
+                            <span>Today</span>
+                            <strong>{{ class_filter_counts.upcoming.today }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="weekly">
+                            <span>This Week</span>
+                            <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="monthly">
+                            <span>This Month</span>
+                            <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="all">
+                            <span>All</span>
+                            <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                        </button>
+
+                    </div>
+                    
+                    <div class="assigned-classes-overview-smaller-devices">
+                        <h3 class="classes-filter-btn">
+                            <span>Today</span>
+                            <strong>{{ class_filter_counts.upcoming.today }}</strong>
+                        </h3>
+                        <h3 class="classes-filter-btn">
+                            <span>This Week</span>
+                            <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+                        </h3>
+                        <h3 class="classes-filter-btn">
+                            <span>This Month</span>
+                            <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+                        </h3>
+                        <h3 class="classes-filter-btn">
+                            <span>All</span>
+                            <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                        </h3>
+                    </div>
+
+                    <select class="mobile-filter-select classes-panel-select">
+                        <option value="today">Today</option>
+                        <option value="weekly">This Week</option>
+                        <option value="monthly">This Month</option>
+                        <option value="all">All</option>
+                    </select>                        
+
+                    <div class="assigned-courses-list">
+                        {% for session in sessions %}
+                            {% if session.class_status_group == "upcoming" %}
+                                {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <p class="no-classes-message text-white p-3" hidden>
+                            No upcoming classes apply to the selected filter.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="wrapper-assigned-classes-panel">
+            <div class="assigned-classes-panel" data-panel-status="completed">
+
+                <div class="assigned-classes-header"
+                     data-toggle="collapse"
+                     data-target="#completedClassesCollapse"
+                     aria-expanded="false"
+                     aria-controls="completedClassesCollapse">
+
+                    <div class="assigned-classes-filter-header">
+                        <h2>
+                            <i class="fa-solid fa-clock-rotate-left mr-3"></i>
+                            Past Classes
+                        </h2>
+
+                        <i class="fa-solid fa-chevron-down classes-panel-arrow"></i>
+                    </div>
+                </div>
+
+                <div id="completedClassesCollapse" class="collapse classes-panel-collapse">
+
+                    <div class="classes-filter-buttons">
+
+                        <button type="button" class="classes-filter-btn" data-filter="today">
+                            <span>Today</span>
+                            <strong>{{ class_filter_counts.completed.today }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="weekly">
+                            <span>This Week</span>
+                            <strong>{{ class_filter_counts.completed.weekly }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="monthly">
+                            <span>This Month</span>
+                            <strong>{{ class_filter_counts.completed.monthly }}</strong>
+                        </button>
+
+                        <button type="button" class="classes-filter-btn" data-filter="all">
+                            <span>All</span>
+                            <strong>{{ class_filter_counts.completed.all }}</strong>
+                        </button>
+
+                    </div>
+
+                    <select class="mobile-filter-select classes-panel-select">
+                        <option value="today">Today</option>
+                        <option value="weekly">This Week</option>
+                        <option value="monthly">This Month</option>
+                        <option value="all">All</option>
+                    </select>                        
+
+                    <div class="assigned-courses-list">
+                        {% for session in sessions %}
+                            {% if session.class_status_group == "completed" %}
+                                {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <p class="no-classes-message text-white p-3" hidden>
+                            No completed classes apply to the selected filter.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <p id="noClassesMessage" class="text-white p-3" hidden>
+            No classes to show for this filter.
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

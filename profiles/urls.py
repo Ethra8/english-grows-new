@@ -50,5 +50,10 @@ urlpatterns = [
     path("company-admin/courses/<int:course_id>/students/<int:enrollment_id>/attendance/", views.company_admin_student_attendance_record, name="company_admin_student_attendance_record"),
     path("company-admin/courses/<int:course_id>/students/<int:enrollment_id>/skills/", views.company_admin_student_skills_overview, name="company_admin_student_skills_overview"),
     path("company_admin/courses/<int:course_id>/students/<int:enrollment_id>/teacher_notes", views.company_admin_student_teacher_notes, name="company_admin_student_teacher_notes"),
+    path("company_admin/courses/<int:course_id>/students/<int:enrollment_id>/skills_graph", views.company_admin_student_progress_skills_graph, name="company_admin_student_progress_skills_graph"),
+    path("company-admin/classes/", views.company_admin_classes_list, name="company_admin_classes_list"),
+    path("company-admin/employees/", views.company_admin_employees_list, name="company_admin_employees_list"),
+
+    
 ]
 

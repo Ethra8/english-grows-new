@@ -3258,3 +3258,303 @@ def company_admin_student_teacher_notes(request, course_id, enrollment_id):
         context,
     )
 
+
+
+def company_admin_student_progress_skills_graph(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_icons = {
+        "speaking": "fa-solid fa-microphone",
+        "reading": "fa-solid fa-book-open",
+        "writing": "fa-solid fa-pen",
+        "listening": "fa-solid fa-headphones",
+    }
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    skills = []
+
+    for assessment in skill_assessments:
+        skills.append({
+            "assessment": assessment,
+            "assessment_id": assessment.id,
+            "skill_value": assessment.skill,
+            "name": assessment.get_skill_display(),
+            "icon": skill_icons.get(
+                assessment.skill,
+                "fa-solid fa-chart-simple",
+            ),
+            "percentage": assessment.average_percentage,
+            "teacher_notes": assessment.teacher_notes,
+            "subskills": assessment.subskill_assessments.all(),
+        })
+
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+
+    academic_profile = getattr(student, "academic_profile", None)
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "academic_profile": academic_profile,
+        "chart_data": chart_data,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_student_progress_skills_graph.html",
+        context,
+    )
+
+
+
+@login_required
+def company_admin_classes_list(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    now = timezone.now()
+    today = timezone.localdate()
+
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=company,
+            course__status="active",
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .prefetch_related(
+            "course__enrollments",
+            "course__enrollments__student",
+            "course__enrollments__student__profile",
+        )
+        .order_by("start_time")
+    )
+
+    class_filter_counts = {
+        "upcoming": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
+        "completed": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
+    }
+
+    for session in sessions:
+        session_date = timezone.localdate(session.start_time)
+
+        session.is_upcoming = (
+            session.start_time > now
+            and not session.is_cancelled
+        )
+
+        session.is_completed = (
+            session.end_time < now
+            and not session.is_cancelled
+        )
+
+        session.is_today = session_date == today
+
+        session.is_this_week = (
+            start_of_week <= session_date <= end_of_week
+        )
+
+        session.is_this_month = (
+            session_date.year == today.year
+            and session_date.month == today.month
+        )
+
+        if session.is_cancelled:
+            session.class_status_group = "cancelled"
+        elif session.is_upcoming:
+            session.class_status_group = "upcoming"
+        elif session.is_completed:
+            session.class_status_group = "completed"
+        else:
+            session.class_status_group = "in_progress"
+
+        if session.is_upcoming:
+            class_filter_counts["upcoming"]["all"] += 1
+
+            if session.is_today:
+                class_filter_counts["upcoming"]["today"] += 1
+
+            if session.is_this_week:
+                class_filter_counts["upcoming"]["weekly"] += 1
+
+            if session.is_this_month:
+                class_filter_counts["upcoming"]["monthly"] += 1
+
+        if session.is_completed:
+            class_filter_counts["completed"]["all"] += 1
+
+            if session.is_today:
+                class_filter_counts["completed"]["today"] += 1
+
+            if session.is_this_week:
+                class_filter_counts["completed"]["weekly"] += 1
+
+            if session.is_this_month:
+                class_filter_counts["completed"]["monthly"] += 1
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "sessions": sessions,
+        "now": now,
+        "class_filter_counts": class_filter_counts,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_classes_list.html",
+        context
+    )
+
+
+@login_required
+def company_admin_employees_list(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            course__company=company,
+            status="active",
+        )
+        .select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+            "student__email",
+            "course__name",
+        )
+    )
+
+    employees_by_id = {}
+
+    for enrollment in enrollments:
+        student = enrollment.student
+
+        if student.id not in employees_by_id:
+            employees_by_id[student.id] = {
+                "student": student,
+                "profile": student.profile,
+                "enrollments": [],
+                "courses": [],
+            }
+
+        employees_by_id[student.id]["enrollments"].append(enrollment)
+        employees_by_id[student.id]["courses"].append(enrollment.course)
+
+    employees = list(employees_by_id.values())
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "employees": employees,
+        "total_employees": len(employees),
+        "level_choices": UserProfile.LEVEL_CHOICES,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_employees_list.html",
+        context
+    )

@@ -43,7 +43,7 @@
             </div>
             <div class="meta-row">
 
-                <a href="">
+                <a href="{% url 'profiles:company_admin_courses' %}">
                     <div class="meta-card meta-courses">
                         <div class="meta-text">
                             <strong>Active Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
@@ -62,7 +62,7 @@
                 <a href="">
                     <div class="meta-card meta-attendance">
                         <div class="meta-text">
-                            <strong>Attendance<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <strong>Attendance Rate<i class="fa-solid fa-angle-right ml-3"></i></strong>
                             <span>
                                 {{ total_attendance_rate|default:"0" }}%
                             </span>

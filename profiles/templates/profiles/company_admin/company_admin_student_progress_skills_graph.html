@@ -103,11 +103,11 @@
         <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
             Attendance
         </a>
-        <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}" class="active">
+        <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
             Skills
         </a>
 
-        <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
+        <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}" class="active">
             Progress
         </a>
         <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
@@ -115,50 +115,7 @@
         </a>
     </nav>
 
-        <div class="student-skills-grid">
-
-        {% for skill in skills %}
-            <article class="student-skill-card">
-
-                <div class="skill-card-header">
-                    
-                    <h2>
-                        <span><i class="{{ skill.icon }} mr-3"></i></span>
-                        {{ skill.name }}
-                    </h2>
-
-                    <hr>
-                    <div class="skill-ring"
-                         style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                        <div>
-                            <strong>{{ skill.percentage|default:"0" }}%</strong>
-                            <span>
-                                {% if skill.percentage <= 25 %}
-                                    Needs work
-                                {% elif skill.percentage <= 45 %}
-                                    Developing
-                                {% elif skill.percentage <= 60 %}
-                                    Meeting
-                                {% elif skill.percentage <= 79 %}
-                                    Confident
-                                {% elif skill.percentage >= 80 %}
-                                    Strong
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </article>
-        {% empty %}
-            <p class="text-white">
-                No skill assessments have been created yet.
-            </p>
-        {% endfor %}
-
-    </div>
-
-    <!-- <div class="student-details-skills-overview-grid mt-4">
+    <!-- <div class="student-details-skills-overview-grid mt-4"> -->
 
         <article class="skills-progress-section">
             <div class="skills-chart-card">
@@ -175,7 +132,7 @@
             </div>
         </article>
 
-    </div> -->
+    <!-- </div> -->
 
 </section>
 
