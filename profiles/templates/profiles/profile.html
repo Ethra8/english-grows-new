@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load date_extras %}
 
 
 {% block extra_css %}
@@ -44,6 +45,9 @@
         <main class="profile-main">
             {% if request.user.profile.role == "company_admin" %}
                 {% include "profiles/includes/company_admin/company_admin_dashboard.html" %}
+            
+            {% elif request.user.profile.role == "teacher" %}
+                {% include "profiles/includes/teacher/teacher_dashboard.html" %}
             
             {% elif request.user.profile.role == "employee" or request.user.profile.role == "individual" %}
                 {% include "profiles/includes/student/student_dashboard.html" %}

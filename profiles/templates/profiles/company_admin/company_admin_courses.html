@@ -1,0 +1,147 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+
+{% block extra_title %}| My Groups {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+
+<section class="assigned-courses-page teacher-page">    
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+        
+    <header>
+        <div class="row" >        
+            <div class="col-12 ml-0 pl-0 mb-4">
+                <h1>Assigned Courses & Levels</h1>
+            </div>
+        </div>
+        <hr>
+    </header>
+
+    <div class="wrapper-assigned-courses-panel">
+        <div class="assigned-courses-panel">
+            <div class="assigned-courses-header">
+
+                <div class="course-status-filter-header">
+
+                    <div class="course-status-buttons">
+
+                        <button type="button" class="course-status-btn active" data-status="active">
+                            <!-- <i class="fa-regular fa-circle-play"></i> -->
+                            <span>Active</span>
+                            <strong>{{ active_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="confirmed">
+                            <!-- <i class="fa-regular fa-circle-check"></i> -->
+                            <span>Confirmed</span>
+                            <strong>{{ confirmed_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="paused">
+                            <!-- <i class="fa-regular fa-circle-pause"></i> -->
+                            <span>Paused</span>
+                            <strong>{{ paused_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="cancelled">
+                            <!-- <i class="fa-regular fa-circle-xmark"></i> -->
+                            <span>Cancelled</span>
+                            <strong>{{ cancelled_courses }}</strong>
+                        </button>
+
+                        <button type="button" class="course-status-btn" data-status="all">
+                            <!-- <i class="fa-solid fa-border-all"></i> -->
+                            <span>All Status</span>
+                            <strong>{{ courses|length }}</strong>
+                        </button>
+
+                    </div>
+  
+                    <select id="courseStatusFilter" class="course-status-select">
+                        <option value="active" selected>Active</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="paused">Paused</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="all">All Status</option>
+                    </select>
+                </div>            
+            </div>
+
+            <div class="assigned-courses-list">
+                {% if courses|length == 0 %}
+                    <p class="text-white p-3">No courses assigned yet.</p>
+                {% endif %}    
+    
+                {% for course in courses %}
+                <div class="assigned-course-row" data-status="{{ course.status }}">
+
+                    <div class="course-main-info">
+
+                        <div class="assigned-course-level">
+                            <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+                        </div>
+
+                        <div class="course-list-group-name">
+                            <h3>
+                                {% if course.company %}
+                                    <i class="fa-regular fa-building mr-2"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-book-open-reader mr-2"></i>
+                                {% endif %}
+                                {{ course.name }}
+                            </h3>
+                            <span id="course_level_inline" class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+                            <p>{{ course.timetable_display }}</p>
+                            <span class="status-badge {{ course.status }}">{{ course.get_status_display }}</span>
+                        
+                        </div>
+                    </div>
+                    <div class="course-stat completion-stat">
+                        <div
+                            class="completion-ring"
+                            style="--completion: {{ course.completion_percentage }};"
+                        ></div>
+
+                        <strong>{{ course.completion_percentage }}%</strong>
+                        <span>Completed</span>
+                    </div>
+
+                    <div class="course-action">
+                        <a href="{% url 'profiles:company_admin_course_details' course.id %}" class="btn-course-details">
+                            <i class="fa-regular fa-eye mr-2"></i>
+                            Details
+                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                        </a>
+                    </div>
+
+                </div>
+                {% endfor %}
+                <p id="noCoursesFilterMessage" class="text-white p-3 course-hidden" hidden>
+                    No courses to show for this filter.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
+{% endblock %}
+    

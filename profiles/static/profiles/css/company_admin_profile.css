@@ -1,0 +1,111 @@
+.company-admin-course-details-page .course-meta-card.meta-attendance::after {
+    content: "\f46c"; /* fa-clipboard-check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(94, 242, 220, 0.1);
+    position: absolute;
+    top: 25px;
+    right: -5px;
+    rotate: calc(-15deg);
+}
+
+.company-admin-course-details-page header .header-last-child {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.company-admin-course-details-page header {
+    display: flex;
+    flex-direction: column;
+}
+
+.company-admin-course-details-page header h2 {
+    color: #c1f7e3;
+    font-size: 1.5rem;
+    margin-top: 0;
+    padding-top: 0;
+    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+}
+
+.company-admin-course-details-page header .header-last-child > div:first-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.company-admin-course-details-page header .header-last-child > div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.company-admin-course-details-page header .header-last-child span {
+    width: 50px;
+}
+
+.company-admin-course-details-page .student-row-parent {
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    padding: 0 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* LEFT COLUMN boxes */
+.company-admin-course-details-page .wrapper-course-details:nth-child(1) {
+    grid-column: 1;
+}
+
+/* RIGHT COLUMN: Student List */
+.company-admin-course-details-page .wrapper-course-details:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .company-admin-course-details-page .course-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .company-admin-course-details-page .course-details-two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .company-admin-course-details-page .course-header-meta-row {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .company-admin-course-details-page .course-meta-card {
+        padding: 0.15rem 1rem 0.15rem 0.25rem;
+    }
+    
+    .company-admin-course-details-page .student-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+
+}
+
+
+
+@media (max-width: 576px) {
+
+    /* *** COURSES Page **********************************/
+    /* *** CLASSES LIST Page *****************************/
+    .company-admin-course-details-page .student-row-parent {
+        padding: 0;
+    }
+
+    .company-admin-course-details-page .student-row {
+        padding: 0.25rem 0.25rem 0.75rem;
+    }
+
+}

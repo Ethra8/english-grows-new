@@ -1,5 +1,3 @@
-{% load date_extras %}    
-    
     <header>
         <div class="row">
             <div class="col-12 pl-0 mb-4">
@@ -24,7 +22,7 @@
             </div>
             <div class="meta-row">
 
-                <a href="">
+                <a href="{% url 'profiles:teacher_courses' %}">
                     <div class="meta-card meta-courses">
                         <div class="meta-text">
                             <strong>Active Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
@@ -35,12 +33,12 @@
 
                 <div class="meta-card meta-students">
                     <div class="meta-text">
-                        <strong>Employees Enrolled<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                        <strong>Students<i class="fa-solid fa-angle-right ml-3"></i></strong>
                         <span>{{ total_students|default:"0" }}</span>
                     </div>
                 </div>
 
-                <a href="">
+                <a href="{% url 'profiles:teacher_attendance' %}">
                     <div class="meta-card meta-attendance">
                         <div class="meta-text">
                             <strong>Attendance<i class="fa-solid fa-angle-right ml-3"></i></strong>
@@ -55,7 +53,7 @@
         </div>
     </div>
 
-    <!-- <div class="wrapper-dashboard-card mt-5">
+    <div class="wrapper-dashboard-card mt-5">
         
         <div class="today-classes-card dashboard-card">
 
@@ -110,7 +108,7 @@
             </div>
 
         </div>
-    </div> -->
+    </div>
 
     <div class="wrapper-dashboard-card mt-5">
         <div class="weekly-overview dashboard-card">
@@ -167,14 +165,14 @@
 
                 <div class="meta-card meta-attendance">
                     <div>
-                        <div class="completion-ring" style="--completion: {{ weekly_attendance_rate|default:'0' }};">
-                            <span class="completion-ring-value">{{ weekly_attendance_rate|default:"0" }}%</span>
+                        <div class="completion-ring" style="--completion: {{ weekly_attendance_completed_percentage|default:'0' }};">
+                            <span class="completion-ring-value">{{ weekly_attendance_completed_percentage|default:"0" }}%</span>
                         </div>
                     </div>
                     <div class="meta-text">
-                        <strong>Attendance Rate</strong>
+                        <strong>Attendance Submitted</strong>
                         <span>
-                            <!-- {{ weekly_attendance_rate|default:"0" }} -->
+                            {{ weekly_attendance_completed_sessions|default:"0" }}
                             <!-- ({{ weekly_attendance_completed_percentage|default:"0" }}%) -->
                         </span>
                     </div>
@@ -238,14 +236,14 @@
 
                 <div class="meta-card meta-attendance">
                     <div>
-                        <div class="completion-ring" style="--completion: {{ monthly_attendance_rate|default:'0' }};">
-                            <span class="completion-ring-value">{{ monthly_attendance_rate|default:"0" }}%</span>
+                        <div class="completion-ring" style="--completion: {{ weekly_attendance_completed_percentage|default:'0' }};">
+                            <span class="completion-ring-value">{{ monthly_attendance_completed_percentage|default:"0" }}%</span>
                         </div>
                     </div>
                     <div class="meta-text">
-                        <strong>Attendance Rate</strong>
+                        <strong>Attendance Submitted</strong>
                         <span>
-                            <!-- {{ monthly_attendance_rate|default:"0" }} -->
+                            {{ monthly_attendance_completed_sessions|default:"0" }}
                         </span>
                     </div>
                 </div>

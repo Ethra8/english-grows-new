@@ -1736,59 +1736,6 @@ def teacher_edit_student_skill(request, skill_assessment_id):
     )
 
 
-# @login_required
-# def teacher_edit_student_subskill(request, course_id, enrollment_id, subskill_id):
-#     course = get_object_or_404(
-#         Course,
-#         id=course_id,
-#         teacher=request.user,
-#     )
-
-#     enrollment = get_object_or_404(
-#         CourseEnrollment,
-#         id=enrollment_id,
-#         course=course,
-#     )
-
-#     subskill = get_object_or_404(
-#         StudentSubSkillAssessment,
-#         id=subskill_id,
-#         skill_assessment__student=enrollment.student,
-#         skill_assessment__course=course,
-#     )
-
-#     if request.method == "POST":
-#         form = StudentSubSkillAssessmentForm(
-#             request.POST,
-#             instance=subskill,
-#         )
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect(
-#                 "profiles:student_skills_overview",
-#                 course_id=course.id,
-#                 enrollment_id=enrollment.id,
-#             )
-#     else:
-#         form = StudentSubSkillAssessmentForm(instance=subskill)
-
-#     context = {
-#         "course": course,
-#         "enrollment": enrollment,
-#         "student": enrollment.student,
-#         "student_profile": enrollment.student.profile,
-#         "subskill": subskill,
-#         # "form": form,
-#     }
-
-#     return render(
-#         request,
-#         "profiles/teacher/teacher_edit_student_subskill.html",
-#         context,
-#     )
-
-
 
 # TEACHER CALENDAR PAGE
 @login_required
@@ -2328,4 +2275,470 @@ def reschedule_class_detail(request, session_id):
         {
             "session": session,
         }
+    )
+
+
+
+# ***********************************************|
+# COMPANY ADMIN PROFILE  ******************************|
+# ***********************************************|
+
+@login_required
+def company_admin_dashboard(request):
+    profile = request.user.profile
+
+    if profile.role != "company_admin":
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    today = timezone.localdate()
+    now = timezone.now()
+
+    # Today range
+    start_of_day = timezone.make_aware(
+        datetime.combine(today, time.min)
+    )
+    end_of_day = timezone.make_aware(
+        datetime.combine(today, time.max)
+    )
+
+    # Week range: Monday - Sunday
+    start_of_week_date = today - timedelta(days=today.weekday())
+    end_of_week_date = start_of_week_date + timedelta(days=6)
+
+    start_of_week = timezone.make_aware(
+        datetime.combine(start_of_week_date, time.min)
+    )
+    end_of_week = timezone.make_aware(
+        datetime.combine(end_of_week_date, time.max)
+    )
+
+    # Month range
+    start_of_month_date = today.replace(day=1)
+    last_day_of_month = calendar.monthrange(today.year, today.month)[1]
+    end_of_month_date = today.replace(day=last_day_of_month)
+
+    start_of_month = timezone.make_aware(
+        datetime.combine(start_of_month_date, time.min)
+    )
+    end_of_month = timezone.make_aware(
+        datetime.combine(end_of_month_date, time.max)
+    )
+
+    courses = (
+        Course.objects
+        .filter(company=company)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .prefetch_related(
+            "enrollments__student__profile",
+            "class_sessions",
+        )
+        .order_by("name")
+    )
+
+    active_courses = courses.filter(status="active").count()
+
+    todays_sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=company,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_day,
+            start_time__lte=end_of_day,
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__company",
+        )
+        .prefetch_related(
+            "course__enrollments",
+            "course__enrollments__student",
+        )
+        .order_by("start_time")
+    )
+
+    weekly_sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=company,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_week,
+            start_time__lte=end_of_week,
+        )
+        .select_related("course")
+        .prefetch_related("attendance_records")
+    )
+
+    monthly_sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=company,
+            course__status="active",
+            is_cancelled=False,
+            start_time__gte=start_of_month,
+            start_time__lte=end_of_month,
+        )
+        .select_related("course")
+        .prefetch_related("attendance_records")
+    )
+
+    def get_percentage(value, total):
+        if total == 0:
+            return 0
+        return round((value / total) * 100)
+
+    # Weekly data
+    total_weekly_sessions = weekly_sessions.count()
+
+    completed_weekly_sessions = weekly_sessions.filter(
+        start_time__lt=now
+    ).count()
+
+    upcoming_weekly_sessions = weekly_sessions.filter(
+        start_time__gte=now
+    ).count()
+
+    weekly_attendance_completed_sessions = (
+        weekly_sessions
+        .filter(attendance_records__status__in=["attended", "missed", "excused"])
+        .distinct()
+        .count()
+    )
+
+    completed_weekly_percentage = get_percentage(
+        completed_weekly_sessions,
+        total_weekly_sessions
+    )
+
+    upcoming_weekly_percentage = get_percentage(
+        upcoming_weekly_sessions,
+        total_weekly_sessions
+    )
+
+    weekly_attendance_completed_percentage = get_percentage(
+        weekly_attendance_completed_sessions,
+        total_weekly_sessions
+    )
+
+    # Monthly data
+    total_monthly_sessions = monthly_sessions.count()
+
+    total_monthly_completed_sessions = monthly_sessions.filter(
+        start_time__lt=now
+    ).count()
+
+    total_monthly_upcoming_sessions = monthly_sessions.filter(
+        start_time__gte=now
+    ).count()
+
+    monthly_attendance_completed_sessions = (
+        monthly_sessions
+        .filter(attendance_records__status__in=["attended", "missed", "excused"])
+        .distinct()
+        .count()
+    )
+
+    total_monthly_completed_percentage = get_percentage(
+        total_monthly_completed_sessions,
+        total_monthly_sessions
+    )
+
+    total_monthly_upcoming_percentage = get_percentage(
+        total_monthly_upcoming_sessions,
+        total_monthly_sessions
+    )
+
+    monthly_attendance_completed_percentage = get_percentage(
+        monthly_attendance_completed_sessions,
+        total_monthly_sessions
+    )
+
+    # Total active students in this company’s active courses
+    total_students = (
+        courses
+        .filter(status="active")
+        .filter(enrollments__status="active")
+        .values("enrollments__student")
+        .distinct()
+        .count()
+    )
+
+    attendance_records = Attendance.objects.filter(
+        class_session__course__company=company,
+        class_session__course__status="active",
+        status__in=["attended", "missed", "excused"],
+    )
+
+    total_attendance_records = attendance_records.count()
+
+    attended_records = attendance_records.filter(
+        status="attended"
+    ).count()
+
+    total_attendance_rate = get_percentage(
+        attended_records,
+        total_attendance_records
+    )
+
+    weekly_attendance_records = Attendance.objects.filter(
+        class_session__course__company=company,
+        class_session__course__status="active",
+        class_session__is_cancelled=False,
+        class_session__start_time__gte=start_of_week,
+        class_session__start_time__lte=end_of_week,
+        status__in=["attended", "missed", "excused"],
+    )
+
+    weekly_total_attendance_records = weekly_attendance_records.count()
+
+    weekly_attended_records = weekly_attendance_records.filter(
+        status="attended"
+    ).count()
+
+    weekly_attendance_rate = get_percentage(
+        weekly_attended_records,
+        weekly_total_attendance_records,
+    )
+
+    monthly_attendance_records = Attendance.objects.filter(
+        class_session__course__company=company,
+        class_session__course__status="active",
+        class_session__is_cancelled=False,
+        class_session__start_time__gte=start_of_month,
+        class_session__start_time__lte=end_of_month,
+        status__in=["attended", "missed", "excused"],
+    )
+
+    monthly_total_attendance_records = monthly_attendance_records.count()
+
+    monthly_attended_records = monthly_attendance_records.filter(
+        status="attended"
+    ).count()
+
+    monthly_attendance_rate = get_percentage(
+        monthly_attended_records,
+        monthly_total_attendance_records
+    )
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "courses": courses,
+        "todays_sessions": todays_sessions,
+        "today": today,
+        "active_courses": active_courses,
+
+        "total_students": total_students,
+
+        "total_weekly_sessions": total_weekly_sessions,
+        "completed_weekly_sessions": completed_weekly_sessions,
+        "completed_weekly_percentage": completed_weekly_percentage,
+        "upcoming_weekly_sessions": upcoming_weekly_sessions,
+        "upcoming_weekly_percentage": upcoming_weekly_percentage,
+        "weekly_attendance_completed_sessions": weekly_attendance_completed_sessions,
+        "weekly_attendance_completed_percentage": weekly_attendance_completed_percentage,
+
+        "total_attendance_rate": total_attendance_rate,
+
+        "total_monthly_sessions": total_monthly_sessions,
+        "total_monthly_completed_sessions": total_monthly_completed_sessions,
+        "total_monthly_upcoming_sessions": total_monthly_upcoming_sessions,
+        "total_monthly_completed_percentage": total_monthly_completed_percentage,
+        "total_monthly_upcoming_percentage": total_monthly_upcoming_percentage,
+        "monthly_attendance_completed_sessions": monthly_attendance_completed_sessions,
+        "monthly_attendance_completed_percentage": monthly_attendance_completed_percentage,
+
+        "weekly_attendance_rate": weekly_attendance_rate,
+        "monthly_attendance_rate": monthly_attendance_rate,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_dashboard.html",
+        context
+    )
+
+
+
+@login_required
+def company_admin_courses(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    courses = (
+        Course.objects
+        .filter(company=company)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .prefetch_related(
+            "enrollments__student__profile",
+            "class_sessions",
+            "timetable_slots",
+        )
+        .order_by("name")
+    )
+
+    total_courses = courses.count()
+    active_courses = courses.filter(status="active").count()
+    confirmed_courses = courses.filter(status="confirmed").count()
+    cancelled_courses = courses.filter(status="cancelled").count()
+    paused_courses = courses.filter(status="paused").count()
+
+    active_courses_list = courses.filter(status="active")
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "courses": courses,
+        "total_courses": total_courses,
+        "active_courses": active_courses,
+        "confirmed_courses": confirmed_courses,
+        "cancelled_courses": cancelled_courses,
+        "paused_courses": paused_courses,
+        "active_courses_list": active_courses_list,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_courses.html",
+        context
+    )
+
+
+
+@login_required
+def company_admin_course_details(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollments = (
+        course.enrollments
+        .select_related("student", "student__profile")
+        .filter(status="active")
+    )
+
+    sessions = (
+        course.class_sessions
+        .all()
+        .order_by("start_time")
+    )
+
+    now = timezone.now()
+
+    total_classes = course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    completed_classes = course.class_sessions.filter(
+        is_cancelled=False,
+        start_time__lt=now,
+    ).count()
+
+    remaining_classes = total_classes - completed_classes
+
+    completion_percentage = 0
+    if total_classes:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+
+    attendance_percentages = []
+
+    for enrollment in enrollments:
+        total_completed = enrollment.total_completed_classes
+
+        if total_completed > 0:
+            attendance_percentages.append(
+                (enrollment.classes_attended / total_completed) * 100
+            )
+
+    average_attendance = 0
+    if attendance_percentages:
+        average_attendance = round(
+            sum(attendance_percentages) / len(attendance_percentages)
+        )
+
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M"),
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
+
+    student_emails = [
+        enrollment.student.email
+        for enrollment in enrollments
+        if enrollment.student.email
+    ]
+
+    bcc_student_emails = ",".join(student_emails)
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollments": enrollments,
+        "sessions": sessions,
+
+        "total_classes": total_classes,
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "completion_percentage": completion_percentage,
+        "average_attendance": average_attendance,
+        "formatted_timetable": formatted_timetable,
+        "bcc_student_emails": bcc_student_emails,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_course_details.html",
+        context
     )

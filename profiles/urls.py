@@ -39,7 +39,11 @@ urlpatterns = [
     path("teacher/calendar/", views.teacher_calendar, name="teacher_calendar"),
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),
 
-    
-    path("teacher/teacher_profile_settings/", views.teacher_profile_settings, name="teacher_profile_settings"),    
+    path("teacher/teacher_profile_settings/", views.teacher_profile_settings, name="teacher_profile_settings"),
+
+    # COMPANY ADMIN pages
+    path("company_admin/company_admin_dashboard/", views.company_admin_dashboard, name="company_admin_dashboard"),
+    path("company-admin/courses/", views.company_admin_courses, name="company_admin_courses"),
+    path("company-admin/courses/<int:course_id>/", views.company_admin_course_details, name="company_admin_course_details"),
 ]
 

@@ -1208,6 +1208,8 @@ div:has(> .student-action-btn) {
 .teacher-course-students-list header .header-last-child > div:first-child,
 .teacher-group-attendance-page header .header-last-child > div:first-child {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .teacher-course-details-page header h2,

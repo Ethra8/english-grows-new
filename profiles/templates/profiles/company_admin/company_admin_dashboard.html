@@ -1,5 +1,24 @@
-{% load date_extras %}    
-    
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+
+
+{% block extra_title %}| My Groups {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+
+<section class="teacher-dashboard teacher-page">    
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+
     <header>
         <div class="row">
             <div class="col-12 pl-0 mb-4">
@@ -55,7 +74,7 @@
         </div>
     </div>
 
-    <!-- <div class="wrapper-dashboard-card mt-5">
+    <div class="wrapper-dashboard-card mt-5">
         
         <div class="today-classes-card dashboard-card">
 
@@ -91,17 +110,11 @@
                                 </div>
                             </div>    
 
-                            {% if session.meeting_link %}
-                                <a href="{{ session.meeting_link }}" class="btn-class-today btn" target="_blank"  rel="noopener">
-                                    <i class="fa-solid fa-video mr-2"></i>
-                                    Start Class
-                                    <i class="fa-solid fa-chevron-right ml-2"></i>
-                                </a>
-                            {% else %}
-                                <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn">
-                                    <i class="fa-regular fa-calendar-days mr-2"></i> To Calendar
-                                </a>
-                            {% endif %}
+                            <a href="#" class="btn-class-today btn">
+                                <i class="fa-regular fa-eye mr-2"></i>
+                                Course
+                                <i class="fa-solid fa-chevron-right ml-2"></i>
+                            </a>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -110,7 +123,7 @@
             </div>
 
         </div>
-    </div> -->
+    </div>
 
     <div class="wrapper-dashboard-card mt-5">
         <div class="weekly-overview dashboard-card">
@@ -172,7 +185,7 @@
                         </div>
                     </div>
                     <div class="meta-text">
-                        <strong>Attendance Rate</strong>
+                        <strong>Current Attendance</strong>
                         <span>
                             <!-- {{ weekly_attendance_rate|default:"0" }} -->
                             <!-- ({{ weekly_attendance_completed_percentage|default:"0" }}%) -->
@@ -243,7 +256,7 @@
                         </div>
                     </div>
                     <div class="meta-text">
-                        <strong>Attendance Rate</strong>
+                        <strong>Current Attendance</strong>
                         <span>
                             <!-- {{ monthly_attendance_rate|default:"0" }} -->
                         </span>
@@ -253,3 +266,6 @@
             </div>
         </div>
     </div>
+
+</section>
+{% endblock %}
