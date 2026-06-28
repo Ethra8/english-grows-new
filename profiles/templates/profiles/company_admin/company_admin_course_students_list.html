@@ -1,0 +1,136 @@
+{% extends "profiles/profile.html" %}
+{% load static %}
+{% load date_extras %}
+{% load course_extras %}
+
+{% block extra_title %}| Company Course Students {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+
+<section class="company-admin-course-students-list teacher-course-students-list teacher-page">    
+    <div class="overlay-birds"></div>
+    <div class="overlay-dark-teal"></div>
+        
+    <header class="mb-2">
+        <div class="row mb-3">
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses">
+                    <a href="#" class="text-white js-back-link">
+                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                        Go Back
+                    </a>    
+                </p>
+            </div>
+        </div>    
+
+        <div class="header-last-child">
+            <div>
+                <span class="level level-{{ course.course_level|lower|cut:'.' }} mr-4">
+                    {{ course.course_level|default:"Pending" }}
+                </span>
+                <h1>{{ course.name }}</h1>
+            </div>
+
+            <div>
+                <h2>
+                    <i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>
+                    {{ course.course_type.name }} | {{ course.total_hours|clean_decimal }} h.
+                </h2>
+            </div>
+        </div>
+    </header>
+
+    <hr>
+
+    <div class="wrapper-course-details">
+        <div class="course-details-child">
+
+            <div class="student-list-header">
+                <h3>
+                    <i class="fa-regular fa-address-book mr-3"></i>
+                    Employee List: {{ enrollments|length }} Students
+                </h3>
+
+                {% if bcc_student_emails %}
+                    <div class="student-list-header-buttons">
+                        <a href="mailto:?bcc={{ bcc_student_emails }}" class="btn-email-all">
+                            <i class="fa-solid fa-envelope mr-2"></i>
+                            Email all
+                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>                    
+
+            <div class="course-detail-grid"> 
+                {% if enrollments %}
+                    <div class="student-row-parent">
+                        {% for enrollment in enrollments %}
+                            <div class="student-row">
+
+                                <button type="button"
+                                        class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
+                                        onclick="toggleLevelForm('{{ enrollment.id }}')">
+                                    {{ enrollment.student.profile.current_level|default:"?" }}
+                                </button>  
+
+                                <form method="POST"
+                                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
+                                      class="d-none"
+                                      id="level-form-{{ enrollment.id }}">
+
+                                    {% csrf_token %}
+
+                                    <select name="current_level">
+                                        {% for value, label in level_choices %}
+                                            <option value="{{ value }}"
+                                                {% if enrollment.student.profile.current_level == value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <button type="submit">Save</button>
+                                </form>                                  
+
+                                <div>
+                                    <strong>
+                                        {{ enrollment.student.get_full_name|default:enrollment.student.username }}
+                                    </strong>
+
+                                    <a href="mailto:{{ enrollment.student.email }}">
+                                        <span>{{ enrollment.student.email }}</span>
+                                    </a>
+                                </div>
+
+                                <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}" class="btn-to-student-detail">
+                                    <i class="fa-regular fa-eye mr-2"></i>
+                                    View
+                                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                                </a>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-white">No students enrolled yet.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+{% endblock %}

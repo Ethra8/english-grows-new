@@ -16,14 +16,12 @@
                 <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
                 {{ request.user.profile.get_role_display }}
                 <br>
-                <strong>{{ request.user.profile.company.name }}</strong>
             </span>
-        {% else %}
-            <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
+            <p class="text-center"><i class="fa-regular fa-building mr-2 mt-4"></i><strong>{{ request.user.profile.company.name }}</strong></p>
         {% endif %}
 
     </div>
-    <hr class="mt-5">
+    <hr class="mt-3">
  
     <nav class="sidebar-nav mt-3" aria-label="Profile navigation">
 

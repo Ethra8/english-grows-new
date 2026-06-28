@@ -20,12 +20,16 @@
                             <i class="fa-regular fa-user mr-2"></i> Dashboard
                             </a>
                         {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
-                            <a href="{% url 'profiles:profile' %}" aria-label="go to my student dashboard">
-                            <i class="fa-regular fa-user"></i>
+                            <a href="{% url 'profiles:profile' %}" class="btn-navbar" aria-label="go to my student dashboard">
+                            <i class="fa-regular fa-user"></i> Dashboard
+                            </a>
+                        {% elif request.user.profile.role == "company_admin" %}
+                            <a href="{% url 'profiles:company_admin_dashboard' %}" class="btn-navbar" aria-label="go to company admin dashboard">
+                            <i class="fa-regular fa-user"></i> Dashboard
                             </a>
                         {% else %}
-                            <a href="{% url 'profiles:profile' %}" aria-label="go to my profile page">
-                            <i class="fa-regular fa-user"></i>
+                            <a href="{% url 'profiles:profile' %}" class="btn-navbar" aria-label="go to my profile page">
+                            <i class="fa-regular fa-user"></i> Dashboard
                             </a>
                         {% endif %}
                         </div>

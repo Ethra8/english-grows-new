@@ -48,7 +48,7 @@
     <hr>
 
     <div class="course-header-meta-row">
-        <a href="{% url 'profiles:teacher_course_students_list' course.id %}"  class="course-meta-card meta-students">
+        <a href="{% url 'profiles:company_admin_course_students_list' course.id %}"  class="course-meta-card meta-students">
             <div class="course-meta-icon">
                 {% if enrollments|length == 1 %}
                 <i class="fa-solid fa-user"></i>
@@ -64,7 +64,7 @@
             </div>
         </a>
 
-        <a href="{% url 'profiles:teacher_group_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
+        <a href="#" class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
@@ -141,7 +141,7 @@
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
+                                    <i class="fa-regular fa-hourglass mr-2"></i>
                                     Class Duration:
                                 </span>
                                 <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
@@ -159,7 +159,7 @@
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
+                                    <i class="fa-solid fa-user-graduate mr-2"></i>
                                     Teacher:
                                 </span>
                                 <span>{{ course.teacher.first_name|default:"Not assigned yet" }} {{ course.teacher.last_name }}</span>

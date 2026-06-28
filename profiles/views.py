@@ -2409,13 +2409,6 @@ def company_admin_dashboard(request):
         start_time__gte=now
     ).count()
 
-    weekly_attendance_completed_sessions = (
-        weekly_sessions
-        .filter(attendance_records__status__in=["attended", "missed", "excused"])
-        .distinct()
-        .count()
-    )
-
     completed_weekly_percentage = get_percentage(
         completed_weekly_sessions,
         total_weekly_sessions
@@ -2423,11 +2416,6 @@ def company_admin_dashboard(request):
 
     upcoming_weekly_percentage = get_percentage(
         upcoming_weekly_sessions,
-        total_weekly_sessions
-    )
-
-    weekly_attendance_completed_percentage = get_percentage(
-        weekly_attendance_completed_sessions,
         total_weekly_sessions
     )
 
@@ -2442,13 +2430,6 @@ def company_admin_dashboard(request):
         start_time__gte=now
     ).count()
 
-    monthly_attendance_completed_sessions = (
-        monthly_sessions
-        .filter(attendance_records__status__in=["attended", "missed", "excused"])
-        .distinct()
-        .count()
-    )
-
     total_monthly_completed_percentage = get_percentage(
         total_monthly_completed_sessions,
         total_monthly_sessions
@@ -2456,11 +2437,6 @@ def company_admin_dashboard(request):
 
     total_monthly_upcoming_percentage = get_percentage(
         total_monthly_upcoming_sessions,
-        total_monthly_sessions
-    )
-
-    monthly_attendance_completed_percentage = get_percentage(
-        monthly_attendance_completed_sessions,
         total_monthly_sessions
     )
 
@@ -2546,8 +2522,6 @@ def company_admin_dashboard(request):
         "completed_weekly_percentage": completed_weekly_percentage,
         "upcoming_weekly_sessions": upcoming_weekly_sessions,
         "upcoming_weekly_percentage": upcoming_weekly_percentage,
-        "weekly_attendance_completed_sessions": weekly_attendance_completed_sessions,
-        "weekly_attendance_completed_percentage": weekly_attendance_completed_percentage,
 
         "total_attendance_rate": total_attendance_rate,
 
@@ -2556,8 +2530,6 @@ def company_admin_dashboard(request):
         "total_monthly_upcoming_sessions": total_monthly_upcoming_sessions,
         "total_monthly_completed_percentage": total_monthly_completed_percentage,
         "total_monthly_upcoming_percentage": total_monthly_upcoming_percentage,
-        "monthly_attendance_completed_sessions": monthly_attendance_completed_sessions,
-        "monthly_attendance_completed_percentage": monthly_attendance_completed_percentage,
 
         "weekly_attendance_rate": weekly_attendance_rate,
         "monthly_attendance_rate": monthly_attendance_rate,
@@ -2742,3 +2714,547 @@ def company_admin_course_details(request, course_id):
         "profiles/company_admin/company_admin_course_details.html",
         context
     )
+
+
+
+@login_required
+def company_admin_course_students_list(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollments = (
+        course.enrollments
+        .select_related("student", "student__profile")
+        .filter(status="active")
+    )
+
+    sessions = (
+        course.class_sessions
+        .all()
+        .order_by("start_time")
+    )
+
+    now = timezone.now()
+
+    total_classes = course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    completed_classes = course.class_sessions.filter(
+        is_cancelled=False,
+        start_time__lt=now,
+    ).count()
+
+    remaining_classes = total_classes - completed_classes
+
+    completion_percentage = 0
+    if total_classes:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+
+    attendance_percentages = []
+
+    for enrollment in enrollments:
+        total_completed = enrollment.total_completed_classes
+
+        if total_completed > 0:
+            attendance_percentages.append(
+                (enrollment.classes_attended / total_completed) * 100
+            )
+
+    average_attendance = 0
+    if attendance_percentages:
+        average_attendance = round(
+            sum(attendance_percentages) / len(attendance_percentages)
+        )
+
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M"),
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
+
+    student_emails = [
+        enrollment.student.email
+        for enrollment in enrollments
+        if enrollment.student.email
+    ]
+
+    bcc_student_emails = ",".join(student_emails)
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollments": enrollments,
+        "sessions": sessions,
+
+        "total_classes": total_classes,
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "completion_percentage": completion_percentage,
+        "average_attendance": average_attendance,
+        "formatted_timetable": formatted_timetable,
+        "bcc_student_emails": bcc_student_emails,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_course_students_list.html",
+        context
+    )
+
+
+
+@login_required
+def company_admin_student_detail(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+    attendances = (
+        Attendance.objects
+        .filter(
+            student=student,
+            class_session__course=course,
+            status__in=["attended", "missed", "excused"],
+        )
+        .select_related("class_session")
+        .order_by("-class_session__start_time")
+    )
+
+    total_attendance_records = attendances.count()
+    attended_count = attendances.filter(status="attended").count()
+    missed_count = attendances.filter(status="missed").count()
+    excused_count = attendances.filter(status="excused").count()
+
+    completed_classes = course.class_sessions.filter(
+        start_time__lt=timezone.now(),
+        is_cancelled=False,
+    ).count()
+
+    if total_attendance_records > 0:
+        attendance_percentage = round(
+            (attended_count / total_attendance_records) * 100
+        )
+    else:
+        attendance_percentage = 0
+
+    total_classes = course.number_of_classes or course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    remaining_classes = max(total_classes - completed_classes, 0)
+
+    if total_classes > 0:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+    else:
+        completion_percentage = 0
+
+    recent_attendance = attendances[:5]
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
+
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "total_classes": total_classes,
+        "completion_percentage": completion_percentage,
+
+        "recent_attendance": recent_attendance,
+        "chart_data": chart_data,
+        "skill_note_display": skill_note_display,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_student_detail.html",
+        context
+    )
+
+
+
+@login_required
+def company_admin_student_attendance_record(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    attendances = (
+        Attendance.objects
+        .filter(
+            student=student,
+            class_session__course=course,
+            status__in=["attended", "missed", "excused"],
+        )
+        .select_related("class_session")
+        .order_by("-class_session__start_time")
+    )
+
+    total_attendance_records = attendances.count()
+    attended_count = attendances.filter(status="attended").count()
+    missed_count = attendances.filter(status="missed").count()
+    excused_count = attendances.filter(status="excused").count()
+
+    completed_classes = course.class_sessions.filter(
+        start_time__lt=timezone.now(),
+        is_cancelled=False,
+    ).count()
+
+    if total_attendance_records > 0:
+        attendance_percentage = round(
+            (attended_count / total_attendance_records) * 100
+        )
+    else:
+        attendance_percentage = 0
+
+    total_classes = course.number_of_classes or course.class_sessions.filter(
+        is_cancelled=False
+    ).count()
+
+    remaining_classes = max(total_classes - completed_classes, 0)
+
+    if total_classes > 0:
+        completion_percentage = round(
+            (completed_classes / total_classes) * 100
+        )
+    else:
+        completion_percentage = 0
+
+    recent_attendance = attendances
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
+
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "total_classes": total_classes,
+        "completion_percentage": completion_percentage,
+
+        "recent_attendance": recent_attendance,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_student_attendance_record.html",
+        context
+    )
+
+
+
+@login_required
+def company_admin_student_skills_overview(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_icons = {
+        "speaking": "fa-solid fa-microphone",
+        "reading": "fa-solid fa-book-open",
+        "writing": "fa-solid fa-pen",
+        "listening": "fa-solid fa-headphones",
+    }
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    skills = []
+
+    for assessment in skill_assessments:
+        skills.append({
+            "assessment": assessment,
+            "assessment_id": assessment.id,
+            "skill_value": assessment.skill,
+            "name": assessment.get_skill_display(),
+            "icon": skill_icons.get(
+                assessment.skill,
+                "fa-solid fa-chart-simple",
+            ),
+            "percentage": assessment.average_percentage,
+            "teacher_notes": assessment.teacher_notes,
+            "subskills": assessment.subskill_assessments.all(),
+        })
+
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+
+    academic_profile = getattr(student, "academic_profile", None)
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "academic_profile": academic_profile,
+        "chart_data": chart_data,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_student_skills_overview.html",
+        context,
+    )
+
+
+
+def company_admin_student_teacher_notes(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    if not company:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    skills = []
+
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+
+    context = {
+        "profile": profile,
+        "company": company,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_student_teacher_notes.html",
+        context,
+    )
+

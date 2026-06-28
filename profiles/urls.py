@@ -45,5 +45,10 @@ urlpatterns = [
     path("company_admin/company_admin_dashboard/", views.company_admin_dashboard, name="company_admin_dashboard"),
     path("company-admin/courses/", views.company_admin_courses, name="company_admin_courses"),
     path("company-admin/courses/<int:course_id>/", views.company_admin_course_details, name="company_admin_course_details"),
+    path("company-admin/courses/<int:course_id>/students/", views.company_admin_course_students_list, name="company_admin_course_students_list"),
+    path("company-admin/courses/<int:course_id>/students/<int:enrollment_id>/", views.company_admin_student_detail, name="company_admin_student_detail"),
+    path("company-admin/courses/<int:course_id>/students/<int:enrollment_id>/attendance/", views.company_admin_student_attendance_record, name="company_admin_student_attendance_record"),
+    path("company-admin/courses/<int:course_id>/students/<int:enrollment_id>/skills/", views.company_admin_student_skills_overview, name="company_admin_student_skills_overview"),
+    path("company_admin/courses/<int:course_id>/students/<int:enrollment_id>/teacher_notes", views.company_admin_student_teacher_notes, name="company_admin_student_teacher_notes"),
 ]
 
