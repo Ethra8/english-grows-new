@@ -52,12 +52,14 @@
                     </div>
                 </a>
 
-                <div class="meta-card meta-students">
-                    <div class="meta-text">
-                        <strong>Employees Enrolled<i class="fa-solid fa-angle-right ml-3"></i></strong>
-                        <span>{{ total_students|default:"0" }}</span>
+                <a href="{% url 'profiles:company_admin_employees_list' %}">
+                    <div class="meta-card meta-students">
+                        <div class="meta-text">
+                            <strong>Active Employees<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <span>{{ total_students|default:"0" }}</span>
+                        </div>
                     </div>
-                </div>
+                </a>
 
                 <a href="">
                     <div class="meta-card meta-attendance">

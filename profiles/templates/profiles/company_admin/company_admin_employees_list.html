@@ -33,9 +33,9 @@
 
         <div class="header-last-child">
             <div>
-                <h1>Employees</h1>
+                <h1>Employee Performance</h1>
                 <p class="text-white-50 mb-0">
-                    {{ company.name }} · {{ total_employees }} employees
+                    INDIVIDUAL PERFORMANCE - {{ total_employees }} Active employees
                 </p>
             </div>
         </div>
@@ -46,12 +46,6 @@
     <div class="wrapper-course-details">
         <div class="course-details-child">
 
-            <div class="student-list-header">
-                <h3>
-                    <i class="fa-regular fa-address-book mr-3"></i>
-                    Employee List: {{ total_employees }} Employees
-                </h3>
-            </div>                    
 
             <div class="course-detail-grid"> 
                 {% if employees %}
@@ -89,13 +83,7 @@
                                         <a href="{% url 'profiles:company_admin_student_detail' enrollment.course.id enrollment.id %}"
                                         class="btn-to-student-detail">
                                             <i class="fa-solid fa-chart-line mr-2"></i>
-
-                                            {% if employee.enrollments|length == 1 %}
-                                                Progress
-                                            {% else %}
                                                 {{ enrollment.course.name }}
-                                            {% endif %}
-
                                             <i class="fa-solid fa-chevron-right ml-2"></i>
                                         </a>
                                     {% endfor %}
