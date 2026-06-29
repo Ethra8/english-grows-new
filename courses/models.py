@@ -37,6 +37,7 @@ class CourseType(models.Model):
         return self.name
 
 
+
 class Course(models.Model):
     """
     Specific course instance.

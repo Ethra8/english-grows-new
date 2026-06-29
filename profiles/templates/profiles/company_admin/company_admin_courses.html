@@ -101,9 +101,14 @@
                                 {% endif %}
                                 {{ course.name }}
                             </h3>
-                            <span id="course_level_inline" class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+
+                            <span id="course_level_inline" class="level level-{{ course.course_level|lower|cut:'.' }}">
+                                {{ course.course_level }}</span>
+
                             <p>{{ course.timetable_display }}</p>
-                            <span class="status-badge {{ course.status }}">{{ course.get_status_display }}</span>
+
+                            <span class="status-badge {{ course.status }}">
+                                {{ course.get_status_display }}</span>
                         
                         </div>
                     </div>

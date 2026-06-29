@@ -94,10 +94,10 @@
             <div class="student-level-area">
                 <small>Current Level</small>
 
-                <button type="button"
+                <span
                         class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2">
                     {{ student_profile.current_level|default:"?" }}
-                </button>
+                </span>
             </div>
         </div>
 
@@ -147,7 +147,11 @@
                                 <span>Total Hours</span>
                                 <strong>{{ course.total_hours|clean_decimal }} h.</strong>
                             </div>
-                        </div>
+                            <div class="detail-row">
+                                <span>Dates</span>
+                                <strong>{{ course.start_date|date:"j M" }} - {{ course.end_date|date:"j M 'y" }}</strong>
+                            </div>
+                       </div>
                     </div>
 
                 </div>
@@ -186,6 +190,10 @@
                             <span>Attended:</span>
                             <strong>{{ attended_count }} / {{ total_attendance_records }}</strong>
                         </div>
+                        <div class="detail-row">
+                            <span>Employee enrolled</span>
+                            <strong>{{ enrollment.enrolled_at|date:"j M 'y'" }}</strong>
+                        </div>
                     </div>
 
                 </div>
@@ -223,6 +231,12 @@
                         <div class="detail-row">
                             <span>Completed Classes:</span>
                             <strong>{{ completed_classes }} / {{ total_classes }}</strong>
+                        </div>
+                    </div>
+                    <div class="student-stat-list">
+                        <div class="detail-row">
+                            <span>Completed Hours:</span>
+                            <strong>{{ completed_hours_display }} / {{ total_hours_display }}</strong>
                         </div>
                     </div>
 

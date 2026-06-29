@@ -39,9 +39,13 @@
                 </span>
                 <h1>{{ course.name }}</h1>
             </div>
+            
             <div>
                 <h2><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }} | {{ course.total_hours|clean_decimal }} h.</h2>
             </div>
+            <span class="status-badge {{ course.status }}">
+                {{ course.get_status_display }}</span>
+
         </div>
     </header>
 
@@ -64,7 +68,7 @@
             </div>
         </a>
 
-        <a href="#" class="course-meta-card metric-card meta-attendance">
+        <a href="{% url 'profiles:company_admin_course_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
@@ -103,20 +107,20 @@
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-regular fa-calendar mr-2"></i>
+                                    <i class="fa-regular fa-calendar-check mr-2"></i>
                                     Start Date:
                                 </span>
                                 <span>
-                                    {{ course.start_date|date:"D, j M"|default:"Not assigned" }}
+                                    {{ course.start_date|date:"D, j M 'y" }}
                                 </span>
                             </div>
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-regular fa-calendar mr-2"></i>
+                                    <i class="fa-regular fa-calendar-xmark mr-2"></i>
                                     End Date:
                                 </span>
                                 <span>
-                                    {{ course.end_date|date:"D, j M"|default:"Not assigned" }}
+                                    {{ course.end_date|date:"D, j M 'y" }}
                                 </span>
                             </div>
 
@@ -186,7 +190,7 @@
                                     <i class="fa-solid fa-building mr-2"></i>
                                     Company:
                                 </span>
-                                <span>{{ course.company|default:"Individual course" }}</span>
+                                <span>{{ course.company }}</span>
                             </div>
 
                             <div class="detail-row">
@@ -203,7 +207,7 @@
                                     <i class="fa-solid fa-chalkboard-user mr-2"></i>
                                     Total Classes:
                                 </span>
-                                <span>{{ course.number_of_classes|default:"Not assigned" }}</span>
+                                <span>{{ course.number_of_classes }}</span>
                             </div>
 
                             <div class="detail-row">

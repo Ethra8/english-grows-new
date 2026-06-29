@@ -14,6 +14,10 @@ from datetime import timedelta, datetime, time
 import calendar
 from collections import defaultdict
 
+from decimal import Decimal
+
+from profiles.utils.time_formatting import format_hours_duration
+
 from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillTermSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
@@ -2600,6 +2604,59 @@ def company_admin_courses(request):
 
 
 @login_required
+def company_admin_all_courses_attendance(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    class_sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=company,
+            is_cancelled=False,
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__teacher",
+        )
+        .prefetch_related(
+            "attendance_records",
+        )
+        .order_by("-start_time")
+    )
+
+    pending_count = 0
+    completed_count = 0
+
+    for class_session in class_sessions:
+        has_attendance = class_session.attendance_records.exists()
+
+        if has_attendance:
+            class_session.attendance_filter_status = "completed"
+            completed_count += 1
+        else:
+            class_session.attendance_filter_status = "pending"
+            pending_count += 1
+
+    context = {
+        "class_sessions": class_sessions,
+        "pending_count": pending_count,
+        "completed_count": completed_count,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_all_courses_attendance.html",
+        context,
+    )
+
+
+
+@login_required
 def company_admin_course_details(request, course_id):
     profile = get_object_or_404(UserProfile, user=request.user)
 
@@ -2837,6 +2894,123 @@ def company_admin_course_students_list(request, course_id):
 
 
 @login_required
+def company_admin_course_attendance(request, course_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        company=company,
+    )
+
+    class_sessions = (
+        ClassSession.objects
+        .filter(
+            course=course,
+            is_cancelled=False,
+            start_time__lt=timezone.now(),
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__teacher",
+        )
+        .prefetch_related("attendance_records")
+        .order_by("-start_time")
+    )
+
+    submitted_class_sessions = []
+
+    for class_session in class_sessions:
+        attendance_records = class_session.attendance_records.select_related(
+            "student",
+            "student__profile",
+        )
+
+        has_records = attendance_records.exists()
+        has_scheduled_records = attendance_records.filter(status="scheduled").exists()
+
+        if has_records and not has_scheduled_records:
+            class_session.attendance_filter_status = "completed"
+
+            class_session.employee_search_text = " ".join(
+                [
+                    f"{attendance.student.get_full_name()} {attendance.student.username} {attendance.student.email}"
+                    for attendance in attendance_records
+                ]
+            )
+
+            submitted_class_sessions.append(class_session)
+
+    context = {
+        "course": course,
+        "class_sessions": submitted_class_sessions,
+        "completed_count": len(submitted_class_sessions),
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_course_attendance.html",
+        context,
+    )
+
+
+
+@login_required
+def company_admin_course_attendance_detail(request, class_session_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    company = profile.company
+
+    class_session = get_object_or_404(
+        ClassSession.objects.select_related(
+            "course",
+            "course__course_type",
+            "course__teacher",
+        ),
+        id=class_session_id,
+        course__company=company,
+    )
+
+    attendances = (
+        class_session.attendance_records
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+        )
+    )
+
+    context = {
+        "class_session": class_session,
+        "course": class_session.course,
+        "attendances": attendances,
+        "total_count": attendances.count(),
+        "attended_count": attendances.filter(status="attended").count(),
+        "missed_count": attendances.filter(status="missed").count(),
+        "excused_count": attendances.filter(status="excused").count(),
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_course_attendance_detail.html",
+        context,
+    )
+
+
+
+@login_required
 def company_admin_student_detail(request, course_id, enrollment_id):
     profile = get_object_or_404(UserProfile, user=request.user)
 
@@ -2896,6 +3070,17 @@ def company_admin_student_detail(request, course_id, enrollment_id):
         is_cancelled=False,
     ).count()
 
+    total_hours = course.total_hours or Decimal("0")
+    class_duration = course.class_duration or Decimal("0")
+
+    completed_hours = completed_classes * class_duration
+    remaining_hours = max(total_hours - completed_hours, Decimal("0"))
+    
+    completed_hours_display = format_hours_duration(completed_hours)
+    remaining_hours_display = format_hours_duration(remaining_hours)
+    total_hours_display = format_hours_duration(total_hours)
+
+
     if total_attendance_records > 0:
         attendance_percentage = round(
             (attended_count / total_attendance_records) * 100
@@ -2952,6 +3137,10 @@ def company_admin_student_detail(request, course_id, enrollment_id):
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
+
+        "total_hours_display": total_hours_display,
+        "completed_hours_display": completed_hours_display,
+        "remaining_hours_display": remaining_hours_display,
 
         "recent_attendance": recent_attendance,
         "chart_data": chart_data,
@@ -3556,5 +3745,48 @@ def company_admin_employees_list(request):
     return render(
         request,
         "profiles/company_admin/company_admin_employees_list.html",
+        context
+    )
+
+
+
+# TEACHER PROFILE SETTINGS
+@login_required
+def company_admin_profile_settings(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if user_profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    if request.method == "POST":
+        user_form = UserProfileForm(
+            request.POST,
+            request.FILES,
+            instance=user_profile,
+            user=request.user
+        )
+
+        if user_form.is_valid():
+            user_form.save()
+
+            messages.success(request, "Your profile has been updated.")
+            return redirect("profiles:company_admin_profile_settings")
+
+    else:
+        user_form = UserProfileForm(
+            instance=user_profile,
+            user=request.user
+        )
+
+
+    context = {
+        "profile": user_profile,
+        "user_form": user_form,
+        "user_profile": user_profile,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_profile_settings.html",
         context
     )

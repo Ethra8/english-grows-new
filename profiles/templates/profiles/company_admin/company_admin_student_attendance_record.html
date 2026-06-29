@@ -142,15 +142,19 @@
     <div class="student-overview-grid mt-4">
 
         <article class="recent-attendance-card">
-            <div class="recent-attendance-card-header">
+            <div class="recent-attendance-card-header student-stat-list">
                 <h2>
                     <i class="fa-solid fa-list-check mr-2"></i>
                     Attendance Records
                 </h2>
 
-                <div class="mb-3">
-                    <strong>Past Classes:</strong>
+                <div class="detail-row">
+                    <strong>Course Past Classes:</strong>
                     <span>{{ completed_classes }}</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Past Classes since enrollment:</strong>
+                    <span>{{ total_attendance_records }}</span>
                 </div>
 
             </div>
