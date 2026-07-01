@@ -1,7 +1,13 @@
-/* teal site bg # 00686b stormy teal / rgba (0, 122, 120) */
-/* teal sidebar # 008f8f; dark cyan */
+/* teal site bg #00686b stormy teal / rgba (0, 122, 120) */
+/* teal sidebar #008f8f; dark cyan */
 
 /*  NEW COLOR: Deep Ocean rgba(0, 122, 120, 1) --- #007A78 */
+
+h2, 
+h3 {
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+}
 
 .profile-layout {
     min-height: 100vh;

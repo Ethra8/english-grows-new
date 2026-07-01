@@ -2,15 +2,33 @@
     line-height: 1.5 !important;
 }
 
-h2, 
-h3 {
+.teacher-page h1 {
+    /* color: whitesmoke; */
+    color: #0B355F;
     font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
+    margin-left: 0%;
+    padding-left: 0%;
+    font-size: 3.2rem;
+    font-weight: 600;
+    margin-bottom: 3.5rem;
 }
+
+/* .teacher-dashboard h1 {
+} */
+
+/* .teacher-dashboard hr {
+    margin-top: 0 !important;
+    margin-bottom: 2rem !important;
+} */
 
 h2 {
    color: #c1f7e3; 
 }
+
+/* .teacher-page .overlay-azure-mist {
+    background: rgba(237, 249, 247, 0.9);
+} */
 
 
 /* MODAL: Confirm Reschedule Action on Class List */
@@ -80,17 +98,10 @@ h2 {
 
 
 /* *** HEADERS *******************************************************/
-.teacher-page h1 {
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    margin-left: 0%;
-    padding-left: 0%;
-    font-size: 2.8rem;
-}
 
 .teacher-page header p {
-    color: whitesmoke !important;
+    /* color: whitesmoke !important; */
+    color: rgba(0, 0, 0, 0.25);
 }
 
 /**** WRAPPERS *******************************************************/
@@ -104,8 +115,21 @@ h2 {
     background: rgba(106, 250, 225, 0.2);
 }
 
+.wrapper-assigned-classes-panel,
+.wrapper-assigned-courses-panel {
+    margin-top: 2rem;
+}
+
 .wrapper-dashboard-card {
     width: 100%;
+}
+
+/* .teacher-dashboard .dashboard-cards .wrapper-dashboard-card:first-child {
+    margin-top: 1.8rem;
+} */
+
+.teacher-dashboard .dashboard-cards .wrapper-dashboard-card:not(:first-child) {
+    margin-top: 3.8rem;
 }
 
 
@@ -574,8 +598,8 @@ div:has(> .student-action-btn) {
 |*********************************** */
 
 .dashboard-card {
-    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: rgba(11, 53, 95, 0.75);
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.96), rgba(0, 103, 108, 0.75));
+    /* background: rgba(11, 53, 95, 0.75);  Oxford Navy ##0B355F */
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     padding: 1rem 1.2rem;
@@ -639,7 +663,8 @@ div:has(> .student-action-btn) {
     /* margin: 0; */
     color: #fff;
     font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
+    font-weight: 400;
 }
 
 .today-title span {
@@ -922,7 +947,7 @@ div:has(> .student-action-btn) {
 .assigned-courses-panel,
 .assigned-classes-panel {
     width: 100%;
-    background: rgba(11, 53, 95, 0.65);
+    background: rgba(11, 53, 95, 0.9);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
@@ -1078,7 +1103,7 @@ div:has(> .student-action-btn) {
 }
 
 .assigned-courses-list {
-    background: linear-gradient(270deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.96), rgba(0, 103, 108, 0.75));
     border-radius: 8px;
     margin: 0;
     padding: 1rem 1.5rem;
@@ -1194,7 +1219,7 @@ div:has(> .student-action-btn) {
 .back-to-my-assigned-courses a,
 .back-to-attendance,
 .back-to-attendance a {
-    color: #5eead4 !important;
+    color: #008F8F !important;
     font-size: 1.1rem;
     font-weight: 400;
     margin: 0 auto 2rem 0;
@@ -1739,7 +1764,7 @@ div:has(> .student-action-btn) {
     margin-bottom: 1.8rem;
 }
 
-.teacher-attendance-page > *:not(.overlay-birds):not(.overlay-dark-teal) {
+.teacher-attendance-page > *:not(.overlay-birds):not(.overlay-azure-mist) {
     position: relative;
     z-index: 2;
 }
@@ -2479,10 +2504,6 @@ header .wrapper-attendance-course-info strong {
     height: 8rem;
     border-radius: 50%;
     background:
-        /* conic-gradient(
-            #42d66b calc(var(--percentage) * 1%),
-            rgba(255,255,255,0.12) 0
-        ); */
         conic-gradient(
             #5fffea calc(var(--percentage) * 1%),
             rgba(105, 255, 235, 0.18) 0

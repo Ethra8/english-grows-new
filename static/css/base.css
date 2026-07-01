@@ -24,6 +24,8 @@ hr {
     border: outset 1px #6afae1;
     border-radius: 50%;
     width: 100%;
+    margin-top: 0 !important;
+    margin-bottom: 2.1rem !important;
 }
 
 p {
@@ -512,17 +514,18 @@ span.btt-link:hover {
 /* Overlays - transparencies to improve accessibility/ readibility */
 
 .overlay-birds,
-.overlay-dark-teal {
+.overlay-azure-mist {
     pointer-events: none;
 }
 
-.overlay-dark-teal {
+.overlay-azure-mist {
     height: 100%;
     width: 100%;
     top: 0;
     left: 0;
     position: fixed;
-    background: linear-gradient(260deg,rgba(0, 103, 108, 0.75) 17%, rgba(0, 136, 143, 0.80) 100%);
+    /* background: linear-gradient(260deg,rgba(0, 103, 108, 0.75) 17%, rgba(0, 136, 143, 0.80) 100%); */
+    background: rgba(237, 249, 247, 0.85);
     z-index: -1;
 }
 

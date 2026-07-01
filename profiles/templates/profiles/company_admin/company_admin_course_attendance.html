@@ -16,10 +16,19 @@
 
 <section class="company-admin-attendance-page teacher-page">
     <div class="overlay-birds"></div>
-    <div class="overlay-dark-teal"></div>
+    <div class="overlay-azure-mist"></div>
 
     <header>
-        <div class="row">        
+        <div class="row"> 
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses">
+                    <a href="#" class="text-white js-back-link">
+                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                        Go Back
+                    </a>
+                </p>
+            </div>
+       
             <div class="col-12 mb-4 ml-0 pl-0">
                 <h1>Course Attendance Record</h1>
             </div>
@@ -135,4 +144,5 @@
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'profiles/js/company_admin.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}
