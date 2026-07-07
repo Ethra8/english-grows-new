@@ -14,24 +14,21 @@
 
 {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
 
-<section class="teacher-attendance-detail-page teacher-page">
+<section class="teacher-attendance-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <header>
-        <p class="back-to-attendance">
-            <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="text-white">
-                <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                To All Attendances
-            </a>    
-        </p>
-
-        <div class="mb-4">
-            <a href="{% url 'profiles:company_admin_course_attendance' class_session.course.id %}" class="text-white">
-                <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                To Course Attendance
-            </a>    
-        </div>
+        <div class="row mb-3">
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses">
+                    <a href="#" class="js-back-link">
+                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                        Go Back
+                    </a>
+                </p>
+            </div>
+        </div>    
 
         <h1 class="mb-5 mt-5">Attendance Detail</h1>
         <hr>

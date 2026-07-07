@@ -14,28 +14,44 @@
 
 {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
 
-<section class="company-admin-attendance-page teacher-page">
+<section class="company-admin-course-details-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <header>
-        <div class="row"> 
+        <!-- 1st Child -->
+        <div class="row mb-3">
             <div class="col-12 mb-2">
                 <p class="back-to-my-assigned-courses">
-                    <a href="#" class="text-white js-back-link">
+                    <a href="#" class="js-back-link">
                         <i class="fa-solid fa-arrow-left-long mr-3"></i>
                         Go Back
                     </a>
                 </p>
             </div>
-       
-            <div class="col-12 mb-4 ml-0 pl-0">
-                <h1>Course Attendance Record</h1>
-            </div>
+        </div>    
+        <!-- 2nd Child -->
+        <div>
+            <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                {{ course.course_level|default:"Pending" }}</span>
+            
+            <h1>{{ course.name }}</h1>
         </div>
-        <hr>
-        <p>Review submitted attendance records for this course</p>
+        <!-- 3rd Child -->
+        <div>   
+            <h2>
+                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }}</span>
+                <span>|</span>
+                <span><i class="fa-solid fa-chalkboard mr-3"></i>{{ course.total_sessions }} Lessons</span>
+            </h2>
+        </div>
+        
+        <span class="status-badge {{ course.status }} mr-3">
+        {{ course.get_status_display }}</span>
+
     </header>
+
+    <hr>
 
     <div class="wrapper-assigned-courses-panel mt-5">
         <div class="assigned-courses-panel">
@@ -144,5 +160,4 @@
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'profiles/js/company_admin.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}

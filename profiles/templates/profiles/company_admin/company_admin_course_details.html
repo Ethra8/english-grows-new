@@ -17,46 +17,44 @@
 
 {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
 
-<section class="company-admin-course-details-page teacher-page">    
+<section class="company-admin-course-details-page profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
     <header>
+        <!-- 1st Child -->
         <div class="row mb-3">
             <div class="col-12 mb-2">
                 <p class="back-to-my-assigned-courses">
-                    <a href="#" class="text-white js-back-link">
+                    <a href="#" class="js-back-link">
                         <i class="fa-solid fa-arrow-left-long mr-3"></i>
                         Go Back
                     </a>
                 </p>
             </div>
         </div>    
-        <div class="header-last-child">
-            <div>
-                <span class="level level-{{ course.course_level|lower|cut:'.' }} mr-4">
-                    {{ course.course_level|default:"Pending" }}
-                </span>
-                <h1>{{ course.name }}</h1>
-            </div>
+        <!-- 2nd Child -->
+        <div>
+            <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                {{ course.course_level|default:"Pending" }}</span>
             
-            <div>
-                <h2>
-                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }}</span>
-                    <span>|</span>
-                    <span><i class="fa-regular fa-clock mr-3"></i>{{ course.total_hours|clean_decimal }} h.</span>
-                </h2>
-            </div>
-                        <span class="status-badge {{ course.status }} mr-3">
-                {{ course.get_status_display }}</span>
-
+            <h1>{{ course.name }}</h1>
         </div>
+        <!-- 3rd Child -->
+        <div>   
+            <h2>
+                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }}</span>
+                <span>|</span>
+                <span><i class="fa-regular fa-clock mr-3"></i>{{ course.total_hours|clean_decimal }} h.</span>
+            </h2>
+        </div>
+        
+        <span class="status-badge {{ course.status }} mr-3">
+        {{ course.get_status_display }}</span>
+
     </header>
 
     <hr>
-        <!-- <p>
-            Course is running as scheduled    
-        </p>         -->
 
 
     <div class="course-header-meta-row">
