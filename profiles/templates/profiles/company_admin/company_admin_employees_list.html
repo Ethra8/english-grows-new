@@ -66,18 +66,8 @@
                                     <a href="mailto:{{ employee.student.email }}">
                                         <span>{{ employee.student.email }}</span>
                                     </a>
-
-                                    <div class="mt-2">
-                                        {% for course in employee.courses %}
-                                        <p><i class="fa-solid fa-chalkboard mr-2"></i>
-                                           
-                                                {{ course.name }}
-                                            </p>
-                                        {% empty %}
-                                            <span class="text-white-50">No active courses</span>
-                                        {% endfor %}
-                                    </div>
                                 </div>
+
                                 <div class="view-progress-course">
                                     {% for enrollment in employee.enrollments %}
                                         <a href="{% url 'profiles:company_admin_student_detail' enrollment.course.id enrollment.id %}"
@@ -89,6 +79,16 @@
                                     {% endfor %}
                                 </div>                               
                             </div>
+                                <!-- <div class="view-progress-course">
+                                    {% for enrollment in employee.enrollments %}
+                                        <a href="{% url 'profiles:company_admin_student_detail' enrollment.course.id enrollment.id %}"
+                                        class="btn-to-student-detail">
+                                            <i class="fa-solid fa-chart-line mr-2"></i>
+                                                {{ enrollment.course.name }}
+                                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                                        </a>
+                                    {% endfor %}
+                                </div>                                -->
                         {% endfor %}
 
                     </div>

@@ -18,12 +18,16 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="mb-4">
-        <a href="#" class="text-white js-back-link">
-            <i class="fa-solid fa-arrow-left-long mr-3"></i>
-            Go Back
-        </a>
-    </div>
+    <div class="row mb-3">
+        <div class="col-12 mb-2">
+            <p class="back-to-my-assigned-courses">
+                <a href="#" class="js-back-link">
+                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                    Go Back
+                </a>    
+            </p>
+        </div>
+    </div>    
 
     <div class="student-detail-header">
 
@@ -97,89 +101,65 @@
 
     <nav class="student-detail-tabs">
         <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
-            Overview
-        </a>
+            Overview</a>
 
         <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
-            Attendance
-        </a>
+            Attendance</a>
+        
         <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}" class="active">
-            Skills
-        </a>
+            Skills</a>
 
         <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
-            Progress
-        </a>
+            Progress</a>
+        
         <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
-            Notes
-        </a>
+            Notes</a>
     </nav>
+    
+    {% for skill in skills %}
+    <div class="student-skills-grid">
 
-        <div class="student-skills-grid">
+        <article class="student-skill-card">
 
-        {% for skill in skills %}
-            <article class="student-skill-card">
+            <div class="skill-card-header">
+                
+                <h2>
+                    <span><i class="{{ skill.icon }} mr-3"></i></span>
+                    {{ skill.name }}
+                </h2>
 
-                <div class="skill-card-header">
-                    
-                    <h2>
-                        <span><i class="{{ skill.icon }} mr-3"></i></span>
-                        {{ skill.name }}
-                    </h2>
-
-                    <hr>
-                    <div class="skill-ring"
-                         style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                        <div>
-                            <strong>{{ skill.percentage|default:"0" }}%</strong>
-                            <span>
-                                {% if skill.percentage <= 25 %}
-                                    Needs work
-                                {% elif skill.percentage <= 45 %}
-                                    Developing
-                                {% elif skill.percentage <= 60 %}
-                                    Meeting
-                                {% elif skill.percentage <= 79 %}
-                                    Confident
-                                {% elif skill.percentage >= 80 %}
-                                    Strong
-                                {% endif %}
-                            </span>
-                        </div>
+                <hr>
+                <div class="skill-ring"
+                        style="--skill-progress: {{ skill.percentage|default:'0' }};">
+                    <div>
+                        <strong>{{ skill.percentage|default:"0" }}%</strong>
+                        <span>
+                            {% if skill.percentage <= 25 %}
+                                Needs work
+                            {% elif skill.percentage <= 45 %}
+                                Developing
+                            {% elif skill.percentage <= 60 %}
+                                Meeting
+                            {% elif skill.percentage <= 79 %}
+                                Confident
+                            {% elif skill.percentage >= 80 %}
+                                Strong
+                            {% endif %}s
+                        </span>
                     </div>
                 </div>
-
-            </article>
-        {% empty %}
-            <p class="text-white">
-                No skill assessments have been created yet.
-            </p>
-        {% endfor %}
-
-    </div>
-
-    <!-- <div class="student-details-skills-overview-grid mt-4">
-
-        <article class="skills-progress-section">
-            <div class="skills-chart-card">
-                <div class="skills-chart-header">
-                    <h2>
-                        <i class="fa-solid fa-chart-line mr-2"></i>
-                        Skills Progress Over Time
-                    </h2>
-                </div>
-
-                <div class="skills-chart-canvas-wrap">
-                    <canvas id="skillsProgressChart"></canvas>
-                </div>
             </div>
+
         </article>
 
-    </div> -->
+    </div>
+    {% empty %}
+    <p class="text-dark">The employee's skills & subskills assessment cards will appear here after being evaluated.</p>
+    {% endfor %}
 
 </section>
-
 {% endblock %}
+
 
 {% block postloadjs %}
 {{ block.super }}
