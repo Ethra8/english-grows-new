@@ -18,7 +18,7 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="row mb-3">
+    <div class="row">
         <div class="col-12 mb-2">
             <p class="back-to-my-assigned-courses">
                 <a href="#" class="js-back-link">
@@ -116,8 +116,9 @@
             Notes</a>
     </nav>
     
-    {% for skill in skills %}
     <div class="student-skills-grid">
+    {% if skills %}    
+    {% for skill in skills %}
 
         <article class="student-skill-card">
 
@@ -144,18 +145,18 @@
                                 Confident
                             {% elif skill.percentage >= 80 %}
                                 Strong
-                            {% endif %}s
+                            {% endif %}
                         </span>
                     </div>
                 </div>
             </div>
 
         </article>
-
-    </div>
-    {% empty %}
-    <p class="text-dark">The employee's skills & subskills assessment cards will appear here after being evaluated.</p>
     {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-dark">The employee's skills & subskills assessment cards will appear here after being evaluated.</p>
+    {% endif %}
 
 </section>
 {% endblock %}
