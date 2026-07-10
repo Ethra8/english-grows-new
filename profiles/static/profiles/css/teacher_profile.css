@@ -2270,7 +2270,7 @@ header .wrapper-attendance-course-info strong {
 .student-main-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
 }
 
 .student-main-info h1 {
@@ -2376,6 +2376,7 @@ header .wrapper-attendance-course-info strong {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    gap: 0.75rem;
 }
 
 .student-overview-grid {
@@ -2962,7 +2963,27 @@ header .wrapper-attendance-course-info strong {
     .student-detail-header {
         flex-direction: column;
         align-items: start;
+        gap: 1.5rem
     }
+
+    .student-header-actions {
+        flex-direction: row-reverse;
+        align-items: flex-end;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .student-level-area {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    /* message btn pushed to the right of container */
+    .student-header-actions > div:first-child {
+        align-items: end;
+    }
+
 
 }
 
@@ -3280,21 +3301,6 @@ header .wrapper-attendance-course-info strong {
         align-items: start;
     } */
 
-    .student-header-actions {
-        flex-direction: column-reverse;
-    }
-
-    .student-level-area {
-        width: 100%;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding-top: 2rem;
-    }
-
-    div:has(> .student-action-btn) {
-        padding-top: 1rem;
-        width: 100%;
-    }
 
 
 }
@@ -3547,6 +3553,7 @@ header .wrapper-attendance-course-info strong {
 
     .student-detail-tabs {
         overflow-x: auto;
+        overflow-y: hidden;
         gap: 1.25rem;
     }
 
@@ -3740,10 +3747,6 @@ header .wrapper-attendance-course-info strong {
         gap: 0.75rem;
     }
 
-    .student-level-area {
-        padding: 1.25rem 0 0;
-    }
-
 
     /*****************************************************|
     |*** ALL ATTENDANCE PageS  ***************************|
@@ -3863,7 +3866,7 @@ header .wrapper-attendance-course-info strong {
     |*****************************************************/
 
     .student-detail-header {
-        padding: 2.5rem 0.75rem 0.75rem;
+        padding: 2.5rem 1rem 1rem;
     }
     
 

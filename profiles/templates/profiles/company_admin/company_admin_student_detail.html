@@ -8,6 +8,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/company_admin_profile.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -87,21 +88,13 @@
                     <i class="fa-regular fa-envelope mr-3"></i>
                     Message
                 </a>
-
-                <!-- <a href="#"
-                   class="student-action-btn">
-                    <i class="fa-solid fa-graduation-cap mr-3"></i>
-                    Edit Academic Profile
-                </a> -->
             </div>
 
             <div class="student-level-area">
                 <small>Current Level</small>
 
-                <span
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2">
-                    {{ student_profile.current_level|default:"?" }}
-                </span>
+                <span class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2">
+                    {{ student_profile.current_level|default:"?" }}</span>
             </div>
         </div>
 

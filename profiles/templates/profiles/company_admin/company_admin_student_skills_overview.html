@@ -8,13 +8,14 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/company_admin_profile.css' %}">
 {% endblock %}
 
 {% block content %}
 
 {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
 
-<section class="teacher-student-detail-page profile-page company-admin-student-skills-page">
+<section id="company-admin-student-skills-page" class="teacher-student-detail-page profile-page ">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 

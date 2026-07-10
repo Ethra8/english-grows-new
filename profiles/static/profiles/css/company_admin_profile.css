@@ -18,21 +18,10 @@
     gap: 1rem;
 }
 
-/* .company-admin-course-details-page header {
-    display: flex;
-    flex-direction: column;
-} */
-
 .company-admin-course-details-page header h1 {
     /* forces h1 to align with level badge */
     margin-bottom: 0;
 }
-
-/* .company-admin-course-details-page header > div:nth-child(3) {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-} */
 
 .company-admin-course-details-page header h2 {
     color: #0B355F;
@@ -78,6 +67,18 @@
 
 
 /************************************************|
+**** STUDENT DETAIL Page ******************|
+*********************************************** */
+
+#company-admin-student-skills-page .student-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+
+/************************************************|
 **** COURSE_STUDENTS_LIST Page ******************|
 *********************************************** */
 
@@ -108,6 +109,18 @@
 .student-row.employees-list .view-progress-course .btn-to-student-detail {
     display: inline-flex;
     width: max-content;
+}
+
+
+
+@media (max-width: 1360px) {
+
+    #company-admin-student-skills-page .student-skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+        margin-top: 2rem;
+    }
 }
 
 
