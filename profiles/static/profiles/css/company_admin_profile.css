@@ -67,16 +67,58 @@
 
 
 /************************************************|
-**** STUDENT DETAIL Page ******************|
+**** STUDENT DETAIL Page ************************|
+*********************************************** */
+
+
+/************************************************|
+**** SKILLS_OVERVIEW Page ***********************|
 *********************************************** */
 
 #company-admin-student-skills-page .student-skills-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 0.75rem;
-    margin-top: 2rem;
+    /* display: grid; */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem !important;
+    /* margin-top: 2rem; */
 }
 
+#company-admin-student-skills-page .skill-card-header h2 {
+    /* display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: baseline; */
+    font-size: 1.7rem;
+}
+
+#company-admin-student-skills-page .student-skill-card {
+    width: 200px;
+    max-width: 200px;
+    padding: 1.2rem 0.75rem;
+    justify-self: center;
+}
+
+#company-admin-student-skills-page .student-skill-card h2 span {
+    /* z-index: 1; */
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    margin-right: 0.75rem;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(11, 53, 95, 0.6);
+    border: 1px solid rgba(94, 242, 220, 0.35); */
+}
+
+#company-admin-student-skills-page .student-skill-card h2 span i {
+    padding-left: 2px;
+    font-size: 1.4rem;
+}
+
+#company-admin-student-skills-page .skill-card-header {
+    align-items: flex-start; 
+}
 
 /************************************************|
 **** COURSE_STUDENTS_LIST Page ******************|
@@ -115,14 +157,35 @@
 
 @media (max-width: 1360px) {
 
-    #company-admin-student-skills-page .student-skills-grid {
+    /* #company-admin-student-skills-page .student-skills-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1.2rem;
         margin-top: 2rem;
-    }
+    } */
 }
 
+
+
+@media (max-width: 1096px) {
+    
+    /************************************************|
+    **** SKILLS_OVERVIEW Page ***********************|
+    *********************************************** */
+
+    #company-admin-student-skills-page .student-skills-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    #company-admin-student-skills-page .student-skill-card {
+        width: 100% !important;
+        min-width: 100% !important;
+        /* padding: 1.2rem 0.75rem;
+        justify-self: center; */
+    }
+
+
+}
 
 
 @media (max-width: 992px) {
@@ -232,6 +295,15 @@
     .company-admin-course-details-page .student-row {
         padding: 0.25rem 0.25rem 0.75rem;
     }
+
+    /************************************************|
+    **** SKILLS_OVERVIEW Page ***********************|
+    *********************************************** */
+
+    #company-admin-student-skills-page .student-skills-grid {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+
 
 
 }
