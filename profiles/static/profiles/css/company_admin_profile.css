@@ -267,7 +267,10 @@
         width: 100%;
     }
 
-    
+    /* ATTENDANCE - All Courses *******************************/
+    .attendance-tools {
+        justify-content: flex-start;
+    }
 }
 
 

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Prefetch
 from django.http import JsonResponse
 
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.utils.dateparse import parse_datetime
+from django.utils.dateparse import parse_datetime, parse_date
 from django.forms import inlineformset_factory
 
 import json
@@ -2803,61 +2803,356 @@ def company_admin_all_courses_attendance(request):
 
     company = profile.company
 
-    class_sessions_queryset = (
+    if not company:
+        return redirect("home")
+
+    now = timezone.now()
+
+    selected_date = request.GET.get("date", "").strip()
+    course_search = request.GET.get("course", "").strip()
+    employee_search = request.GET.get("employee", "").strip()
+
+    parsed_date = None
+
+    if selected_date:
+        parsed_date = parse_date(selected_date)
+
+    final_attendance_statuses = {
+        "attended",
+        "missed",
+        "excused",
+    }
+
+    # Active employees enrolled in each course.
+    enrollment_queryset = (
+        CourseEnrollment.objects
+        .filter(status="active")
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+            "student__email",
+        )
+    )
+
+    # Load class sessions and their attendance records efficiently.
+    class_session_queryset = (
         ClassSession.objects
         .filter(
-            course__company=company,
             is_cancelled=False,
-            start_time__lt=timezone.now(),
         )
         .select_related(
             "course",
-            "course__course_type",
-            "course__teacher",
         )
         .prefetch_related(
-            "attendance_records",
-            "attendance_records__student",
-            "attendance_records__student__profile",
+            Prefetch(
+                "attendance_records",
+                queryset=(
+                    Attendance.objects
+                    .select_related(
+                        "student",
+                        "student__profile",
+                    )
+                    .order_by(
+                        "student__first_name",
+                        "student__last_name",
+                        "student__email",
+                    )
+                ),
+            )
         )
-        .order_by("-start_time")
+        .order_by("start_time")
     )
 
-    completed_class_sessions = []
-
-    for class_session in class_sessions_queryset:
-        attendance_records = class_session.attendance_records.all()
-
-        has_attendance_records = attendance_records.exists()
-
-        has_scheduled_attendance = any(
-            attendance.status == "scheduled"
-            for attendance in attendance_records
+    # When a date is selected, the course figures refer only to that date.
+    if parsed_date:
+        class_session_queryset = class_session_queryset.filter(
+            start_time__date=parsed_date,
         )
 
-        if has_attendance_records and not has_scheduled_attendance:
-            class_session.attendance_filter_status = "completed"
+    courses = (
+        Course.objects
+        .filter(company=company)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+            "teacher__profile",
+        )
+        .prefetch_related(
+            Prefetch(
+                "enrollments",
+                queryset=enrollment_queryset,
+                to_attr="active_enrollments",
+            ),
+            Prefetch(
+                "class_sessions",
+                queryset=class_session_queryset,
+                to_attr="attendance_class_sessions",
+            ),
+        )
+        .order_by("name")
+    )
 
-            class_session.employee_search_text = " ".join(
-                (
-                    attendance.student.get_full_name()
-                    or attendance.student.username
-                    or attendance.student.email
+    # Search by course name or course type.
+    if course_search:
+        courses = courses.filter(
+            Q(name__icontains=course_search)
+            | Q(course_type__name__icontains=course_search)
+        )
+
+    # Find courses containing the searched employee.
+    if employee_search:
+        employee_parts = employee_search.split()
+
+        employee_query = (
+            Q(
+                enrollments__student__email__icontains=employee_search,
+            )
+            | Q(
+                enrollments__student__username__icontains=employee_search,
+            )
+            | Q(
+                enrollments__student__first_name__icontains=employee_search,
+            )
+            | Q(
+                enrollments__student__last_name__icontains=employee_search,
+            )
+        )
+
+        # Supports full-name searches such as "John Smith".
+        if len(employee_parts) >= 2:
+            first_name_search = employee_parts[0]
+            last_name_search = " ".join(employee_parts[1:])
+
+            employee_query |= (
+                Q(
+                    enrollments__student__first_name__icontains=(
+                        first_name_search
+                    ),
                 )
-                + f" {attendance.student.email}"
+                & Q(
+                    enrollments__student__last_name__icontains=(
+                        last_name_search
+                    ),
+                )
+            )
+
+        courses = courses.filter(employee_query).distinct()
+
+    # If a date was selected, only show courses with a class on that date.
+    if parsed_date:
+        courses = courses.filter(
+            class_sessions__is_cancelled=False,
+            class_sessions__start_time__date=parsed_date,
+        ).distinct()
+
+    course_attendance_rows = []
+
+    global_employee_ids = set()
+    global_past_classes = 0
+    global_submitted_classes = 0
+    global_attended_count = 0
+    global_missed_count = 0
+    global_excused_count = 0
+
+    for course in courses:
+        active_enrollments = course.active_enrollments
+
+        for enrollment in active_enrollments:
+            global_employee_ids.add(enrollment.student_id)
+
+        class_sessions = course.attendance_class_sessions
+
+        past_class_sessions = [
+            class_session
+            for class_session in class_sessions
+            if class_session.start_time < now
+        ]
+
+        future_class_sessions = [
+            class_session
+            for class_session in class_sessions
+            if class_session.start_time >= now
+        ]
+
+        submitted_class_sessions = []
+
+        attended_count = 0
+        missed_count = 0
+        excused_count = 0
+
+        for class_session in past_class_sessions:
+            attendance_records = list(
+                class_session.attendance_records.all()
+            )
+
+            if not attendance_records:
+                continue
+
+            attendance_is_submitted = all(
+                attendance.status in final_attendance_statuses
                 for attendance in attendance_records
             )
 
-            completed_class_sessions.append(class_session)
+            if not attendance_is_submitted:
+                continue
+
+            submitted_class_sessions.append(class_session)
+
+            attended_count += sum(
+                1
+                for attendance in attendance_records
+                if attendance.status == "attended"
+            )
+
+            missed_count += sum(
+                1
+                for attendance in attendance_records
+                if attendance.status == "missed"
+            )
+
+            excused_count += sum(
+                1
+                for attendance in attendance_records
+                if attendance.status == "excused"
+            )
+
+        past_classes_count = len(past_class_sessions)
+        submitted_classes_count = len(submitted_class_sessions)
+
+        pending_submission_count = max(
+            past_classes_count - submitted_classes_count,
+            0,
+        )
+
+        total_final_attendance_records = (
+            attended_count
+            + missed_count
+            + excused_count
+        )
+
+        if total_final_attendance_records:
+            attendance_rate = round(
+                attended_count
+                / total_final_attendance_records
+                * 100
+            )
+        else:
+            attendance_rate = 0
+
+        if past_classes_count:
+            submission_rate = round(
+                submitted_classes_count
+                / past_classes_count
+                * 100
+            )
+        else:
+            submission_rate = 0
+
+        last_class = (
+            max(
+                past_class_sessions,
+                key=lambda class_session: class_session.start_time,
+            )
+            if past_class_sessions
+            else None
+        )
+
+        next_class = (
+            min(
+                future_class_sessions,
+                key=lambda class_session: class_session.start_time,
+            )
+            if future_class_sessions
+            else None
+        )
+
+        # Custom attributes available directly in the template.
+        course.employee_count = len(active_enrollments)
+
+        course.past_classes_count = past_classes_count
+        course.submitted_classes_count = submitted_classes_count
+        course.pending_submission_count = pending_submission_count
+        course.submission_rate = submission_rate
+
+        course.attended_count = attended_count
+        course.missed_count = missed_count
+        course.excused_count = excused_count
+        course.attendance_rate = attendance_rate
+
+        course.last_class = last_class
+        course.next_class = next_class
+
+        course_attendance_rows.append(course)
+
+        global_past_classes += past_classes_count
+        global_submitted_classes += submitted_classes_count
+        global_attended_count += attended_count
+        global_missed_count += missed_count
+        global_excused_count += excused_count
+
+    global_total_attendance_records = (
+        global_attended_count
+        + global_missed_count
+        + global_excused_count
+    )
+
+    if global_total_attendance_records:
+        global_attendance_rate = round(
+            global_attended_count
+            / global_total_attendance_records
+            * 100
+        )
+
+        global_missed_rate = round(
+            global_missed_count
+            / global_total_attendance_records
+            * 100
+        )
+
+        global_excused_rate = round(
+            global_excused_count
+            / global_total_attendance_records
+            * 100
+        )
+    else:
+        global_attendance_rate = 0
+        global_missed_rate = 0
+        global_excused_rate = 0
 
     context = {
-        "class_sessions": completed_class_sessions,
-        "completed_count": len(completed_class_sessions),
+        "profile": profile,
+        "company": company,
+
+        # One item per course.
+        "courses": course_attendance_rows,
+
+        # Global summary.
+        "total_courses": len(course_attendance_rows),
+        "total_employees": len(global_employee_ids),
+        "total_past_classes": global_past_classes,
+        "total_submitted_classes": global_submitted_classes,
+        "global_attended_count": global_attended_count,
+        "global_missed_count": global_missed_count,
+        "global_excused_count": global_excused_count,
+        "global_attendance_rate": global_attendance_rate,
+        "global_missed_rate": global_missed_rate,
+        "global_excused_rate": global_excused_rate,
+
+        # Keep filter values visible after submitting.
+        "selected_date": selected_date,
+        "course_search": course_search,
+        "employee_search": employee_search,
     }
 
     return render(
         request,
-        "profiles/company_admin/company_admin_all_courses_attendance.html",
+        "profiles/company_admin/"
+        "company_admin_all_courses_attendance.html",
         context,
     )
 

@@ -422,6 +422,7 @@ h2 {
 
 .btn-class-today,
 .btn-course-details,
+.btn-attendance-tools,
 .btn-email-all,
 .edit-attendance-btn,
 .btn-to-student-detail,
@@ -448,6 +449,7 @@ h2 {
 
 .btn-class-today:hover,
 .btn-course-details:hover,
+.btn-attendance-tools:hover,
 .btn-email-all:hover,
 .edit-attendance-btn:hover,
 .btn-to-student-detail:hover,
@@ -471,7 +473,8 @@ div:has(> .student-action-btn) {
     position: relative;
 }
 
-.btn-course-details i {
+.btn-course-details i,
+.btn-attendance-tools i {
     position: relative;
     font-size: 1.2rem;
     margin-right: 0.5rem;
@@ -1735,7 +1738,7 @@ div:has(> .student-action-btn) {
 
 .attendance-list-card {
     min-height: fit-content;
-    background: linear-gradient(27deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(285deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -1767,10 +1770,11 @@ div:has(> .student-action-btn) {
     display: flex;
     gap: 0.8rem;
     margin-left: auto;
+    flex-wrap: wrap;
 }
 
 .attendance-tools input {
-    min-height: 50px;
+    height: 42px;
     background: rgba(0, 30, 60, 0.7);
     border: 1px solid rgba(95, 255, 234, 0.45);
     color: #ffffff;
@@ -1856,7 +1860,7 @@ div:has(> .student-action-btn) {
     gap: 1.2rem;
     padding: 1.3rem 1rem;
     border: 1px solid rgba(95, 255, 234, 0.22);
-    background: linear-gradient(183deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
 }
 
 .attendance-row:last-child {
@@ -2905,23 +2909,6 @@ div:has(> .student-action-btn) {
         padding: 70px 2% !important;
     }
 
-    /* .assigned-course-row,
-    .assigned-class-row {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    } */
-
-    /* Course Assigned BY STATUS */
-    /* .course-action {
-        width: 100%;
-    }
-
-    .btn-course-details {
-        width: 100%;
-        margin: 0;
-        box-sizing: border-box;
-    } */
-
 
 }
 
@@ -3309,14 +3296,18 @@ div:has(> .student-action-btn) {
 @media (max-width: 767.99px) {
 
     /* *** BUTTONS **************************************** */
+    .btn-course-details,
+    .btn-email-all,
+    .edit-attendance-btn,
+    .btn-to-student-detail  {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;    
+    }
 
-    /* Courses page *******************************/
-    /* Attendance page ****************************/
-    /* Classes List page **************************/
-    /* .assigned-courses-page .btn-course-details,
-    .teacher-classes-list .btn-course-details {
-        width: fit-content;
-    } */
+    .all-courses-attendance .attendance-tools button.btn-attendance-tools {
+        width: max-content !important;
+    }
 
 
     /*****************************************************|
@@ -3355,14 +3346,6 @@ div:has(> .student-action-btn) {
         box-sizing: border-box;    
     }
 
-    .btn-course-details,
-    .btn-email-all,
-    .edit-attendance-btn,
-    .btn-to-student-detail  {
-        width: 100%;
-        margin: 0;
-        box-sizing: border-box;    
-    }
 
     /*****************************************************|
     |*** CLASSES LIST Page  ******************************|
@@ -3775,10 +3758,6 @@ div:has(> .student-action-btn) {
 
     .attendance-filter-btn.active::after {
         display: none;
-    }
-
-    .attendance-tools {
-        flex-direction: column;
     }
 
 
