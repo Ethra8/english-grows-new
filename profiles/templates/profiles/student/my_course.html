@@ -11,7 +11,7 @@
 
 {% include "profiles/includes/student/student_sidebar.html" %}
 
-<section class="my-course">    
+<section class="my-course course-details">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -19,10 +19,44 @@
     <div class="row">        
         <div class="col-12 mb-4 ml-0 pl-0">
             <header>
+                <!-- 1st Child -->
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <p class="back-to-my-assigned-courses">
+                            <a href="#" class="js-back-link">
+                                <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                                Go Back
+                            </a>
+                        </p>
+                    </div>
+                </div>    
+                <!-- 2nd Child -->
+                <div>
+                    <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                        {{ active_enrollment.course.course_level|default:"Pending" }}</span>
+                    
+                    <h1>{{ active_enrollment.course.name }}</h1>
+                </div>
+                <!-- 3rd Child -->
+                <div>   
+                    <h2>
+                        <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
+                        <span>|</span>
+                        <span><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
+                    </h2>
+                </div>
+                
+                <span class="status-badge {{ course.status }} mb-3">
+                {{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
+
+                <hr>
+            </header>
+
+            <!-- <header>
             {% if active_enrollment %}
                 <h1>{{ active_enrollment.course.course_type.name }}</h1>
                 <hr>
-                        <p class="text-white mt-4 mb-4">Code of your current course: <strong>{{ active_enrollment.course.name }}</strong></p>
+                <p class="mt-4 mb-4">Code of your current course: <strong>{{ active_enrollment.course.name }}</strong></p>
 
                 <div class="item">
                     <div class="item-icon">
@@ -41,7 +75,7 @@
             {% else %}
                 <h1>No active course assigned yet</h1>
             {% endif %}
-            </header>
+            </header> -->
         </div>
         <div class="wrapper-course-card w-100">
             <div class="course-card row">
@@ -161,5 +195,11 @@
     {% endif %}
 
 </section>
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'profiles/js/profiles.js' %}"></script>
 
 {% endblock %}

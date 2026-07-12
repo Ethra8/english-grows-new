@@ -15,37 +15,59 @@
 
 {% include "profiles/includes/teacher/teacher_sidebar.html" %}
 
-<section class="teacher-take-attendance-page profile-page">
+<section class="teacher-take-attendance-page profile-page course-details">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <header>
-        <p class="back-to-attendance">
-            <a href="{% url 'profiles:teacher_attendance' %}" class="text-white js-back-link">
-                <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                Go Back
-            </a>    
-        </p>
-
-        <h1 class="mb-5 mt-4">Take Attendance</h1>
-        <hr>
-        <div class="wrapper-attendance-course-info">
-            <div>
-                <p><strong><i class="fa-solid fa-clipboard-user mr-3"></i>
-                    {{ class_session.course.name }}</strong></p>
-                <p><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
-                    Lesson {{ class_session.class_number }}</p>
+        <!-- 1st Child -->
+        <div class="row mb-3">
+            <div class="col-12 mb-2">
+                <p class="back-to-my-assigned-courses">
+                    <a href="#" class="js-back-link">
+                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                        Go Back
+                    </a>
+                </p>
             </div>
-            <div>   
-                <p><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
-                    {{ class_session.start_time|date:"D, d M Y" }}</p>
-                <p><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
-                    {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
-            </div>     
+        </div>    
+        <!-- 2nd Child -->
+        <div>
+            <span class="level level-{{ class_session.course.course_level|lower|cut:'.' }}">
+                {{ class_session.course.course_level|default:"Pending" }}</span>
+            
+            <h1>{{ class_session.course.name }}</h1>
         </div>
-        <!-- <hr> -->
+        <!-- 3rd Child -->
+        <div>   
+            <h2>
+                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ class_session.course.course_type.name }}</span>
+                <span>|</span>
+                <span><i class="fa-regular fa-clock mr-3"></i>{{ class_session.course.total_hours|clean_decimal }} h.</span>
+            </h2>
+        </div>
+        
+        <span class="status-badge {{ class_session.course.status }} mb-3">
+        {{ class_session.course.get_status_display }}</span>
+        
+        <hr>
 
     </header>
+
+    <div class="wrapper-attendance-course-info">
+        <div>
+            <p class="text-white"><strong><i class="fa-solid fa-clipboard-user mr-3"></i>
+                {{ class_session.course.name }}</strong></p>
+            <p class="text-white"><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
+                Lesson {{ class_session.class_number }}</p>
+        </div>
+        <div>   
+            <p class="text-white"><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
+                {{ class_session.start_time|date:"D, d M Y" }}</p>
+            <p class="text-white"><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
+                {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+        </div>     
+    </div>
 
 
     <form method="POST" class="take-attendance-form">

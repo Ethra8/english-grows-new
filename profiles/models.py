@@ -343,7 +343,7 @@ class StudentAcademicProfile(models.Model):
 SUBSKILLS = {
     "speaking": [
         ("fluency", "Fluency"),
-        ("accuracy_and_range", "Accuracy & Range"),
+        ("accuracy_and_range", "Grammar & vocabulary: Accuracy & range"),
         ("pronunciation", "Pronunciation"),
         ("interaction", "Interaction"),
     ],
@@ -427,6 +427,10 @@ class StudentSkillAssessment(models.Model):
 
         return round(total / subskills.count())
 
+    @property
+    def average_score(self):
+        return round(self.average_percentage / 10, 1)
+
     def generate_teacher_notes(self):
         subskills = self.subskill_assessments.all()
 
@@ -434,6 +438,7 @@ class StudentSkillAssessment(models.Model):
             return ""
 
         strengths = []
+        passing = []
         developing = []
         needs_work = []
 
@@ -442,7 +447,9 @@ class StudentSkillAssessment(models.Model):
 
             if subskill.rating in ["strong", "confident"]:
                 strengths.append(label)
-            elif subskill.rating in ["meeting", "developing"]:
+            elif subskill.rating == "passing":
+                passing.append(label)
+            elif subskill.rating == "developing":
                 developing.append(label)
             elif subskill.rating == "needs_work":
                 needs_work.append(label)
@@ -452,6 +459,11 @@ class StudentSkillAssessment(models.Model):
         if strengths:
             notes.append(
                 f"Strengths: {', '.join(strengths)}."
+            )
+        
+        if passing:
+            notes.append(
+                f"Meeting: {', '.join(passing)}."
             )
 
         if developing:
@@ -472,7 +484,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
-        ("meeting", "Meeting"),
+        ("passing", "Passing"),
         ("confident", "Confident"),
         ("strong", "Strong"),
     ]
@@ -480,7 +492,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_PERCENTAGES = {
         "needs_work": 25,
         "developing": 45,
-        "meeting": 60,
+        "passing": 60,
         "confident": 80,
         "strong": 100,
     }

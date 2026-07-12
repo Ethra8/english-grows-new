@@ -33,6 +33,34 @@ main.profile-main,
     margin-top: 100px;
 }
 
+.course-details header > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.course-details header h1 {
+    /* forces h1 to align with level badge */
+    margin-bottom: 0;
+}
+
+.course-details header h2 {
+    color: #0B355F;
+    font-size: 1.5rem;
+    margin-top: 0;
+    padding-top: 0;
+    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+}
+
+/* horizontal line separating course type | total_hours */
+.course-details header h2 > span:nth-child(2) {
+    padding: 0 .8rem;
+    color: #008F8F;
+}
+
+
 
 /* *** H1 **************************************************/
 
@@ -40,7 +68,7 @@ main.profile-main h1,
 .my-course header h1,
 .my-attendance header h1,
 .profile-settings-page header h1 {
-    color: whitesmoke;
+    color: #003366;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
     letter-spacing: 0.03em;
@@ -182,6 +210,7 @@ main.profile-main h1,
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    margin-bottom: 2rem;
 }
 
 .sidebar-link {
@@ -340,6 +369,7 @@ main.profile-main h1,
 /* **************************************************|
 ******** STUDENT COURSE INFO Page********************|
 *****************************************************/
+
 
 .my-course .course-card {
     border-radius: 8px;
@@ -995,6 +1025,23 @@ main.profile-main h1,
     .next-class-card,
     .next-class-card .info {
         margin: 0 auto;
+    }
+
+    /* HEADERS ***************************************/
+
+    /* COURSE DETAILS Pages ********************************** */
+    .course-details header h1 {
+        font-size: 2.5rem;    
+    }
+
+    .course-details header h2 {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .course-details header h2 span:nth-child(2) {
+        display: none;
+        visibility: hidden;
     }
 
 

@@ -138,13 +138,13 @@
                         <span>
                             {% if skill.percentage <= 25 %}
                                 Needs work
-                            {% elif skill.percentage <= 45 %}
+                            {% elif skill.percentage <= 49 %}
                                 Developing
-                            {% elif skill.percentage <= 60 %}
-                                Meeting
-                            {% elif skill.percentage <= 79 %}
+                            {% elif skill.percentage <= 65 %}
+                                Passing
+                            {% elif skill.percentage <= 80 %}
                                 Confident
-                            {% elif skill.percentage >= 80 %}
+                            {% elif skill.percentage > 80 %}
                                 Strong
                             {% endif %}
                         </span>

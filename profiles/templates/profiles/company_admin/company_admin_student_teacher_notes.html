@@ -132,12 +132,22 @@
 
         {% for note in skill_note_display %}
             <div class="teacher-skill-note">
-                <h4>{{ note.skill }}</h4>
+                <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small>
+                </h4>
 
                 {% if note.strengths %}
                     <p>
                         <strong>Strengths:</strong>
                         {% for subskill in note.strengths %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.passing %}
+                    <p>
+                        <strong>Meets expectations:</strong>
+                        {% for subskill in note.passing %}
                             <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </p>

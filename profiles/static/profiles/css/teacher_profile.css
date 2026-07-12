@@ -1218,7 +1218,7 @@ div:has(> .student-action-btn) {
     cursor: pointer;
 }
 
-.teacher-course-details-page header .header-last-child,
+
 .teacher-course-students-list header .header-last-child,
 .teacher-group-attendance-page header .header-last-child {
     display: grid;
@@ -1226,7 +1226,7 @@ div:has(> .student-action-btn) {
     gap: 0.5rem;
 }
 
-.teacher-course-details-page header .header-last-child > div:first-child,
+
 .teacher-course-students-list header .header-last-child > div:first-child,
 .teacher-group-attendance-page header .header-last-child > div:first-child {
     display: flex;
@@ -1234,17 +1234,16 @@ div:has(> .student-action-btn) {
     justify-content: flex-start;
 }
 
-.teacher-course-details-page header h2,
-.teacher-course-students-list header h2,
+/* .teacher-course-students-list header h2,
 .teacher-group-attendance-page header h2 {
     color: #c1f7e3;
     font-size: 1.5rem;
     margin-top: 0;
     padding-top: 0;
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
-}
+} */
 
-.teacher-course-details-page header .header-last-child > div:last-child,
+
 .teacher-course-students-list header .header-last-child > div:last-child,
 .teacher-group-attendance-page header .header-last-child > div:last-child {
     display: flex;
@@ -1252,7 +1251,6 @@ div:has(> .student-action-btn) {
     justify-content: center;
 }
 
-.teacher-course-details-page header .header-last-child span,
 .teacher-course-students-list header .header-last-child span,
 .teacher-group-attendance-page header .header-last-child span {
     width: 50px;
@@ -1760,7 +1758,7 @@ div:has(> .student-action-btn) {
 .teacher-attendance-page header p,
 .teacher-attendance-detail-page header p {
     margin: 0;
-    color: whitesmoke;
+    color: rgb(82, 82, 82);
     font-size: 1.1rem;
     padding: 0.25rem 1rem 0.25rem 0;
 }
@@ -1875,7 +1873,7 @@ div:has(> .student-action-btn) {
 |****  : Summary BUTTONS Wrapper & Cards*************************/
 
 
-header .wrapper-attendance-course-info {
+.wrapper-attendance-course-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
     border: 1px solid rgba(95, 255, 234, 0.25);
@@ -1885,21 +1883,21 @@ header .wrapper-attendance-course-info {
     align-items: center;
     align-content: center;
     width: 80%;
-    margin: auto;
+    margin: auto auto 1rem;
 }
 
-header .wrapper-attendance-course-info > div:last-child {
+.wrapper-attendance-course-info > div:last-child {
     border-left: 1px #008b87 solid;
     padding-left: 1rem;
 }
 
-header .wrapper-attendance-course-info p {
+.wrapper-attendance-course-info p {
     padding: 0%;
     margin: 0%;
     line-height: 2;
 }
 
-header .wrapper-attendance-course-info strong {
+.wrapper-attendance-course-info strong {
     font-size: 1.2rem;
 }
 
@@ -3084,7 +3082,7 @@ header .wrapper-attendance-course-info strong {
 
     .take-attendance-card,
     .attendance-detail-card,
-    header .wrapper-attendance-course-info {
+    .wrapper-attendance-course-info {
         width: 100%;
     }
 
@@ -3464,11 +3462,11 @@ header .wrapper-attendance-course-info strong {
     |*** TAKE ATTENDANCE Page  ***************************|
     |*****************************************************/
         
-    header .wrapper-attendance-course-info {
+    .wrapper-attendance-course-info {
         grid-template-columns: 1fr;
     }
 
-    header .wrapper-attendance-course-info > div:last-child {
+    .wrapper-attendance-course-info > div:last-child {
         border-left: none;
         padding-left: 0%;
     }

@@ -1154,15 +1154,22 @@ def build_skill_note_display(skill_assessment):
 
     return {
         "skill": skill_assessment.get_skill_display(),
+        "percentage": skill_assessment.average_percentage,
+        "score": skill_assessment.average_score,
         "strengths": [
             subskill.get_subskill_display()
             for subskill in subskills
             if subskill.rating in ["strong", "confident"]
         ],
+        "passing": [
+            subskill.get_subskill_display()
+            for subskill in subskills
+            if subskill.rating == "passing"
+        ],
         "developing": [
             subskill.get_subskill_display()
             for subskill in subskills
-            if subskill.rating in ["meeting", "developing"]
+            if subskill.rating == "developing"
         ],
         "needs_work": [
             subskill.get_subskill_display()
@@ -2037,6 +2044,8 @@ def teacher_attendance_detail(request, session_id):
         course__teacher=request.user,
     )
 
+    course = class_session.course
+
     attendances = list(
         Attendance.objects
         .filter(class_session=class_session)
@@ -2087,6 +2096,7 @@ def teacher_attendance_detail(request, session_id):
     context = {
         "profile": profile,
         "class_session": class_session,
+        "course": course,
         "attendances": attendances,
         "attended_count": attended_count,
         "missed_count": missed_count,
@@ -2283,9 +2293,9 @@ def reschedule_class_detail(request, session_id):
 
 
 
-# ***********************************************|
+# *****************************************************|
 # COMPANY ADMIN PROFILE  ******************************|
-# ***********************************************|
+# *****************************************************|
 
 @login_required
 def company_admin_dashboard(request):
