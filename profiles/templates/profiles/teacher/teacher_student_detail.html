@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
 {% load course_extras %}
@@ -22,7 +22,7 @@
     <div class="overlay-azure-mist"></div>
 
     <div class="mb-4">
-        <a href="#" class="text-white js-back-link">
+        <a href="#" class="js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
         </a>    
@@ -127,8 +127,7 @@
 
     <!-- Inside navbar -->
     <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}"    
-           class="active">
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="active">
             Overview
         </a>
 
@@ -140,12 +139,12 @@
             Skills
         </a>
 
-        <a href="#">
-            Courses
+        <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+            Progress
         </a>
 
-        <a href="#">
-            Notes
+        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+            Assessment
         </a>
 
         <a href="#">
@@ -183,31 +182,6 @@
                                 <strong>{{ course.total_hours|clean_decimal }} h.</strong>
                             </div>
 
-                            <!-- <div class="detail-row">
-                                <span>Class Duration</span>
-                                <strong>{{ course.class_duration_display|default:"Not assigned" }}</strong>
-                            </div>
-
-                            {% if course.has_short_final_class %}
-                                <div class="detail-row">
-                                    <span>
-                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                                        Last Class Duration:
-                                    </span>
-                                    <span>{{ course.final_class_duration_display }}</span>
-                                </div>
-                            {% endif %}
-
-                            <div class="detail-row">
-                                <span>Total Classes</span>
-                                <strong>{{ total_classes }}</strong>
-                            </div>
-
-                            <div class="detail-row">
-                                <span>Teacher</span>
-                                <strong>{{ course.teacher.get_full_name|default:course.teacher.username }}</strong>
-                            </div> -->
-
                         </div>
                     </div>
 
@@ -238,7 +212,7 @@
                         style="--percentage: {{ attendance_percentage }};">
                         <div class="progress-ring-inner">
                             <strong>{{ attendance_percentage }}%</strong>
-                            <span>Attendance</span>
+                            <span>Attended</span>
                         </div>
                     </div>
 
@@ -247,21 +221,6 @@
                             <span>Attended:</span>
                             <strong>{{ attended_count }} / {{ completed_classes }}</strong>
                         </div>
-
-                        <!-- <div class="detail-row">
-                            <span>Missed:</span>
-                            <strong>{{ missed_count }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Excused:</span>
-                            <strong>{{ excused_count }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Past Classes:</span>
-                            <strong>{{ completed_classes }}</strong>
-                        </div> -->
                     </div>
 
                 </div>
@@ -298,21 +257,6 @@
                             <span>Completed Classes:</span>
                             <strong>{{ completed_classes }} / {{ total_classes }}</strong>
                         </div>
-
-                        <!-- <div class="detail-row">
-                            <span>Remaining Classes:</span>
-                            <strong>{{ remaining_classes }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Total Classes:</span>
-                            <strong>{{ total_classes }}</strong>
-                        </div>
-
-                        <div class="detail-row">
-                            <span>Course Completion:</span>
-                            <strong>{{ completion_percentage }}%</strong>
-                        </div> -->
                     </div>
 
                 </div>
@@ -326,121 +270,14 @@
             </div>
         </article>
     </div>
-
-    <div class="student-details-skills-overview-grid">
-        <article class="skills-progress-section">
-            <div class="skills-chart-card">
-                <div class="skills-chart-header">
-                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Skills Progress Over Time</h2>
-                </div>
-
-                <div class="skills-chart-canvas-wrap">
-                    <canvas id="skillsProgressChart"></canvas>
-                </div>
-            </div>
-        </article>
-        <article class="student-skills-notes-card">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2 class="mb-0"><i class="fa-solid fa-file-pen mr-2"></i>Teacher Notes</h2>
-                <!-- <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}">
-                    <i class="fa-solid fa-pen mr-2"></i>
-                    Edit
-                </a> -->
-            </div>
-            <hr>
-
-            {% for note in skill_note_display %}
-            <div class="teacher-skill-note">
-                <h4>{{ note.skill }}</h4>
-
-                {% if note.strengths %}
-                    <p>
-                        <strong>Strengths:</strong>
-                        {% for subskill in note.strengths %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                {% if note.developing %}
-                    <p>
-                        <strong>Developing areas:</strong>
-                        {% for subskill in note.developing %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                {% if note.needs_work %}
-                    <p>
-                        <strong>Needs work:</strong>
-                        {% for subskill in note.needs_work %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-            </div>
-        {% endfor %}        
-        </article>    
-    </div>  
     
 </section>
 
 {% endblock %}
 
+
 {% block postloadjs %}
 {{ block.super }}
 {{ chart_data_json|json_script:"skills-chart-data" }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// DISPLAY STD SKILLS PROGRESS CHART
-// ATTENTION: Do not move to JS file, it doesn't work there...
-document.addEventListener("DOMContentLoaded", function () {
-
-    // const chartData = JSON.parse(chartDataEl.textContent);
-    const chartEl = document.getElementById("skillsProgressChart");
-
-    if (!chartEl) {
-        return;
-    }
-
-    const chartData = JSON.parse("{{ chart_data_json|escapejs }}");
-
-    if (!chartData.labels || chartData.labels.length === 0) {
-        chartEl.parentElement.innerHTML = `
-            <p class="text-dark">
-                No skill progress data yet. Save a skill assessment first.
-            </p>
-        `;
-        return;
-    }
-
-    new Chart(chartEl, {
-        type: "line",
-        data: chartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    min: 0,
-                    max: 100,
-                    ticks: {
-                        callback: function(value) {
-                            return value + "%";
-                        }
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: "bottom",
-                }
-            }
-        }
-    });
-});
-
-</script>
 {% endblock %}

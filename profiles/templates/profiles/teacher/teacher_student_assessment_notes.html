@@ -1,19 +1,20 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load date_extras %}
+{% load course_extras %}
 
-{% block extra_title %}| Skills Overview{% endblock %}
+{% block extra_title %}| Teacher Notes {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-<link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
 {% endblock %}
 
 {% block content %}
 
-{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
 
-<section class="profile-page teacher-student-skills-page">
-
+<section class="teacher-student-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -21,7 +22,7 @@
         <a href="#" class="js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
-        </a>
+        </a>    
     </div>
 
     <div class="student-detail-header">
@@ -43,10 +44,7 @@
             </div>
 
             <div>
-                <h1>
-                    {{ student.get_full_name|default:student.username }}
-                </h1>
-
+                <h1>{{ student.get_full_name|default:student.username }}</h1>
                 <p>{{ student.email }}</p>
 
                 <div class="student-meta-line">
@@ -81,12 +79,6 @@
                 <a href="mailto:{{ student.email }}" class="student-action-btn">
                     <i class="fa-regular fa-envelope mr-3"></i>
                     Message
-                </a>
-
-                <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}"
-                   class="student-action-btn">
-                    <i class="fa-solid fa-graduation-cap mr-3"></i>
-                    Edit Academic Profile
                 </a>
             </div>
 
@@ -123,7 +115,6 @@
 
     </div>
 
-    <!-- Inside navbar -->
     <nav class="student-detail-tabs">
         <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
             Overview
@@ -133,7 +124,7 @@
             Attendance
         </a>
 
-        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active">
+        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
             Skills
         </a>
 
@@ -141,7 +132,7 @@
             Progress
         </a>
 
-        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}" class="active">
             Assessment
         </a>
 
@@ -150,76 +141,73 @@
         </a>
     </nav>
 
-    <div class="student-skills-grid">
 
-        {% for skill in skills %}
-            <article class="student-skill-card">
+    <article class="student-skills-notes-card">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">
+                <i class="fa-regular fa-file-lines mr-2"></i>
+                Assessment
+            </h2>
+        </div>
 
-                <div class="skill-card-header">
-                    
-                    <h2>
-                        <span><i class="{{ skill.icon }} mr-3"></i></span>
-                        {{ skill.name }}
-                    </h2>
-                    <div class="skill-card-edit mt-4">
-                        <a href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
-                        class="skill-edit-link"
-                        title="Edit {{ skill.name }}">
-                            <i class="fa-regular fa-pen-to-square mr-2"></i> Edit Skill
-                        </a>
-                    </div>
+        <hr>
 
-                    <hr>
-                    <div class="skill-ring"
-                         style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                        <div>
-                            <strong>{{ skill.percentage|default:"0" }}%</strong>
-                            <span>Overall</span>
-                        </div>
-                    </div>
-                </div>
+        {% for note in skill_note_display %}
+            <div class="teacher-skill-note">
+                <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small>
+                </h4>
 
-                <div class="skill-card-body">
-                    <div class="skill-details">
-
-                        <p>{{ skill.subskills|length }} subskills tracked</p>
-
-                        {% for subskill in skill.subskills %}
-                            {% with progress=subskill.percentage|default:0 %}
-                                <div class="subskill-row">                      
-                                    <div class="subskill-main mt-3">
-                                        <strong>{{ subskill.get_subskill_display }}</strong>
-                                        <br>
-                                        <span>{{ subskill.get_rating_display }} ({{ progress }}%)</span>                                    
-                                        <!-- <strong class="subskill-percentage">{{ progress }}%</strong> -->
-                                    </div>
-                                </div>
-                            {% endwith %}
-                        {% empty %}
-                            <p class="text-white-50 mb-0">
-                                No subskills have been created yet.
-                            </p>
+                {% if note.strengths %}
+                    <p>
+                        <strong>Strengths:</strong>
+                        {% for subskill in note.strengths %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
+                    </p>
+                {% endif %}
 
-                    </div>
-                </div>
+                {% if note.pass %}
+                    <p>
+                        <strong>Meets expectations:</strong>
+                        {% for subskill in note.pass %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
 
-            </article>
+                {% if note.developing %}
+                    <p>
+                        <strong>Developing areas:</strong>
+                        {% for subskill in note.developing %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if note.needs_work %}
+                    <p>
+                        <strong>Needs work:</strong>
+                        {% for subskill in note.needs_work %}
+                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+            </div>
         {% empty %}
-            <p class="text-white">
-                No skill assessments yet.
-            </p>
+            <p class="text-white">No teacher notes yet.</p>
         {% endfor %}
+    </article>
 
-    </div>
 
 
 </section>
 
 {% endblock %}
 
-
 {% block postloadjs %}
 {{ block.super }}
+
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
 {% endblock %}

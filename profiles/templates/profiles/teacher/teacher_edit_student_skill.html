@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -18,7 +18,7 @@
     <div class="overlay-azure-mist"></div>
 
     <div class="mb-4">
-        <a href="#" class="text-white js-back-link">
+        <a href="#" class="js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
         </a>
@@ -29,7 +29,7 @@
             Edit {{ skill_assessment.get_skill_display }}
         </h1>
 
-        <p>
+        <p class="text-dark">
             {% if skill_assessment.student.name %} {{ skill_assessment.student.get_full_name }} {% else %} {{ skill_assessment.student.username }} {% endif %} ·
             {{ skill_assessment.course.name }}
         </p>

@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 
 {% block extra_css %}
@@ -18,7 +18,7 @@
 
 <div id="my_calendar_page">
     <div class="container mb-4">
-        <h1>My Classes Calendar</h1>
+        <h1>Class Calendar</h1>
         <hr>
         <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:teacher_calendar_events' %}"></div>
     </div>

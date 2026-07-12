@@ -18,11 +18,14 @@ h3 {
 
 /* *** PAGES & SECTIONS ************************************/
 
-main.profile-main,
 .my-course,
 .my-attendance,
 .profile-settings-page {
     padding: 70px 7%;
+    width: 100%;
+}
+
+main.profile-main {
     width: 100%;
 }
 
@@ -1015,10 +1018,6 @@ main.profile-main h1,
         justify-content: space-around;
     }
 
-    main.profile-main {
-        padding: 70px 7%;
-        min-width: 100%;
-    }
 
     /*  STUDENT: My DASHBOARD Page ***************** */
     
@@ -1106,11 +1105,9 @@ main.profile-main h1,
 @media (max-width: 576px) {
 
     /* MAIN PROFILE ********************/
-    main.profile-main {
-        padding: 70px 7%;
-        min-width: 100%;
-    }
 
+
+    
     /* STUDENT: My DASHBOARD Page ***** */
 
     .wrapper-next-class-card {

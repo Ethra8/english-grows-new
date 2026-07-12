@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -20,7 +20,7 @@
 
     <header>
         <p class="back-to-my-assigned-courses">
-            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="text-white">
+            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
                 <i class="fa-solid fa-arrow-left-long mr-3"></i>
                 Back to Student Profile
             </a>

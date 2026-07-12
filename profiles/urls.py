@@ -6,12 +6,16 @@ app_name = "profiles"
 urlpatterns = [
     path('', views.profile, name='profile'),
     
-    # STUDENT PAGES
-    path("profile_settings/", views.profile_settings, name="profile_settings"),    
+    path("profile_settings/", views.profile_settings, name="profile_settings"),
+
+
+    # STUDENT PAGES    
+    path("student/dashboard/", views.student_dashboard, name="student_dashboard"),
     path("student/my_course/", views.my_course, name="my_course"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
     path("student/my_calendar/", views.my_calendar, name="my_calendar"),
     path("student/my_calendar/events/", views.my_calendar_events, name="my_calendar_events"),
+
 
     # TEACHER PAGES
     path("teacher/teacher_dashboard/", views.teacher_dashboard, name="teacher_dashboard"),
@@ -35,6 +39,8 @@ urlpatterns = [
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/academic-profile/", views.student_academic_profile_settings, name="student_academic_profile_settings"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/skills/", views.student_skills_overview, name="student_skills_overview"),
     path("teacher/student-skill/<int:skill_assessment_id>/edit/", views.teacher_edit_student_skill, name="teacher_edit_student_skill"),
+    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/assessment_notes", views.teacher_student_assessment_notes, name="teacher_student_assessment_notes"),
+    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/progress_chart", views.teacher_student_progress_skills_graph, name="teacher_student_progress_skills_graph"),
     # Teacher RESCHEDULE
     path("teacher/classes/<int:session_id>/pending-reschedule/", views.mark_class_pending_reschedule, name="mark_class_pending_reschedule"),
     path("teacher/reschedule-classes/", views.teacher_reschedule_classes, name="teacher_reschedule_classes"),
@@ -44,6 +50,7 @@ urlpatterns = [
     path("teacher/calendar/events/", views.teacher_calendar_events, name="teacher_calendar_events"),
     # Teacher PROFILE SETTINGS
     path("teacher/teacher_profile_settings/", views.teacher_profile_settings, name="teacher_profile_settings"),
+
 
     # COMPANY ADMIN PAGES
     path("company_admin/company_admin_dashboard/", views.company_admin_dashboard, name="company_admin_dashboard"),

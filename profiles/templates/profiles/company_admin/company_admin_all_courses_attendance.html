@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
 
@@ -20,12 +20,12 @@
 
     <header>
         <div class="row">        
-            <div class="col-12 mb-4 ml-0 pl-0">
-                <h1>All Course Attendance</h1>
+            <div class="col-12 ml-0 pl-0">
+                <h1>Global Attendance</h1>
             </div>
         </div>
         <hr>
-        <p>Review whether attendance has been submitted for each company class session</p>
+        <p class="text-dark">Review the attendance record submitted for each company class session, all groups included.</p>
     </header>
 
     <div class="wrapper-assigned-courses-panel mt-5">
@@ -36,19 +36,19 @@
 
                     <div class="attendance-filter-card two-filters">
 
-                        <button class="attendance-filter-btn active" data-filter="pending" type="button">
+                        <!-- <button class="attendance-filter-btn active" data-filter="pending" type="button">
                             <span class="status-pill pending">
                                 <i class="fa-solid fa-clipboard-question"></i>
                             </span>
                             <span>Pending</span>
                             <strong>{{ pending_count }}</strong>
-                        </button>
+                        </button> -->
 
                         <button class="attendance-filter-btn" data-filter="completed" type="button">
                             <span class="status-pill completed">
                                 <i class="fa-solid fa-clipboard-check"></i>
                             </span>
-                            <span>Completed</span>
+                            <span>Attendances Submitted</span>
                             <strong>{{ completed_count }}</strong>
                         </button>
 
@@ -59,7 +59,7 @@
 
             <div class="attendance-list-card">
 
-                <div class="attendance-list-header">
+                <!-- <div class="attendance-list-header">
                     <h2 id="attendanceListTitle">Pending Attendance</h2>
 
                     <div class="attendance-tools">
@@ -71,7 +71,7 @@
                             placeholder="Search course or group..."
                         >
                     </div>
-                </div>
+                </div> -->
 
                 <div class="attendance-list">
 

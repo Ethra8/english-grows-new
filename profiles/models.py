@@ -349,15 +349,15 @@ SUBSKILLS = {
     ],
 
     "reading": [
-        ("scanning", "Scanning - Specific Information"),
-        ("skimming", "Skimming - Gist (General Idea)"),
-        ("detailed", "Deep Understanding"),
+        ("scanning", "Scanning: Specific information"),
+        ("skimming", "Skimming (Gist): General Idea"),
+        ("detailed", "In detail: Deep Understanding"),
     ],
 
     "listening": [
-        ("gist", "Gist (General Idea)"),
+        ("gist", "For Gist: General Idea"),
         ("specific_information", "Specific Information"),
-        ("detailed", "Deep Understanding"),
+        ("detailed", "In detail: Deep Understanding"),
     ],
 
     "writing": [
@@ -484,7 +484,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
-        ("passing", "Passing"),
+        ("passing", "Pass"),
         ("confident", "Confident"),
         ("strong", "Strong"),
     ]

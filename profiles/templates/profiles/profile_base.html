@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load date_extras %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+{% endblock %}
+
+{% block extra_title %}| Dashboard{% endblock %}
+
+
+{% block sidebar %}
+{% endblock %}
+
+
+{% block page_header %}
+    <div id="profile-header" class="container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay-birds"></div>
+    <div class="overlay-azure-mist"></div>
+    
+    <div class="profile-layout">
+
+        {% block profile_sidebar %}
+        {% endblock %}
+
+        <main class="profile-main">
+            {% block profile_content %}
+            {% endblock %}
+        </main>
+
+    </div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/countryfield.js' %}"></script>
+{% endblock %}

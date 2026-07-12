@@ -19,16 +19,12 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="row">
-        <div class="col-12 mb-2">
-            <p class="back-to-my-assigned-courses">
-                <a href="#" class="js-back-link">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
-                </a>    
-            </p>
-        </div>
-    </div>    
+    <div class="mb-4">
+        <a href="#" class="js-back-link">
+            <i class="fa-solid fa-arrow-left-long mr-3"></i>
+            Go Back
+        </a>    
+    </div>
 
     <div class="student-detail-header">
 
@@ -91,32 +87,58 @@
                 <small>Current Level</small>
 
                 <button type="button"
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mr-2">
+                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2"
+                        onclick="toggleLevelForm('{{ enrollment.id }}')">
                     {{ student_profile.current_level|default:"?" }}
                 </button>
 
+                <form method="POST"
+                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
+                      class="d-none student-level-form"
+                      id="level-form-{{ enrollment.id }}">
+
+                    {% csrf_token %}
+
+                    <select name="current_level">
+                        {% for value, label in level_choices %}
+                            <option value="{{ value }}"
+                                {% if student_profile.current_level == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit">Save</button>
+                </form>
             </div>
+
         </div>
 
     </div>
 
     <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
+        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
             Overview
         </a>
 
-        <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
             Attendance
         </a>
-        <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
+
+        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
             Skills
         </a>
 
-        <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}" class="active">
+        <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}" class="active">
             Progress
         </a>
-        <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
+
+        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
             Assessment
+        </a>
+
+        <a href="#">
+            History
         </a>
     </nav>
 

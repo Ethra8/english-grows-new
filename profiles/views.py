@@ -35,16 +35,47 @@ def login_redirect(request):
 
 
 
-# STUDENT for UserProfile
+# Common login to profile... THEN custom role profile
 @login_required
 def profile(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
+    user_profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if user_profile.role == UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("profiles:company_admin_dashboard")
+
+    if user_profile.role == UserProfile.ROLE_TEACHER:
+        return redirect("profiles:teacher_dashboard")
+
+    if user_profile.role in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL,
+    ]:
+        return redirect("profiles:student_dashboard")
+
+    return redirect("home")
+
+
+@login_required
+def student_dashboard(request):
+    user_profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if user_profile.role not in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL,
+    ]:
+        return redirect("home")
 
     active_enrollment = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active"
+            status="active",
         )
         .select_related(
             "course",
@@ -57,29 +88,29 @@ def profile(request):
 
     next_class = None
 
-    current_level = None
-
     if active_enrollment:
         next_class = (
             ClassSession.objects
             .filter(
                 course=active_enrollment.course,
                 is_cancelled=False,
-                start_time__gte=timezone.now()
+                start_time__gte=timezone.now(),
             )
             .order_by("start_time")
             .first()
         )
-    
+
     context = {
         "profile": user_profile,
-        "current_level": current_level,
         "active_enrollment": active_enrollment,
         "next_class": next_class,
     }
 
-    return render(request, "profiles/profile.html", context)
-
+    return render(
+        request,
+        "profiles/student/student_dashboard.html",
+        context,
+    )
 
 
 @login_required
@@ -1161,7 +1192,7 @@ def build_skill_note_display(skill_assessment):
             for subskill in subskills
             if subskill.rating in ["strong", "confident"]
         ],
-        "passing": [
+        "pass": [
             subskill.get_subskill_display()
             for subskill in subskills
             if subskill.rating == "passing"
@@ -1203,11 +1234,6 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
     student = enrollment.student
     student_profile = student.profile
-
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
-    )
 
     attendances = (
         Attendance.objects
@@ -1261,20 +1287,6 @@ def teacher_student_detail(request, course_id, enrollment_id):
         .order_by("-class_session__start_time")[:5]
     )
 
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .prefetch_related("subskill_assessments")
-        .order_by("skill")
-    )
-
-    skill_note_display = [
-        build_skill_note_display(skill_assessment)
-        for skill_assessment in skill_assessments
-    ]
 
     context = {
         "course": course,
@@ -1288,20 +1300,12 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "excused_count": excused_count,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
+        "recent_attendance": recent_attendance,
 
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
-
-        "recent_attendance": recent_attendance,
-        "chart_data_json": json.dumps(chart_data),
-        "skill_note_display": skill_note_display,
-    }
-
-    chart_data = {
-        "labels": [],
-        "datasets": [],
     }
 
     return render(
@@ -1655,6 +1659,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "chart_data_json": json.dumps(chart_data),
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
+        "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
     return render(
@@ -1743,6 +1748,179 @@ def teacher_edit_student_skill(request, skill_assessment_id):
     return render(
         request,
         "profiles/teacher/teacher_edit_student_skill.html",
+        context,
+    )
+
+
+
+def teacher_student_assessment_notes(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    skills = []
+
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+
+    context = {
+        "profile": profile,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_student_assessment_notes.html",
+        context,
+    )
+
+
+
+def teacher_student_progress_skills_graph(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    skill_icons = {
+        "speaking": "fa-solid fa-microphone",
+        "reading": "fa-solid fa-book-open",
+        "writing": "fa-solid fa-pen",
+        "listening": "fa-solid fa-headphones",
+    }
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
+    )
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+    skills = []
+
+    for assessment in skill_assessments:
+        skills.append({
+            "assessment": assessment,
+            "assessment_id": assessment.id,
+            "skill_value": assessment.skill,
+            "name": assessment.get_skill_display(),
+            "icon": skill_icons.get(
+                assessment.skill,
+                "fa-solid fa-chart-simple",
+            ),
+            "percentage": assessment.average_percentage,
+            "teacher_notes": assessment.teacher_notes,
+            "subskills": assessment.subskill_assessments.all(),
+        })
+
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(teacher_notes="")
+        .order_by("skill")
+    )
+
+    academic_profile = getattr(student, "academic_profile", None)
+
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+    context = {
+        "profile": profile,
+        "course": course,
+        "enrollment": enrollment,
+        "student": student,
+        "student_profile": student_profile,
+        "skills": skills,
+        "academic_profile": academic_profile,
+        "chart_data": chart_data,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_student_progress_skills_graph.html",
         context,
     )
 
@@ -2615,18 +2793,22 @@ def company_admin_courses(request):
 
 @login_required
 def company_admin_all_courses_attendance(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
 
     company = profile.company
 
-    class_sessions = (
+    class_sessions_queryset = (
         ClassSession.objects
         .filter(
             course__company=company,
             is_cancelled=False,
+            start_time__lt=timezone.now(),
         )
         .select_related(
             "course",
@@ -2635,27 +2817,42 @@ def company_admin_all_courses_attendance(request):
         )
         .prefetch_related(
             "attendance_records",
+            "attendance_records__student",
+            "attendance_records__student__profile",
         )
         .order_by("-start_time")
     )
 
-    pending_count = 0
-    completed_count = 0
+    completed_class_sessions = []
 
-    for class_session in class_sessions:
-        has_attendance = class_session.attendance_records.exists()
+    for class_session in class_sessions_queryset:
+        attendance_records = class_session.attendance_records.all()
 
-        if has_attendance:
+        has_attendance_records = attendance_records.exists()
+
+        has_scheduled_attendance = any(
+            attendance.status == "scheduled"
+            for attendance in attendance_records
+        )
+
+        if has_attendance_records and not has_scheduled_attendance:
             class_session.attendance_filter_status = "completed"
-            completed_count += 1
-        else:
-            class_session.attendance_filter_status = "pending"
-            pending_count += 1
+
+            class_session.employee_search_text = " ".join(
+                (
+                    attendance.student.get_full_name()
+                    or attendance.student.username
+                    or attendance.student.email
+                )
+                + f" {attendance.student.email}"
+                for attendance in attendance_records
+            )
+
+            completed_class_sessions.append(class_session)
 
     context = {
-        "class_sessions": class_sessions,
-        "pending_count": pending_count,
-        "completed_count": completed_count,
+        "class_sessions": completed_class_sessions,
+        "completed_count": len(completed_class_sessions),
     }
 
     return render(

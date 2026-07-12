@@ -1,4 +1,4 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
 {% load course_extras %}
@@ -22,7 +22,7 @@
     <div class="overlay-azure-mist"></div>
 
     <div class="mb-4">
-        <a href="#" class="text-white js-back-link">
+        <a href="#" class="js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
         </a>    
@@ -115,8 +115,7 @@
             Overview
         </a>
 
-        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}"    
-           class="active">
+        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="active">
             Attendance
         </a>
 
@@ -124,12 +123,12 @@
             Skills
         </a>
 
-        <a href="#">
-            Courses
+        <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+            Progress
         </a>
 
-        <a href="#">
-            Notes
+        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+            Assessment
         </a>
 
         <a href="#">
@@ -150,7 +149,7 @@
                     <span>{{ completed_classes }}</span>
                 </div>
 
-                <button type="button" id="editAttendanceBtn" class="student-edit-attendance-btn">
+                <button type="button" id="editAttendanceBtn" class="student-edit-attendance-btn mb-3">
                     <i class="fa-regular fa-pen-to-square mr-2"></i>
                     Edit
                 </button>

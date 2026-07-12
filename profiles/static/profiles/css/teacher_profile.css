@@ -112,11 +112,11 @@ h2 {
     width: 100%;
 }
 
-/* .teacher-dashboard .dashboard-cards .wrapper-dashboard-card:first-child {
+/* .profile-dashboard .dashboard-cards .wrapper-dashboard-card:first-child {
     margin-top: 1.8rem;
 } */
 
-.teacher-dashboard .dashboard-cards .wrapper-dashboard-card:not(:first-child) {
+.profile-dashboard .dashboard-cards .wrapper-dashboard-card:not(:first-child) {
     margin-top: 3.8rem;
 }
 
@@ -130,12 +130,12 @@ h2 {
     width: 100%;
 }
 
-.teacher-dashboard .dashboard-general-info-card .meta-row {
+.profile-dashboard .dashboard-general-info-card .meta-row {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin: 2rem 0 1rem;}
 
-.teacher-dashboard .weekly-overview .meta-row {
+.profile-dashboard .weekly-overview .meta-row {
     grid-template-columns: repeat(4, 1fr);
     margin: 2rem 0 1rem;
 }
@@ -179,7 +179,7 @@ h2 {
     border-radius: 50%;
 }
 
-.teacher-dashboard .dashboard-general-info-card .meta-card {
+.profile-dashboard .dashboard-general-info-card .meta-card {
     padding: 0.5rem 1.5rem 0.5rem 3rem ;
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
 }
@@ -231,7 +231,7 @@ h2 {
     z-index: 1;
 }
 
-.teacher-dashboard .dashboard-general-info-card .meta-card.meta-courses::after {
+.profile-dashboard .dashboard-general-info-card .meta-card.meta-courses::after {
     content: "\f144"; /* fa-circle-play */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -243,7 +243,7 @@ h2 {
     rotate: calc(-15deg);
 }
 
-.teacher-dashboard .dashboard-general-info-card .meta-card.meta-students::after {
+.profile-dashboard .dashboard-general-info-card .meta-card.meta-students::after {
     content: "\f500"; /* fa-user-group */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -255,7 +255,7 @@ h2 {
     right: 15px;
 }
 
-.teacher-dashboard .dashboard-general-info-card .meta-card.meta-attendance::after,
+.profile-dashboard .dashboard-general-info-card .meta-card.meta-attendance::after,
 .teacher-course-details-page .course-meta-card.meta-attendance::after,
 .teacher-course-students-list .course-meta-card.meta-attendance::after,
 .teacher-student-detail-page .course-meta-card.meta-attendance::after {
@@ -2644,6 +2644,7 @@ div:has(> .student-action-btn) {
 .student-skill-card p {
     font-weight: 600;
     text-transform: capitalize;
+    color: whitesmoke;
     width: 100%;
     border-bottom: #008b87 1px solid;
 }
@@ -3002,7 +3003,7 @@ div:has(> .student-action-btn) {
     /* DASHBOARD Page *********************************** */
     /******************************************************/
     
-    .teacher-dashboard .weekly-overview .meta-row {
+    .profile-dashboard .weekly-overview .meta-row {
         gap: 0.5rem;
     }
 
@@ -3119,17 +3120,17 @@ div:has(> .student-action-btn) {
 
 @media (max-width: 992px) {
 
-    .teacher-dashboard .dashboard-general-info-card .meta-row {
+    .profile-dashboard .dashboard-general-info-card .meta-row {
         gap: 0.5rem;
     }
 
-    .teacher-dashboard .dashboard-general-info-card .meta-card {
+    .profile-dashboard .dashboard-general-info-card .meta-card {
         padding: 0.15rem 1rem 0.15rem 1.5em;
     }
 
     .course-header-meta-row,
     .course-header-meta-row,
-    .teacher-dashboard .dashboard-general-info-card .meta-row {
+    .profile-dashboard .dashboard-general-info-card .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 
@@ -3322,7 +3323,7 @@ div:has(> .student-action-btn) {
     |*** DASHBOARD Page  *********************************|
     |*****************************************************/
     
-    .teacher-dashboard .dashboard-general-info-card .meta-row {
+    .profile-dashboard .dashboard-general-info-card .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 
@@ -3609,11 +3610,11 @@ div:has(> .student-action-btn) {
     /*****************************************************|
     |*** DASHBOARD Page  *********************************|
     |*****************************************************/
-    .teacher-dashboard .dashboard-general-info-card .meta-card {
+    .profile-dashboard .dashboard-general-info-card .meta-card {
         padding: 0.25rem 2rem;
     }
 
-    .teacher-dashboard .weekly-overview .meta-row {
+    .profile-dashboard .weekly-overview .meta-row {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
     }

@@ -45,6 +45,10 @@ a:hover {
     text-decoration: none;
 }
 
+a.js-back-link {
+    color: #007A78;
+}
+
 a.js-back-link:hover {
     font-weight: 600;
 }

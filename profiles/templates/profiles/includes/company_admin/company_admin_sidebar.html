@@ -55,7 +55,7 @@
             <span>Materials</span>
         </a> -->
 
-        <a href="" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
             <i class="fa-solid fa-list-check"></i>
             <span>Attendance</span>
         </a>

@@ -1,7 +1,7 @@
-{% extends "profiles/profile.html" %}
+{% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
-
+{% load course_extras %}
 
 {% block extra_title %}| Dashboard {% endblock %}
 
@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin_profile.css' %}">
 {% endblock %}
 
+{% block profile_sidebar %}
+    {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+{% endblock %}
 
-{% block content %}
+{% block profile_content %}
 
-{% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
-
-<section class="teacher-dashboard profile-page">    
+<section class="profile-dashboard profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -63,7 +64,7 @@
                         </div>
                     </a>
 
-                    <a href="">
+                    <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
                         <div class="meta-card meta-attendance">
                             <div class="meta-text">
                                 <strong>Attendance Rate<i class="fa-solid fa-angle-right ml-3"></i></strong>
@@ -114,7 +115,7 @@
                                     </div>
                                 </div>    
 
-                                <a href="#" class="btn-class-today btn">
+                                <a href="{% url 'profiles:company_admin_course_details' session.course_id  %}" class="btn-class-today btn">
                                     <i class="fa-regular fa-eye mr-2"></i>
                                     Course
                                     <i class="fa-solid fa-chevron-right ml-2"></i>
@@ -189,7 +190,7 @@
                             </div>
                         </div>
                         <div class="meta-text">
-                            <strong>Current Attendance</strong>
+                            <strong>Weekly Attendance</strong>
                             <span>
                                 <!-- {{ weekly_attendance_rate|default:"0" }} -->
                                 <!-- ({{ weekly_attendance_completed_percentage|default:"0" }}%) -->
@@ -260,7 +261,7 @@
                             </div>
                         </div>
                         <div class="meta-text">
-                            <strong>Current Attendance</strong>
+                            <strong>Monthly Attendance</strong>
                             <span>
                                 <!-- {{ monthly_attendance_rate|default:"0" }} -->
                             </span>
