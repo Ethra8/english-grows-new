@@ -2479,13 +2479,10 @@ def reschedule_class_detail(request, session_id):
 def company_admin_dashboard(request):
     profile = request.user.profile
 
-    if profile.role != "company_admin":
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
 
     company = profile.company
-
-    if not company:
-        return redirect("home")
 
     today = timezone.localdate()
     now = timezone.now()
