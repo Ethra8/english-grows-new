@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import dj_database_url
+
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -119,18 +121,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-USE_POSTGRES = os.environ.get("USE_POSTGRES", "False") == "True"
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if USE_POSTGRES:
+if DATABASE_URL:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME"),
-            "USER": os.environ.get("DB_USER"),
-            "PASSWORD": os.environ.get("DB_PASSWORD"),
-            "HOST": os.environ.get("DB_HOST", "localhost"),
-            "PORT": os.environ.get("DB_PORT", "5433"),
-        }
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
 else:
     DATABASES = {
@@ -139,6 +138,7 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
