@@ -60,7 +60,7 @@ main.profile-main {
 /* horizontal line separating course type | total_hours */
 .course-details header h2 > span:nth-child(2) {
     padding: 0 .8rem;
-    color: #008F8F;
+    color: #006b7d;
 }
 
 
@@ -95,8 +95,7 @@ main.profile-main h1,
 }
 
 .btn-join-class:hover {
-    /* background-color: rgba(106, 250, 225, 1) !important; */
-    color: rgba(106, 250, 225, 1) !important;
+    color: rgba(95, 240, 223, 1) !important;  /* #5ff0df */
     box-shadow: 0 1px 2px 0 #8b8b8b;
 }
 
@@ -111,12 +110,12 @@ main.profile-main h1,
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     box-shadow: 0 1px 1px 1px #4b4b4b;
-    border: outset 1px aquamarine;
+    border: outset 1px #5ff0df;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 .profile-settings-page .btn-update:hover {
-    border: outset 1px rgba(106, 250, 225, 1);
+    border: outset 1px rgba(95, 240, 223, 1);
     box-shadow: 0 1px 1px 0 #4b4b4b;
     color: aquamarine;
 }
@@ -133,7 +132,7 @@ main.profile-main h1,
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(106, 250, 225, 0.2);
+    background: rgba(95, 240, 223, 0.2);
     /* overflow-block: visible; */
     max-width: fit-content;
 }
@@ -147,8 +146,8 @@ main.profile-main h1,
 /*********************** SIDEBAR ***************************/
 
 .profile-sidebar {
-    background-color: #003b6f;
-    color: #ffffff;
+    background-color: #0b355f;
+    color: whitesmoke;
     padding: 2rem;
     max-width: 270px;
     min-width: 270px;
@@ -159,7 +158,7 @@ main.profile-main h1,
     font-weight: 500;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    color: #ffffff;
+    color: whitesmoke;
     line-height: 1.3 !important;
     text-transform: capitalize;
 }
@@ -220,7 +219,7 @@ main.profile-main h1,
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: #ffffff;
+    color: whitesmoke;
     text-decoration: none;
     padding: 0.9rem 1rem;
     border-radius: 8px;
@@ -228,8 +227,8 @@ main.profile-main h1,
 
 .sidebar-link:hover,
 .sidebar-link.active {
-    background-color: #008f8f;
-    color: #ffffff;
+    background-color: #006b7d;
+    color: whitesmoke;
     text-decoration: none;
 }
 
@@ -242,9 +241,9 @@ main.profile-main h1,
     align-items: center;
     overflow: hidden;
     max-width: fit-content;
-    border: 2px solid #38d9c9;
+    border: 2px solid #5ff0df;
     border-radius: 999px;
-    background: #38d9c9;
+    background: #5ff0df;
     box-shadow: 0 1px 2px 0 #0B355F;
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
@@ -263,7 +262,7 @@ main.profile-main h1,
     padding: 6px 22px 6px 16px;
 
     background: #0B355F;
-    color: #ffffff;
+    color: whitesmoke;
 
     font-weight: 500;
     border-top-right-radius: 50px;
@@ -291,7 +290,7 @@ main.profile-main h1,
     height: 380px;
     border-radius: 50%;
     /* background: #008F8F; */
-    background: #008f8f;
+    background: #006b7d;
     background: linear-gradient(63deg,rgba(0, 122, 120, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
     padding-left: 205px;
     padding-top: 90px;
@@ -306,11 +305,11 @@ main.profile-main h1,
     height: 380px;
     border-radius: 50%;
     background: #0B355F;
-    color: white;
+    color: whitesmoke;
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px #ffffff;
+    border: solid 2px whitesmoke;
 }
 
 .next-class-card .circle-panel1 .icon-circle-bg {
@@ -350,7 +349,7 @@ main.profile-main h1,
 .next-class-card .info {
     padding: 2rem 2rem 2rem 17rem;
     width: 100%;
-    border: outset 1px #008f8f;
+    border: outset 1px #006b7d;
     max-width: fit-content;
 }
 
@@ -414,7 +413,7 @@ main.profile-main h1,
 }
 
 .my-course header .item-text span {
-    color: #ffffff;
+    color: whitesmoke;
     font-size: 1.3rem;
 }
 
@@ -440,7 +439,7 @@ main.profile-main h1,
     height: 450px;
     border-radius: 50%;
     background: linear-gradient(63deg,rgba(0, 122, 120, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
-    color: white;
+    color: whitesmoke;
     padding-left: 205px;
     padding-top: 90px;
     z-index: 2;
@@ -454,11 +453,11 @@ main.profile-main h1,
     height: 460px;
     border-radius: 50%;
     background: #0B355F;
-    color: white;
+    color: whitesmoke;
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px #ffffff;
+    border: solid 2px whitesmoke;
 }
 
 .course-card .circle-panel1 .icon-circle-bg {
@@ -596,7 +595,7 @@ main.profile-main h1,
     border-radius: 50%;
     /* background: #249188; */
     background: linear-gradient(63deg,rgba(0, 122, 120, 1) 3%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
-    color: white;
+    color: whitesmoke;
     padding-left: 150px;
     padding-top: 90px;
     z-index: 2;
@@ -644,7 +643,7 @@ main.profile-main h1,
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px #ffffff;
+    border: solid 2px whitesmoke;
 }
 
 .attendance-percentage-card {
@@ -666,7 +665,7 @@ main.profile-main h1,
     padding: 1rem 2rem 1rem 17rem;
     width: 100%;
     min-height: 165px;
-    border: outset 1px #008f8f;
+    border: outset 1px #006b7d;
 }
 
 
@@ -810,7 +809,7 @@ main.profile-main h1,
 #parentAttendanceHeading,
 #parentAbsenceHeading {
     color: white;
-    background-color: #008f8f;;
+    background-color: #006b7d;
     border-radius: 8px;
 }
 
@@ -838,7 +837,7 @@ main.profile-main h1,
 #parentAttendanceHeading.card-header,
 #parentAbsenceHeading.card-header {
     color: white;
-    background-color: #008f8f;
+    background-color: #006b7d;
     border-radius: 8px;
     padding: 0.5rem;
     display: flex;

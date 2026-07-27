@@ -1,6 +1,55 @@
 /* background home color 
 rgba(0, 103, 108) */
 
+.maintenance-banner {
+    position: relative;
+    z-index: 999;
+    width: 100%;
+    background: #5ff0df;
+    display: flex;
+    align-items: center;      /* Vertical centering */
+    justify-content: space-around;  /* Horizontal centering */
+    flex-direction: column;
+    min-height: 76px;         /* or height: 56px */
+    color: #006b7d;
+    text-align: center !important;
+    padding: .85rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: .03em;
+    border-bottom: 3px solid #006b7d;
+    margin-top: 120px;
+}
+
+.maintenance-banner i {
+    color: #0B355F;
+    font-size: 1.5rem;
+}
+
+.maintenance-banner strong {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #0B355F;
+    /* margin-right: .5rem; */
+}
+
+.maintenance-text {
+    opacity: .9;
+}
+
+@media (max-width: 768px) {
+    .maintenance-banner {
+        font-size: .85rem;
+        padding: .75rem 1rem;
+    }
+
+    .maintenance-text {
+        display: block;
+        margin-top: .25rem;
+    }
+}
+
+
 body {
     /* background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed; */
     /* background-size: cover; */
@@ -21,7 +70,7 @@ h2 {
 }
 
 hr {
-    border: outset 1px #6afae1;
+    border: outset 1px #5ff0df;
     border-radius: 50%;
     width: 100%;
     margin-top: 0 !important;
@@ -46,7 +95,7 @@ a:hover {
 }
 
 a.js-back-link {
-    color: #007A78;
+    color: #006b7d;
 }
 
 a.js-back-link:hover {
@@ -60,7 +109,7 @@ a.js-back-link:hover {
 }
 
 .btn-navbar {
-    border: 1px solid #5eead4;
+    border: 1px solid #5ff0df;
     color: whitesmoke;
     padding: 0.6rem 1.1rem;
     border-radius: 7px;
@@ -72,7 +121,7 @@ a.js-back-link:hover {
 }
 
 .btn-navbar:hover {
-    background: rgba(94, 234, 212, 0.15);
+    background: rgba(95, 240, 223, 0.15);  /*5ff0df*/
     color: #c1f7e3;
     text-decoration: none;
 }
@@ -93,16 +142,16 @@ a.js-back-link:hover {
     border-radius: 8px;
     font-size: 1.1rem;
     background: #0B355F;
-    color: white;
+    color: whitesmoke;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
-    border: outset 1px aquamarine;
+    border: outset 1px #5ff0df;
     box-shadow: 0 1px 3px 0 #484a4d;    
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 .btn-custom:hover {
-    background: teal;
+    background: #006b7d;
     color: white;
     /* font-weight: 600; */
 }
@@ -116,7 +165,7 @@ a.js-back-link:hover {
 .btn-custom-teal {
     width: 100%;
     /* max-width: 320px; */
-    background: teal;
+    background: #006b7d;
     color: white;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
@@ -149,7 +198,7 @@ a.js-back-link:hover {
 }
 
 .btn-outline-custom {
-    background: teal;
+    background: #006b7d;
     color: white !important; /* use important to override link colors for <a> elements */
     border: 1px outset #0B355F;
 }
@@ -157,13 +206,13 @@ a.js-back-link:hover {
 .btn-outline-custom:hover,
 .btn-outline-custom:active,
 .btn-outline-custom:focus {
-    background: aquamarine;
+    background: #5ff0df;
     color: #0B355F !important;
     font-weight: 700;
 }
 
 .btn-bg-light {
-    background-color: aquamarine;
+    background-color: #5ff0df;
     color: #0B355F !important;
     border: inset 2px teal;
 }
@@ -181,7 +230,7 @@ a.js-back-link:hover {
     color: teal;
     bottom: 10px;
     right: 10px;
-    border: medium solid teal;
+    border: medium solid #006b7d;
     background-color: #0B355F;
     border-radius: 10px !important;
 }
@@ -242,10 +291,10 @@ a.js-back-link:hover {
     color: #c1f7e3 !important;
 }
 
-#main-nav {
+/* #main-nav {
     background-color: teal;
     padding: 10px 0;
-}
+} */
 
 #contact-form,
 #subscribe-form {
@@ -337,7 +386,7 @@ ul li {
 
 .fa-circle-user {
     /* color: #82fae0 ; */
-    color: #6afae1; /* birds color */
+    color: #5ff0df; /* birds color */
     font-size: 30px !important;
 }
 
@@ -358,7 +407,7 @@ ul li {
 }
 
 footer a {
-    color: aqua !important;
+    color: #5ff0df !important;
     text-decoration: none;
     font-size: 1.1rem;
 }
@@ -440,7 +489,7 @@ footer a {
 /* custom backgrounds */
 .bg-custom-dark {
     background-color: #0B355F;
-    color: white;
+    color: whitesmoke;
 }
 
 .bg-teal {
@@ -557,7 +606,7 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
-    background: url('/static/images/bg_4.jpg') no-repeat center center fixed;
+    background: url('/static/images/bg_landing.png') no-repeat center center fixed;
     background-size: cover;
     z-index: -2;
 }
@@ -640,7 +689,7 @@ span.btt-link:hover {
     font-size: 1.3rem;
     font-weight: 400;
     font-family: 'Montserrat', sans-serif;
-    color: #ffffff;
+    color: whitesmoke;
     max-width: 55%;
     margin-top: 40px;
     line-height: 1.3 !important;
@@ -671,7 +720,7 @@ span.btt-link:hover {
 
 #individual-services .card {
     border-radius: 20px !important;
-    border: inset 3px teal;
+    border: inset 3px #006b7d;
 }
 
 #individual-services .card-body {
@@ -687,7 +736,7 @@ span.btt-link:hover {
 }
 
 #individual-services .card-body h3 {
-    color: #fff;
+    color: whitesmoke;
     font-family: "Big Shoulders Display" !important;
     letter-spacing: 0.03em;
     font-size: 1.5rem;
@@ -740,7 +789,7 @@ span.vertical-line {
 
 .alert {
     background-color: whitesmoke;
-    color: teal;
+    color: #006b7d;
     border-radius: 8px;
     padding: .75rem 1rem !important;
     /* margin: 0 50px 0 0; */
@@ -788,7 +837,7 @@ span.vertical-line {
 #bag-grand-total {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    color: #fff;
+    color: whitesmoke;
     font-size: 2rem;
 }
 
