@@ -21,8 +21,6 @@
     {% block extra_meta %}
     {% endblock %}
 
-    <link rel="manifest" href="{% static 'site.webmanifest' %}">
-
     {% block corecss %}
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,12 +31,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
       integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <!-- Favicon -->
-    <link rel="icon" href="{% static 'icons/favicon.ico' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{% static 'icons/apple-touch-icon.png' %}">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{% static 'icons/favicon-32x32.png' %}">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{% static 'icons/favicon-16x16.png' %}">
+
+    <link rel="manifest"
+          href="{% static 'site.webmanifest' %}">
+
+    <link rel="mask-icon"
+          href="{% static 'icons/safari-pinned-tab.svg' %}"
+          color="#5bbad5">    
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}

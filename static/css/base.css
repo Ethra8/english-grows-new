@@ -2,7 +2,7 @@
 rgba(0, 103, 108) */
 
 .maintenance-banner {
-    position: relative;
+    position: fixed;
     z-index: 999;
     width: 100%;
     background: #5ff0df;
@@ -662,7 +662,8 @@ span.btt-link:hover {
     overflow: hidden;
     min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
     padding: 60px 3%;
-    margin-top: 120px;
+    /* margin-top: 120px; */
+    margin-top: 190px;
 }
 
 #index .eg-font {
