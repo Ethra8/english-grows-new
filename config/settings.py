@@ -32,14 +32,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 # If DEBUG in .env is exactly True → DEBUG becomes True; Otherwise → DEBUG becomes False
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", 
-    "localhost,127.0.0.1",
-    "englishgrows.com",
-    "www.englishgrows.com",
-    ".onrender.com",
-).split(",")
-
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,englishgrows.com,www.englishgrows.com,.onrender.com",
+    ).split(",")
+    if host.strip()
+]
 
 # Application definition
 
