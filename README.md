@@ -1,2 +1,2 @@
-<img width="1600" height="1200" alt="Collor Palette 2" src="https://github.com/user-attachments/assets/8e6c9bcf-e424-4414-8824-d619c8c38ae7" />
-<img width="1600" height="1200" alt="Palette English Grows" src="https://github.com/user-attachments/assets/cd09104b-aacd-4060-a64b-8397bd768050" />
+<img width="1600" height="1200" alt="English Grows Color Palette_Final" src="https://github.com/user-attachments/assets/3c5992da-464b-4f96-b4f4-2c25f952dd5f" />
+
