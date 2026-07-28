@@ -140,7 +140,7 @@ def profile_settings(request):
             profile_user.email = form.cleaned_data["email"]
             profile_user.save()
 
-            return redirect("profiles:profile_settings", user_id=profile_user.id)
+            return redirect("profiles:profile_settings")
 
     else:
         form = UserProfileForm(
