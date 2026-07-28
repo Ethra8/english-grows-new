@@ -47,10 +47,11 @@
                         <span><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
                     </h2>
                 </div>
-                {% endif %}
+                
                 <span class="status-badge {{ course.status }} mb-3">
                 {{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
 
+                {% endif %}
                 <hr>
             </header>
 
