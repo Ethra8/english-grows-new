@@ -176,7 +176,7 @@
 
 /* Right chunk : month/week/list*/
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button {
-    background-color: #c1f7e3;
+    background-color: #C7FAFF;
     color: rgb(59, 59, 59);
     text-transform: capitalize;
     font-weight: 600;
