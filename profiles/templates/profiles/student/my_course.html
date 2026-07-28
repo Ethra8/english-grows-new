@@ -39,14 +39,15 @@
                     {% endif %}
                 </div>
                 <!-- 3rd Child -->
+                {% if active_enrollment %}
                 <div>   
                     <h2>
-                        <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{% if active_enrollment %}{{ active_enrollment.course.course_type.name }}{% endif %}</span>
+                        <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
                         <span>|</span>
-                        <span><i class="fa-regular fa-clock mr-3"></i>{% if active_enrollment %}{{ active_enrollment.course.total_hours|clean_decimal }} h.{% endif %}</span>
+                        <span><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
                     </h2>
                 </div>
-                
+                {% endif %}
                 <span class="status-badge {{ course.status }} mb-3">
                 {{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
 
