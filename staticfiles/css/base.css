@@ -122,7 +122,7 @@ a.js-back-link:hover {
 
 .btn-navbar:hover {
     background: rgba(95, 240, 223, 0.15);  /*5ff0df*/
-    color: #C7FAFF;
+    color: #c7fff9;
     text-decoration: none;
 }
 
@@ -180,7 +180,7 @@ a.js-back-link:hover {
 
 .index-cta-button {
     background: #0B355F ;
-    color: #C7FAFF;
+    color: #c7fff9;
     border: 1px solid #0B355F;
     min-width: 220px;
     font-size: 1rem;
@@ -192,7 +192,7 @@ a.js-back-link:hover {
 .index-cta-button:hover,
 .index-cta-button:active,
 .index-cta-button:focus {
-    background-color: #C7FAFF;
+    background-color: #c7fff9;
     color: #0B355F;
     font-weight: 400;
 }
@@ -288,7 +288,7 @@ a.js-back-link:hover {
 
 #topnav .fa-user:hover,
 #topnav .fa-arrow-right-from-bracket:hover {
-    color: #C7FAFF !important;
+    color: #c7fff9 !important;
 }
 
 /* #main-nav {
@@ -344,7 +344,7 @@ a.js-back-link:hover {
 }
 
 a.text-white:hover {
-    color: #C7FAFF !important;
+    color: #c7fff9 !important;
 }
 
 .eg-font {
@@ -374,7 +374,7 @@ ul li {
 
 .list-inline-item p:hover,
 .list-inline-item .icon-nav:hover {
-    color: #C7FAFF;
+    color: #c7fff9;
     text-align: left;
 }
 
@@ -391,7 +391,7 @@ ul li {
 }
 
 .fa-circle-user:hover {
-    color: #C7FAFF;
+    color: #c7fff9;
 }
 
 /* Footer */
@@ -418,7 +418,7 @@ footer .topage-link {
 }
 
 footer .topage-link:hover {
-    color: #C7FAFF !important;
+    color: #c7fff9 !important;
 }
 
 #subscribe-link a {
@@ -436,7 +436,7 @@ footer .topage-link:hover {
 }
 
 #subscribe-link:hover{
-    background-color: #C7FAFF;
+    background-color: #c7fff9;
     color: #0B355F !important;
     font-weight: 600;
 }
@@ -446,7 +446,7 @@ footer .topage-link:hover {
 } 
 
 .icons-social {
-    color: #C7FAFF;
+    color: #c7fff9;
     font-size: 1.5rem;
     padding: 15px;
     transition: all 0.15s linear;
@@ -553,7 +553,7 @@ footer .topage-link:hover {
 }
 
 .dropdown-menu {
-    background-color: #C7FAFF;
+    background-color: #c7fff9;
     box-shadow: 0 1px 3px 0 #737577;    
 }
 
@@ -695,7 +695,7 @@ span.btt-link:hover {
     font-weight: 500;
     margin-left: 15rem;
     font-size: 2.5rem;
-    color: #C7FAFF;
+    color: #c7fff9;
     margin-top: -30px;
 }
 

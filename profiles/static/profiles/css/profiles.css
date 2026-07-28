@@ -320,7 +320,7 @@ main.profile-main h1,
     width: 50px;
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    border: solid 1px #C7FAFF;
+    border: solid 1px #c7fff9;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -375,7 +375,7 @@ main.profile-main h1,
 
 .my-course .course-card {
     border-radius: 8px;
-    /* background: #C7FAFF; */
+    /* background: #c7fff9; */
     background-color: whitesmoke;
     position: relative;
     overflow: hidden;
@@ -407,7 +407,7 @@ main.profile-main h1,
 }
 
 .my-course header .item-text strong {
-    color: #C7FAFF;
+    color: #c7fff9;
     font-size: 1.5rem;
     font-weight: 500;
 }
@@ -468,7 +468,7 @@ main.profile-main h1,
     width: 50px;
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    border: solid 1px #C7FAFF;
+    border: solid 1px #c7fff9;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -523,7 +523,7 @@ main.profile-main h1,
     font-size: 1.2rem;
     border: outset 1px #5ff0df;
     /* background: linear-gradient(53deg,rgba(0, 128, 128, 1) 0%, rgb(45, 186, 175) 30%, rgba(106, 250, 225, 1) 100%); */
-    background: #C7FAFF;
+    background: #c7fff9;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #0B355F;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
@@ -620,7 +620,7 @@ main.profile-main h1,
     width: 50px;
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    border: solid 1px #C7FAFF;
+    border: solid 1px #c7fff9;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -745,7 +745,7 @@ main.profile-main h1,
 .detailed-attendance-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    color: #C7FAFF;
+    color: #c7fff9;
     font-size: 2rem;
     margin: 410px 2rem 1rem 11.5rem;
     line-height: 1.1;
@@ -831,7 +831,7 @@ main.profile-main h1,
 
 #parentAttendanceHeading .fa-solid.fa-chevron-down,
 #parentAbsenceHeading .fa-solid.fa-chevron-down {
-    color:#C7FAFF;
+    color:#c7fff9;
 }
 
 #parentAttendanceHeading.card-header,
@@ -897,7 +897,7 @@ main.profile-main h1,
 }
 
 .attendance-history-text h6:hover {
-    color: #C7FAFF;
+    color: #c7fff9;
 }
 
 .attendance-history-text span {

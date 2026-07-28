@@ -15,7 +15,7 @@ h1 {
 }
 
 h2 {
-   color: #C7FAFF; 
+   color: #c7fff9; 
 }
 
 
@@ -852,7 +852,7 @@ div:has(> .student-action-btn) {
 }
 
 .class-list-group-name a:hover {
-    color: #C7FAFF;
+    color: #c7fff9;
     cursor: pointer;
 }
 
@@ -894,9 +894,9 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.today {
-    background: #C7FAFF;
+    background: #c7fff9;
     color: #0B355F;
-    border: 1px outset #C7FAFF !important;
+    border: 1px outset #c7fff9 !important;
 }
 
 .status-badge.active,
@@ -1054,7 +1054,7 @@ div:has(> .student-action-btn) {
     height: 45px;
     border-radius: 50%;
     border: outset 1px #5ff0df;
-    background: #C7FAFF;
+    background: #c7fff9;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #0B355F;
     display: flex;
     align-items: center;
@@ -1073,7 +1073,7 @@ div:has(> .student-action-btn) {
     color: #0B355F;
     font-weight: 600;
     border: outset 2px #5ff0df;
-    background: #C7FAFF;
+    background: #c7fff9;
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);
     color: #0B355F;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -1239,7 +1239,7 @@ div:has(> .student-action-btn) {
 
 /* .teacher-course-students-list header h2,
 .teacher-group-attendance-page header h2 {
-    color: #C7FAFF;
+    color: #c7fff9;
     font-size: 1.5rem;
     margin-top: 0;
     padding-top: 0;
@@ -1387,7 +1387,7 @@ div:has(> .student-action-btn) {
 
 /* BOTH COLUMNS */
 .wrapper-course-details h4 i {
-    color: #C7FAFF ;
+    color: #c7fff9 ;
 }
 
 .course-detail-grid {
@@ -1493,7 +1493,7 @@ div:has(> .student-action-btn) {
 }
 
 .wrapper-course-details h3 {
-    color: #C7FAFF;
+    color: #c7fff9;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
 }
@@ -1548,7 +1548,7 @@ div:has(> .student-action-btn) {
 }
 
 .student-row span {
-    color: #C7FAFF;
+    color: #c7fff9;
     display: grid;
 }
 
@@ -1807,7 +1807,7 @@ div:has(> .student-action-btn) {
 }
 
 .attendance-class-info>span {
-    color: #C7FAFF !important;
+    color: #c7fff9 !important;
     font-size: 0.95rem;
     font-weight: 400;
 }
@@ -2733,7 +2733,7 @@ div:has(> .student-action-btn) {
 
 .skill-ring span {
     font-size: 0.75rem;
-    color: #C7FAFF;
+    color: #c7fff9;
 }
 
 .skill-details strong {
