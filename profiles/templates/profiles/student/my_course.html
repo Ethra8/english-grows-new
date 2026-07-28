@@ -33,7 +33,7 @@
                 <!-- 2nd Child -->
                 <div>
                     <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                        {{ active_enrollment.course.course_level|default:"Pending" }}</span>
+                        {{ active_enrollment.course.course_level|default:"Level Pending" }}</span>
                     {% if active_enrollment %}
                     <h1>{{ active_enrollment.course.name }}</h1>
                     {% endif %}
