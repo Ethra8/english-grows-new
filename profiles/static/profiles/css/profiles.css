@@ -67,8 +67,7 @@ main.profile-main {
 
 /* *** H1 **************************************************/
 
-main.profile-main h1,
-.my-course header h1,
+main.profile-main h1
 .my-attendance header h1,
 .profile-settings-page header h1 {
     color: #003366;
@@ -77,6 +76,15 @@ main.profile-main h1,
     letter-spacing: 0.03em;
     margin-left: 0%;
     margin-bottom: 3rem;
+    padding-left: 0%;
+}
+
+.my-course header h1 {
+    color: #003366;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.03em;
+    margin-left: 0%;
     padding-left: 0%;
 }
 
@@ -231,6 +239,65 @@ main.profile-main h1,
     color: whitesmoke;
     text-decoration: none;
 }
+
+
+/* **************************************************|
+|***  STATUS BADGES for:
+- Status of course 
+- Status of Classes: today/past/upcoming classes*****|
+|*********************************** ****************/
+
+.status-badge {
+    display: inline-block;
+    padding: .2rem .75rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
+    text-align: center;
+}
+
+.status-badge.today {
+    background: #c7fff9;
+    color: #0B355F;
+    border: 1px outset #c7fff9 !important;
+}
+
+.status-badge.active,
+.status-badge.upcoming {
+    background: #23c99a;
+    border: 1px outset #23c99a !important;
+}
+
+.status-badge.confirmed {
+    background: #f5c542;
+    color: #0B355F;
+    border: 1px outset #f5c542 !important;
+}
+
+.status-badge.paused,
+.status-badge.pending-reschedule {
+    background: #6d7175;
+    border: 1px outset #6d7175 !important;
+}
+
+.status-badge.cancelled,
+.status-badge.inactive {
+    background: #e95757;
+    border: 1px outset #e95757 !important;
+}
+
+.status-badge.completed {
+    background: rgba(94, 234, 212, 0.15);
+    border: 0.5px solid rgba(94, 234, 212, 0.15) !important;
+}
+
+/* END of STATUS-BADGES *************/
+
 
 /* **************************************************|
 ******** MAIN PROFILE *******************************|

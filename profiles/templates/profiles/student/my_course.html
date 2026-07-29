@@ -32,7 +32,7 @@
                 </div>    
                 <!-- 2nd Child -->
                 <div>
-                    <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                    <span class="level level-{{ active_enrollment.course.course_level|lower|cut:'.' }}">
                         {{ active_enrollment.course.course_level|default:"Level Pending" }}</span>
                     {% if active_enrollment %}
                     <h1>{{ active_enrollment.course.name }}</h1>
@@ -48,7 +48,7 @@
                     </h2>
                 </div>
                 
-                <span class="status-badge {{ course.status }} mb-3">
+                <span class="status-badge {{ active_enrollment.course.status }} mb-3">
                 {{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
 
                 {% endif %}

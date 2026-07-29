@@ -191,6 +191,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'role',
         'company',
         'country',
+        'native_language',
         'created_at',
     )
 
@@ -199,6 +200,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'level',
         'company',
         'country',
+        'native_language',
     )
 
     search_fields = (
