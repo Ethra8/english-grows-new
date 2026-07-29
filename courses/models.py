@@ -742,20 +742,23 @@ class CourseEnrollment(models.Model):
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
-            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
-            status="attended"
-        ).values("class_session").distinct().count()
+            status=Attendance.STATUS_ATTENDED,
+        ).values(
+            "class_session_id"
+        ).distinct().count()
+
 
     @property
     def classes_missed(self):
         return Attendance.objects.filter(
             student=self.student,
             class_session__course=self.course,
-            class_session__start_time__gte=self.enrolled_at,
             class_session__is_cancelled=False,
-            status="missed"
-        ).values("class_session").distinct().count()
+            status=Attendance.STATUS_MISSED,
+        ).values(
+            "class_session_id"
+        ).distinct().count()
 
     @property
     def classes_excused(self):
