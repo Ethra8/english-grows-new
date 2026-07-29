@@ -68,7 +68,6 @@ main.profile-main {
 /* *** H1 **************************************************/
 
 main.profile-main h1,
-.my-course header h1,
 .my-attendance header h1,
 .profile-settings-page header h1 {
     color: #003366;
@@ -79,6 +78,17 @@ main.profile-main h1,
     margin-bottom: 3rem;
     padding-left: 0%;
 }
+
+.my-course header h1 {
+    color: #003366;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.03em;
+    margin-left: 0%;
+    margin-bottom: 3rem;
+    padding-left: 0%;
+}
+
 
 
 /* ****** BUTTONS **************************************** */
