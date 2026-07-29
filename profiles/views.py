@@ -321,6 +321,163 @@ def my_calendar_events(request):
 
 
 
+# STUDENT MY LEARNING PROGRESS Page
+@login_required
+def my_learning_progress(request):
+    student = request.user
+    student_profile = student.profile
+
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(student=student)
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by(
+            "-status",
+            "-id",
+        )
+    )
+
+    selected_course_id = request.GET.get("course")
+
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = (
+            enrollments.filter(status="active").first()
+            or enrollments.filter(status="paused").first()
+            or enrollments.filter(status="completed").first()
+            or enrollments.first()
+        )
+
+    if not enrollment:
+        return render(
+            request,
+            "profiles/student/my_learning_progress.html",
+            {
+                "student": student,
+                "student_profile": student_profile,
+                "enrollments": enrollments,
+                "enrollment": None,
+                "course": None,
+            },
+        )
+
+    course = enrollment.course
+
+    attendances = (
+        Attendance.objects
+        .filter(
+            student=student,
+            class_session__course=course,
+        )
+        .select_related("class_session")
+        .order_by("-class_session__start_time")
+    )
+
+    attended_count = attendances.filter(
+        status="attended"
+    ).count()
+
+    missed_count = attendances.filter(
+        status="missed"
+    ).count()
+
+    excused_count = attendances.filter(
+        status="excused"
+    ).count()
+
+    total_attendance_records = (
+        attended_count
+        + missed_count
+        + excused_count
+    )
+
+    completed_classes = course.class_sessions.filter(
+        end_time__lt=timezone.now(),
+        is_cancelled=False,
+    ).count()
+
+    attendance_percentage = (
+        round(
+            attended_count
+            / total_attendance_records
+            * 100
+        )
+        if total_attendance_records > 0
+        else 0
+    )
+
+    total_classes = (
+        course.number_of_classes
+        or course.class_sessions.filter(
+            is_cancelled=False
+        ).count()
+    )
+
+    remaining_classes = max(
+        total_classes - completed_classes,
+        0,
+    )
+
+    completion_percentage = (
+        round(
+            completed_classes
+            / total_classes
+            * 100
+        )
+        if total_classes > 0
+        else 0
+    )
+
+    recent_attendance = (
+        attendances
+        .filter(
+            status__in=[
+                "attended",
+                "missed",
+                "excused",
+            ]
+        )
+        .order_by("-class_session__start_time")[:5]
+    )
+
+    context = {
+        "student": student,
+        "student_profile": student_profile,
+
+        "enrollments": enrollments,
+        "enrollment": enrollment,
+        "course": course,
+
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
+        "recent_attendance": recent_attendance,
+
+        "completed_classes": completed_classes,
+        "remaining_classes": remaining_classes,
+        "total_classes": total_classes,
+        "completion_percentage": completion_percentage,
+    }
+
+    return render(
+        request,
+        "profiles/student/my_learning_progress.html",
+        context,
+    )
+
+
+
 # STUDENT ATTENDANCE PAGE
 @login_required
 def my_attendance(request):

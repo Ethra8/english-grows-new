@@ -12,9 +12,10 @@ urlpatterns = [
     # STUDENT PAGES    
     path("student/dashboard/", views.student_dashboard, name="student_dashboard"),
     path("student/my_course/", views.my_course, name="my_course"),
-    path("student/my_attendance/", views.my_attendance, name="my_attendance"),
     path("student/my_calendar/", views.my_calendar, name="my_calendar"),
     path("student/my_calendar/events/", views.my_calendar_events, name="my_calendar_events"),
+    path("student/my-learning-progress/", views.my_learning_progress, name="my_learning_progress"),
+    path("student/my_attendance/", views.my_attendance, name="my_attendance"),
 
 
     # TEACHER PAGES
