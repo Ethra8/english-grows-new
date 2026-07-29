@@ -393,7 +393,7 @@ main.profile-main h1
 
 .next-class-card .circle-panel1 i {
     position: relative;
-    top: 13px;
+    top: 9px;
     left: 11px;
     font-size: 1.4rem;
     color: transparent;
@@ -542,6 +542,13 @@ main.profile-main h1
 .course-card .circle-panel1 .fa-solid {
     position: relative;
     top: 5px;
+    left: 17px;
+    font-size: 2.2rem;
+}
+
+.my-course .course-card .circle-panel1 .fa-solid {
+    position: relative;
+    top: -4px;
     left: 17px;
     font-size: 2.2rem;
 }
