@@ -416,8 +416,8 @@ main.profile-main h1
 .next-class-card .info {
     padding: 2rem 2rem 2rem 17rem;
     width: 100%;
-    border: outset 1px #006b7d;
     max-width: fit-content;
+    border-radius: 8px;
 }
 
 .next-class-card .info p {
