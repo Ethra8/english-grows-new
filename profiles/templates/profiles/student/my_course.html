@@ -54,32 +54,8 @@
                 {% endif %}
                 <hr>
             </header>
-
-            <!-- <header>
-            {% if active_enrollment %}
-                <h1>{{ active_enrollment.course.course_type.name }}</h1>
-                <hr>
-                <p class="mt-4 mb-4">Code of your current course: <strong>{{ active_enrollment.course.name }}</strong></p>
-
-                <div class="item">
-                    <div class="item-icon">
-                    {% if enrollment_status == 'active' %}
-                        <i class="fa-regular fa-circle-check"></i>
-                    {% elif enrollment_status != 'active' %}
-                        <i class="fa-solid fa-bars-progress"></i>
-                    {% endif %}
-                    </div>
-
-                    <div class="item-text">
-                        <strong>Status</strong>
-                        <span>{{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
-                    </div>
-                </div>
-            {% else %}
-                <h1>No active course assigned yet</h1>
-            {% endif %}
-            </header> -->
         </div>
+        
         <div class="wrapper-course-card w-100">
             <div class="course-card row">
                 <div class="circle-panel1">

@@ -46,7 +46,7 @@ main.profile-main {
 
 .course-details header h1 {
     /* forces h1 to align with level badge */
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 .course-details header h2 {
@@ -391,7 +391,7 @@ main.profile-main h1
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.next-class-card .circle-panel1 .fa-solid {
+.next-class-card .circle-panel1 i {
     position: relative;
     top: 13px;
     left: 11px;
