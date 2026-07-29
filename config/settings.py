@@ -220,12 +220,21 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
+AWS_STORAGE_BUCKET_NAME = os.environ.get(
+    "AWS_STORAGE_BUCKET_NAME",
+    "english-grows-media-017110365926-eu-north-1-an",
+)
 
+AWS_S3_REGION_NAME = os.environ.get(
+    "AWS_S3_REGION_NAME",
+    "eu-north-1",
+)
 
-AWS_DEFAULT_ACL = None
-AWS_S3_FILE_OVERWRITE = False
+AWS_S3_ENDPOINT_URL = os.environ.get(
+    "AWS_S3_ENDPOINT_URL",
+    "https://s3.eu-north-1.amazonaws.com",
+)
+
 
 STORAGES = {
     "default": {
@@ -233,13 +242,25 @@ STORAGES = {
         "OPTIONS": {
             "bucket_name": AWS_STORAGE_BUCKET_NAME,
             "region_name": AWS_S3_REGION_NAME,
+
+            # Critical fix:
+            "endpoint_url": AWS_S3_ENDPOINT_URL,
+            "signature_version": "s3v4",
+            "addressing_style": "virtual",
+
+            # Private media files:
             "default_acl": None,
-            "file_overwrite": False,
             "querystring_auth": True,
             "querystring_expire": 3600,
+
+            # Prevent overwriting files with matching names:
+            "file_overwrite": False,
         },
     },
+
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+        ),
     },
 }
