@@ -220,20 +220,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-AWS_STORAGE_BUCKET_NAME = os.environ.get(
-    "AWS_STORAGE_BUCKET_NAME",
-    "english-grows-media-017110365926-eu-north-1-an",
-)
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
 
-AWS_S3_REGION_NAME = os.environ.get(
-    "AWS_S3_REGION_NAME",
-    "eu-north-1",
-)
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
 
-AWS_S3_ENDPOINT_URL = os.environ.get(
-    "AWS_S3_ENDPOINT_URL",
-    "https://s3.eu-north-1.amazonaws.com",
-)
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
 
 
 STORAGES = {
@@ -251,7 +242,8 @@ STORAGES = {
             # Private media files:
             "default_acl": None,
             "querystring_auth": True,
-            "querystring_expire": 3600,
+            # urls expires in 24h = 86400 secs.
+            "querystring_expire": 86400,
 
             # Prevent overwriting files with matching names:
             "file_overwrite": False,
