@@ -724,14 +724,19 @@ class CourseEnrollment(models.Model):
 
     @property
     def total_completed_classes(self):
-        return Attendance.objects.filter(
-            student=self.student,
-            class_session__course=self.course,
-            class_session__start_time__gte=self.enrolled_at,
-            class_session__is_cancelled=False,
-        ).exclude(
-            status="scheduled"
-        ).values("class_session").distinct().count()
+        return (
+            Attendance.objects
+            .filter(
+                student=self.student,
+                class_session__course=self.course,
+                class_session__is_cancelled=False,
+                class_session__end_time__lt=timezone.now(),
+            )
+            .exclude(status="scheduled")
+            .values("class_session_id")
+            .distinct()
+            .count()
+        )
 
     @property
     def upcoming_classes(self):
