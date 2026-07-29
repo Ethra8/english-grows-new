@@ -43,7 +43,7 @@
     <div class="wrapper-next-class-card">
         <div class="next-class-card">
             <div class="circle-panel1">
-                <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div>
+                <!-- <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div> -->
                 <h2>Next Class</h2>
             </div>
             <div class="circle-panel2"></div>
@@ -52,13 +52,21 @@
                     <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
                     <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
                     <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
-                    {% if next_class.topic %} 
-                    <p><strong>Topic:</strong> {{ next_class.topic }}</p>
+                        <!-- <div class="class-session-next-class">
+                            <img src="{% static 'icons/class_session_teacher.png' %}" alt="Teacher" class="ml-0 mr-1">
+                            <span>{{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</span>
+                        </div>
+                        <div class="class-session-next-class">
+                            <img src="{% static 'icons/class_session_topic.png' %}" alt="Topic" class="ml-0 mr-1">
+                            <span>{{ next_class.topic|default:"Not added" }}</span>
+                        </div> -->
+                    {% if next_class.topic %}
+                    <p><i class="fa-regular fa-bookmark"></i>{{ next_class.topic }}</p>
                     {% endif %}
                     {% if next_class.meeting_link %}
                         <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
                             <i class="fa-solid fa-video mr-2"></i>
-                            Join Class <i class="fa-solid fa-chevron-right ml-5 float-right mt-1"></i>
+                            Join Class <i class="fa-solid fa-chevron-right ml-5 float-right"></i>
                         </a>
                     {% endif %}
                 {% else %}

@@ -92,19 +92,36 @@ main.profile-main h1
 /* ****** BUTTONS **************************************** */
 
 .btn-join-class {
-    color: #ffffff;
-    background: linear-gradient(90deg,rgba(0, 31, 61, 1) 0%, rgba(11, 53, 95, 1) 55%, rgba(0, 87, 173, 1) 100%);
-    text-align: left !important;
+    border: 1px solid #5ff0df;
+    color: whitesmoke;
+    padding: 0.25rem 0.85rem;
     border-radius: 8px;
-    width: 100%;
-    box-shadow: 0 2px 3px 0 #8b8b8b;
-    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 400;
+    width: max-content;
+    max-height: fit-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    /* background: rgba(94, 234, 212, 0.1); */
+    background: linear-gradient(
+        222deg,
+        #00a7ad 0%,
+        #006b7d 90%,
+        #004d63 100%
+    );
+
+    align-self: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 .btn-join-class:hover {
-    color: rgba(95, 240, 223, 1) !important;  /* #5ff0df */
+    color: white !important;  /* #5ff0df */
     box-shadow: 0 1px 2px 0 #8b8b8b;
+    font-weight: 500;
 }
 
 .profile-settings-page .btn-update {
@@ -349,6 +366,18 @@ main.profile-main h1
     max-width: fit-content;
 }
 
+.profile-dashboard .next-class-card .circle-panel1::after {
+    content: "\f51c"; /* <i class="fa-solid fa-chalkboard-user"></i> */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(94, 242, 220, 0.2);
+    position: absolute;
+    top: 170px;
+    right: 20%;
+    /* rotate: calc(15deg); */
+}
+
 .next-class-card .circle-panel1 {
     position: absolute;
     top: -70px;
@@ -357,8 +386,18 @@ main.profile-main h1
     height: 380px;
     border-radius: 50%;
     /* background: #008F8F; */
-    background: #006b7d;
-    background: linear-gradient(63deg,rgba(0, 122, 120, 1) 17%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    /* background: linear-gradient(
+        222deg,
+        #00a7ad 0%,
+        #006b7d 90%,
+        #004d63 100%
+    ); */
+    /* background: linear-gradient(22deg, rgba(11, 53, 95, 0.25) 2%, rgba(0, 107, 125, 1) 100%); */
+    background: #0B355F;
+    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    box-shadow:
+        0 10px 25px rgba(0,107,125,.25),
+        inset 0 1px rgba(255,255,255,.15);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 2;
@@ -387,7 +426,7 @@ main.profile-main h1
     width: 50px;
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    border: solid 1px #c7fff9;
+    border: solid 1px #727272;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -410,7 +449,7 @@ main.profile-main h1
     font-size: 2rem;
     font-weight: 600;
     line-height: 1.1;
-    color: #0B355F;
+    color: whitesmoke;
 }
 
 .next-class-card .info {
@@ -422,6 +461,19 @@ main.profile-main h1
 
 .next-class-card .info p {
     color: #0B355F;
+}
+
+.class-session-next-class {
+    display: flex;
+    align-items: center;
+    /* gap: 0.75rem; */
+}
+
+.class-session-next-class img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .profile-card {
@@ -668,8 +720,34 @@ main.profile-main h1
     height: 400px;
     border-radius: 50%;
     /* background: #249188; */
-    background: linear-gradient(63deg,rgba(0, 122, 120, 1) 3%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
-    color: whitesmoke;
+    /* background: linear-gradient(63deg,rgba(0, 122, 120, 1) 3%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%); */
+    /* background: 
+        radial-gradient(circle at top left,
+            rgba(255,255,255,.18) 0%,
+            transparent 45%),
+        linear-gradient(
+            145deg,
+            #007f86 0%,
+            #006b7d 45%,
+            #005265 75%,
+            #033c56 100%
+    );     */
+    /* background: linear-gradient(
+        135deg,
+        #008d96 0%,
+        #007b89 25%,
+        #006b7d 55%,
+        #00566b 100%
+    ); */
+    background: linear-gradient(
+        222deg,
+        #00a7ad 0%,
+        #006b7d 90%,
+        #004d63 100%
+    );
+    box-shadow:
+        0 10px 25px rgba(0,107,125,.25),
+        inset 0 1px rgba(255,255,255,.15);
     padding-left: 150px;
     padding-top: 90px;
     z-index: 2;
@@ -680,10 +758,22 @@ main.profile-main h1
     letter-spacing: 0.03em;
     margin: 5.2rem 2rem 0 50px;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.1;
-    color: #0B355F;
+    color: whitesmoke;
     max-height: 50px;
+}
+
+.attendance-progress-card .circle-panel1::after {
+    content: "\f46c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 8.5rem;
+    color: rgba(94, 242, 220, 0.2);
+    position: absolute;
+    top: 184px;
+    right: 76px;
+    rotate: calc(12deg);
 }
 
 .circle-panel1 .icon-circle-bg {
@@ -713,7 +803,7 @@ main.profile-main h1
     height: 400px;
     border-radius: 50%;
     background: #0B355F;
-    color: white;
+    color: whitesmoke;
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
@@ -739,7 +829,7 @@ main.profile-main h1
     padding: 1rem 2rem 1rem 17rem;
     width: 100%;
     min-height: 165px;
-    border: outset 1px #006b7d;
+    /* border: outset 1px #006b7d; */
 }
 
 
@@ -819,7 +909,7 @@ main.profile-main h1
 .detailed-attendance-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    color: #c7fff9;
+    color: whitesmoke;
     font-size: 2rem;
     margin: 410px 2rem 1rem 11.5rem;
     line-height: 1.1;
@@ -832,7 +922,8 @@ main.profile-main h1
     width: 450px;
     height: 450px;
     border-radius: 50%;
-    background: linear-gradient(63deg,rgba(0, 122, 120, 1) 10%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+    /* background: linear-gradient(63deg,rgba(0, 122, 120, 1) 10%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%); */
+    background-color: rgb(0, 107, 125);
     color: white;
     padding-left: 205px;
     padding-top: 90px;
@@ -1157,11 +1248,21 @@ main.profile-main h1
         left: -170px;
         width: 600px;
         height: 600px;
-        background: linear-gradient(101deg,rgba(0, 122, 120, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+        /* background: linear-gradient(101deg,rgba(0, 122, 120, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%); */
+    }
+
+    .attendance-progress-card .circle-panel1::after {
+        font-size: 5rem;
+        color: rgba(94, 242, 220, 0.1);
+        position: absolute;
+        top: 475px;
+        right: 186px;
+        rotate: calc(12deg);
     }
 
     .attendance-progress-card .circle-panel1 h2 {
         margin: 26rem 1rem 0 5rem;
+        /* color: #0B355F */
     }
 
     .attendance-progress-card .circle-panel2 {
@@ -1198,7 +1299,7 @@ main.profile-main h1
         left: -170px;
         width: 600px;
         height: 600px;
-        background: linear-gradient(101deg,rgba(0, 122, 120, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%);
+        /* background: linear-gradient(101deg,rgba(0, 122, 120, 1) 7%, rgba(95, 240, 223, 1) 65%, rgba(193, 247, 227, 1) 100%); */
     }
 
     .next-class-card .info{
@@ -1208,13 +1309,21 @@ main.profile-main h1
         /* width: max-content; */
     }
 
-    .next-class-card .circle-panel1 .icon-circle-bg {
-        top: 410px;
-        left: -10px;
+    .profile-dashboard .next-class-card .circle-panel1::after {
+        font-size: 6rem;
+        color: rgba(94, 242, 220, 0.1);
+        position: absolute;
+        top: 470px;
+        right: 190px;
     }
 
+    /* .next-class-card .circle-panel1 .icon-circle-bg {
+        top: 410px;
+        left: -10px;
+    } */
+
     .next-class-card .circle-panel1 h2 {
-        margin: 23rem 1rem 0 4rem;
+        margin: 26rem 1rem 0;
     }
 
     .next-class-card .circle-panel2 {
@@ -1260,7 +1369,6 @@ main.profile-main h1
     .my-attendance header .item .fa-solid {
         font-size: 1.2rem;
     }
-
 
     /* My ACCOUNT SETTINGS Page **************************** */
 
