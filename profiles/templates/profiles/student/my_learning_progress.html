@@ -17,7 +17,7 @@
 {% include "profiles/includes/student/student_sidebar.html" %}
 
 
-<section class="teacher-student-detail-page profile-page">
+<section class="learner-employee-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -39,86 +39,43 @@
                 {% else %}
                     {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
                         <i class="fa-solid fa-user-tie"></i>
-                    {% elif student_profile.role == "individual" %}
+                    {% elif student_profile.role == "student" %}
                         <i class="fa-regular fa-user"></i>
                     {% endif %}
                 {% endif %}
             </div>
 
             <div>
-                <h1>
-                    {{ student.get_full_name|default:student.username }}
-                </h1>
+                <div class="d-flex flex-row">
+                    <div>
+                        <h1>{{ student.get_full_name|default:student.username }}</h1>
+                        <p>{{ student.email }}</p>
+                        {% if request.user.profile.company %}
+                            <span class="mt-4">
+                                <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
+                                {{ request.user.profile.get_role_display }}
+                                <br>
+                            </span>
+                            <p class="mt-3">
+                                <i class="fa-regular fa-building mr-2"></i>
+                                {{ request.user.profile.company.name }}</p>
 
-                <p>{{ student.email }}</p>
+                        {% else %}
+                            <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
+                        {% endif %}
 
-                <div class="student-meta-line">
-                    <span>
-                        <i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Student" }}
-                    </span>
-                </div>
-
-                {% if student_profile.company %}
-                <div class="student-meta-line">
-                    <span>
-                        <i class="fa-regular fa-building"></i>
-                        {{ student_profile.company.name }}
-                    </span>
-                </div>
-                {% endif %}
-
-                <div class="student-meta-line mt-3">
-                    {% if student.is_active %}
-                        <span class="status-badge active">Active</span>
+                        {% if student.is_active %}
+                        <span class="status-badge active mt-3">Active</span>
                     {% else %}
-                        <span class="status-badge inactive">Inactive</span>
+                        <span class="status-badge inactive mt-3">Inactive</span>
                     {% endif %}
+                    </div>
+                    {% if student_profile.current_level %}
+                    <span class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2 ml-3 mr-3">
+                        {{ student_profile.current_level }}</span>
+                    {% endif %}    
+
                 </div>
-            </div>
-
-        </div>
-
-        <div class="student-header-actions">
-            <div>
-                <a href="mailto:{{ student.email }}" class="student-action-btn">
-                    <i class="fa-regular fa-envelope mr-3"></i>
-                    Message
-                </a>
-
-                <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}"
-                class="student-action-btn">
-                    <i class="fa-solid fa-graduation-cap mr-3"></i>
-                    Edit Academic Profile
-                </a>
-            </div>
-            <div class="student-level-area">
-                <small>Current Level</small>
-
-                <button type="button"
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2"
-                        onclick="toggleLevelForm('{{ enrollment.id }}')">
-                    {{ student_profile.current_level|default:"?" }}
-                </button>
-
-                <form method="POST"
-                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
-                      class="d-none student-level-form"
-                      id="level-form-{{ enrollment.id }}">
-
-                    {% csrf_token %}
-
-                    <select name="current_level">
-                        {% for value, label in level_choices %}
-                            <option value="{{ value }}"
-                                {% if student_profile.current_level == value %}selected{% endif %}>
-                                {{ label }}
-                            </option>
-                        {% endfor %}
-                    </select>
-
-                    <button type="submit">Save</button>
-                </form>
             </div>
 
         </div>

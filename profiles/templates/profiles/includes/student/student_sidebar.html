@@ -16,8 +16,11 @@
                 <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
                 {{ request.user.profile.get_role_display }}
                 <br>
-                <strong>{{ request.user.profile.company.name }}</strong>
             </span>
+            <!-- <p class="text-center mt-3">
+                <i class="fa-regular fa-building mr-2"></i>
+                {{ request.user.profile.company.name }}</p>
+
         {% else %}
             <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
         {% endif %}
@@ -26,9 +29,9 @@
             <p class="eg-font text-center mt-4 px-3"> {{ active_enrollment.course.course_type.name|default:"Pending confirmation" }}</p>
         {% else %}
         <p class="eg-font text-center mt-4 px-3">Course not assigned yet</p>
-        {% endif %}    
+        {% endif %}     -->
     </div>
-    <hr>
+    <hr class="mt-5">
 
     <nav class="sidebar-nav" aria-label="Profile navigation">
 

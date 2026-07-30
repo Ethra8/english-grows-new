@@ -679,6 +679,65 @@ main.profile-main h1
 }
 
 
+/* **************************************************|
+******** STUDENT: My LEARNING PROGRESS PAGE *********|
+*****************************************************/
+.learner-employee-detail-page {
+    color: whitesmoke;
+}
+
+.learner-employee-detail-page .student-avatar-large {
+    width: 150px !important;
+    height: 150px !important;
+}
+
+.learner-employee-detail-page .student-detail-header h1 {
+    color: #edf9f7;
+}
+
+.learner-employee-detail-page .student-main-info span {
+    color: whitesmoke !important;
+    font-size: 1rem !important;
+}
+
+.learner-employee-detail-page .course-meta-card.meta-attendance::after {
+    content: "\f46c"; /* fa-clipboard-check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(94, 242, 220, 0.1);
+    position: absolute;
+    top: 25px;
+    right: -5px;
+    rotate: calc(-15deg);
+}
+
+/* Attendance Detail page : SUMMARY CARDS */
+.learner-employee-detail-page .wrapper-attendance-summary-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 1.5rem auto;
+    width: fit-content;
+}
+
+.learner-employee-detail-page .progress-ring {
+    --percentage: 0;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #5fffea calc(var(--percentage) * 1%),
+            rgba(105, 255, 235, 0.18) 0
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+
+
 
 /* **************************************************|
 ******** STUDENT: My ATTENDANCE PAGE ****************|
@@ -687,6 +746,16 @@ main.profile-main h1
 .my-attendance {
     width: stretch;
 }
+
+.my-attendance header p:nth-child(3) {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.my-attendance header strong:last-child {
+    color: #006b7d;
+}
+
 
 /* *** Current Attendace PROGRESS *****/
 .wrapper-attendance-progress-card,
@@ -1233,6 +1302,15 @@ main.profile-main h1
     }
 
 
+    /* STUDENT: MY LEARNING PROGRESS Page */
+
+    .learner-employee-detail-page .wrapper-attendance-summary-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin: 1.5rem auto;
+        width: 100%;
+    }
+
     /* STUDENT: My ATTENDANCE Page ****** */
 
     .my-attendance {
@@ -1349,6 +1427,23 @@ main.profile-main h1
         padding: 10.5rem 1rem 3rem;
     }
 
+
+    /* My LEARNING PROGRESS Page */
+    /*****************************************************|
+    |*** ATTENDANCE DETAIL Page  *************************|
+    |*****************************************************/
+    .learner-employee-detail-page .attendance-summary-card {
+        min-height: 0;
+        height: 56px;
+        padding: 1.4rem;
+        width: 100%;
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .learner-employee-detail-page .attendance-summary-card strong {
+        padding: 0.15rem 0.8rem;
+    }
 
     /* My ATTENDANCE Page ******************************* */
 

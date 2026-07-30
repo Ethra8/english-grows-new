@@ -2232,7 +2232,7 @@ div:has(> .student-action-btn) {
     height: 96px;
     border-radius: 50%;
     background: rgba(95, 255, 234, 0.16);
-    border: 2px outset rgba(241, 255, 253, 0.75);
+    border: 2px outset rgba(84, 85, 85, 0.75);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2265,7 +2265,7 @@ div:has(> .student-action-btn) {
 .teacher-student-detail-page,
 .teacher-student-skills-page,
 .teacher-edit-skill-page {
-    color: #fff;
+    color: whitesmoke;
 }
 
 .student-detail-header,
@@ -2381,10 +2381,11 @@ div:has(> .student-action-btn) {
     justify-content: space-between;
 }
 
-.student-detail-card h2,
+.student-detail-card h2, 
 .recent-attendance-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     margin-bottom: 1.25rem;
+    text-transform: uppercase;
 }
 
 .current-course-block h3 {
@@ -2395,7 +2396,7 @@ div:has(> .student-action-btn) {
 
 .student-course-details .detail-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
     gap: 1rem;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 0.6rem 0;
