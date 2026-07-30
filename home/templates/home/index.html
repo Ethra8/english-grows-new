@@ -4,499 +4,58 @@
 
 {% block page_header %}
 
-<!-- =========================================================
-     MAINTENANCE BANNER
-========================================================== -->
 <div class="maintenance-banner">
     <div>
-        <p>
-            <i class="fa-solid fa-screwdriver-wrench mr-3"></i>
-            <strong>PLATFORM CURRENTLY UNDER DEVELOPMENT</strong>
-        </p>
-
-        <p>
-            <span>
-                Thank you for your patience while new features are being
-                built and refined.
-            </span>
-        </p>
+        <p><i class="fa-solid fa-screwdriver-wrench mr-3"></i>
+            <strong>PLATFORM CURRENTLY UNDER DEVELOPMENT</strong></p>
+        <p><span>
+            Thank you for your patience while new features are being built and refined.</span></p>
     </div>
 </div>
 
+<div class="overlay-globe"></div>
 
-<!-- =========================================================
-     DECORATIVE GLOBE
-========================================================== -->
-<div class="overlay-globe" aria-hidden="true"></div>
-
-
-<!-- =========================================================
-     TRANSPARENT BIRDS VIDEO
-========================================================== -->
-<video
-    class="index-top-video w-100 h-100"
-    autoplay
-    muted
-    loop
-    playsinline
-    aria-hidden="true"
->
-    <source
-        src="{% static 'videos/birds-video.webm' %}"
-        type="video/webm"
-    >
+<video class="index-top-video w-100 h-100" autoplay muted playsinline>
+    <source src="{% static 'videos/birds-video.webm' %}" type="video/webm">
 </video>
 
-
-<!-- =========================================================
-     LANDING-PAGE HERO
-========================================================== -->
-<div id="index" class="container-fluid w-100">
-
-    <div class="row index-hero-row align-items-center">
-
-        <!-- =================================================
-             LEFT SIDE: BRANDING, TEXT AND CTA BUTTONS
-        ================================================== -->
-        <div class="col-12 col-lg-6 index-content-column">
-
-            <header class="index-header">
-
-                <h1 class="display-1 text-white charmonman-title">
-                    your
-
-                    <br>
-
-                    <span class="eg-font text-uppercase ml-md-3">
-                        English grows
-                    </span>
-
-                    <br>
-
-                    <span class="w-edna">
-                        with Edna
-                    </span>
-                </h1>
-
-                <h2>
-                    Live online professional English training
-                </h2>
-
-                <p class="mb-0">
-                    Communicate confidently and improve your performance.
-                </p>
-
-                <p class="mt-2">
-                    Take the best from different methodologies.
-                </p>
-
+<div id="index" class="container-fluid h-100 w-100">
+    
+    <div class="row h-100">
+        <div class="col-12 my-auto ml-md-0 mr-md-0 px-0">
+            <header>
+                <div class="my-auto">
+                    <h1 class="display-1 text-white charmonman-title">
+                        your<br> <span class="eg-font text-uppercase ml-md-3">English grows</span>
+                        <br>
+                        <span class="w-edna">with Edna</span>
+                    </h1>
+                    <h2>Live online professional English training</h2>
+                    <!-- <hr> -->
+                    <p class="mb-0">Communicate confidently and improve your performance.</p>
+                    <p class="mt-2">Take the best from different methodologies.</p>  
+                </div>
             </header>
-
-
-            <!-- CTA BUTTONS -->
             <div class="cta">
-
                 <div class="row mt-5">
-
-                    <div class="col-12 col-md-4 px-0 pr-md-3 mb-3 mb-md-0">
-                        <a
-                            href=""
-                            class="index-cta-button btn text-uppercase py-2"
-                            aria-label="Go to the companies section to request a tailored plan for your enterprise"
-                        >
-                            Companies
-
-                            <i
-                                class="fa-solid fa-chevron-right ml-2 float-right mt-1"
-                                aria-hidden="true"
-                            ></i>
-                        </a>
+                    <div class="col-12 col-md-4 text-center text-sm-left px-0">
+                        <a href="" class="index-cta-button btn text-uppercase py-2"
+                        aria-label="go to the companies section to request a tailored plan for your enterprise">
+                            Companies <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i></a>
                     </div>
-
-
-                    <div class="col-12 col-md-4 px-0 px-md-2 mb-3 mb-md-0">
-                        <a
-                            href=""
-                            class="index-cta-button btn text-uppercase py-2"
-                            aria-label="Go to the section with services tailored for professionals"
-                        >
-                            Professionals
-
-                            <i
-                                class="fa-solid fa-chevron-right ml-2 float-right mt-1"
-                                aria-hidden="true"
-                            ></i>
-                        </a>
+                    <div class="col-12 col-md-4 text-center text-sm-left px-0">
+                        <a href="" class="index-cta-button btn text-uppercase py-2"
+                        aria-label="go to the section with services tailored for professional">
+                            Professionals <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i></a>
                     </div>
-
-
-                    <div class="col-12 col-md-4 px-0 pl-md-3">
-                        <a
-                            href=""
-                            class="index-cta-button btn text-uppercase py-2"
-                            aria-label="Go to the section with services tailored for Cambridge exam candidates"
-                        >
-                            Cambridge Exams
-
-                            <i
-                                class="fa-solid fa-chevron-right ml-2 float-right mt-1"
-                                aria-hidden="true"
-                            ></i>
-                        </a>
+                    <div class="col-12 col-md-4 text-center text-sm-left px-0">
+                        <a href="" class="index-cta-button btn text-uppercase py-2"
+                        aria-label="go to the section with services tailored for Cambridge exams candidates">
+                            Cambridge Exams <i class="fa-solid fa-chevron-right ml-2 float-right mt-1"></i></a>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
-
-        <!-- =================================================
-             RIGHT SIDE: LAPTOP PLATFORM SHOWCASE
-        ================================================== -->
-        <div class="col-12 col-lg-6 index-laptop-column">
-
-            <section
-                class="platform-showcase"
-                aria-label="English Grows learning platform preview"
-            >
-
-                <div
-                    class="platform-laptop"
-                    id="platform-laptop"
-                >
-
-                    <!-- =====================================
-                         LAPTOP IMAGE
-                    ====================================== -->
-                    <img
-                        src="{% static 'images/landing/laptop-transparent.png' %}"
-                        alt=""
-                        class="platform-laptop-image"
-                        aria-hidden="true"
-                    >
-
-
-                    <!-- =====================================
-                         LAPTOP SCREEN
-                    ====================================== -->
-                    <div
-                        class="platform-laptop-screen"
-                        aria-live="polite"
-                    >
-
-                        <!-- STUDENT DASHBOARD -->
-                        <figure
-                            class="platform-slide active"
-                            data-slide-title="Student dashboard"
-                        >
-                            <img
-                                src="{% static 'images/platform/student-dashboard.webp' %}"
-                                alt="English Grows student dashboard"
-                            >
-                        </figure>
-
-
-                        <!-- TEACHER DASHBOARD -->
-                        <figure
-                            class="platform-slide"
-                            data-slide-title="Teacher dashboard"
-                        >
-                            <img
-                                src="{% static 'images/platform/teacher-dashboard.webp' %}"
-                                alt="English Grows teacher dashboard"
-                            >
-                        </figure>
-
-
-                        <!-- ATTENDANCE -->
-                        <figure
-                            class="platform-slide"
-                            data-slide-title="Attendance records"
-                        >
-                            <img
-                                src="{% static 'images/platform/attendance.webp' %}"
-                                alt="English Grows attendance records"
-                            >
-                        </figure>
-
-
-                        <!-- LEARNING PROGRESS -->
-                        <figure
-                            class="platform-slide"
-                            data-slide-title="Learning progress"
-                        >
-                            <img
-                                src="{% static 'images/platform/learning-progress.webp' %}"
-                                alt="English Grows learning progress page"
-                            >
-                        </figure>
-
-
-                        <!-- CALENDAR -->
-                        <figure
-                            class="platform-slide"
-                            data-slide-title="Course calendar"
-                        >
-                            <img
-                                src="{% static 'images/platform/calendar.webp' %}"
-                                alt="English Grows course calendar"
-                            >
-                        </figure>
-
-
-                        <!-- HR / COMPANY DASHBOARD -->
-                        <figure
-                            class="platform-slide"
-                            data-slide-title="Company dashboard"
-                        >
-                            <img
-                                src="{% static 'images/platform/company-dashboard.webp' %}"
-                                alt="English Grows company and HR dashboard"
-                            >
-                        </figure>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         VISUALLY HIDDEN LIVE DESCRIPTION
-                    ====================================== -->
-                    <p
-                        id="platform-slide-description"
-                        class="sr-only"
-                    >
-                        Student dashboard
-                    </p>
-
-                </div>
-
-
-                <!-- =========================================
-                     PLATFORM NAME / CURRENT SCREEN
-                ========================================== -->
-                <div class="platform-showcase-caption">
-
-                    <p class="platform-showcase-eyebrow mb-1">
-                        The English Grows platform
-                    </p>
-
-                    <p
-                        class="platform-current-slide mb-0"
-                        id="platform-current-slide"
-                    >
-                        Student dashboard
-                    </p>
-
-                </div>
-
-
-                <!-- =========================================
-                     SLIDESHOW NAVIGATION DOTS
-                ========================================== -->
-                <div
-                    class="platform-slide-controls"
-                    role="group"
-                    aria-label="Choose a platform preview"
-                >
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot active"
-                        data-slide-index="0"
-                        aria-label="Show student dashboard"
-                        aria-pressed="true"
-                    ></button>
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot"
-                        data-slide-index="1"
-                        aria-label="Show teacher dashboard"
-                        aria-pressed="false"
-                    ></button>
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot"
-                        data-slide-index="2"
-                        aria-label="Show attendance records"
-                        aria-pressed="false"
-                    ></button>
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot"
-                        data-slide-index="3"
-                        aria-label="Show learning progress"
-                        aria-pressed="false"
-                    ></button>
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot"
-                        data-slide-index="4"
-                        aria-label="Show course calendar"
-                        aria-pressed="false"
-                    ></button>
-
-                    <button
-                        type="button"
-                        class="platform-slide-dot"
-                        data-slide-index="5"
-                        aria-label="Show company dashboard"
-                        aria-pressed="false"
-                    ></button>
-
-                </div>
-
-            </section>
-
-        </div>
-
     </div>
-
 </div>
-
-
-<!-- =========================================================
-     PLATFORM SLIDESHOW
-========================================================== -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const laptop = document.getElementById("platform-laptop");
-        const slides = Array.from(
-            document.querySelectorAll(".platform-slide")
-        );
-        const dots = Array.from(
-            document.querySelectorAll(".platform-slide-dot")
-        );
-        const currentSlideLabel = document.getElementById(
-            "platform-current-slide"
-        );
-        const liveDescription = document.getElementById(
-            "platform-slide-description"
-        );
-
-        const slideIntervalTime = 4500;
-        const prefersReducedMotion = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-        ).matches;
-
-        let currentSlideIndex = 0;
-        let slideInterval = null;
-
-
-        function displaySlide(index) {
-            if (!slides.length) {
-                return;
-            }
-
-            currentSlideIndex = index;
-
-            slides.forEach(function (slide, slideIndex) {
-                const isActive = slideIndex === currentSlideIndex;
-
-                slide.classList.toggle("active", isActive);
-                slide.setAttribute(
-                    "aria-hidden",
-                    isActive ? "false" : "true"
-                );
-            });
-
-            dots.forEach(function (dot, dotIndex) {
-                const isActive = dotIndex === currentSlideIndex;
-
-                dot.classList.toggle("active", isActive);
-                dot.setAttribute(
-                    "aria-pressed",
-                    isActive ? "true" : "false"
-                );
-            });
-
-            const activeSlide = slides[currentSlideIndex];
-            const slideTitle =
-                activeSlide.dataset.slideTitle || "Platform preview";
-
-            if (currentSlideLabel) {
-                currentSlideLabel.textContent = slideTitle;
-            }
-
-            if (liveDescription) {
-                liveDescription.textContent = slideTitle;
-            }
-        }
-
-
-        function showNextSlide() {
-            const nextSlideIndex =
-                (currentSlideIndex + 1) % slides.length;
-
-            displaySlide(nextSlideIndex);
-        }
-
-
-        function startSlideshow() {
-            if (
-                prefersReducedMotion ||
-                slides.length < 2 ||
-                slideInterval
-            ) {
-                return;
-            }
-
-            slideInterval = window.setInterval(
-                showNextSlide,
-                slideIntervalTime
-            );
-        }
-
-
-        function stopSlideshow() {
-            if (!slideInterval) {
-                return;
-            }
-
-            window.clearInterval(slideInterval);
-            slideInterval = null;
-        }
-
-
-        dots.forEach(function (dot) {
-            dot.addEventListener("click", function () {
-                const selectedIndex = Number(
-                    dot.dataset.slideIndex
-                );
-
-                stopSlideshow();
-                displaySlide(selectedIndex);
-                startSlideshow();
-            });
-        });
-
-
-        if (laptop) {
-            laptop.addEventListener("mouseenter", stopSlideshow);
-            laptop.addEventListener("mouseleave", startSlideshow);
-
-            laptop.addEventListener("focusin", stopSlideshow);
-            laptop.addEventListener("focusout", startSlideshow);
-        }
-
-
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                stopSlideshow();
-            } else {
-                startSlideshow();
-            }
-        });
-
-
-        displaySlide(0);
-        startSlideshow();
-    });
-</script>
-
 {% endblock %}
