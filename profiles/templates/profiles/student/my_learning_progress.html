@@ -49,7 +49,7 @@
                 <div class="d-flex flex-row">
                     <div>
                         <h1>{{ student.get_full_name|default:student.username }}</h1>
-                        <p>{{ student.email }}</p>
+                        <p><a href="mailto:{{ student.email }}" class="text-white">{{ student.email }}</a></p>
                         {% if request.user.profile.company %}
                             <span class="mt-4">
                                 <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
@@ -69,16 +69,17 @@
                     {% else %}
                         <span class="status-badge inactive mt-3">Inactive</span>
                     {% endif %}
+
                     </div>
-                    {% if student_profile.current_level %}
-                    <span class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2 ml-3 mr-3">
-                        {{ student_profile.current_level }}</span>
-                    {% endif %}    
 
                 </div>
             </div>
 
         </div>
+                                        {% if student_profile.current_level %}
+                    <span class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2 ml-3 mr-3">
+                        {{ student_profile.current_level }}</span>
+                    {% endif %}    
 
     </div>
 

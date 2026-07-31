@@ -35,7 +35,7 @@
 
     <nav class="sidebar-nav" aria-label="Profile navigation">
 
-        <a href="{% url 'profiles:profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+        <a href="{% url 'profiles:profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
         </a>
@@ -50,9 +50,9 @@
             <span>Class Calendar</span>
         </a>
 
-        <a href="{% url 'profiles:my_learning_progress' %}" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
+        <a href="{% url 'profiles:my_learning_progress' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_learning_progress' %}active{% endif %}">
             <i class="fa-solid fa-chart-line"></i>
-            <span>My Learning Progress</span>
+            <span>My Progress</span>
         </a>
 
         <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">

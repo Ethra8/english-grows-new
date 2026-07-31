@@ -11,7 +11,6 @@
     flex-direction: column;
     min-height: 76px;         /* or height: 56px */
     padding: .85rem 1.5rem;
-    font-size: 1.2rem;
     font-weight: 500;
     letter-spacing: .03em;
     border-bottom: 3px solid #006b7d;
@@ -21,7 +20,7 @@
 
 .maintenance-banner>div {
     background-color: #c7fff9;
-    width: 80%;
+    width: 98%;
     display: flex;
     flex-direction: column;
     align-items: center;      /* Vertical centering */
@@ -39,10 +38,8 @@
 
 .maintenance-banner strong {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: #006b7d;
-    /* background-color: #c7fff9; */
-    /* margin-right: .5rem; */
 }
 
 .maintenance-banner span,
@@ -50,8 +47,9 @@
     margin-bottom: 0;
     padding-bottom: 0;
     opacity: .9;
-    line-height: 2;
+    line-height: 1.2;
     font-weight: 500;
+    font-size: 1rem;
 }
 
 
@@ -200,14 +198,14 @@ a.js-back-link:hover {
 
 .index-cta-button {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: left;
+    /* gap: 1rem; */
     background: #0B355F;
-    /* color: #c7fff9; */
     color: whitesmoke;
     border: 1px solid #0B355F;
-    width: 250px;
-    font-size: 1rem;
+    min-width: 250px;
+    height: 100%;
+    font-size: 1.3rem;
     box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
     transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
 }
@@ -441,7 +439,7 @@ ul li {
 }
 
 footer a {
-    color: #5ff0df !important;
+    color: whitesmoke !important;
     text-decoration: none;
     font-size: 1.1rem;
 }
@@ -456,7 +454,7 @@ footer .topage-link {
 }
 
 footer .topage-link:hover {
-    color: #c7fff9 !important;
+    color: #5ff0df !important;
 }
 
 #subscribe-link a {
@@ -662,17 +660,6 @@ span.btt-link:hover {
     z-index: -2;
 }
 
-.index-top-video {
-    position: absolute;
-    top: 0;
-    right: 0 !important;
-    min-width: 100vw;
-    min-height: 100vh;
-    object-fit: cover;
-    z-index: -1;
-    pointer-events: none;
-}
-
 .overlay-light {
     height: 100%;
     width: 100%;
@@ -709,27 +696,38 @@ span.btt-link:hover {
     position: relative;
     overflow: hidden;
     min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-    padding: 60px 16%;
+    padding: 200px 7% 60px;
     /* margin-top: 120px; */
-    margin-top: 250px;
-}
+    /* margin-top: 120px; */
 
-#index .landingpage-me-on-laptop {
-    height: 100%;
+    z-index: 2;
     width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    background: url('/static/images/landingpage-me-on-laptop.png') no-repeat center center fixed;
-    background-size: cover;
-    z-index: 99;
 }
 
-/* #index .landingpage-me-on-laptop img {
+.index-top-video {
     position: absolute;
-    top: 200px;
-    right: 7%;
-} */
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    object-fit: cover;
+    /* z-index: -1; */
+    z-index: 99;
+    pointer-events: none;
+}
+
+.hero-title-image {
+    display: block;
+    width: 100%;
+    /* max-width: 610px; */
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+    margin-left: -10%;
+    z-index: 999 !important;
+}
 
 #index .row {
     position: relative;
@@ -761,7 +759,7 @@ span.btt-link:hover {
     font-weight: 700;
     font-family: 'Lato', sans-serif;
     color: whitesmoke;
-    width: 55%;
+    width: 75%;
     margin: 5rem 0 2rem;
     line-height: 1.6 !important;
     text-transform: uppercase;
@@ -771,13 +769,447 @@ span.btt-link:hover {
     color: #c7fff9;
     margin-top: 0.25rem;
     font-size: 1.2rem;
-    width: 55%;
+    width: 75%;
     text-justify: none;
 }
 
+
+/* =========================================================
+   LAPTOP SHOWCASE — LANDING PAGE
+   Matches the existing HTML exactly
+========================================================= */
+
+
+/* =========================================================
+   HERO LAYOUT
+========================================================= */
+
+
+.index-hero-row {
+    min-height: calc(100vh - 70px);
+}
+
+
+/* Left content */
+.index-content-column {
+    position: relative;
+    z-index: 4;
+}
+
+
+/* Right laptop column */
+.index-laptop-column {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 650px;
+
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* =========================================================
+   COMPLETE LAPTOP SHOWCASE
+========================================================= */
+
+.platform-showcase {
+    position: relative;
+
+    width: 100%;
+    max-width: none;
+
+    margin: 0 auto;
+
+    /* transform: translateX(-26%); */
+    transform: translateY(5%);
+    z-index: 20;
+}
+
+
+/*
+The laptop image determines the dimensions of the entire
+component. The screen is then positioned relative to it.
+*/
+/* .platform-laptop {
+    position: relative;
+
+    width: min(900px, 52vw);
+
+    margin: 0 auto;
+
+    animation: laptopFloat 6s ease-in-out infinite;
+} */
+
+
+.platform-laptop {
+    position: relative;
+
+    width: 100%;
+    min-width: 100%;
+    max-width: none;
+
+    margin: 0 auto;
+}
+
+
+/* Actual transparent laptop PNG */
+.platform-laptop-image {
+    position: relative;
+    z-index: 4;
+
+    display: block;
+
+    width: 130%;
+    max-width: none;
+    height: auto;
+
+    margin: 0 auto 0 -14%;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+
+/* =========================================================
+   SCREEN AREA
+========================================================= */
+
+/*
+These measurements correspond to the generated laptop image.
+
+Because the laptop image still contains a dark screen,
+the slideshow must sit ABOVE the laptop image.
+
+The overlay is limited precisely to the inner display,
+so it does not cover the black bezel.
+*/
+.platform-laptop-screen {
+    position: absolute;
+
+    top: 14.2%;
+    left: 22.35%;
+
+    width: 85%;
+    height: 62%;
+
+    z-index: 2;
+
+    overflow: hidden;
+
+    margin: 0 auto 0 -14%;
+    padding: 0;
+
+    background-color: #0b355f;
+    border-radius: 1px;
+}
+
+
+/* =========================================================
+   SLIDES
+========================================================= */
+
+/*
+Your slides are <figure> elements.
+
+This removes the browser's default figure margins and
+stacks every slide in precisely the same screen position.
+*/
+.platform-slide {
+    position: absolute;
+    inset: 0;
+    left: 10px;
+    top: 2.5%;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    opacity: 0;
+    visibility: hidden;
+
+    overflow: hidden;
+
+    transition:
+        opacity 700ms ease-in-out,
+        visibility 700ms ease-in-out;
+}
+
+/* Image inside every figure */
+.platform-slide img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+
+    object-fit: contain;
+    object-position: top center;
+}
+
+.platform-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =========================================================
+   CAPTION
+========================================================= */
+
+.platform-showcase-caption {
+    position: relative;
+    z-index: 4;
+
+    margin-top: 0.75rem;
+
+    text-align: center;
+}
+
+.platform-showcase-eyebrow {
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.platform-current-slide {
+    color: #ffffff;
+
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   SLIDE NAVIGATION DOTS
+========================================================= */
+
+.platform-slide-controls {
+    position: relative;
+    z-index: 4;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.65rem;
+
+    margin-top: 0.75rem;
+}
+
+.platform-slide-dot {
+    display: block;
+
+    width: 9px;
+    height: 9px;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: transparent;
+
+    border: 1px solid #5ff0df;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        transform 200ms ease;
+}
+
+.platform-slide-dot:hover {
+    transform: scale(1.25);
+}
+
+.platform-slide-dot:focus {
+    outline: 2px solid rgba(95, 240, 223, 0.45);
+    outline-offset: 3px;
+}
+
+.platform-slide-dot.active {
+    background-color: #5ff0df;
+    border-color: #5ff0df;
+}
+
+
+/* =========================================================
+   SUBTLE LAPTOP MOVEMENT
+========================================================= */
+
+/* @keyframes laptopFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+} */
+
+
+/* =========================================================
+   LARGE DESKTOPS
+========================================================= */
+
+/* @media (min-width: 1400px) {
+
+    .platform-laptop {
+        width: min(920px, 52vw);
+    } */
+
+    /*
+    Slight movement toward the right lets the laptop overlap
+    the globe without interfering with the left-side text.
+    */
+    /* .platform-showcase {
+        transform: translateX(2%);
+    }
+} */
+
+
+/* =========================================================
+   MEDIUM DESKTOPS
+========================================================= */
+
+/* @media (min-width: 992px) and (max-width: 1399.98px) {
+
+    .platform-laptop {
+        width: min(780px, 53vw);
+    }
+
+    .platform-showcase {
+        transform: translateX(3%);
+    }
+} */
+
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    #index {
+        min-height: auto;
+    }
+
+    .index-hero-row {
+        min-height: auto;
+    }
+
+    .index-content-column {
+        padding-top: 4rem;
+    }
+
+    .index-laptop-column {
+        min-height: auto;
+
+        padding-top: 3rem;
+        padding-bottom: 4rem;
+    }
+
+    /* .platform-showcase {
+        width: 100%;
+        max-width: 800px;
+
+        margin: 0 auto;
+
+        transform: none;
+    }
+
+    .platform-laptop {
+        width: min(800px, 94vw);
+
+        margin: 0 auto;
+    } */
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .index-laptop-column {
+        overflow: hidden;
+
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .platform-showcase {
+        width: 110%;
+
+        margin-left: -5%;
+    }
+
+    .platform-laptop {
+        width: 100%;
+
+        animation: none;
+    }
+
+    .platform-showcase-caption {
+        margin-top: 0.4rem;
+    }
+
+    .platform-showcase-eyebrow {
+        font-size: 0.65rem;
+    }
+
+    .platform-current-slide {
+        font-size: 0.85rem;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .platform-laptop {
+        animation: none;
+    }
+
+    .platform-slide {
+        transform: none;
+
+        transition:
+            opacity 250ms ease,
+            visibility 250ms ease;
+    }
+
+    .platform-slide.active {
+        transform: none;
+    }
+}
+
+
+/* END OF LAPTOP SHOWCASE */
+
 #index .cta {
-    max-width: 80%;
-    margin-top: 2rem;
+    width: 100%;
+    height: 76px;
+    margin-top: 7rem;
+    background-color: #0B355F;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 #index .footer {

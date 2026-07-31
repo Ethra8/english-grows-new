@@ -23,6 +23,7 @@ h3 {
 .profile-settings-page {
     padding: 70px 7%;
     width: 100%;
+    min-height: 100vh;
 }
 
 main.profile-main {
@@ -164,11 +165,12 @@ main.profile-main h1
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(95, 240, 223, 0.2);
     /* overflow-block: visible; */
-    max-width: fit-content;
+    /* max-width: fit-content; */
 }
 
 .wrapper-next-class-card {
     min-width: fit-content;
+    max-width: fit-content;
 }
 
 
@@ -332,7 +334,7 @@ main.profile-main h1
     max-width: fit-content;
     border: 2px solid #5ff0df;
     border-radius: 999px;
-    background: #5ff0df;
+    background: #006b7d;
     box-shadow: 0 1px 2px 0 #0B355F;
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
@@ -344,7 +346,7 @@ main.profile-main h1
 
 .dashboard-level-pill .current-level-label {
     padding: 6px 14px;
-    color: #0B355F;
+    color: whitesmoke;
 }
 
 .dashboard-level-pill .current-level-value {

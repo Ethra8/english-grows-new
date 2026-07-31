@@ -16,7 +16,7 @@ from collections import defaultdict
 
 from decimal import Decimal
 
-from profiles.utils.time_formatting import format_hours_duration
+from profiles.utils.time_formating import format_hours_duration
 
 from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillTermSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet

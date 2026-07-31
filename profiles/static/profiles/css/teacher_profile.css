@@ -3443,7 +3443,7 @@ div:has(> .student-action-btn) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
+        /* text-align: center; */
         justify-content: center !important;
         gap: 1rem;
         align-self: baseline;
