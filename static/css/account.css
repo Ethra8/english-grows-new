@@ -62,6 +62,8 @@
     font-weight: 500;
     color: #0B355F;
     font-size: 3rem;
+    line-height: 1.2;
+    padding: 1.5rem 0;
 }
 
 .allauth-form-inner-content p {

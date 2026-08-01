@@ -7,7 +7,7 @@
 <!-- =========================================================
      MAINTENANCE BANNER
 ========================================================== -->
-<div class="maintenance-banner">
+<!-- <div class="maintenance-banner">
     <div class="text-center">
         <p class="text-center mb-2">
             <i class="fa-solid fa-screwdriver-wrench mr-3"></i>
@@ -21,7 +21,7 @@
             </span>
         </p>
     </div>
-</div>
+</div> -->
 
 
 <!-- =========================================================
@@ -33,7 +33,7 @@
 <!-- =========================================================
      TRANSPARENT BIRDS VIDEO
 ========================================================== -->
-<video
+<!-- <video
     class="index-top-video w-100 h-100"
     autoplay
     muted
@@ -44,7 +44,7 @@
         src="{% static 'videos/birds-video.webm' %}"
         type="video/webm"
     >
-</video>
+</video> -->
 
 
 <!-- =========================================================
@@ -57,7 +57,7 @@
         <!-- =================================================
              LEFT SIDE: BRANDING, TEXT AND CTA BUTTONS
         ================================================== -->
-        <div class="col-12 col-lg-7 index-content-column">
+        <div class="col-12 col-lg-6 col-xl-5 index-content-column">
 
             <header class="index-header">
 
@@ -70,8 +70,7 @@
                     <span class="w-edna">
                         with Edna</span>
                 </h1> -->
-                <img src="{% static 'images/hero_title_transparent.png' %}" alt="Your English grows with Edna" class="hero-title-image">
-                <img src="{% static 'images/title_landingpage_mobile.png' %}" alt="Your English grows with Edna" class="hero-title-image-mobile">
+                <!-- <img src="{% static 'images/hero_title_transparent.png' %}" alt="Your English grows with Edna" class="hero-title-image"> -->
 
                 <h2>Live online professional <span>English training</span></h2>
 
@@ -82,21 +81,137 @@
 
         </div>
 
-        <!-- RIGHT SIDE: LAPTOP PLATFORM SHOWCASE -->
-        <div class="col-12 col-lg-5 index-laptop-column">
+        <!-- ====== RIGHT SIDE: LAPTOP PLATFORM SHOWCASE ========== -->
+        <div class="col-12 col-lg-6 col-xl-7 index-laptop-column">
 
-            <section class="platform-showcase" aria-label="English Grows live online lesson preview">
-                <div class="platform-laptop">
-                    <img src="{% static 'images/laptop_screen_me_popout.png' %}" alt="Edna delivering a live online English lesson" class="platform-laptop-static-image">
+            <section class="platform-showcase" aria-label="English Grows learning platform preview">
+
+                <div class="platform-laptop" id="platform-laptop">
+
+                    <!-- === LAPTOP IMAGE ============ -->
+                    <img src="{% static 'images/landing/laptop-transparent.png' %}" alt="" class="platform-laptop-image" aria-hidden="true">
+
+
+                    <!-- === LAPTOP SCREEN =========== -->
+                    <div class="platform-laptop-screen" aria-live="polite">
+
+                        <figure id="laptop_me_background" class="platform-slide platform-slide-person" data-slide-title="Live online training">
+                            <img src="{% static 'images/platform/laptop_me_background.png' %}" alt="English Grows live online lesson">
+                        </figure>
+
+                        <!-- STUDENT DASHBOARD -->
+                        <figure class="platform-slide active" data-slide-title="Learner profile - My learning progress">
+                            <img src="{% static 'images/platform/student_dashboard_learning_progress.png' %}" alt="English Grows learner profile - my learning progress"></figure>
+
+                        <figure class="platform-slide" data-slide-title="Learner profile - Class Calendar">
+                            <img src="{% static 'images/platform/student_dashboard_class_calendar.png' %}" alt="English Grows Learner profile - Class Calendar"></figure>
+
+                        <figure class="platform-slide" data-slide-title="Learner profile - Course Info">
+                            <img src="{% static 'images/platform/student_dashboard_course_info.png' %}" alt="English Grows Learner profile - Course Info"></figure>
+
+                        <figure class="platform-slide" data-slide-title="Learner profile - Attendance Records">
+                            <img src="{% static 'images/platform/student_dashboard_attendance_page.png' %}" alt="English Grows Learner profile - Attendance Records"></figure>
+
+                        <!-- COMPANY ADMIN / HR PROFILE -->
+                        <figure class="platform-slide" data-slide-title="Company Admin / HR profiles - Dashboard">
+                            <img src="{% static 'images/platform/companyAdmin_dashboard.png' %}" alt="Company Admin profile - dashboard"></figure>
+
+                        <!-- TEACHER PROFILE -->
+                        <figure class="platform-slide" data-slide-title="Teacher profile - Dashboard">
+                            <img src="{% static 'images/platform/teacher_dashboard.png' %}" alt="English Grows Teacher profile - Dashboard"></figure>
+
+                        <figure class="platform-slide" data-slide-title="Teacher profile - Upcoming Classes">
+                            <img src="{% static 'images/platform/teacher_upcoming_classes.png' %}" alt="English Grows Teacher profile - Upcoming Classes"></figure>
+
+                    </div>
+
+                    <!-- This layer has the exact same dimensions as the laptop screen,
+                        but overflow is visible. -->
+                    <div class="platform-person-layer" aria-hidden="true">
+                        <img src="{% static 'images/platform/laptop_me_cutout.png' %}" alt="" class="platform-person-popout" aria-hidden="true">
+                    </div>
+
+                    <!-- === VISUALLY HIDDEN LIVE DESCRIPTION ======= -->
+                    <p id="platform-slide-description" class="sr-only">Student dashboard</p>
+
+
+                    <!-- === PLATFORM NAME / CURRENT SCREEN ========= -->
+                    <div class="platform-showcase-caption">
+                        <p class="platform-showcase-eyebrow mb-1">The English Grows platform</p>
+                        <p class="platform-current-slide mb-0" id="platform-current-slide">Student dashboard</p>
+                    </div>
+
+                    <!-- === SLIDESHOW NAVIGATION DOTS ========= -->
+                    <div class="platform-slide-controls" role="group" aria-label="Choose a platform preview">
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot active"
+                            data-slide-index="0"
+                            aria-label="Show Learner dashboard - My learning progress"
+                            aria-pressed="true"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="1"
+                            aria-label="Show Learner profile - Class Calendar"
+                            aria-pressed="false"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="2"
+                            aria-label="Show Learner profile - Course Info"
+                            aria-pressed="false"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="3"
+                            aria-label="Show Learner profile - Attendance Records"
+                            aria-pressed="false"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="4"
+                            aria-label="Show Company Admin / HR profiles - Dashboard"
+                            aria-pressed="false"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="5"
+                            aria-label="Show Teacher profile - Dashboard"
+                            aria-pressed="false"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="platform-slide-dot"
+                            data-slide-index="6"
+                            aria-label="Show Teacher profile - Upcoming Classes"
+                            aria-pressed="false"
+                        ></button>
+
+                    </div>
                 </div>
+
             </section>
 
         </div>
+
     </div>
 
 
     <!-- CTA BUTTONS -->
-    <!-- <div class="cta">
+    <div class="cta">
             <div>
                 <a href="" class="index-cta-button btn text-uppercase py-2" aria-label="Go to the companies section to request a tailored plan for your enterprise">
                     Companies<i class="fa-solid fa-chevron-right ml-2 float-right mt-1" aria-hidden="true"></i></a>
@@ -109,7 +224,7 @@
                 <a href="" class="index-cta-button btn text-uppercase py-2" aria-label="Go to the section with services tailored for Cambridge exam candidates">
                     Cambridge Exams<i class="fa-solid fa-chevron-right ml-2 float-right mt-1" aria-hidden="true"></i></a>
             </div>
-    </div> -->
+    </div>
 
 </div>
 

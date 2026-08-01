@@ -1,4 +1,17 @@
-/* Icy Acqua (lightest Accent): #c7fff9 / rgba(199, 255, 249, 1) */
+
+/*******************************************************************|
+|** COLOR PALETTE **************************************************|
+|*******************************************************************|
+
+|**** Oxford Navy : #0b355f; rgba(11, 53, 95, 1)/ 
+|**** Stormy Teal (Brand color - Landing page bg): #006b7d; / 
+|**** Strong Cyan (light blue text accent): #07c0c7; / 
+|**** Icy Acqua (lightest Accent): #c7fff9 / rgba(199, 255, 249, 1) 
+|**** Azure Mist (light website bg): #edf9f7 / 
+
+|**** Slate Grey (text): #6a7f81; 
+|**** Cool Steel (lighter grey text): #96a0a1;   ***********************/
+
 
 .maintenance-banner {
     position: fixed;
@@ -588,10 +601,10 @@ footer .topage-link:hover {
     padding-left: 50px;
 }
 
-.dropdown-menu {
+/* .dropdown-menu {
     background-color: #c7fff9;
     box-shadow: 0 1px 3px 0 #737577;    
-}
+} */
 
 .btt-link {
     cursor: pointer;
@@ -696,7 +709,7 @@ span.btt-link:hover {
     position: relative;
     overflow: hidden;
     min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-    padding: 200px 7% 60px;
+    padding: 200px 14% 60px;
     /* margin-top: 120px; */
     /* margin-top: 120px; */
 
@@ -708,8 +721,8 @@ span.btt-link:hover {
     position: absolute;
     bottom: 0 !important;
     right: 0 !important;
-    width: 100vw;
-    min-width: 100vw;
+    width: 110vw;
+    min-width: 110vw;
     height: 100vh;
     min-height: 100vh;
     object-fit: cover;
@@ -721,12 +734,15 @@ span.btt-link:hover {
 .hero-title-image {
     display: block;
     width: 100%;
-    /* max-width: 610px; */
+    max-width: 610px;
     height: auto;
     object-fit: contain;
-    margin-bottom: 1.5rem;
-    margin-left: -10%;
+    margin: 0 auto 1.5rem -10%;
     z-index: 999 !important;
+}
+
+.hero-title-image-mobile {
+    display: none;
 }
 
 #index .row {
@@ -734,35 +750,38 @@ span.btt-link:hover {
     z-index: 2;
 }
 
-#index .eg-font {
-    /* font-family: "Big Shoulders Display", sans-serif; */
+/* #index .eg-font {
     letter-spacing: normal;
     font-weight: 600;
     font-size: 6rem;
-}
+} */
 
 #index h1 {
     line-height: 1.2;
 }
 
-#index .w-edna {
+/* #index .w-edna {
     font-family: "Charmonman", cursive;
     font-weight: 500;
     margin-left: 18rem;
     font-size: 3.5rem;
     color: #c7fff9;
     line-height: 1.7;
-}
+} */
 
 #index h2 {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 700;
     font-family: 'Lato', sans-serif;
     color: whitesmoke;
     width: 75%;
     margin: 5rem 0 2rem;
-    line-height: 1.6 !important;
+    line-height: 1.4;
     text-transform: uppercase;
+}
+
+#index h2 span {
+    color: #07C0C7;
 }
 
 #index header p {
@@ -773,11 +792,27 @@ span.btt-link:hover {
     text-justify: none;
 }
 
+#index .platform-showcase {
+    /* position: absolute; */
+    left: 0;
+    top: 21%;
+    display: flex;
+    transform: translateX(27%);
+    transform: translateY(-18%);
+    /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
+    border-radius: 50%; */
+    /* width: 650px;
+    height: 650px; */
+    z-index: 5;
+    margin: 0;
+}
 
-/* =========================================================
-   LAPTOP SHOWCASE — LANDING PAGE
-   Matches the existing HTML exactly
-========================================================= */
+#index .platform-laptop img {
+    position: absolute;
+    width: 100%;
+    top: 10%;
+    left: 0;
+}
 
 
 /* =========================================================
@@ -826,8 +861,8 @@ span.btt-link:hover {
     margin: 0 auto;
 
     /* transform: translateX(-26%); */
-    transform: translateY(5%);
-    z-index: 20;
+    /* transform: translateY(0); */
+    /* z-index: 20; */
 }
 
 
@@ -835,18 +870,12 @@ span.btt-link:hover {
 The laptop image determines the dimensions of the entire
 component. The screen is then positioned relative to it.
 */
-/* .platform-laptop {
-    position: relative;
-
-    width: min(900px, 52vw);
-
-    margin: 0 auto;
-
-    animation: laptopFloat 6s ease-in-out infinite;
-} */
-
-
 .platform-laptop {
+    --screen-top: 14.6%;
+    --screen-left: 17.35%;
+    --screen-width: 66%;
+    --screen-height: 53.6%;
+
     position: relative;
 
     width: 100%;
@@ -856,24 +885,21 @@ component. The screen is then positioned relative to it.
     margin: 0 auto;
 }
 
-
 /* Actual transparent laptop PNG */
 .platform-laptop-image {
     position: relative;
-    z-index: 4;
+    z-index: 6;
 
     display: block;
 
-    width: 130%;
-    max-width: none;
+    width: 100%;
     height: auto;
 
-    margin: 0 auto 0 -14%;
+    margin: 0;
 
     pointer-events: none;
     user-select: none;
 }
-
 
 /* =========================================================
    SCREEN AREA
@@ -891,17 +917,17 @@ so it does not cover the black bezel.
 .platform-laptop-screen {
     position: absolute;
 
-    top: 14.2%;
-    left: 22.35%;
+    top: var(--screen-top);
+    left: var(--screen-left);
 
-    width: 85%;
-    height: 62%;
+    width: var(--screen-width);
+    height: var(--screen-height);
 
     z-index: 2;
 
     overflow: hidden;
 
-    margin: 0 auto 0 -14%;
+    margin: 0;
     padding: 0;
 
     background-color: #0b355f;
@@ -919,39 +945,128 @@ Your slides are <figure> elements.
 This removes the browser's default figure margins and
 stacks every slide in precisely the same screen position.
 */
-.platform-slide {
+
+/* === SPECIAL PERSON SLIDE =================== */
+.platform-person-layer {
+    position: absolute;
+
+    top: var(--screen-top);
+    left: var(--screen-left);
+
+    width: var(--screen-width);
+    height: var(--screen-height);
+
+    z-index: 7;
+
+    overflow: visible;
+
+    pointer-events: none;
+}
+
+.platform-slide-person {
     position: absolute;
     inset: 0;
-    left: 10px;
-    top: 2.5%;
+    top: 0;
+    left: 0;
 
-    width: 100%;
+    width: 110%;
     height: 100%;
 
     margin: 0;
     padding: 0;
 
+    overflow: hidden;
+}
+
+.platform-slide-person img {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    width: 100% !important;
+    height: 120% !important;
+
+    object-fit: cover;
+    object-position: top left;
+
+    margin: 0;
+}
+
+/*
+
+IMPORTANT:
+This image must contain ONLY your cut-out figure on transparency.
+
+It must not contain the rectangular map background.
+*/
+.platform-person-popout {
+    position: absolute;
+
+    left: 50%;
+    bottom: 0;
+
+    /*
+    Size relative to the inner screen, not the whole laptop.
+    Adjust only this value to make yourself larger or smaller.
+    */
+    width: 124%;
+    height: auto;
+
     opacity: 0;
     visibility: hidden;
 
-    overflow: hidden;
+    transform: translateX(-50%) translateY(10px);
+
+    transform-origin: bottom center;
 
     transition:
         opacity 700ms ease-in-out,
-        visibility 700ms ease-in-out;
+        /* visibility 700ms ease-in-out,
+        transform 700ms ease-in-out; */
+}
+
+.platform-laptop.person-slide-active .platform-person-popout {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateX(-50%) translateY(0);
+}
+
+.platform-slide {
+    position: absolute;
+    inset: 0;
+    /* left: 1.5%;
+    top: 1.5%; */
+    width: 97%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: opacity 700ms ease-in-out, visibility 700ms ease-in-out;
 }
 
 /* Image inside every figure */
 .platform-slide img {
     display: block;
-
+    position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
 
-    margin: 0;
+    margin: 0 auto;
 
+    /* object-fit: contain;
+    object-position: top center; */
+
+    /*
+    Fills the complete inner laptop display.
+    A very small amount may be cropped at the sides.
+    */
     object-fit: contain;
-    object-position: top center;
+    object-position: top top;
+
+    /* image-rendering: auto; */
 }
 
 .platform-slide.active {
@@ -1048,7 +1163,7 @@ stacks every slide in precisely the same screen position.
    SUBTLE LAPTOP MOVEMENT
 ========================================================= */
 
-/* @keyframes laptopFloat {
+@keyframes laptopFloat {
     0%,
     100% {
         transform: translateY(0);
@@ -1057,43 +1172,11 @@ stacks every slide in precisely the same screen position.
     50% {
         transform: translateY(-8px);
     }
-} */
+}
 
 
-/* =========================================================
-   LARGE DESKTOPS
-========================================================= */
-
-/* @media (min-width: 1400px) {
-
-    .platform-laptop {
-        width: min(920px, 52vw);
-    } */
-
-    /*
-    Slight movement toward the right lets the laptop overlap
-    the globe without interfering with the left-side text.
-    */
-    /* .platform-showcase {
-        transform: translateX(2%);
-    }
-} */
 
 
-/* =========================================================
-   MEDIUM DESKTOPS
-========================================================= */
-
-/* @media (min-width: 992px) and (max-width: 1399.98px) {
-
-    .platform-laptop {
-        width: min(780px, 53vw);
-    }
-
-    .platform-showcase {
-        transform: translateX(3%);
-    }
-} */
 
 
 /* =========================================================
@@ -1119,9 +1202,9 @@ stacks every slide in precisely the same screen position.
 
         padding-top: 3rem;
         padding-bottom: 4rem;
-    }
+    } */
 
-    /* .platform-showcase {
+    .platform-showcase {
         width: 100%;
         max-width: 800px;
 
@@ -1134,7 +1217,17 @@ stacks every slide in precisely the same screen position.
         width: min(800px, 94vw);
 
         margin: 0 auto;
+    }
+
+    .platform-slide-person {
+        bottom: 0;
+        width: 115% !important;
+    }
+
+    /* .platform-person-popout {
+        bottom: 38.5%;
     } */
+
 }
 
 
@@ -1158,13 +1251,23 @@ stacks every slide in precisely the same screen position.
     }
 
     .platform-laptop {
-        width: 100%;
+        width: 105%;
 
         animation: none;
     }
 
+    .platform-slide-person {
+        bottom: 0%;
+        width: 115% !important;
+    }
+
+    /* .platform-person-popout {
+        bottom: 40%;
+    } */
+
     .platform-showcase-caption {
         margin-top: 0.4rem;
+        margin-left: 8%;
     }
 
     .platform-showcase-eyebrow {
@@ -1173,30 +1276,6 @@ stacks every slide in precisely the same screen position.
 
     .platform-current-slide {
         font-size: 0.85rem;
-    }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    .platform-laptop {
-        animation: none;
-    }
-
-    .platform-slide {
-        transform: none;
-
-        transition:
-            opacity 250ms ease,
-            visibility 250ms ease;
-    }
-
-    .platform-slide.active {
-        transform: none;
     }
 }
 
@@ -1409,28 +1488,157 @@ span.vertical-line {
 
 
 
+/* =========================================================
+   LARGE DESKTOPS
+========================================================= */
+
+@media (min-width: 1400px) {
+
+    #index {
+        padding: 120px 14% 60px;
+    }
+
+    .platform-laptop {
+        width: min(920px, 52vw);
+    }
+
+    #index .platform-laptop img {
+        position: absolute;
+        width: 100%;
+        top: 10%;
+        left: 0;
+    }
+
+    /*
+    Slight movement toward the right lets the laptop overlap
+    the globe without interfering with the left-side text.
+    */
+    .platform-showcase {
+        transform: translateX(2%);
+    }
+
+    .platform-slide-person {
+        bottom: 0;
+        width: 115% !important;
+    }
+
+}
+
+
+/* =========================================================
+   MEDIUM DESKTOPS
+========================================================= */
+
+@media (min-width: 992px) and (max-width: 1399.98px) {
+
+    #index {
+        padding: 120px 6% 60px;
+    }
+
+    .platform-laptop {
+        width: min(780px, 53vw);
+    }
+
+    #index .platform-laptop img {
+        position: absolute;
+        width: 90%;
+        top: 10%;
+        left: 0;
+    }
+
+    #index .platform-showcase {
+        /* transform: translateX(-15%);
+        transform: translateY(-15%); */
+        left: -20%;
+        top: 25%;
+    }
+
+    .platform-showcase {
+        transform: translateX(3%);
+    }
+
+    .platform-slide-person {
+        bottom: 0;
+        width: 115% !important;
+    }
+
+    /* .platform-person-popout {
+        bottom: 30% !important;
+    } */
+
+}
+
+
+
+
 @media (max-width: 1199.99px) {
-    /* #index .cta {
-        max-width: 100%;
+    /* #index {
+        padding: 120px 7%;
+    } */
+
+    #index .platform-showcase {
+        position: absolute;
+        left: 0;
+        top: 21%;
+        display: flex;
+        transform: translateX(27%);
+        transform: translateY(-28%);
+        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
+        border-radius: 50%; */
+        width: 650px;
+        height: 650px;
+        z-index: 5;
+        margin: 0;
+    }
+
+    /* #index .platform-laptop img {
+        position: absolute;
+        width: 70%;
+        top: 15%;
+        left: 0;
     } */
 }
 
 
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     
     #bag.container, 
     #bag.container-sm {
         max-width: 98%;
     }
 
-}
+} */
 
 
 @media (max-width: 991.99px) {
     
-    nav .dropdown-menu {
+    /* nav .dropdown-menu {
         left: -80px !important;   
+    }
+ */
+    nav .navbar-nav {
+        /* display: -ms-flexbox;
+        display: flex; */
+        -ms-flex-direction: row;
+        flex-direction: row;
+        /* padding-left: 0;
+        margin-bottom: 0;
+        list-style: none; */
+        gap: 2rem;
+        /* font-weight: 400;
+        line-height: 1.5; */
+    }
+
+    nav .btn-navbar {
+        margin-top: 0.5rem;
+    }
+
+    .navbar-collapse {
+        min-height: 70px;
+        max-height: auto;
+        padding: 0.25rem 1rem 1rem !important;
+        gap: 0.5rem;
     }
 
     .logo {
@@ -1440,7 +1648,34 @@ span.vertical-line {
     }
 
     #index {
-        padding: 120px 12%;
+        padding: 120px 6% 60px;
+    }
+
+    #index .hero-title-image {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    #index .platform-showcase {
+        position: absolute;
+        left: -18%;
+        top: 21%;
+        display: flex;
+        transform: translateX(0);
+        transform: translateY(-28%);
+        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
+        border-radius: 50%; */
+        width: 650px;
+        height: 650px;
+        z-index: 5;
+        margin: 0;
+    }
+
+    #index .platform-laptop img {
+        position: absolute;
+        width: 70%;
+        top: 15%;
+        left: 0;
     }
 
     .main-bg {
@@ -1459,9 +1694,9 @@ span.vertical-line {
         padding-left: 0 !important;
     }
 
-    .nav-link {
+    /* .nav-link {
         padding: 0;
-    }
+    } */
 
 }
 
@@ -1479,14 +1714,14 @@ span.vertical-line {
     }
 
     /* ONLY FOR PLATFORM DEVELOPMENT BANNER */
-    #index {
+    /* #index {
         padding: 120px 12%;
-    }
+    } */
 
-    #index .w-edna {
+    /* #index .w-edna {
         margin-left: 11rem;
         font-size: 3.6rem;
-    }
+    } */
 
     #index h2 {
         /* font-size: 1.3rem; */
@@ -1499,10 +1734,10 @@ span.vertical-line {
         width: 80%;
     }
 
-    .index-cta-button {
+    /* .index-cta-button {
         margin: 1.5rem 0 0 0;
         width: 80%;
-    }
+    } */
 
     #checkout-page {
         padding-left: 0;
@@ -1560,17 +1795,39 @@ span.vertical-line {
     #index {
         /* padding: 60px 7% !important; */
         /* ONLY FOR DEVELOPMENT BANNER */
-        padding: 180px 10%;
+        padding-top: 180px;
     }
 
-    #index .eg-font {
+    #index .platform-showcase {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        transform: translateX(27%);
+        transform: translateY(-28%);
+        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
+        border-radius: 50%; */
+        width: 650px;
+        height: 650px;
+        z-index: 5;
+        margin: 0;
+    }
+
+    /* #index .platform-laptop img {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+    } */
+
+    /* #index .eg-font {
         font-size: 5rem;
-    }
+    } */
 
-    #index .w-edna {
+    /* #index .w-edna {
         font-size: 2.8rem;
         margin-left: auto;
-    }
+    } */
 
     #index header p {
         width: 100%;
@@ -1689,5 +1946,149 @@ span.vertical-line {
     #individual-services {
         padding-left: 12px;
         padding-right: 12px;
+    }
+}
+
+
+
+/* =========================================================
+   RESPONSIVE STATIC LAPTOP IMAGE — FINAL OVERRIDE
+========================================================= */
+
+#index .index-laptop-column {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding-left: 15px;
+    padding-right: 15px;
+
+    overflow: visible;
+}
+
+
+#index .platform-showcase {
+    position: relative;
+
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
+
+    transform: none;
+
+    overflow: visible;
+}
+
+
+#index .platform-laptop {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
+}
+
+
+#index .platform-laptop img,
+#index .platform-laptop-static-image {
+    position: static;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
+
+    object-fit: contain;
+}
+
+
+@media (max-width: 767.98px) {
+
+    #index .index-laptop-column {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 0;
+        padding-right: 0;
+
+        margin-top: 2.5rem;
+    }
+
+    #index .platform-showcase {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #index .platform-laptop {
+        width: 100%;
+        max-width: 760px;
+    }
+
+    #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+@media (max-width: 575px) {
+    body {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    #index {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    #index .hero-title-image {
+        display: none;
+    }
+
+    #index .hero-title-image-mobile {
+        display: block;
+    }
+
+    #index h2 {
+        line-height: 1.1;
+    }
+
+    #index .index-laptop-column {
+        padding-left: 0;
+        padding-right: 0;
+
+        overflow: visible;
+    }
+
+    #index .platform-showcase,
+    #index .platform-laptop,
+    #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
     }
 }

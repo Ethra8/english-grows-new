@@ -65,45 +65,47 @@
     <header class="container-fluid fixed-top w-100 p-0">
 
       <div id="topnav" class="row d-none d-lg-flex m-0">
-        <div class="col-12 col-sm-3 my-auto py-lg-0 text-center text-lg-left">
+        <div class="col-3 my-auto py-lg-0 text-center text-lg-left">
           <a href="{% url 'home' %}" class="nav-link" aria-label="go to the home page">
             <img src="{% static 'images/logo_englishgrows.png' %}" alt="logo" class="logo">
           </a>
         </div>
-        <div class="col-12 col-md-9 my-auto py-1 py-lg-0">
+        <div class="col-9 my-auto py-1 py-lg-0">
           <ul class="list-inline list-unstyled text-right my-0">
             {% if request.user.is_authenticated %}
               <li>
                 <div class="text-center">
                   {% if request.user.profile.role == "teacher" %}
-                    <a href="{% url 'profiles:teacher_dashboard' %}" class="btn-navbar" aria-label="go to my teacher dashboard">
+                    <a href="{% url 'profiles:teacher_dashboard' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my teacher dashboard">
                       <i class="fa-regular fa-user mr-2"></i> Dashboard
                     </a>
                   {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
-                    <a href="{% url 'profiles:profile' %}" class="btn-navbar" aria-label="go to my student dashboard">
+                    <a href="{% url 'profiles:profile' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my student dashboard">
                       <i class="fa-regular fa-user"></i> Dashboard
                     </a>
                   {% elif request.user.profile.role == "company_admin" %}
-                    <a href="{% url 'profiles:company_admin_dashboard' %}" class="btn-navbar" aria-label="go to company admin dashboard">
+                    <a href="{% url 'profiles:company_admin_dashboard' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to company admin dashboard">
                       <i class="fa-regular fa-user"></i> Dashboard
                     </a>
                   {% else %}
-                    <a href="{% url 'profiles:profile' %}" class="btn-navbar" aria-label="go to my profile page">
+                    <a href="{% url 'profiles:profile' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my profile page">
                       <i class="fa-regular fa-user"></i> Dashboard
                     </a>
                   {% endif %}
                 </div>
               </li>
-                    
+
+              
+              
               <li>
-                <a href="{% url 'account_logout' %}" class="btn-navbar" aria-label="Logout">
+                <a href="{% url 'account_logout' %}" class="btn-navbar d-none d-lg-inline" aria-label="Logout">
                   <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </a>
               </li>
 
             {% else %}
               <li>
-                <a href="{% url 'account_login' %}" class="btn-navbar">
+                <a href="{% url 'account_login' %}" class="btn-navbar d-none d-lg-inline">
                     Login
                     <i class="fa-solid fa-chevron-right ml-2"></i>
                 </a>
@@ -137,12 +139,13 @@
       </div>
       
       {% block nav %}
-      <div class="row bg-custom-dark pr-3">
-        <nav class="navbar navbar-dark navbar-expand-lg w-100 pb-0">
-          {% include 'includes/mobile_top_header.html' %}
-        </nav>
+      <div class="d-block d-lg-none row bg-custom-dark">
+          <nav class="navbar navbar-dark navbar-expand-lg w-100 px-5">
+              {% include 'includes/mobile_top_header.html' %}
+          </nav>
       </div>
-      {% endblock %}
+      {% endblock %}    
+    
     </header>
 
     <!-- <div class="overlay1"></div> -->

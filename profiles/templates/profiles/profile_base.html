@@ -21,10 +21,17 @@
     </div>
 {% endblock %}
 
-{% block content %}    
+{% block content %}
     <div class="profile-layout">
 
         {% block profile_sidebar %}
+            {% if request.user.profile.role == "teacher" %}
+                {% include "profiles/includes/teacher/teacher_sidebar.html" %}
+            {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
+                {% include "profiles/includes/student/student_sidebar.html" %}
+            {% elif request.user.profile.role == "company_admin" %}
+                {% include "profiles/includes/company_admin/company_admin_sidebar.html" %}
+            {% endif %} 
         {% endblock %}
 
         <main class="profile-main">
@@ -33,9 +40,14 @@
         </main>
 
     </div>
+    <div
+        id="sidebarBackdrop"
+        class="sidebar-backdrop"
+        aria-hidden="true"
+    ></div>
 {% endblock %}
-
 {% block postloadjs %}
     {{ block.super }}
+    <script src="{% static 'profiles/js/sidebar.js' %}"></script>
     <script type="text/javascript" src="{% static 'profiles/js/countryfield.js' %}"></script>
 {% endblock %}
