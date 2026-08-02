@@ -10,6 +10,7 @@
         {% endif %}
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
+
         <!-- badge user role & company -->
         {% if request.user.profile.company %}
             <span class="text-center mt-4">
@@ -49,11 +50,6 @@
             <i class="fa-solid fa-chart-line"></i>
             <span>Performance</span>
         </a>
-
-        <!-- <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}">
-            <i class="fa-solid fa-folder-open"></i>
-            <span>Materials</span>
-        </a> -->
 
         <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
             <i class="fa-solid fa-list-check"></i>
