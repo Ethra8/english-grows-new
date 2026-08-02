@@ -1294,9 +1294,9 @@ main.profile-main h1
 
         position: fixed;
         top: 0;
-        right: 0;
+        right: auto;
         bottom: 0;
-        left: auto;
+        left: 0;
 
         width: min(85vw, 320px);
         max-width: none;
@@ -1309,7 +1309,7 @@ main.profile-main h1
 
         background-color: #0b355f;
 
-        transform: translateX(-56.5%);
+        transform: translateX(0);
         visibility: hidden;
 
         z-index: 1060;
