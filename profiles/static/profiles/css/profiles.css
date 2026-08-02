@@ -1298,7 +1298,7 @@ main.profile-main h1
         bottom: 0;
         left: 0;
 
-        width: min(85vw, 320px);
+        width: min(85vw, 300px);
         max-width: none;
         min-height: 100vh;
         flex: none;

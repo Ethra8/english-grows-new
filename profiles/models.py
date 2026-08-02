@@ -79,15 +79,15 @@ class UserProfile(models.Model):
     """
 
     ROLE_TEACHER = "teacher"
-    ROLE_INDIVIDUAL = "individual"
+    ROLE_INDIVIDUAL = "learner"
     ROLE_COMPANY_ADMIN = "company_admin"
-    ROLE_EMPLOYEE = "employee"
+    ROLE_EMPLOYEE = "learner"
 
     ROLE_CHOICES = [
         (ROLE_TEACHER, "Teacher"),
         (ROLE_INDIVIDUAL, "Student Profile"),
         (ROLE_COMPANY_ADMIN, "Company Admin"),
-        (ROLE_EMPLOYEE, "Employee"),
+        (ROLE_EMPLOYEE, "Learner"),
     ]
 
     LEVEL_UNKNOWN = "Pending"
