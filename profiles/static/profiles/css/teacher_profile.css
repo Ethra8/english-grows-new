@@ -2201,6 +2201,35 @@ div:has(> .student-action-btn) {
     gap: 2rem;
 }
 
+.student-detail-header {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.student-main-info {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.student-main-info > div:last-child {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.student-main-info h1,
+.student-main-info p,
+.student-meta-line,
+.student-meta-line span {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 .student-main-info h1 {
     color: whitesmoke;
     margin-bottom: 0;
@@ -2266,6 +2295,22 @@ div:has(> .student-action-btn) {
 .teacher-student-skills-page,
 .teacher-edit-skill-page {
     color: whitesmoke;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.profile-layout,
+main.profile-main,
+.profile-page {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+main.profile-main {
+    overflow-x: hidden;
 }
 
 .student-detail-header,
@@ -2337,6 +2382,19 @@ div:has(> .student-action-btn) {
     font-weight: 700;
 }
 
+.student-detail-tabs-wrapper {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
 .student-detail-tabs {
     display: flex;
     gap: 2rem;
@@ -2345,13 +2403,24 @@ div:has(> .student-action-btn) {
     margin-bottom: 1.7rem;
     background-color: #003366;
     margin-top: 0.25rem;
-    border-radius: 8px;}
+    border-radius: 8px;
+
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
 
 .student-detail-tabs a {
     color: rgba(255,255,255,0.75);
     padding: 1rem 0;
     text-decoration: none;
     position: relative;
+
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 
 .student-detail-tabs a.active,
@@ -2364,7 +2433,7 @@ div:has(> .student-action-btn) {
     position: absolute;
     left: 0;
     bottom: -1px;
-    width: 100%;
+    /* width: 100%; */
     height: 3px;
     background: #00e0cf;
     border-radius: 999px;
@@ -2552,9 +2621,13 @@ div:has(> .student-action-btn) {
 
 .student-skills-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.2rem;
     margin-top: 2rem;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .student-skills-grid p {
@@ -2570,6 +2643,37 @@ div:has(> .student-action-btn) {
     border-radius: 8px;
     padding: 1.5rem;
     color: whitesmoke;
+}
+
+.student-skill-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.skill-card-header,
+.skill-card-body,
+.skill-details,
+.subskill-row,
+.subskill-main {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.skill-card-header h2,
+.subskill-main strong,
+.subskill-main span {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.skill-edit-link {
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
 }
 
 .student-skill-card p {
@@ -2742,8 +2846,9 @@ div:has(> .student-action-btn) {
 .subskill-edit-card {
     background: rgba(11, 53, 95, 0.95);
     border: 1px solid rgba(95, 255, 234, 0.35);
-    padding: 0.5rem 1rem 0.25rem;
+    padding: 1rem 1rem 0.25rem;
     border-radius: 8px;
+    width: 100%;
 }
 
 .subskill-edit-card h3 {
@@ -2820,13 +2925,12 @@ div:has(> .student-action-btn) {
 
     .student-skills-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.2rem;
         margin-top: 2rem;
     }
 
 }
-
 
 
 @media (min-width: 1367.99px) and (max-width: 1700px) {
@@ -3205,15 +3309,30 @@ div:has(> .student-action-btn) {
     /*****************************************************|
     |*** STUDENT DETAIL Page  ****************************|
     |*****************************************************/
-    /* .student-detail-header {
-        flex-direction: column;
-        align-items: start;
-    } */
+    .student-detail-tabs-wrapper {
+        margin-bottom: .5rem;
+    }
 
+    .student-detail-tabs {
+        justify-content: flex-start;
+    }
+
+    .student-detail-tabs a {
+        padding-inline: 1rem;
+    }
 
 
 }
 
+
+
+@media (max-width: 900px) {
+
+    .student-skills-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+}
 
 
 @media (max-width: 767.99px) {
@@ -3456,12 +3575,6 @@ div:has(> .student-action-btn) {
         align-items: flex-start;
     }
 
-    .student-detail-tabs {
-        overflow-x: auto;
-        overflow-y: hidden;
-        gap: 1.25rem;
-    }
-
     .student-overview-grid {
         grid-template-columns: 1fr;
     }
@@ -3478,10 +3591,11 @@ div:has(> .student-action-btn) {
 
     .student-skills-grid,
     .student-skills-bottom-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .subskills-edit-list-three {
+    .subskills-edit-list-three,
+    .subskills-edit-list-four {
         display: flex;
         /* grid-template-columns: 1fr 1fr; */
         flex-wrap: wrap;

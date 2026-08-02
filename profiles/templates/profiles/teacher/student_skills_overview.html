@@ -74,7 +74,7 @@
 
         </div>
 
-        <div class="student-header-actions">
+        <!-- <div class="student-header-actions">
             <div>
                 <a href="mailto:{{ student.email }}" class="student-action-btn">
                     <i class="fa-regular fa-envelope mr-3"></i>
@@ -117,37 +117,38 @@
                 </form>
             </div>
 
-        </div>
+        </div> -->
 
     </div>
 
     <!-- Inside navbar -->
-    <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
-            Overview
-        </a>
+    <div class="student-detail-tabs-wrapper">
+        <nav class="student-detail-tabs">
+            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
+                Overview
+            </a>
 
-        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
-            Attendance
-        </a>
+            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
+                Attendance
+            </a>
 
-        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active">
-            Skills
-        </a>
+            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active">
+                Skills
+            </a>
 
-        <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
-            Progress
-        </a>
+            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+                Progress
+            </a>
 
-        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
-            Assessment
-        </a>
+            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+                Assessment
+            </a>
 
-        <a href="#">
-            History
-        </a>
-    </nav>
-
+            <a href="#">
+                History
+            </a>
+        </nav>
+    </div>
     <div class="student-skills-grid">
 
         {% for skill in skills %}
