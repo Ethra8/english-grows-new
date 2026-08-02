@@ -1309,7 +1309,7 @@ main.profile-main h1
 
         background-color: #0b355f;
 
-        transform: translateX(0);
+        transform: translateX(-100%);
         visibility: hidden;
 
         z-index: 1060;
@@ -1322,7 +1322,7 @@ main.profile-main h1
     }
 
     .profile-sidebar.sidebar-open {
-        transform: translateX(50);
+        transform: translateX(0);
         visibility: visible;
     }
 
