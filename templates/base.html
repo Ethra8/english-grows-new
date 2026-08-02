@@ -60,64 +60,115 @@
     <title>English Grows {% block extra_title %}{% endblock %}</title>
   </head>
   
-  <body class="d-flex flex-column min-vh-100">
-    
+ <body class="d-flex flex-column min-vh-100">
+
     <header class="container-fluid fixed-top w-100 p-0">
 
       <div id="topnav" class="row d-none d-lg-flex m-0">
+
         <div class="col-3 my-auto py-lg-0 text-center text-lg-left">
-          <a href="{% url 'home' %}" class="nav-link" aria-label="go to the home page">
-            <img src="{% static 'images/logo_englishgrows.png' %}" alt="logo" class="logo">
+          <a href="{% url 'home' %}"
+             class="nav-link"
+             aria-label="go to the home page">
+
+            <img
+              src="{% static 'images/logo_englishgrows.png' %}"
+              alt="logo"
+              class="logo"
+            >
           </a>
         </div>
+
         <div class="col-9 my-auto py-1 py-lg-0">
+
           <ul class="list-inline list-unstyled text-right my-0">
-            {% if request.user.is_authenticated %}
-              <li>
-                <div class="text-center">
-                  {% if request.user.profile.role == "teacher" %}
-                    <a href="{% url 'profiles:teacher_dashboard' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my teacher dashboard">
-                      <i class="fa-regular fa-user mr-2"></i> Dashboard
-                    </a>
-                  {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
-                    <a href="{% url 'profiles:profile' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my student dashboard">
-                      <i class="fa-regular fa-user"></i> Dashboard
-                    </a>
-                  {% elif request.user.profile.role == "company_admin" %}
-                    <a href="{% url 'profiles:company_admin_dashboard' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to company admin dashboard">
-                      <i class="fa-regular fa-user"></i> Dashboard
-                    </a>
-                  {% else %}
-                    <a href="{% url 'profiles:profile' %}" class="btn-navbar d-none d-lg-inline" aria-label="go to my profile page">
-                      <i class="fa-regular fa-user"></i> Dashboard
-                    </a>
-                  {% endif %}
-                </div>
-              </li>
 
-              
-              
-              <li>
-                <a href="{% url 'account_logout' %}" class="btn-navbar d-none d-lg-inline" aria-label="Logout">
-                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </a>
-              </li>
+            {% block top_nav_actions %}
 
-            {% else %}
-              <li>
-                <a href="{% url 'account_login' %}" class="btn-navbar d-none d-lg-inline">
+              {% if request.user.is_authenticated %}
+
+                <li>
+                  <div class="text-center">
+
+                    {% if request.user.profile.role == "teacher" %}
+
+                      <a href="{% url 'profiles:teacher_dashboard' %}"
+                         class="btn-navbar d-none d-lg-inline"
+                         aria-label="go to my teacher dashboard">
+
+                        <i class="fa-regular fa-user mr-2"></i>
+                        Dashboard
+                      </a>
+
+                    {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
+
+                      <a href="{% url 'profiles:profile' %}"
+                         class="btn-navbar d-none d-lg-inline"
+                         aria-label="go to my student dashboard">
+
+                        <i class="fa-regular fa-user"></i>
+                        Dashboard
+                      </a>
+
+                    {% elif request.user.profile.role == "company_admin" %}
+
+                      <a href="{% url 'profiles:company_admin_dashboard' %}"
+                         class="btn-navbar d-none d-lg-inline"
+                         aria-label="go to company admin dashboard">
+
+                        <i class="fa-regular fa-user"></i>
+                        Dashboard
+                      </a>
+
+                    {% else %}
+
+                      <a href="{% url 'profiles:profile' %}"
+                         class="btn-navbar d-none d-lg-inline"
+                         aria-label="go to my profile page">
+
+                        <i class="fa-regular fa-user"></i>
+                        Dashboard
+                      </a>
+
+                    {% endif %}
+
+                  </div>
+                </li>
+
+                <li>
+                  <a href="{% url 'account_logout' %}"
+                     class="btn-navbar d-none d-lg-inline"
+                     aria-label="Logout">
+
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-2 mt-1"></i>
+                    Logout
+                  </a>
+                </li>
+
+              {% else %}
+
+                <li>
+                  <a href="{% url 'account_login' %}"
+                     class="btn-navbar d-none d-lg-inline">
+
                     Login
                     <i class="fa-solid fa-chevron-right ml-2"></i>
-                </a>
-              </li>
-            {% endif %}
+                  </a>
+                </li>
+
+              {% endif %}
+
+            {% endblock %}
+
 
             {% block bag_icon %}
             {% endblock %}
 
             {% block sidebar %}
             {% endblock %}
-          <!-- bag_icon logic: To be exported to invidual_lessons.html
+
+
+            <!-- bag_icon logic: To be exported to invidual_lessons.html
             <li class="list-inline-item pr-5">
               <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
                 href="" aria-label="go to your bag page to update quantity, and see subtotals">
@@ -132,81 +183,198 @@
                   </p>
                 </div>
               </a>
-            </li> 
-          -->
+            </li>
+            -->
+
           </ul>
         </div>
       </div>
-      
+
+
       {% block nav %}
-      <div class="d-block d-lg-none row bg-custom-dark">
+
+        <div class="d-block d-lg-none row bg-custom-dark">
+
           <nav class="navbar navbar-dark navbar-expand-lg w-100 px-5">
+
+            {% block mobile_nav_content %}
               {% include 'includes/mobile_top_header.html' %}
+            {% endblock %}
+
           </nav>
-      </div>
-      {% endblock %}    
-    
+
+        </div>
+
+      {% endblock %}
+
     </header>
 
-    <!-- <div class="overlay1"></div> -->
-    {% if messages %}
-    <div class="messages alert-dismissible fade show">
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      {% endfor %}
-    </div>
-    {% endif %} 
 
-    
+    <!-- <div class="overlay1"></div> -->
+
+    {% if messages %}
+
+      <div class="messages alert-dismissible fade show">
+
+        {% for message in messages %}
+
+          <div class="alert alert-{{ message.tags }}" role="alert">
+
+            {{ message }}
+
+            <button type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close">
+
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+    {% endif %}
+
+
     {% block page_header %}
     {% endblock %}
-    
+
 
     <!-- <div class="main-bg"> -->
     <!-- <div class="d-flex flex-column min-vh-100"> -->
-      <main class="d-flex flex-grow-1">
+
+    <main class="d-flex flex-grow-1">
+
       {% block content %}
       {% endblock %}
-      </main>
+
+    </main>
+
     <!-- </div> -->
 
+
     <footer class="footer d-flex flex-column justify-content-center h-25">
+
       <p class="topage-links mt-3 mb-3 text-center text-white">
-        <a href="" class="topage-link ml-2 mr-2" aria-label="go to service page for companies">Companies</a><span> | </span> 
-        <a href="" class="topage-link ml-2 mr-2" aria-label="go to service page for professionals">Professionals</a><span> | </span>
-        <a href="" class="topage-link ml-2 mr-2" aria-label="go to service page for companies">Exam Candidates</a>
+
+        <a href=""
+           class="topage-link ml-2 mr-2"
+           aria-label="go to service page for companies">
+          Companies
+        </a>
+
+        <span> | </span>
+
+        <a href=""
+           class="topage-link ml-2 mr-2"
+           aria-label="go to service page for professionals">
+          Professionals
+        </a>
+
+        <span> | </span>
+
+        <a href=""
+           class="topage-link ml-2 mr-2"
+           aria-label="go to service page for companies">
+          Exam Candidates
+        </a>
+
       </p>
+
       <hr>
+
       <p class="topage-links mb-3 text-center text-white">
-        <a href="" class="topage-link ml-2 mr-2" aria-label="go to the about page">About</a><span> | </span>
-        <a href="" class="topage-link ml-2" aria-label="go to the contact page">Contact</a>
+
+        <a href=""
+           class="topage-link ml-2 mr-2"
+           aria-label="go to the about page">
+          About
+        </a>
+
+        <span> | </span>
+
+        <a href=""
+           class="topage-link ml-2"
+           aria-label="go to the contact page">
+          Contact
+        </a>
+
       </p>
+
       <hr>
+
       <p class="topage-links mb-3 text-center text-white">
-        <a href="" class="topage-link ml-2 mr-2" aria-label="go to the about page">Privacy Policy</a><span> | </span>
-        <a href="" class="topage-link ml-2" aria-label="go to the contact page">Terms & Cons</a>
+
+        <a href=""
+           class="topage-link ml-2 mr-2"
+           aria-label="go to the about page">
+          Privacy Policy
+        </a>
+
+        <span> | </span>
+
+        <a href=""
+           class="topage-link ml-2"
+           aria-label="go to the contact page">
+          Terms & Cons
+        </a>
+
       </p>
-      <!-- <a href="" aria-label="go to the newsletter subscription form"><p id="subscribe-link" class="mt-3 mb-1 text-center text-white">Subscribe to our Newsletter</p></a> -->
-      <!-- <p class="m-0 mt-1 text-center">
-          <a href="https://www.facebook.com/profile.php?id=61561504216913" target= "_blank" aria-label="go to facebook our facebook profile page"><i class="fab fa-facebook-square icons-social"></i></a>
-          <a href="https://www.twitter.com" target= "_blank" aria-label="go to twitter site"><i class="fab fa-twitter-square ms-3 icons-social"></i></a>
-          <a href="https://www.instagram.com" target= "_blank" aria-label="go to instagram site"><i class="fab fa-instagram-square ms-3 icons-social"></i></a>
-          <a href="https://www.youtube.com" target= "_blank" aria-label="go to youtube site"><i class="fab fa-youtube-square ms-3 icons-social"></i></a>
-      </p> -->
+
+      <!--
+      <a href="" aria-label="go to the newsletter subscription form">
+        <p id="subscribe-link" class="mt-3 mb-1 text-center text-white">
+          Subscribe to our Newsletter
+        </p>
+      </a>
+      -->
+
+      <!--
+      <p class="m-0 mt-1 text-center">
+        <a href="https://www.facebook.com/profile.php?id=61561504216913"
+           target="_blank"
+           aria-label="go to facebook our facebook profile page">
+          <i class="fab fa-facebook-square icons-social"></i>
+        </a>
+
+        <a href="https://www.twitter.com"
+           target="_blank"
+           aria-label="go to twitter site">
+          <i class="fab fa-twitter-square ms-3 icons-social"></i>
+        </a>
+
+        <a href="https://www.instagram.com"
+           target="_blank"
+           aria-label="go to instagram site">
+          <i class="fab fa-instagram-square ms-3 icons-social"></i>
+        </a>
+
+        <a href="https://www.youtube.com"
+           target="_blank"
+           aria-label="go to youtube site">
+          <i class="fab fa-youtube-square ms-3 icons-social"></i>
+        </a>
+      </p>
+      -->
+
       <p class="mt-3 text-center text-white">
         © English Grows 2026
       </p>
-      <p class="mt-3 text-center text-lightGrey">Software designed & developed by Edna T.M.</p>
-  
+
+      <p class="mt-3 text-center text-lightGrey">
+        Software designed & developed by Edna T.M.
+      </p>
+
     </footer>
+
 
     {% block postloadjs %}
     {% endblock %}
 
   </body>
 </html>
+
+

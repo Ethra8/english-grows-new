@@ -2905,7 +2905,7 @@ div:has(> .student-action-btn) {
 @media (max-width: 1250px) {
 
     .profile-page {
-        padding: 70px 4%;
+        padding: 70px 15px 70px 40px;
     }
 
     .teacher-attendance-page {
@@ -2916,7 +2916,11 @@ div:has(> .student-action-btn) {
     /******************************************************/
     /* DASHBOARD Page *********************************** */
     /******************************************************/
-    
+    .today-sessions-list p {
+        color: whitesmoke;
+        padding: 0 1.75rem;
+    }
+
     .profile-dashboard .weekly-overview .meta-row {
         gap: 0.5rem;
     }
@@ -3023,16 +3027,8 @@ div:has(> .student-action-btn) {
 }
 
 
-@media (min-width: 992px) {
 
-    /*****************************************************|
-    |*** STUDENT DETAIL Page *******************************|
-    |*****************************************************/
-
-}
-
-
-@media (max-width: 992px) {
+@media (max-width: 991.99px) {
 
     .profile-dashboard .dashboard-general-info-card .meta-row {
         gap: 0.5rem;

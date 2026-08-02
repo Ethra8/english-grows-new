@@ -12,6 +12,35 @@
 
 {% block extra_title %}| Dashboard{% endblock %}
 
+{% block top_nav_actions %}
+{% endblock %}
+
+
+{% block mobile_nav_content %}
+
+    <a href="{% url 'home' %}"
+       class="navbar-brand d-lg-none py-1 pl-3"
+       aria-label="Go to the home page">
+
+        <img
+            class="logo"
+            src="{% static 'images/logo_englishgrows.png' %}"
+            alt="English Grows logo"
+        >
+    </a>
+
+    <button
+        class="navbar-toggler d-lg-none ml-auto mr-3"
+        type="button"
+        id="mobileSidebarToggle"
+        aria-controls="profileSidebar"
+        aria-expanded="false"
+        aria-label="Open navigation menu"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+{% endblock %}
 
 {% block page_header %}
     <div id="profile-header" class="container">
@@ -34,18 +63,23 @@
             {% endif %} 
         {% endblock %}
 
+        <div
+            id="sidebarBackdrop"
+            class="sidebar-backdrop"
+            aria-hidden="true"
+        ></div>
+
+
         <main class="profile-main">
             {% block profile_content %}
             {% endblock %}
         </main>
 
     </div>
-    <div
-        id="sidebarBackdrop"
-        class="sidebar-backdrop"
-        aria-hidden="true"
-    ></div>
+
+    
 {% endblock %}
+
 {% block postloadjs %}
     {{ block.super }}
     <script src="{% static 'profiles/js/sidebar.js' %}"></script>

@@ -208,6 +208,7 @@
     right: 1rem;
     grid-row: 1;
     grid-column: 1;
+    border-color: #5ff0cf !important;
 }
 
 .my-calendar .fc-prev-button {
@@ -215,6 +216,7 @@
     left: 2rem;
     grid-row: 1;
     grid-column: 1;
+    border-color: #5ff0cf !important;
 }
 
 /* View buttons row: today / week / month / list/ year */
@@ -285,6 +287,15 @@
 .course-cancelled-event .fc-event-time,
 .course-cancelled-event .fc-event-title {
     color: #842029 !important;
+}
+
+
+
+@media (max-width: 1250px) {
+
+    #my_calendar_page {
+        padding: 70px 15px 70px 40px;
+    }
 }
 
 

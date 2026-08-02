@@ -1,6 +1,16 @@
+console.log("sidebar.js loaded");
+
 const toggleButton = document.getElementById("mobileSidebarToggle");
 const sidebar = document.getElementById("profileSidebar");
 const backdrop = document.getElementById("sidebarBackdrop");
+
+
+console.log({
+    toggleButton,
+    sidebar,
+    backdrop
+});
+
 
 if (toggleButton && sidebar && backdrop) {
     const openSidebar = () => {

@@ -11,9 +11,7 @@
 {% endblock %}
 
 
-{% block content %}
-
-{% include "profiles/includes/teacher/teacher_sidebar.html" %}
+{% block profile_content %}
 
 <section class="profile-dashboard profile-page">    
     <div class="overlay-birds"></div>
@@ -46,7 +44,7 @@
                 <a href="{% url 'profiles:teacher_courses' %}">
                     <div class="meta-card meta-courses">
                         <div class="meta-text">
-                            <strong>Active Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <strong>My Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
                             <span>{{ active_courses|default:"0" }}</span>
                         </div>
                     </div>
@@ -124,7 +122,7 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p>No upcoming class scheduled for today.</p>
+                    <p>No upcoming classes scheduled for today.</p>
                 {% endif %}
             </div>
 
