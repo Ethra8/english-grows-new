@@ -314,9 +314,10 @@ main.profile-main h1
 
 
 /* =========================================================
-   BACKDROP
+   BACKDROP: blury bg when sidebar displays 
+   on smaller devs (max-width: 991.98px
 ========================================================= */
-
+/* Hidden by default */
 .sidebar-backdrop {
     display: none;
 }
@@ -1209,7 +1210,7 @@ main.profile-main h1
 
 @media (max-width: 1250px) {
 
-/* === SIDEBAR ============================ */
+/* === SIDEBAR ===================================== */
     .profile-sidebar {
         /* max-width: 170px;
         min-width: 170px; */
@@ -1217,7 +1218,7 @@ main.profile-main h1
         padding: 2rem 0.75rem;
     }
 
-    /* STUDENT: Course page */
+    /* STUDENT: Course page **************************/
 
     .course-card .info {
         padding: 10.5rem 4% 2rem;
@@ -1268,9 +1269,9 @@ main.profile-main h1
 }
 
 
-@media (max-width: 991px) {
+@media (max-width: 991.98px) {
 
-    /* *** H1 **************************************************/
+    /* *** H1 ****************************************/
 
     main.profile-main h1,
     .my-course header h1,
@@ -1280,14 +1281,94 @@ main.profile-main h1
     .profile-settings-page header p {
         padding: 0 4%;
     }
-/* STUDENT Course page */
+
+
+    /* SIDEBAR on PROFILES DASHBOARDS ****************/
+    .profile-layout {
+        display: block;
+    }
+
+    .profile-sidebar {
+        display: flex;
+        flex-direction: column;
+
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+
+        width: min(85vw, 320px);
+        max-width: none;
+        height: 100vh;
+        min-height: 0;
+        flex: none;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        background-color: #0b355f;
+
+        transform: translateX(-56.5%);
+        visibility: hidden;
+
+        z-index: 1060;
+
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+
+        transition:
+            transform 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    .profile-sidebar.sidebar-open {
+        transform: translateX(50);
+        visibility: visible;
+    }
+
+    .sidebar-backdrop {
+        display: block;
+
+        position: fixed;
+        inset: 0;
+
+        background-color: rgba(2, 23, 43, 0.55);
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+
+        z-index: 1050;
+
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    .sidebar-backdrop.backdrop-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    body.mobile-sidebar-active {
+        overflow: hidden;
+    }
+
+    .profile-main {
+        width: 100%;
+    }
+
+
+    /* STUDENT Course page ************************/
 
     .my-course .course-card {
         min-width: none !important;
         margin: 0 auto;
     }
 
-    /* ACCOUNT SETTINGS Page */
+
+    /* ACCOUNT SETTINGS Page *********************/
     .profile-settings-page {
         padding: 70px 2%;
     }
@@ -1297,23 +1378,23 @@ main.profile-main h1
 
 @media (max-width: 768px) {
 
-    /*  MAIN PROFILE ***************** */
+    /*  MAIN PROFILE *************************** */
 
     /* .profile-layout {
         justify-content: space-around;
     } */
 
 
-    /*  STUDENT: My DASHBOARD Page ***************** */
+    /*  STUDENT: My DASHBOARD Page ************* */
     
     .next-class-card,
     .next-class-card .info {
         margin: 0 auto;
     }
 
-    /* HEADERS ***************************************/
+    /* HEADERS ***********************************/
 
-    /* COURSE DETAILS Pages ********************************** */
+    /* COURSE DETAILS Pages ******************** */
     .course-details header h1 {
         font-size: 2.5rem;    
     }
@@ -1329,7 +1410,7 @@ main.profile-main h1
     }
 
 
-    /* STUDENT: My COURSE Page ******* */
+    /* STUDENT: My COURSE Page ***************** */
 
     .my-course {
         padding: 70px 14%;
@@ -1520,92 +1601,4 @@ main.profile-main h1
     /* My ACCOUNT SETTINGS Page **************************** */
 
 
-}
-
-
-
-
-/* Hidden by default */
-.sidebar-backdrop {
-    display: none;
-}
-
-@media (max-width: 991.98px) {
-
-    .profile-layout {
-        display: block;
-    }
-
-    .profile-sidebar {
-        display: flex;
-        flex-direction: column;
-
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: auto;
-
-        width: min(85vw, 320px);
-        max-width: none;
-        height: 100vh;
-        min-height: 0;
-        flex: none;
-
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        background-color: #0b355f;
-
-        transform: translateX(-56.5%);
-        visibility: hidden;
-
-        z-index: 1060;
-
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
-
-        transition:
-            transform 0.3s ease,
-            visibility 0.3s ease;
-    }
-
-    .profile-sidebar.sidebar-open {
-        transform: translateX(50);
-        visibility: visible;
-    }
-
-    .sidebar-backdrop {
-        display: block;
-
-        position: fixed;
-        inset: 0;
-
-        background-color: rgba(2, 23, 43, 0.55);
-
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-
-        z-index: 1050;
-
-        transition:
-            opacity 0.3s ease,
-            visibility 0.3s ease;
-    }
-
-    .sidebar-backdrop.backdrop-open {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-    }
-
-    body.mobile-sidebar-active {
-        overflow: hidden;
-    }
-
-
-
-    .profile-main {
-        width: 100%;
-    }
 }
