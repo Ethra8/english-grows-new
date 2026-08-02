@@ -1313,7 +1313,7 @@ main.profile-main h1
 
         z-index: 1060;
 
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
 
         transition:
             transform 0.3s ease,
