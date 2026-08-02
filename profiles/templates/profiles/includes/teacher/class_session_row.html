@@ -32,7 +32,7 @@
             {% else %}
                 <span class="status-badge upcoming mt-2">Upcoming</span>
             {% endif %}
-            {% if session.is_today or session.is_upcoming %}
+            <!-- {% if session.is_today or session.is_upcoming %}
                 <button
                     type="button"
                     class="status-badge pending-reschedule mt-2 js-open-reschedule-modal"
@@ -45,7 +45,7 @@
                     RESCHEDULE
                     <i class="fa-solid fa-angles-right ml-2"></i>
                 </button>
-            {% endif %}            
+            {% endif %}             -->
         </div>
 
     </div>
@@ -72,12 +72,28 @@
     </div>
 
     <div class="course-action">
+        {% if session.is_today or session.is_upcoming %}
+        <button
+            type="button"
+            class="js-open-reschedule-modal btn-course-details"
+            data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+            data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+            data-class-date="{{ session.start_time|date:'D, j M' }}"
+            data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}">
+            <span><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
+            Reschedule</span>
+            <i class="fa-solid fa-chevron-right ml-2"></i>
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- <div class="course-action">
         <a href="#" class="btn-course-details">
             <i class="fa-regular fa-eye mr-2"></i>
             View
             <i class="fa-solid fa-chevron-right ml-2"></i>
         </a>
-    </div>
+    </div> -->
 
 </div>
 

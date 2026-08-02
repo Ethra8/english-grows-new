@@ -405,7 +405,7 @@ class StudentSkillAssessment(models.Model):
 
     class Meta:
         unique_together = ("student", "course", "skill")
-
+    
     def __str__(self):
         return (
             f"{self.student.get_full_name()} · "
@@ -518,8 +518,6 @@ class StudentSubSkillAssessment(models.Model):
         choices=RATING_CHOICES,
         default="developing",
     )
-
-    # teacher_notes = models.TextField(blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 

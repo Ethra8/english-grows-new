@@ -134,7 +134,7 @@ class StudentAcademicProfileForm(forms.ModelForm):
         widgets = {
             "learning_goals": forms.CheckboxSelectMultiple,
             "next_review_date": forms.DateInput(attrs={"type": "date"}),
-            "teacher_notes": forms.Textarea(attrs={"rows": 4}),
+            "teacher_notes": forms.Textarea(attrs={"rows": 2}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -152,6 +152,13 @@ class StudentSkillAssessmentForm(forms.ModelForm):
         fields = [
             "teacher_notes",
         ]
+        widgets = {
+            "teacher_notes": forms.Textarea(
+                attrs={
+                    "rows": 4,
+                }
+            ),
+        }
 
 
 class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
@@ -159,7 +166,6 @@ class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
         model = StudentSubSkillAssessment
         fields = [
             "rating",
-            # "teacher_notes",
         ]
 
 

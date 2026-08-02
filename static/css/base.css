@@ -429,15 +429,14 @@ ul li {
     border-color: rgba(255, 255, 255, .5);
 }
 
-.fa-circle-user {
-    /* color: #82fae0 ; */
-    color: #5ff0df; /* birds color */
+/* .fa-circle-user {
+    color: #5ff0df;
     font-size: 30px !important;
 }
 
 .fa-circle-user:hover {
     color: #c7fff9;
-}
+} */
 
 /* Footer */
 .footer {
@@ -770,12 +769,12 @@ span.btt-link:hover {
 } */
 
 #index h2 {
-    font-size: 2rem;
+    font-size: 2.3rem;
     font-weight: 700;
     font-family: 'Lato', sans-serif;
     color: whitesmoke;
-    width: 75%;
-    margin: 5rem 0 2rem;
+    width: 65%;
+    margin: 6rem 0 2rem;
     line-height: 1.4;
     text-transform: uppercase;
 }
@@ -792,26 +791,33 @@ span.btt-link:hover {
     text-justify: none;
 }
 
-#index .platform-showcase {
-    /* position: absolute; */
-    left: 0;
-    top: 21%;
-    display: flex;
-    transform: translateX(27%);
-    transform: translateY(-18%);
-    /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
-    border-radius: 50%; */
-    /* width: 650px;
-    height: 650px; */
-    z-index: 5;
-    margin: 0;
+
+
+#index .platform-laptop {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
 }
 
-#index .platform-laptop img {
-    position: absolute;
+
+#index .platform-laptop img,
+#index .platform-laptop-static-image {
+    position: static;
+
+    display: block;
+
     width: 100%;
-    top: 10%;
-    left: 0;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
+
+    object-fit: contain;
 }
 
 
@@ -833,18 +839,20 @@ span.btt-link:hover {
 
 
 /* Right laptop column */
-.index-laptop-column {
+#index .index-laptop-column {
     position: relative;
-    z-index: 3;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    min-height: 650px;
+    min-width: 0;
+    min-height: 0;
 
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    overflow: visible;
 }
 
 
@@ -946,90 +954,6 @@ This removes the browser's default figure margins and
 stacks every slide in precisely the same screen position.
 */
 
-/* === SPECIAL PERSON SLIDE =================== */
-.platform-person-layer {
-    position: absolute;
-
-    top: var(--screen-top);
-    left: var(--screen-left);
-
-    width: var(--screen-width);
-    height: var(--screen-height);
-
-    z-index: 7;
-
-    overflow: visible;
-
-    pointer-events: none;
-}
-
-.platform-slide-person {
-    position: absolute;
-    inset: 0;
-    top: 0;
-    left: 0;
-
-    width: 110%;
-    height: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    overflow: hidden;
-}
-
-.platform-slide-person img {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    width: 100% !important;
-    height: 120% !important;
-
-    object-fit: cover;
-    object-position: top left;
-
-    margin: 0;
-}
-
-/*
-
-IMPORTANT:
-This image must contain ONLY your cut-out figure on transparency.
-
-It must not contain the rectangular map background.
-*/
-.platform-person-popout {
-    position: absolute;
-
-    left: 50%;
-    bottom: 0;
-
-    /*
-    Size relative to the inner screen, not the whole laptop.
-    Adjust only this value to make yourself larger or smaller.
-    */
-    width: 124%;
-    height: auto;
-
-    opacity: 0;
-    visibility: hidden;
-
-    transform: translateX(-50%) translateY(10px);
-
-    transform-origin: bottom center;
-
-    transition:
-        opacity 700ms ease-in-out,
-        /* visibility 700ms ease-in-out,
-        transform 700ms ease-in-out; */
-}
-
-.platform-laptop.person-slide-active .platform-person-popout {
-    opacity: 1;
-    visibility: visible;
-
-    transform: translateX(-50%) translateY(0);
-}
 
 .platform-slide {
     position: absolute;
@@ -1159,137 +1083,14 @@ It must not contain the rectangular map background.
 }
 
 
-/* =========================================================
-   SUBTLE LAPTOP MOVEMENT
-========================================================= */
-
-@keyframes laptopFloat {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-
-
-
-
-
-/* =========================================================
-   TABLETS
-========================================================= */
-
-@media (max-width: 991.98px) {
-
-    #index {
-        min-height: auto;
-    }
-
-    .index-hero-row {
-        min-height: auto;
-    }
-
-    .index-content-column {
-        padding-top: 4rem;
-    }
-
-    .index-laptop-column {
-        min-height: auto;
-
-        padding-top: 3rem;
-        padding-bottom: 4rem;
-    } */
-
-    .platform-showcase {
-        width: 100%;
-        max-width: 800px;
-
-        margin: 0 auto;
-
-        transform: none;
-    }
-
-    .platform-laptop {
-        width: min(800px, 94vw);
-
-        margin: 0 auto;
-    }
-
-    .platform-slide-person {
-        bottom: 0;
-        width: 115% !important;
-    }
-
-    /* .platform-person-popout {
-        bottom: 38.5%;
-    } */
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 575.98px) {
-
-    .index-laptop-column {
-        overflow: hidden;
-
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .platform-showcase {
-        width: 110%;
-
-        margin-left: -5%;
-    }
-
-    .platform-laptop {
-        width: 105%;
-
-        animation: none;
-    }
-
-    .platform-slide-person {
-        bottom: 0%;
-        width: 115% !important;
-    }
-
-    /* .platform-person-popout {
-        bottom: 40%;
-    } */
-
-    .platform-showcase-caption {
-        margin-top: 0.4rem;
-        margin-left: 8%;
-    }
-
-    .platform-showcase-eyebrow {
-        font-size: 0.65rem;
-    }
-
-    .platform-current-slide {
-        font-size: 0.85rem;
-    }
-}
-
-
-/* END OF LAPTOP SHOWCASE */
-
-#index .cta {
+/* #index .cta {
     width: 100%;
     height: 76px;
     margin-top: 7rem;
     background-color: #0B355F;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-}
+} */
 
 #index .footer {
     bottom: 0;
@@ -1494,33 +1295,6 @@ span.vertical-line {
 
 @media (min-width: 1400px) {
 
-    #index {
-        padding: 120px 14% 60px;
-    }
-
-    .platform-laptop {
-        width: min(920px, 52vw);
-    }
-
-    #index .platform-laptop img {
-        position: absolute;
-        width: 100%;
-        top: 10%;
-        left: 0;
-    }
-
-    /*
-    Slight movement toward the right lets the laptop overlap
-    the globe without interfering with the left-side text.
-    */
-    .platform-showcase {
-        transform: translateX(2%);
-    }
-
-    .platform-slide-person {
-        bottom: 0;
-        width: 115% !important;
-    }
 
 }
 
@@ -1532,39 +1306,10 @@ span.vertical-line {
 @media (min-width: 992px) and (max-width: 1399.98px) {
 
     #index {
-        padding: 120px 6% 60px;
+        /* padding: 120px 6% 60px; */
+        padding: 200px 6% 60px;
     }
 
-    .platform-laptop {
-        width: min(780px, 53vw);
-    }
-
-    #index .platform-laptop img {
-        position: absolute;
-        width: 90%;
-        top: 10%;
-        left: 0;
-    }
-
-    #index .platform-showcase {
-        /* transform: translateX(-15%);
-        transform: translateY(-15%); */
-        left: -20%;
-        top: 25%;
-    }
-
-    .platform-showcase {
-        transform: translateX(3%);
-    }
-
-    .platform-slide-person {
-        bottom: 0;
-        width: 115% !important;
-    }
-
-    /* .platform-person-popout {
-        bottom: 30% !important;
-    } */
 
 }
 
@@ -1572,62 +1317,33 @@ span.vertical-line {
 
 
 @media (max-width: 1199.99px) {
-    /* #index {
-        padding: 120px 7%;
-    } */
 
-    #index .platform-showcase {
+    /* #index .platform-showcase {
         position: absolute;
         left: 0;
         top: 21%;
         display: flex;
         transform: translateX(27%);
         transform: translateY(-28%);
-        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
-        border-radius: 50%; */
         width: 650px;
         height: 650px;
         z-index: 5;
         margin: 0;
-    }
-
-    /* #index .platform-laptop img {
-        position: absolute;
-        width: 70%;
-        top: 15%;
-        left: 0;
     } */
+
 }
 
 
-
-/* @media (min-width: 576px) {
-    
-    #bag.container, 
-    #bag.container-sm {
-        max-width: 98%;
-    }
-
-} */
-
+/* =========================================================
+   TABLETS - Landscape
+========================================================= */
 
 @media (max-width: 991.99px) {
     
-    /* nav .dropdown-menu {
-        left: -80px !important;   
-    }
- */
     nav .navbar-nav {
-        /* display: -ms-flexbox;
-        display: flex; */
         -ms-flex-direction: row;
         flex-direction: row;
-        /* padding-left: 0;
-        margin-bottom: 0;
-        list-style: none; */
         gap: 2rem;
-        /* font-weight: 400;
-        line-height: 1.5; */
     }
 
     nav .btn-navbar {
@@ -1648,34 +1364,12 @@ span.vertical-line {
     }
 
     #index {
-        padding: 120px 6% 60px;
+        padding: 290px 6% 60px;
     }
 
     #index .hero-title-image {
         margin: 0 auto;
         width: 100%;
-    }
-
-    #index .platform-showcase {
-        position: absolute;
-        left: -18%;
-        top: 21%;
-        display: flex;
-        transform: translateX(0);
-        transform: translateY(-28%);
-        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
-        border-radius: 50%; */
-        width: 650px;
-        height: 650px;
-        z-index: 5;
-        margin: 0;
-    }
-
-    #index .platform-laptop img {
-        position: absolute;
-        width: 70%;
-        top: 15%;
-        left: 0;
     }
 
     .main-bg {
@@ -1694,14 +1388,16 @@ span.vertical-line {
         padding-left: 0 !important;
     }
 
-    /* .nav-link {
-        padding: 0;
-    } */
 
 }
 
 
-@media (max-width: 767px) {
+
+/* =========================================================
+   TABLETS - Portrait
+========================================================= */
+
+@media (max-width: 767.98px) {
 
     .btn-custom,
     .btn-custom-teal {
@@ -1709,24 +1405,8 @@ span.vertical-line {
         max-width: 100% !important; 
     }
 
-    #index .eg-font {
-        font-size: 5rem;
-    }
-
-    /* ONLY FOR PLATFORM DEVELOPMENT BANNER */
-    /* #index {
-        padding: 120px 12%;
-    } */
-
-    /* #index .w-edna {
-        margin-left: 11rem;
-        font-size: 3.6rem;
-    } */
-
     #index h2 {
-        /* font-size: 1.3rem; */
         width: 80%;
-        /* margin-top: 40px; */
         line-height: 1.6;
     }
 
@@ -1734,10 +1414,31 @@ span.vertical-line {
         width: 80%;
     }
 
-    /* .index-cta-button {
-        margin: 1.5rem 0 0 0;
-        width: 80%;
-    } */
+    #index .index-laptop-column {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 0;
+        padding-right: 0;
+
+        margin-top: 2.5rem;
+    }
+
+    #index .platform-showcase {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #index .platform-laptop {
+        width: 100%;
+        max-width: 760px;
+    }
+
+    #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
 
     #checkout-page {
         padding-left: 0;
@@ -1779,11 +1480,21 @@ span.vertical-line {
 }
 
 
-@media (max-width: 575px) { /* Extra small devices */
+/* =========================================================
+   X-SMALL DEVICES
+========================================================= */
+
+@media (max-width: 575px) {
     
     body {
         padding-left: 15px;
         padding-right: 15px;
+    }
+
+    #index {
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 330px;
     }
 
     .logo {
@@ -1792,56 +1503,44 @@ span.vertical-line {
         margin-left: 0;
     }
 
-    #index {
-        /* padding: 60px 7% !important; */
-        /* ONLY FOR DEVELOPMENT BANNER */
-        padding-top: 180px;
+    #index .hero-title-image {
+        display: none;
     }
 
-    #index .platform-showcase {
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        transform: translateX(27%);
-        transform: translateY(-28%);
-        /* background: radial-gradient(circle,rgba(11, 53, 95, 0.97) 57%, rgba(11, 53, 95, 0.58) 70%, rgba(11, 53, 95, 0.13) 100%);    
-        border-radius: 50%; */
-        width: 650px;
-        height: 650px;
-        z-index: 5;
-        margin: 0;
+    #index .hero-title-image-mobile {
+        display: block;
+        width: 80%;
     }
 
-    /* #index .platform-laptop img {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        left: 0;
-    } */
-
-    /* #index .eg-font {
-        font-size: 5rem;
-    } */
-
-    /* #index .w-edna {
-        font-size: 2.8rem;
-        margin-left: auto;
-    } */
+    #index h2 {
+        line-height: 1.1;
+        width: 90%;
+    }
 
     #index header p {
-        width: 100%;
+        width: 90%;
     }
 
-    /* #index h2 {
+    #index .index-laptop-column {
+        padding-left: 0;
+        padding-right: 0;
 
-    } */
+        overflow: visible;
+    }
 
-    .index-cta-button {
+    #index .platform-showcase,
+    #index .platform-laptop,
+    #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
+    }
+
+
+    /* .index-cta-button {
         margin-left: 0rem;
         width: 100%;
         margin-top: 1.7rem;
-    }
+    } */
     
     .topage-links {
         display: flex;
@@ -1889,35 +1588,149 @@ span.vertical-line {
 
 
 
-@media (max-width: 525px) {
+/* =========================================================
+   RESPONSIVE STATIC LAPTOP IMAGE — FINAL OVERRIDE
+========================================================= */
 
-    #index .w-edna {
-        /* margin-left: 7rem; */
-        font-size: 2.5rem;
-        line-height: 1.2;
-    }
+/* #index .index-laptop-column {
+    position: relative;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding-left: 15px;
+    padding-right: 15px;
+
+    overflow: visible;
+} */
+
+
+/* #index .platform-showcase {
+    position: relative;
+
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
+
+    transform: none;
+
+    overflow: visible;
+} */
+
+
+/* #index .platform-laptop {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0 auto;
 }
 
 
+#index .platform-laptop img,
+#index .platform-laptop-static-image {
+    position: static;
 
-@media (max-width: 476px) {
+    display: block;
 
-    .w-edna {
-        margin-left: 2.4rem;
-    }
-    
-    /* to override the 15px and allow more vv */
-    #individual-services .card {
-        margin: 0;
-    }
+    width: 100%;
+    max-width: 100%;
+    height: auto;
 
-    #companies,
-    #subscribe-page {
-        padding-right: 0;
+    margin: 0 auto;
+
+    object-fit: contain;
+} */
+
+
+@media (max-width: 767.98px) {
+
+    /* #index .index-laptop-column {
+        width: 100%;
+        max-width: 100%;
+
         padding-left: 0;
-    }
+        padding-right: 0;
+
+        margin-top: 2.5rem;
+    } */
+
+    /* #index .platform-showcase {
+        width: 100%;
+        max-width: 100%;
+    } */
+
+    /* #index .platform-laptop {
+        width: 100%;
+        max-width: 760px;
+    } */
+
+    /* #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    } */
 }
+
+
+
+@media (max-width: 575.98px) {
+
+    /* body {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    #index {
+        padding-left: 15px;
+        padding-right: 15px;
+    } */
+
+    /* #index .hero-title-image {
+        display: none;
+    }
+
+    #index .hero-title-image-mobile {
+        display: block;
+    }
+
+    #index h2 {
+        line-height: 1.1;
+    }
+
+    #index .index-laptop-column {
+        padding-left: 0;
+        padding-right: 0;
+
+        overflow: visible;
+    }
+
+    #index .platform-showcase,
+    #index .platform-laptop,
+    #index .platform-laptop-static-image {
+        width: 100%;
+        max-width: 100%;
+    } */
+
+
+}
+
 
 
 @media (max-width: 321px) {
@@ -1946,149 +1759,5 @@ span.vertical-line {
     #individual-services {
         padding-left: 12px;
         padding-right: 12px;
-    }
-}
-
-
-
-/* =========================================================
-   RESPONSIVE STATIC LAPTOP IMAGE — FINAL OVERRIDE
-========================================================= */
-
-#index .index-laptop-column {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 0;
-    min-height: 0;
-
-    padding-left: 15px;
-    padding-right: 15px;
-
-    overflow: visible;
-}
-
-
-#index .platform-showcase {
-    position: relative;
-
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-
-    display: block;
-
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-
-    transform: none;
-
-    overflow: visible;
-}
-
-
-#index .platform-laptop {
-    position: relative;
-
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-}
-
-
-#index .platform-laptop img,
-#index .platform-laptop-static-image {
-    position: static;
-
-    display: block;
-
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-
-    object-fit: contain;
-}
-
-
-@media (max-width: 767.98px) {
-
-    #index .index-laptop-column {
-        width: 100%;
-        max-width: 100%;
-
-        padding-left: 0;
-        padding-right: 0;
-
-        margin-top: 2.5rem;
-    }
-
-    #index .platform-showcase {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    #index .platform-laptop {
-        width: 100%;
-        max-width: 760px;
-    }
-
-    #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-    }
-}
-
-
-@media (max-width: 575px) {
-    body {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-}
-
-@media (max-width: 575.98px) {
-
-    #index {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    #index .hero-title-image {
-        display: none;
-    }
-
-    #index .hero-title-image-mobile {
-        display: block;
-    }
-
-    #index h2 {
-        line-height: 1.1;
-    }
-
-    #index .index-laptop-column {
-        padding-left: 0;
-        padding-right: 0;
-
-        overflow: visible;
-    }
-
-    #index .platform-showcase,
-    #index .platform-laptop,
-    #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
     }
 }

@@ -107,32 +107,35 @@
     </div>
 
     <!-- Inside navbar -->
-    <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
-            Overview
-        </a>
+    <div class="student-detail-tabs-wrapper">
 
-        <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="active">
-            Attendance
-        </a>
+        <nav class="student-detail-tabs">
+            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
+                Overview
+            </a>
 
-        <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
-            Skills
-        </a>
+            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="active">
+                Attendance
+            </a>
 
-        <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
-            Progress
-        </a>
+            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
+                Skills
+            </a>
 
-        <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
-            Assessment
-        </a>
+            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+                Progress
+            </a>
 
-        <a href="#">
-            History
-        </a>
-    </nav>
+            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+                Assessment
+            </a>
 
+            <a href="#">
+                History
+            </a>
+        </nav>
+    </div>
+    
     <div class="student-overview-grid mt-4">
 
         <article class="recent-attendance-card">

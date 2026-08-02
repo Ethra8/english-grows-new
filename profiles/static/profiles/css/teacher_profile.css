@@ -38,7 +38,7 @@ h2 {
 .reschedule-modal-box {
     max-width: 520px;
     width: 100%;
-    background: #062f35;
+    background: #0B355F;
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 22px;
     padding: 2rem;
@@ -60,7 +60,7 @@ h2 {
 .reschedule-modal-cancel,
 .reschedule-modal-confirm {
     border: none;
-    border-radius: 999px;
+    border-radius: 8px;
     padding: 0.75rem 1.4rem;
     cursor: pointer;
 }
@@ -71,7 +71,7 @@ h2 {
 }
 
 .reschedule-modal-confirm {
-    background: #189f03;
+    background: #55a04a;
     color: #ffffff;
     font-weight: 700;
 }
@@ -428,7 +428,8 @@ h2 {
 .btn-to-student-detail,
 .student-action-btn,
 .student-edit-attendance-btn,
-.skill-edit-link {
+.skill-edit-link,
+.btn-skill-save-assessment {
     border: 1px solid #5ff0df;
     color: #5ff0df;
     padding: 0.25rem 0.85rem;
@@ -455,7 +456,8 @@ h2 {
 .btn-to-student-detail:hover,
 .student-action-btn:hover,
 .student-edit-attendance-btn:hover,
-.skill-edit-link:hover  {
+.skill-edit-link:hover,
+.btn-skill-save-assessment:hover  {
     background: rgba(94, 234, 212, 0.15);
     color: #fff;
     text-decoration: none;
@@ -2218,6 +2220,7 @@ div:has(> .student-action-btn) {
     flex: 1;
     min-width: 0;
     max-width: 100%;
+    width: 100%;
 }
 
 .student-main-info h1,
@@ -2257,8 +2260,8 @@ div:has(> .student-action-btn) {
 
 /* Only Student Detail page */
 .student-avatar-large {
-    width: 96px;
-    height: 96px;
+    width: 156px;
+    height: 156px;
     border-radius: 50%;
     background: rgba(95, 255, 234, 0.16);
     border: 2px outset rgba(84, 85, 85, 0.75);
@@ -2823,6 +2826,10 @@ main.profile-main {
 **** EDIT STD SKILLS Page *************|
 *********************************************** */
 
+.student-skill-edit-page header i {
+    font-size: 1.4rem;
+}
+
 .subskills-edit-list-three {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -2867,7 +2874,8 @@ main.profile-main {
     width: 160px;
 }
 
-.subskill-edit-card p {
+.subskill-edit-card p,
+.skill-notes-card p {
     color: #b5b5b5;
 }
 
@@ -2971,11 +2979,12 @@ main.profile-main {
     .assigned-class-row {
         grid-template-columns: 2fr 1fr auto;
         gap: 1.5rem;
+        padding: 1.5rem 1rem 1rem;
     }
 
 
     /******************************************************/
-    /* COURSE DETAILS Page ***************************** */
+    /* COURSE DETAILS Page ****************************** */
     /******************************************************/
     .student-detail-header {
         flex-direction: column;
