@@ -98,25 +98,28 @@
 
     </div>
 
-    <nav class="student-detail-tabs">
-        <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}" class="active">
-            Overview
-        </a>
+    <div class="student-detail-tabs-wrapper">
 
-        <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
-            Attendance
-        </a>
-        <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
-            Skills
-        </a>
+        <nav class="student-detail-tabs">
+            <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}" class="active">
+                Overview
+            </a>
 
-        <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
-            Progress
-        </a>
-        <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
-            Assessment
-        </a>
-    </nav>
+            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+                Attendance
+            </a>
+            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
+                Skills
+            </a>
+
+            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
+                Progress
+            </a>
+            <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
+                Assessment
+            </a>
+        </nav>
+    </div>    
 
     <div class="student-overview-grid">
 

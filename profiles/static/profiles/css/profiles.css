@@ -141,7 +141,7 @@ main.profile-main h1
     align-items: center;
     justify-content: space-between;
     background: rgba(94, 234, 212, 0.1);
-    align-self: center;
+    align-self:right;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
