@@ -29,6 +29,42 @@
     width: 100%;
 }
 
+/* Profile-photo clear checkbox */
+.account-settings-form #div_id_profile_photo input[type="checkbox"] + label {
+    display: inline-block;
+    width: auto;
+    border-top: none;
+    padding-top: 0;
+    margin: 0 0 0 0.35rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.account-settings-form #div_id_profile_photo input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    border-top: none;
+    padding-top: 0;
+    margin: 0 0 0 0.9rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+/* Avoid image file name overriding form width */
+#div_id_profile_photo {
+    min-width: 0;
+    overflow: hidden;
+}
+
+#div_id_profile_photo a {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
 #id_specialties_helptext {
     color: lightgray !important;
 }
