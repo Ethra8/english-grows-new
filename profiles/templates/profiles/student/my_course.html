@@ -19,23 +19,12 @@
         <div class="mb-4 ml-0 pl-0">
             <header>
                 <!-- 1st Child -->
-                <!-- <div class="mb-3">
-                    <div class="mb-2">
-                        <p class="back-to-my-assigned-courses">
-                            <a href="#" class="js-back-link">
-                                <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                                Go Back
-                            </a>
-                        </p>
-                    </div>
-                </div>     -->
-                <!-- 2nd Child -->
                 <div>
                     <i class="fa-solid fa-chalkboard-user mr-3"></i>
                     <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
                 </div>
                 
-                <!-- 3rd Child -->
+                <!-- 2nd Child -->
                 <div>
                     <div class="col-12 dashboard-level-pill">
                         <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
@@ -59,7 +48,7 @@
                     </span>
 
                 </div>
-                <!-- 4th Child -->
+                <!-- 3rd Child -->
                 <div>
                     <h2>
                         <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
