@@ -20,6 +20,53 @@
         <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:my_calendar_events' %}"></div>
     </div>
 </div>
+
+<div class="modal fade" id="classSessionModal" tabindex="-1" role="dialog" aria-labelledby="classSessionModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content calendar-session-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="classSessionModalTitle"></h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-2">
+                    <strong>When:</strong>
+                    <span id="classSessionModalTime"></span>
+                </p>
+
+                <p class="mb-2">
+                    <strong>Course:</strong>
+                    <span id="classSessionModalCourse"></span>
+                </p>
+
+                <p class="mb-0">
+                    <strong>Class:</strong>
+                    <span id="classSessionModalClassNumber"></span>
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Close
+                </button>
+
+                <a href="#"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   id="classSessionModalJoinBtn"
+                   class="btn calendar-modal-join-btn">
+                    Join class
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block postloadjs %}

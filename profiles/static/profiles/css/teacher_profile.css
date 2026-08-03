@@ -87,10 +87,6 @@ h2 {
 
 /* *** HEADERS *******************************************************/
 
-.profile-page header p {
-    /* color: whitesmoke !important; */
-    color: rgba(0, 0, 0, 0.25);
-}
 
 /**** WRAPPERS *******************************************************/
 
@@ -2195,24 +2191,34 @@ div:has(> .student-action-btn) {
 }
 
 
-/* *** TAKE ATTENDANCE page *****************
-*  *** ATTENDANCE DETAIL page ***************|
+/*  *** ATTENDANCE DETAIL page ***************|
 *  *** STUDENT DETAIL page ******************/
+
+.student-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 220px;
+    padding: 2rem 4rem;
+    width: 100%;
+    max-width: 100%;
+    /* min-width: 0; */
+    box-sizing: border-box;
+}
+
+.student-detail-header,
+.student-detail-card,
+.recent-attendance-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+}
 
 .student-main-info {
     display: flex;
     align-items: center;
-    gap: 2rem;
-}
-
-.student-detail-header {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-.student-main-info {
+    gap: 4rem;
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -2262,8 +2268,8 @@ div:has(> .student-action-btn) {
 
 /* Only Student Detail page */
 .student-avatar-large {
-    width: 156px;
-    height: 156px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     background: rgba(95, 255, 234, 0.16);
     border: 2px outset rgba(84, 85, 85, 0.75);
@@ -2318,22 +2324,7 @@ main.profile-main {
     overflow-x: hidden;
 }
 
-.student-detail-header,
-.student-detail-card,
-.recent-attendance-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
-    border: 1px solid rgba(0, 194, 178, 0.35);
-    border-radius: 8px;
-    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
-}
 
-.student-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 220px;
-    padding: 2rem;
-}
 
 .student-header-actions {
     display: flex;

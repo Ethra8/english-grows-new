@@ -18,12 +18,12 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <a href="#" class="js-back-link">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
         </a>    
-    </div>
+    </div> -->
 
     <!-- Header -->
     <div class="student-detail-header">
@@ -46,26 +46,30 @@
                 <div class="d-flex flex-row">
                     <div>
                         <h1>{{ student.get_full_name|default:student.username }}</h1>
-                        <p><a href="mailto:{{ student.email }}" class="text-white">{{ student.email }}</a></p>
-                        {% if request.user.profile.company %}
-                            <span class="mt-4">
-                                <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
-                                {{ request.user.profile.get_role_display }}
-                                <br>
-                            </span>
-                            <p class="mt-3">
-                                <i class="fa-regular fa-building mr-2"></i>
-                                {{ request.user.profile.company.name }}</p>
 
-                        {% else %}
+                        <div class="col-12 dashboard-level-pill mt-4">
+                            <span class="current-level-label">
+                                <i class="fa-solid fa-chart-simple mr-3"></i>My LEVEL</span>
+                            <span class="current-level-value">
+                                {{ request.user.profile.get_current_level_display|default:"Level Pending" }}</span>
+                        </div>
+
+                        <div class="mt-4">
+                            {% if request.user.profile.company %}
+                            <p><strong><i class="fa-regular fa-building mr-2"></i>
+                                {{ request.user.profile.company.name }}</strong></p>
+                            {% else %}
                             <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
-                        {% endif %}
+                            {% endif %}
+                            
+                            <p>{{ student.email }}</p>
+                        </div>
 
                         {% if student.is_active %}
-                        <span class="status-badge active mt-3">Active</span>
-                    {% else %}
-                        <span class="status-badge inactive mt-3">Inactive</span>
-                    {% endif %}
+                            <span class="status-badge active mt-3">Active</span>
+                        {% else %}
+                            <span class="status-badge inactive mt-3">Inactive</span>
+                        {% endif %}
 
                     </div>
 
@@ -73,10 +77,10 @@
             </div>
 
         </div>
-                                        {% if student_profile.current_level %}
+                                        <!-- {% if student_profile.current_level %}
                     <span class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2 ml-3 mr-3">
                         {{ student_profile.current_level }}</span>
-                    {% endif %}    
+                    {% endif %}     -->
 
     </div>
 
@@ -88,7 +92,7 @@
                 Overview
             </a>
 
-            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
+            <a href="{% url 'profiles:my_attendance' %}">
                 Attendance
             </a>
 

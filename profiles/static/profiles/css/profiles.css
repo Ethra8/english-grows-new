@@ -21,7 +21,7 @@ h3 {
 .my-course,
 .my-attendance,
 .profile-settings-page {
-    padding: 70px 7%;
+    padding: 70px 5%;
     width: 100%;
     min-height: 100vh;
 }
@@ -109,7 +109,7 @@ main.profile-main {
 
 /* *** H1 **************************************************/
 
-main.profile-main h1,
+/* main.profile-main h1, */
 .my-course header h1,
 .my-attendance header h1,
 .profile-settings-page header h1 {
@@ -806,7 +806,8 @@ main.profile-main h1,
     color: #0B355F;
 }
 
-.course-card .item {
+.course-card .item,
+.detailed-attendance-card .item {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -814,7 +815,8 @@ main.profile-main h1,
     border-bottom: 1px solid rgba(0, 128, 128, 0.15);
 }
 
-.course-card .item-icon {
+.course-card .item-icon,
+.detailed-attendance-card .item-icon {
     width: 36px;
     height: 36px;
     min-width: 36px;
@@ -831,18 +833,21 @@ main.profile-main h1,
     color: whitesmoke;
 }
 
-.course-card .item-text {
+.course-card .item-text,
+.detailed-attendance-card .item-text {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
 }
 
-.course-card .item-text strong {
+.course-card .item-text strong,
+.detailed-attendance-card .item-text strong {
     color: #006b7d;
     font-weight: 700;
 }
 
-.course-card .item-text span {
+.course-card .item-text span,
+.detailed-attendance-card .item-text span {
     color: #5f6363;
 }
 
@@ -852,11 +857,6 @@ main.profile-main h1,
 *****************************************************/
 .learner-employee-detail-page {
     color: whitesmoke;
-}
-
-.learner-employee-detail-page .student-avatar-large {
-    width: 150px !important;
-    height: 150px !important;
 }
 
 .learner-employee-detail-page .student-detail-header h1 {

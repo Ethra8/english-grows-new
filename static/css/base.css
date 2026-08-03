@@ -558,6 +558,11 @@ footer .topage-link:hover {
 } */
 
 /* custom fonts */
+
+.text-muted {
+    color: rgba(0, 0, 0, 0.25);
+}
+
 .text-lightGrey {
     color: #a3a3a3 !important;
 }

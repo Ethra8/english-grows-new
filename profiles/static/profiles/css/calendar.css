@@ -1,141 +1,68 @@
+/* =========================================================
+   MY CLASS CALENDAR PAGE
+========================================================= */
+
 #my_calendar_page {
-    padding: 70px 3% ;
-    width: stretch ;
+    padding: 70px 3%;
+    width: stretch;
 }
 
 #my_calendar_page h1 {
-    color:#003366;
+    color: #003366;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 2.8rem;
     letter-spacing: 0.03em;
 }
 
-/* .wrapper-calendar, */
 #my_calendar_page .container {
     border-radius: 8px;
     min-width: 100%;
 }
+
+
+/* =========================================================
+   FULLCALENDAR WRAPPER / BASE
+========================================================= */
 
 #calendar {
     border-radius: 8px;
     padding: 20px 12px 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     /* background: rgba(106, 250, 225, 0.2); */
-    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 122, 120, 0.65));    margin: 0 auto 60px;
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 122, 120, 0.65));
+    margin: 0 auto 60px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-/* Title itself: Week date, e-g-: Jun 18-24 2026  */
-.fc-toolbar-title {
-    color:whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-size: 2rem;
-    border-radius: 5px;
-    max-width: 100%;
-    min-width: 50%;
-    padding: 0.5rem 120px;
-    background-color: #0B355F;
-    border: outset 1px #007A78;
-    box-shadow: 0 1px 2px 0 #404143;
-    text-align: center;
-    margin-bottom: 2rem !important;
-}
-
-.fc-timegrid-body {
-    background-color: rgba(244, 247, 247, 0.8);
-}
-
-/* Calendar LIST bg  */
+/* Calendar view background */
 .fc-view-harness {
     background-color: rgba(239, 240, 240, 0.8);
     width: 100%;
     /* border-radius: 50px; */
 }
 
-/*  */
 .fc-view-harness-passive {
     border-radius: 5px !important;
 }
 
-.fc-theme-standard td, .fc-theme-standard th {
+.fc-timegrid-body {
+    background-color: rgba(244, 247, 247, 0.8);
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
     border: 1px solid rgb(181, 181, 181);
 }
 
-.fc th  {
+.fc th {
     background-color: rgba(106, 250, 225, 0.3) /* #6afae1; */
 }
 
-/* Calendar date <th> table head content */
-.fc .fc-col-header-cell-cushion {
-    display: inline-block;
-    padding: 2px 4px;
-    color:#0B355F;
-    min-height: 3rem !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-
-/* MONTHLY VIEW ***** */
-
-/* day numbers in monthly grid */
-.fc .fc-daygrid-day-number {
-    color: #0B355F;
-}
-
-/* Monthly view: 'all-day' cell full */
-.fc .fc-timegrid-axis-frame {
-    /* default */
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-    overflow: hidden;
-    /* default */
-    background-color: rgb(255, 255, 255);
-}
-
-/* Monthly view: 'all-day' cell text */
-.fc .fc-timegrid-axis-cushion {
-    max-width: 100px;
-    padding: 0.25rem 0.25rem;
-}
-
-/* Monthly view: 'all-day' header row */
-.fc .fc-daygrid-day-frame {
-    min-height: 100%;
-    position: relative;
-    background-color: rgb(255, 255, 255);
-}
-
-/* Calendar events styling */
-.fc-timegrid-event-harness-inset .fc-timegrid-event,
-.fc-timegrid-event.fc-event-mirror, 
-.fc-timegrid-more-link {
-    box-shadow: 0 0 0 1px var(--fc-page-bg-color);
-    background-color: #007A78;
-    padding: 0.3rem;
-}
-
-.fc-timegrid-event-harness-inset .fc-timegrid-event:hover,
-.fc-timegrid-event.fc-event-mirror:hover, 
-.fc-timegrid-more-link:hover {
-    cursor: pointer;
-    background-color: #01858a;
-}
-
-.fc .fc-list-day-text,
-.fc .fc-list-day-side-text {
-    color: #0B355F !important;
-}
-
-.bank-holiday-event {
-    background-color: #8b0000 !important;
-    border-color: #8b0000 !important;
-    color: #fff !important;
-}
+/* =========================================================
+   FULLCALENDAR TOOLBAR
+========================================================= */
 
 .my-calendar .fc-header-toolbar {
     position: relative;
@@ -174,7 +101,7 @@
     z-index: 5;
 }
 
-/* Right chunk : month/week/list*/
+/* Right chunk: month/week/list/year */
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button {
     background-color: #c7fff9;
     color: rgb(59, 59, 59);
@@ -182,6 +109,23 @@
     font-weight: 600;
     font-size: 1rem;
     border-radius: 5px;
+}
+
+/* Title itself: week/month/day date */
+.fc-toolbar-title {
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-size: 2rem;
+    border-radius: 5px;
+    max-width: 100%;
+    min-width: 50%;
+    padding: 0.5rem 120px;
+    background-color: #0B355F;
+    border: outset 1px #007A78;
+    box-shadow: 0 1px 2px 0 #404143;
+    text-align: center;
+    margin-bottom: 2rem !important;
 }
 
 /* Prev and next shared style */
@@ -202,6 +146,15 @@
     box-shadow: 0 1px 2px 0 #404143;
 }
 
+/* Prev button */
+.my-calendar .fc-prev-button {
+    top: -62px;
+    left: 2rem;
+    grid-row: 1;
+    grid-column: 1;
+    border-color: #5ff0cf !important;
+}
+
 /* Next button */
 .my-calendar .fc-next-button {
     top: 37px;
@@ -211,15 +164,7 @@
     border-color: #5ff0cf !important;
 }
 
-.my-calendar .fc-prev-button {
-    top: -62px;
-    left: 2rem;
-    grid-row: 1;
-    grid-column: 1;
-    border-color: #5ff0cf !important;
-}
-
-/* View buttons row: today / week / month / list/ year */
+/* View buttons row: today / week / month / list / year */
 .my-calendar .fc-button-group {
     position: relative;
     display: flex !important;
@@ -252,9 +197,358 @@
     margin-left: 0 !important;
 }
 
-/* ================================
-   TEACHER CALENDAR
-================================ */
+
+/* =========================================================
+   CALENDAR TABLE HEADERS / DAY LABELS
+========================================================= */
+
+/* Calendar date <th> table head content */
+.fc .fc-col-header-cell-cushion {
+    display: flex;
+    padding: 2px 4px;
+    color: #0B355F;
+    min-height: 3rem !important;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   TIMEGRID / ALL-DAY AREA
+========================================================= */
+
+/* Timegrid/all-day axis cell */
+.fc .fc-timegrid-axis-frame {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+}
+
+/* Timegrid/all-day axis text */
+.fc .fc-timegrid-axis-cushion {
+    max-width: 100px;
+    padding: 0.25rem 0.25rem;
+}
+
+
+/* =========================================================
+   MONTH GRID
+========================================================= */
+
+/* Day cells are clickable because dateClick opens day view */
+.my-calendar .fc-daygrid-day {
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.my-calendar .fc-daygrid-day:hover,
+.my-calendar .fc-daygrid-day:hover .fc-daygrid-day-frame {
+    background-color: rgba(230, 230, 230, 0.75) !important;
+}
+
+/* Day numbers in monthly grid */
+.fc .fc-daygrid-day-number {
+    color: #0B355F;
+}
+
+/* Day cell frame */
+.fc .fc-daygrid-day-frame {
+    min-height: 100%;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+}
+
+/* Today's date highlight - month view */
+.my-calendar .fc-daygrid-day.fc-day-today {
+    background-color: rgba(255, 248, 190, 0.55) !important;
+}
+
+.my-calendar .fc-daygrid-day.fc-day-today .fc-daygrid-day-frame {
+    background-color: rgba(255, 248, 190, 0.35) !important;
+}
+
+.my-calendar .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+    color: #0B355F;
+    font-weight: 700;
+}
+
+/* Prevent month grid event text from overflowing cells */
+.my-calendar .fc-daygrid-day,
+.my-calendar .fc-daygrid-day-frame,
+.my-calendar .fc-daygrid-day-events,
+.my-calendar .fc-daygrid-event-harness,
+.my-calendar .fc-daygrid-event,
+.my-calendar .fc-daygrid-event .fc-event-main {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden !important;
+}
+
+.my-calendar .fc-daygrid-event {
+    display: block !important;
+    max-width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.my-calendar .fc-daygrid-dot-event {
+    display: flex !important;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden !important;
+}
+
+.my-calendar .fc-daygrid-event .fc-event-time,
+.my-calendar .fc-daygrid-event .fc-event-title {
+    display: inline-block !important;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.my-calendar .fc-daygrid-event .fc-event-time {
+    flex-shrink: 0;
+}
+
+.my-calendar .fc-daygrid-event .fc-event-title {
+    flex: 1 1 auto;
+}
+
+/* Custom JS eventContent for month grid */
+.my-calendar .calendar-month-event-content {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.my-calendar .calendar-month-event-title {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   WEEK / DAY GRID EVENTS
+========================================================= */
+
+/* Calendar events styling */
+.fc-timegrid-event-harness-inset .fc-timegrid-event,
+.fc-timegrid-event.fc-event-mirror,
+.fc-timegrid-more-link {
+    box-shadow: 0 0 0 1px var(--fc-page-bg-color);
+    background-color: #007A78;
+    padding: 0.3rem;
+}
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event:hover,
+.fc-timegrid-event.fc-event-mirror:hover,
+.fc-timegrid-more-link:hover {
+    cursor: pointer;
+    background-color: #01858a;
+}
+
+/* Grid events must remain clickable and must not overflow cells */
+.my-calendar .fc-event,
+.my-calendar .fc-timegrid-event {
+    cursor: pointer;
+    max-width: 100%;
+    overflow: hidden !important;
+}
+
+/* FullCalendar default rendering */
+.my-calendar .fc-timegrid-event .fc-event-main,
+.my-calendar .fc-timegrid-event .fc-event-main-frame {
+    display: block !important;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden !important;
+    color: #ffffff !important;
+}
+
+.my-calendar .fc-timegrid-event .fc-event-time,
+.my-calendar .fc-timegrid-event .fc-event-title {
+    display: block !important;
+    max-width: 100%;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    color: #ffffff !important;
+    line-height: 1.2;
+}
+
+/* Time stays on one line */
+.my-calendar .fc-timegrid-event .fc-event-time {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Title can wrap inside taller week/day events, but never escape */
+.my-calendar .fc-timegrid-event .fc-event-title {
+    white-space: normal;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Custom JS eventContent for week/day grids */
+.my-calendar .calendar-grid-event-content {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.25rem 0.35rem;
+    overflow: hidden;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.my-calendar .calendar-grid-event-time,
+.my-calendar .calendar-grid-event-title {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #ffffff;
+}
+
+.my-calendar .calendar-grid-event-time {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.my-calendar .calendar-grid-event-title {
+    white-space: normal;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MONTH LIST VIEW
+========================================================= */
+
+.fc .fc-list-day-text,
+.fc .fc-list-day-side-text {
+    color: #0B355F !important;
+}
+
+/* Month List date header aligned left */
+.my-calendar .fc-list-day-cushion {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: left !important;
+}
+
+.my-calendar .fc-list-day-text,
+.my-calendar .fc-list-day-side-text {
+    float: none !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+}
+
+/* Month List event row with Join button */
+.my-calendar .calendar-list-event-row {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.my-calendar .fc-list-event-title {
+    min-width: 0;
+}
+
+.my-calendar .calendar-list-event-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.my-calendar .calendar-join-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    background-color: #0B355F;
+    color: #ffffff !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.my-calendar .calendar-join-btn:hover {
+    background-color: #007A7D;
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.calendar-session-modal {
+    border-radius: 10px;
+    border: none;
+    overflow: hidden;
+}
+
+.calendar-session-modal .modal-header {
+    background-color: #0B355F;
+    color: #ffffff;
+}
+
+.calendar-session-modal .close {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.calendar-modal-join-btn {
+    background-color: #0B355F;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.calendar-modal-join-btn:hover {
+    background-color: #007A7D;
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   SPECIAL EVENT TYPES
+========================================================= */
+
+/* Bank holidays */
+.bank-holiday-event {
+    background-color: #8b0000 !important;
+    border-color: #8b0000 !important;
+    color: #fff !important;
+}
 
 /* Confirmed Courses */
 .course-confirmed-event {
@@ -262,8 +556,8 @@
     border-color: #ffe69c !important;
 }
 
- .course-confirmed-event .fc-event-time,
- .course-confirmed-event .fc-event-title {
+.course-confirmed-event .fc-event-time,
+.course-confirmed-event .fc-event-title {
     color: #664d03 !important;
 }
 
@@ -290,6 +584,9 @@
 }
 
 
+/* =========================================================
+   RESPONSIVE: <= 1250px
+========================================================= */
 
 @media (max-width: 1250px) {
 
@@ -299,10 +596,9 @@
 }
 
 
-
-/* ================================
-   FullCalendar Toolbar - Mobile
-================================ */
+/* =========================================================
+   RESPONSIVE: TABLET / MOBILE <= 768px
+========================================================= */
 
 @media (max-width: 768px) {
 
@@ -353,7 +649,7 @@
         min-width: max-content !important;
     }
 
-    /* Right chunk : month/week/list*/
+    /* Right chunk: month/week/list */
     .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child {
         grid-row: 2;
         grid-column: 1;
@@ -368,16 +664,149 @@
         font-size: 0.8rem;
     }
 
-    /* View buttons row: month / week / list */
+    /* View buttons row */
     .my-calendar .fc-button-group {
         gap: 0.25rem;
     }
 
+    /* WEEK / DAY GRID: smaller readable text */
+    .my-calendar .fc-timegrid-event .fc-event-main,
+    .my-calendar .calendar-grid-event-content {
+        padding: 0.18rem 0.25rem;
+    }
+
+    .my-calendar .fc-timegrid-event .fc-event-time,
+    .my-calendar .fc-timegrid-event .fc-event-title,
+    .my-calendar .calendar-grid-event-time,
+    .my-calendar .calendar-grid-event-title {
+        font-size: 0.68rem;
+        line-height: 1.15;
+    }
+
+    /* MONTH GRID: prevent event text from crossing into adjacent cells */
+    .my-calendar .fc-daygrid-event,
+    .my-calendar .calendar-month-event-title {
+        font-size: 0.68rem;
+        line-height: 1.15;
+    }
+
+    .my-calendar .fc-daygrid-event {
+        padding: 0 2px;
+    }
+
+    /* MONTH LIST: time on first row, dot beside title */
+    .my-calendar .fc-list-event {
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            "time time"
+            "dot title";
+        border-bottom: 1px solid rgba(11, 53, 95, 0.25) !important;
+    }
+
+    .my-calendar .fc-list-event td {
+        border: none !important;
+        box-sizing: border-box;
+    }
+
+    .my-calendar .fc-list-event-time {
+        grid-area: time;
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 1rem 0.25rem !important;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666;
+        white-space: normal !important;
+    }
+
+    .my-calendar .fc-list-event-graphic {
+        grid-area: dot;
+        display: flex !important;
+        align-items: flex-start;
+        width: auto !important;
+        padding: 0.55rem 0.4rem 0.85rem 1rem !important;
+    }
+
+    .my-calendar .fc-list-event-title {
+        grid-area: title;
+        display: block !important;
+        width: 100% !important;
+        min-width: 0;
+        padding: 0.35rem 1rem 0.85rem 0.2rem !important;
+    }
+
+    .my-calendar .calendar-list-event-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .my-calendar .calendar-list-event-title {
+        white-space: normal;
+        line-height: 1.35;
+    }
+
+    .my-calendar .calendar-join-btn {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .my-calendar .fc-list-day-cushion {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+    }
+
+    .my-calendar .fc-list-day-side-text {
+        margin-left: 0;
+        font-size: 0.9rem;
+    }
 }
 
-/* ================================
-   Extra small screens
-================================ */
+
+/* =========================================================
+   RESPONSIVE: SMALL MOBILE <= 576px
+========================================================= */
+
+@media (max-width: 576px) {
+
+    /* WEEK / DAY GRID: very narrow columns */
+    .my-calendar .fc-timegrid-event .fc-event-time,
+    .my-calendar .fc-timegrid-event .fc-event-title,
+    .my-calendar .calendar-grid-event-time,
+    .my-calendar .calendar-grid-event-title {
+        font-size: 0.62rem;
+    }
+
+    /* MONTH GRID: keep cells clean on mobile */
+    .my-calendar .fc-daygrid-event,
+    .my-calendar .calendar-month-event-title {
+        font-size: 0.62rem;
+    }
+
+    .my-calendar .fc-daygrid-event {
+        font-size: 0.7rem;
+        padding: 0 2px;
+    }
+
+    .my-calendar .fc-daygrid-event .fc-event-title {
+        max-width: 100%;
+    }
+
+    .my-calendar .fc-daygrid-day-number {
+        font-size: 0.85rem;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE: EXTRA SMALL <= 400px
+========================================================= */
 
 @media (max-width: 400px) {
 
@@ -392,16 +821,8 @@
         font-size: 2.8rem;
     }
 
-    /* Monthly view: 'all-day' cell text */
+    /* Timegrid/all-day axis text */
     .fc .fc-timegrid-axis-cushion {
         max-width: 80px;
     }
-
-
 }
-
-
-
-
-
-
