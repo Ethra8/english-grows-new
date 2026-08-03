@@ -37,9 +37,6 @@ class UserProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['profile_photo'].label = "Profile picture"
 
-        super().__init__(*args, **kwargs)
-        self.fields['first_name'].label = "Update your profile"
-
         if self.user:
             self.fields['first_name'].initial = self.user.first_name
             self.fields['last_name'].initial = self.user.last_name
