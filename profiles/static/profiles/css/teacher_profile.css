@@ -207,6 +207,7 @@ h2 {
     border-radius: 50%;
 }
 
+.course-header-meta-row .completion-ring,
 #monthly_overview .completion-ring,
 #weekly_overview .completion-ring {
     width: 60px !important;
@@ -214,6 +215,7 @@ h2 {
     margin-right: 0;
 }
 
+.course-header-meta-row .completion-ring-value,
 #monthly_overview .completion-ring-value,
 #weekly_overview .completion-ring-value {
     z-index: 10;

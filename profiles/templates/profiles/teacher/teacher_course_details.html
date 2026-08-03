@@ -71,8 +71,8 @@
         </a>
 
         <a href="{% url 'profiles:teacher_group_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
-            <div class="metric-icon completion-icon"
-                style="--percentage: {{ average_attendance|default:0 }};">
+            <div class="metric-icon completion-ring"
+                style="--completion: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
                 <i class="fa-solid fa-clipboard-check"></i>
             </div>
@@ -83,16 +83,17 @@
         </a>
 
         <div class="course-meta-card metric-card meta-completion">
-            <div class="metric-icon completion-icon"
-                style="--percentage: {{ completion_percentage|default:0 }};">
-                <span class="progress-ring"></span>
-                <i class="fa-solid fa-chalkboard"></i>
+            <div>
+                <div class="metric-icon completion-ring" style="--completion: {{ completion_percentage|default:'0' }};">
+                    <span class="completion-ring-value">{{ completion_percentage|default:"0" }}%</span>
+                </div>
             </div>
-            <div class="course-meta-text">
+            <div class="meta-text">
                 <strong>Completion</strong>
-                <span>{{ completion_percentage }} %</span>
+                <span>{{ completed_classes }} / {{ course.number_of_classes}} <small>sessions</small> </span>
             </div>
         </div>
+
     </div>
 
     <div class="course-details-two-col">
