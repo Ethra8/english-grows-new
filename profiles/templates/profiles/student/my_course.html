@@ -10,17 +10,17 @@
 
 {% block profile_content %}
 
-<section class="my-course course-details">    
+<section class="my-course">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     
-    <div class="row">        
-        <div class="col-12 mb-4 ml-0 pl-0">
+    <div>        
+        <div class="mb-4 ml-0 pl-0">
             <header>
                 <!-- 1st Child -->
-                <div class="row mb-3">
-                    <div class="col-12 mb-2">
+                <!-- <div class="mb-3">
+                    <div class="mb-2">
                         <p class="back-to-my-assigned-courses">
                             <a href="#" class="js-back-link">
                                 <i class="fa-solid fa-arrow-left-long mr-3"></i>
@@ -28,31 +28,49 @@
                             </a>
                         </p>
                     </div>
-                </div>    
+                </div>     -->
                 <!-- 2nd Child -->
                 <div>
-                    <span class="level level-{{ active_enrollment.course.course_level|lower|cut:'.' }}">
-                        {{ active_enrollment.course.course_level|default:"Level Pending" }}</span>
-                    {% if active_enrollment %}
-                    <h1>{{ active_enrollment.course.name }}</h1>
-                    {% endif %}
+                    <i class="fa-solid fa-chalkboard-user mr-3"></i>
+                    <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
                 </div>
+                
                 <!-- 3rd Child -->
-                {% if active_enrollment %}
-                <div>   
+                <div>
+                    <div class="col-12 dashboard-level-pill">
+                        <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                        <span class="current-level-value">
+                            {{ active_enrollment.course.course_level|default:"Level Pending" }}
+                        </span>
+                    </div>
+                    <span class="status-badge status-badge-student">
+                        {% if active_enrollment.course.status == 'confirmed' %}
+                            <i class="fa-regular fa-circle-check mr-2"></i>
+                        {% elif active_enrollment.course.status == 'active' %}
+                            <i class="fa-regular fa-circle-play mr-2"></i>
+                        {% elif active_enrollment.course.status == 'completed' %}
+                            <i class="fa-solid fa-hourglass-end mr-2"></i>
+                        {% elif active_enrollment.course.status == 'paused' %}
+                            <i class="fa-regular fa-circle-pause mr-2"></i>
+                        {% elif active_enrollment.course.status == 'cancelled' %}
+                            <i class="fa-regular fa-circle-xmark mr-2"></i>
+                        {% endif %}
+                            {{ active_enrollment.course.get_status_display|default:"In progress" }}
+                    </span>
+
+                </div>
+                <!-- 4th Child -->
+                <div>
                     <h2>
                         <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
                         <span>|</span>
-                        <span><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
+                        <span class="text-muted"><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
                     </h2>
                 </div>
-                
-                <span class="status-badge {{ active_enrollment.course.status }} mb-3">
-                {{ active_enrollment.course.get_status_display|default:"In progress" }}</span>
 
-                {% endif %}
                 <hr>
             </header>
+
         </div>
         
         <div class="col-12 wrapper-course-card w-100">
@@ -126,7 +144,11 @@
                         </div>
                         <div class="item">
                             <div class="item-icon">
+                                {% if active_enrollment.course.teacher.profile.profile_photo %} 
+                                <img src="{{ active_enrollment.course.teacher.profile.profile_photo.url }}" alt="{{ active_enrollment.course.teacher.get_full_name }}">
+                                {% else %}
                                 <i class="fa-solid fa-graduation-cap"></i>
+                                {% endif %}
                             </div>
                             <div class="item-text">
                                 <strong>Teacher</strong>
