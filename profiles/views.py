@@ -4353,6 +4353,176 @@ def company_admin_classes_list(request):
     )
 
 
+
+
+# =========================================================
+# COMPANY ADMIN CALENDAR PAGE
+# =========================================================
+
+@login_required
+def company_admin_calendar(request):
+    profile = get_object_or_404(
+        UserProfile.objects.select_related("company"),
+        user=request.user,
+    )
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+    # A company admin must belong to a company.
+    if not profile.company:
+        return redirect("home")
+
+    courses = (
+        Course.objects
+        .filter(company=profile.company)
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+            "teacher__profile",
+        )
+        .order_by("name")
+    )
+
+    context = {
+        "profile": profile,
+        "company": profile.company,
+        "courses": courses,
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_calendar.html",
+        context,
+    )
+
+
+# =========================================================
+# COMPANY ADMIN CALENDAR EVENTS
+# =========================================================
+
+@login_required
+def company_admin_calendar_events(request):
+    profile = get_object_or_404(
+        UserProfile.objects.select_related("company"),
+        user=request.user,
+    )
+
+    if (
+        profile.role != UserProfile.ROLE_COMPANY_ADMIN
+        or not profile.company
+    ):
+        return JsonResponse([], safe=False)
+
+    start = request.GET.get("start")
+    end = request.GET.get("end")
+
+    sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=profile.company,
+            is_cancelled=False,
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__teacher__profile",
+            "course__company",
+        )
+        .order_by("start_time")
+    )
+
+    bank_holidays = (
+        BankHoliday.objects
+        .filter(is_active=True)
+        .order_by("start_date")
+    )
+
+    if start and end:
+        start_datetime = parse_datetime(start)
+        end_datetime = parse_datetime(end)
+
+        if start_datetime and end_datetime:
+            sessions = sessions.filter(
+                start_time__gte=start_datetime,
+                start_time__lt=end_datetime,
+            )
+
+            bank_holidays = (
+                bank_holidays
+                .filter(start_date__lt=end_datetime.date())
+                .filter(
+                    Q(end_date__isnull=True)
+                    | Q(end_date__gte=start_datetime.date())
+                )
+            )
+
+    events = []
+
+    for session in sessions:
+        status_class = ""
+
+        if session.course.status == "confirmed":
+            status_class = "course-confirmed-event"
+
+        elif session.course.status == "paused":
+            status_class = "course-paused-event"
+
+        elif session.course.status == "cancelled":
+            status_class = "course-cancelled-event"
+
+        teacher = session.course.teacher
+
+        if teacher:
+            teacher_name = teacher.get_full_name() or teacher.email
+        else:
+            teacher_name = "Not assigned"
+
+        events.append({
+            "id": session.id,
+            "title": session.title,
+            "start": session.start_time.isoformat(),
+            "end": (
+                session.end_time.isoformat()
+                if session.end_time
+                else None
+            ),
+            "className": status_class,
+            "extendedProps": {
+                "type": "class_session",
+                "course": session.course.name,
+                "course_status": session.course.status,
+                "class_number": session.class_number,
+                "meeting_link": session.meeting_link,
+                "teacher": teacher_name,
+            },
+        })
+
+    for holiday in bank_holidays:
+        event = {
+            "id": f"holiday-{holiday.id}",
+            "title": holiday.title,
+            "start": holiday.start_date.isoformat(),
+            "allDay": True,
+            "display": "block",
+            "className": "bank-holiday-event",
+            "extendedProps": {
+                "type": "bank_holiday",
+            },
+        }
+
+        if holiday.end_date:
+            event["end"] = (
+                holiday.end_date + timedelta(days=1)
+            ).isoformat()
+
+        events.append(event)
+
+    return JsonResponse(events, safe=False)
+
+
+
 @login_required
 def company_admin_employees_list(request):
     profile = get_object_or_404(UserProfile, user=request.user)

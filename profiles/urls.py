@@ -68,6 +68,8 @@ urlpatterns = [
     path("company_admin/courses/<int:course_id>/students/<int:enrollment_id>/skills_graph", views.company_admin_student_progress_skills_graph, name="company_admin_student_progress_skills_graph"),
     path("company-admin/classes/", views.company_admin_classes_list, name="company_admin_classes_list"),
     path("company-admin/employees/", views.company_admin_employees_list, name="company_admin_employees_list"),
+    path("company-admin/calendar/", views.company_admin_calendar, name="company_admin_calendar"),
+    path("company-admin/calendar/events/", views.company_admin_calendar_events, name="company_admin_calendar_events"),
     path("company_admin/profile_settings/", views.company_admin_profile_settings, name='company_admin_profile_settings'),
     
 ]

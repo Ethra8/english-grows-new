@@ -7,8 +7,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/all_courses.css' %}">
 {% endblock %}
 
@@ -30,23 +30,23 @@
 
     <div class="wrapper-assigned-courses-small-cards">
         <div class="card">
-            <div class="card-header"><span>Active</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-play mr-2"></i>Active</span></div>
             <div class="card-body">{{ active_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span>Confirmed</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-check mr-2"></i>Confirmed</span></div>
             <div class="card-body">{{ confirmed_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span>Paused</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-pause mr-2"></i>Paused</span></div>
             <div class="card-body">{{ paused_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span>Cancelled</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>Cancelled</span></div>
             <div class="card-body">{{ cancelled_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span>All Courses</span></div>
+            <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>All Courses</span></div>
             <div class="card-body">{{ courses|length }}</div>
         </div>
     </div>

@@ -1,0 +1,32 @@
+{% extends "profiles/profile_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/calendar.css' %}">
+{% endblock %}
+
+{% block extra_title %}| Calendar{% endblock %}
+
+
+{% block profile_content %}
+
+<div class="overlay-birds"></div>
+<div class="overlay-azure-mist"></div>
+
+<div id="my_calendar_page">
+    <div class="container mb-4">
+        <h1>Class Calendar</h1>
+        <hr>
+        <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:company_admin_calendar_events' %}"></div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script type="text/javascript" src="{% static 'profiles/js/calendar.js' %}"></script>
+{% endblock %}
+    

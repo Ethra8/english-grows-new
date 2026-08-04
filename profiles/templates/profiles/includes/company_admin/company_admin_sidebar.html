@@ -42,7 +42,7 @@
             <span>Class Sessions</span>
         </a>
 
-        <a href="" class="sidebar-link {% if request.resolver_match.url_name == 'my_calendar' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_calendar' %}active{% endif %}">
             <i class="fa-regular fa-calendar-days"></i>
             <span>Classes Calendar</span>
         </a>
