@@ -13,64 +13,105 @@
 <section class="my-course">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
+  
+    <header>
+        <!-- 1st Child -->
+        <div>
+            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            <div>
+                <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
+                <h2>
+                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
+                    <span>|</span>
+                    <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
+                </h2>
 
-    
-    <div>        
-        <div class="mb-4 ml-0 pl-0">
-            <header>
-                <!-- 1st Child -->
-                <div>
-                    <i class="fa-solid fa-chalkboard-user mr-3"></i>
-                    <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
-                </div>
-                
-                <!-- 2nd Child -->
-                <div>
-                    <div class="col-12 level-pill">
-                        <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
-                        <span class="current-level-value">
-                            {{ active_enrollment.course.course_level|default:"Level Pending" }}
-                        </span>
-                    </div>
-                    <span class="status-badge status-badge-student">
-                        {% if active_enrollment.course.status == 'confirmed' %}
-                            <i class="fa-regular fa-circle-check mr-2"></i>
-                        {% elif active_enrollment.course.status == 'active' %}
-                            <i class="fa-regular fa-circle-play mr-2"></i>
-                        {% elif active_enrollment.course.status == 'completed' %}
-                            <i class="fa-solid fa-hourglass-end mr-2"></i>
-                        {% elif active_enrollment.course.status == 'paused' %}
-                            <i class="fa-regular fa-circle-pause mr-2"></i>
-                        {% elif active_enrollment.course.status == 'cancelled' %}
-                            <i class="fa-regular fa-circle-xmark mr-2"></i>
-                        {% endif %}
-                            {{ active_enrollment.course.get_status_display|default:"In progress" }}
-                    </span>
-
-                </div>
-                <!-- 3rd Child -->
-                <div>
-                    <h2>
-                        <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
-                        <span>|</span>
-                        <span class="text-muted"><i class="fa-regular fa-clock mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
-                    </h2>
-                </div>
-
-                <hr>
-            </header>
+            </div>
+        </div>
+        <div>
+            <div class="col-12 level-pill">
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-value">
+                    {{ active_enrollment.course.course_level|default:"Level Pending" }}
+                </span>
+            </div>
+            <span class="status-badge status-badge-student">
+                {% if active_enrollment.course.status == 'confirmed' %}
+                    <i class="fa-regular fa-circle-check mr-2"></i>
+                {% elif active_enrollment.course.status == 'active' %}
+                    <i class="fa-regular fa-circle-play mr-2"></i>
+                {% elif active_enrollment.course.status == 'completed' %}
+                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                {% elif active_enrollment.course.status == 'paused' %}
+                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                {% elif active_enrollment.course.status == 'cancelled' %}
+                    <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% endif %}
+                    {{ active_enrollment.course.get_status_display|default:"In progress" }}
+            </span>
 
         </div>
         
-        <div class="col-12 wrapper-course-card w-100">
-            <div class="course-card row">
+    </header> 
+    <hr>
+
+        
+        <div class="wrapper-course-card w-100">
+
+            <div class="course-card">
+
                 <div class="circle-panel1">
-                    <!-- <div class="icon-circle-bg"><i class="fa-solid fa-info"></i></div> -->
                     <h2>General Info</h2>
                 </div>
+
                 <div class="circle-panel2"></div>
+
+                {% if not active_enrollment %}
+                <div class="profile-card p-4">
+                    <!-- <h2>No active course assigned yet</h2> -->
+                    <p>Your course information will appear here once you are enrolled in a course.</p>
+                </div>
+                {% endif %}
+
                 <div class="info row d-flex align-items-center justify-content-between">
-    {% if active_enrollment %}
+                    <!-- div:first-of-type -->
+                    <div class="col col-12">
+                        <div class="item col col-12 col-md-6 timetable-info">
+                            <div class="item-icon">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div class="item-text">
+                                <strong>Timetable</strong>
+                                {% if active_enrollment.course.timetable_slots %}
+                                    {% for slot in timetable_slots %}                    
+                                    <span> <strong>{{ slot.get_day_of_week_display|slice:":3" }}. </strong>
+                                        {{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }}
+                                    </span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span> Not assigned yet</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="item col col-12 col-md-6 next-class-info">
+                                <div class="corner-ribbon">
+                                    Upcoming
+                                </div>
+                                <div class="item-icon">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                            </div>
+                            <div class="item-text">
+                                <strong>Next Class</strong>
+                                {% if next_class %}
+                                <span> {{ next_class.start_time|ordinal_sup_short }}</span>
+                                <span>{{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</span>
+                                {% else %}    
+                                <span>Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col col-12 col-md-6">
                         {% if active_enrollment.course.total_hours %} 
                         <div class="item">
@@ -150,39 +191,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col col-12">
-                        <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-regular fa-clock"></i>
-                            </div>
-                            <div class="item-text">
-                                <strong>Timetable</strong>
-                                {% if active_enrollment.course.timetable_slots %}
-                                    {% for slot in timetable_slots %}                    
-                                    <span> {{ slot.get_day_of_week_display|slice:":3" }}:
-                                        {{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }}
-                                    </span>
-                                    {% endfor %}
-                                {% else %}
-                                    <span> Not assigned yet</span>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                    </div>
 
                 </div>
 
             </div>
 
         </div>
-
-    {% else %}
-    <div class="profile-card p-4">
-        <!-- <h2>No active course assigned yet</h2> -->
-        <p>Your course information will appear here once you are enrolled in a course.</p>
-    </div>
-    {% endif %}
 
 </section>
 

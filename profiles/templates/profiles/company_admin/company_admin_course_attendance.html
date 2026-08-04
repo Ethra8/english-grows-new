@@ -12,44 +12,62 @@
 
 {% block profile_content %}
 
-<section class="company-admin-course-details-page profile-page">
+<section class="my-course profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
+    <div class="row mb-3">
+        <div class="col-12 mb-2">
+            <p class="go-back-link">
+                <a href="#" class="text-white js-back-link">
+                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                    Go Back
+                </a>
+            </p>
+        </div>
+    </div>    
+        
     <header>
         <!-- 1st Child -->
-        <div class="row mb-3">
-            <div class="col-12 mb-2">
-                <p class="back-to-my-assigned-courses">
-                    <a href="#" class="js-back-link">
-                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                        Go Back
-                    </a>
-                </p>
-            </div>
-        </div>    
-        <!-- 2nd Child -->
         <div>
-            <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                {{ course.course_level|default:"Pending" }}</span>
-            
-            <h1>{{ course.name }}</h1>
+            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            <div>
+                <h1>{{ course.name|default:"Course Name" }}</h1>
+                <h2>
+                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
+                    <span>|</span>
+                    <span class="text-muted"><i class="fa-solid fa-chalkboard mr-3"></i>{{ course.total_sessions }} Lessons</spa>
+                </h2>
+
+            </div>
         </div>
-        <!-- 3rd Child -->
-        <div>   
-            <h2>
-                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }}</span>
-                <span>|</span>
-                <span><i class="fa-solid fa-chalkboard mr-3"></i>{{ course.total_sessions }} Lessons</span>
-            </h2>
+        <div>
+            <div class="col-12 level-pill">
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-value">
+                    {{ course.course_level|default:"Level Pending" }}
+                </span>
+            </div>
+            <span class="status-badge status-badge-student">
+                {% if course.status == 'confirmed' %}
+                    <i class="fa-regular fa-circle-check mr-2"></i>
+                {% elif course.status == 'active' %}
+                    <i class="fa-regular fa-circle-play mr-2"></i>
+                {% elif course.status == 'completed' %}
+                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                {% elif course.status == 'paused' %}
+                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                {% elif course.status == 'cancelled' %}
+                    <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% endif %}
+                    {{ course.get_status_display|default:"In progress" }}
+            </span>
+
         </div>
         
-        <span class="status-badge {{ course.status }} mr-3">
-        {{ course.get_status_display }}</span>
+    </header> 
+    <hr>    
 
-    </header>
-
-    <hr>
 
     <div class="wrapper-assigned-courses-panel mt-5">
         <div class="assigned-courses-panel">

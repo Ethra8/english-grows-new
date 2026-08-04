@@ -251,7 +251,7 @@ h2 {
 .profile-dashboard .dashboard-general-info-card .meta-card.meta-attendance::after,
 .teacher-course-details-page .course-meta-card.meta-attendance::after,
 .teacher-course-students-list .course-meta-card.meta-attendance::after,
-.teacher-student-detail-page .course-meta-card.meta-attendance::after {
+.course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -1127,22 +1127,6 @@ div:has(> .student-action-btn) {
 |**** COURSE_DETAIL Page *****************|
 |*****************************************/
 
-.back-to-my-assigned-courses,
-.back-to-my-assigned-courses a,
-.back-to-attendance,
-.back-to-attendance a {
-    color: #008F8F !important;
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0;
-}
-
-.back-to-my-assigned-courses i,
-.back-to-attendance i {
-    cursor: pointer;
-}
-
-
 .teacher-course-students-list header .header-last-child,
 .teacher-group-attendance-page header .header-last-child {
     display: grid;
@@ -1587,7 +1571,7 @@ div:has(> .student-action-btn) {
     font-size: 0.85rem;
 }
 
-.teacher-attendance-page .attendance-status {
+.attendance-status {
     padding: 0.35rem 0rem;
 }
 
@@ -1634,10 +1618,10 @@ div:has(> .student-action-btn) {
 
 /**** ATTENDANCE Page ************************************ */
 
-.teacher-take-attendance-page header,
+/* .teacher-take-attendance-page header,
 .teacher-attendance-detail-page header {
     margin-bottom: 1rem;
-}
+} */
 
 #attendanceDateFilter {
     color-scheme: light;
@@ -1650,9 +1634,9 @@ div:has(> .student-action-btn) {
     cursor: pointer;
 }
 
-.teacher-attendance-detail-page header > div.d-flex {
+/* .teacher-attendance-detail-page header > div.d-flex {
     flex-direction: column;
-}
+} */
 
 
 /* Main list card */
@@ -1674,18 +1658,18 @@ div:has(> .student-action-btn) {
     margin-bottom: 1.8rem;
 }
 
-.teacher-attendance-page > *:not(.overlay-birds):not(.overlay-azure-mist) {
+/* .teacher-attendance-page > *:not(.overlay-birds):not(.overlay-azure-mist) {
     position: relative;
     z-index: 2;
-}
+} */
 
-.teacher-attendance-page header p,
+/* .teacher-attendance-page header p,
 .teacher-attendance-detail-page header p {
     margin: 0;
     color: rgb(82, 82, 82);
     font-size: 1.1rem;
     padding: 0.25rem 1rem 0.25rem 0;
-}
+} */
 
 .attendance-tools {
     display: flex;
@@ -1895,8 +1879,8 @@ div:has(> .student-action-btn) {
 }
 
 /* Attendance Detail page : SUMMARY CARDS */
-.teacher-attendance-detail-page .wrapper-attendance-summary-card,
-.teacher-student-detail-page .wrapper-attendance-summary-card {
+.wrapper-attendance-summary-card,
+.wrapper-attendance-summary-card {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 1.5rem auto;
@@ -1944,7 +1928,7 @@ div:has(> .student-action-btn) {
     margin-bottom: 1.5rem;
 }
 
-.teacher-attendance-page .attendance-list-header h2,
+.attendance-list-header h2,
 .take-attendance-form .take-attendance-card-header h2,
 .attendance-detail-card-header h2 {
     color: #ffffff;
@@ -2297,7 +2281,7 @@ div:has(> .student-action-btn) {
 |*****************************************/
 
 
-.teacher-student-detail-page,
+.student-detail-page,
 .teacher-student-skills-page,
 .teacher-edit-skill-page {
     color: whitesmoke;
@@ -2483,7 +2467,7 @@ main.profile-main {
 }
 
 /* BIG ring: Student detail page */
-.teacher-student-detail-page .progress-ring {
+.student-detail-page .progress-ring {
     --percentage: 0;
     width: 8rem;
     height: 8rem;
@@ -3005,9 +2989,9 @@ main.profile-main {
 @media (max-width: 1250px) {
 
 
-    .teacher-attendance-page {
+    /* .teacher-attendance-page {
         margin-left: 0;
-    }
+    } */
 
 
     /******************************************************/
@@ -3490,8 +3474,8 @@ main.profile-main {
         padding-left: 0%;
     }
 
-    .teacher-attendance-detail-page .wrapper-attendance-summary-card,
-    .teacher-student-detail-page .wrapper-attendance-summary-card {
+    .wrapper-attendance-summary-card,
+    .wrapper-attendance-summary-card {
         display: grid;
         grid-template-columns: 1fr;
         margin: 1.5rem auto;
@@ -3499,7 +3483,7 @@ main.profile-main {
     }
 
     .take-attendance-form .take-attendance-card-header p:first-child,
-    .teacher-attendance-detail-page .attendance-detail-card-header p:first-child {
+    .attendance-detail-card-header p:first-child {
         padding: 1rem;
     }
 
@@ -3759,9 +3743,9 @@ main.profile-main {
     /*****************************************************|
     |*** ALL ATTENDANCE PageS  ***************************|
     |*****************************************************/
-    .teacher-attendance-page {
+    /* .teacher-attendance-page {
         padding: 2rem 1rem;
-    }
+    } */
 
     .attendance-list-card {
         min-height: 260px;
@@ -3832,8 +3816,8 @@ main.profile-main {
     /*****************************************************|
     |*** ATTENDANCE DETAIL Page  *************************|
     |*****************************************************/
-    .teacher-attendance-detail-page .attendance-summary-card,
-    .teacher-student-detail-page .attendance-summary-card {
+    .attendance-summary-card,
+    .attendance-summary-card {
         min-height: 0;
         height: 56px;
         padding: 1.4rem;
@@ -3842,12 +3826,12 @@ main.profile-main {
         gap: 1.5rem;
     }
 
-    .teacher-attendance-detail-page .attendance-summary-card strong,
-    .teacher-student-detail-page .attendance-summary-card strong {
+    .attendance-summary-card strong,
+    .attendance-summary-card strong {
         padding: 0.15rem 0.8rem;
     }
 
-    .teacher-attendance-detail-page .take-attendance-row {
+    .take-attendance-row {
         display: flex;
         flex-direction: row-reverse;
         align-items: flex-start;
@@ -3855,7 +3839,7 @@ main.profile-main {
         gap: 1rem;
     }
 
-    .teacher-attendance-detail-page .student-avatar {
+    .student-avatar {
         display: none;
         visibility: hidden;
     }
@@ -3904,8 +3888,7 @@ main.profile-main {
     /* Student Detail page ********************************/
     /* Attendance Detail page *****************************/
     /* Take Attendance page *******************************/
-    .teacher-attendance-detail-page .student-main-info span,
-    .teacher-take-attendance-page .student-main-info span {
+    .student-main-info span {
         display: none;
     }
 

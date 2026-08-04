@@ -196,11 +196,26 @@ def my_course(request):
             .order_by("day_of_week", "start_time")
         )
 
+    next_class = None
+
+    if active_enrollment:
+        next_class = (
+            ClassSession.objects
+            .filter(
+                course=active_enrollment.course,
+                is_cancelled=False,
+                start_time__gte=timezone.now(),
+            )
+            .order_by("start_time")
+            .first()
+        )
+
     context = {
         "profile": profile,
         "active_enrollment": active_enrollment,
         "enrollment_status": enrollment_status,
         "timetable_slots": timetable_slots,
+        "next_class": next_class,
     }
 
     return render(request, "profiles/student/my_course.html", context)
