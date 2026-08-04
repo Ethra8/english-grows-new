@@ -9,12 +9,13 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/employee_profile.css' %}">
 {% endblock %}
 
 
 {% block profile_content %}
 
-<section class="learner-employee-detail-page profile-page">
+<section class="student-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -26,59 +27,71 @@
     </div> -->
 
     <!-- Header -->
-    <div class="student-detail-header">
+    <header>
 
         <div class="student-main-info">
-
-            <div class="student-avatar-large">
-                {% if student_profile.profile_photo %}
-                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                {% else %}
-                    {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                    {% elif student_profile.role == "student" %}
-                        <i class="fa-regular fa-user"></i>
-                    {% endif %}
-                {% endif %}
-            </div>
-
             <div>
-                <div class="d-flex flex-row">
-                    <div>
-                        <h1>{{ student.get_full_name|default:student.username }}</h1>
+                <div class="student-avatar-large
+                    {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
 
-                        <div class="col-12 level-pill mt-4">
-                            <span class="current-level-label">
-                                <i class="fa-solid fa-chart-simple mr-3"></i>My LEVEL</span>
-                            <span class="current-level-value">
-                                {{ request.user.profile.get_current_level_display|default:"Level Pending" }}</span>
-                        </div>
-
-                        <div class="mt-4">
-                            {% if request.user.profile.company %}
-                            <p><strong><i class="fa-regular fa-building mr-2"></i>
-                                {{ request.user.profile.company.name }}</strong></p>
-                            {% else %}
-                            <span class="text-center mt-4">{{ "Exam Preparation" }}</span>
-                            {% endif %}
-                            
-                            <p>{{ student.email }}</p>
-                        </div>
-
-                        {% if student.is_active %}
-                            <span class="status-badge active mt-3">Active</span>
+                    {% if student_profile.profile_photo %}
+                        <img
+                            src="{{ student_profile.profile_photo.url }}"
+                            alt="{{ student.get_full_name }}"
+                        >
+                    {% else %}
+                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
+                            <i class="fa-solid fa-user-tie"></i>
                         {% else %}
-                            <span class="status-badge inactive mt-3">Inactive</span>
+                            <i class="fa-regular fa-user"></i>
                         {% endif %}
+                    {% endif %}
 
-                    </div>
-
+                    <span
+                        class="avatar-status-dot"
+                        aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"
+                        title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}">
+                    </span>
                 </div>
             </div>
+            
+            <div>
+                <h1>{{ student.get_full_name|default:student.username }}</h1>
 
+                <p><a href="mailto:{{ student.email }}">
+                    {{ student.email }}</a></p>
+
+                <div class="profile-user-role">
+                    <span><i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Employee" }}</span>
+                </div> 
+
+                <div class="header-last-child">      
+
+                    <div class="level-pill larger-devs">
+                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-value">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.get_current_level_display }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
+                    <div class="level-pill smaller-devs">
+                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-value">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.current_level }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-    </div>
+    </header>
 
     <!-- Inside navbar -->
     <div class="student-detail-tabs-wrapper">

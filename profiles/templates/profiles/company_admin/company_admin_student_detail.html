@@ -74,8 +74,8 @@
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">CEFR Level</span>
                         <span class="current-level-value">
-                        {% if request.user.profile.current_level %}    
-                            {{ request.user.profile.get_current_level_display }}
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.get_current_level_display }}
                         {% else %}
                             Pending
                         {% endif %}    
@@ -84,8 +84,8 @@
                     <div class="level-pill smaller-devs">
                         <span class="current-level-label">CEFR Level</span>
                         <span class="current-level-value">
-                        {% if request.user.profile.current_level %}    
-                            {{ request.user.profile.current_level }}
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.current_level }}
                         {% else %}
                             Pending
                         {% endif %}    
