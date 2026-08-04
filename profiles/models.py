@@ -105,12 +105,12 @@ class UserProfile(models.Model):
         (LEVEL_UNKNOWN, "Pending"),
         (LEVEL_A1, "A1 Beginner"),
         (LEVEL_A2, "A2 Elementary"),
-        (LEVEL_B1_1, "B1.1 Pre-Intermediate"),
-        (LEVEL_B1_2, "B1.2 Low Intermediate"),
-        (LEVEL_B2_1, "B2.1 Intermediate"),
-        (LEVEL_B2_2, "B2.2 High Intermediate"),
-        (LEVEL_C1_1, "C1.1 Low Advance"),
-        (LEVEL_C1_2, "C1.2 High Advance"),
+        (LEVEL_B1_1, "B1.1 - Pre-Intermediate"),
+        (LEVEL_B1_2, "B1.2 - Lower Intermediate"),
+        (LEVEL_B2_1, "B2.1 - Intermediate"),
+        (LEVEL_B2_2, "B2.2 - Higher Intermediate"),
+        (LEVEL_C1_1, "C1.1 - Lower Advanced"),
+        (LEVEL_C1_2, "C1.2 - Higher Advanced"),
         (LEVEL_C2, "C2 Proficiency"),
     ]
 

@@ -24,6 +24,16 @@ h3 {
 
 
 /* *** PAGES & SECTIONS ************************************/
+.profile-page {
+    padding: 70px 5%;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* avoid 'go-back' link to take up too much space */
+.student-detail-page.profile-page {
+    padding: 30px 5% 70px;
+}
 
 .my-course,
 .my-attendance,
@@ -32,6 +42,7 @@ h3 {
     width: 100%;
     min-height: 100vh;
 }
+
 
 main.profile-main {
     width: 100%;
@@ -417,7 +428,7 @@ main.profile-main {
 ******** MAIN PROFILE *******************************|
 *****************************************************/
 
-.dashboard-level-pill {
+.level-pill {
     display: inline-flex;
     align-items: center;
     overflow: hidden;
@@ -428,22 +439,22 @@ main.profile-main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    font-size: 1.2rem;
-    font-weight: 600;
     padding: 0 0 0 .25rem;
 }
 
-.dashboard-level-pill .current-level-label {
-    padding: 6px 14px;
+.level-pill .current-level-label {
+    padding: 9px 22px;
     color: whitesmoke;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
-.dashboard-level-pill .current-level-value {
-    padding: 6px 22px 6px 16px;
+.level-pill .current-level-value {
+    padding: 9px 22px 6px;
 
     background: #0B355F;
     color: whitesmoke;
-
+    font-size: 1.2rem;
     font-weight: 500;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
@@ -772,6 +783,65 @@ main.profile-main {
     color: whitesmoke !important;
     font-size: 1rem !important;
 }
+
+/* INSIDE PROFILE DETAILS NAV ******************************/
+.student-detail-tabs-wrapper {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.student-detail-tabs {
+    display: flex;
+    gap: 2rem;
+    padding: 0 1.25rem;
+    border-bottom: 1px solid rgba(0, 194, 178, 0.35);
+    margin-bottom: 1.7rem;
+    background-color: #003366;
+    margin-top: 0.25rem;
+    border-radius: 8px;
+
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+.student-detail-tabs a {
+    color: rgba(255,255,255,0.75);
+    padding: 1rem 0;
+    text-decoration: none;
+    position: relative;
+
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.student-detail-tabs a.active, .student-detail-tabs a:hover {
+    color: #5ff5cf;
+    border-bottom: 3px solid #5ff5cf;
+}
+
+.student-detail-tabs a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    /* width: 100%; */
+    height: 3px;
+    background: #5ff5cf;
+    border-radius: 999px;
+}
+/* END OF INSIDE NAV *************** */
 
 .learner-employee-detail-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
@@ -1213,6 +1283,11 @@ main.profile-main {
 
 @media (max-width: 1250px) {
 
+    .profile-page {
+        padding: 70px 15px 70px 40px;
+    }
+
+
     /* === SIDEBAR ===================================== */
     .profile-sidebar {
         max-width: 220px;
@@ -1365,6 +1440,21 @@ main.profile-main {
         margin: 0 auto;
     }
 
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  ****************************|
+    |*****************************************************/
+    .student-detail-tabs-wrapper {
+        margin-bottom: .5rem;
+    }
+
+    .student-detail-tabs {
+        justify-content: flex-start;
+    }
+
+    .student-detail-tabs a {
+        padding-inline: 1rem;
+    }
+
 
     /* ACCOUNT SETTINGS Page *********************/
     .profile-settings-page {
@@ -1496,7 +1586,9 @@ main.profile-main {
 @media (max-width: 576px) {
 
     /* MAIN PROFILE ********************/
-
+    .profile-page {
+        padding: 30px 4%;
+    }
 
     
     /* STUDENT: My DASHBOARD Page ***** */

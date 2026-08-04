@@ -78,11 +78,6 @@ h2 {
 
 
 /* *** SECTIONS & PAGES *********************************************/
-.profile-page {
-    padding: 70px 5%;
-    width: 100%;
-    min-height: 100vh;
-}
 
 
 /* *** HEADERS *******************************************************/
@@ -1139,7 +1134,7 @@ div:has(> .student-action-btn) {
     color: #008F8F !important;
     font-size: 1.1rem;
     font-weight: 400;
-    margin: 0 auto 2rem 0;
+    margin: 0;
 }
 
 .back-to-my-assigned-courses i,
@@ -1402,7 +1397,7 @@ div:has(> .student-action-btn) {
 .course-details-child,
 .course-info-child,
 .course-materials-child {
-    background: linear-gradient(176deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
     border-radius: 8px;
     margin: 0;
     padding: 1rem .5rem 0.5rem;
@@ -2209,7 +2204,7 @@ div:has(> .student-action-btn) {
 .student-detail-header,
 .student-detail-card,
 .recent-attendance-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85));
     border: 1px solid rgba(0, 194, 178, 0.35);
     border-radius: 8px;
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
@@ -2378,7 +2373,7 @@ main.profile-main {
     font-weight: 700;
 }
 
-.student-detail-tabs-wrapper {
+/* .student-detail-tabs-wrapper {
     display: block;
     width: 100%;
     max-width: 100%;
@@ -2389,9 +2384,9 @@ main.profile-main {
 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
-}
+} */
 
-.student-detail-tabs {
+/* .student-detail-tabs {
     display: flex;
     gap: 2rem;
     padding: 0 1.25rem;
@@ -2407,8 +2402,8 @@ main.profile-main {
     min-width: 100%;
     max-width: none;
     box-sizing: border-box;
-}
-
+} */
+/* 
 .student-detail-tabs a {
     color: rgba(255,255,255,0.75);
     padding: 1rem 0;
@@ -2417,23 +2412,22 @@ main.profile-main {
 
     flex: 0 0 auto;
     white-space: nowrap;
-}
+} */
 
-.student-detail-tabs a.active,
+/* .student-detail-tabs a.active,
 .student-detail-tabs a:hover {
     color: #00e0cf;
-}
+} */
 
-.student-detail-tabs a.active::after {
+/* .student-detail-tabs a.active::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: -1px;
-    /* width: 100%; */
     height: 3px;
     background: #00e0cf;
     border-radius: 999px;
-}
+} */
 
 .student-detail-card,
 .recent-attendance-card {
@@ -2450,7 +2444,7 @@ main.profile-main {
 .recent-attendance-card h2 {
     font-size: 1.9rem;
     margin-bottom: 1.25rem;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 
 .current-course-block h3 {
@@ -3010,9 +3004,6 @@ main.profile-main {
 
 @media (max-width: 1250px) {
 
-    .profile-page {
-        padding: 70px 15px 70px 40px;
-    }
 
     .teacher-attendance-page {
         margin-left: 0;
@@ -3311,7 +3302,7 @@ main.profile-main {
     /*****************************************************|
     |*** STUDENT DETAIL Page  ****************************|
     |*****************************************************/
-    .student-detail-tabs-wrapper {
+    /* .student-detail-tabs-wrapper {
         margin-bottom: .5rem;
     }
 
@@ -3322,7 +3313,7 @@ main.profile-main {
     .student-detail-tabs a {
         padding-inline: 1rem;
     }
-
+ */
 
 }
 
@@ -3618,10 +3609,6 @@ main.profile-main {
 
 @media (max-width: 576px) {
     
-    .profile-page {
-        padding: 30px 4%;
-    }
-
     header h1 {
         padding-left: 4%;
         padding-right: 4%;
