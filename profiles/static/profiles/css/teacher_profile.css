@@ -3115,10 +3115,10 @@ main.profile-main {
         gap: 0.5rem;
     }
 
-    .profile-dashboard .dashboard-general-info-card .meta-card {
+    /* .profile-dashboard .dashboard-general-info-card .meta-card {
         padding: 0.15rem 1rem 0.15rem 1.5em;
     }
-
+ */
     .course-header-meta-row,
     .course-header-meta-row,
     .profile-dashboard .dashboard-general-info-card .meta-row {
