@@ -146,11 +146,15 @@ document.addEventListener('DOMContentLoaded', function () {
             Clicking an event still opens the event modal.
         */
         dateClick: function (info) {
-            if (calendar.view.type === 'dayGridMonth') {
+            const clickableViews = [
+                'dayGridMonth',
+                'multiMonthYear'
+            ];
+
+            if (clickableViews.includes(info.view.type)) {
                 calendar.changeView('timeGridDay', info.dateStr);
             }
         },
-
         /*
             Custom event rendering:
             - Month List gets custom layout with Join Class button.

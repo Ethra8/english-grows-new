@@ -825,9 +825,18 @@ div:has(> .student-action-btn) {
     padding-left: 1.5rem;
 } */
 
+.class-list-group-name img,
+.course-list-group-name img {
+    border-left: 1px solid rgba(94, 234, 212, 0.2);
+    /* padding-left: 1.5rem; */
+    width: 46px;
+    height: 46px;
+}
+
+
 .class-list-group-name .text-white,
 .assigned-courses-page .course-list-group-name .text-white {
-    color: whitesmoke;
+    /* color: whitesmoke; */
     font-weight: 300 !important;
     font-size: 1.4rem;
 }

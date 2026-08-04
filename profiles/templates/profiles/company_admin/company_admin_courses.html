@@ -111,14 +111,14 @@
 
                     <div class="course-main-info">
 
-                        <div class="assigned-course-level">
+                        <!-- <div class="assigned-course-level">
                             <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
-                        </div>
+                        </div> -->
 
                         <div class="course-list-group-name">
                             <h3>
-                                {% if course.company %}
-                                    <i class="fa-regular fa-building mr-2"></i>
+                                {% if course.enrollments|length <= 1 %}
+                                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon 1-2-1 course">
                                 {% else %}
                                     <i class="fa-solid fa-book-open-reader mr-2"></i>
                                 {% endif %}
