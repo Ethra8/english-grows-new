@@ -9,11 +9,6 @@ h3 {
     letter-spacing: 0.03em;
 }
 
-.profile-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-grow: 1;
-}
 
 /* HR **************************************************** */
 
@@ -53,13 +48,24 @@ h3 {
 .profile-main,
 .profile-page {
     min-width: 0;
-    max-width: 100%;
     box-sizing: border-box;
 }
 
-/* main.profile-main {
-    overflow-x: hidden;
-} */
+.profile-layout {
+    display: flex;
+    width: 100%;
+}
+.profile-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-grow: 1;
+}
+
+main.profile-main {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+}
 
 .profile-page {
     padding: 70px 5%;
@@ -266,7 +272,7 @@ main.profile-main {
     color: whitesmoke;
     padding: 2rem;
     position: relative;
-    z-index: 1030;
+    z-index: 1028;
 }
 
 .profile-sidebar h2 {

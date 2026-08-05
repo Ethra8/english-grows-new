@@ -1,3 +1,4 @@
+
 .company-admin-attendance-page header hr {
     margin: 2rem 0 1.25rem;
     border: 0;
@@ -244,6 +245,12 @@
 /************************************************|
 **** EMPLOYEES_LIST Page ************************|
 *********************************************** */
+
+.all-employees-performance-page hr:first-of-type {
+    /* margin: 2rem 0 1.25rem; */
+    border: 0;
+    border-top: 1px solid rgba(0, 103, 108, 0.3);
+}
 
 .student-row.employees-list {
     display: grid !important;
