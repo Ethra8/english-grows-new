@@ -1,3 +1,9 @@
+.company-admin-attendance-page header hr {
+    margin: 2rem 0 1.25rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 103, 108, 0.3);
+}
+
 .company-admin-course-details-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";

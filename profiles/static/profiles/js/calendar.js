@@ -2,17 +2,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     
     const calendarEl = document.getElementById('calendar');
-    const userRole = calendarEl.dataset.role;
 
     if (!calendarEl) {
         return;
     }
 
+    const userRole = calendarEl.dataset.role;
     const eventsUrl = calendarEl.dataset.eventsUrl;
 
     function isMobileCalendar() {
         return window.innerWidth <= 768;
     }
+
+    let calendarIsMobile = isMobileCalendar();
 
     function getHeaderToolbar() {
         if (isMobileCalendar()) {
@@ -116,18 +118,25 @@ document.addEventListener('DOMContentLoaded', function () {
             - Other views: FullCalendar default title
         */
         datesSet: function (info) {
-            const titleEl = calendarEl.querySelector('.fc-toolbar-title');
-
-            if (!titleEl) {
+            if (info.view.type !== 'timeGridDay') {
                 return;
             }
 
-            if (info.view.type === 'timeGridDay') {
+            /*
+                Wait until FullCalendar has finished writing its own title,
+                then replace the complete contents of the title element.
+            */
+            window.requestAnimationFrame(function () {
+                const titleEl = calendarEl.querySelector('.fc-toolbar-title');
+
+                if (!titleEl) {
+                    return;
+                }
+
                 titleEl.innerHTML = formatBigDayTitle(info.start);
-            } else {
-                titleEl.textContent = info.view.title;
-            }
+            });
         },
+
         /*
             Grid column header:
             - Only day view uses: Wed. 19/08/26
@@ -353,7 +362,20 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         windowResize: function () {
-            calendar.setOption('headerToolbar', getHeaderToolbar());
+            const newMobileState = isMobileCalendar();
+
+            /*
+                Rebuild the toolbar only when crossing the
+                768px mobile/desktop breakpoint.
+            */
+            if (newMobileState !== calendarIsMobile) {
+                calendarIsMobile = newMobileState;
+
+                calendar.setOption(
+                    'headerToolbar',
+                    getHeaderToolbar()
+                );
+            }
         }
     });
 

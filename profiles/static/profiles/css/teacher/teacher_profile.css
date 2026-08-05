@@ -805,7 +805,7 @@ div:has(> .student-action-btn) {
 
 .assigned-course-row {
     display: grid;
-    grid-template-columns: minmax(420px, 1.25fr) minmax(90px, 0.5fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(90px, 0.5fr) minmax(130px, 1fr) ;
+    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(90px, 0.5fr) minmax(130px, 1fr) ;
     align-items: center;
     gap: 2rem;
     padding: 0.75rem 1.3rem;
@@ -2411,7 +2411,6 @@ div:has(> .student-action-btn) {
 |**** STUDENT DETAIL Page *****************|
 |*****************************************/
 
-
 .student-detail-page,
 .teacher-student-skills-page,
 .teacher-edit-skill-page {
@@ -2421,20 +2420,6 @@ div:has(> .student-action-btn) {
     min-width: 0;
     box-sizing: border-box;
 }
-
-.profile-layout,
-main.profile-main,
-.profile-page {
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-main.profile-main {
-    overflow-x: hidden;
-}
-
-
 
 .student-header-actions {
     display: flex;
@@ -3249,9 +3234,6 @@ main.profile-main {
 
 
 @media (max-width: 991.99px) {
-    .profile-page {
-        padding: 70px 15px;
-    }
 
     .profile-dashboard .dashboard-general-info-card .meta-row {
         gap: 0.5rem;

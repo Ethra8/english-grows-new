@@ -49,10 +49,25 @@ h3 {
 }
 
 /* *** PAGES & SECTIONS ************************************/
+.profile-layout,
+.profile-main,
+.profile-page {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* main.profile-main {
+    overflow-x: hidden;
+} */
+
 .profile-page {
     padding: 70px 5%;
     width: 100%;
     min-height: 100vh;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* avoid 'go-back' link to take up too much space */
@@ -1477,6 +1492,10 @@ main.profile-main {
 
 
 @media (max-width: 991.98px) {
+
+    /* .profile-page {
+        padding: 70px 15px;
+    } */
 
     /* *** H1 ****************************************/
 
