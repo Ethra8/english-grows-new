@@ -100,63 +100,81 @@
                     </select>
                 </div>            
             </div>
-
-            <div class="assigned-courses-list">
                 {% if courses|length == 0 %}
                     <p class="text-white p-3">No courses assigned yet.</p>
                 {% endif %}    
+            <!-- COURSE & CLASS LIST -->
+            <div class="assigned-courses-list">
     
                 {% for course in courses %}
+                <a href="{% url 'profiles:company_admin_course_details' course.id %}">
+                <!-- COURSE & CLASS ROW -->
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
                     <div class="course-main-info">
-
-                        <!-- <div class="assigned-course-level">
-                            <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
-                        </div> -->
-
                         <div class="course-list-group-name">
                             <div>
-                                {% if course.enrollment_count <= 1 %}
-                                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                                {% else %}
-                                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
-                                {% endif %}
-                                <h3>{{ course.name }}</h3>
-                            </div>
-
-                            <p>{{ course.timetable_display }}</p>
-
-                            <div class="d-flex flex-row">
-                                <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                                    {{ course.course_level }}</span>
-
-                                <span class="status-badge {{ course.status }} ml-3">
-                                    {{ course.get_status_display }}</span>
+                                    {% if course.enrollment_count == 1 %}
+                                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                                    {% else %}
+                                    <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+                                    {% endif %}
+                                    <div>
+                                        <h3>{{ course.name }}</h3>
+                                        <span>{{ course.course_type }}</span> 
+                                    </div>
                             </div>
                         </div>
                     </div>
-                    <div class="course-stat completion-stat">
+                    
+                    <div>
+                        <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                            {{ course.course_level|default:"Pending" }}</span>
+                    </div>
+
+                    <div class="course-list-status">
+                        <span class="status-dot status-{{ course.status }}"></span>
+                        <span class="status-text">
+                            {{ course.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="course-list-date">
+                        <div class="icon">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div>
+                            <strong>{{ course.timetable_days_display }}</strong>
+                            <span>{{ course.timetable_times_display }}</span>
+                        </div>
+                    </div>
+
+                    <div class="course-list-student-num">
+                        <div class="icon">
+                            {% if course.enrollments.count == 1 %}
+                                <i class="fa-solid fa-user"></i>
+                            {% elif course.enrollments.count == 2 %}
+                                <i class="fa-solid fa-people-arrows"></i>
+                            {% else %}
+                                <i class="fa-solid fa-users-line"></i>
+                            {% endif %}
+                        </div>
+                        <strong>{{ course.enrollments.count }}</strong>   
+                    </div>
+
+                    <div class="course-stat">
                         <div
                             class="completion-ring"
                             style="--completion: {{ course.completion_percentage }};"
-                        ></div>
-
-                        <strong>{{ course.completion_percentage }}%</strong>
-                        <span>Completed</span>
+                        >
+                            <span>{{ course.completion_percentage }}%</span>
+                        </div>
+                        <span>Completion</span>
                     </div>
-
-                    <div class="course-action">
-                        <a href="{% url 'profiles:company_admin_course_details' course.id %}" class="btn-course-details">
-                            <i class="fa-regular fa-eye mr-2"></i>
-                            Details
-                            <i class="fa-solid fa-chevron-right ml-2"></i>
-                        </a>
-                    </div>
-
                 </div>
+                </a>
                 {% endfor %}
-                <p id="noCoursesFilterMessage" class="text-white p-3 course-hidden" hidden>
+                <p id="noCoursesFilterMessage" class="text-grey p-3 course-hidden" hidden>
                     No courses to show for this filter.
                 </p>
             </div>

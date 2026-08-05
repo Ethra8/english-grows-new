@@ -265,40 +265,48 @@ class Course(models.Model):
 
         return self.total_hours % self.class_duration != 0
 
+
     @property
     def class_duration_display(self):
         return self.format_duration(self.class_duration)
 
+    # Returns ONLY DAYS of course timetable
     @property
-    def timetable_display(self):
+    def timetable_days_display(self):
         slots = list(self.timetable_slots.all())
 
         if not slots:
             return "Not assigned"
 
-        # Do all slots share the same times?
+        return " & ".join(
+            slot.get_day_of_week_display()[:3]
+            for slot in slots
+        )
+
+    # Returns ONLY TIMES of course timetable 
+    # (different if days have different times!)
+    @property
+    def timetable_times_display(self):
+        slots = list(self.timetable_slots.all())
+
+        if not slots:
+            return ""
+
         first_start = slots[0].start_time
         first_end = slots[0].end_time
 
         same_times = all(
-            slot.start_time == first_start and
-            slot.end_time == first_end
+            slot.start_time == first_start
+            and slot.end_time == first_end
             for slot in slots
         )
 
         if same_times:
-            days = " & ".join(
-                slot.get_day_of_week_display()[:3]
-                for slot in slots
-            )
-
             return (
-                f"{days} | "
                 f"{first_start.strftime('%H:%M')} - "
                 f"{first_end.strftime('%H:%M')}"
             )
 
-        # Different times
         return " · ".join(
             f"{slot.get_day_of_week_display()[:3]} "
             f"{slot.start_time.strftime('%H:%M')} - "

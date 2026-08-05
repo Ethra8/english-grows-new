@@ -93,7 +93,7 @@
     font-size: 46px;
 }
 
-/* AVATAR STATUS DOT - PROFILE STATUS **********************/
+/* AVATAR STATUS DOT - PROFILE STATUS - My-Progress/Student details pages**********************/
 .avatar-status-dot {
     position: absolute;
     right: 7%;
@@ -194,7 +194,6 @@
     margin: 1.5rem auto;
     width: fit-content;
 }
-
 
 .student-detail-page .progress-ring {
     --percentage: 0;

@@ -750,22 +750,6 @@ div:has(> .student-action-btn) {
     gap: 0.25rem;
 }
 
-.class-main-info .class-list-group-name a {
-    display: flex;
-}
-
-.class-main-info .class-list-group-name a h3 {
-    font-weight: 400;
-    color: #0B355F;
-    margin: 0 0 .35rem;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-}
-
-.class-main-info .class-list-group-name a > div {
-    margin-left: 1rem;
-}
-
 .classes-list-filter {
     background-color: rgba(11, 53, 95, 0.6);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -783,69 +767,107 @@ div:has(> .student-action-btn) {
     z-index: 5;
 }
 
-.class-list-date {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
-    padding-left: 1.5rem;
-    min-width: 200px;
-    gap: 0.75rem;
-    /* width: 13rem; */
-}
 
-.class-list-student-num {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);    padding-left: 1.5rem;
-    min-width: 100px;
-    gap: 0.75rem;
-}
-
-.class-list-date .icon,
-.class-list-student-num .icon {
-    width: 36px;
-    height: 36px;
-    border: 1px solid #006b7d;
-    background: transparent;
-    border-radius: 999px;
-    /* padding: 0.15rem; */
-    text-align: center !important;
-}
-
-.class-list-date i,
-.class-list-student-num i {
-    color: #006b7d;
-    /* text-align: center !important; */
-}
-
-.class-list-date strong,
-.class-list-student-num strong {
-    color: #006b7d;
-    font-size: 1rem;
-    margin-bottom: 0;
-    /* margin-right: .4rem; */
-}
-
-.class-list-date span,
-.class-list-student-num span {
+/* COURSE & CLASS LIST *********************/
+.assigned-courses-list,
+.assigned-classes-list {
     display: block;
-    /* margin-top: .2rem; */
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: whitesmoke;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-x: scroll !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
 }
 
-/* .class-list-group-name,
-.course-list-group-name {
-    border-left: 1px solid rgba(94, 234, 212, 0.2);
-    padding-left: 1.5rem;
-} */
 
+/* COURSE & CLASS ROW ********************* */
+
+.assigned-class-row {
+    display: grid;
+    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(150px, 1fr);
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 1.3rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    min-width: 900px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.assigned-course-row {
+    display: grid;
+    grid-template-columns: minmax(420px, 1.25fr) minmax(90px, 0.5fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(90px, 0.5fr) minmax(130px, 1fr) ;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 1.3rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    min-width: 1300px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.assigned-course-row:hover,
+.assigned-class-row:hover {
+    background: rgba(199, 255, 249, 0.3);
+}
+
+/* COURSE & CLASS MAIN INFO */
+/* For COURSE & CLASS List */
+.course-main-info,
+.class-main-info {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+}
+
+.class-main-info h3,
+.course-main-info h3 {
+    font-weight: 500;
+    color: #0B355F;
+    margin: 0 0 .35rem;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.005em;
+    transition: all 0.2s ease;
+}
+
+.class-main-info h3:hover,
+.course-main-info h3:hover {
+    font-weight: 600;
+}
+
+.assigned-course-level span.status-badge, 
+.course-main-info span.status-badge,
+.class-main-info span.status-badge {
+    border-radius: 20px;
+    padding: 0.2rem 1rem !important;
+    font-weight: 700;
+    width: fit-content;
+    font-size: .75rem;
+    position: relative;
+}
+
+/* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
+.assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
+.assigned-courses-list > .assigned-course-row:not(.class-hidden):not(:has(~ .assigned-course-row:not(.class-hidden))),
+.attendance-row:last-child  {
+    border-bottom: none !important;
+}
+
+/* ROW DATA: BUTTON at the end */
+/* .course-action {
+    justify-self: end !important;
+
+} */
 .course-list-group-name > div:first-of-type,
 .class-list-group-name > div:first-of-type,
 .attendance-list .attendance-row > div:first-of-type {
@@ -858,18 +880,13 @@ div:has(> .student-action-btn) {
     gap: 0.5rem;
 }
 
-.course-list-group-name > div:first-of-type h3,
-.class-list-group-name > div:first-of-type h3 {
-    margin-bottom: 0 !important;
-}
-
 .class-list-group-name > div:first-of-type img,
 .course-list-group-name > div:first-of-type img,
 .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
     height: 46px;
     background: #C7FFF9;
-    /* background: radial-gradient(circle,rgba(199, 255, 249, 0.97) 10%, rgba(237, 249, 247, 1) 37%, rgba(95, 245, 207, 1) 69%); */
+    background: radial-gradient(circle,rgba(199, 255, 249, 0.97) 10%, rgba(237, 249, 247, 1) 37%, rgba(95, 245, 207, 1) 69%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -879,15 +896,200 @@ div:has(> .student-action-btn) {
 }
 
 .class-list-group-name > div:first-of-type span,
+.course-list-group-name > div:first-of-type span,
 .attendance-list .attendance-row > div:first-of-type span {
     color: #6a7f81;
 }
 
-.assigned-courses-page .course-list-group-name .text-white {
-    /* color: whitesmoke; */
-    font-weight: 300 !important;
-    font-size: 1.4rem;
+/* LEVEL CELL in DATA ROW */
+.assigned-class-row > div:nth-of-type(2),
+.assigned-course-row > div:nth-of-type(2) {
+    height: 100%; 
+    min-height: 80%;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    align-content: center;
 }
+
+.assigned-class-row .level,
+.assigned-course-row .level {
+    width: 60px;
+}
+
+/* COURSE STATUS Text & DOT in ROW */
+.course-list-status {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    height: 70%;    
+    padding-left: 1.5rem;
+}
+
+.course-list-status .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.status-confirmed {
+    background: #17c964;
+}
+
+.status-dot.status-active {
+    background: #5ff0df;
+}
+
+.status-dot.status-paused {
+    background: #ffb000;
+}
+
+.status-dot.status-cancelled {
+    background: #ef4444;
+}
+
+.status-dot.status-completed {
+    background: #7c7c7c;
+}
+
+/* DATES in ROW */
+.class-list-date,
+.course-list-date {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    height: 70%;    
+    padding-left: 1.5rem;
+    min-width: 200px;
+    gap: 0.75rem;
+}
+
+.class-list-student-num,
+.course-list-student-num {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);    
+    height: 70%;    
+    padding-left: 1.5rem;
+    min-width: 100px;
+    gap: 0.75rem;
+}
+
+.class-list-date .icon,
+.class-list-student-num .icon,
+.course-list-date .icon,
+.course-list-student-num .icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #006b7d;
+    background: transparent;
+    border-radius: 999px;
+    text-align: center !important;
+}
+
+.class-list-date i,
+.class-list-student-num i,
+.course-list-date i,
+.course-list-student-num i {
+    color: #006b7d;
+}
+
+.class-list-date strong,
+.class-list-student-num strong,
+.course-list-date strong,
+.course-list-student-num strong {
+    color: #006b7d;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Keep span elements in separate lines */
+.class-list-date span,
+.class-list-student-num span,
+.course-list-date span,
+.course-list-student-num span {
+    display: block;
+}
+
+/* ROW DATA: COURSE STATISTICS */
+/* For COURSE & CLASS List */
+.course-stat {
+    display: flex;
+    flex-direction: row;
+    border-left: 1px solid rgba(0, 107, 125, 0.15);
+    height: 80%;    
+    padding-left: 1.5rem;
+    min-width: 100px;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    min-height: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.course-stat .completion-ring {
+    --size: 65px;
+    --thickness: 8px;
+    width: var(--size);
+    height: var(--size);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #5eead4 calc(var(--completion) * 1%),
+            rgba(11,53,95,.12) 0
+        );
+    flex-shrink: 0;
+}
+
+.course-stat > div:first-of-type {
+    border-radius: 999px;
+    border: 1px solid #006b7d; 
+    width: 65px;
+    height: 65px;
+}
+
+.completion-ring::after{
+    content:"";
+    position:absolute;
+    inset: var(--thickness);
+    border-radius:50%;
+    background:white;
+}
+
+.completion-ring span{
+    position:relative;
+    z-index:2;
+    font-size:0.95rem;
+    font-weight:500;
+    color:#006b7d;
+    line-height:1;
+}
+
+.course-stat span {
+    color: #6a7f81;
+}
+
+/* ****** END OF CLASS & COURSE ROWS in LIST Pages *********** */
+
 
 .teacher-reschedule-page .course-list-group-name h3 {
     font-weight: 500;
@@ -897,7 +1099,6 @@ div:has(> .student-action-btn) {
     font-weight: 300 !important;
     font-size: 1rem;
 }
-
 
 
 /*** Courses/Classes FILTER BY STATUS: **************************|
@@ -1017,7 +1218,7 @@ div:has(> .student-action-btn) {
     outline: none;
 }
 
-.assigned-courses-icon {
+/* .assigned-courses-icon {
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -1033,7 +1234,7 @@ div:has(> .student-action-btn) {
 .assigned-courses-icon i {
     color: #0B355F;
     font-size: 1.5rem;
-}
+} */
 
 .course-status-filter {
     border-radius: 8px;
@@ -1058,123 +1259,6 @@ div:has(> .student-action-btn) {
 .course-status-filter option:checked,
 .classes-list-filter option:checked {
     background: linear-gradient(235deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-}
-
-.assigned-courses-list,
-.assigned-classes-list {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background: whitesmoke;
-    padding: 1rem;
-    box-sizing: border-box;
-    overflow-x: scroll !important;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    scrollbar-width: auto;
-}
-
-.assigned-course-row, 
-.assigned-class-row {
-    display: grid;
-    /* grid-template-columns: 340px 70px minmax(0, 1fr) minmax(0, 1fr); */
-    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(150px, 1fr);
-    align-items: center;
-    gap: 2rem;
-    padding: 0.75rem 1.3rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
-    min-width: 900px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.assigned-class-row .level {
-    width: 60px;
-}
-
-/* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
-.assigned-courses-list > .assigned-class-row:not(.class-hidden):not(:has(~ .assigned-class-row:not(.class-hidden))),
-.assigned-courses-list > .assigned-course-row:not(.class-hidden):not(:has(~ .assigned-class-row:not(.class-hidden))),
-.attendance-row:last-child  {
-    border-bottom: none !important;
-}
-
-.course-main-info,
-.class-main-info {
-    display: flex;
-    align-items: center;
-    gap: 1.3rem;
-    /* min-width: max-content; */
-    /* width: fit-content; */
-}
-
-.course-main-info h3 {
-    color: whitesmoke;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    margin: 0 0 0.75rem;
-    font-size: 1.8rem;
-    font-weight: 300;
-}
-
-.course-main-info h3 i {
-    font-size: 1.5rem;
-}
-
-.course-main-info p,
-.class-main-info p {
-    color: #c8eee9;
-    margin: .45rem 0;
-}
-
-.assigned-course-level span.status-badge, 
-.course-main-info span.status-badge,
-.class-main-info span.status-badge {
-    /* border: 1px solid rgba(94, 234, 212, 0.5); */
-    border-radius: 20px;
-    padding: 0.2rem 1rem !important;
-    font-weight: 700;
-    width: fit-content;
-    font-size: .75rem;
-    position: relative;
-}
-
-.course-stat {
-    color: #dff;
-    border-left: 1px solid rgba(94, 234, 212, 0.2);
-    padding-left: 1.5rem;
-    min-width: 100px;
-    align-content: center;
-    height: 100%;
-    min-height: auto;
-    justify-content: center;
-    text-align: center;
-}
-
-.course-stat i {
-    color: #5eead4;
-    margin-right: .5rem;
-}
-
-.course-stat strong {
-    color: #fff;
-    font-size: 1.3rem;
-    margin-right: .4rem;
-}
-
-.course-stat span {
-    display: block;
-    margin-top: .2rem;
-}
-
-.course-action {
-    justify-self: end !important;
-
 }
 /* END Course/Class filter BY STATUS ***************** */
 
@@ -1365,7 +1449,6 @@ div:has(> .student-action-btn) {
     border-bottom-right-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.25);
     padding: 1rem 1.25rem;
-    /* color: #fff; */
     margin-top: 0.5rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
@@ -1389,13 +1472,6 @@ div:has(> .student-action-btn) {
     margin: 0.5rem auto;
 }
 
-/* .course-detail-item strong span {
-    display: inline;
-    color: whitesmoke;
-    margin-bottom: 0 !important;
-    font-weight: 400;
-} */
-
 .course-detail-item p {
     display: inline;
     color: whitesmoke;
@@ -1417,13 +1493,6 @@ div:has(> .student-action-btn) {
 .student-row:last-child {
     border-bottom: none;
 }
-
-/* .detail-row strong {
-    color: whitesmoke;
-    font-weight: 500;
-    position: relative;
-    line-height: 1.5;
-} */
 
 .detail-row span:first-child {
     color: #006b7d;
@@ -2999,13 +3068,9 @@ main.profile-main {
         width: 100%;
     }
  */
-    .assigned-course-row {
-        grid-template-columns: 2fr 1fr auto;
-        gap: 1.5rem;
-        padding: 1.5rem 1rem 1rem;
-    }
 
-    .assigned-class-row {
+    .assigned-class-row,
+    .assigned-course-row {
         /* grid-template-columns: minmax(0, 1fr) 70px 170px auto; */
         gap: 1rem;
         padding: 1.5rem 1rem 1rem;
@@ -3069,9 +3134,9 @@ main.profile-main {
     /* COURSES Page (All courses assigned) ************** */
     /******************************************************/
 
-    .course-stat {
+    /* .course-stat {
         display: none;
-    }
+    } */
 
 
     /******************************************************/
@@ -3493,14 +3558,14 @@ main.profile-main {
 
     /* *** COURSES Page ************************************/
     /* *** CLASSES LIST Page *******************************/
-    .assigned-course-row {
+    /* .assigned-course-row {
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 1rem;
         padding: 1.5rem 1.4rem 1rem;
     }
-
+ */
         
     /* .assigned-class-row {
         display: flex !important;
@@ -3950,9 +4015,9 @@ main.profile-main {
         /* flex-grow: 10; */
     }
 
-    .assigned-course-level {
+    /* .assigned-course-level {
         display: none;
-    }
+    } */
 
 }
 
@@ -4054,7 +4119,7 @@ main.profile-main {
 } */
 
 /* Chrome, Edge and Safari */
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar,
+/* .company-admin-classes-list .assigned-courses-list::-webkit-scrollbar,
 .company-admin-classes-list .assigned-classes-list::-webkit-scrollbar {
     width: auto;
     height: 14px;
@@ -4063,7 +4128,6 @@ main.profile-main {
 .company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-track,
 .company-admin-classes-list .assigned-classes-list::-webkit-scrollbar-track {
     background: whitesmoke;
-    /* border-radius: 999px; */
     border: 1px solid #b5b5b5;
 }
 
@@ -4079,7 +4143,30 @@ main.profile-main {
 .company-admin-classes-list .assigned-classes-list::-webkit-scrollbar-thumb:hover {
     background: #cdcdcd;
 }
+ */
 
+
+/* Chrome, Edge and Safari */
+/* .company-admin-classes-list .assigned-courses-list::-webkit-scrollbar {
+    width: auto;
+    height: 14px;
+}
+
+.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-track {
+    background: #0B355F;
+    border-radius: 999px;
+}
+
+.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
+    min-width: 60px;
+    background: #5ff0df;
+    border: 3px solid #0B355F;
+    border-radius: 999px;
+}
+
+.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
+    background: #c7fff9;
+} */
 
 /* MUST STAY AT THE END OF CSS FILE */
 .assigned-course-row.course-hidden,

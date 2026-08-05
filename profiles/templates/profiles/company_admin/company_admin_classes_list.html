@@ -99,8 +99,10 @@
                     <div class="assigned-classes-list">
                         {% for session in sessions %}
                             {% if session.class_status_group == "upcoming" %}
+
                                 {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
-                            {% endif %}
+                            
+                                {% endif %}
                         {% endfor %}
 
                         <p class="no-classes-message text-grey p-3" hidden>
