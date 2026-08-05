@@ -1,10 +1,34 @@
+/* COMPANY ADMIN EMPLOYEES LIST - EMPLOYEES PROGRESS */
+.all-courses-student-list h1 {
+    margin-bottom: 0;
+}
 
-.company-admin-attendance-page header hr {
+.all-courses-student-list hr {
     margin: 2rem 0 1.25rem;
     border: 0;
     border-top: 1px solid rgba(0, 103, 108, 0.3);
 }
 
+.all-courses-student-list p:first-of-type {
+    margin: 0;
+    color: #0B355F;
+    font-size: 1rem;
+}
+
+.all-courses-student-list .student-row-parent {
+    background-color: whitesmoke;
+}
+
+.all-courses-student-list .student-row .student-main-info {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+} 
+
+/* COMPANY ADMIN ATTENDANCE PAGE (From Sidebar)*/
 .company-admin-course-details-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";

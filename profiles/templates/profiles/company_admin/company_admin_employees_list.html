@@ -13,11 +13,11 @@
 
 {% block profile_content %}
 
-<section class="teacher-course-students-list all-courses-student-list profile-page">    
+<section class="all-courses-student-list profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col-12 mb-2">
                 <p class="go-back-link">
                     <a href="#" class="js-back-link">
@@ -26,7 +26,7 @@
                     </a>    
                 </p>
             </div>
-        </div>    
+        </div>     -->
 
     <header class="mb-2">
 
@@ -36,11 +36,12 @@
             </div>
         </div>
     </header>
-                <p class="mb-0">
-                    INDIVIDUAL PERFORMANCE - {{ total_employees }} Active employees
-                </p>
-
     <hr>
+
+    <p class="text-dark mb-0">Review employee performance across different areas.</p>
+    
+    <p class="text-dark mb-0">{{ total_employees }} Active employees</p>
+
 
     <div class="wrapper-course-details">
         <div class="course-details-child">
@@ -53,11 +54,10 @@
                         {% for employee in employees %}
                             <div class="student-row employees-list">
 
-                                <button type="button"
-                                        class="level level-{{ employee.profile.current_level|lower|cut:'.' }} mr-2">
-                                    {{ employee.profile.current_level|default:"?" }}
-                                </button>  
-                                <div>
+                                <div class="student-main-info ">
+                                    <div class="student-avatar">
+
+                                    </div>
                                     <strong>
                                         {{ employee.student.get_full_name|default:employee.student.username }}
                                     </strong>
@@ -66,6 +66,9 @@
                                         <span>{{ employee.student.email }}</span>
                                     </a>
                                 </div>
+                                <div class="level level-{{ employee.profile.current_level|lower|cut:'.' }} mr-2">
+                                    {{ employee.profile.current_level|default:"?" }}
+                                </div>  
 
                                 <div class="view-progress-course">
                                     {% for enrollment in employee.enrollments %}
