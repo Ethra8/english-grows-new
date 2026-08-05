@@ -88,23 +88,28 @@
 
                     <div class="course-main-info">
 
-                        <div class="assigned-course-level">
+                        <!-- <div class="assigned-course-level">
                             <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
-                        </div>
+                        </div> -->
 
                         <div class="course-list-group-name">
-                            <h3>
-                                {% if course.company %}
-                                    <i class="fa-regular fa-building mr-2"></i>
+                            <div>
+                                {% if course.enrollment_count <= 1 %}
+                                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                                 {% else %}
-                                    <i class="fa-solid fa-book-open-reader mr-2"></i>
+                                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
                                 {% endif %}
-                                {{ course.name }}
-                            </h3>
-                            <span id="course_level_inline" class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
+                                <h3>{{ course.name }}</h3>
+                            </div>
+
                             <p>{{ course.timetable_display }}</p>
-                            <span class="status-badge {{ course.status }}">{{ course.get_status_display }}</span>
-                        
+                            <div class="d-flex flex-row">
+                                <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                                    {{ course.course_level }}</span>
+
+                                <span class="status-badge {{ course.status }} ml-3">
+                                    {{ course.get_status_display }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="course-stat completion-stat">

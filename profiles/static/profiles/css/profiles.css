@@ -393,9 +393,9 @@ main.profile-main {
     font-size: .75rem;
     font-weight: 700;
     text-transform: uppercase;
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+    /* width: 160px; */
+    min-width: 90px;
+    max-width: fit-content;
     text-align: center;
 }
 

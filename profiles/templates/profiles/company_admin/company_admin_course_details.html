@@ -117,6 +117,23 @@
 
                             <div class="detail-row">
                                 <span>
+                                    <i class="fa-regular fa-clock mr-2"></i>
+                                    Timetable:
+                                </span>
+                                <span>
+                                    {% if formatted_timetable %}
+                                        {% for timetable in formatted_timetable %}
+                                           <strong>{{ timetable.days }}</strong> 
+                                            <br>
+                                            {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        Not assigned
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-row">
+                                <span>
                                     <i class="fa-regular fa-calendar-check mr-2"></i>
                                     Start Date:
                                 </span>
@@ -133,26 +150,6 @@
                                     {{ course.end_date|date:"D, j M 'y" }}
                                 </span>
                             </div>
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-regular fa-clock mr-2"></i>
-                                    Timetable:
-                                </span>
-
-                                <span>
-                                    {% if formatted_timetable %}
-                                        {% for timetable in formatted_timetable %}
-                                            {{ timetable.days }}
-                                            <br>
-                                            {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        Not assigned
-                                    {% endif %}
-                                </span>
-                            </div>
-
                             <div class="detail-row">
                                 <span>
                                     <i class="fa-regular fa-hourglass mr-2"></i>

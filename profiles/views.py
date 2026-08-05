@@ -2919,6 +2919,7 @@ def company_admin_courses(request):
     courses = (
         Course.objects
         .filter(company=company)
+        .annotate(enrollment_count=Count("enrollments"))
         .select_related(
             "course_type",
             "company",
