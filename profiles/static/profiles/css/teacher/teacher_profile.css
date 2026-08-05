@@ -1923,7 +1923,7 @@ div:has(> .student-action-btn) {
     align-items: center;
     align-content: center;
     width: 80%;
-    margin: auto auto 1rem;
+    margin: 0 0 1rem;
 }
 
 .wrapper-attendance-course-info > div:last-child {
@@ -2044,7 +2044,7 @@ div:has(> .student-action-btn) {
     border-radius: 8px;
     padding: 1.6rem;
     width: 80%;
-    margin: auto;
+    margin: 0;
 }
 
 .take-attendance-form .take-attendance-card-header {

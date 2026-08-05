@@ -12,7 +12,7 @@
 
 {% block profile_content %}
 
-<section class="my-course profile-page">
+<section class="course-attendance my-course profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -77,13 +77,13 @@
 
                     <div class="attendance-filter-card two-filters">
 
-                        <button class="attendance-filter-btn active" data-filter="completed" type="button">
+                        <div class="attendance-filter-btn" data-filter="completed" type="button">
                             <span class="status-pill completed">
                                 <i class="fa-solid fa-clipboard-check"></i>
                             </span>
-                            <span>Submitted</span>
+                            <h2>Attendance Submitted:</h2>
                             <strong>{{ completed_count }}</strong>
-                        </button>
+                        </div>
 
                     </div>
 
@@ -93,8 +93,8 @@
             <div class="attendance-list-card">
 
                 <div class="attendance-list-header">
-                    <h2 id="attendanceListTitle">Submitted Attendance</h2>
-
+                    <!-- <h3 id="attendanceListTitle"></h3> -->
+                    <h3>Filter Attendance</h3>
                     <div class="attendance-tools">
                         <input type="date" id="attendanceDateFilter">
 
@@ -123,36 +123,22 @@
 
                                 <div class="attendance-class-info">
                                     <h3>Lesson {{ class_session.class_number }}</h3>
-                                    <strong>{{ class_session.start_time|date:"D, d M" }}</strong>
-                                    <span>
-                                        {{ class_session.start_time|time:"H:i" }}
-                                        -
-                                        {{ class_session.end_time|time:"H:i" }}
-                                    </span>
                                 </div>
                             </div>
-
-                            <div class="attendance-time">
-                                <div class="attendance-status">
-                                    <span class="status-pill completed">
-                                        <i class="fa-solid fa-clipboard-check"></i>
-                                    </span>
+                            <div class="class-list-date">
+                                <div class="icon">
+                                    <i class="fa-solid fa-calendar-day"></i>
                                 </div>
-
                                 <div>
                                     <strong>{{ class_session.start_time|date:"D, d M" }}</strong>
-                                    <span>
-                                        {{ class_session.start_time|time:"H:i" }}
-                                        -
-                                        {{ class_session.end_time|time:"H:i" }}
-                                    </span>
+                                    <span>{{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</span>
                                 </div>
                             </div>
 
                             <div class="attendance-action">
                                 <a href="{% url 'profiles:company_admin_course_attendance_detail' class_session.id %}" 
-                                   class="btn-course-details">
-                                    <i class="fa-regular fa-eye mr-2"></i>
+                                   class="btn-attendance-details">
+                                    <i class="fa-solid fa-clipboard-check"></i>
                                     Review
                                     <i class="fa-solid fa-chevron-right ml-2"></i>
                                 </a>
@@ -165,10 +151,6 @@
 
                 </div>
 
-                <p id="attendanceNoResults" class="attendance-empty-message d-none">
-                    No submitted attendance records found for this filter.
-                </p>
-
             </div>
         </div>
     </div>
@@ -179,5 +161,6 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
     <script type="text/javascript" src="{% static 'profiles/js/company_admin.js' %}"></script>
 {% endblock %}
