@@ -122,7 +122,7 @@
                             <option value="all">All</option>
                         </select>                        
 
-                        <div class="assigned-courses-list">
+                        <div class="assigned-classes-list">
                             {% for session in sessions %}
                                 {% if session.class_status_group == "upcoming" %}
                                     {% include "profiles/includes/teacher/class_session_row.html" %}

@@ -401,8 +401,8 @@
     min-height: 112px;
     border-bottom: 1px solid rgba(0, 103, 108, 0.17);
     /* background: linear-gradient(223deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    /* background: whitesmoke; */
-    background: rgba(199, 255, 249, 0.8);
+    background: whitesmoke;
+    /* background: rgba(199, 255, 249, 0.8); */
     transition:
         background 0.2s ease,
         box-shadow 0.2s ease;

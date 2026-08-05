@@ -3576,10 +3576,12 @@ def company_admin_course_attendance(request, course_id):
     company = profile.company
 
     course = get_object_or_404(
-        Course,
+        Course.objects.annotate(
+            enrollment_count=Count("enrollments")
+        ),
         id=course_id,
         company=company,
-    )
+    )    
 
     class_sessions = (
         ClassSession.objects

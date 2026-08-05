@@ -138,7 +138,7 @@
                                     Start Date:
                                 </span>
                                 <span>
-                                    {{ course.start_date|date:"D, j M 'y" }}
+                                    {{ course.start_date|date:"D, j M 'y"|default:"Pending" }}
                                 </span>
                             </div>
                             <div class="detail-row">
@@ -147,7 +147,7 @@
                                     End Date:
                                 </span>
                                 <span>
-                                    {{ course.end_date|date:"D, j M 'y" }}
+                                    {{ course.end_date|date:"D, j M 'y"|default:"Pending" }}
                                 </span>
                             </div>
                             <div class="detail-row">

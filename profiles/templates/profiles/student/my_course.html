@@ -136,7 +136,7 @@
 
                             <div class="item-text">
                                 <strong>Class Duration</strong>
-                                <span>{{ active_enrollment.course.class_duration|clean_decimal }}{% if active_enrollment.course.class_duration <= 1.99 %} hour {% else %} hours {% endif %}</span>
+                                <span>{{ active_enrollment.course.class_duration|clean_decimal }}{% if active_enrollment.course.class_duration <= 1 %} hour {% else %} hours {% endif %}</span>
                             </div>
                         </div>                    
                         <div class="item">
