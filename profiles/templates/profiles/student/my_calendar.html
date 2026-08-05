@@ -18,7 +18,11 @@
     <div class="container">
         <h1 class="mb-5">My Class Calendar</h1>
         <hr>
-        <div id="calendar" class="my-calendar" data-events-url="{% url 'profiles:my_calendar_events' %}"></div>
+        <div id="calendar" 
+            class="my-calendar" 
+            data-events-url="{% url 'profiles:my_calendar_events' %}"
+            data-role="student">        
+        </div>
     </div>
 </div>
 

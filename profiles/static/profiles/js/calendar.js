@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     
     const calendarEl = document.getElementById('calendar');
+    const userRole = calendarEl.dataset.role;
 
     if (!calendarEl) {
         return;
@@ -162,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
         */
         eventContent: function (arg) {
             const meetingLink = arg.event.extendedProps.meeting_link;
+            const groupDetailsUrl = arg.event.extendedProps.group_details_url;
             const title = arg.event.title;
 
             /*
@@ -178,19 +180,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 row.appendChild(titleEl);
 
-                if (meetingLink) {
-                    const joinBtn = document.createElement('a');
-                    joinBtn.href = meetingLink;
-                    joinBtn.target = '_blank';
-                    joinBtn.rel = 'noopener noreferrer';
-                    joinBtn.classList.add('calendar-join-btn');
-                    joinBtn.textContent = 'Join class';
+                if (userRole === 'company_admin') {
+                    if (groupDetailsUrl) {
+                        const detailsBtn = document.createElement('a');
 
-                    joinBtn.addEventListener('click', function (event) {
-                        event.stopPropagation();
-                    });
+                        detailsBtn.href = groupDetailsUrl;
+                        detailsBtn.target = '_self';
+                        detailsBtn.classList.add('calendar-join-btn');
+                        detailsBtn.textContent = 'Group details';
 
-                    row.appendChild(joinBtn);
+                        detailsBtn.addEventListener('click', function (event) {
+                            event.stopPropagation();
+                        });
+
+                        row.appendChild(detailsBtn);
+                    }
+                } else {
+                    if (meetingLink) {
+                        const joinBtn = document.createElement('a');
+
+                        joinBtn.href = meetingLink;
+                        joinBtn.target = '_blank';
+                        joinBtn.rel = 'noopener noreferrer';
+                        joinBtn.classList.add('calendar-join-btn');
+                        joinBtn.textContent = 'Join class';
+
+                        joinBtn.addEventListener('click', function (event) {
+                            event.stopPropagation();
+                        });
+
+                        row.appendChild(joinBtn);
+                    }
                 }
 
                 return {
@@ -255,7 +275,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const title = info.event.title;
             const start = info.event.start;
             const end = info.event.end;
+
             const meetingLink = info.event.extendedProps.meeting_link;
+            const groupDetailsUrl = info.event.extendedProps.group_details_url;
+
             const course = info.event.extendedProps.course;
             const classNumber = info.event.extendedProps.class_number;
 
@@ -265,7 +288,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const modalClassNumber = document.getElementById('classSessionModalClassNumber');
             const modalJoinBtn = document.getElementById('classSessionModalJoinBtn');
 
-            if (!modalTitle || !modalTime || !modalCourse || !modalClassNumber || !modalJoinBtn) {
+            if (
+                !modalTitle ||
+                !modalTime ||
+                !modalCourse ||
+                !modalClassNumber ||
+                !modalJoinBtn
+            ) {
                 return;
             }
 
@@ -284,16 +313,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 minute: '2-digit'
             }) : '';
 
-            modalTime.textContent = endText ? `${startText} - ${endText}` : startText;
-            modalCourse.textContent = course || 'Course information unavailable';
-            modalClassNumber.textContent = classNumber ? `Lesson ${classNumber}` : '';
+            modalTime.textContent = endText
+                ? `${startText} - ${endText}`
+                : startText;
 
-            if (meetingLink) {
-                modalJoinBtn.href = meetingLink;
-                modalJoinBtn.classList.remove('d-none');
+            modalCourse.textContent =
+                course || 'Course information unavailable';
+
+            modalClassNumber.textContent =
+                classNumber ? `Lesson ${classNumber}` : '';
+
+            if (userRole === 'company_admin') {
+                modalJoinBtn.textContent = 'Group details';
+                modalJoinBtn.target = '_self';
+                modalJoinBtn.rel = '';
+
+                if (groupDetailsUrl) {
+                    modalJoinBtn.href = groupDetailsUrl;
+                    modalJoinBtn.classList.remove('d-none');
+                } else {
+                    modalJoinBtn.href = '#';
+                    modalJoinBtn.classList.add('d-none');
+                }
             } else {
-                modalJoinBtn.href = '#';
-                modalJoinBtn.classList.add('d-none');
+                modalJoinBtn.textContent = 'Join class';
+                modalJoinBtn.target = '_blank';
+                modalJoinBtn.rel = 'noopener noreferrer';
+
+                if (meetingLink) {
+                    modalJoinBtn.href = meetingLink;
+                    modalJoinBtn.classList.remove('d-none');
+                } else {
+                    modalJoinBtn.href = '#';
+                    modalJoinBtn.classList.add('d-none');
+                }
             }
 
             $('#classSessionModal').modal('show');

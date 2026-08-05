@@ -351,10 +351,10 @@ h2 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
-.teacher-classes-list .level {
+/* .teacher-classes-list .level {
     width: 36px;
     height: 36px;
-}
+} */
 
 
 
@@ -755,7 +755,7 @@ div:has(> .student-action-btn) {
     gap: 0.25rem;
 }
 
-.class-main-info h3 {
+.class-main-info h3 a {
     color: #5ff0df;
     margin: 0 0 .35rem;
     font-size: 1.6rem;

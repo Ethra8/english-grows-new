@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
 from django.forms import inlineformset_factory
+from django.urls import reverse
 
 import json
 
@@ -4497,6 +4498,11 @@ def company_admin_calendar_events(request):
                 "class_number": session.class_number,
                 "meeting_link": session.meeting_link,
                 "teacher": teacher_name,
+
+                "group_details_url": reverse(
+                    "profiles:company_admin_course_details",
+                    args=[session.course.id],
+                ),
             },
         })
 
