@@ -95,46 +95,35 @@
         </div>
     </header>
 
-
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
             <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
-                Overview
-            </a>
-
-            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
-                Attendance
-            </a>
-            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
-                Skills
-            </a>
-
+                Overview</a>
             <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}" class="active">
-                Progress
-            </a>
+                Progress</a>
+            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
+                Skills</a>
+            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+                Attendance</a>
             <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
-                Assessment
-            </a>
+                Assessment</a>
         </nav>
-    </div>
-    <!-- <div class="student-details-skills-overview-grid mt-4"> -->
+    </div>    
 
-        <article class="skills-progress-section">
-            <div class="skills-chart-card">
-                <div class="skills-chart-header">
-                    <h2>
-                        <i class="fa-solid fa-chart-line mr-2"></i>
-                        Skills Progress Over Time
-                    </h2>
-                </div>
-
-                <div class="skills-chart-canvas-wrap">
-                    <canvas id="skillsProgressChart"></canvas>
-                </div>
+    <article class="skills-progress-section">
+        <div class="skills-chart-card">
+            <div class="skills-chart-header">
+                <h2>
+                    <i class="fa-solid fa-chart-line mr-2"></i>
+                    Skills Progress Over Time
+                </h2>
             </div>
-        </article>
 
-    <!-- </div> -->
+            <div class="skills-chart-canvas-wrap">
+                <canvas id="skillsProgressChart"></canvas>
+            </div>
+        </div>
+    </article>
 
 </section>
 

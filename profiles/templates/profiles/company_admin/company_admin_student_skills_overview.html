@@ -95,25 +95,20 @@
         </div>
     </header>
 
-
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
             <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
                 Overview</a>
-
-            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
-                Attendance</a>
-            
-            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}" class="active">
-                Skills</a>
-
             <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
                 Progress</a>
-            
+            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}" class="active">
+                Skills</a>
+            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+                Attendance</a>
             <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
                 Assessment</a>
         </nav>
-    </div>
+    </div>    
         
     <div class="student-skills-grid">
     {% if skills %}    
