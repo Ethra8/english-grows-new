@@ -1,34 +1,197 @@
-/* COMPANY ADMIN EMPLOYEES LIST - EMPLOYEES PROGRESS */
-.all-courses-student-list h1 {
+/************************************************|
+**** company_admin_amployees_list.html **********|
+***** Sidebar: PERFORMANCE **********************|
+/* CLASS from PAGE = .company-admin-employees-list-page */
+
+.company-admin-employees-list-page h1 {
     margin-bottom: 0;
 }
 
-.all-courses-student-list hr {
+.company-admin-employees-list-page hr {
     margin: 2rem 0 1.25rem;
     border: 0;
     border-top: 1px solid rgba(0, 103, 108, 0.3);
 }
 
-.all-courses-student-list p:first-of-type {
+.company-admin-employees-list-page p:first-of-type {
     margin: 0;
     color: #0B355F;
     font-size: 1rem;
 }
 
-.all-courses-student-list .student-row-parent {
-    background-color: whitesmoke;
+/* META CARD */
+.company-admin-employees-list-page .meta-card {
+    padding: 0.25rem 2.6rem 0.15rem 0.45rem;
+    width: fit-content;
+    margin: 3rem 0;
 }
 
-.all-courses-student-list .student-row .student-main-info {
+.company-admin-employees-list-page .meta-card .meta-icon {
+    background: rgba(237, 249, 247, 0.9);
+}
+
+.company-admin-employees-list-page .meta-card .meta-icon img {
+    width: 42px;
+    height: 42px;
+}
+
+.company-admin-employees-list-page .meta-text strong {
+    display: block;
+    color: #ffffff;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    letter-spacing: 0.03em;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+/* END META CARD */
+
+
+/* EMPLOYEES LIST */
+.wrapper-employees-list {
+    width: 100%;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: rgba(106, 250, 225, 0.2);
+}
+
+.wrapper-employees-list > div:first-of-type {
+    background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
+    border-radius: 8px;
+    margin: 0;
+    padding: 0.5rem;
+    border: 1px solid rgba(94, 234, 212, 0.8);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.employees-list-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    background-color: whitesmoke;
+    margin-top: 0;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+}
+
+.employees-list-row {
+    display: grid;
+    grid-template-columns: 60px minmax(320px, 380px) 1fr auto;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.2);
+    padding: 0.75rem 0;
+    /* color: #fff; */
+    gap: 1.2rem;
+}
+
+.company-admin-employees-list-page .employees-list-row .avatar {
+    /* width: 46px;
+    height: 46px; */
+    border-radius: 50%;
+    background: rgba(95, 255, 234, 0.16);
+    border: 1px outset rgba(170, 170, 170, 0.2);
     display: flex;
     align-items: center;
-    gap: 4rem;
+    justify-content: center;
+    overflow: hidden;
+    color: #006b7d;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+}
+
+.company-admin-employees-list-page .employees-list-row .avatar,
+.company-admin-employees-list-page .employees-list-row .avatar img {
+    width: 60px;
+    height: 60px;
+}
+
+.company-admin-employees-list-page .employees-list-row .main-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: center;
+    gap: 0.25rem;
     width: 100%;
     max-width: 100%;
     min-width: 0;
 } 
 
-/* COMPANY ADMIN ATTENDANCE PAGE (From Sidebar)*/
+.company-admin-employees-list-page .employees-list-row .main-info strong {
+    color: #0B355F;
+}
+
+.company-admin-employees-list-page .employees-list-row .main-info a span {
+    color: #6a7f81;
+}
+
+.company-admin-employees-list-page .employees-list-row .main-info a span:hover {
+    font-weight: 500;
+}
+
+.company-admin-employees-list-page .employees-list-row .employee-level {
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+}
+
+.company-admin-employees-list-page .employees-list-row .employee-level .level {
+    width: 60px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+}
+
+.company-admin-employees-list-page .employees-list-row .view-progress-course .btn-to-student-detail {
+    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.company-admin-employees-list-page .employees-list-row .view-progress-course .btn-to-student-detail:hover {
+    color: #ffffff;
+    transform: translateY(-0.5px);
+    background: linear-gradient(135deg, #00acaf, #008589);
+    box-shadow: 0 10px 20px rgba(0, 122, 125, 0.24);
+}
+
+
+/************************************************|
+**** COURSES Page *******************************|
+**** = company_admin_courses.html  **************|
+*********************************************** */
+
+.admin-assigned-courses-page .course-main-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    gap: 0.5rem;
+
+}
+
+.admin-assigned-courses-page .course-main-info img {
+    width: 46px;
+    height: 46px;
+    background: #C7FFF9;
+    background: radial-gradient(circle,rgba(199, 255, 249, 0.97) 10%, rgba(237, 249, 247, 1) 37%, rgba(95, 245, 207, 1) 69%);
+    border-radius: 999px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+}
+
+.admin-assigned-courses-page .course-main-info span {
+    color: #6a7f81;
+}
+
+/************************************************|
+**** company_admin_course_details.html **********|
+*********************************************** */
+
 .company-admin-course-details-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";
@@ -270,8 +433,7 @@
 **** EMPLOYEES_LIST Page ************************|
 *********************************************** */
 
-.all-employees-performance-page hr:first-of-type {
-    /* margin: 2rem 0 1.25rem; */
+/* .all-employees-performance-page hr:first-of-type {
     border: 0;
     border-top: 1px solid rgba(0, 103, 108, 0.3);
 }
@@ -297,7 +459,7 @@
 .student-row.employees-list .view-progress-course .btn-to-student-detail {
     display: inline-flex;
     width: max-content;
-}
+} */
 
 
 

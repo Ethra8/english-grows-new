@@ -1,13 +1,15 @@
 .wrapper-assigned-courses-small-cards {
     display: flex;
-    flex-wrap: wrap ;
+    flex-wrap: wrap;
+    gap: 0.25rem;
     width: 100%;
     display: none;
 }
 
 .wrapper-assigned-courses-small-cards .card {
-    width: 50%;
+    min-width: 48%;
     border-radius: 8px;
+    max-width: 97%;
 }
 
 .wrapper-assigned-courses-small-cards .card:last-child {

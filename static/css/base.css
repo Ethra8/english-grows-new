@@ -115,8 +115,8 @@ hr {
     border: outset 1px #5ff0df;
     border-radius: 50%;
     width: 100%;
-    margin-top: 0 !important;
-    margin-bottom: 2.1rem !important;
+    /* margin-top: 0;
+    margin-bottom: 2.1rem; */
 }
 
 p {
@@ -663,7 +663,7 @@ span.btt-link:hover {
     left: 0;
     position: fixed;
     /* background: linear-gradient(260deg,rgba(0, 103, 108, 0.75) 17%, rgba(0, 136, 143, 0.80) 100%); */
-    background: rgba(237, 249, 247, 0.85);
+    background: rgba(237, 249, 247, 0.9);
     z-index: -1;
 }
 

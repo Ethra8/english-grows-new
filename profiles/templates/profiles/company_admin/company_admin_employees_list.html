@@ -13,23 +13,11 @@
 
 {% block profile_content %}
 
-<section class="all-courses-student-list profile-page">    
+<section class="company-admin-employees-list-page profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
-        <!-- <div class="row mb-3">
-            <div class="col-12 mb-2">
-                <p class="go-back-link">
-                    <a href="#" class="js-back-link">
-                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                        Go Back
-                    </a>    
-                </p>
-            </div>
-        </div>     -->
-
     <header class="mb-2">
-
         <div class="header-last-child">
             <div>
                 <h1>Employee Performance</h1>
@@ -38,37 +26,51 @@
     </header>
     <hr>
 
-    <p class="text-dark mb-0">Review employee performance across different areas.</p>
+    <p class="text-dark">Review all employees' individual performance across different areas.</p>
     
-    <p class="text-dark mb-0">{{ total_employees }} Active employees</p>
+    <!-- META CARD -->
+    <div class="meta-card meta-students">
+        <div class="meta-icon">
+            <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+        </div>
+        <div class="meta-text">
+            <strong>Employees Enrolled</strong>
+            <span>{{ total_employees|default:"0" }}</span>
+        </div>
+    </div>
 
+    <div class="wrapper-employees-list">
+        <!-- <div class="course-details-child"> -->
 
-    <div class="wrapper-course-details">
-        <div class="course-details-child">
-
-
-            <div class="course-detail-grid"> 
+        <div>
+            <div class="employees-list-grid"> 
                 {% if employees %}
-                    <div class="student-row-parent">
 
                         {% for employee in employees %}
-                            <div class="student-row employees-list">
+                            <div class="employees-list-row">
 
-                                <div class="student-main-info ">
-                                    <div class="student-avatar">
+                                <div class="avatar">
+                                    {% if employee.student.profile.profile_photo %}
+                                        <img src="{{ employee.student.profile.profile_photo.url }}" alt="{{ attendance.student.get_full_name }}">
+                                    {% else %}
+                                        <i class="fa-solid fa-user"></i>
+                                    {% endif %}
+                                </div>
 
-                                    </div>
+                                <div class="main-info">
                                     <strong>
                                         {{ employee.student.get_full_name|default:employee.student.username }}
                                     </strong>
-
                                     <a href="mailto:{{ employee.student.email }}">
                                         <span>{{ employee.student.email }}</span>
                                     </a>
                                 </div>
-                                <div class="level level-{{ employee.profile.current_level|lower|cut:'.' }} mr-2">
-                                    {{ employee.profile.current_level|default:"?" }}
-                                </div>  
+
+                                <div class="employee-level">
+                                    <span class="level level-{{ employee.profile.current_level|lower|cut:'.' }} mr-2">
+                                        {{ employee.profile.current_level|default:"?" }}
+                                    </span>  
+                                </div>
 
                                 <div class="view-progress-course">
                                     {% for enrollment in employee.enrollments %}
@@ -93,7 +95,6 @@
                                 </div>                                -->
                         {% endfor %}
 
-                    </div>
                 {% else %}
                     <p class="text-white">No employees enrolled yet.</p>
                 {% endif %}

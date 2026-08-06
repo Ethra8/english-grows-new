@@ -15,7 +15,7 @@
 
 {% block profile_content %}
 
-<section class="assigned-courses-page profile-page">    
+<section class="assigned-courses-page profile-page admin-assigned-courses-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
@@ -112,8 +112,6 @@
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
                     <div class="course-main-info">
-                        <div class="course-list-group-name">
-                            <div>
                                     {% if course.enrollment_count == 1 %}
                                     <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                                     {% else %}
@@ -123,8 +121,6 @@
                                         <h3>{{ course.name }}</h3>
                                         <span>{{ course.course_type }}</span> 
                                     </div>
-                            </div>
-                        </div>
                     </div>
                     
                     <div>
@@ -191,4 +187,3 @@
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 
 {% endblock %}
-    

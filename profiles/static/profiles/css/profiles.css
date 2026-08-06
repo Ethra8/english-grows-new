@@ -331,8 +331,8 @@ main.profile-main {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    margin-bottom: 2rem;
+    gap: 0.4rem;
+    margin: 25px auto;
 }
 
 .sidebar-link {
@@ -341,7 +341,7 @@ main.profile-main {
     gap: 1rem;
     color: whitesmoke;
     text-decoration: none;
-    padding: 0.4rem 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 8px;
 }
 
@@ -352,7 +352,9 @@ main.profile-main {
     text-decoration: none;
 }
 
-
+.profile-sidebar a .btn-navbar {
+    margin: 3rem 0 auto !important;
+}
 
 /* =========================================================
    MOBILE TOGGLE
