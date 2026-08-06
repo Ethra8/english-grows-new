@@ -484,7 +484,6 @@ main.profile-main {
 /* **************************************************|
 ******** MAIN PROFILE *******************************|
 *****************************************************/
-
 .level-pill {
     display: inline-flex;
     align-items: center;
@@ -1000,6 +999,124 @@ main.profile-main {
     border-radius: 999px;
 }
 /* END OF INSIDE NAV *************** */
+
+/* =========================================================
+   COURSE SELECTOR
+========================================================= */
+
+.course-selector-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 0 1.25rem;
+}
+
+.course-selector-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    margin: 0;
+
+    color: #0b355f;
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.course-selector-label i {
+    color: #007a7d;
+    font-size: 1rem;
+}
+
+.course-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    min-width: 320px;
+    max-width: 100%;
+}
+
+.course-select {
+    width: 100%;
+    min-height: 44px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    padding: 0.7rem 3rem 0.7rem 1.1rem;
+
+    color: #ffffff;
+    background:
+        linear-gradient(
+            135deg,
+            #0b355f 0%,
+            #006b7d 100%
+        );
+
+    border: 1px solid rgba(95, 240, 223, 0.85);
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 14px rgba(11, 53, 95, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.course-select:hover {
+    border-color: #5ff0df;
+
+    box-shadow:
+        0 7px 18px rgba(11, 53, 95, 0.24),
+        0 0 0 2px rgba(95, 240, 223, 0.08);
+}
+
+.course-select:focus {
+    border-color: #5ff0df;
+
+    box-shadow:
+        0 0 0 3px rgba(95, 240, 223, 0.22),
+        0 6px 16px rgba(11, 53, 95, 0.22);
+}
+
+.course-select-arrow {
+    position: absolute;
+    right: 1rem;
+
+    color: #5ff0df;
+    font-size: 0.8rem;
+
+    pointer-events: none;
+
+    transition: transform 0.2s ease;
+}
+
+.course-select-wrapper:focus-within .course-select-arrow {
+    transform: rotate(180deg);
+}
+
+/* Native dropdown options */
+.course-select option {
+    color: #0b355f;
+    background: #ffffff;
+    font-weight: 500;
+}
+/* END OF COURSE SELECTOR FORM */
 
 .learner-employee-detail-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
@@ -1920,6 +2037,31 @@ main.profile-main {
 
     .my-attendance header .item .fa-solid {
         font-size: 1.2rem;
+    }
+
+    /* MY PROGRESS PAGE */
+    /* Course Selector Form */
+    .course-selector-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+
+        width: 100%;
+        margin: 1.25rem 0;
+    }
+
+    .course-selector-label {
+        padding-left: 0.25rem;
+    }
+
+    .course-select-wrapper {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .course-select {
+        width: 100%;
+        font-size: 0.9rem;
     }
 
 }

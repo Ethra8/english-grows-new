@@ -109,7 +109,7 @@
                 Skills
             </a>
 
-            <a href="/#employeeSkillsGraphOverview">
+            <a href="#employeeSkillsGraphOverview">
                 Progress
             </a>
 
@@ -123,7 +123,37 @@
         </nav>
     <div class="student-detail-tabs-wrapper">
 
-    <!-- Overview content -->
+    {% if enrollments %}
+        <form method="get" class="course-selector-form">
+
+            <label for="course-select" class="course-selector-label">
+                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <span>Select your course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()"
+                >
+                    {% for item in enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if course and item.course.id == course.id %}selected{% endif %}
+                        >
+                            {{ item.course.name }} — {{ item.get_status_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+            </div>
+
+        </form>
+    {% endif %}   
+         <!-- Overview content -->
     <div class="student-overview-grid">
 
                         <!-- Current Course -->
@@ -159,7 +189,7 @@
                 </div>
             </div> 
             <div>
-                <a href="{% url 'profiles:my_course' course.id %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_course' %}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>                    
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
@@ -197,7 +227,7 @@
                 </div>
             </div>
             <div>
-                <a href="{% url 'profiles:my_attendance' course.id %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_attendance' %}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
@@ -263,21 +293,22 @@
 
 {% block postloadjs %}
 {{ block.super }}
-{{ chart_data_json|json_script:"skills-chart-data" }}
+{{ chart_data|json_script:"skills-chart-data" }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const chartEl = document.getElementById("skillsProgressChart");
+    const chartDataEl = document.getElementById("skills-chart-data");
 
-    if (!chartEl) {
+    if (!chartEl || !chartDataEl) {
         return;
     }
 
-    const chartData = JSON.parse(
-        document.getElementById("skills-chart-data").textContent
-    );
+    const chartData = JSON.parse(chartDataEl.textContent);
+
+    console.log("Student chart data:", chartData);
 
     if (!chartData.labels || chartData.labels.length === 0) {
         chartEl.parentElement.innerHTML = `
@@ -299,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     min: 0,
                     max: 100,
                     ticks: {
-                        callback: function(value) {
+                        callback: function (value) {
                             return value + "%";
                         }
                     }
@@ -307,12 +338,12 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             plugins: {
                 legend: {
-                    position: "bottom",
+                    position: "bottom"
                 }
             }
         }
     });
 });
 </script>
-
 {% endblock %}
+

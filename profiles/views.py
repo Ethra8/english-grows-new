@@ -337,7 +337,7 @@ def my_calendar_events(request):
 
 
 
-# STUDENT MY LEARNING PROGRESS Page
+# STUDENT MY LEARNING PROGRESS PAGE
 @login_required
 def my_learning_progress(request):
     student = request.user
@@ -373,6 +373,7 @@ def my_learning_progress(request):
             or enrollments.first()
         )
 
+    # No course enrollment
     if not enrollment:
         return render(
             request,
@@ -383,11 +384,39 @@ def my_learning_progress(request):
                 "enrollments": enrollments,
                 "enrollment": None,
                 "course": None,
+
+                # Prevent the graph JavaScript from failing
+                "chart_data": {
+                    "labels": [],
+                    "datasets": [],
+                },
             },
         )
 
     course = enrollment.course
 
+    # ---------------------------------------------------------
+    # SKILLS PROGRESS GRAPH
+    # ---------------------------------------------------------
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+    print("========== STUDENT GRAPH DEBUG ==========")
+    print("Student:", student.id, student.username)
+    print("Enrollment:", enrollment.id, enrollment.status)
+    print("Course:", course.id, course.name)
+    print("Chart data:", chart_data)
+    print("=========================================")
+    print("========== ADMIN HELPER ==========")
+    print("HELPER MODULE:", build_skill_progress_chart_data.__module__)
+    print("HELPER NAME:", build_skill_progress_chart_data.__name__)
+    print("HELPER OBJECT:", build_skill_progress_chart_data)
+    print("==================================")
+    # ---------------------------------------------------------
+    # ATTENDANCE
+    # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
@@ -484,6 +513,9 @@ def my_learning_progress(request):
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
+
+        # Skills graph data
+        "chart_data": chart_data,
     }
 
     return render(
@@ -491,7 +523,6 @@ def my_learning_progress(request):
         "profiles/student/my_learning_progress.html",
         context,
     )
-
 
 
 # STUDENT ATTENDANCE PAGE
