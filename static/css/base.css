@@ -83,6 +83,10 @@ LIGHTER AZURE MIST #F4FFFE;
 }
 
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     /* background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed; */
     /* background-size: cover; */

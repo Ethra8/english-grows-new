@@ -2,6 +2,9 @@
 /* teal sidebar #008f8f; dark cyan */
 
 /*  NEW COLOR: Deep Ocean rgba(0, 122, 120, 1) --- #007A78 */
+#employeeSkillsGraphOverview {
+    scroll-margin-top: 90px; /* adjust to your navbar height */
+}
 
 h2, 
 h3 {

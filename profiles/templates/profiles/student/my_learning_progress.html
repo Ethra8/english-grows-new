@@ -109,7 +109,7 @@
                 Skills
             </a>
 
-            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+            <a href="/#employeeSkillsGraphOverview">
                 Progress
             </a>
 
@@ -159,7 +159,7 @@
                 </div>
             </div> 
             <div>
-                <a href="{% url 'profiles:teacher_course_details' course.id %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_course' course.id %}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>                    
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
@@ -197,7 +197,7 @@
                 </div>
             </div>
             <div>
-                <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_attendance' course.id %}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
@@ -242,6 +242,20 @@
         </article>
     </div>
     
+    <div id="employeeSkillsGraphOverview" class="student-details-skills-overview-grid">
+        <article class="skills-progress-section">
+            <div class="skills-chart-card">
+                <div class="skills-chart-header">
+                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Skills Progress Over Time</h2>
+                </div>
+
+                <div class="skills-chart-canvas-wrap">
+                    <canvas id="skillsProgressChart"></canvas>
+                </div>
+            </div>
+        </article>
+    </div>  
+
 </section>
 
 {% endblock %}
@@ -251,4 +265,54 @@
 {{ block.super }}
 {{ chart_data_json|json_script:"skills-chart-data" }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const chartEl = document.getElementById("skillsProgressChart");
+
+    if (!chartEl) {
+        return;
+    }
+
+    const chartData = JSON.parse(
+        document.getElementById("skills-chart-data").textContent
+    );
+
+    if (!chartData.labels || chartData.labels.length === 0) {
+        chartEl.parentElement.innerHTML = `
+            <p class="text-dark">
+                No skill progress data yet. Save a skill assessment first.
+            </p>
+        `;
+        return;
+    }
+
+    new Chart(chartEl, {
+        type: "line",
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + "%";
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: "bottom",
+                }
+            }
+        }
+    });
+});
+</script>
+
 {% endblock %}
