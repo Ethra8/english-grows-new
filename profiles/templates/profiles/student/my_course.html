@@ -7,6 +7,12 @@
 
 {% block extra_title %}| Course Info{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+{% endblock %}
+
 
 {% block profile_content %}
 
@@ -14,6 +20,43 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
   
+{% if active_enrollments %}
+    <form method="get" class="course-selector-form">
+
+        <label for="course-select" class="course-selector-label">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Select within active courses you are enrolled in</span>
+        </label>
+
+        <div class="course-select-wrapper">
+
+            <select
+                id="course-select"
+                name="course"
+                class="course-select"
+                onchange="this.form.submit()"
+            >
+
+                {% for item in active_enrollments %}
+                    <option
+                        value="{{ item.course.id }}"
+                        {% if active_enrollment and item.id == active_enrollment.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ item.course.name }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+
+        </div>
+
+    </form>
+{% endif %}
+
     <header>
         <!-- 1st Child -->
         <div>

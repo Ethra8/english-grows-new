@@ -38,7 +38,7 @@
     color: #c9fffc;
     font-size: 1.2rem;
     font-weight: 500;
-    margin: 1rem 0 0.75rem;
+    margin: 0 0 0.75rem;
 }
 
 
@@ -275,10 +275,10 @@
         flex-direction: column;
         align-items: center;
         justify-content: center !important;
-        gap: 1rem;
+        gap: 0;
         align-self: baseline;
         width: 100%;
-        padding: 4rem;
+        padding: 2rem 4rem;
     }
 
     .student-avatar-large {
@@ -286,21 +286,21 @@
         height: 200px;
     }
     .student-main-info > div:last-child {
-        padding: 2.5rem 0.5rem 0 2rem;
+        padding: 2.5rem 0.75rem 0 0.75rem;
     }
 
-    .student-main-info h1 {
+    /* .student-main-info h1 {
         margin: 1rem auto 1rem;
-    }
+    } */
 
     .student-main-info p a {
         margin: 1rem auto 1rem;
         text-align: center;
     }
 
-    .student-main-info p:nth-of-type(1) {
+    /* .student-main-info p:nth-of-type(1) {
         margin-top: 2rem;
-    }
+    } */
 
     .student-detail-page .wrapper-attendance-summary-card {
         display: grid;
@@ -321,7 +321,7 @@
     }
 
     .student-main-info {
-        padding: 4rem .75rem 3rem;
+        padding: 2rem .75rem 3rem;
     }
 
     .student-main-info p a {
@@ -348,16 +348,32 @@
 
 @media (max-width: 480px) {
 
-    .student-main-info > div:last-child {
+    /* .student-main-info > div:last-child {
         padding: 2.5rem 0 0 1rem;
-    }
-
-    .student-detail-page .level-pill.smaller-devs {
-        display: inline-flex;
-    }
+    } */
 
     .student-detail-page .level-pill.larger-devs {
         display: none;
     }
+
+    .student-detail-page .level-pill.smaller-devs {
+        display: inline-flex;
+        min-width: 100%;
+    }
+
+    .student-detail-page .level-pill .current-level-label {
+        padding: 6px 11% 6px 22px;
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .student-detail-page .level-pill .current-level-value {
+        padding: 6px 22px 6px 11%;
+        display: flex;
+        width: 50%;
+        flex-grow: 1;
+    }
+
 
 }

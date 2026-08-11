@@ -1,6 +1,15 @@
 from django.contrib import admin
-from django.core.exceptions import ValidationError
-from .models import CourseType, Course, CourseTimetableSlot, CourseEnrollment, ClassSession, Attendance, BankHoliday
+from django.utils import timezone
+
+from .models import (
+    CourseType,
+    Course,
+    CourseTimetableSlot,
+    CourseEnrollment,
+    ClassSession,
+    Attendance,
+    BankHoliday,
+)
 
 
 @admin.register(CourseType)
@@ -23,9 +32,25 @@ class CourseTypeAdmin(admin.ModelAdmin):
     )
 
 
+# -------------------------------------------------------------------------
+# COURSE ENROLLMENT INLINE
+# -------------------------------------------------------------------------
+#
+# Enrollments can be added from the Course admin.
+#
+# When a new enrollment becomes active:
+# - NO new ClassSessions are generated if the course already has sessions.
+# - CourseEnrollment.save() automatically creates Attendance records for
+#   this learner for every unfinished ClassSession.
+#
+# We avoid deleting enrollments from the Course page because the enrollment
+# lifecycle already provides paused/completed/cancelled statuses.
+# -------------------------------------------------------------------------
 class CourseEnrollmentInline(admin.TabularInline):
     model = CourseEnrollment
     extra = 0
+    can_delete = False
+
     autocomplete_fields = (
         "student",
     )
@@ -43,20 +68,10 @@ class CourseEnrollmentInline(admin.TabularInline):
     )
 
 
-class ClassSessionInline(admin.TabularInline):
-    model = ClassSession
-    extra = 1
 
-    fields = (
-        "title",
-        "start_time",
-        "end_time",
-        "topic",
-        "meeting_link",
-        "is_cancelled",
-    )
-
-
+# -------------------------------------------------------------------------
+# COURSE TIMETABLE INLINE
+# -------------------------------------------------------------------------
 class CourseTimetableSlotInline(admin.TabularInline):
     model = CourseTimetableSlot
     extra = 1
@@ -66,6 +81,7 @@ class CourseTimetableSlotInline(admin.TabularInline):
         "start_time",
         "end_time",
     )
+
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -77,7 +93,6 @@ class CourseAdmin(admin.ModelAdmin):
     @admin.display(description="Final Class Duration")
     def final_class_duration_display(self, obj):
         return obj.final_class_duration_display
-
 
     list_display = (
         "name",
@@ -141,55 +156,95 @@ class CourseAdmin(admin.ModelAdmin):
         "teacher",
     )
 
-    actions = (
-        "generate_class_sessions",
-    )
+    # Manual "Generate class sessions" action removed.
+    #
+    # ClassSessions + initial Attendance records are now generated
+    # automatically by the model lifecycle once all prerequisites exist.
 
     def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
+        """
+        Run after Django Admin has saved all Course-related inline objects.
+
+        The models already attempt automatic generation when the Course,
+        timetable slots and enrollments are saved.
+
+        Calling try_generate_class_sessions() here is an additional safe
+        final check after ALL related Admin inlines have been processed.
+
+        The model guard prevents regeneration once ClassSessions exist.
+        """
+        super().save_related(
+            request,
+            form,
+            formsets,
+            change
+        )
 
         course = form.instance
 
-        if course.class_duration_source == "auto":
+        # Keep automatically calculated duration synchronized after all
+        # timetable inline rows have been saved.
+        if (
+            course.timetable_slots.exists()
+            and course.class_duration_source == "auto"
+        ):
             course.update_class_duration_from_timetable()
 
-
-    def generate_class_sessions(self, request, queryset):
-        for course in queryset:
-            try:
-                result = course.generate_class_sessions()
-
-                self.message_user(
-                    request,
-                    (
-                        f"{course.name}: "
-                        f"{result['sessions_created']} class sessions created, "
-                        f"{result['attendances_created']} attendance records created "
-                        f"for {result['students_count']} enrolled student(s)."
-                    )
-                )
-
-            except ValidationError as error:
-                self.message_user(
-                    request,
-                    f"{course.name}: {error.message}",
-                    level="ERROR"
-                )
-
-    generate_class_sessions.short_description = "Generate class sessions and attendance records"  
+        # Final safe generation attempt.
+        #
+        # This only generates when:
+        # - no ClassSessions exist yet
+        # - start_date exists
+        # - number_of_classes is available
+        # - timetable slots exist
+        # - at least one active enrollment exists
+        course.try_generate_class_sessions()
 
     inlines = (
         CourseTimetableSlotInline,
         CourseEnrollmentInline,
-        ClassSessionInline,
     )
+
+
+
+class CourseEnrollmentCourseFilter(admin.SimpleListFilter):
+    """
+    Filter CourseEnrollments by course name.
+
+    Displays Course.name instead of:
+        Course object (4)
+    """
+
+    title = "course"
+    parameter_name = "course"
+
+    def lookups(self, request, model_admin):
+        courses = (
+            Course.objects
+            .filter(enrollments__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
+
+        return [
+            (course.pk, course.name)
+            for course in courses
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                course_id=self.value()
+            )
+
+        return queryset
 
 
 @admin.register(CourseEnrollment)
 class CourseEnrollmentAdmin(admin.ModelAdmin):
     list_display = (
         "student",
-        "course",
+        "course_name",
         "status",
         "target_level",
         "enrolled_at",
@@ -201,7 +256,7 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
 
     list_filter = (
         "status",
-        "course",
+        CourseEnrollmentCourseFilter,
         "course__course_type",
         "enrolled_at",
     )
@@ -224,14 +279,45 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         "total_assigned_classes",
         "classes_attended",
         "classes_missed",
+        "classes_excused",
+        "total_absences",
         "attendance_percentage",
         "has_low_attendance_warning",
     )
 
+    @admin.display(
+        description="Course",
+        ordering="course__name",
+    )
+    def course_name(self, obj):
+        return obj.course.name
 
+    def has_delete_permission(self, request, obj=None):
+        """
+        Preserve enrollment history.
+
+        Use the enrollment status
+        (paused/completed/cancelled)
+        instead of deleting the enrollment record.
+        """
+        return False
+
+
+
+# -------------------------------------------------------------------------
+# ATTENDANCE INLINE
+# -------------------------------------------------------------------------
+#
+# Attendance rows are generated automatically:
+# - initially when the Course schedule is generated
+# - later when a new learner becomes actively enrolled
+#
+# Admin users edit the learner outcome, but do not manually add/delete rows.
+# -------------------------------------------------------------------------
 class AttendanceInline(admin.TabularInline):
     model = Attendance
     extra = 0
+    can_delete = False
 
     autocomplete_fields = (
         "student",
@@ -246,24 +332,61 @@ class AttendanceInline(admin.TabularInline):
     )
 
     readonly_fields = (
+        "student",
         "recorded_at",
     )
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+
+class ClassSessionCourseFilter(admin.SimpleListFilter):
+    """
+    Filter ClassSessions by course name.
+
+    Displays Course.name in the sidebar instead of:
+        Course object (1)
+    """
+
+    title = "course"
+    parameter_name = "course"
+
+    def lookups(self, request, model_admin):
+        courses = (
+            Course.objects
+            .filter(class_sessions__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
+
+        return [
+            (course.pk, course.name)
+            for course in courses
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                course_id=self.value()
+            )
+
+        return queryset
 
 
 @admin.register(ClassSession)
 class ClassSessionAdmin(admin.ModelAdmin):
     list_display = (
-        "title",
-        "course",
-        "start_time",
-        "end_time",
+        "course_name",
+        "class_number",
+        "session_datetime",
+        "status",
         "topic",
-        "is_cancelled",
     )
 
     list_filter = (
-        "is_cancelled",
-        "course",
+        "status",
+        ClassSessionCourseFilter,
         "course__course_type",
         "start_time",
     )
@@ -278,25 +401,125 @@ class ClassSessionAdmin(admin.ModelAdmin):
         "course",
     )
 
+    fields = (
+        "course",
+        "class_number",
+        "title",
+        "status",
+        "start_time",
+        "end_time",
+        "topic",
+        "meeting_link",
+        "created_at",
+    )
+
+    readonly_fields = (
+        "course",
+        "class_number",
+        "created_at",
+    )
+
     inlines = (
         AttendanceInline,
     )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    # ----------------------------------------
+    # COURSE NAME
+    # ----------------------------------------
+    @admin.display(
+        description="Course",
+        ordering="course__name",
+    )
+    def course_name(self, obj):
+        return obj.course.name
+
+    # ----------------------------------------
+    # SESSION DATE + TIME
+    # ----------------------------------------
+    @admin.display(
+        description="Date & time",
+        ordering="start_time",
+    )
+    def session_datetime(self, obj):
+        if not obj.start_time:
+            return "—"
+
+        start_time = timezone.localtime(obj.start_time)
+
+        if obj.end_time:
+            end_time = timezone.localtime(obj.end_time)
+
+            return (
+                f"{start_time.strftime('%d/%m/%Y %H:%M')}"
+                f"–{end_time.strftime('%H:%M')}"
+            )
+
+        return start_time.strftime("%d/%m/%Y %H:%M")
+
+
+class AttendanceCourseFilter(admin.SimpleListFilter):
+    """
+    Filter Attendance records by course.
+
+    Displays the actual Course.name in the admin sidebar
+    instead of Django's default representation:
+        Course object (3)
+    """
+
+    title = "course"
+    parameter_name = "course"
+
+    def lookups(self, request, model_admin):
+        """
+        Build the list of courses that actually have
+        Attendance records.
+        """
+        courses = (
+            Course.objects
+            .filter(
+                class_sessions__attendance_records__isnull=False
+            )
+            .distinct()
+            .order_by("name")
+        )
+
+        return [
+            (course.pk, course.name)
+            for course in courses
+        ]
+
+    def queryset(self, request, queryset):
+        """
+        Apply the selected course filter.
+        """
+        if self.value():
+            return queryset.filter(
+                class_session__course_id=self.value()
+            )
+
+        return queryset
 
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = (
-        "student",
-        "class_session",
+        "student_display",
+        "course_name",
+        "class_session_display",
+        "session_datetime",
         "status",
-        "minutes_late",
         "was_punctual",
-        "recorded_at",
     )
 
     list_filter = (
         "status",
-        "class_session__course",
+        AttendanceCourseFilter,  # CHANGED
         "recorded_at",
     )
 
@@ -305,7 +528,6 @@ class AttendanceAdmin(admin.ModelAdmin):
         "student__first_name",
         "student__last_name",
         "student__email",
-        "class_session__title",
         "class_session__course__name",
     )
 
@@ -314,10 +536,98 @@ class AttendanceAdmin(admin.ModelAdmin):
         "class_session",
     )
 
-    readonly_fields = (
+    fields = (
+        "student",
+        "class_session",
+        "status",
+        "minutes_late",
+        "notes",
         "recorded_at",
         "was_punctual",
     )
+
+    readonly_fields = (
+        "student",
+        "class_session",
+        "recorded_at",
+        "was_punctual",
+    )
+
+    list_select_related = (
+        "student",
+        "class_session",
+        "class_session__course",
+    )
+
+    def has_add_permission(self, request):
+        """
+        Attendance rows are created automatically from CourseEnrollment /
+        Course generation logic.
+        """
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        Preserve attendance history and the one-record-per-student/session
+        invariant.
+        """
+        return False
+
+    # ----------------------------------------
+    # STUDENT NAME
+    # First + Last name if available.
+    # Otherwise username.
+    # ----------------------------------------
+    @admin.display(
+        description="Student",
+        ordering="student__last_name",
+    )
+    def student_display(self, obj):
+        full_name = obj.student.get_full_name().strip()
+
+        if full_name:
+            return full_name
+
+        return obj.student.username
+
+    # ----------------------------------------
+    # COURSE NAME
+    # ----------------------------------------
+    @admin.display(
+        description="Course",
+        ordering="class_session__course__name",
+    )
+    def course_name(self, obj):
+        return obj.class_session.course.name
+
+    # ----------------------------------------
+    # CLASS SESSION
+    # e.g. Lesson 1
+    # ----------------------------------------
+    @admin.display(
+        description="Class session",
+        ordering="class_session__class_number",
+    )
+    def class_session_display(self, obj):
+        return f"Lesson {obj.class_session.class_number}"
+
+    # ----------------------------------------
+    # SESSION DATE + TIME
+    # e.g. 22/06/2026 12:00
+    # ----------------------------------------
+    @admin.display(
+        description="Date & time",
+        ordering="class_session__start_time",
+    )
+    def session_datetime(self, obj):
+        if not obj.class_session.start_time:
+            return "—"
+
+        start_time = timezone.localtime(
+            obj.class_session.start_time
+        )
+
+        return start_time.strftime("%d/%m/%Y %H:%M")
 
 
 @admin.register(BankHoliday)

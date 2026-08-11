@@ -12,12 +12,50 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
+
     <header class="mb-5">
         <h1>My Attendance</h1>
-        <div>
+        {% if active_enrollments %}
+            <form method="get" class="course-selector-form">
+
+                <label for="course-select" class="course-selector-label">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>Select within active courses you are enrolled in</span>
+                </label>
+
+                <div class="course-select-wrapper">
+
+                    <select
+                        id="course-select"
+                        name="course"
+                        class="course-select"
+                        onchange="this.form.submit()"
+                    >
+
+                        {% for item in active_enrollments %}
+                            <option
+                                value="{{ item.course.id }}"
+                                {% if active_enrollment and item.id == active_enrollment.id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item.course.name }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+
+                </div>
+
+            </form>
+        {% endif %}
+
+        <!-- <div>
             <i class="fa-solid fa-chalkboard-user mr-3"></i>
             <p>{{ active_enrollment.course.name }}</p>     
-        </div>
+        </div> -->
         <hr>
     </header>
 
@@ -48,7 +86,7 @@
 
                 {% if active_enrollment.has_low_attendance_warning %}
                 <div class="attendance-warning ml-4 mr-3">                
-                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level!</p>
+                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level of 75%!</p>
                 </div>
                 {% endif %}
                 

@@ -4037,8 +4037,13 @@ div:has(> .student-action-btn) {
     /* Student Detail page ********************************/
     /* Attendance Detail page *****************************/
     /* Take Attendance page *******************************/
-    .student-main-info span {
+    
+    /* .student-main-info span {
         display: none;
+    } */
+
+    .student-detail-page .level-pill .current-level-label span {
+        display:inline-block;
     }
 
     /*****************************************************|

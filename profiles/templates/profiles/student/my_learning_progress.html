@@ -9,7 +9,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/employee_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
 {% endblock %}
 
 
@@ -66,8 +66,8 @@
                         {{ student_profile.get_role_display|default:"Employee" }}</span>
                 </div> 
 
-                <div class="header-last-child">      
-
+                    <!-- <div class="header-last-child">       -->
+                <div class="mt-4">  
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">CEFR Level</span>
                         <span class="current-level-value">
@@ -121,14 +121,15 @@
                 History
             </a>
         </nav>
-    <div class="student-detail-tabs-wrapper">
+    </div>
+    <!-- <div class="student-detail-tabs-wrapper"> -->
 
     {% if enrollments %}
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
                 <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
-                <span>Select your course</span>
+                <span>Select active course to overview</span>
             </label>
 
             <div class="course-select-wrapper">
@@ -143,7 +144,7 @@
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
                         >
-                            {{ item.course.name }} — {{ item.get_status_display }}
+                            {{ item.course.name }}
                         </option>
                     {% endfor %}
                 </select>
@@ -160,7 +161,7 @@
         <article class="student-detail-card">
             <div>
 
-                <h2><i class="fa-solid fa-circle-info mr-3"></i>Current Course</h2>
+                <h2><i class="fa-solid fa-circle-info mr-3"></i>{{ course.name }}</h2>
                 <hr>
 
                 <div class="current-course-block">
@@ -170,7 +171,7 @@
                     </div>
 
                     <div>
-                        <h3>{{ course.name }}</h3>
+                        <!-- <h3>{{ course.name }}</h3> -->
 
                         <div class="student-course-details">
                             <div class="detail-row">
@@ -189,7 +190,7 @@
                 </div>
             </div> 
             <div>
-                <a href="{% url 'profiles:my_course' %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_course' %}?course={{ course.id }}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>                    
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
@@ -227,7 +228,7 @@
                 </div>
             </div>
             <div>
-                <a href="{% url 'profiles:my_attendance' %}" class="btn-course-details mt-3">
+                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>

@@ -116,7 +116,7 @@ h2 {
 }
 
 hr {
-    border: outset 1px #5ff0df;
+    border: outset 0.5px #006b7d;
     border-radius: 50%;
     width: 100%;
     /* margin-top: 0;

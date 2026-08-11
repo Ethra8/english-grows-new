@@ -94,8 +94,11 @@ def student_dashboard(request):
             ClassSession.objects
             .filter(
                 course=active_enrollment.course,
-                is_cancelled=False,
                 start_time__gte=timezone.now(),
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_RESCHEDULED,
+                ],
             )
             .order_by("start_time")
             .first()
@@ -164,15 +167,25 @@ def profile_settings(request):
 # ************************************|
 
 # STUDENT COURSE INFO PAGE
+# STUDENT COURSE INFO PAGE
+
 @login_required
 def my_course(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
 
-    active_enrollment = (
+    # ---------------------------------------------------------
+    # Get ALL enrollments that are active AND whose course
+    # is also currently active.
+    # ---------------------------------------------------------
+    active_enrollments = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active"
+            status="active",
+            course__status="active",
         )
         .select_related(
             "course",
@@ -180,14 +193,39 @@ def my_course(request):
             "course__company",
             "course__teacher",
         )
-        .first()
+        .order_by("course__name")
     )
+
+    # ---------------------------------------------------------
+    # Get the course selected in the <select>.
+    #
+    # The form sends:
+    #     ?course=COURSE_ID
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+    # ---------------------------------------------------------
+    # Determine which enrollment/course should be displayed.
+    # ---------------------------------------------------------
+    if selected_course_id:
+        active_enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        # No selection in URL yet:
+        # display the first available active enrollment.
+        active_enrollment = active_enrollments.first()
 
     enrollment_status = None
 
     if active_enrollment:
         enrollment_status = active_enrollment.status
 
+    # ---------------------------------------------------------
+    # TIMETABLE
+    # Must come from the SELECTED course.
+    # ---------------------------------------------------------
     timetable_slots = None
 
     if active_enrollment:
@@ -197,6 +235,10 @@ def my_course(request):
             .order_by("day_of_week", "start_time")
         )
 
+    # ---------------------------------------------------------
+    # NEXT CLASS
+    # Must also come from the SELECTED course.
+    # ---------------------------------------------------------
     next_class = None
 
     if active_enrollment:
@@ -204,8 +246,11 @@ def my_course(request):
             ClassSession.objects
             .filter(
                 course=active_enrollment.course,
-                is_cancelled=False,
                 start_time__gte=timezone.now(),
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_RESCHEDULED,
+                ],
             )
             .order_by("start_time")
             .first()
@@ -213,14 +258,23 @@ def my_course(request):
 
     context = {
         "profile": profile,
+
+        # ALL courses for the dropdown
+        "active_enrollments": active_enrollments,
+
+        # ONE selected course/enrollment for the page content
         "active_enrollment": active_enrollment,
+
         "enrollment_status": enrollment_status,
         "timetable_slots": timetable_slots,
         "next_class": next_class,
     }
 
-    return render(request, "profiles/student/my_course.html", context)
-
+    return render(
+        request,
+        "profiles/student/my_course.html",
+        context
+    )
 
 
 # STUDENT CALENDAR PAGE
@@ -230,7 +284,8 @@ def my_calendar(request):
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active"
+            status="active",
+            course__status="active",
         )
         .select_related(
             "course",
@@ -261,6 +316,7 @@ def my_calendar_events(request):
         .filter(
             student=request.user,
             status="active",
+            course__status="active",
         )
         .values_list("course_id", flat=True)
     )
@@ -269,7 +325,11 @@ def my_calendar_events(request):
         ClassSession.objects
         .filter(
             course_id__in=active_course_ids,
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
         )
         .select_related("course")
         .order_by("start_time")
@@ -345,7 +405,11 @@ def my_learning_progress(request):
 
     enrollments = (
         CourseEnrollment.objects
-        .filter(student=student)
+        .filter(
+            student=request.user,
+            status="active",
+            course__status="active",
+        )
         .select_related(
             "course",
             "course__teacher",
@@ -403,17 +467,6 @@ def my_learning_progress(request):
         course=course,
     )
 
-    print("========== STUDENT GRAPH DEBUG ==========")
-    print("Student:", student.id, student.username)
-    print("Enrollment:", enrollment.id, enrollment.status)
-    print("Course:", course.id, course.name)
-    print("Chart data:", chart_data)
-    print("=========================================")
-    print("========== ADMIN HELPER ==========")
-    print("HELPER MODULE:", build_skill_progress_chart_data.__module__)
-    print("HELPER NAME:", build_skill_progress_chart_data.__name__)
-    print("HELPER OBJECT:", build_skill_progress_chart_data)
-    print("==================================")
     # ---------------------------------------------------------
     # ATTENDANCE
     # ---------------------------------------------------------
@@ -445,10 +498,7 @@ def my_learning_progress(request):
         + excused_count
     )
 
-    completed_classes = course.class_sessions.filter(
-        end_time__lt=timezone.now(),
-        is_cancelled=False,
-    ).count()
+    completed_classes = course.completed_sessions
 
     attendance_percentage = (
         round(
@@ -460,12 +510,7 @@ def my_learning_progress(request):
         else 0
     )
 
-    total_classes = (
-        course.number_of_classes
-        or course.class_sessions.filter(
-            is_cancelled=False
-        ).count()
-    )
+    total_classes = course.total_sessions
 
     remaining_classes = max(
         total_classes - completed_classes,
@@ -528,13 +573,22 @@ def my_learning_progress(request):
 # STUDENT ATTENDANCE PAGE
 @login_required
 def my_attendance(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
 
-    active_enrollment = (
+    # ---------------------------------------------------------
+    # ALL ACTIVE ENROLLMENTS
+    # Only include courses that are also currently active.
+    # These are used to populate the course selector.
+    # ---------------------------------------------------------
+    active_enrollments = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active"
+            status="active",
+            course__status="active",
         )
         .select_related(
             "course",
@@ -542,24 +596,62 @@ def my_attendance(request):
             "course__company",
             "course__teacher",
         )
-        .first()
+        .order_by("course__name")
     )
 
-    if not active_enrollment:
-        return render(request, "profiles/student/my_attendance.html", {
-            "profile": profile,
-            "active_enrollment": None,
-            "recent_attendance": [],
-            "recent_missed_classes": [],
-            "recent_excused_classes": [],
-        })
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    # /profiles/student/my_attendance/?course=4
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
 
+    # ---------------------------------------------------------
+    # DETERMINE WHICH ENROLLMENT / COURSE TO DISPLAY
+    # ---------------------------------------------------------
+    if selected_course_id:
+        active_enrollment = (
+            active_enrollments
+            .filter(course_id=selected_course_id)
+            .first()
+        )
+
+        # If an invalid/stale course ID is supplied,
+        # fall back to the first available active enrollment.
+        if not active_enrollment:
+            active_enrollment = active_enrollments.first()
+
+    else:
+        active_enrollment = active_enrollments.first()
+
+    # ---------------------------------------------------------
+    # NO ACTIVE COURSE
+    # ---------------------------------------------------------
+    if not active_enrollment:
+        return render(
+            request,
+            "profiles/student/my_attendance.html",
+            {
+                "profile": profile,
+                "active_enrollments": active_enrollments,
+                "active_enrollment": None,
+                "recent_attendance": [],
+                "recent_absences": [],
+            }
+        )
+
+    # ---------------------------------------------------------
+    # ATTENDED CLASSES
+    # Data comes from the SELECTED course only.
+    # ---------------------------------------------------------
     recent_attendance = (
         Attendance.objects
         .filter(
             student=request.user,
             class_session__course=active_enrollment.course,
-            status="attended",
+            class_session__status=ClassSession.STATUS_COMPLETED,
+            status=Attendance.STATUS_ATTENDED,
         )
         .select_related(
             "class_session",
@@ -568,12 +660,20 @@ def my_attendance(request):
         .order_by("-class_session__start_time")
     )
 
+    # ---------------------------------------------------------
+    # ABSENCES
+    # Data comes from the SELECTED course only.
+    # ---------------------------------------------------------
     recent_absences = (
         Attendance.objects
         .filter(
             student=request.user,
             class_session__course=active_enrollment.course,
-            status__in=["missed", "excused"],
+            class_session__status=ClassSession.STATUS_COMPLETED,
+            status__in=[
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
         )
         .select_related(
             "class_session",
@@ -584,14 +684,22 @@ def my_attendance(request):
 
     context = {
         "profile": profile,
+
+        # ALL active courses -> selector
+        "active_enrollments": active_enrollments,
+
+        # ONE selected course -> page content
         "active_enrollment": active_enrollment,
+
         "recent_attendance": recent_attendance,
-        "recent_absences": recent_absences
+        "recent_absences": recent_absences,
     }
 
-    return render(request, "profiles/student/my_attendance.html", context)
-
-
+    return render(
+        request,
+        "profiles/student/my_attendance.html",
+        context
+    )
 
 # ***********************************************|
 # TEACHER PROFILE  ******************************|
@@ -660,7 +768,11 @@ def teacher_dashboard(request):
         .filter(
             course__teacher=request.user,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_day,
             start_time__lte=end_of_day,
         )
@@ -674,7 +786,11 @@ def teacher_dashboard(request):
         .filter(
             course__teacher=request.user,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_week,
             start_time__lte=end_of_week,
         )
@@ -687,7 +803,11 @@ def teacher_dashboard(request):
         .filter(
             course__teacher=request.user,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_month,
             start_time__lte=end_of_month,
         )
@@ -699,11 +819,15 @@ def teacher_dashboard(request):
     total_weekly_sessions = weekly_sessions.count()
 
     completed_weekly_sessions = weekly_sessions.filter(
-        start_time__lt=now
+        status=ClassSession.STATUS_COMPLETED
     ).count()
 
     upcoming_weekly_sessions = weekly_sessions.filter(
-        start_time__gte=now
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+        ],
+        start_time__gte=now,
     ).count()
 
     weekly_attendance_completed_sessions = (
@@ -717,11 +841,15 @@ def teacher_dashboard(request):
     total_monthly_sessions = monthly_sessions.count()
 
     total_monthly_completed_sessions = monthly_sessions.filter(
-        start_time__lt=now
+        status=ClassSession.STATUS_COMPLETED
     ).count()
 
     total_monthly_upcoming_sessions = monthly_sessions.filter(
-        start_time__gte=now
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+        ],
+        start_time__gte=now,
     ).count()
 
     monthly_attendance_completed_sessions = (
@@ -780,7 +908,12 @@ def teacher_dashboard(request):
     attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
         class_session__course__status="active",
-        status__in=["attended", "missed", "excused"],
+        class_session__status=ClassSession.STATUS_COMPLETED,
+        status__in=[
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        ],
     )
 
     total_attendance_records = attendance_records.count()
@@ -885,13 +1018,15 @@ def teacher_classes_list(request):
         session_date = timezone.localdate(session.start_time)
 
         session.is_upcoming = (
-            session.start_time > now
-            and not session.is_cancelled
+            session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+            and session.start_time > now
         )
 
         session.is_completed = (
-            session.end_time < now
-            and not session.is_cancelled
+            session.status == ClassSession.STATUS_COMPLETED
         )
 
         session.is_today = session_date == today
@@ -901,13 +1036,15 @@ def teacher_classes_list(request):
             and session_date.month == today.month
         )
 
-        if session.is_cancelled:
-            session.class_status_group = "cancelled"
-        elif session.is_upcoming:
-            session.class_status_group = "upcoming"
+        if session.status == ClassSession.STATUS_PENDING_RESCHEDULE:
+            session.class_status_group = "pending_reschedule"
         elif session.is_completed:
             session.class_status_group = "completed"
+        elif session.is_upcoming:
+            session.class_status_group = "upcoming"
         else:
+            # Scheduled/rescheduled but not future and not completed:
+            # still outstanding until explicitly completed.
             session.class_status_group = "in_progress"
 
         if session.is_upcoming:
@@ -1017,22 +1154,10 @@ def teacher_course_details(request, course_id):
 
     now = timezone.now()
 
-    total_classes = course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    completed_classes = course.class_sessions.filter(
-        is_cancelled=False,
-        start_time__lt=now,
-    ).count()
-
-    remaining_classes = total_classes - completed_classes
-
-    completion_percentage = 0
-    if total_classes:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
+    total_classes = course.total_sessions
+    completed_classes = course.completed_sessions
+    remaining_classes = course.remaining_sessions
+    completion_percentage = course.completion_percentage
 
     attendance_percentages = []
 
@@ -1120,7 +1245,14 @@ def teacher_group_attendance(request, course_id):
 
     class_sessions = (
         course.class_sessions
-        .filter(start_time__lt=now)
+        .filter(
+            start_time__lt=now,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
+        )
         .annotate(
             attended_count=Count(
                 "attendance_records",
@@ -1163,6 +1295,11 @@ def teacher_session_attendance_detail(request, session_id):
         id=session_id,
         course__teacher=request.user,
         start_time__lt=timezone.now(),
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+            ClassSession.STATUS_COMPLETED,
+        ],
     )
 
     attendance_records = (
@@ -1218,22 +1355,10 @@ def teacher_course_students_list(request, course_id):
 
     now = timezone.now()
 
-    total_classes = course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    completed_classes = course.class_sessions.filter(
-        is_cancelled=False,
-        start_time__lt=now,
-    ).count()
-
-    remaining_classes = total_classes - completed_classes
-
-    completion_percentage = 0
-    if total_classes:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
+    total_classes = course.total_sessions
+    completed_classes = course.completed_sessions
+    remaining_classes = course.remaining_sessions
+    completion_percentage = course.completion_percentage
 
     attendance_percentages = []
 
@@ -1454,31 +1579,24 @@ def teacher_student_detail(request, course_id, enrollment_id):
     missed_count = attendances.filter(status="missed").count()
     excused_count = attendances.filter(status="excused").count()
    
-    completed_classes = course.class_sessions.filter(
-        start_time__lt=timezone.now(),
-        is_cancelled=False,
-    ).count()
+    # Progress is based on the learner's actually assigned sessions.
+    # A ClassSession counts as completed ONLY when status="completed".
+    completed_classes = enrollment.total_completed_classes
+    total_classes = enrollment.total_assigned_classes
+    remaining_classes = enrollment.upcoming_classes
 
-    if total_attendance_records > 0:
+    if completed_classes > 0:
         attendance_percentage = round(
             (attended_count / completed_classes) * 100
         )
     else:
         attendance_percentage = 0
 
-
-    total_classes = course.number_of_classes or course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    remaining_classes = max(total_classes - completed_classes, 0)
-
-    if total_classes > 0:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
-    else:
-        completion_percentage = 0
+    completion_percentage = (
+        round((completed_classes / total_classes) * 100)
+        if total_classes > 0
+        else 0
+    )
 
     recent_attendance = (
         Attendance.objects
@@ -1652,31 +1770,24 @@ def student_attendance_record(request, course_id, enrollment_id):
     missed_count = attendances.filter(status="missed").count()
     excused_count = attendances.filter(status="excused").count()
    
-    completed_classes = course.class_sessions.filter(
-        start_time__lt=timezone.now(),
-        is_cancelled=False,
-    ).count()
+    # Progress is based on the learner's actually assigned sessions.
+    # A ClassSession counts as completed ONLY when status="completed".
+    completed_classes = enrollment.total_completed_classes
+    total_classes = enrollment.total_assigned_classes
+    remaining_classes = enrollment.upcoming_classes
 
-    if total_attendance_records > 0:
+    if completed_classes > 0:
         attendance_percentage = round(
             (attended_count / completed_classes) * 100
         )
     else:
         attendance_percentage = 0
 
-
-    total_classes = course.number_of_classes or course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    remaining_classes = max(total_classes - completed_classes, 0)
-
-    if total_classes > 0:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
-    else:
-        completion_percentage = 0
+    completion_percentage = (
+        round((completed_classes / total_classes) * 100)
+        if total_classes > 0
+        else 0
+    )
 
     recent_attendance = (
         Attendance.objects
@@ -2178,7 +2289,11 @@ def teacher_calendar_events(request):
         ClassSession.objects
         .filter(
             course_id__in=teacher_course_ids,
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             )
         .select_related("course")
         .order_by("start_time")
@@ -2273,7 +2388,11 @@ def teacher_attendance(request):
             course__teacher=request.user,
             course__status="active",
             start_time__lte=now,
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
         )
         .select_related(
             "course",
@@ -2290,23 +2409,12 @@ def teacher_attendance(request):
     pending_count = 0
     completed_count = 0
 
-    final_attendance_statuses = [
-        "attended",
-        "missed",
-        "excused",
-    ]
-
     for session in sessions_queryset:
-        final_attendance_exists = Attendance.objects.filter(
-            class_session=session,
-            status__in=final_attendance_statuses,
-        ).exists()
+        # Attendance rows are generated automatically and are the source of
+        # truth for which learners are assigned to this lesson.
+        session.students_count = session.attendance_records.count()
 
-        session.students_count = session.course.enrollments.filter(
-            status="active"
-        ).count()
-
-        if final_attendance_exists:
+        if session.status == ClassSession.STATUS_COMPLETED:
             session.attendance_filter_status = "completed"
             completed_count += 1
         else:
@@ -2376,10 +2484,18 @@ def teacher_take_attendance(request, session_id):
         )
     
     if request.method == "POST":
-        for enrollment in enrollments:
-            status = request.POST.get(f"attendance_{enrollment.student_id}")
+        final_attendance_statuses = {
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        }
 
-            if status in ["attended", "missed", "excused"]:
+        for enrollment in enrollments:
+            status = request.POST.get(
+                f"attendance_{enrollment.student_id}"
+            )
+
+            if status in final_attendance_statuses:
                 Attendance.objects.update_or_create(
                     student=enrollment.student,
                     class_session=class_session,
@@ -2388,7 +2504,34 @@ def teacher_take_attendance(request, session_id):
                     }
                 )
 
-        messages.success(request, "Attendance saved successfully.")
+        # Once every Attendance record assigned to this session has a final
+        # learner outcome, the lesson itself is completed.
+        #
+        # ClassSession.save() will then check whether this was the final
+        # unfinished lesson and, if so, complete the Course + active
+        # CourseEnrollments automatically.
+        attendance_records = class_session.attendance_records.all()
+
+        has_attendance_records = attendance_records.exists()
+        has_unfinished_attendance = attendance_records.filter(
+            status=Attendance.STATUS_SCHEDULED
+        ).exists()
+
+        if has_attendance_records and not has_unfinished_attendance:
+            if class_session.status != ClassSession.STATUS_COMPLETED:
+                class_session.status = ClassSession.STATUS_COMPLETED
+                class_session.save(update_fields=["status"])
+
+            messages.success(
+                request,
+                "Attendance saved and lesson marked as completed."
+            )
+        else:
+            messages.success(
+                request,
+                "Attendance saved. Complete all learner records to finish the lesson."
+            )
+
         return redirect(
             "profiles:teacher_attendance_detail",
             session_id=class_session.id,
@@ -2504,15 +2647,11 @@ def mark_class_pending_reschedule(request, session_id):
     )
 
     if request.method == "POST":
+        # Rescheduling belongs to ClassSession, not Attendance.
+        # Existing Attendance records remain status="scheduled" and stay
+        # attached to this same ClassSession throughout the reschedule flow.
         session.status = ClassSession.STATUS_PENDING_RESCHEDULE
-        session.is_cancelled = True
-        session.save(update_fields=["status", "is_cancelled"])
-
-        session.attendance_records.filter(
-            status=Attendance.STATUS_SCHEDULED
-        ).update(
-            status=Attendance.STATUS_PENDING_RESCHEDULE
-        )
+        session.save(update_fields=["status"])
 
         messages.success(
             request,
@@ -2643,20 +2782,12 @@ def reschedule_class_detail(request, session_id):
 
         session.start_time = new_start
         session.end_time = new_end
-        session.status = ClassSession.STATUS_SCHEDULED
-        session.is_cancelled = False
+        session.status = ClassSession.STATUS_RESCHEDULED
         session.save(update_fields=[
             "start_time",
             "end_time",
             "status",
-            "is_cancelled",
         ])
-
-        session.attendance_records.filter(
-            status=Attendance.STATUS_PENDING_RESCHEDULE
-        ).update(
-            status=Attendance.STATUS_SCHEDULED
-        )
 
         messages.success(
             request,
@@ -2744,7 +2875,11 @@ def company_admin_dashboard(request):
         .filter(
             course__company=company,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_day,
             start_time__lte=end_of_day,
         )
@@ -2765,7 +2900,11 @@ def company_admin_dashboard(request):
         .filter(
             course__company=company,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_week,
             start_time__lte=end_of_week,
         )
@@ -2778,7 +2917,11 @@ def company_admin_dashboard(request):
         .filter(
             course__company=company,
             course__status="active",
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             start_time__gte=start_of_month,
             start_time__lte=end_of_month,
         )
@@ -2795,11 +2938,15 @@ def company_admin_dashboard(request):
     total_weekly_sessions = weekly_sessions.count()
 
     completed_weekly_sessions = weekly_sessions.filter(
-        start_time__lt=now
+        status=ClassSession.STATUS_COMPLETED
     ).count()
 
     upcoming_weekly_sessions = weekly_sessions.filter(
-        start_time__gte=now
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+        ],
+        start_time__gte=now,
     ).count()
 
     completed_weekly_percentage = get_percentage(
@@ -2816,11 +2963,15 @@ def company_admin_dashboard(request):
     total_monthly_sessions = monthly_sessions.count()
 
     total_monthly_completed_sessions = monthly_sessions.filter(
-        start_time__lt=now
+        status=ClassSession.STATUS_COMPLETED
     ).count()
 
     total_monthly_upcoming_sessions = monthly_sessions.filter(
-        start_time__gte=now
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+        ],
+        start_time__gte=now,
     ).count()
 
     total_monthly_completed_percentage = get_percentage(
@@ -2846,7 +2997,12 @@ def company_admin_dashboard(request):
     attendance_records = Attendance.objects.filter(
         class_session__course__company=company,
         class_session__course__status="active",
-        status__in=["attended", "missed", "excused"],
+        class_session__status=ClassSession.STATUS_COMPLETED,
+        status__in=[
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        ],
     )
 
     total_attendance_records = attendance_records.count()
@@ -2863,7 +3019,7 @@ def company_admin_dashboard(request):
     weekly_attendance_records = Attendance.objects.filter(
         class_session__course__company=company,
         class_session__course__status="active",
-        class_session__is_cancelled=False,
+        class_session__status=ClassSession.STATUS_COMPLETED,
         class_session__start_time__gte=start_of_week,
         class_session__start_time__lte=end_of_week,
         status__in=["attended", "missed", "excused"],
@@ -2883,7 +3039,7 @@ def company_admin_dashboard(request):
     monthly_attendance_records = Attendance.objects.filter(
         class_session__course__company=company,
         class_session__course__status="active",
-        class_session__is_cancelled=False,
+        class_session__status=ClassSession.STATUS_COMPLETED,
         class_session__start_time__gte=start_of_month,
         class_session__start_time__lte=end_of_month,
         status__in=["attended", "missed", "excused"],
@@ -3019,12 +3175,6 @@ def company_admin_all_courses_attendance(request):
     if selected_date:
         parsed_date = parse_date(selected_date)
 
-    final_attendance_statuses = {
-        "attended",
-        "missed",
-        "excused",
-    }
-
     # Active employees enrolled in each course.
     enrollment_queryset = (
         CourseEnrollment.objects
@@ -3044,7 +3194,11 @@ def company_admin_all_courses_attendance(request):
     class_session_queryset = (
         ClassSession.objects
         .filter(
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
         )
         .select_related(
             "course",
@@ -3148,7 +3302,11 @@ def company_admin_all_courses_attendance(request):
     # If a date was selected, only show courses with a class on that date.
     if parsed_date:
         courses = courses.filter(
-            class_sessions__is_cancelled=False,
+            class_sessions__status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
             class_sessions__start_time__date=parsed_date,
         ).distinct()
 
@@ -3188,19 +3346,16 @@ def company_admin_all_courses_attendance(request):
         excused_count = 0
 
         for class_session in past_class_sessions:
+            # Under the new lifecycle, attendance is considered submitted
+            # only when the lesson itself has been explicitly completed.
+            if class_session.status != ClassSession.STATUS_COMPLETED:
+                continue
+
             attendance_records = list(
                 class_session.attendance_records.all()
             )
 
             if not attendance_records:
-                continue
-
-            attendance_is_submitted = all(
-                attendance.status in final_attendance_statuses
-                for attendance in attendance_records
-            )
-
-            if not attendance_is_submitted:
                 continue
 
             submitted_class_sessions.append(class_session)
@@ -3392,22 +3547,10 @@ def company_admin_course_details(request, course_id):
 
     now = timezone.now()
 
-    total_classes = course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    completed_classes = course.class_sessions.filter(
-        is_cancelled=False,
-        start_time__lt=now,
-    ).count()
-
-    remaining_classes = total_classes - completed_classes
-
-    completion_percentage = 0
-    if total_classes:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
+    total_classes = course.total_sessions
+    completed_classes = course.completed_sessions
+    remaining_classes = course.remaining_sessions
+    completion_percentage = course.completion_percentage
 
     attendance_percentages = []
 
@@ -3510,22 +3653,10 @@ def company_admin_course_students_list(request, course_id):
 
     now = timezone.now()
 
-    total_classes = course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    completed_classes = course.class_sessions.filter(
-        is_cancelled=False,
-        start_time__lt=now,
-    ).count()
-
-    remaining_classes = total_classes - completed_classes
-
-    completion_percentage = 0
-    if total_classes:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
+    total_classes = course.total_sessions
+    completed_classes = course.completed_sessions
+    remaining_classes = course.remaining_sessions
+    completion_percentage = course.completion_percentage
 
     attendance_percentages = []
 
@@ -3618,8 +3749,7 @@ def company_admin_course_attendance(request, course_id):
         ClassSession.objects
         .filter(
             course=course,
-            is_cancelled=False,
-            start_time__lt=timezone.now(),
+            status=ClassSession.STATUS_COMPLETED,
         )
         .select_related(
             "course",
@@ -3771,41 +3901,56 @@ def company_admin_student_detail(request, course_id, enrollment_id):
     missed_count = attendances.filter(status="missed").count()
     excused_count = attendances.filter(status="excused").count()
 
-    completed_classes = course.class_sessions.filter(
-        start_time__lt=timezone.now(),
-        is_cancelled=False,
-    ).count()
+    # Learner progress is based on ClassSessions actually assigned to
+    # this enrollment. Completed means status="completed", never merely past.
+    completed_classes = enrollment.total_completed_classes
+    total_classes = enrollment.total_assigned_classes
+    remaining_classes = enrollment.upcoming_classes
 
-    total_hours = course.total_hours or Decimal("0")
-    class_duration = course.class_duration or Decimal("0")
+    completed_session_list = list(
+        enrollment.eligible_sessions.filter(
+            status=ClassSession.STATUS_COMPLETED
+        )
+    )
 
-    completed_hours = completed_classes * class_duration
-    remaining_hours = max(total_hours - completed_hours, Decimal("0"))
-    
+    completed_hours = sum(
+        (
+            Decimal(str(
+                (session.end_time - session.start_time).total_seconds()
+            )) / Decimal("3600")
+            for session in completed_session_list
+        ),
+        Decimal("0"),
+    )
+
+    assigned_session_list = list(enrollment.eligible_sessions)
+
+    total_hours = sum(
+        (
+            Decimal(str(
+                (session.end_time - session.start_time).total_seconds()
+            )) / Decimal("3600")
+            for session in assigned_session_list
+        ),
+        Decimal("0"),
+    )
+
+    remaining_hours = max(
+        total_hours - completed_hours,
+        Decimal("0"),
+    )
+
     completed_hours_display = format_hours_duration(completed_hours)
     remaining_hours_display = format_hours_duration(remaining_hours)
     total_hours_display = format_hours_duration(total_hours)
 
+    attendance_percentage = enrollment.attendance_percentage
 
-    if total_attendance_records > 0:
-        attendance_percentage = round(
-            (attended_count / total_attendance_records) * 100
-        )
-    else:
-        attendance_percentage = 0
-
-    total_classes = course.number_of_classes or course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    remaining_classes = max(total_classes - completed_classes, 0)
-
-    if total_classes > 0:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
-    else:
-        completion_percentage = 0
+    completion_percentage = (
+        round((completed_classes / total_classes) * 100)
+        if total_classes > 0
+        else 0
+    )
 
     recent_attendance = attendances[:5]
 
@@ -3911,30 +4056,17 @@ def company_admin_student_attendance_record(request, course_id, enrollment_id):
     missed_count = attendances.filter(status="missed").count()
     excused_count = attendances.filter(status="excused").count()
 
-    completed_classes = course.class_sessions.filter(
-        start_time__lt=timezone.now(),
-        is_cancelled=False,
-    ).count()
+    completed_classes = enrollment.total_completed_classes
+    total_classes = enrollment.total_assigned_classes
+    remaining_classes = enrollment.upcoming_classes
 
-    if total_attendance_records > 0:
-        attendance_percentage = round(
-            (attended_count / total_attendance_records) * 100
-        )
-    else:
-        attendance_percentage = 0
+    attendance_percentage = enrollment.attendance_percentage
 
-    total_classes = course.number_of_classes or course.class_sessions.filter(
-        is_cancelled=False
-    ).count()
-
-    remaining_classes = max(total_classes - completed_classes, 0)
-
-    if total_classes > 0:
-        completion_percentage = round(
-            (completed_classes / total_classes) * 100
-        )
-    else:
-        completion_percentage = 0
+    completion_percentage = (
+        round((completed_classes / total_classes) * 100)
+        if total_classes > 0
+        else 0
+    )
 
     recent_attendance = attendances
 
@@ -4320,13 +4452,15 @@ def company_admin_classes_list(request):
         session_date = timezone.localdate(session.start_time)
 
         session.is_upcoming = (
-            session.start_time > now
-            and not session.is_cancelled
+            session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+            and session.start_time > now
         )
 
         session.is_completed = (
-            session.end_time < now
-            and not session.is_cancelled
+            session.status == ClassSession.STATUS_COMPLETED
         )
 
         session.is_today = session_date == today
@@ -4340,13 +4474,15 @@ def company_admin_classes_list(request):
             and session_date.month == today.month
         )
 
-        if session.is_cancelled:
-            session.class_status_group = "cancelled"
-        elif session.is_upcoming:
-            session.class_status_group = "upcoming"
+        if session.status == ClassSession.STATUS_PENDING_RESCHEDULE:
+            session.class_status_group = "pending_reschedule"
         elif session.is_completed:
             session.class_status_group = "completed"
+        elif session.is_upcoming:
+            session.class_status_group = "upcoming"
         else:
+            # Scheduled/rescheduled but not future and not completed:
+            # still outstanding until explicitly completed.
             session.class_status_group = "in_progress"
 
         if session.is_upcoming:
@@ -4457,7 +4593,11 @@ def company_admin_calendar_events(request):
         ClassSession.objects
         .filter(
             course__company=profile.company,
-            is_cancelled=False,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_COMPLETED,
+            ],
         )
         .select_related(
             "course",
