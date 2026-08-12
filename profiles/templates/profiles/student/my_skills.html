@@ -19,11 +19,6 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-
-    <!-- =====================================================
-         STUDENT HEADER
-         ===================================================== -->
-
     <!-- Header -->
     <header>
 
@@ -64,7 +59,6 @@
                         {{ student_profile.get_role_display|default:"Employee" }}</span>
                 </div> 
 
-                    <!-- <div class="header-last-child">       -->
                 <div class="mt-4">  
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">CEFR Level</span>
@@ -92,10 +86,7 @@
     </header>
 
 
-    <!-- =====================================================
-         STUDENT INTERNAL NAVIGATION
-         ===================================================== -->
-
+    <!-- INTERNAL NAV -->
     <div class="student-detail-tabs-wrapper">
 
         <nav class="student-detail-tabs">
@@ -123,29 +114,16 @@
     </div>
 
 
-    <!-- =====================================================
-         COURSE SELECTOR
-         Only show if learner has more than one active course
-         ===================================================== -->
+    <!-- COURSE SELECTOR FORM
+         Only shows if learner has more than one active course  -->
 
     {% if active_enrollments|length > 1 %}
 
-        <form
-            method="get"
-            class="course-selector-form"
-        >
+        <form method="get" class="course-selector-form">
 
-            <label
-                for="course-select"
-                class="course-selector-label"
-            >
+            <label for="course-select" class="course-selector-label">
                 <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
-
-                <span>
-                    Select active course to overview
-                </span>
-            </label>
-
+                <span>Select active course to overview</span></label>
 
             <div class="course-select-wrapper">
 
@@ -181,9 +159,7 @@
     {% endif %}
 
 
-<!-- =====================================================
-     SKILLS
-     ===================================================== -->
+<!-- SKILLS -->
 
 {% if skills %}
 
@@ -194,83 +170,41 @@
             <article class="student-skill-card">
 
                 <div class="skill-card-header">
-
-                    <h2>
-                        <span>
-                            <i class="{{ skill.icon }} mr-3"></i>
-                        </span>
-
-                        {{ skill.name }}
-                    </h2>
-
-
+                    <h2><span><i class="{{ skill.icon }} mr-3"></i></span>
+                        {{ skill.name }}</h2>
                     <hr>
-
-
-                    <div
-                        class="skill-ring"
-                        style="--skill-progress: {{ skill.percentage|default:'0' }};"
-                    >
+                    <div class="skill-ring" style="--skill-progress: {{ skill.percentage|default:'0' }};">
                         <div>
-
-                            <strong>
-                                {{ skill.percentage|default:"0" }}%
-                            </strong>
-
-                            <span>
-                                Overall
-                            </span>
-
+                            <strong>{{ skill.percentage|default:"0" }}%</strong>
+                            <span>Overall</span>
                         </div>
                     </div>
-
                 </div>
 
-
                 <div class="skill-card-body">
-
                     <div class="skill-details">
 
-                        <p>
-                            {{ skill.subskills|length }} subskills tracked
-                        </p>
-
+                        <p>{{ skill.subskills|length }} subskills tracked</p>
 
                         {% for subskill in skill.subskills %}
 
                             {% with progress=subskill.percentage|default:0 %}
 
                                 <div class="subskill-row">
-
                                     <div class="subskill-main mt-3">
-
-                                        <strong>
-                                            {{ subskill.get_subskill_display }}
-                                        </strong>
-
+                                        <strong>{{ subskill.get_subskill_display }}</strong>
                                         <br>
-
-                                        <span>
-                                            {{ subskill.get_rating_display }}
-                                            ({{ progress }}%)
-                                        </span>
-
+                                        <span>{{ subskill.get_rating_display }} ({{ progress }}%)</span>
                                     </div>
-
                                 </div>
 
                             {% endwith %}
 
                         {% empty %}
-
-                            <p class="text-white-50 mb-0">
-                                No subskills have been evaluated yet.
-                            </p>
-
+                            <p class="text-white-50 mb-0">No subskills have been evaluated yet.</p>
                         {% endfor %}
 
                     </div>
-
                 </div>
 
             </article>
@@ -279,13 +213,11 @@
 
     </div>
 
-
 {% else %}
 
     <p class="text-dark mt-4">
         Your skills assessment will appear here once your teacher
-        has completed your first evaluation.
-    </p>
+        has completed your first evaluation.</p>
 
 {% endif %}
 
@@ -295,9 +227,7 @@
 
 
 {% block postloadjs %}
-
 {{ block.super }}
-
 {% if chart_data %}
     {{ chart_data|json_script:"skills-chart-data" }}
 {% endif %}
