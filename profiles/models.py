@@ -343,28 +343,28 @@ class StudentAcademicProfile(models.Model):
 SUBSKILLS = {
     "speaking": [
         ("fluency", "Fluency"),
-        ("accuracy_and_range", "Grammar & vocabulary: Accuracy & range"),
+        ("accuracy_and_range", "Grammar & vocabulary (Accuracy & range)"),
         ("pronunciation", "Pronunciation"),
         ("interaction", "Interaction"),
     ],
 
     "reading": [
-        ("scanning", "Scanning: Specific information"),
-        ("skimming", "Skimming (Gist): General Idea"),
-        ("detailed", "In detail: Deep Understanding"),
+        ("scanning", "Scanning (Specific information)"),
+        ("skimming", "Skimming (General Idea)"),
+        ("detailed", "In detail (Deep Understanding)"),
     ],
 
     "listening": [
-        ("gist", "For Gist: General Idea"),
+        ("gist", "Gist (General Idea)"),
         ("specific_information", "Specific Information"),
-        ("detailed", "In detail: Deep Understanding"),
+        ("detailed", "In detail (Deep Understanding)"),
     ],
 
     "writing": [
-        ("organization", "Organization"),
+        ("organization", "Structure & Organization"),
         ("cohesion", "Cohesion & Coherence"),
-        ("vocabulary_grammar", "Vocabulary & Grammar"),
-        ("register", "Register"),
+        ("vocabulary_grammar", "Grammar & vocabulary (Accuracy & range)"),
+        ("register", "Register (Style accuracy)"),
     ],
 }
 
@@ -438,7 +438,7 @@ class StudentSkillAssessment(models.Model):
             return ""
 
         strengths = []
-        passing = []
+        meets_expectations = []
         developing = []
         needs_work = []
 
@@ -447,10 +447,13 @@ class StudentSkillAssessment(models.Model):
 
             if subskill.rating in ["strong", "confident"]:
                 strengths.append(label)
-            elif subskill.rating == "passing":
-                passing.append(label)
+
+            elif subskill.rating == "pass":
+                meets_expectations.append(label)
+
             elif subskill.rating == "developing":
                 developing.append(label)
+
             elif subskill.rating == "needs_work":
                 needs_work.append(label)
 
@@ -460,10 +463,10 @@ class StudentSkillAssessment(models.Model):
             notes.append(
                 f"Strengths: {', '.join(strengths)}."
             )
-        
-        if passing:
+
+        if meets_expectations:
             notes.append(
-                f"Meeting: {', '.join(passing)}."
+                f"Meets expectations: {', '.join(meets_expectations)}."
             )
 
         if developing:
@@ -479,12 +482,11 @@ class StudentSkillAssessment(models.Model):
         return "\n".join(notes)
 
 
-
 class StudentSubSkillAssessment(models.Model):
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
-        ("passing", "Pass"),
+        ("pass", "Pass"),
         ("confident", "Confident"),
         ("strong", "Strong"),
     ]
@@ -492,7 +494,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_PERCENTAGES = {
         "needs_work": 40,
         "developing": 50,
-        "passing": 60,
+        "pass": 60,
         "confident": 75,
         "strong": 100,
     }

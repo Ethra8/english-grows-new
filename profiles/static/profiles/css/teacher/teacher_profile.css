@@ -2453,6 +2453,7 @@ div:has(> .student-action-btn) {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 2fr;
     gap: 1rem;
+    margin-top: 1.25rem;
 }
 
 .student-level-area small {
