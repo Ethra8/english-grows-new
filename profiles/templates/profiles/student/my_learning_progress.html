@@ -97,15 +97,15 @@
     <div class="student-detail-tabs-wrapper">
 
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="active">
+            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active">
                 Overview
             </a>
 
-            <a href="{% url 'profiles:my_attendance' %}">
+            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
                 Attendance
             </a>
 
-            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
+            <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
                 Skills
             </a>
 
@@ -113,7 +113,7 @@
                 Progress
             </a>
 
-            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+            <a href="#employeeAssessmentOverview">
                 Assessment
             </a>
 
@@ -124,7 +124,7 @@
     </div>
     <!-- <div class="student-detail-tabs-wrapper"> -->
 
-    {% if enrollments %}
+    {% if active_enrollments|length > 1 %}
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
@@ -139,7 +139,7 @@
                     class="course-select"
                     onchange="this.form.submit()"
                 >
-                    {% for item in enrollments %}
+                    {% for item in active_enrollments %}
                         <option
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
@@ -256,20 +256,20 @@
 
                     <div class="student-stat-list">
                         <div class="detail-row">
-                            <span>Completed Classes:</span>
+                            <span>Past Lessons:</span>
                             <strong>{{ completed_classes }} / {{ total_classes }}</strong>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <a href="#" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>                    
                     details
                     <i class="fa-solid fa-arrow-right ml-3"></i>
                 </a>
-            </div>
+            </div> -->
         </article>
     </div>
     
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!chartData.labels || chartData.labels.length === 0) {
         chartEl.parentElement.innerHTML = `
             <p class="text-dark">
-                No skill progress data yet. Save a skill assessment first.
+                No skill progress data to process your skills graph yet. Your skills progress graph will display here once your teacher has completed an evaluation.
             </p>
         `;
         return;

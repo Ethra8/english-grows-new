@@ -490,10 +490,10 @@ class StudentSubSkillAssessment(models.Model):
     ]
 
     RATING_PERCENTAGES = {
-        "needs_work": 25,
-        "developing": 45,
+        "needs_work": 40,
+        "developing": 50,
         "passing": 60,
-        "confident": 80,
+        "confident": 75,
         "strong": 100,
     }
 
@@ -509,7 +509,7 @@ class StudentSubSkillAssessment(models.Model):
     )
 
     percentage = models.PositiveSmallIntegerField(
-        default=45,
+        default=50,
         editable=False,
     )
 

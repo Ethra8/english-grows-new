@@ -403,7 +403,7 @@ def my_learning_progress(request):
     student = request.user
     student_profile = student.profile
 
-    enrollments = (
+    active_enrollments = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
@@ -417,39 +417,54 @@ def my_learning_progress(request):
             "course__company",
         )
         .order_by(
-            "-status",
             "-id",
         )
     )
 
     selected_course_id = request.GET.get("course")
 
+    # ---------------------------------------------------------
+    # COURSE SELECTED IN URL
+    # ---------------------------------------------------------
     if selected_course_id:
-        enrollment = get_object_or_404(
-            enrollments,
+        active_enrollment = get_object_or_404(
+            active_enrollments,
             course_id=selected_course_id,
         )
-    else:
-        enrollment = (
-            enrollments.filter(status="active").first()
-            or enrollments.filter(status="paused").first()
-            or enrollments.filter(status="completed").first()
-            or enrollments.first()
-        )
 
-    # No course enrollment
-    if not enrollment:
+    # ---------------------------------------------------------
+    # NO COURSE SELECTED IN URL
+    # ---------------------------------------------------------
+    else:
+        # Pick the default course according to the queryset order.
+        active_enrollment = active_enrollments.first()
+
+        # If a default course exists, redirect to the canonical URL
+        # so the currently displayed course is always explicit.
+        if active_enrollment:
+            return redirect(
+                f"{request.path}?course={active_enrollment.course_id}"
+            )
+
+
+    # ---------------------------------------------------------
+    # NO ELIGIBLE ACTIVE COURSE
+    # ---------------------------------------------------------
+    if not active_enrollment:
         return render(
             request,
             "profiles/student/my_learning_progress.html",
             {
                 "student": student,
                 "student_profile": student_profile,
-                "enrollments": enrollments,
-                "enrollment": None,
+
+                # Full queryset for the selector
+                "active_enrollments": active_enrollments,
+
+                # No selected enrollment/course
+                "active_enrollment": None,
                 "course": None,
 
-                # Prevent the graph JavaScript from failing
                 "chart_data": {
                     "labels": [],
                     "datasets": [],
@@ -457,7 +472,10 @@ def my_learning_progress(request):
             },
         )
 
-    course = enrollment.course
+    # ---------------------------------------------------------
+    # SELECTED / DEFAULT COURSE
+    # ---------------------------------------------------------
+    course = active_enrollment.course
 
     # ---------------------------------------------------------
     # SKILLS PROGRESS GRAPH
@@ -543,8 +561,8 @@ def my_learning_progress(request):
         "student": student,
         "student_profile": student_profile,
 
-        "enrollments": enrollments,
-        "enrollment": enrollment,
+        "active_enrollments": active_enrollments,
+        "active_enrollment": active_enrollment,
         "course": course,
 
         "attended_count": attended_count,
@@ -700,6 +718,251 @@ def my_attendance(request):
         "profiles/student/my_attendance.html",
         context
     )
+
+
+
+@login_required
+def my_skills(request):
+    student = request.user
+    student_profile = get_object_or_404(
+        UserProfile,
+        user=student,
+    )
+
+    # ---------------------------------------------------------
+    # SECURITY
+    # Only learner roles can access this page.
+    # ---------------------------------------------------------
+    if student_profile.role not in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL,
+    ]:
+        return redirect("home")
+
+
+    # ---------------------------------------------------------
+    # ALL ACTIVE ENROLLMENTS
+    # Only include courses that are also active.
+    #
+    # This queryset is used for:
+    # - the course selector
+    # - validating ?course=...
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by(
+            "-id",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+    if selected_course_id:
+        active_enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+
+    else:
+        # Use the first active enrollment as the default.
+        active_enrollment = active_enrollments.first()
+
+        # Make the selected/default course explicit in the URL.
+        #
+        # /my-skills/
+        #
+        # becomes:
+        #
+        # /my-skills/?course=4
+        if active_enrollment:
+            return redirect(
+                f"{request.path}?course={active_enrollment.course_id}"
+            )
+
+
+    # ---------------------------------------------------------
+    # NO ACTIVE COURSE
+    # ---------------------------------------------------------
+    if not active_enrollment:
+        return render(
+            request,
+            "profiles/student/my_skills.html",
+            {
+                "student": student,
+                "student_profile": student_profile,
+                "active_enrollments": active_enrollments,
+                "active_enrollment": None,
+                "course": None,
+                "skills": [],
+                "skill_notes": [],
+                "skill_note_display": [],
+                "academic_profile": None,
+                "chart_data": {
+                    "labels": [],
+                    "datasets": [],
+                },
+                "level_choices": UserProfile.LEVEL_CHOICES,
+            },
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = active_enrollment.course
+
+
+    # ---------------------------------------------------------
+    # SKILL ICONS
+    # ---------------------------------------------------------
+    skill_icons = {
+        "speaking": "fa-solid fa-microphone",
+        "reading": "fa-solid fa-book-open",
+        "writing": "fa-solid fa-pen",
+        "listening": "fa-solid fa-headphones",
+    }
+
+
+    # ---------------------------------------------------------
+    # IMPORTANT:
+    # DO NOT create assessments from the learner-facing view.
+    #
+    # The teacher view may use get_or_create() because the teacher
+    # is responsible for evaluating/editing skills.
+    #
+    # The student view should only READ existing assessments.
+    # ---------------------------------------------------------
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related(
+            "subskill_assessments"
+        )
+        .order_by("skill")
+    )
+
+
+    # ---------------------------------------------------------
+    # SKILL NOTE DISPLAY
+    # ---------------------------------------------------------
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+
+    # ---------------------------------------------------------
+    # BUILD SKILL CARDS
+    # ---------------------------------------------------------
+    skills = []
+
+    for assessment in skill_assessments:
+        skills.append({
+            "assessment": assessment,
+            "assessment_id": assessment.id,
+            "skill_value": assessment.skill,
+            "name": assessment.get_skill_display(),
+            "icon": skill_icons.get(
+                assessment.skill,
+                "fa-solid fa-chart-simple",
+            ),
+            "percentage": assessment.average_percentage,
+            "teacher_notes": assessment.teacher_notes,
+            "subskills": assessment.subskill_assessments.all(),
+        })
+
+
+    # ---------------------------------------------------------
+    # TEACHER NOTES
+    # ---------------------------------------------------------
+    skill_notes = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .exclude(
+            teacher_notes=""
+        )
+        .order_by("skill")
+    )
+
+
+    # ---------------------------------------------------------
+    # ACADEMIC PROFILE
+    # ---------------------------------------------------------
+    academic_profile = getattr(
+        student,
+        "academic_profile",
+        None
+    )
+
+
+    # ---------------------------------------------------------
+    # SKILL PROGRESS CHART
+    # ---------------------------------------------------------
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
+    )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
+    context = {
+        "student": student,
+        "student_profile": student_profile,
+
+        # ALL active enrollments -> course selector
+        "active_enrollments": active_enrollments,
+
+        # ONE selected enrollment -> current page
+        "active_enrollment": active_enrollment,
+
+        "course": course,
+
+        "skills": skills,
+        "academic_profile": academic_profile,
+
+        # Use normal Python object because your template already
+        # uses json_script.
+        "chart_data": chart_data,
+
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+
+        "level_choices": UserProfile.LEVEL_CHOICES,
+    }
+
+
+    return render(
+        request,
+        "profiles/student/my_skills.html",
+        context,
+    )
+
+
+
+
 
 # ***********************************************|
 # TEACHER PROFILE  ******************************|

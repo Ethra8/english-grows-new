@@ -15,12 +15,12 @@
 
     <header class="mb-5">
         <h1>My Attendance</h1>
-        {% if active_enrollments %}
+        {% if active_enrollments|length > 1 %}
             <form method="get" class="course-selector-form">
 
                 <label for="course-select" class="course-selector-label">
                     <i class="fa-solid fa-chalkboard-user"></i>
-                    <span>Select within active courses you are enrolled in</span>
+                    <span>Select an active course to view</span>
                 </label>
 
                 <div class="course-select-wrapper">
@@ -52,10 +52,6 @@
             </form>
         {% endif %}
 
-        <!-- <div>
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
-            <p>{{ active_enrollment.course.name }}</p>     
-        </div> -->
         <hr>
     </header>
 

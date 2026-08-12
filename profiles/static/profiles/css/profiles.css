@@ -1408,6 +1408,19 @@ main.profile-main {
     border: solid 2px #ffffff;
 }
 
+.my-attendance .detailed-attendance-card div:nth-child(3) {
+    background-color: #F4FFFE;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0.5rem;
+    /* for 'upcoming ribbon */
+    padding: 0 1rem;
+}
+
+
 
 /* ******* ACCORDION: My Attendance/Absence Records ********************* */
 
@@ -1582,7 +1595,7 @@ main.profile-main {
 
     .course-card .info .col:first-child {
         padding-right: 0;
-        padding-left: 2rem;
+        /* padding-left: 1rem; */
     }
 
     .course-card .info .col:nth-child(2) {
@@ -1873,10 +1886,7 @@ main.profile-main {
     }
 
     .course-card .info > div:first-of-type {
-        background-color: #F4FFFE;
-        display: flex;
         flex-direction: column;
-        padding: 1rem;
     }
 
     .course-card .info > div:first-of-type .next-class-info {
@@ -1885,6 +1895,7 @@ main.profile-main {
 
     .course-card .info > div:first-of-type .timetable-info {
         gap: 1rem;
+        padding-left: 0.5rem;
     }
 
     .course-card .info > div:first-of-type .next-class-info::before {
