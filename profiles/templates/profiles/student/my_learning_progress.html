@@ -58,8 +58,8 @@
             <div>
                 <h1>{{ student.get_full_name|default:student.username }}</h1>
 
-                <p><a href="mailto:{{ student.email }}">
-                    {{ student.email }}</a></p>
+                {% if active_enrollment %}
+                    <p>{{ active_enrollment.course.name }}</p>{% endif %}
 
                 <div class="profile-user-role">
                     <span><i class="fa-regular fa-user mr-2"></i>
@@ -97,29 +97,25 @@
     <div class="student-detail-tabs-wrapper">
 
         <nav class="student-detail-tabs">
+
             <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active">
-                Overview
-            </a>
+                Overview</a>
 
             <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
-                Attendance
-            </a>
+                Attendance</a>
 
             <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
-                Skills
-            </a>
+                Skills</a>
 
             <a href="#employeeSkillsGraphOverview">
-                Progress
-            </a>
+                Progress</a>
 
-            <a href="#employeeAssessmentOverview">
-                Assessment
-            </a>
+            <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}">
+                Assessment</a>
 
             <a href="#">
-                History
-            </a>
+                History</a>
+
         </nav>
     </div>
     <!-- <div class="student-detail-tabs-wrapper"> -->

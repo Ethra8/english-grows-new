@@ -861,7 +861,7 @@ def my_skills(request):
 
 
     # ---------------------------------------------------------
-    # SKILL NOTE DISPLAY
+    # SKILL NOTEs DISPLAY
     # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
@@ -960,6 +960,161 @@ def my_skills(request):
         context,
     )
 
+
+
+@login_required
+def my_learning_progress_assessment(request):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    # Only learners can access this page
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
+    student = request.user
+    student_profile = profile
+
+
+    # =========================================================
+    # ALL ACTIVE ENROLLMENTS
+    # Used by the course selector
+    # =========================================================
+
+    active_enrollments = (
+        CourseEnrollment.objects
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+        )
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+        )
+        .order_by("-enrolled_at")
+    )
+
+
+    # =========================================================
+    # SELECT CURRENT COURSE
+    # =========================================================
+
+    requested_course_id = request.GET.get("course")
+
+
+    if requested_course_id:
+        # Use the course explicitly selected in ?course=
+        #
+        # Security:
+        # student=student ensures a learner cannot access
+        # another student's enrollment by changing the ID.
+        enrollment = get_object_or_404(
+            CourseEnrollment.objects.select_related(
+                "course",
+                "course__teacher",
+                "course__course_type",
+                "student",
+                "student__profile",
+            ),
+            student=student,
+            course_id=requested_course_id,
+        )
+
+    else:
+        # No course supplied in URL:
+        # default to the most recent ACTIVE enrollment.
+        enrollment = active_enrollments.first()
+
+
+    course = enrollment.course if enrollment else None
+
+
+    # =========================================================
+    # SKILL ASSESSMENTS
+    # =========================================================
+
+    if course:
+        skill_assessments = (
+            StudentSkillAssessment.objects
+            .filter(
+                student=student,
+                course=course,
+            )
+            .prefetch_related("subskill_assessments")
+            .order_by("skill")
+        )
+
+    else:
+        skill_assessments = StudentSkillAssessment.objects.none()
+
+
+    skill_note_display = [
+        build_skill_note_display(skill_assessment)
+        for skill_assessment in skill_assessments
+    ]
+
+
+    # =========================================================
+    # TEACHER NOTES
+    # =========================================================
+
+    if course:
+        skill_notes = (
+            StudentSkillAssessment.objects
+            .filter(
+                student=student,
+                course=course,
+            )
+            .exclude(teacher_notes="")
+            .order_by("skill")
+        )
+
+    else:
+        skill_notes = StudentSkillAssessment.objects.none()
+
+
+    # =========================================================
+    # TEMPORARY DEBUG
+    # =========================================================
+
+    print("ASSESSMENT requested_course_id:", requested_course_id)
+    print("ASSESSMENT selected course:", course.id if course else None)
+    print(
+        "ASSESSMENT active courses:",
+        list(active_enrollments.values_list("course_id", flat=True))
+    )
+
+
+    context = {
+        "profile": profile,
+        "student": student,
+        "student_profile": student_profile,
+
+        # All active courses — for selector
+        "active_enrollments": active_enrollments,
+
+        # Currently selected course
+        "active_enrollment": enrollment,
+        "enrollment": enrollment,
+        "course": course,
+
+        # Assessment
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+    }
+
+
+    return render(
+        request,
+        "profiles/student/my_learning_progress_assessment.html",
+        context,
+    )
 
 
 

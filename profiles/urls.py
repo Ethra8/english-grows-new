@@ -17,6 +17,7 @@ urlpatterns = [
     path("student/my-learning-progress/", views.my_learning_progress, name="my_learning_progress"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
     path("student/my-skills/", views.my_skills, name="my_skills"),
+    path("student/my-learning-progress/assessment/", views.my_learning_progress_assessment, name="my_learning_progress_assessment"),
 
 
     # TEACHER PAGES
