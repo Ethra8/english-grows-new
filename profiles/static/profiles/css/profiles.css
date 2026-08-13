@@ -1573,7 +1573,7 @@ main.profile-main {
 @media (max-width: 1250px) {
 
     .profile-page {
-        padding: 70px 15px 70px 40px;
+        padding: 70px 15px 70px 15px;
     }
 
 

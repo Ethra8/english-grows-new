@@ -4,6 +4,7 @@
     gap: 0.25rem;
     width: 100%;
     display: none;
+    justify-content: center;
 }
 
 .wrapper-assigned-courses-small-cards .card {

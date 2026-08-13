@@ -323,9 +323,9 @@
     padding: .25rem 2rem;
 }
 
-.course-attendance .wrapper-assigned-courses-panel {
+/* .course-attendance .wrapper-assigned-courses-panel {
     max-width: 1000px; 
-}
+} */
 
 .course-attendance .wrapper-assigned-courses-panel h2 {
     color: whitesmoke;
@@ -349,6 +349,7 @@
 .course-attendance .attendance-row {
     background: whitesmoke !important;
     border-radius: 8px;
+    padding: 0 1rem;
 }
 
 .course-attendance .attendance-list-card {
@@ -378,8 +379,8 @@
     align-items: center;
     align-content: space-around;
     gap: 1.2rem;
-    padding: 1.3rem;
-    border: 1px solid rgba(95, 255, 234, 0.22);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 194, 178, 0.35);
     /* width: 900px; */
     /* min-width: 900px; */
     max-width: none;
@@ -392,7 +393,8 @@
     font-weight: 700;
 }
 
-.attendance-time span, .attendance-students span {
+.attendance-time span,
+.attendance-students span {
     color: #96a0a1;
     font-size: 0.9rem;
 }

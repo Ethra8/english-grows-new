@@ -1470,7 +1470,8 @@ div:has(> .student-action-btn) {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.course-details-child .course-detail-item > div:first-of-type {
+.course-details-child .course-detail-item > div:first-of-type,
+.course-info-child .course-detail-item > div:first-of-type {
     background-color: rgba(199, 255, 249, 0.4);
     border-radius: 8px;
     padding: 0.5rem 1rem;
@@ -1516,10 +1517,16 @@ div:has(> .student-action-btn) {
     font-weight: 600;
 }
 
-.detail-row span:last-child {
+.detail-row span:last-child,
+.detail-row span a {
     color: #6a7f81;
     font-weight: 400;
     text-align: left;
+}
+
+.detail-row span a:hover {
+   color: #006b7d;
+   font-weight: 500;
 }
 
 .course-details-child,
@@ -1549,7 +1556,7 @@ div:has(> .student-action-btn) {
 
 .course-details-child h3,
 .course-info-child h3 {
-    padding: 1rem 1.5rem;
+    padding: 0.25rem 1.5rem;
 }
 
 .student-list-header {
@@ -1909,7 +1916,7 @@ div:has(> .student-action-btn) {
     align-content: space-around;
     gap: 1.2rem;
     padding: 1.3rem 1rem;
-    border: 1px solid rgba(95, 255, 234, 0.22);
+    border-bottom: 1px solid rgba(95, 255, 234, 0.22);
     background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
 }
 

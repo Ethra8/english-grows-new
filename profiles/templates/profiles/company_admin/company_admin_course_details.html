@@ -22,11 +22,10 @@
     <header>
         <!-- 1st Child -->
         <div>
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
             <div>
                 <h1>{{ course.name|default:"Course Name" }}</h1>
                 <h2>
-                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
+                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
                     <span>|</span>
                     <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ course.total_hours|clean_decimal }} h.</span>
                 </h2>
@@ -167,15 +166,6 @@
                                     <span>{{ course.final_class_duration_display }}</span>
                                 </div>
                             {% endif %}
-
-                            <div class="detail-row">
-                                <span>
-                                    <i class="fa-solid fa-user-graduate mr-2"></i>
-                                    Teacher:
-                                </span>
-                                <span>{{ course.teacher.first_name|default:"Not assigned yet" }} {{ course.teacher.last_name }}</span>
-                            </div>
-
                         </div>                
                     </div>
                         
@@ -194,12 +184,13 @@
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-building mr-2"></i>
-                                    Company:
+                                    <i class="fa-solid fa-user-graduate mr-2"></i>
+                                    Teacher:
                                 </span>
-                                <span>{{ course.company }}</span>
+                                <span><strong>{{ course.teacher.first_name|default:"Not assigned yet" }} {{ course.teacher.last_name }}</strong>
+                                    <br><a href="mailto:{{ course.teacher.email }}">{{ course.teacher.email }}</a>
+                                </span>
                             </div>
-
                             <div class="detail-row">
                                 <span>
                                     <i class="fa-solid fa-arrows-rotate mr-2"></i>
@@ -207,8 +198,7 @@
                                 </span>
                                 <span>{{ course.total_hours|clean_decimal }} h.</span>
                             </div>
-                        </div>
-                        <div class="course-detail-item">
+
                             <div class="detail-row">
                                 <span>
                                     <i class="fa-solid fa-chalkboard-user mr-2"></i>

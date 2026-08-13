@@ -34,7 +34,7 @@
             <div>
                 <h1>{{ course.name|default:"Course Name" }}</h1>
                 <h2>
-                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
+                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
                     <span>|</span>
                     <span class="text-muted"><i class="fa-solid fa-chalkboard mr-3"></i>{{ course.total_sessions }} Lessons</spa>
                 </h2>
