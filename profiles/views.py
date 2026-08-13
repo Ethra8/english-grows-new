@@ -4,6 +4,7 @@ from django.db.models import Count, Q, Prefetch
 from django.http import JsonResponse
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
 from django.forms import inlineformset_factory
@@ -23,6 +24,8 @@ from .models import UserProfile, TeacherProfile, StudentAcademicProfile, Student
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
+
+User = get_user_model()
 
 
 @login_required
@@ -4320,8 +4323,11 @@ def company_admin_course_attendance_detail(request, class_session_id):
 
 
 @login_required
-def company_admin_student_detail(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_student_detail(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4331,55 +4337,192 @@ def company_admin_student_detail(request, course_id, enrollment_id):
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+    # ---------------------------------------------------------
+    # GET EMPLOYEE
+    #
+    # The employee must belong to the same company as the
+    # logged-in company admin.
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=company,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
+    student_profile = student.profile
+
+
+    # ---------------------------------------------------------
+    # GET ALL ACTIVE ENROLLMENTS FOR THIS EMPLOYEE
+    #
+    # These are used to populate the course selector.
+    #
+    # We only include:
+    # - active enrollments
+    # - active courses
+    # - courses belonging to this company
+    # ---------------------------------------------------------
+    active_enrollments  = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+            course__company=company,
+        )
+        .select_related(
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
-        ),
-        id=enrollment_id,
-        course=course,
+        )
+        .order_by("course__name")
     )
 
-    student = enrollment.student
-    student_profile = student.profile
 
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    #
+    # /profiles/company-admin/employees/3/?course=5
+    #
+    # If no course is provided, we use the first active
+    # enrollment.
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+
+    # ---------------------------------------------------------
+    # DETERMINE SELECTED ENROLLMENT / COURSE
+    # ---------------------------------------------------------
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+
+    # ---------------------------------------------------------
+    # EMPLOYEE HAS NO ACTIVE ENROLLMENTS
+    #
+    # We keep the employee profile page available, but there
+    # will be no course-specific progress information.
+    # ---------------------------------------------------------
+    if not enrollment:
+        context = {
+            "profile": profile,
+            "company": company,
+
+            "student": student,
+            "student_profile": student_profile,
+
+            "active_enrollments": active_enrollments,
+            "enrollment": None,
+            "course": None,
+
+            "level_choices": UserProfile.LEVEL_CHOICES,
+
+            "attended_count": 0,
+            "missed_count": 0,
+            "excused_count": 0,
+            "total_attendance_records": 0,
+            "attendance_percentage": 0,
+
+            "completed_classes": 0,
+            "remaining_classes": 0,
+            "total_classes": 0,
+            "completion_percentage": 0,
+
+            "total_hours_display": format_hours_duration(
+                Decimal("0")
+            ),
+            "completed_hours_display": format_hours_duration(
+                Decimal("0")
+            ),
+            "remaining_hours_display": format_hours_duration(
+                Decimal("0")
+            ),
+
+            "recent_attendance": [],
+            "chart_data": None,
+            "skill_note_display": [],
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_detail.html",
+            context,
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # SKILLS CHART
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+
+    # ---------------------------------------------------------
+    # ATTENDANCE
+    # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
             student=student,
             class_session__course=course,
-            status__in=["attended", "missed", "excused"],
+            status__in=[
+                "attended",
+                "missed",
+                "excused",
+            ],
         )
         .select_related("class_session")
         .order_by("-class_session__start_time")
     )
 
     total_attendance_records = attendances.count()
-    attended_count = attendances.filter(status="attended").count()
-    missed_count = attendances.filter(status="missed").count()
-    excused_count = attendances.filter(status="excused").count()
 
-    # Learner progress is based on ClassSessions actually assigned to
-    # this enrollment. Completed means status="completed", never merely past.
+    attended_count = attendances.filter(
+        status="attended"
+    ).count()
+
+    missed_count = attendances.filter(
+        status="missed"
+    ).count()
+
+    excused_count = attendances.filter(
+        status="excused"
+    ).count()
+
+
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    #
+    # Progress is based on the ClassSessions actually assigned
+    # to this enrollment.
+    #
+    # A completed class means:
+    # status == ClassSession.STATUS_COMPLETED
+    # ---------------------------------------------------------
     completed_classes = enrollment.total_completed_classes
     total_classes = enrollment.total_assigned_classes
     remaining_classes = enrollment.upcoming_classes
 
+
+    # ---------------------------------------------------------
+    # COMPLETED HOURS
+    # ---------------------------------------------------------
     completed_session_list = list(
         enrollment.eligible_sessions.filter(
             status=ClassSession.STATUS_COMPLETED
@@ -4388,52 +4531,106 @@ def company_admin_student_detail(request, course_id, enrollment_id):
 
     completed_hours = sum(
         (
-            Decimal(str(
-                (session.end_time - session.start_time).total_seconds()
-            )) / Decimal("3600")
+            Decimal(
+                str(
+                    (
+                        session.end_time
+                        - session.start_time
+                    ).total_seconds()
+                )
+            ) / Decimal("3600")
             for session in completed_session_list
         ),
         Decimal("0"),
     )
 
-    assigned_session_list = list(enrollment.eligible_sessions)
+
+    # ---------------------------------------------------------
+    # TOTAL ASSIGNED HOURS
+    # ---------------------------------------------------------
+    assigned_session_list = list(
+        enrollment.eligible_sessions
+    )
 
     total_hours = sum(
         (
-            Decimal(str(
-                (session.end_time - session.start_time).total_seconds()
-            )) / Decimal("3600")
+            Decimal(
+                str(
+                    (
+                        session.end_time
+                        - session.start_time
+                    ).total_seconds()
+                )
+            ) / Decimal("3600")
             for session in assigned_session_list
         ),
         Decimal("0"),
     )
 
+
+    # ---------------------------------------------------------
+    # REMAINING HOURS
+    # ---------------------------------------------------------
     remaining_hours = max(
         total_hours - completed_hours,
         Decimal("0"),
     )
 
-    completed_hours_display = format_hours_duration(completed_hours)
-    remaining_hours_display = format_hours_duration(remaining_hours)
-    total_hours_display = format_hours_duration(total_hours)
 
-    attendance_percentage = enrollment.attendance_percentage
+    # ---------------------------------------------------------
+    # FORMAT HOURS FOR DISPLAY
+    # ---------------------------------------------------------
+    completed_hours_display = format_hours_duration(
+        completed_hours
+    )
 
+    remaining_hours_display = format_hours_duration(
+        remaining_hours
+    )
+
+    total_hours_display = format_hours_duration(
+        total_hours
+    )
+
+
+    # ---------------------------------------------------------
+    # ATTENDANCE %
+    # ---------------------------------------------------------
+    attendance_percentage = (
+        enrollment.attendance_percentage
+    )
+
+
+    # ---------------------------------------------------------
+    # COMPLETION %
+    # ---------------------------------------------------------
     completion_percentage = (
-        round((completed_classes / total_classes) * 100)
+        round(
+            (completed_classes / total_classes) * 100
+        )
         if total_classes > 0
         else 0
     )
 
+
+    # ---------------------------------------------------------
+    # RECENT ATTENDANCE
+    # ---------------------------------------------------------
     recent_attendance = attendances[:5]
 
+
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .prefetch_related("subskill_assessments")
+        .prefetch_related(
+            "subskill_assessments"
+        )
         .order_by("skill")
     )
 
@@ -4442,30 +4639,46 @@ def company_admin_student_detail(request, course_id, enrollment_id):
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-        "course": course,
-        "enrollment": enrollment,
+
+        # Employee
         "student": student,
         "student_profile": student_profile,
+
+        # Course selector
+        "active_enrollments": active_enrollments,
+
+        # Currently selected course
+        "enrollment": enrollment,
+        "course": course,
+
         "level_choices": UserProfile.LEVEL_CHOICES,
 
+        # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
 
+        # Progress
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
 
+        # Hours
         "total_hours_display": total_hours_display,
         "completed_hours_display": completed_hours_display,
         "remaining_hours_display": remaining_hours_display,
 
+        # Additional data
         "recent_attendance": recent_attendance,
         "chart_data": chart_data,
         "skill_note_display": skill_note_display,
@@ -4474,14 +4687,16 @@ def company_admin_student_detail(request, course_id, enrollment_id):
     return render(
         request,
         "profiles/company_admin/company_admin_student_detail.html",
-        context
+        context,
     )
 
 
-
 @login_required
-def company_admin_student_attendance_record(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_student_attendance_record(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4491,92 +4706,230 @@ def company_admin_student_attendance_record(request, course_id, enrollment_id):
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+
+    # ---------------------------------------------------------
+    # GET EMPLOYEE
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=company,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
+    student_profile = student.profile
+
+
+    # ---------------------------------------------------------
+    # GET ACTIVE ENROLLMENTS
+    #
+    # Only active enrollments in active courses belonging
+    # to this company are available in the selector.
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+            course__company=company,
+        )
+        .select_related(
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
-        ),
-        id=enrollment_id,
-        course=course,
+        )
+        .order_by("course__name")
     )
 
-    student = enrollment.student
-    student_profile = student.profile
 
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    # /profiles/company-admin/employees/3/attendance/?course=9
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+
+    # ---------------------------------------------------------
+    # DETERMINE SELECTED ENROLLMENT / COURSE
+    # ---------------------------------------------------------
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+
+    # ---------------------------------------------------------
+    # NO ACTIVE ENROLLMENT
+    # ---------------------------------------------------------
+    if not enrollment:
+        context = {
+            "profile": profile,
+            "company": company,
+
+            "student": student,
+            "student_profile": student_profile,
+
+            "active_enrollments": active_enrollments,
+            "enrollment": None,
+            "course": None,
+
+            "level_choices": UserProfile.LEVEL_CHOICES,
+
+            "attended_count": 0,
+            "missed_count": 0,
+            "excused_count": 0,
+            "total_attendance_records": 0,
+            "attendance_percentage": 0,
+
+            "completed_classes": 0,
+            "remaining_classes": 0,
+            "total_classes": 0,
+            "completion_percentage": 0,
+
+            "recent_attendance": [],
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_attendance_record.html",
+            context,
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # ATTENDANCE RECORDS
+    # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
             student=student,
             class_session__course=course,
-            status__in=["attended", "missed", "excused"],
+            status__in=[
+                "attended",
+                "missed",
+                "excused",
+            ],
         )
         .select_related("class_session")
         .order_by("-class_session__start_time")
     )
 
-    total_attendance_records = attendances.count()
-    attended_count = attendances.filter(status="attended").count()
-    missed_count = attendances.filter(status="missed").count()
-    excused_count = attendances.filter(status="excused").count()
 
+    # ---------------------------------------------------------
+    # ATTENDANCE COUNTS
+    # ---------------------------------------------------------
+    total_attendance_records = attendances.count()
+
+    attended_count = attendances.filter(
+        status="attended"
+    ).count()
+
+    missed_count = attendances.filter(
+        status="missed"
+    ).count()
+
+    excused_count = attendances.filter(
+        status="excused"
+    ).count()
+
+
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    # ---------------------------------------------------------
     completed_classes = enrollment.total_completed_classes
     total_classes = enrollment.total_assigned_classes
     remaining_classes = enrollment.upcoming_classes
 
-    attendance_percentage = enrollment.attendance_percentage
 
+    # ---------------------------------------------------------
+    # ATTENDANCE %
+    # ---------------------------------------------------------
+    attendance_percentage = (
+        enrollment.attendance_percentage
+    )
+
+
+    # ---------------------------------------------------------
+    # COMPLETION %
+    # ---------------------------------------------------------
     completion_percentage = (
-        round((completed_classes / total_classes) * 100)
+        round(
+            (completed_classes / total_classes) * 100
+        )
         if total_classes > 0
         else 0
     )
 
+
+    # ---------------------------------------------------------
+    # FULL ATTENDANCE HISTORY
+    # ---------------------------------------------------------
     recent_attendance = attendances
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-        "course": course,
-        "enrollment": enrollment,
+
+        # Employee
         "student": student,
         "student_profile": student_profile,
+
+        # Course selector
+        "active_enrollments": active_enrollments,
+
+        # Selected course
+        "enrollment": enrollment,
+        "course": course,
+
         "level_choices": UserProfile.LEVEL_CHOICES,
 
+        # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
 
+        # Progress
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
 
+        # Attendance records
         "recent_attendance": recent_attendance,
     }
 
     return render(
         request,
         "profiles/company_admin/company_admin_student_attendance_record.html",
-        context
+        context,
     )
 
 
 
 @login_required
-def company_admin_student_skills_overview(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_student_skills_overview(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4586,25 +4939,105 @@ def company_admin_student_skills_overview(request, course_id, enrollment_id):
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+
+    # ---------------------------------------------------------
+    # GET EMPLOYEE
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=company,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
-            "course",
-        ),
-        id=enrollment_id,
-        course=course,
-    )
-
-    student = enrollment.student
     student_profile = student.profile
 
+
+    # ---------------------------------------------------------
+    # GET ACTIVE ENROLLMENTS
+    #
+    # These populate the course selector.
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+            course__company=company,
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("course__name")
+    )
+
+
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    # /profiles/company-admin/employees/3/skills/?course=9
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+
+    # ---------------------------------------------------------
+    # DETERMINE SELECTED ENROLLMENT
+    # ---------------------------------------------------------
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+
+    # ---------------------------------------------------------
+    # NO ACTIVE ENROLLMENT
+    # ---------------------------------------------------------
+    if not enrollment:
+        context = {
+            "profile": profile,
+            "company": company,
+
+            "student": student,
+            "student_profile": student_profile,
+
+            "active_enrollments": active_enrollments,
+            "enrollment": None,
+            "course": None,
+
+            "skills": [],
+            "academic_profile": getattr(
+                student,
+                "academic_profile",
+                None,
+            ),
+            "chart_data": None,
+            "skill_notes": [],
+            "skill_note_display": [],
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_skills_overview.html",
+            context,
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # SKILL ICONS
+    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -4612,21 +5045,35 @@ def company_admin_student_skills_overview(request, course_id, enrollment_id):
         "listening": "fa-solid fa-headphones",
     }
 
+
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .prefetch_related("subskill_assessments")
+        .prefetch_related(
+            "subskill_assessments"
+        )
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
+    # DISPLAY-FRIENDLY NOTES
+    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
+    # BUILD SKILLS LIST
+    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
@@ -4644,6 +5091,10 @@ def company_admin_student_skills_overview(request, course_id, enrollment_id):
             "subskills": assessment.subskill_assessments.all(),
         })
 
+
+    # ---------------------------------------------------------
+    # SKILL NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -4654,20 +5105,43 @@ def company_admin_student_skills_overview(request, course_id, enrollment_id):
         .order_by("skill")
     )
 
-    academic_profile = getattr(student, "academic_profile", None)
 
+    # ---------------------------------------------------------
+    # ACADEMIC PROFILE
+    # ---------------------------------------------------------
+    academic_profile = getattr(
+        student,
+        "academic_profile",
+        None,
+    )
+
+
+    # ---------------------------------------------------------
+    # CHART DATA
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-        "course": course,
-        "enrollment": enrollment,
+
         "student": student,
         "student_profile": student_profile,
+
+        # Course selector
+        "active_enrollments": active_enrollments,
+
+        # Currently selected course
+        "enrollment": enrollment,
+        "course": course,
+
         "skills": skills,
         "academic_profile": academic_profile,
         "chart_data": chart_data,
@@ -4683,8 +5157,12 @@ def company_admin_student_skills_overview(request, course_id, enrollment_id):
 
 
 
-def company_admin_student_teacher_notes(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+@login_required
+def company_admin_student_teacher_notes(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4694,42 +5172,134 @@ def company_admin_student_teacher_notes(request, course_id, enrollment_id):
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+
+    # ---------------------------------------------------------
+    # GET EMPLOYEE
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=company,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
-            "course",
-        ),
-        id=enrollment_id,
-        course=course,
-    )
-
-    student = enrollment.student
     student_profile = student.profile
 
+
+    # ---------------------------------------------------------
+    # GET ACTIVE ENROLLMENTS
+    #
+    # Used for the course selector and to ensure the employee
+    # belongs to one of this company's active courses.
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+            course__company=company,
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("course__name")
+    )
+
+
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    # /profiles/company-admin/employees/3/assessment/?course=9
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+
+    # ---------------------------------------------------------
+    # DETERMINE SELECTED ENROLLMENT
+    # ---------------------------------------------------------
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+
+    # ---------------------------------------------------------
+    # NO ACTIVE ENROLLMENT
+    # ---------------------------------------------------------
+    if not enrollment:
+        context = {
+            "profile": profile,
+            "company": company,
+
+            "student": student,
+            "student_profile": student_profile,
+
+            "active_enrollments": active_enrollments,
+            "enrollment": None,
+            "course": None,
+
+            "skills": [],
+            "skill_notes": [],
+            "skill_note_display": [],
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_teacher_notes.html",
+            context,
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .prefetch_related("subskill_assessments")
+        .prefetch_related(
+            "subskill_assessments"
+        )
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
+    # DISPLAY-FRIENDLY SKILL NOTES
+    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
+    # SKILLS
+    #
+    # Your original view passed an empty list, so this remains
+    # unchanged unless the template actually needs skill data.
+    # ---------------------------------------------------------
     skills = []
 
+
+    # ---------------------------------------------------------
+    # TEACHER NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -4740,13 +5310,24 @@ def company_admin_student_teacher_notes(request, course_id, enrollment_id):
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-        "course": course,
-        "enrollment": enrollment,
+
         "student": student,
         "student_profile": student_profile,
+
+        # Course selector
+        "active_enrollments": active_enrollments,
+
+        # Selected enrollment / course
+        "enrollment": enrollment,
+        "course": course,
+
         "skills": skills,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
@@ -4760,8 +5341,12 @@ def company_admin_student_teacher_notes(request, course_id, enrollment_id):
 
 
 
-def company_admin_student_progress_skills_graph(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+@login_required
+def company_admin_student_progress_skills_graph(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4771,25 +5356,111 @@ def company_admin_student_progress_skills_graph(request, course_id, enrollment_i
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+
+    # ---------------------------------------------------------
+    # GET EMPLOYEE
+    #
+    # The employee must belong to the same company
+    # as the logged-in company admin.
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=company,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
-            "course",
-        ),
-        id=enrollment_id,
-        course=course,
-    )
-
-    student = enrollment.student
     student_profile = student.profile
 
+
+    # ---------------------------------------------------------
+    # GET ALL ACTIVE ENROLLMENTS FOR THIS EMPLOYEE
+    #
+    # These can also be used to populate the course selector
+    # on this page if you want the same selector available
+    # across all employee detail tabs.
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+            course__company=company,
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("course__name")
+    )
+
+
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    #
+    # /profiles/company-admin/employees/3/progress/?course=9
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+
+    # ---------------------------------------------------------
+    # DETERMINE SELECTED ENROLLMENT / COURSE
+    # ---------------------------------------------------------
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+
+    # ---------------------------------------------------------
+    # EMPLOYEE HAS NO ACTIVE ENROLLMENT
+    # ---------------------------------------------------------
+    if not enrollment:
+        context = {
+            "profile": profile,
+            "company": company,
+
+            "student": student,
+            "student_profile": student_profile,
+
+            "active_enrollments": active_enrollments,
+            "enrollment": None,
+            "course": None,
+
+            "skills": [],
+            "academic_profile": getattr(
+                student,
+                "academic_profile",
+                None,
+            ),
+            "chart_data": None,
+            "skill_notes": [],
+            "skill_note_display": [],
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_progress_skills_graph.html",
+            context,
+        )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # SKILL ICONS
+    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -4797,21 +5468,35 @@ def company_admin_student_progress_skills_graph(request, course_id, enrollment_i
         "listening": "fa-solid fa-headphones",
     }
 
+
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .prefetch_related("subskill_assessments")
+        .prefetch_related(
+            "subskill_assessments"
+        )
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
+    # DISPLAY-FRIENDLY SKILL NOTES
+    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
+    # BUILD SKILLS LIST
+    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
@@ -4829,6 +5514,10 @@ def company_admin_student_progress_skills_graph(request, course_id, enrollment_i
             "subskills": assessment.subskill_assessments.all(),
         })
 
+
+    # ---------------------------------------------------------
+    # SKILL NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -4839,20 +5528,45 @@ def company_admin_student_progress_skills_graph(request, course_id, enrollment_i
         .order_by("skill")
     )
 
-    academic_profile = getattr(student, "academic_profile", None)
 
+    # ---------------------------------------------------------
+    # ACADEMIC PROFILE
+    # ---------------------------------------------------------
+    academic_profile = getattr(
+        student,
+        "academic_profile",
+        None,
+    )
+
+
+    # ---------------------------------------------------------
+    # PROGRESS CHART
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-        "course": course,
-        "enrollment": enrollment,
+
+        # Employee
         "student": student,
         "student_profile": student_profile,
+
+        # Course selector
+        "active_enrollments": active_enrollments,
+
+        # Selected enrollment / course
+        "enrollment": enrollment,
+        "course": course,
+
+        # Progress data
         "skills": skills,
         "academic_profile": academic_profile,
         "chart_data": chart_data,

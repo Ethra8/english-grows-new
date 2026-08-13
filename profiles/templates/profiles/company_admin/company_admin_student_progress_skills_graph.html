@@ -97,19 +97,51 @@
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}">
                 Overview</a>
-            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}" class="active">
+            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}" class="active">
                 Progress</a>
-            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
                 Skills</a>
-            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
                 Attendance</a>
-            <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
                 Assessment</a>
         </nav>
-    </div>    
+    </div>
 
+        {% if active_enrollments|length > 1 %}
+        <form method="get" class="course-selector-form">
+
+            <label for="course-select" class="course-selector-label">
+                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <span>Select Active Course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()"
+                >
+                    {% for item in active_enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if course and item.course.id == course.id %}selected{% endif %}
+                        >
+                            {{ item.course.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+            </div>
+
+        </form>
+    {% endif %}
+
+    
     <article class="skills-progress-section">
         <div class="skills-chart-card">
             <div class="skills-chart-header">

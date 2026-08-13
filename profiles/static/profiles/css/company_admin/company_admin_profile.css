@@ -56,6 +56,13 @@
     padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    /* smoother horizontal scrolling on touch devices */
+    -webkit-overflow-scrolling: touch;
 }
 
 .wrapper-employees-list > div:first-of-type {
@@ -65,6 +72,8 @@
     padding: 0.5rem;
     border: 1px solid rgba(94, 234, 212, 0.8);
     width: 100%;
+        min-width: fit-content;
+
     display: flex;
     flex-direction: column;
 }
@@ -77,14 +86,17 @@
     margin-top: 0;
     padding: 1rem 1.5rem;
     border-radius: 8px;
+    width: 100%;
+    min-width: 1000px;
 }
 
 .employees-list-row {
     display: grid;
-    grid-template-columns: 60px minmax(320px, 380px) 1fr auto;
+    grid-template-columns: 60px minmax(420px, 480px) 1fr auto;
     border-bottom: 1px solid rgba(0, 107, 125, 0.2);
     padding: 1rem 0;
     gap: 1.2rem;
+    align-items: center;
 }
 
 .employees-list-grid div:last-child,

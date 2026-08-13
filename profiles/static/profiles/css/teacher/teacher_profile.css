@@ -2695,6 +2695,10 @@ div:has(> .student-action-btn) {
 }
 
 /* Skills Graph SnapShot */
+.skills-progress-section {
+    margin-top: 1.5rem;
+}
+
 .skills-chart-card {
     background: whitesmoke;
     border: 2px inset rgba(95, 255, 234, 0.45);
@@ -2765,17 +2769,30 @@ div:has(> .student-action-btn) {
     width: 100%;
 }
 
-.student-skill-card,
-.student-skills-chart-card,
-.student-skills-notes-card {
+.student-skills-chart-card {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 8px;
     padding: 1.5rem;
     color: whitesmoke;
+    margin-top: 1.5rem;
+}
+
+.student-skills-notes-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1.5rem 0.75rem;
+    color: whitesmoke;
+    margin-top: 1.5rem;
 }
 
 .student-skill-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: whitesmoke;
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -2941,17 +2958,46 @@ div:has(> .student-action-btn) {
     border-radius: 999px;
 }
 
+.teacher-skill-note {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding-bottom: .75rem;
+}
+
+.student-skills-notes-card > .teacher-skill-note:last-of-type {
+    margin-bottom: 0 !important;
+}
+
+.teacher-skill-note ul {
+    color:#003366;
+    padding-left: .5rem;
+}
+
 .teacher-skill-note h4 {
     font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    background: #003366;
-    color: #5fffea;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    background: #C7FFF9; 
+    color: #003366;
     padding: 0 0.5rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom: 1px solid #006b7d;
+}
+
+.teacher-skill-note li {
+    color:#003366;
 }
 
 .teacher-skill-note p {
+    color:#003366;
     text-justify: none;
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 0;
 }
+
 
 
 /************************************************|
@@ -3067,7 +3113,7 @@ div:has(> .student-action-btn) {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.2rem;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
     }
 
 }

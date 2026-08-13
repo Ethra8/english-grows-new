@@ -96,63 +96,87 @@
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}">
                 Overview</a>
-            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}">
                 Progress</a>
-            <a href="{% url 'profiles:company_admin_student_skills_overview' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
                 Skills</a>
-            <a href="{% url 'profiles:company_admin_student_attendance_record' course.id enrollment.id %}">
+            <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
                 Attendance</a>
-            <a href="{% url 'profiles:company_admin_student_teacher_notes' course.id enrollment.id %}" class="active">
+            <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}" class="active">
                 Assessment</a>
         </nav>
-    </div>    
+    </div>
+    
+        {% if active_enrollments|length > 1 %}
+        <form method="get" class="course-selector-form">
+
+            <label for="course-select" class="course-selector-label">
+                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <span>Select Active Course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()"
+                >
+                    {% for item in active_enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if course and item.course.id == course.id %}selected{% endif %}
+                        >
+                            {{ item.course.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+            </div>
+
+        </form>
+    {% endif %}
+
 
     <article class="student-skills-notes-card">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">
-                <i class="fa-regular fa-file-lines mr-2"></i>
-                Assessment
-            </h2>
-        </div>
-
-        <hr>
 
         {% for note in skill_note_display %}
             <div class="teacher-skill-note">
-                <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small>
-                </h4>
+                <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small></h4>
 
                 {% if note.strengths %}
-                    <p>
-                        <strong>Strengths:</strong>
+                    <ul><p class="text-muted">
+                        <strong>Strengths:</strong></p>
                         {% for subskill in note.strengths %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                            <li><span class="teacher-subskill">{{ subskill }}</span></li>
                         {% endfor %}
-                    </p>
+                    </ul>
                 {% endif %}
 
                 {% if note.passing %}
-                    <p>
-                        <strong>Meets expectations:</strong>
+                    <ul>
+                        <p class="text-muted">
+                            <strong>Minimum requirements:</strong></p>
                         {% for subskill in note.passing %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                        <li><span class="teacher-subskill">{{ subskill }}</span></li>
                         {% endfor %}
-                    </p>
+                    </ul>
                 {% endif %}
 
                 {% if note.developing %}
-                    <p>
-                        <strong>Developing areas:</strong>
+                    <ul><p>
+                        <strong>Developing areas:</strong></p>
                         {% for subskill in note.developing %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+                            <li><span class="teacher-subskill text-mutted">{{ subskill }}</span></li>
                         {% endfor %}
-                    </p>
+                    </ul>
                 {% endif %}
 
                 {% if note.needs_work %}
-                    <p>
+                    <p class="text-muted">
                         <strong>Needs work:</strong>
                         {% for subskill in note.needs_work %}
                             <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
@@ -162,7 +186,7 @@
 
             </div>
         {% empty %}
-            <p class="text-white">No teacher notes yet.</p>
+            <p class="text-muted">No teacher notes yet.</p>
         {% endfor %}
     </article>
 
