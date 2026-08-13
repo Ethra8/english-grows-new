@@ -72,7 +72,7 @@
 .employees-list-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.2rem;
+    /* gap: 1.2rem; */
     background-color: whitesmoke;
     margin-top: 0;
     padding: 1rem 1.5rem;
@@ -83,14 +83,16 @@
     display: grid;
     grid-template-columns: 60px minmax(320px, 380px) 1fr auto;
     border-bottom: 1px solid rgba(0, 107, 125, 0.2);
-    padding: 0.75rem 0;
-    /* color: #fff; */
+    padding: 1rem 0;
     gap: 1.2rem;
 }
 
+.employees-list-grid div:last-child,
+.assigned-classes-list a > div.assigned-classes-row:last-of-type {
+    border-bottom: none !important;
+}
+
 .company-admin-employees-list-page .employees-list-row .avatar {
-    /* width: 46px;
-    height: 46px; */
     border-radius: 50%;
     background: rgba(95, 255, 234, 0.16);
     border: 1px outset rgba(170, 170, 170, 0.2);
@@ -133,7 +135,7 @@
 
 .company-admin-employees-list-page .employees-list-row .employee-level {
     display: flex;
-    align-content: center;
+    align-items: center;
     justify-content: flex-start;
 }
 
@@ -516,9 +518,9 @@
 @media (max-width: 767px) {
 
     /* COURSE DETAILS Page ********************************** */
-    .company-admin-course-details-page.profile-page header h1 {
+    /* .company-admin-course-details-page.profile-page header h1 {
         font-size: 2.5rem;    
-    }
+    } */
 
     .company-admin-course-details-page header h2 {
         display: flex !important;
@@ -588,7 +590,7 @@
 
     .company-admin-course-details-page.profile-page header h1 {
         padding-left: 0;
-        font-size: 2rem;
+        /* font-size: 2rem; */
     }
 
 

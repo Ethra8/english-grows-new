@@ -17,9 +17,9 @@
 
 .company-admin-attendance-page header h1 {
     margin: 0;
-    font-size: clamp(2rem, 3vw, 3.2rem);
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    /* font-size: clamp(2rem, 3vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: 0.02em; */
 }
 
 .company-admin-attendance-page header hr {
