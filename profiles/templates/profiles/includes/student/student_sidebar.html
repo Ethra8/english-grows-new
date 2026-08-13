@@ -50,11 +50,11 @@
             <span>Materials</span>
         </a>
 
-        <a href="{% url 'profiles:my_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
+        <!-- <a href="{% url 'profiles:my_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
             <i class="fa-solid fa-list-check"></i>
             <span>My Attendance</span>
         </a>
-
+ -->
         <a href="{% url 'profiles:profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'profile_settings' %}active{% endif %}">
             <i class="fa-solid fa-user-gear"></i>
             <span>Account Settings</span>

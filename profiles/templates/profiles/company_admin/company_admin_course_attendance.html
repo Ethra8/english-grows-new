@@ -30,7 +30,7 @@
     <header>
         <!-- 1st Child -->
         <div>
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            <!-- <i class="fa-solid fa-chalkboard-user mr-3"></i> -->
             <div>
                 <h1>{{ course.name|default:"Course Name" }}</h1>
                 <h2>
@@ -67,17 +67,32 @@
         
     </header> 
     <hr>    
+            <div class="meta-row">
 
+                <a href="{% url 'profiles:company_admin_employees_list' %}">
+                    <div class="meta-card meta-students">
+                        <div class="meta-text">
+                            <strong>Attendance Submitted:</strong>
+                            <span>{{ completed_count }}</span>
+                        </div>
+                    </div>
+                </a>
 
-    <div class="wrapper-assigned-courses-panel mt-5">
-        <div class="assigned-courses-panel">
+                <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
+                    <div class="meta-card meta-attendance">
+                        <div class="meta-text">
+                            <strong>Attendance Rate:</strong>
+                            <span>
+                                {{ average_attendance }} %
+                            </span>
+                        </div>
+                    </div>
+                </a>
 
-            <div class="assigned-courses-header">
-                <div class="course-status-filter-header">
+            </div>
+                    <!-- <div class="attendance-filter-card two-filters">
 
-                    <div class="attendance-filter-card two-filters">
-
-                        <div class="attendance-filter-btn" data-filter="completed" type="button">
+                        <div>
                             <span class="status-pill completed">
                                 <i class="fa-solid fa-clipboard-check"></i>
                             </span>
@@ -86,9 +101,10 @@
                         </div>
 
                     </div>
+ -->
 
-                </div>
-            </div>    
+    <div class="wrapper-assigned-courses-panel mt-5">
+        <div class="assigned-courses-panel">
 
             <div class="attendance-list-card">
 

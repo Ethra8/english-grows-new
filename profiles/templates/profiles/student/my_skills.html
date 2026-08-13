@@ -51,12 +51,9 @@
             <div>
                 <h1>{{ student.get_full_name|default:student.username }}</h1>
 
-                {% if active_enrollment %}
-                    <p>{{ active_enrollment.course.name }}</p>{% endif %}
-
                 <div class="profile-user-role">
                     <span><i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Employee" }}</span>
+                        {{ student_profile.get_role_display|default:"Learner" }}</span>
                 </div> 
 
                 <div class="mt-4">  

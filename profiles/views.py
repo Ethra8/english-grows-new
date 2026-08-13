@@ -644,6 +644,19 @@ def my_attendance(request):
         active_enrollment = active_enrollments.first()
 
     # ---------------------------------------------------------
+    # VARIABLES REQUIRED BY SHARED STUDENT HEADER
+    # ---------------------------------------------------------
+    student = request.user
+    student_profile = profile
+
+    # Course currently being displayed.
+    course = (
+        active_enrollment.course
+        if active_enrollment
+        else None
+    )
+
+    # ---------------------------------------------------------
     # NO ACTIVE COURSE
     # ---------------------------------------------------------
     if not active_enrollment:
@@ -652,6 +665,12 @@ def my_attendance(request):
             "profiles/student/my_attendance.html",
             {
                 "profile": profile,
+
+                # Shared student header
+                "student": student,
+                "student_profile": student_profile,
+                "course": None,
+
                 "active_enrollments": active_enrollments,
                 "active_enrollment": None,
                 "recent_attendance": [],
@@ -702,6 +721,13 @@ def my_attendance(request):
 
     context = {
         "profile": profile,
+
+        # -----------------------------------------------------
+        # SHARED STUDENT HEADER
+        # -----------------------------------------------------
+        "student": student,
+        "student_profile": student_profile,
+        "course": course,
 
         # ALL active courses -> selector
         "active_enrollments": active_enrollments,
@@ -4163,6 +4189,12 @@ def company_admin_course_attendance(request, course_id):
         company=company,
     )    
 
+    enrollments = (
+        course.enrollments
+        .select_related("student", "student__profile")
+        .filter(status="active")
+    )
+
     class_sessions = (
         ClassSession.objects
         .filter(
@@ -4201,10 +4233,33 @@ def company_admin_course_attendance(request, course_id):
 
             submitted_class_sessions.append(class_session)
 
+        total_classes = course.total_sessions
+        completed_classes = course.completed_sessions
+
+        attendance_percentages = []
+
+        for enrollment in enrollments:
+            total_completed = enrollment.total_completed_classes
+
+            if total_completed > 0:
+                attendance_percentages.append(
+                    (enrollment.classes_attended / total_completed) * 100
+                )
+
+        average_attendance = 0
+        if attendance_percentages:
+            average_attendance = round(
+                sum(attendance_percentages) / len(attendance_percentages)
+            )
+
+
     context = {
         "course": course,
         "class_sessions": submitted_class_sessions,
         "completed_count": len(submitted_class_sessions),
+        "total_classes": total_classes,
+        "completed_classes": completed_classes,
+        "average_attendance": average_attendance,
     }
 
     return render(

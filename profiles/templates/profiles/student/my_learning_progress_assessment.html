@@ -36,10 +36,7 @@
                     {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
 
                     {% if student_profile.profile_photo %}
-                        <img
-                            src="{{ student_profile.profile_photo.url }}"
-                            alt="{{ student.get_full_name|default:student.username }}"
-                        >
+                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name|default:student.username }}" >
                     {% else %}
                         {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
                             <i class="fa-solid fa-user-tie"></i>
@@ -47,7 +44,6 @@
                             <i class="fa-regular fa-user"></i>
                         {% endif %}
                     {% endif %}
-
 
                     <span
                         class="avatar-status-dot"
@@ -58,22 +54,13 @@
                 </div>
             </div>
 
-
             <div>
-
                 <h1>{{ student.get_full_name|default:student.username }}</h1>
 
-                {% if active_enrollment %}
-                    <p>{{ active_enrollment.course.name }}</p>{% endif %}
-
-
                 <div class="profile-user-role">
-                    <span>
-                        <i class="fa-regular fa-user mr-2"></i>
-                        Student
-                    </span>
-                </div>
-
+                    <span><i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Learner" }}</span>
+                </div> 
 
                 <div class="header-last-child">
 

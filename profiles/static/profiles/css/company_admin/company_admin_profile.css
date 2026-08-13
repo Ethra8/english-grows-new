@@ -7,11 +7,11 @@
     margin-bottom: 0;
 }
 
-.company-admin-employees-list-page hr {
+/* .company-admin-employees-list-page hr {
     margin: 2rem 0 1.25rem;
     border: 0;
     border-top: 1px solid rgba(0, 103, 108, 0.3);
-}
+} */
 
 .company-admin-employees-list-page p:first-of-type {
     margin: 0;
@@ -233,9 +233,9 @@
     color: #008F8F;
 }
 
-.company-admin-course-details-page hr {
+/* .company-admin-course-details-page hr {
     margin-top: 2rem !important;
-}
+} */
 
 .company-admin-course-details-page .course-detail-grid {
     grid-template-columns: 1fr;
@@ -314,6 +314,15 @@
 **** COURSE_ATTENDANCE Page ******************|
 *********************************************** */
 
+.course-attendance .meta-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.course-attendance .meta-card {
+    padding: .25rem 2rem;
+}
+
 .course-attendance .wrapper-assigned-courses-panel {
     max-width: 1000px; 
 }
@@ -322,7 +331,7 @@
     color: whitesmoke;
 }
 
-.course-attendance .wrapper-assigned-courses-panel .attendance-filter-btn strong {
+/* .course-attendance .wrapper-assigned-courses-panel .attendance-filter-btn strong {
     font-size: 1.5rem;
     bottom: .5rem;
     height: 45px;
@@ -334,7 +343,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.25rem;
-}
+} */
 
 .course-attendance .attendance-list,
 .course-attendance .attendance-row {
@@ -365,13 +374,15 @@
 
 .course-attendance .attendance-row {
     display: grid;
-    grid-template-columns: minmax(90px, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(200px, 200px) minmax(260px, 260px) auto;
     align-items: center;
     align-content: space-around;
     gap: 1.2rem;
     padding: 1.3rem;
     border: 1px solid rgba(95, 255, 234, 0.22);
-    /* background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85)); */
+    /* width: 900px; */
+    /* min-width: 900px; */
+    max-width: none;
 }
 
 .course-attendance .attendance-time strong,
@@ -631,11 +642,6 @@
     scrollbar-color: #5ff0df #0B355F;
 }
 
-.course-attendance .attendance-row {
-    /* width: 900px; */
-    min-width: 900px;
-    max-width: none;
-}
 
 /* Chrome, Edge and Safari */
 

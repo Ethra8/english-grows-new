@@ -28,41 +28,38 @@
     </header>
 
     <div class="dashboard-cards">
-        <div>
-            
-            <div class="dashboard-general-info-card">
-                <div class="meta-row">
+        <div class="dashboard-general-info-card">
+            <div class="meta-row">
 
-                    <a href="{% url 'profiles:company_admin_courses' %}">
-                        <div class="meta-card meta-courses">
-                            <div class="meta-text">
-                                <strong>All Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
-                                <span>{{ active_courses|default:"0" }}</span>
-                            </div>
+                <a href="{% url 'profiles:company_admin_courses' %}">
+                    <div class="meta-card meta-courses">
+                        <div class="meta-text">
+                            <strong>All Courses<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <span>{{ active_courses|default:"0" }}</span>
                         </div>
-                    </a>
+                    </div>
+                </a>
 
-                    <a href="{% url 'profiles:company_admin_employees_list' %}">
-                        <div class="meta-card meta-students">
-                            <div class="meta-text">
-                                <strong>Active Employees<i class="fa-solid fa-angle-right ml-3"></i></strong>
-                                <span>{{ total_students|default:"0" }}</span>
-                            </div>
+                <a href="{% url 'profiles:company_admin_employees_list' %}">
+                    <div class="meta-card meta-students">
+                        <div class="meta-text">
+                            <strong>Active Employees<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <span>{{ total_students|default:"0" }}</span>
                         </div>
-                    </a>
+                    </div>
+                </a>
 
-                    <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
-                        <div class="meta-card meta-attendance">
-                            <div class="meta-text">
-                                <strong>Attendance Rate<i class="fa-solid fa-angle-right ml-3"></i></strong>
-                                <span>
-                                    {{ total_attendance_rate|default:"0" }}%
-                                </span>
-                            </div>
+                <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
+                    <div class="meta-card meta-attendance">
+                        <div class="meta-text">
+                            <strong>Attendance Rate<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                            <span>
+                                {{ total_attendance_rate|default:"0" }}%
+                            </span>
                         </div>
-                    </a>
+                    </div>
+                </a>
 
-                </div>
             </div>
         </div>
 

@@ -25,16 +25,6 @@ h3 {
 }
 
 
-/* HR **************************************************** */
-
-/* .my-course hr:first-of-type,
-.my-attendance header hr {
-    border-color: #006b7d;
-    min-width: 100%;
-    position: static;
-} */
-
-
 /* GO BACK LINK ********************************************/
 
 .go-back-link,
@@ -92,7 +82,6 @@ main.profile-main {
     padding: 30px 5% 70px;
 }
 
-.my-attendance,
 .profile-settings-page {
     padding: 70px 5%;
     width: 100%;
@@ -174,7 +163,6 @@ main.profile-main {
 
 /* main.profile-main h1, */
 .my-course header h1,
-.my-attendance header h1,
 .profile-settings-page header h1 {
     color: #003366;
     /* font-family: "Big Shoulders Display", sans-serif;
@@ -184,7 +172,6 @@ main.profile-main {
     padding-left: 0;
 }
 
-.my-attendance header h1,
 .profile-settings-page header h1 {
     margin-bottom: 3rem;
 }
@@ -649,8 +636,21 @@ main.profile-main {
     align-items: center;
 }
 
-.my-course header > div:nth-child(1) > i:first-child {
-    /* Irrelevant, takes up too much space */
+.title-course-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.title-course-name img {
+    width: 46px;
+    height: 46px;
+}
+
+
+/* .my-course header > div:nth-child(1) > i:first-child {
+    Irrelevant, takes up too much space
     display: none;
 
     background: radial-gradient(circle,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 0.9) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 1) 100%);
@@ -663,7 +663,7 @@ main.profile-main {
     padding: 0.5rem 0.65rem;
     border: 1px outset #006b7d;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
+} */
 
 .my-course header > div:nth-child(2) {
     gap: 1.95rem;
@@ -1023,7 +1023,7 @@ main.profile-main {
     gap: 1rem;
     width: fit-content;
     max-width: 100%;
-    margin: 1.25rem 0 0;
+    margin: 1.25rem 0 1.25rem;
     background: whitesmoke;
     padding: 0.5rem;
     border-radius: 8px;
@@ -1174,27 +1174,27 @@ main.profile-main {
 ******** STUDENT: My ATTENDANCE PAGE ****************|
 *****************************************************/
 
-.my-attendance {
+/* .my-attendance {
     width: stretch;
-}
+} */
 
-.my-attendance header > div {
+/* .my-attendance header > div {
     display: flex;
     flex-direction: row;
     align-self: center;
     align-content: center;
     align-items: center;
     margin-bottom: 2rem;
-}
+} */
 
-.my-attendance header p {
+/* .my-attendance header p {
     font-size: 1.2rem;
     font-weight: 700;
     color: #0B355F;
     margin-bottom: 0;
-}
+} */
 
-.my-attendance header i.fa-chalkboard-user,
+/* .my-attendance header i.fa-chalkboard-user, */
 .course-selector-form i.fa-chalkboard-user {
     color: rgba(95, 240, 223, 0.65);
     font-size: 1.4rem;
@@ -1416,19 +1416,6 @@ main.profile-main {
     z-index: 1;
     border: solid 2px #ffffff;
 }
-
-.my-attendance .detailed-attendance-card div:nth-child(3) {
-    background-color: #F4FFFE;
-    display: flex;
-    flex-direction: row;
-    /* justify-content: space-between; */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-    margin-bottom: 0.5rem;
-    /* for 'upcoming ribbon */
-    padding: 0 1rem;
-}
-
 
 
 /* ******* ACCORDION: My Attendance/Absence Records ********************* */
@@ -1805,40 +1792,22 @@ main.profile-main {
         margin: 0 auto;
     }
 
-    /* HEADERS ***********************************/
-
-    /* COURSE DETAILS Pages ******************** */
-    /* .course-details header h1 {
-        font-size: 2rem;
-    }
-
-    .course-details header h1 i {
-        width: 66px;
-        height: 66px;
-        font-size: 2rem;
-    }
-
-    .course-details header h2 {
-        display: flex !important;
-        flex-direction: column !important;
-    } */
-
-    /* .course-details header h2 span:nth-child(2) {
-        display: none;
-        visibility: hidden;
-    } */
 
     /* STUDENT: My COURSE Page ***************** */
 
+    h1 {
+        font-weight: 700;
+    }
+
     .my-course {
-        padding: 20px 4% 70px;
+        padding: 0 4% 70px;
     }
 
     .my-course header {
-        margin: 0 auto 0 1rem;
+        margin: 3rem auto 0 1rem;
         text-align: center;
-        flex-direction: column;
-        gap: 0.75rem;
+        /* flex-direction: column;
+        gap: 0.75rem; */
     }
 
     .my-course header > div:nth-child(1) {
@@ -1846,14 +1815,7 @@ main.profile-main {
         gap: 2.5rem;    
         }
 
-    /* .my-course header i:first-of-type {
-        position: relative;
-        margin: 0 auto;
-    } */
-
     .my-course header h1 {
-        /* font-size: 2.2rem;
-        font-weight: 700; */
         text-align: left;
     }
 
@@ -1873,7 +1835,6 @@ main.profile-main {
     }
 
     .my-course .course-card {
-        /* min-width: 0 !important; */
         padding: 0%;
     }
 
@@ -1923,9 +1884,9 @@ main.profile-main {
 
     /* STUDENT: My ATTENDANCE Page ****** */
 
-    .my-attendance {
+    /* .my-attendance {
         margin: 0 auto;
-    }
+    } */
 
     .attendance-progress-card .info {
         padding: 7.5rem 4% 2rem;
@@ -2023,19 +1984,12 @@ main.profile-main {
     /* *** MY COURSE Page ******************************** */
 
     .my-course {
-        padding: 20px 3% 70px;
+        padding: 0 3% 70px;
     }
 
     .my-course header h1 {
         padding: 0;
     }
-
-    /* .course-details header > div:nth-child(3) {
-        display: flex;
-        flex-direction: column;
-        align-items:baseline;
-        gap: 1rem;
-    } */
 
     .my-course .course-card .info {       
         padding: 10.5rem 1rem 3rem;
@@ -2069,12 +2023,12 @@ main.profile-main {
 
     /* My ATTENDANCE Page ******************************* */
 
-    .my-attendance {
+    /* .my-attendance {
         padding: 70px 3%;
         width: stretch;
-    }
+    } */
 
-    .my-attendance header .item strong {
+    /* .my-attendance header .item strong {
         font-size: 1.2rem;
     }
 
@@ -2085,7 +2039,7 @@ main.profile-main {
 
     .my-attendance header .item .fa-solid {
         font-size: 1.2rem;
-    }
+    } */
 
 
 }

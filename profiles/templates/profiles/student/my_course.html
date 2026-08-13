@@ -60,11 +60,19 @@
     <header>
         <!-- 1st Child -->
         <div>
-            <i class="fa-solid fa-chalkboard-user mr-3"></i>
+            <!-- <i class="fa-solid fa-chalkboard-user mr-3"></i> -->
             <div>
+                <!-- <div class="title-course-name">
+                    {% if active_enrollments|length <= 1 %}
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                    {% elif active_enrollments|length > 1 %}
+                        <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+                    {% endif %}
+                    <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
+                </div> -->
                 <h1>{{ active_enrollment.course.name|default:"Course Name" }}</h1>
                 <h2>
-                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
+                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.course_type.name }}</span>
                     <span>|</span>
                     <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ active_enrollment.course.total_hours|clean_decimal }} h.</span>
                 </h2>

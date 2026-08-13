@@ -1713,9 +1713,6 @@ div:has(> .student-action-btn) {
     border-radius: 999px;
     font-weight: 600;
     font-size: 0.85rem;
-}
-
-.attendance-status {
     padding: 0.35rem 0rem;
 }
 
@@ -2342,6 +2339,11 @@ div:has(> .student-action-btn) {
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
 }
 
+.student-detail-card hr:first-of-type {
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    margin: 0.25rem 0 1rem;
+}
+
 .student-main-info {
     display: flex;
     align-items: center;
@@ -2588,7 +2590,7 @@ div:has(> .student-action-btn) {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     gap: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     padding: 0.6rem 0;
     margin: 0;
 }
@@ -2788,7 +2790,12 @@ div:has(> .student-action-btn) {
 .subskill-main span {
     min-width: 0;
     max-width: 100%;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+}
+
+.skill-card-header hr {
+    border: outset 0.5px #006b7d;
+    margin: 0 auto 1rem;
 }
 
 .skill-edit-link {
@@ -3066,7 +3073,6 @@ div:has(> .student-action-btn) {
         width: 100%;
         gap: 0.25rem;
         padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(94, 234, 212, 0.2);
     }
 
 }
@@ -3745,13 +3751,6 @@ div:has(> .student-action-btn) {
 
 @media (max-width: 576px) {
     
-    header h1 {
-        padding-left: 4%;
-        padding-right: 4%;
-        font-size: 2.5rem;
-    }
-
-
     /*****************************************************|
     |*** DASHBOARD Page  *********************************|
     |*****************************************************/
@@ -3856,7 +3855,6 @@ div:has(> .student-action-btn) {
         width: 100%;
         gap: 0.25rem;
         padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(94, 234, 212, 0.2);
     }
 
     /* *** COURSE DETAILS Page ***************************/
