@@ -330,6 +330,12 @@ main.profile-main {
     font-size: 0.9rem;
 }
 
+.profile-sidebar hr {
+    /* border: 1px solid rgba(199, 255, 249, 0.7); */
+    border: 0;
+    border-top: 1px solid rgba(95, 245, 252, 0.7);
+}
+
 .sidebar-nav {
     display: flex;
     flex-direction: column;
