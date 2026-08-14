@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
 {% endblock %}
 
 
@@ -118,7 +119,7 @@
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
-                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <i class="fa-solid fa-chalkboard-user"></i>
                 <span>My active course</span></label>
 
             <div class="course-select-wrapper">
@@ -159,11 +160,11 @@
 
 {% if skills %}
 
-    <div class="student-skills-grid">
+    <div class="skills-grid">
 
         {% for skill in skills %}
 
-            <article class="student-skill-card">
+            <article class="skill-card">
 
                 <div class="skill-card-header">
                     <h2><span><i class="{{ skill.icon }} mr-3"></i></span>

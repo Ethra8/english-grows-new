@@ -17,7 +17,7 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="row mb-3">
+    <!-- <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
                 <a href="#" class="js-back-link">
@@ -26,7 +26,7 @@
                 </a>    
             </p>
         </div>
-    </div>    
+    </div>     -->
 
     <header>
 
@@ -113,7 +113,7 @@
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
-                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <i class="fa-solid fa-chalkboard-user"></i>
                 <span>Select Active Course</span>
             </label>
 
@@ -149,8 +149,8 @@
 
                 {% if note.strengths %}
                     <div class="subskill-group">
-                        <p>
-                            <strong>Strengths:</strong></p>
+                        <p><strong>Strengths:</strong></p>
+                        
                         <ul>  
                         {% for subskill in note.strengths %}
                             <li><span class="teacher-subskill">{{ subskill }}</span></li>
@@ -161,15 +161,11 @@
 
                 {% if note.minimum_level_requirements %}
                     <div class="subskill-group">
-                        <p>
-                            <strong>Minimum level requirements:</strong>
-                        </p>
+                        <p><strong>Minimum level requirements (Pass):</strong></p>
 
                         <ul>
                             {% for subskill in note.minimum_level_requirements %}
-                                <li>
-                                    <span class="teacher-subskill">{{ subskill }}</span>
-                                </li>
+                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -178,15 +174,11 @@
 
                 {% if note.developing %}
                     <div class="subskill-group">
-                        <p>
-                            <strong>Developing areas:</strong>
-                        </p>
+                        <p><strong>Developing areas:</strong></p>
 
                         <ul>
                             {% for subskill in note.developing %}
-                                <li>
-                                    <span class="teacher-subskill">{{ subskill }}</span>
-                                </li>
+                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -195,22 +187,24 @@
 
                 {% if note.needs_work %}
                     <div class="subskill-group">
-                        <p>
-                            <strong>Needs work:</strong>
-                        </p>
+                        <p><strong>Needs work:</strong></p>
 
                         <ul>
                             {% for subskill in note.needs_work %}
-                                <li>
-                                    <span class="teacher-subskill">{{ subskill }}</span>
-                                </li>
+                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
                 {% endif %}
             </div>
         {% empty %}
-            <p class="text-muted">No teacher notes yet.</p>
+            <div class="empty-assessment-state">
+                <h4>No assessment available yet</h4>
+                <p>
+                    The teacher's notes will appear here once
+                    the employee's progress has been assessed.
+                </p>
+            </div>
         {% endfor %}
     </article>
 

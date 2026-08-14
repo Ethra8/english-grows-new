@@ -4,8 +4,9 @@
 {% block extra_title %}| Skills Overview{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-<link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -149,10 +150,10 @@
             </a>
         </nav>
     </div>
-    <div class="student-skills-grid">
+    <div class="skills-grid">
 
         {% for skill in skills %}
-            <article class="student-skill-card">
+            <article class="skill-card">
 
                 <div class="skill-card-header">
                     

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -18,7 +19,7 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="row mb-3">
+    <!-- <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
                 <a href="#" class="js-back-link">
@@ -27,7 +28,7 @@
                 </a>    
             </p>
         </div>
-    </div>    
+    </div>     -->
 
     <header>
 
@@ -114,7 +115,7 @@
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
-                <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
+                <i class="fa-solid fa-chalkboard-user"></i>
                 <span>Select Active Course</span>
             </label>
 
@@ -142,11 +143,11 @@
     {% endif %}
 
     
-    <div class="student-skills-grid">
+    <div class="skills-grid">
     {% if skills %}    
     {% for skill in skills %}
 
-        <article class="student-skill-card">
+        <article class="skill-card">
 
             <div class="skill-card-header">
                 
@@ -154,7 +155,7 @@
                     <span><i class="{{ skill.icon }} mr-3"></i></span>
                     {{ skill.name }}
                 </h2>
-
+                
                 <hr>
                 <div class="skill-ring"
                         style="--skill-progress: {{ skill.percentage|default:'0' }};">

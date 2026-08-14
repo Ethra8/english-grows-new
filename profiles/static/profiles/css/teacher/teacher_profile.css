@@ -281,8 +281,7 @@ h2 {
 }
 
 .meta-icon,
-.course-meta-icon,
-.student-skill-card h2 span {
+.course-meta-icon {
     z-index: 1;
     width: 55px;
     height: 55px;
@@ -296,8 +295,7 @@ h2 {
 }
 
 .meta-icon i,
-.course-meta-icon i,
-.student-skill-card h2 span i {
+.course-meta-icon i {
     color: rgba(94, 242, 220, 0.9);
     font-size: 1.8rem;
 }
@@ -2724,21 +2722,7 @@ div:has(> .student-action-btn) {
     width: calc(var(--progress) * 1%);
 }
 
-.student-skills-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.2rem;
-    margin-top: 1.25rem;
 
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-}
-
-.student-skills-grid p {
-    color: #0B355F;
-    width: 100%;
-}
 
 .student-skills-chart-card {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
@@ -2753,44 +2737,9 @@ div:has(> .student-action-btn) {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 8px;
-    padding: 1.5rem 0.75rem;
-    color: whitesmoke;
+    padding: 0.5rem;
+    color: #6A7F81;
     margin-top: 1.25rem;
-}
-
-.student-skill-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
-    border: 1px solid rgba(95, 255, 234, 0.35);
-    border-radius: 8px;
-    padding: 1.5rem;
-    color: whitesmoke;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-.skill-card-header,
-.skill-card-body,
-.skill-details,
-.subskill-row,
-.subskill-main {
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.skill-card-header h2,
-.subskill-main strong,
-.subskill-main span {
-    min-width: 0;
-    max-width: 100%;
-    overflow-wrap: normal;
-}
-
-.skill-card-header hr {
-    border: outset 0.5px #006b7d;
-    margin: 0 auto 1rem;
 }
 
 .skill-edit-link {
@@ -2799,36 +2748,7 @@ div:has(> .student-action-btn) {
     white-space: normal;
 }
 
-.student-skill-card p {
-    font-weight: 600;
-    text-transform: capitalize;
-    color: whitesmoke;
-    width: 100%;
-    border-bottom: #008b87 1px solid;
-}
 
-.skill-card-header {
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: space-between;
-    /* gap: 1rem; */
-}
-
-.skill-card-header h2 {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: baseline;
-}
-
-.skill-card-header h2 span {
-    margin-right: 1.2rem;
-}
-
-.skill-card-header h2 i {
-    margin-left: 1rem;
-}
 
 .skill-card-edit {
     display: flex;
@@ -2843,71 +2763,19 @@ div:has(> .student-action-btn) {
     margin-bottom: 1rem;    
 }
 
-.skill-card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 2.2rem;
-    align-items: flex-start;
-    margin: 1.5rem 0;
-}
-
-.skill-details {
-    width: 100%;
-}
-
-.skill-ring {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background:
-        conic-gradient(
-            #5fffea calc(var(--skill-progress) * 1%),
-            rgba(255,255,255,0.16) 0
-        );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: .5rem 1.5rem;
-}
-
-.skill-ring > div {
-    width: 98px;
-    height: 98px;
-    border-radius: 50%;
-    background: #0B355F;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.skill-ring strong {
-    font-size: 1.4rem;
-}
-
-.skill-ring span {
-    font-size: 0.75rem;
-    color: #c7fff9;
-}
-
-.skill-details strong {
-    color: #5fffea;
-    font-size: 0.9rem;
-}
-
 .skill-trend {
     margin-top: 1rem;
     color: #5fffea;
 }
 
-.student-skills-bottom-grid {
+/* .student-skills-bottom-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1.2rem;
     margin-top: 1.2rem;
-}
+} */
 
-.chart-row {
+/* .chart-row {
     display: grid;
     grid-template-columns: 100px 1fr 50px;
     align-items: center;
@@ -2927,7 +2795,7 @@ div:has(> .student-action-btn) {
     height: 100%;
     background: #5fffea;
     border-radius: 999px;
-}
+} */
 
 .teacher-skill-note {
     background-color: whitesmoke;
@@ -2950,7 +2818,7 @@ div:has(> .student-action-btn) {
     font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 0.01em;
-    background: #C7FFF9; 
+    background: #edf9f7; 
     color: #003366;
     padding: 0 1rem;
     border-top-left-radius: 8px;
@@ -2984,6 +2852,16 @@ div:has(> .student-action-btn) {
 
 .teacher-subskill {
     display: inline;
+}
+
+.empty-assessment-state {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    padding: .75rem 1rem;
+}
+
+.empty-assessment-state p {
+    padding-top: 1rem;
 }
 
 
@@ -3093,16 +2971,6 @@ div:has(> .student-action-btn) {
         border: 0;
     }
 
-    /*****************************************************|
-    |*** STD. SKILLS OVERVIEW Page  **********************|
-    |*****************************************************/
-
-    .student-skills-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.2rem;
-        margin-top: 1.5rem;
-    }
 
 }
 
@@ -3492,13 +3360,6 @@ div:has(> .student-action-btn) {
 
 
 
-@media (max-width: 900px) {
-
-    .student-skills-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-}
 
 
 @media (max-width: 767.99px) {
@@ -3765,10 +3626,10 @@ div:has(> .student-action-btn) {
     |*** STD. SKILLS OVERVIEW Page  **********************|
     |*****************************************************/
 
-    .student-skills-grid,
-    .student-skills-bottom-grid {
+
+    /* .student-skills-bottom-grid {
         grid-template-columns: minmax(0, 1fr);
-    }
+    } */
 
     .subskills-edit-list-three,
     .subskills-edit-list-four {
@@ -4160,79 +4021,6 @@ div:has(> .student-action-btn) {
     max-width: 100%;
     min-width: 0;
 }
-
-/* .company-admin-classes-list .assigned-courses-list {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-
-    box-sizing: border-box;
-
-    overflow-x: scroll !important;
-    overflow-y: hidden;
-
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    scrollbar-width: auto;
-    scrollbar-color: #5ff0df #0B355F;
-} */
-
-/* .company-admin-classes-list .assigned-class-row {
-    width: 900px;
-    min-width: 900px;
-    max-width: none;
-} */
-
-/* Chrome, Edge and Safari */
-/* .company-admin-classes-list .assigned-courses-list::-webkit-scrollbar,
-.company-admin-classes-list .assigned-classes-list::-webkit-scrollbar {
-    width: auto;
-    height: 14px;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-track,
-.company-admin-classes-list .assigned-classes-list::-webkit-scrollbar-track {
-    background: whitesmoke;
-    border: 1px solid #b5b5b5;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb,
-.company-admin-classes-list .assigned-classes-list::-webkit-scrollbar-thumb {
-    min-width: 60px;
-    background:#b2b3b2;
-    border: 1px outset #b5b5b5;
-    border-radius: 999px;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover,
-.company-admin-classes-list .assigned-classes-list::-webkit-scrollbar-thumb:hover {
-    background: #cdcdcd;
-}
- */
-
-
-/* Chrome, Edge and Safari */
-/* .company-admin-classes-list .assigned-courses-list::-webkit-scrollbar {
-    width: auto;
-    height: 14px;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-track {
-    background: #0B355F;
-    border-radius: 999px;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
-    min-width: 60px;
-    background: #5ff0df;
-    border: 3px solid #0B355F;
-    border-radius: 999px;
-}
-
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
-    background: #c7fff9;
-} */
 
 /* MUST STAY AT THE END OF CSS FILE */
 .assigned-course-row.course-hidden,
