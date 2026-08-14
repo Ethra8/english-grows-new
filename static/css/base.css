@@ -235,7 +235,19 @@ a.js-back-link:hover {
 .index-cta-button {
     display: flex;
     justify-content: left;
-    /* gap: 1rem; */
+    background: #0B355F;
+    color: whitesmoke;
+    border: 1px solid #0B355F;
+    min-width: 250px;
+    height: 100%;
+    font-size: 1.3rem;
+    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+
+.error-page-button {
+    display: flex;
+    justify-content: center;
     background: #0B355F;
     color: whitesmoke;
     border: 1px solid #0B355F;
@@ -248,7 +260,10 @@ a.js-back-link:hover {
 
 .index-cta-button:hover,
 .index-cta-button:active,
-.index-cta-button:focus {
+.index-cta-button:focus,
+.error-page-button:hover,
+.error-page-button:active,
+.error-page-button:focus {
     /* background-color: #c7fff9;
     color: #0B355F; */
     border: 1px solid #5ff0df;
@@ -1773,7 +1788,8 @@ span.vertical-line {
         margin-left: auto !important;
     }
 
-    .index-cta-button {
+    .index-cta-button,
+    .error-page-button {
         min-width: 100%;
         font-size: 1rem;
     }

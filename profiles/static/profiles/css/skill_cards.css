@@ -18,38 +18,15 @@
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 8px;
-    padding: 1.5rem;
-    color: whitesmoke;
+    padding: 1px;
     width: 100%;
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
-}
-
-.skill-card h2 span {
-    z-index: 1;
-    width: 55px;
-    height: 55px;
-    min-width: 55px;
+    gap: 0.1rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: rgba(11, 53, 95, 0.6);
-    border: 1px solid rgba(94, 242, 220, 0.35);
-}
-
-.skill-card h2 span i {
-    color: rgba(94, 242, 220, 0.9);
-    font-size: 1.8rem;
-}
-
-.skill-card p {
-    font-weight: 600;
-    text-transform: capitalize;
-    color: whitesmoke;
-    width: 100%;
-    border-bottom: #008b87 1px solid;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .skill-card-header,
@@ -66,25 +43,97 @@
     flex-direction: column;
     /* align-items: center; */
     justify-content: space-between;
-    /* gap: 1rem; */
+    padding: 1rem;
+    background-color: whitesmoke;
 }
 
-.skill-card-header h2 {
+.skill-card-header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#company_admin .skill-card-header {
+    border-radius: 8px;
+}
+
+.skill-card-body {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    /* stretch to occupy available height: */
+    flex: 1;
+}
+
+.skill-card h2 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-content: baseline;
+    /* align-content: baseline; */
     min-width: 0;
     max-width: 100%;
     overflow-wrap: normal;
+    /* background-color: whitesmoke; */
+    background-color: rgba(11, 53, 95, 0.05);
+    border-radius: 999px;
+    padding: 0.25rem;
+    align-items: center;
+    color: #0B355F;
 }
 
-.skill-card-header h2 span {
+.skill-card h2.listening {
+    /* background-color: #7c3aed; */
+    border: 2px outset #7c3aed;
+}
+
+.skill-card h2.listening i {
+    color: #7c3aed;
+}
+
+.skill-card h2.speaking {
+    /* background-color: #f5be58; */
+    border: 2px outset #f5be58;
+}
+
+.skill-card h2.speaking i {
+    color: #f5be58;
+}
+
+.skill-card h2.reading {
+    /* background-color: #1e6bff; */
+    border: 2px outset #1e6bff;
+}
+
+.skill-card h2.reading i {
+    color: #1e6bff;
+}
+
+.skill-card h2.writing {
+    /* background-color: #006b7d; */
+    border: 2px outset #0ea5b7;
+}
+
+.skill-card h2.writing i {
+    color: #0ea5b7;
+}
+
+.skill-card h2 span {
+    z-index: 1;
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* background-color: rgba(11, 53, 95, 0.6); */
+    background-color: whitesmoke;
+    /* border: 1px solid rgba(94, 242, 220, 0.35); */
+    border: 1px solid rgba(11, 53, 95, 0.3);
     margin-right: 1.2rem;
 }
 
 .skill-card-header h2 i {
     margin-left: 1rem;
+    font-size: 1.8rem;
 }
 
 .skill-card-header hr {
@@ -104,7 +153,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: .5rem 1.5rem;
+    margin: 1.5rem 1.5rem 0.75rem;
+}
+
+.skill-ring.listening {
+    border: 1px outset #7c3aed;
+    background:
+        conic-gradient(
+            #7c3aed calc(var(--skill-progress) * 1%),
+            rgba(255,255,255,0.16) 0
+        );
+}
+
+.skill-ring.reading {
+    border: 1px outset #1e6bff;
+    background:
+        conic-gradient(
+            #1e6bff calc(var(--skill-progress) * 1%),
+            rgba(255,255,255,0.16) 0
+        );
+}
+
+.skill-ring.speaking {
+    border: 1px outset #f5be58;
+    background:
+        conic-gradient(
+            #f5be58 calc(var(--skill-progress) * 1%),
+            rgba(255,255,255,0.16) 0
+        );
+}
+
+.skill-ring.writing {
+    border: 1px outset #0ea5b7;
+    background:
+        conic-gradient(
+            #0ea5b7 calc(var(--skill-progress) * 1%),
+            rgba(255,255,255,0.16) 0
+        );
 }
 
 .skill-ring > div {
@@ -135,9 +220,22 @@
     width: 100%;
 }
 
+.skill-card h3 {
+    font-weight: 600;
+    text-transform: capitalize;
+    color: whitesmoke;
+    width: 100%;
+    border-bottom: #008b87 1px solid;
+    color:#0B355F;
+}
+
 .skill-details strong {
-    color: #5fffea;
+    color: #006b7d;
     font-size: 0.9rem;
+}
+
+.skill-details span {
+    color: #6a7f81;
 }
 
 .subskill-row,

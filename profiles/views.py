@@ -34,10 +34,10 @@ User = get_user_model()
 # Keep the same skill colors everywhere the progress chart is used.
 # Dictionary order also controls the dataset / legend order.
 SKILL_CHART_COLORS = {
-    "Speaking": "#00b894",
-    "Reading": "#1e6bff",
-    "Writing": "#ff7a00",
     "Listening": "#7c3aed",
+    "Reading": "#1e6bff",
+    "Speaking": "#f5be58",
+    "Writing": "#0ea5b7",
 }
 
 

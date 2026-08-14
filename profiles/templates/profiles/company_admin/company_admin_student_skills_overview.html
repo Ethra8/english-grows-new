@@ -7,7 +7,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
@@ -15,7 +15,7 @@
 
 {% block profile_content %}
 
-<section class="student-detail-page profile-page ">
+<section id="company_admin" class="student-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -115,7 +115,7 @@
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
-                <i class="fa-solid fa-chalkboard-user"></i>
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                 <span>Select Active Course</span>
             </label>
 
@@ -151,13 +151,13 @@
 
             <div class="skill-card-header">
                 
-                <h2>
+                <h2 class="{{ skill.name|lower }}">
                     <span><i class="{{ skill.icon }} mr-3"></i></span>
                     {{ skill.name }}
                 </h2>
                 
-                <hr>
-                <div class="skill-ring"
+                <!-- <hr> -->
+                <div class="skill-ring {{ skill.name|lower }}"
                         style="--skill-progress: {{ skill.percentage|default:'0' }};">
                     <div>
                         <strong>{{ skill.percentage|default:"0" }}%</strong>

@@ -119,7 +119,7 @@
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
-                <i class="fa-solid fa-chalkboard-user"></i>
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                 <span>My active course</span></label>
 
             <div class="course-select-wrapper">
@@ -167,10 +167,10 @@
             <article class="skill-card">
 
                 <div class="skill-card-header">
-                    <h2><span><i class="{{ skill.icon }} mr-3"></i></span>
+                    <h2 class="{{ skill.name|lower }}"><span><i class="{{ skill.icon }} mr-3"></i></span>
                         {{ skill.name }}</h2>
-                    <hr>
-                    <div class="skill-ring" style="--skill-progress: {{ skill.percentage|default:'0' }};">
+                    <!-- <hr> -->
+                    <div class="skill-ring {{ skill.name|lower }}" style="--skill-progress: {{ skill.percentage|default:'0' }};">
                         <div>
                             <strong>{{ skill.percentage|default:"0" }}%</strong>
                             <span>Overall</span>
@@ -181,7 +181,7 @@
                 <div class="skill-card-body">
                     <div class="skill-details">
 
-                        <p>{{ skill.subskills|length }} subskills tracked</p>
+                        <h3>{{ skill.subskills|length }} subskills tracked</h3>
 
                         {% for subskill in skill.subskills %}
 
