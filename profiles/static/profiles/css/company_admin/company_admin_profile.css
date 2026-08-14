@@ -189,7 +189,7 @@
     width: 46px;
     height: 46px;
     background: #C7FFF9;
-    background: radial-gradient(circle,rgba(199, 255, 249, 0.97) 10%, rgba(237, 249, 247, 1) 37%, rgba(95, 245, 207, 1) 69%);
+    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;

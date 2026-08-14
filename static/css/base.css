@@ -431,7 +431,7 @@ a.text-white:hover {
     color: #fff;
 } */
 
-ul li {
+#topnav ul li {
     display: inline-block;
     max-width: fit-content;
 }

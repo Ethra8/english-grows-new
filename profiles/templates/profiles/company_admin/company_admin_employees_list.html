@@ -41,6 +41,26 @@
 
     <div class="wrapper-employees-list">
         <!-- <div class="course-details-child"> -->
+        <div class="employees-list-toolbar">
+
+            <span class="sort-label">
+                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                Sort by
+            </span>
+
+            <div class="sort-options">
+                <a href="?sort=name"
+                class="sort-option {% if sort_by == 'name' %}active{% endif %}">
+                    Name A–Z
+                </a>
+
+                <a href="?sort=level"
+                class="sort-option {% if sort_by == 'level' %}active{% endif %}">
+                    Level
+                </a>
+            </div>
+
+        </div>
 
         <div>
             <div class="employees-list-grid"> 

@@ -3,31 +3,20 @@
 {% load date_extras %}
 {% load course_extras %}
 
-{% block extra_title %}| Student Skills {% endblock %}
+{% block extra_title %}| My Progress {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="student-detail-page profile-page ">
+<section class="student-detail-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
-
-    <div class="row mb-3">
-        <div class="col-12 mb-2">
-            <p class="go-back-link">
-                <a href="#" class="js-back-link">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
-                </a>    
-            </p>
-        </div>
-    </div>    
 
     <header>
 
@@ -42,7 +31,7 @@
                             alt="{{ student.get_full_name }}"
                         >
                     {% else %}
-                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
+                        {% if student_profile.role == "employee" %}
                             <i class="fa-solid fa-user-tie"></i>
                         {% else %}
                             <i class="fa-regular fa-user"></i>
@@ -56,69 +45,100 @@
                     </span>
                 </div>
             </div>
-            
-            <div>
-                <h1>{{ student.get_full_name|default:student.username }}</h1>
 
-                <p><a href="mailto:{{ student.email }}">
-                    {{ student.email }}</a></p>
+            <div>
+                <h1>
+                    {{ student.get_full_name|default:student.username }}
+                </h1>
+
+                <p>
+                    <a href="mailto:{{ student.email }}">
+                        {{ student.email }}
+                    </a>
+                </p>
 
                 <div class="profile-user-role">
-                    <span><i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Employee" }}</span>
-                </div> 
+                    <span>
+                        <i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Student" }}
+                    </span>
+                </div>
 
-                <div class="header-last-child">      
+                <div class="header-last-child">
 
                     <div class="level-pill larger-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">
+                            CEFR Level
+                        </span>
+
                         <span class="current-level-value">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.get_current_level_display }}
-                        {% else %}
-                            Pending
-                        {% endif %}    
+                            {% if student_profile.current_level %}
+                                {{ student_profile.get_current_level_display }}
+                            {% else %}
+                                Pending
+                            {% endif %}
                         </span>
                     </div>
+
                     <div class="level-pill smaller-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">
+                            CEFR Level
+                        </span>
+
                         <span class="current-level-value">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.current_level }}
-                        {% else %}
-                            Pending
-                        {% endif %}    
+                            {% if student_profile.current_level %}
+                                {{ student_profile.current_level }}
+                            {% else %}
+                                Pending
+                            {% endif %}
                         </span>
                     </div>
+
                 </div>
             </div>
         </div>
     </header>
 
+
+    <!-- INTERNAL NAV -->
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}">
-                Overview</a>
-            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}">
-                Progress</a>
-            <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}" class="active">
-                Skills</a>
-            <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
-                Attendance</a>
-            <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
-                Assessment</a>
-        </nav>
-    </div>    
 
-        {% if active_enrollments|length > 1 %}
+            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">
+                Overview</a>
+
+            <a href="{% url 'profiles:my_skills_progress_graph' %}?course={{ course.id }}" class="active">
+                Progress</a>
+
+            <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
+                Skills</a>
+
+            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
+                Attendance</a>
+
+            <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}">
+                Assessment</a>
+
+            <!-- <a href="#">
+                History</a> -->
+
+        </nav>
+    </div>
+
+
+    {% if active_enrollments|length > 1 %}
         <form method="get" class="course-selector-form">
 
-            <label for="course-select" class="course-selector-label">
+            <label
+                for="course-select"
+                class="course-selector-label"
+            >
                 <i class="fa-solid fa-swatchbook fa-flip-horizontal"></i>
                 <span>Select Active Course</span>
             </label>
 
             <div class="course-select-wrapper">
+
                 <select
                     id="course-select"
                     name="course"
@@ -128,7 +148,9 @@
                     {% for item in active_enrollments %}
                         <option
                             value="{{ item.course.id }}"
-                            {% if course and item.course.id == course.id %}selected{% endif %}
+                            {% if course and item.course.id == course.id %}
+                                selected
+                            {% endif %}
                         >
                             {{ item.course.name }}
                         </option>
@@ -136,63 +158,49 @@
                 </select>
 
                 <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+
             </div>
 
         </form>
     {% endif %}
 
-    
-    <div class="student-skills-grid">
-    {% if skills %}    
-    {% for skill in skills %}
+    <div id="employeeSkillsGraphOverview" class="student-details-skills-overview-grid">
 
-        <article class="student-skill-card">
+        <article class="skills-progress-section">
 
-            <div class="skill-card-header">
-                
-                <h2>
-                    <span><i class="{{ skill.icon }} mr-3"></i></span>
-                    {{ skill.name }}
-                </h2>
+            <div class="skills-chart-card">
 
-                <hr>
-                <div class="skill-ring"
-                        style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                    <div>
-                        <strong>{{ skill.percentage|default:"0" }}%</strong>
-                        <span>
-                            {% if skill.percentage <= 49 %}
-                                Needs work
-                            {% elif skill.percentage >= 50 and skill.percentage < 60 %}
-                                Developing
-                            {% elif skill.percentage >= 60 and skill.percentage < 75 %}
-                                Pass
-                            {% elif skill.percentage >= 75 and skill.percentage < 80 %}
-                                Confident
-                            {% elif skill.percentage >= 80 %}
-                                Strong
-                            {% endif %}
-                        </span>
-                    </div>
+                <div class="skills-chart-header">
+                    <h2>
+                        <i class="fa-solid fa-chart-line mr-2"></i>
+                        Skills Progress Over Time
+                    </h2>
                 </div>
+
+                <div class="skills-chart-canvas-wrap">
+                    <canvas id="skillsProgressChart"></canvas>
+                </div>
+
             </div>
 
         </article>
-    {% endfor %}
-    </div>
-    {% else %}
-    <p class="text-dark">The employee's skills & subskills assessment cards will appear here after being evaluated.</p>
-    {% endif %}
-
+    </div>    
 </section>
+
 {% endblock %}
 
 
 {% block postloadjs %}
+
 {{ block.super }}
+
 {{ chart_data|json_script:"skills-chart-data" }}
 
-<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script
+    type="text/javascript"
+    src="{% static 'profiles/js/teacher.js' %}">
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -206,10 +214,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const chartData = JSON.parse(chartDataEl.textContent);
 
+    console.log("Student chart data:", chartData);
+
     if (!chartData.labels || chartData.labels.length === 0) {
         chartEl.parentElement.innerHTML = `
             <p class="text-dark">
-                No skill progress data yet. Save a skill assessment first.
+                No skill progress data to process your skills graph yet. Your skills progress graph will display here once your teacher has completed an evaluation.
             </p>
         `;
         return;
@@ -221,13 +231,12 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            spanGaps: true,
             scales: {
                 y: {
                     min: 0,
                     max: 100,
                     ticks: {
-                        callback: function(value) {
+                        callback: function (value) {
                             return value + "%";
                         }
                     }
@@ -242,4 +251,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
 {% endblock %}

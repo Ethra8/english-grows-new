@@ -28,6 +28,19 @@ from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, 
 User = get_user_model()
 
 
+# =========================================================
+# SHARED SKILLS CHART CONFIGURATION
+# =========================================================
+# Keep the same skill colors everywhere the progress chart is used.
+# Dictionary order also controls the dataset / legend order.
+SKILL_CHART_COLORS = {
+    "Speaking": "#00b894",
+    "Reading": "#1e6bff",
+    "Writing": "#ff7a00",
+    "Listening": "#7c3aed",
+}
+
+
 @login_required
 def login_redirect(request):
     profile = request.user.profile
@@ -990,6 +1003,91 @@ def my_skills(request):
     )
 
 
+@login_required
+def my_skills_progress_graph(request):
+    student = request.user
+    student_profile = get_object_or_404(
+        UserProfile,
+        user=student,
+    )
+
+    # ---------------------------------------------------------
+    # SECURITY
+    # Only learner roles can access their own progress graph.
+    # ---------------------------------------------------------
+    if student_profile.role not in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL,
+    ]:
+        return redirect("home")
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS
+    # Only active enrollments in active courses are selectable.
+    # ---------------------------------------------------------
+    active_enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status="active",
+            course__status="active",
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("course__name")
+    )
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # Keep the course selected on the other learner pages.
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get("course")
+
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            active_enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = active_enrollments.first()
+
+    course = enrollment.course if enrollment else None
+
+    # ---------------------------------------------------------
+    # SKILLS PROGRESS GRAPH
+    # IMPORTANT: use the shared helper so every role/page gets
+    # identical skill colors, dataset order and chart values.
+    # ---------------------------------------------------------
+    if course:
+        chart_data = build_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
+    else:
+        chart_data = {
+            "labels": [],
+            "datasets": [],
+        }
+
+    context = {
+        "student": student,
+        "student_profile": student_profile,
+        "active_enrollments": active_enrollments,
+        "active_enrollment": enrollment,
+        "enrollment": enrollment,
+        "course": course,
+        "chart_data": chart_data,
+    }
+
+    return render(
+        request,
+        "profiles/student/my_skills_progress_graph.html",
+        context,
+    )
 
 @login_required
 def my_learning_progress_assessment(request):
@@ -1879,6 +1977,14 @@ def teacher_course_students_list(request, course_id):
 
 # BUILD STD SKILLS GRAPH
 def build_skill_progress_chart_data(student, course):
+    """
+    Build the shared Chart.js data structure for skills progress.
+
+    All learner, teacher and company-admin views should call this
+    helper instead of building chart datasets independently.
+    SKILL_CHART_COLORS is the single source of truth for both
+    skill colors and dataset/legend order.
+    """
     snapshots = (
         StudentSkillTermSnapshot.objects
         .filter(
@@ -1895,14 +2001,14 @@ def build_skill_progress_chart_data(student, course):
         if snapshot.term_label not in chart_labels:
             chart_labels.append(snapshot.term_label)
 
+    # Dictionary order follows SKILL_CHART_COLORS, so the graph
+    # and legend are always: Speaking, Reading, Writing, Listening.
     skill_chart_values = {
-        "Speaking": [],
-        "Reading": [],
-        "Writing": [],
-        "Listening": [],
+        skill_name: []
+        for skill_name in SKILL_CHART_COLORS
     }
 
-    for skill_name in skill_chart_values.keys():
+    for skill_name in skill_chart_values:
         skill_value = skill_name.lower()
 
         for label in chart_labels:
@@ -1917,43 +2023,26 @@ def build_skill_progress_chart_data(student, course):
                     break
 
             skill_chart_values[skill_name].append(
-                matching_snapshot.percentage if matching_snapshot else None
+                matching_snapshot.percentage
+                if matching_snapshot
+                else None
             )
+
+    datasets = []
+
+    for skill_name, color in SKILL_CHART_COLORS.items():
+        datasets.append({
+            "label": skill_name,
+            "data": skill_chart_values[skill_name],
+            "borderColor": color,
+            "backgroundColor": color,
+            "tension": 0.35,
+        })
 
     return {
         "labels": chart_labels,
-        "datasets": [
-            {
-                "label": "Speaking",
-                "data": skill_chart_values["Speaking"],
-                "borderColor": "#00b894",
-                "backgroundColor": "#00b894",
-                "tension": 0.35,
-            },
-            {
-                "label": "Reading",
-                "data": skill_chart_values["Reading"],
-                "borderColor": "#1e6bff",
-                "backgroundColor": "#1e6bff",
-                "tension": 0.35,
-            },
-            {
-                "label": "Writing",
-                "data": skill_chart_values["Writing"],
-                "borderColor": "#ff7a00",
-                "backgroundColor": "#ff7a00",
-                "tension": 0.35,
-            },
-            {
-                "label": "Listening",
-                "data": skill_chart_values["Listening"],
-                "borderColor": "#7c3aed",
-                "backgroundColor": "#7c3aed",
-                "tension": 0.35,
-            },
-        ],
+        "datasets": datasets,
     }
-
 
 # Helper to display Teacher notes (+ future automated reports ???)
 def build_skill_note_display(skill_assessment):
@@ -1963,26 +2052,31 @@ def build_skill_note_display(skill_assessment):
         "skill": skill_assessment.get_skill_display(),
         "percentage": skill_assessment.average_percentage,
         "score": skill_assessment.average_score,
+
         "strengths": [
             subskill.get_subskill_display()
             for subskill in subskills
             if subskill.rating in ["strong", "confident"]
         ],
-        "pass": [
+
+        "minimum_level_requirements": [
             subskill.get_subskill_display()
             for subskill in subskills
-            if subskill.rating == "passing"
+            if subskill.rating == "minimum_level_requirements"
         ],
+
         "developing": [
             subskill.get_subskill_display()
             for subskill in subskills
             if subskill.rating == "developing"
         ],
+
         "needs_work": [
             subskill.get_subskill_display()
             for subskill in subskills
             if subskill.rating == "needs_work"
         ],
+
         "plain_notes": skill_assessment.teacher_notes,
     }
 
@@ -5902,6 +5996,18 @@ def company_admin_employees_list(request):
     if not company:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # SORT OPTION
+    # ---------------------------------------------------------
+    sort_by = request.GET.get("sort", "name")
+
+    if sort_by not in ["name", "level"]:
+        sort_by = "name"
+
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS
+    # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -5924,6 +6030,10 @@ def company_admin_employees_list(request):
         )
     )
 
+
+    # ---------------------------------------------------------
+    # GROUP ENROLLMENTS BY EMPLOYEE
+    # ---------------------------------------------------------
     employees_by_id = {}
 
     for enrollment in enrollments:
@@ -5942,18 +6052,68 @@ def company_admin_employees_list(request):
 
     employees = list(employees_by_id.values())
 
+    # ---------------------------------------------------------
+    # SORT EMPLOYEES
+    # ---------------------------------------------------------
+    def employee_display_name(employee):
+        student = employee["student"]
+
+        full_name = student.get_full_name().strip()
+
+        if full_name:
+            return full_name.lower()
+
+        return student.username.lower()
+
+
+    if sort_by == "level":
+
+        level_order = {
+            "A1": 1,
+            "A2": 2,
+            "B1.1": 3,
+            "B1.2": 4,
+            "B2.1": 5,
+            "B2.2": 6,
+            "C1.1": 7,
+            "C1.2": 8,
+            "C2.1": 9,
+            "C2.2": 10,
+        }
+
+        employees.sort(
+            key=lambda employee: (
+                level_order.get(
+                    employee["profile"].current_level,
+                    999,
+                ),
+                employee_display_name(employee),
+            )
+        )
+
+    else:
+        # Default: displayed employee name A-Z
+        employees.sort(
+            key=employee_display_name
+        )
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
         "employees": employees,
         "total_employees": len(employees),
         "level_choices": UserProfile.LEVEL_CHOICES,
+
+        "sort_by": sort_by,
     }
 
     return render(
         request,
         "profiles/company_admin/company_admin_employees_list.html",
-        context
+        context,
     )
 
 

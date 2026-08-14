@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
 {% endblock %}
 
 
@@ -83,22 +84,21 @@
         </div>
     </header>
 
-    <!-- Inside navbar -->
+    <!-- INTERNAL NAV -->
     <div class="student-detail-tabs-wrapper">
-
         <nav class="student-detail-tabs">
 
             <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active">
                 Overview</a>
 
-            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
-                Attendance</a>
+            <a href="{% url 'profiles:my_skills_progress_graph' %}?course={{ course.id }}">
+                Progress</a>
 
             <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
                 Skills</a>
 
-            <a href="#employeeSkillsGraphOverview">
-                Progress</a>
+            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
+                Attendance</a>
 
             <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}">
                 Assessment</a>
@@ -108,6 +108,7 @@
 
         </nav>
     </div>
+
     <!-- <div class="student-detail-tabs-wrapper"> -->
 
     {% if active_enrollments|length > 1 %}

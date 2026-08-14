@@ -1028,7 +1028,7 @@ main.profile-main {
     gap: 1rem;
     width: fit-content;
     max-width: 100%;
-    margin: 1.25rem 0 1.25rem;
+    margin: 1.25rem 0 0;
     background: whitesmoke;
     padding: 0.5rem;
     border-radius: 8px;
@@ -1217,6 +1217,7 @@ main.profile-main {
 .wrapper-attendance-details {
     width: 100%;
     max-width: 100% !important;
+    margin-top: 1.25rem;    
 }
 
 .attendance-progress-card {

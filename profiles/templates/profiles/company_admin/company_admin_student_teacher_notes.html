@@ -148,42 +148,66 @@
                 <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small></h4>
 
                 {% if note.strengths %}
-                    <ul><p class="text-muted">
-                        <strong>Strengths:</strong></p>
+                    <div class="subskill-group">
+                        <p>
+                            <strong>Strengths:</strong></p>
+                        <ul>  
                         {% for subskill in note.strengths %}
                             <li><span class="teacher-subskill">{{ subskill }}</span></li>
                         {% endfor %}
-                    </ul>
+                        </ul>  
+                    </div>
                 {% endif %}
 
-                {% if note.passing %}
-                    <ul>
-                        <p class="text-muted">
-                            <strong>Minimum requirements:</strong></p>
-                        {% for subskill in note.passing %}
-                        <li><span class="teacher-subskill">{{ subskill }}</span></li>
-                        {% endfor %}
-                    </ul>
+                {% if note.minimum_level_requirements %}
+                    <div class="subskill-group">
+                        <p>
+                            <strong>Minimum level requirements:</strong>
+                        </p>
+
+                        <ul>
+                            {% for subskill in note.minimum_level_requirements %}
+                                <li>
+                                    <span class="teacher-subskill">{{ subskill }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
+
 
                 {% if note.developing %}
-                    <ul><p>
-                        <strong>Developing areas:</strong></p>
-                        {% for subskill in note.developing %}
-                            <li><span class="teacher-subskill text-mutted">{{ subskill }}</span></li>
-                        {% endfor %}
-                    </ul>
+                    <div class="subskill-group">
+                        <p>
+                            <strong>Developing areas:</strong>
+                        </p>
+
+                        <ul>
+                            {% for subskill in note.developing %}
+                                <li>
+                                    <span class="teacher-subskill">{{ subskill }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
+
 
                 {% if note.needs_work %}
-                    <p class="text-muted">
-                        <strong>Needs work:</strong>
-                        {% for subskill in note.needs_work %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
+                    <div class="subskill-group">
+                        <p>
+                            <strong>Needs work:</strong>
+                        </p>
 
+                        <ul>
+                            {% for subskill in note.needs_work %}
+                                <li>
+                                    <span class="teacher-subskill">{{ subskill }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
         {% empty %}
             <p class="text-muted">No teacher notes yet.</p>

@@ -355,8 +355,8 @@ SUBSKILLS = {
     ],
 
     "listening": [
-        ("gist", "Gist (General Idea)"),
-        ("specific_information", "Specific Information"),
+        ("gist", "For Gist (General Idea)"),
+        ("specific_information", "For Specific Information"),
         ("detailed", "In detail (Deep Understanding)"),
     ],
 
@@ -438,7 +438,7 @@ class StudentSkillAssessment(models.Model):
             return ""
 
         strengths = []
-        meets_expectations = []
+        minimum_level_requirements = []
         developing = []
         needs_work = []
 
@@ -448,8 +448,8 @@ class StudentSkillAssessment(models.Model):
             if subskill.rating in ["strong", "confident"]:
                 strengths.append(label)
 
-            elif subskill.rating == "pass":
-                meets_expectations.append(label)
+            elif subskill.rating == "minimum_level_requirements":
+                minimum_level_requirements.append(label)
 
             elif subskill.rating == "developing":
                 developing.append(label)
@@ -464,9 +464,9 @@ class StudentSkillAssessment(models.Model):
                 f"Strengths: {', '.join(strengths)}."
             )
 
-        if meets_expectations:
+        if minimum_level_requirements:
             notes.append(
-                f"Meets expectations: {', '.join(meets_expectations)}."
+                f"Minimum level requirements (pass): {', '.join(minimum_level_requirements)}."
             )
 
         if developing:
@@ -483,10 +483,11 @@ class StudentSkillAssessment(models.Model):
 
 
 class StudentSubSkillAssessment(models.Model):
+
     RATING_CHOICES = [
         ("needs_work", "Needs Work"),
         ("developing", "Developing"),
-        ("pass", "Pass"),
+        ("minimum_level_requirements", "Minimum level requirements (pass)"),
         ("confident", "Confident"),
         ("strong", "Strong"),
     ]
@@ -494,7 +495,7 @@ class StudentSubSkillAssessment(models.Model):
     RATING_PERCENTAGES = {
         "needs_work": 40,
         "developing": 50,
-        "pass": 60,
+        "minimum_level_requirements": 60,
         "confident": 75,
         "strong": 100,
     }
@@ -516,7 +517,7 @@ class StudentSubSkillAssessment(models.Model):
     )
 
     rating = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=RATING_CHOICES,
         default="developing",
     )
@@ -530,7 +531,7 @@ class StudentSubSkillAssessment(models.Model):
     def save(self, *args, **kwargs):
         self.percentage = self.RATING_PERCENTAGES.get(
             self.rating,
-            45,
+            50,
         )
 
         super().save(*args, **kwargs)

@@ -1,0 +1,24 @@
+/* Skills Graph SnapShot */
+.skills-chart-card {
+    background: whitesmoke;
+    border: 2px inset rgba(95, 255, 234, 0.45);
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    min-height: 380px;
+}
+
+.skills-chart-header h2 {
+    color: #003366;
+    margin-bottom: 1.5rem;
+}
+
+.skills-chart-canvas-wrap {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+#skillsProgressChart {
+    width: 100% !important;
+    height: 100% !important;
+}

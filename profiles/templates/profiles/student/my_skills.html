@@ -85,29 +85,27 @@
 
     <!-- INTERNAL NAV -->
     <div class="student-detail-tabs-wrapper">
-
         <nav class="student-detail-tabs">
 
             <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">
                 Overview</a>
 
-            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
-                Attendance</a>
+            <a href="{% url 'profiles:my_skills_progress_graph' %}?course={{ course.id }}">
+                Progress</a>
 
             <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active">
                 Skills</a>
 
-            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}#employeeSkillsGraphOverview">
-                Progress</a>
+            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
+                Attendance</a>
 
-            <a href="{% url 'profiles:my_learning_progress_assessment' %}">
+            <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}">
                 Assessment</a>
 
-            <a href="#">
-                History</a>
+            <!-- <a href="#">
+                History</a> -->
 
         </nav>
-
     </div>
 
 

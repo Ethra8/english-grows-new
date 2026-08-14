@@ -14,10 +14,11 @@ urlpatterns = [
     path("student/my_course/", views.my_course, name="my_course"),
     path("student/my_calendar/", views.my_calendar, name="my_calendar"),
     path("student/my_calendar/events/", views.my_calendar_events, name="my_calendar_events"),
-    path("student/my-learning-progress/", views.my_learning_progress, name="my_learning_progress"),
+    path("student/my_learning_progress/", views.my_learning_progress, name="my_learning_progress"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
-    path("student/my-skills/", views.my_skills, name="my_skills"),
-    path("student/my-learning-progress/assessment/", views.my_learning_progress_assessment, name="my_learning_progress_assessment"),
+    path("student/my_skills/", views.my_skills, name="my_skills"),
+    path("student/my_learning_progress/skills_progress/", views.my_skills_progress_graph, name="my_skills_progress_graph"),
+    path("student/my_learning_progress/assessment/", views.my_learning_progress_assessment, name="my_learning_progress_assessment"),
 
 
     # TEACHER PAGES
