@@ -13,7 +13,7 @@
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
         <!-- badge user role & company -->
         {% if request.user.profile.company %}
-            <span class="text-center mt-4">
+            <span class="text-center mt-2">
                 <i class="fa-regular fa-user mr-2"></i>
                 {{ request.user.profile.get_role_display }}
                 <br>
