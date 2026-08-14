@@ -299,7 +299,11 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         Use the enrollment status
         (paused/completed/cancelled)
         instead of deleting the enrollment record.
+         - only superuser can alter
         """
+        if request.user.is_superuser:
+            return True
+
         return False
 
 
@@ -337,7 +341,12 @@ class AttendanceInline(admin.TabularInline):
     )
 
     def has_add_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+
         return False
+
+
 
 
 
@@ -424,9 +433,15 @@ class ClassSessionAdmin(admin.ModelAdmin):
     )
 
     def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+
         return False
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+
         return False
 
     # ----------------------------------------
@@ -562,15 +577,21 @@ class AttendanceAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         """
         Attendance rows are created automatically from CourseEnrollment /
-        Course generation logic.
+        Course generation logic - only superuser can alter.
         """
+        if request.user.is_superuser:
+            return True
+
         return False
 
     def has_delete_permission(self, request, obj=None):
         """
         Preserve attendance history and the one-record-per-student/session
-        invariant.
+        invariant - only superuser can alter.
         """
+        if request.user.is_superuser:
+            return True
+
         return False
 
     # ----------------------------------------
