@@ -1,8 +1,54 @@
+## 📑 Table of Contents
+- [Color Palette](#color-palette)
+- [Site Structure](#site-structure)
+  - [Home App](#home-app)
+  - [Profiles App](#profiles-app)
+    - [User Profile & Role Management](#user-profile--role-management)
+    - [Learner / Employee Area](#learner--employee-area)
+    - [Teacher Area](#teacher-area)
+    - [Company Admin Area](#company-admin-area)
+    - [Role-Based Access Control](#role-based-access-control)
+  - [Courses App](#courses-app)
+    - [Course Types](#course-types)
+    - [Course Management](#course-management)
+    - [Course Enrolment](#course-enrolment)
+    - [Course Timetable](#course-timetable)
+    - [Class Session Generation](#class-session-generation)
+    - [Class Session Lifecycle](#class-session-lifecycle)
+    - [Attendance](#attendance)
+    - [Attendance Reporting](#attendance-reporting)
+  - [Learning Assessment & Progress](#learning-assessment--progress)
+    - [Student Skill Assessment](#student-skill-assessment)
+    - [Student Subskill Assessment](#student-subskill-assessment)
+    - [Detailed Assessment Snapshots](#detailed-assessment-snapshots)
+    - [Term Assessment Snapshots](#term-assessment-snapshots)
+  - [Calendar](#calendar)
+  - [Django Admin](#django-admin)
+
+- [Database Structure — Models](#database-structure--models)
+  - [ERD — Entity Relationship Diagram](#erd--entity-relationship-diagram)
+  - [Key Data-Integrity Rules](#key-data-integrity-rules)
+
+- [Application Data Flow](#application-data-flow)
+
+- [Architectural Design Choices](#architectural-design-choices)
+  - [Authentication vs. Application Profile](#authentication-vs-application-profile)
+  - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
+  - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
+  - [Current Assessment vs. Assessment History](#current-assessment-vs-assessment-history)
+  - [Shared Data, Role-Specific Presentation](#shared-data-role-specific-presentation)
+
+- [Design Choices](#design-choices)
+  - [Colour System](#colour-system)
+  - [Responsive Design](#responsive-design)
+  - [Data Visualisation](#data-visualisation)
+
+---
+
+## 🎨 Colour Palette
 <img width="1600" height="1200" alt="EnglishGrows_ColorPalette_final" src="https://github.com/user-attachments/assets/ebd1867a-743e-45e2-a019-0593eff1cd54" />
 
 <img width="221" height="393" alt="image" src="https://github.com/user-attachments/assets/5aace972-d513-401b-b99d-0d1f1e01fe42" />
-
-## 🎨 Colour Palette
 
 | Colour | Hex | Role in the Design System |
 |---|---|---|
