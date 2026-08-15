@@ -23,4 +23,181 @@
 <img width="485" height="310" alt="image" src="https://github.com/user-attachments/assets/17f89c31-a78e-45be-a2b1-775316973018" />
 <img width="308" height="459" alt="image" src="https://github.com/user-attachments/assets/acb9153e-34ca-43e8-babe-ecbe5f3abdfd" />
 
+## SITE STRUCTURE
+
+EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
+
+The application follows Django's Model-Template-View architecture and is currently organised into three principal custom Django apps:
+
+- **Home**
+- **Profiles**
+- **Courses**
+
+Each app contains the relevant combination of **models**, **views**, **URLs**, **templates**, **forms**, static assets, and supporting logic required for its area of responsibility.
+
+Authentication is handled using Django's authentication system together with **django-allauth**. Application-specific user information and role-based behaviour are managed through the `UserProfile` model.
+
+The platform supports four principal user roles:
+
+- **Teacher**
+- **Individual learner**
+- **Employee learner**
+- **Company administrator**
+
+Access to platform functionality and data is controlled according to the authenticated user's role and, where applicable, their associated company.
+
+---
+
+### HOME App
+
+The `home` app is responsible primarily for the public-facing area of EnglishGrows and serves as the entry point to the platform.
+
+#### Main responsibilities
+
+- Provides the public **landing page**
+- Presents EnglishGrows' training services and platform
+- Provides navigation into the authenticated learning platform
+- Contains public-facing marketing and informational content
+- Directs users towards the relevant learning or company-training journey
+- Integrates the public website with the authenticated Django platform
+
+The Home app is intentionally kept separate from the teaching-management functionality so that public marketing content and authenticated platform features remain logically independent.
+
+---
+
+### PROFILES App
+
+The `profiles` app contains most of the user-facing platform experience.
+
+It extends Django authentication with application-specific profile information and provides dedicated interfaces according to each user's role.
+
+The app includes functionality for:
+
+- **Learners**
+- **Teachers**
+- **Company administrators**
+
+The same underlying course, attendance, and assessment data is presented differently depending on the authenticated user's permissions and responsibilities.
+
+---
+
+#### USER PROFILE & ROLE MANAGEMENT
+
+The platform uses Django's authenticated `User` as the primary user identity and associates it with a dedicated `UserProfile`.
+
+The profile stores additional application information such as:
+
+- User role
+- Associated company, where applicable
+- Native language
+- Country
+- Current CEFR level
+- Profile photograph
+- User-specific platform information
+
+This avoids maintaining separate authentication models for teachers, employees, individual learners, and company administrators.
+
+Instead, role-based access is determined through the user's profile.
+
+---
+
+#### LEARNER / EMPLOYEE AREA
+
+Learners have access to a dedicated learning area containing information specific to their own active course enrolments.
+
+Principal functionality includes:
+
+- **Learner dashboard**
+- **My Course**
+- **My Attendance**
+- **My Learning Progress**
+- **Skill overview**
+- **Detailed skill progress graphs**
+- **Teacher assessment feedback**
+- **Course selector when enrolled in multiple active courses**
+- **Upcoming-class information**
+- **Attendance and absence history**
+- **Course completion information**
+
+Only enrolments that are currently active and belong to active courses are exposed through the learner-facing course selectors.
+
+Learners therefore interact only with relevant current training data rather than historical, cancelled, or inactive courses.
+
+---
+
+#### TEACHER AREA
+
+Teachers have a dedicated operational dashboard for managing the courses and learners assigned to them.
+
+Principal functionality includes:
+
+- **Teacher dashboard**
+- **Assigned courses**
+- **Course details**
+- **Class/session management**
+- **Attendance management**
+- **Individual attendance submission**
+- **Group attendance submission**
+- **Attendance history**
+- **Student details**
+- **Student skill assessment**
+- **Subskill assessment**
+- **Assessment notes**
+- **Learner progress graphs**
+- **Class rescheduling**
+- **Calendar**
+- **Course and learner progress reporting**
+
+Teacher access is restricted to courses assigned to the authenticated teacher.
+
+The teacher dashboard provides operational summaries for current teaching activity, including active courses, students, upcoming/completed sessions, and attendance information.
+
+---
+
+#### COMPANY ADMIN AREA
+
+Company administrators have a dedicated B2B management area allowing them to monitor the training delivered to employees belonging to their organisation.
+
+Principal functionality includes:
+
+- **Company dashboard**
+- **Employee list**
+- **Employee profile and learning progress**
+- **Company course list**
+- **Course details**
+- **Course learner list**
+- **Company class/session list**
+- **Company-wide attendance reporting**
+- **Employee attendance records**
+- **Employee skill development**
+- **Assessment information**
+- **Progress graphs**
+- **Company calendar**
+
+Company administrators can only access information associated with their own `Company`.
+
+This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, and learning outcomes.
+
+---
+
+#### ROLE-BASED ACCESS CONTROL
+
+Role-based views validate the authenticated user's `UserProfile` before exposing protected information.
+
+The application therefore applies restrictions such as:
+
+```text
+Teacher
+    ↓
+Only courses assigned to that teacher
+
+Company Administrator
+    ↓
+Only courses and employees belonging to that company
+
+Learner / Employee
+    ↓
+Only that learner's own enrolments,
+attendance and assessment data
+
 
