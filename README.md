@@ -17,4 +17,6 @@
 | **Cool Steel** | `#96A0A1` | Low-emphasis neutral — disabled, inactive and tertiary UI elements |
 
 
+# MODELS - DATABASE STRUCTURE
+<img width="485" height="310" alt="image" src="https://github.com/user-attachments/assets/17f89c31-a78e-45be-a2b1-775316973018" />
 
