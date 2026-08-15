@@ -63,12 +63,6 @@
 | **Cool Steel** | `#96A0A1` | Low-emphasis neutral — disabled, inactive and tertiary UI elements |
 
 
-# MODELS - DATABASE STRUCTURE
-## ASSESSMENT
-### SKILLS ASSESSMENT
-<img width="485" height="310" alt="image" src="https://github.com/user-attachments/assets/17f89c31-a78e-45be-a2b1-775316973018" />
-<img width="308" height="459" alt="image" src="https://github.com/user-attachments/assets/acb9153e-34ca-43e8-babe-ecbe5f3abdfd" />
-
 ## SITE STRUCTURE
 
 EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
