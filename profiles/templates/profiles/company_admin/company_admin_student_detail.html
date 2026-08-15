@@ -100,10 +100,10 @@
         <nav class="student-detail-tabs">
             <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}" class="active">
                 Overview</a>
-            <!-- <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}">
-                Progress</a> -->
+
             <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
                 Skills</a>
+
             <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
                 Attendance</a>
             <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">

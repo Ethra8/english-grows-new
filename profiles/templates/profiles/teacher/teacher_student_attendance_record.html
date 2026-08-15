@@ -122,17 +122,13 @@
                 Skills
             </a>
 
-            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
-                Progress
-            </a>
-
             <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
                 Assessment
             </a>
 
-            <a href="#">
+            <!-- <a href="#">
                 History
-            </a>
+            </a> -->
         </nav>
     </div>
     
@@ -251,25 +247,26 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const editBtn = document.getElementById("editAttendanceBtn");
+    document.addEventListener("DOMContentLoaded", function () {
+        const editBtn = document.getElementById("editAttendanceBtn");
 
-    if (!editBtn) {
-        return;
-    }
+        if (!editBtn) {
+            return;
+        }
 
-    editBtn.addEventListener("click", function () {
-        document.querySelectorAll(".attendance-current-status").forEach(function (item) {
-            item.classList.toggle("d-none");
+        editBtn.addEventListener("click", function () {
+            document.querySelectorAll(".attendance-current-status").forEach(function (item) {
+                item.classList.toggle("d-none");
+            });
+
+            document.querySelectorAll(".attendance-edit-form").forEach(function (form) {
+                form.classList.toggle("d-none");
+            });
+
+            editBtn.classList.toggle("active");
         });
-
-        document.querySelectorAll(".attendance-edit-form").forEach(function (form) {
-            form.classList.toggle("d-none");
-        });
-
-        editBtn.classList.toggle("active");
     });
-});
 </script>
 {% endblock %}

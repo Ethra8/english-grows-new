@@ -138,17 +138,13 @@
                 Skills
             </a>
 
-            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
-                Progress
-            </a>
-
             <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
                 Assessment
             </a>
 
-            <a href="#">
+            <!-- <a href="#">
                 History
-            </a>
+            </a> -->
         </nav>
     </div>
 
@@ -392,8 +388,8 @@
     {{ chart_data|json_script:"skills-chart-data" }}
 {% endif %}
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'profiles/js/skills_progress_chart.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}

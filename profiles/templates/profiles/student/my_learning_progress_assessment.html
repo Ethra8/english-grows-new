@@ -95,17 +95,14 @@
             <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">
                 Overview</a>
 
-            <a href="{% url 'profiles:my_skills_progress_graph' %}?course={{ course.id }}">
-                Progress</a>
-
             <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
                 Skills</a>
 
             <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
                 Attendance</a>
 
-            <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}" class="active">
-                Assessment</a>
+            <!-- <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}" class="active">
+                Assessment</a> -->
 
             <!-- <a href="#">
                 History</a> -->
@@ -262,8 +259,7 @@
 
 
 {% endblock %}
-
-
 {% block postloadjs %}
     {{ block.super }}
+
 {% endblock %}
