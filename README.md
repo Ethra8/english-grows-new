@@ -787,7 +787,7 @@ Unrated subskills are excluded rather than being interpreted as zero performance
 
 `StudentSubSkillAssessment` provides the detailed assessment information from which the overall skill assessment is calculated.
 
-Each principal language skill is divided into several pedagogically relevant subskills.
+Each principal language skill is divided into several pedagogically relevant subskills, aligned with CEFR descriptors and informed by Cambridge English assessment criteria.
 
 The current subskill structure is:
 
