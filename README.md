@@ -543,54 +543,99 @@ scheduled
 completed
 ```
 
-When a lesson must be rescheduled, the lifecycle becomes:
+When a lesson needs to be rescheduled, either the **learner/employee or the teacher** can mark the session as requiring rescheduling:
 
 ```text
-scheduled
-    │
-    ▼
-pending_reschedule
-    │
-    ▼
-rescheduled
-    │
-    ▼
-completed
+                         ┌─────────────────────┐
+                         │      scheduled      │
+                         └──────────┬──────────┘
+                                    │
+                     Reschedule requested by
+                         either party
+                         ┌──────────┴──────────┐
+                         │                     │
+                         ▼                     ▼
+                Learner / Employee          Teacher
+                         │                     │
+                         └──────────┬──────────┘
+                                    ▼
+                         pending_reschedule
+                                    │
+                          New date/time agreed
+                                    │
+                                    ▼
+                       Teacher reschedules class
+                                    │
+                                    ▼
+                              rescheduled
+                                    │
+                           Lesson takes place
+                                    │
+                                    ▼
+                               completed
 ```
 
-A fundamental design decision is that a rescheduled lesson remains the **same `ClassSession` record**.
+The `pending_reschedule` status therefore represents a **rescheduling request or an unresolved scheduling change**, rather than a cancelled lesson.
 
-The application does not delete the original lesson and create another one.
+Both parties involved in the training can initiate this workflow:
 
-Instead:
+- **Learners / employees** can flag a scheduled class when they need it to be rescheduled.
+- **Teachers** can also mark a scheduled class as requiring rescheduling.
+- Once a new date and time have been agreed, the **teacher updates the session schedule** and the class moves to `rescheduled`.
+- After the rescheduled lesson has taken place and attendance has been recorded, the session can be moved to `completed`.
+
+A fundamental design decision is that a rescheduled lesson remains the **same `ClassSession` database record** throughout this process.
+
+For example:
 
 ```text
 Lesson 8
 12 Oct · 10:00
 scheduled
        │
+       │ Reschedule requested
        ▼
+Lesson 8
 pending_reschedule
        │
+       │ New date/time agreed
        ▼
 Lesson 8
 15 Oct · 16:00
 rescheduled
+       │
+       │ Lesson delivered
+       ▼
+Lesson 8
+completed
 ```
 
-The lesson remains **Lesson 8** throughout the process.
+The application does **not** delete the original lesson and create a replacement.
+
+Instead, the existing `ClassSession` is updated with the newly agreed date and time while retaining its original identity.
 
 This preserves:
 
 - **Lesson identity**
 - **Class number**
-- **Attendance relationships**
+- **Course relationship**
+- **Learner attendance relationships**
 - **Course progression**
 - **Historical consistency**
-- **References from other parts of the application**
+- **References from other areas of the application**
 
-This architecture also ensures that rescheduling does not accidentally increase the number of lessons in a course.
+This architecture also ensures that rescheduling a lesson does not accidentally increase the number of classes belonging to the course.
 
+The distinction between the statuses is therefore:
+
+| Status | Meaning |
+|---|---|
+| `scheduled` | The lesson is scheduled normally |
+| `pending_reschedule` | A learner/employee or teacher has indicated that the lesson needs to be rescheduled and a new date/time is still to be agreed |
+| `rescheduled` | The teacher has updated the existing session with the newly agreed date/time |
+| `completed` | The lesson has taken place and has been completed |
+
+This workflow allows rescheduling to be initiated by either side while keeping responsibility for modifying the official course schedule with the teacher.
 ---
 
 #### Attendance
