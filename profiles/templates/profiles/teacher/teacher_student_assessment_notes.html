@@ -138,14 +138,6 @@
     </div>
 
     <article class="student-skills-notes-card">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">
-                <i class="fa-regular fa-file-lines mr-2"></i>
-                Assessment
-            </h2>
-        </div>
-
-        <hr>
 
         {% for note in skill_note_display %}
             <div class="teacher-skill-note">
@@ -161,10 +153,10 @@
                     </p>
                 {% endif %}
 
-                {% if note.pass %}
+                {% if note.required_standard %}
                     <p>
-                        <strong>Meets expectations:</strong>
-                        {% for subskill in note.pass %}
+                        <strong>Meets minimum required standard:</strong>
+                        {% for subskill in note.required_standard %}
                             <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </p>
