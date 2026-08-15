@@ -232,7 +232,6 @@ Role-based views validate the authenticated user's `UserProfile` before exposing
 
 The application therefore applies restrictions such as:
 
-```text
 Teacher
     ↓
 Only courses assigned to that teacher
@@ -293,13 +292,13 @@ A course type can contain information such as:
 
 A single `CourseType` can therefore be associated with multiple `Course` instances.
 
-```text
+
 CourseType
     │
     │ 1 : N
     ▼
   Course
-```
+
 
 This separates the **type of training being offered** from the **actual delivery of that training**.
 
@@ -335,13 +334,13 @@ A course stores delivery-specific information including:
 
 Course statuses currently support:
 
-```text
+
 Confirmed
 Active
 Paused
 Completed
 Cancelled
-```
+
 
 Course duration and class-generation logic are linked. The application uses the total number of training hours and lesson duration to determine the number of lessons required.
 
@@ -349,7 +348,7 @@ A course is not considered completed simply because its scheduled end date has p
 
 Instead, course completion depends on its actual lessons:
 
-```text
+
 Course
    │
    ▼
@@ -361,7 +360,6 @@ All sessions completed?
    ├── No  → Course remains open
    │
    └── Yes → Course becomes completed
-```
 
 When all `ClassSession` records belonging to a course have reached `completed` status, the course is automatically moved to `completed`.
 
@@ -377,7 +375,7 @@ Learners are connected to courses through the `CourseEnrollment` model.
 
 This is an association model between `User` and `Course`:
 
-```text
+
 User
   │
   │ 1 : N
@@ -387,7 +385,6 @@ CourseEnrollment
   │ N : 1
   │
 Course
-```
 
 Using a dedicated enrolment model rather than a simple many-to-many relationship allows EnglishGrows to store information that belongs specifically to the learner's participation in a particular course.
 
@@ -402,12 +399,12 @@ Each enrolment can contain:
 
 Enrolment statuses include:
 
-```text
+
 Active
 Paused
 Completed
 Cancelled
-```
+
 
 The database prevents the same learner from being enrolled more than once in the same course.
 
@@ -427,10 +424,9 @@ A timetable slot defines the normal weekly teaching pattern of a course.
 
 For example:
 
-```text
 Monday       09:00 – 10:30
 Wednesday    09:00 – 10:30
-```
+
 
 Each timetable slot stores:
 
@@ -443,7 +439,7 @@ The timetable represents a **scheduling rule**, not an individual lesson.
 
 This distinction is important:
 
-```text
+
 CourseTimetableSlot
         │
         │ defines recurring schedule
@@ -453,16 +449,14 @@ CourseTimetableSlot
         │ represents
         ▼
    Actual lesson
-```
 
 The database prevents duplicate timetable slots with the same:
 
-```text
+
 course
 + day_of_week
 + start_time
 + end_time
-```
 
 Validation also ensures that the end time occurs after the start time.
 
