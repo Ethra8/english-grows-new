@@ -199,6 +199,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     margin: 1.5rem auto;
     width: fit-content;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
 }
 
 .student-detail-page .progress-ring {
@@ -215,6 +216,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 

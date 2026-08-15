@@ -153,15 +153,21 @@
             <article class="skill-card">
 
                 <div class="skill-card-header">
-                    <h2 class="{{ skill.name|lower }}"><span><i class="{{ skill.icon }} mr-3"></i></span>
-                        {{ skill.name }}</h2>
-                    <!-- <hr> -->
-                    <!-- <div class="skill-ring {{ skill.name|lower }}" style="--skill-progress: {{ skill.score|floatformat:'-1'|default:'0' }};">
-                        <div>
-                            <strong>{{ skill.score|floatformat:"-1"|default:"0" }}/10</strong>
-                            <span>Overall</span>
-                        </div>
-                    </div> -->
+
+                    <h2 class="{{ skill.name|lower }}">
+                        <span class="skill-heading">
+
+                            <span class="skill-icon">
+                                <i class="{{ skill.icon }}"></i></span>
+
+                            <span class="skill-name">
+                                {{ skill.name }}</span>
+
+                        </span>
+                        <span class="skill-score">
+                            {{ skill.score|floatformat:"-1" }}/10
+                        </span>
+                    </h2>
                 </div>
 
                 <div class="skill-card-body">
@@ -312,7 +318,7 @@
 {% endif %}
 
 
-    <div id="employeeSkillsGraphOverview" class="student-details-skills-overview-grid">
+    <div id="employeeSkillsGraphOverview" class="student-details-skills-overview-grid mt-4">
     
         <article class="skills-progress-section">
             <div class="skills-chart-card">
