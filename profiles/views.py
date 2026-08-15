@@ -20,7 +20,7 @@ from decimal import Decimal
 
 from profiles.utils.time_formating import format_hours_duration
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillTermSnapshot
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
@@ -494,11 +494,12 @@ def my_learning_progress(request):
     # ---------------------------------------------------------
     # SKILLS PROGRESS GRAPH
     # ---------------------------------------------------------
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
+    overall_skill_chart_data = (
+        build_overall_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
     )
-
     # ---------------------------------------------------------
     # ATTENDANCE
     # ---------------------------------------------------------
@@ -592,7 +593,7 @@ def my_learning_progress(request):
         "completion_percentage": completion_percentage,
 
         # Skills graph data
-        "chart_data": chart_data,
+        "overall_skill_chart_data": overall_skill_chart_data,
     }
 
     return render(
@@ -979,92 +980,6 @@ def my_skills(request):
         context,
     )
 
-
-@login_required
-def my_skills_progress_graph(request):
-    student = request.user
-    student_profile = get_object_or_404(
-        UserProfile,
-        user=student,
-    )
-
-    # ---------------------------------------------------------
-    # SECURITY
-    # Only learner roles can access their own progress graph.
-    # ---------------------------------------------------------
-    if student_profile.role not in [
-        UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL,
-    ]:
-        return redirect("home")
-
-    # ---------------------------------------------------------
-    # ACTIVE ENROLLMENTS
-    # Only active enrollments in active courses are selectable.
-    # ---------------------------------------------------------
-    active_enrollments = (
-        CourseEnrollment.objects
-        .filter(
-            student=student,
-            status="active",
-            course__status="active",
-        )
-        .select_related(
-            "course",
-            "course__teacher",
-            "course__course_type",
-            "course__company",
-        )
-        .order_by("course__name")
-    )
-
-    # ---------------------------------------------------------
-    # SELECTED COURSE
-    # Keep the course selected on the other learner pages.
-    # ---------------------------------------------------------
-    selected_course_id = request.GET.get("course")
-
-    if selected_course_id:
-        enrollment = get_object_or_404(
-            active_enrollments,
-            course_id=selected_course_id,
-        )
-    else:
-        enrollment = active_enrollments.first()
-
-    course = enrollment.course if enrollment else None
-
-    # ---------------------------------------------------------
-    # SKILLS PROGRESS GRAPH
-    # IMPORTANT: use the shared helper so every role/page gets
-    # identical skill colors, dataset order and chart values.
-    # ---------------------------------------------------------
-    if course:
-        chart_data = build_skill_progress_chart_data(
-            student=student,
-            course=course,
-        )
-    else:
-        chart_data = {
-            "labels": [],
-            "datasets": [],
-        }
-
-    context = {
-        "student": student,
-        "student_profile": student_profile,
-        "active_enrollments": active_enrollments,
-        "active_enrollment": enrollment,
-        "enrollment": enrollment,
-        "course": course,
-        "chart_data": chart_data,
-    }
-
-    return render(
-        request,
-        "profiles/student/my_skills_progress_graph.html",
-        context,
-    )
 
 @login_required
 def my_learning_progress_assessment(request):
@@ -1941,15 +1856,134 @@ def teacher_course_students_list(request, course_id):
 # BUILD STD SKILLS GRAPH
 def build_skill_progress_chart_data(student, course):
     """
-    Build the shared Chart.js data structure for skills progress.
-    - Assessment values are stored and displayed on a 0–10 scale.
-    - All user.role views should call this
-    helper so chart colors, order and values remain consistent.
-    SKILL_CHART_COLORS is the single source of truth for both
-    skill colors and dataset/legend order.
+    Build skill progress chart data from detailed assessment snapshots.
+
+    Multiple subskill changes can create multiple snapshots for the
+    same skill on the same day.
+
+    For the chart's daily point, use the LAST snapshot recorded for
+    that skill on that date. This ensures the latest graph point
+    matches the current skill-card score.
     """
+
     snapshots = (
-        StudentSkillTermSnapshot.objects
+        StudentSkillAssessmentSnapshot.objects
+        .filter(
+            skill_assessment__student=student,
+            skill_assessment__course=course,
+        )
+        .select_related(
+            "skill_assessment",
+        )
+        .order_by(
+            "recorded_at",
+        )
+    )
+
+    # ---------------------------------------------------------
+    # GROUP SNAPSHOTS BY DATE + SKILL
+    #
+    # Because snapshots are ordered chronologically, assigning
+    # repeatedly to the same date/skill automatically leaves us
+    # with the LAST snapshot for that day.
+    # ---------------------------------------------------------
+    daily_scores = {}
+
+    for snapshot in snapshots:
+        date = timezone.localtime(
+            snapshot.recorded_at
+        ).date()
+
+        skill = snapshot.skill_assessment.skill
+
+        daily_scores.setdefault(date, {})
+
+        daily_scores[date][skill] = snapshot.score
+
+
+    # ---------------------------------------------------------
+    # CHART DATES
+    # ---------------------------------------------------------
+    chart_dates = sorted(daily_scores.keys())
+
+    chart_labels = [
+        date.strftime("%d %b %Y")
+        for date in chart_dates
+    ]
+
+
+    # ---------------------------------------------------------
+    # DATASETS
+    # ---------------------------------------------------------
+    datasets = []
+
+    for skill_name, color in SKILL_CHART_COLORS.items():
+
+        skill_value = skill_name.lower()
+
+        values = []
+
+        for date in chart_dates:
+            score = daily_scores.get(
+                date,
+                {},
+            ).get(
+                skill_value,
+            )
+
+            values.append(
+                float(score)
+                if score is not None
+                else None
+            )
+
+        datasets.append({
+            "label": skill_name,
+            "data": values,
+            "borderColor": color,
+            "backgroundColor": color,
+            "tension": 0.2,
+        })
+
+
+    return {
+        "labels": chart_labels,
+        "datasets": datasets,
+    }
+
+
+from decimal import Decimal, ROUND_HALF_UP
+from django.utils import timezone
+
+
+def build_overall_skill_progress_chart_data(student, course):
+    """
+    Build one overall skill-development score per assessment date.
+
+    Each point represents the average of the latest known scores
+    for all four skills on that date.
+
+    Rules:
+    - Uses existing term snapshots as historical baseline.
+    - Uses detailed assessment snapshots for newer changes.
+    - If a skill is assessed several times on the same day,
+      only its LAST score that day is used.
+    - A chart point is created only once all four skills have
+      an available assessment score.
+    """
+
+    skill_names = {
+        "listening",
+        "reading",
+        "speaking",
+        "writing",
+    }
+
+    # ---------------------------------------------------------
+    # DETAILED ASSESSMENT SNAPSHOTS
+    # ---------------------------------------------------------
+    assessment_snapshots = (
+        StudentSkillAssessmentSnapshot.objects
         .filter(
             skill_assessment__student=student,
             skill_assessment__course=course,
@@ -1958,54 +1992,115 @@ def build_skill_progress_chart_data(student, course):
         .order_by("recorded_at")
     )
 
+
+    # ---------------------------------------------------------
+    # COLLECT ALL CHANGES BY DATE
+    #
+    # {
+    #     date: {
+    #         "listening": Decimal(...),
+    #         "reading": Decimal(...),
+    #         ...
+    #     }
+    # }
+    # ---------------------------------------------------------
+    daily_changes = {}
+
+    # New detailed assessment history
+    #
+    # These are processed second, so they take precedence
+    # over a term snapshot on the same date.
+    for snapshot in assessment_snapshots:
+        date = timezone.localtime(
+            snapshot.recorded_at
+        ).date()
+
+        skill = snapshot.skill_assessment.skill
+
+        daily_changes.setdefault(date, {})
+
+        # Because queryset is chronological, the last
+        # snapshot for this skill/date wins.
+        daily_changes[date][skill] = snapshot.score
+
+
+    if not daily_changes:
+        return {
+            "labels": [],
+            "datasets": [],
+        }
+
+
+    # ---------------------------------------------------------
+    # WALK THROUGH HISTORY
+    #
+    # Carry forward the latest known value for every skill.
+    # ---------------------------------------------------------
+    latest_scores = {}
+
     chart_labels = []
+    overall_scores = []
 
-    for snapshot in snapshots:
-        if snapshot.term_label not in chart_labels:
-            chart_labels.append(snapshot.term_label)
 
-    # Dictionary order follows SKILL_CHART_COLORS, so the graph
-    # and legend are always: Speaking, Reading, Writing, Listening.
-    skill_chart_values = {
-        skill_name: []
-        for skill_name in SKILL_CHART_COLORS
-    }
+    for date in sorted(daily_changes.keys()):
 
-    for skill_name in skill_chart_values:
-        skill_value = skill_name.lower()
+        # Apply all assessment changes made on this date.
+        for skill, score in daily_changes[date].items():
+            latest_scores[skill] = score
 
-        for label in chart_labels:
-            matching_snapshot = None
 
-            for snapshot in snapshots:
-                if (
-                    snapshot.skill_assessment.skill == skill_value
-                    and snapshot.term_label == label
-                ):
-                    matching_snapshot = snapshot
-                    break
+        # -----------------------------------------------------
+        # ONLY CREATE A POINT WHEN ALL 4 SKILLS HAVE
+        # ACTUALLY BEEN ASSESSED.
+        # -----------------------------------------------------
+        if not skill_names.issubset(latest_scores.keys()):
+            continue
 
-            skill_chart_values[skill_name].append(
-                float(matching_snapshot.score)
-                if matching_snapshot
-                else None
-            )
 
-    datasets = []
+        total = sum(
+            (
+                latest_scores[skill]
+                for skill in skill_names
+            ),
+            Decimal("0"),
+        )
 
-    for skill_name, color in SKILL_CHART_COLORS.items():
-        datasets.append({
-            "label": skill_name,
-            "data": skill_chart_values[skill_name],
-            "borderColor": color,
-            "backgroundColor": color,
-            "tension": 0.2,
-        })
+        average = (
+            total / Decimal("4")
+        ).quantize(
+            Decimal("0.1"),
+            rounding=ROUND_HALF_UP,
+        )
+
+
+        chart_labels.append(
+            date.strftime("%d %b %Y")
+        )
+
+        overall_scores.append(
+            float(average)
+        )
+
 
     return {
         "labels": chart_labels,
-        "datasets": datasets,
+
+        "datasets": [
+            {
+                "label": "Overall Skills",
+                "data": overall_scores,
+
+                # I'd use ONE brand colour here,
+                # not one of the individual skill colours.
+                "borderColor": "#007A7D",
+                "backgroundColor": "#007A7D",
+
+                "tension": 0.2,
+            }
+        ],
     }
+
+
 
 # Helper to display Teacher notes (+ future automated reports ???)
 def build_skill_note_display(skill_assessment):
@@ -2118,7 +2213,13 @@ def teacher_student_detail(request, course_id, enrollment_id):
         .order_by("-class_session__start_time")[:5]
     )
 
-
+    # OVERALL SKILLS PROGRESS GRAPH
+    overall_skill_chart_data = (
+        build_overall_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
+    )
     context = {
         "course": course,
         "enrollment": enrollment,
@@ -2137,6 +2238,8 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
+
+        "overall_skill_chart_data": overall_skill_chart_data,
     }
 
     return render(
@@ -2378,12 +2481,21 @@ def update_student_attendance_status(request, course_id, enrollment_id, attendan
 
 @login_required
 def student_skills_overview(request, course_id, enrollment_id):
+
+    # ---------------------------------------------------------
+    # COURSE
+    # Security: course must belong to logged-in teacher
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
         teacher=request.user,
     )
 
+
+    # ---------------------------------------------------------
+    # ENROLLMENT / STUDENT
+    # ---------------------------------------------------------
     enrollment = get_object_or_404(
         CourseEnrollment.objects.select_related(
             "student",
@@ -2397,6 +2509,10 @@ def student_skills_overview(request, course_id, enrollment_id):
     student = enrollment.student
     student_profile = student.profile
 
+
+    # ---------------------------------------------------------
+    # SKILL ICONS
+    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -2404,88 +2520,178 @@ def student_skills_overview(request, course_id, enrollment_id):
         "listening": "fa-solid fa-headphones",
     }
 
-    for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES:
-        skill_assessment, created = StudentSkillAssessment.objects.get_or_create(
-            student=student,
-            course=course,
-            skill=skill_value,
+
+    # ---------------------------------------------------------
+    # ENSURE ALL PREDEFINED SKILLS / SUBSKILLS EXIST
+    #
+    # Important:
+    # Creating an unrated subskill does NOT create a snapshot,
+    # because rating=None means "Not assessed yet".
+    # ---------------------------------------------------------
+    for skill_value, skill_label in (
+        StudentSkillAssessment.SKILL_AREA_CHOICES
+    ):
+        skill_assessment, created = (
+            StudentSkillAssessment.objects.get_or_create(
+                student=student,
+                course=course,
+                skill=skill_value,
+            )
         )
 
-        for subskill_value, subskill_label in SUBSKILLS.get(skill_value, []):
+        for subskill_value, subskill_label in SUBSKILLS.get(
+            skill_value,
+            [],
+        ):
             StudentSubSkillAssessment.objects.get_or_create(
                 skill_assessment=skill_assessment,
                 subskill=subskill_value,
             )
 
-    valid_skill_values = [
-        skill_value
-        for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES
-    ]
 
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .prefetch_related("subskill_assessments")
+        .prefetch_related(
+            "subskill_assessments",
+        )
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
+    # DISPLAY-FRIENDLY SKILL NOTE DATA
+    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
 
+    # ---------------------------------------------------------
+    # BUILD SKILL CARDS
+    #
+    # Same structure as learner Skills page,
+    # but assessment_id is retained so teacher can edit.
+    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
+
+        note_display = build_skill_note_display(
+            assessment
+        )
+
+        # Only genuinely assessed subskills.
+        assessed_subskills = (
+            assessment.subskill_assessments
+            .exclude(rating__isnull=True)
+            .exclude(rating="")
+        )
+
         skills.append({
             "assessment": assessment,
+
+            # Needed by Edit Skill button
             "assessment_id": assessment.id,
+
             "skill_value": assessment.skill,
             "name": assessment.get_skill_display(),
+
             "icon": skill_icons.get(
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
+
+            # Overall assessment /10
             "score": assessment.average_score,
+
             "teacher_notes": assessment.teacher_notes,
-            "subskills": assessment.subskill_assessments.all(),
+
+            # Use only genuinely assessed subskills
+            # so "{{ skill.subskills|length }} assessed"
+            # is accurate.
+            "subskills": assessed_subskills,
+
+            # Grouped assessment categories
+            "strengths": note_display["strengths"],
+            "confident": note_display["confident"],
+            "required_standard": note_display["required_standard"],
+            "developing": note_display["developing"],
+            "needs_work": note_display["needs_work"],
         })
 
+
+    # ---------------------------------------------------------
+    # TEACHER NOTES
+    # ---------------------------------------------------------
     skill_notes = (
-    StudentSkillAssessment.objects
+        StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .exclude(teacher_notes="")
+        .exclude(
+            teacher_notes=""
+        )
         .order_by("skill")
     )
-    
 
-    academic_profile = getattr(student, "academic_profile", None)
 
+    # ---------------------------------------------------------
+    # ACADEMIC PROFILE
+    # ---------------------------------------------------------
+    academic_profile = getattr(
+        student,
+        "academic_profile",
+        None,
+    )
+
+
+    # ---------------------------------------------------------
+    # DETAILED 4-SKILL PROGRESS GRAPH
+    #
+    # Uses StudentSkillAssessmentSnapshot history.
+    # Same graph as learner Skills page.
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "course": course,
         "enrollment": enrollment,
         "student": student,
         "student_profile": student_profile,
+
         "skills": skills,
         "academic_profile": academic_profile,
-        "chart_data_json": json.dumps(chart_data),
+
+        # Pass normal Python object.
+        # Template should serialize with json_script.
+        "chart_data": chart_data,
+
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
+
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
+
+    # ---------------------------------------------------------
+    # RENDER
+    # ---------------------------------------------------------
     return render(
         request,
         "profiles/teacher/student_skills_overview.html",
@@ -2759,108 +2965,6 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
     return render(
         request,
         "profiles/teacher/teacher_student_assessment_notes.html",
-        context,
-    )
-
-
-
-def teacher_student_progress_skills_graph(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
-
-    if profile.role != UserProfile.ROLE_TEACHER:
-        return redirect("home")
-
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-    )
-
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
-            "student",
-            "student__profile",
-            "course",
-        ),
-        id=enrollment_id,
-        course=course,
-    )
-
-    student = enrollment.student
-    student_profile = student.profile
-
-    skill_icons = {
-        "speaking": "fa-solid fa-microphone",
-        "reading": "fa-solid fa-book-open",
-        "writing": "fa-solid fa-pen",
-        "listening": "fa-solid fa-headphones",
-    }
-
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .prefetch_related("subskill_assessments")
-        .order_by("skill")
-    )
-
-    skill_note_display = [
-        build_skill_note_display(skill_assessment)
-        for skill_assessment in skill_assessments
-    ]
-
-    skills = []
-
-    for assessment in skill_assessments:
-        skills.append({
-            "assessment": assessment,
-            "assessment_id": assessment.id,
-            "skill_value": assessment.skill,
-            "name": assessment.get_skill_display(),
-            "icon": skill_icons.get(
-                assessment.skill,
-                "fa-solid fa-chart-simple",
-            ),
-            "score": assessment.average_score,
-            "teacher_notes": assessment.teacher_notes,
-            "subskills": assessment.subskill_assessments.all(),
-        })
-
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(teacher_notes="")
-        .order_by("skill")
-    )
-
-    academic_profile = getattr(student, "academic_profile", None)
-
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
-    )
-
-    context = {
-        "profile": profile,
-        "course": course,
-        "enrollment": enrollment,
-        "student": student,
-        "student_profile": student_profile,
-        "skills": skills,
-        "academic_profile": academic_profile,
-        "chart_data": chart_data,
-        "skill_notes": skill_notes,
-        "skill_note_display": skill_note_display,
-        "level_choices": UserProfile.LEVEL_CHOICES,
-    }
-
-    return render(
-        request,
-        "profiles/teacher/teacher_student_progress_skills_graph.html",
         context,
     )
 
@@ -4817,10 +4921,14 @@ def company_admin_student_detail(request, student_id):
         for skill_assessment in skill_assessments
     ]
 
+    # OVERALL SKILLS PROGRESS GRAPH
+    overall_skill_chart_data = (
+        build_overall_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
+    )
 
-    # ---------------------------------------------------------
-    # CONTEXT
-    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
@@ -4860,6 +4968,8 @@ def company_admin_student_detail(request, student_id):
         "recent_attendance": recent_attendance,
         "chart_data": chart_data,
         "skill_note_display": skill_note_display,
+
+        "overall_skill_chart_data": overall_skill_chart_data,
     }
 
     return render(
@@ -5486,247 +5596,6 @@ def company_admin_student_teacher_notes(request, student_id):
     return render(
         request,
         "profiles/company_admin/company_admin_student_teacher_notes.html",
-        context,
-    )
-
-
-
-@login_required
-def company_admin_student_progress_skills_graph(request, student_id):
-    profile = get_object_or_404(
-        UserProfile,
-        user=request.user,
-    )
-
-    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
-        return redirect("home")
-
-    company = profile.company
-
-    if not company:
-        return redirect("home")
-
-
-    # ---------------------------------------------------------
-    # GET EMPLOYEE
-    #
-    # The employee must belong to the same company
-    # as the logged-in company admin.
-    # ---------------------------------------------------------
-    student = get_object_or_404(
-        User.objects.select_related("profile"),
-        id=student_id,
-        profile__company=company,
-    )
-
-    student_profile = student.profile
-
-
-    # ---------------------------------------------------------
-    # GET ALL ACTIVE ENROLLMENTS FOR THIS EMPLOYEE
-    #
-    # These can also be used to populate the course selector
-    # on this page if you want the same selector available
-    # across all employee detail tabs.
-    # ---------------------------------------------------------
-    active_enrollments = (
-        CourseEnrollment.objects
-        .filter(
-            student=student,
-            status="active",
-            course__status="active",
-            course__company=company,
-        )
-        .select_related(
-            "course",
-            "course__teacher",
-            "course__course_type",
-            "course__company",
-        )
-        .order_by("course__name")
-    )
-
-
-    # ---------------------------------------------------------
-    # GET SELECTED COURSE FROM URL
-    #
-    # Example:
-    #
-    # /profiles/company-admin/employees/3/progress/?course=9
-    # ---------------------------------------------------------
-    selected_course_id = request.GET.get("course")
-
-
-    # ---------------------------------------------------------
-    # DETERMINE SELECTED ENROLLMENT / COURSE
-    # ---------------------------------------------------------
-    if selected_course_id:
-        enrollment = get_object_or_404(
-            active_enrollments,
-            course_id=selected_course_id,
-        )
-    else:
-        enrollment = active_enrollments.first()
-
-
-    # ---------------------------------------------------------
-    # EMPLOYEE HAS NO ACTIVE ENROLLMENT
-    # ---------------------------------------------------------
-    if not enrollment:
-        context = {
-            "profile": profile,
-            "company": company,
-
-            "student": student,
-            "student_profile": student_profile,
-
-            "active_enrollments": active_enrollments,
-            "enrollment": None,
-            "course": None,
-
-            "skills": [],
-            "academic_profile": getattr(
-                student,
-                "academic_profile",
-                None,
-            ),
-            "chart_data": None,
-            "skill_notes": [],
-            "skill_note_display": [],
-        }
-
-        return render(
-            request,
-            "profiles/company_admin/company_admin_student_progress_skills_graph.html",
-            context,
-        )
-
-
-    # ---------------------------------------------------------
-    # SELECTED COURSE
-    # ---------------------------------------------------------
-    course = enrollment.course
-
-
-    # ---------------------------------------------------------
-    # SKILL ICONS
-    # ---------------------------------------------------------
-    skill_icons = {
-        "speaking": "fa-solid fa-microphone",
-        "reading": "fa-solid fa-book-open",
-        "writing": "fa-solid fa-pen",
-        "listening": "fa-solid fa-headphones",
-    }
-
-
-    # ---------------------------------------------------------
-    # SKILL ASSESSMENTS
-    # ---------------------------------------------------------
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .prefetch_related(
-            "subskill_assessments"
-        )
-        .order_by("skill")
-    )
-
-
-    # ---------------------------------------------------------
-    # DISPLAY-FRIENDLY SKILL NOTES
-    # ---------------------------------------------------------
-    skill_note_display = [
-        build_skill_note_display(skill_assessment)
-        for skill_assessment in skill_assessments
-    ]
-
-
-    # ---------------------------------------------------------
-    # BUILD SKILLS LIST
-    # ---------------------------------------------------------
-    skills = []
-
-    for assessment in skill_assessments:
-        skills.append({
-            "assessment": assessment,
-            "assessment_id": assessment.id,
-            "skill_value": assessment.skill,
-            "name": assessment.get_skill_display(),
-            "icon": skill_icons.get(
-                assessment.skill,
-                "fa-solid fa-chart-simple",
-            ),
-            "average_score": assessment.average_score,
-            "teacher_notes": assessment.teacher_notes,
-            "subskills": assessment.subskill_assessments.all(),
-        })
-
-
-    # ---------------------------------------------------------
-    # SKILL NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(teacher_notes="")
-        .order_by("skill")
-    )
-
-
-    # ---------------------------------------------------------
-    # ACADEMIC PROFILE
-    # ---------------------------------------------------------
-    academic_profile = getattr(
-        student,
-        "academic_profile",
-        None,
-    )
-
-
-    # ---------------------------------------------------------
-    # PROGRESS CHART
-    # ---------------------------------------------------------
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
-    )
-
-
-    # ---------------------------------------------------------
-    # CONTEXT
-    # ---------------------------------------------------------
-    context = {
-        "profile": profile,
-        "company": company,
-
-        # Employee
-        "student": student,
-        "student_profile": student_profile,
-
-        # Course selector
-        "active_enrollments": active_enrollments,
-
-        # Selected enrollment / course
-        "enrollment": enrollment,
-        "course": course,
-
-        # Progress data
-        "skills": skills,
-        "academic_profile": academic_profile,
-        "chart_data": chart_data,
-        "skill_notes": skill_notes,
-        "skill_note_display": skill_note_display,
-    }
-
-    return render(
-        request,
-        "profiles/company_admin/company_admin_student_progress_skills_graph.html",
         context,
     )
 

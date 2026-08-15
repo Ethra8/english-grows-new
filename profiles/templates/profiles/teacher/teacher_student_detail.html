@@ -139,17 +139,17 @@
                 Skills
             </a>
 
-            <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
+            <!-- <a href="{% url 'profiles:teacher_student_progress_skills_graph' course.id enrollment.id %}">
                 Progress
-            </a>
+            </a> -->
 
             <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
                 Assessment
             </a>
 
-            <a href="#">
+            <!-- <a href="#">
                 History
-            </a>
+            </a> -->
         </nav>
     </div>
     <!-- Overview content -->
@@ -271,13 +271,33 @@
         </article>
     </div>
     
+    <div class="student-details-skills-overview-grid">
+        <article class="skills-progress-section">
+            <div class="skills-chart-card">
+                <div class="skills-chart-header">
+                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Progress Over Time</h2>
+                </div>
+
+                <div class="skills-chart-canvas-wrap">
+                    <canvas id="overallSkillsProgressChart"></canvas>
+                </div>
+            </div>
+        </article>
+    </div>  
+    
 </section>
 
 {% endblock %}
 
-
 {% block postloadjs %}
 {{ block.super }}
-{{ chart_data_json|json_script:"skills-chart-data" }}
+
+{% if overall_skill_chart_data %}
+    {{ overall_skill_chart_data|json_script:"overall-skills-chart-data" }}
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'profiles/js/skills_progress_chart.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}

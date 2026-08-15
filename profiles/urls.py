@@ -17,7 +17,6 @@ urlpatterns = [
     path("student/my_learning_progress/", views.my_learning_progress, name="my_learning_progress"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
     path("student/my_skills/", views.my_skills, name="my_skills"),
-    path("student/my_learning_progress/skills_progress/", views.my_skills_progress_graph, name="my_skills_progress_graph"),
     path("student/my_learning_progress/assessment/", views.my_learning_progress_assessment, name="my_learning_progress_assessment"),
 
 
@@ -44,7 +43,6 @@ urlpatterns = [
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/skills/", views.student_skills_overview, name="student_skills_overview"),
     path("teacher/student-skill/<int:skill_assessment_id>/edit/", views.teacher_edit_student_skill, name="teacher_edit_student_skill"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/assessment_notes", views.teacher_student_assessment_notes, name="teacher_student_assessment_notes"),
-    path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/progress_chart", views.teacher_student_progress_skills_graph, name="teacher_student_progress_skills_graph"),
     # Teacher RESCHEDULE
     path("teacher/classes/<int:session_id>/pending-reschedule/", views.mark_class_pending_reschedule, name="mark_class_pending_reschedule"),
     path("teacher/reschedule-classes/", views.teacher_reschedule_classes, name="teacher_reschedule_classes"),
@@ -68,7 +66,6 @@ urlpatterns = [
     path("company-admin/employees/<int:student_id>/attendance/", views.company_admin_student_attendance_record, name="company_admin_student_attendance_record"),
     path("company-admin/employees/<int:student_id>/skills/", views.company_admin_student_skills_overview, name="company_admin_student_skills_overview"),
     path("company-admin/employees/<int:student_id>/assessment/", views.company_admin_student_teacher_notes, name="company_admin_student_teacher_notes"),
-    path("company-admin/employees/<int:student_id>/progress/", views.company_admin_student_progress_skills_graph, name="company_admin_student_progress_skills_graph"),
     path("company-admin/classes/", views.company_admin_classes_list, name="company_admin_classes_list"),
     path("company-admin/employees/", views.company_admin_employees_list, name="company_admin_employees_list"),
     path("company-admin/calendar/", views.company_admin_calendar, name="company_admin_calendar"),

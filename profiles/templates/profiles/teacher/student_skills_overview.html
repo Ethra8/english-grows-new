@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -150,69 +151,234 @@
             </a>
         </nav>
     </div>
+
+    <!-- SKILLS -->
+
+{% if skills %}
+
     <div class="skills-grid">
 
         {% for skill in skills %}
+
             <article class="skill-card">
 
                 <div class="skill-card-header">
-                    
-                    <h2>
-                        <span><i class="{{ skill.icon }} mr-3"></i></span>
-                        {{ skill.name }}
-                    </h2>
-                    <div class="skill-card-edit mt-4">
-                        <a href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
-                        class="skill-edit-link"
-                        title="Edit {{ skill.name }}">
-                            <i class="fa-regular fa-pen-to-square mr-2"></i> Edit Skill
-                        </a>
-                    </div>
 
-                    <hr>
-                    <div class="skill-ring"
-                         style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                        <div>
-                            <strong>{{ skill.percentage|default:"0" }}%</strong>
-                            <span>Overall</span>
-                        </div>
-                    </div>
+                    <h2 class="{{ skill.name|lower }}">
+
+                        <span class="skill-heading">
+
+                            <span class="skill-icon">
+                                <i class="{{ skill.icon }}"></i>
+                            </span>
+
+                            <span class="skill-name">
+                                {{ skill.name }}
+                            </span>
+
+                        </span>
+
+                        <span class="skill-score">
+                            {% if skill.score is not None %}
+                                {{ skill.score|floatformat:"-1" }}/10
+                            {% else %}
+                                Not assessed
+                            {% endif %}
+                        </span>
+
+                    </h2>
+
                 </div>
 
+
                 <div class="skill-card-body">
+
                     <div class="skill-details">
 
-                        <p>{{ skill.subskills|length }} subskills tracked</p>
+                        <h3>
+                            {{ skill.subskills|length }}
+                            subskill{{ skill.subskills|length|pluralize }}
+                            assessed
+                        </h3>
 
-                        {% for subskill in skill.subskills %}
-                            {% with progress=subskill.percentage|default:0 %}
-                                <div class="subskill-row">                      
-                                    <div class="subskill-main mt-3">
-                                        <strong>{{ subskill.get_subskill_display }}</strong>
-                                        <br>
-                                        <span>{{ subskill.get_rating_display }} ({{ progress }}%)</span>                                    
-                                        <!-- <strong class="subskill-percentage">{{ progress }}%</strong> -->
-                                    </div>
-                                </div>
-                            {% endwith %}
-                        {% empty %}
-                            <p class="text-white-50 mb-0">
-                                No subskills have been created yet.
-                            </p>
-                        {% endfor %}
+
+                        <!-- KEY STRENGTHS -->
+                        {% if skill.strengths %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Key strengths</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.strengths %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- CONFIDENT AREAS -->
+                        {% if skill.confident %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Confident areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.confident %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- REQUIRED STANDARD -->
+                        {% if skill.required_standard %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Required standard achieved</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.required_standard %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- DEVELOPING -->
+                        {% if skill.developing %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Developing areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.developing %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- PRIORITY AREAS -->
+                        {% if skill.needs_work %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Priority areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.needs_work %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
 
                     </div>
+
+
+                    <!-- TEACHER ACTION -->
+                    <div class="skill-card-actions">
+
+                        <a
+                            href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
+                            class="btn-skill-edit"
+                        >
+                            <i class="fa-regular fa-pen-to-square mr-2"></i>
+                            Edit skill
+                        </a>
+
+                    </div>
+
                 </div>
 
             </article>
-        {% empty %}
-            <p class="text-white">
-                No skill assessments yet.
-            </p>
+
         {% endfor %}
 
     </div>
 
+
+    <!-- -----------------------------------------------------
+         4-SKILL PROGRESS GRAPH
+         ----------------------------------------------------- -->
+
+    <div class="skills-progress-section mt-4">
+
+        <div class="skills-chart-card">
+
+            <div class="skills-chart-header">
+
+                <h2>
+                    <i class="fa-solid fa-chart-line mr-2"></i>
+                    Skills Progress Over Time
+                </h2>
+
+            </div>
+
+            <div class="skills-chart-canvas-wrap">
+                <canvas id="skillsProgressChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% else %}
+
+    <p class="text-dark mt-4">
+        No skills assessment is available yet.
+    </p>
+
+{% endif %}
 
 </section>
 
@@ -221,5 +387,13 @@
 
 {% block postloadjs %}
 {{ block.super }}
+
+{% if chart_data %}
+    {{ chart_data|json_script:"skills-chart-data" }}
+{% endif %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'profiles/js/skills_progress_chart.js' %}"></script>
 <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
 {% endblock %}

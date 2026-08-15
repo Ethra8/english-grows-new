@@ -100,14 +100,14 @@
         <nav class="student-detail-tabs">
             <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}" class="active">
                 Overview</a>
-            <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}">
-                Progress</a>
+            <!-- <a href="{% url 'profiles:company_admin_student_progress_skills_graph' student.id %}?course={{ course.id }}">
+                Progress</a> -->
             <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
                 Skills</a>
             <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
                 Attendance</a>
-            <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
-                Assessment</a>
+            <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
+                Assessment</a> -->
         </nav>
     </div>    
 
@@ -278,11 +278,11 @@
         <article class="skills-progress-section">
             <div class="skills-chart-card">
                 <div class="skills-chart-header">
-                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Skills Progress Over Time</h2>
+                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Progress Over Time</h2>
                 </div>
 
                 <div class="skills-chart-canvas-wrap">
-                    <canvas id="skillsProgressChart"></canvas>
+                    <canvas id="overallSkillsProgressChart"></canvas>
                 </div>
             </div>
         </article>
@@ -294,115 +294,11 @@
 
 {% block postloadjs %}
 {{ block.super }}
-{{ chart_data|json_script:"skills-chart-data" }}
-<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+
+{% if overall_skill_chart_data %}
+    {{ overall_skill_chart_data|json_script:"overall-skills-chart-data" }}
+{% endif %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const chartEl = document.getElementById("skillsProgressChart");
-        const chartDataEl = document.getElementById("skills-chart-data");
-
-        if (!chartEl || !chartDataEl) {
-            return;
-        }
-
-        const chartData = JSON.parse(chartDataEl.textContent);
-
-        console.log("Student chart data:", chartData);
-
-        if (!chartData.labels || chartData.labels.length === 0) {
-            chartEl.parentElement.innerHTML = `
-                <p class="text-dark">
-                    No skill progress data yet.
-                    Your skills progress graph will display here once your
-                    teacher has completed an evaluation.
-                </p>
-            `;
-            return;
-        }
-
-        // ---------------------------------------------------------
-        // Apply consistent visual settings to every skill dataset.
-        // The actual skill colors already come from chart_data.
-        // ---------------------------------------------------------
-        chartData.datasets.forEach(function (dataset) {
-            dataset.tension = 0.2;
-            dataset.fill = false;
-            dataset.borderWidth = 2.5;
-            dataset.pointRadius = 4;
-            dataset.pointHoverRadius = 6;
-        });
-
-        new Chart(chartEl, {
-            type: "line",
-
-            data: chartData,
-
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                spanGaps: true,
-
-                interaction: {
-                    mode: "index",
-                    intersect: false
-                },
-
-                scales: {
-                    y: {
-                        min: 0,
-                        max: 10,
-
-                        ticks: {
-                            stepSize: 1,
-
-                            callback: function (value) {
-                                return value;
-                            }
-                        },
-
-                        title: {
-                            display: true,
-                            text: "Assessment score / 10"
-                        }
-                    },
-
-                    x: {
-                        title: {
-                            display: false
-                        }
-                    }
-                },
-
-                plugins: {
-                    legend: {
-                        position: "bottom",
-
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: "circle",
-                            padding: 18
-                        }
-                    },
-
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                const value = context.parsed.y;
-
-                                return (
-                                    context.dataset.label
-                                    + ": "
-                                    + Number(value).toFixed(1).replace(".0", "")
-                                    + " / 10"
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    });
-</script>
+<script src="{% static 'profiles/js/skills_progress_chart.js' %}"></script>
 {% endblock %}

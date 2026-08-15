@@ -2718,20 +2718,20 @@ div:has(> .student-action-btn) {
 **** STUDENT SKILLS OVERVIEW Page *************|
 *********************************************** */
 
-.chart-bar span {
+/* .chart-bar span {
     width: calc(var(--progress) * 1%);
-}
+} */
 
 
 
-.student-skills-chart-card {
+/* .student-skills-chart-card {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
     border: 1px solid rgba(95, 255, 234, 0.35);
     border-radius: 8px;
     padding: 1.5rem;
     color: whitesmoke;
     margin-top: 1.5rem;
-}
+} */
 
 .student-skills-notes-card {
     background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
@@ -2742,7 +2742,7 @@ div:has(> .student-action-btn) {
     margin-top: 1.25rem;
 }
 
-.skill-edit-link {
+/* .skill-edit-link {
     width: fit-content;
     max-width: 100%;
     white-space: normal;
@@ -2761,12 +2761,12 @@ div:has(> .student-action-btn) {
     justify-content: flex-end;
     margin-top: -0.5rem;
     margin-bottom: 1rem;    
-}
+} */
 
-.skill-trend {
+/* .skill-trend {
     margin-top: 1rem;
     color: #5fffea;
-}
+} */
 
 /* .student-skills-bottom-grid {
     display: grid;
@@ -2797,6 +2797,7 @@ div:has(> .student-action-btn) {
     border-radius: 999px;
 } */
 
+/* ASSESSMENT PAGES all profiles */
 .teacher-skill-note {
     background-color: whitesmoke;
     border-radius: 8px;
@@ -2808,10 +2809,10 @@ div:has(> .student-action-btn) {
     margin-bottom: 0 !important;
 }
 
-/* .teacher-skill-note ul {
+.teacher-skill-note ul {
     color:#003366;
     padding-left: 1.5rem;
-} */
+}
 
 .teacher-skill-note h4 {
     font-family: "Big Shoulders Display", sans-serif;
@@ -2826,9 +2827,9 @@ div:has(> .student-action-btn) {
     border-bottom: 1px solid #006b7d;
 }
 
-/* .teacher-skill-note li {
+.teacher-skill-note li {
     color:#003366;
-} */
+}
 
 .teacher-skill-note p {
     color:#003366;
@@ -2850,7 +2851,7 @@ div:has(> .student-action-btn) {
 .empty-assessment-state p {
     padding-top: 1rem;
 }
-
+/* END ASSESSMENT pages */
 
 
 /************************************************|
