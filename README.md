@@ -787,21 +787,45 @@ Unrated subskills are excluded rather than being interpreted as zero performance
 
 `StudentSubSkillAssessment` provides the detailed assessment information from which the overall skill assessment is calculated.
 
-Each principal language skill contains several pedagogically relevant subskills.
+Each principal language skill is divided into several pedagogically relevant subskills.
 
-For example:
+The current subskill structure is:
 
 ```text
 Speaking
 ├── Fluency
-├── Grammar & Vocabulary
+├── Grammar & vocabulary (Accuracy & range)
 ├── Pronunciation
 └── Interaction
+
+Reading
+├── Scanning (Specific information)
+├── Skimming (General Idea)
+└── In detail (Deep Understanding)
+
+Listening
+├── For Gist (General Idea)
+├── For Specific Information
+└── In detail (Deep Understanding)
+
+Writing
+├── Structure & Organization
+├── Cohesion & Coherence
+├── Grammar & vocabulary (Accuracy & range)
+└── Register (Style accuracy)
 ```
 
-Other skill areas contain their own appropriate subskills for Reading, Writing, and Listening.
+Each `StudentSubSkillAssessment` belongs to one `StudentSkillAssessment`.
 
-Each subskill assessment belongs to one `StudentSkillAssessment`.
+The relationship can be represented as:
+
+```text
+StudentSkillAssessment
+        │
+        │ 1 : N
+        ▼
+StudentSubSkillAssessment
+```
 
 The combination:
 
@@ -811,9 +835,11 @@ skill_assessment + subskill
 
 is unique.
 
+This prevents the same subskill from being duplicated within a learner's assessment for a particular skill.
+
 Subskills use descriptive performance categories rather than user-facing percentages.
 
-The assessment system currently distinguishes:
+The current assessment categories are:
 
 | Assessment Category | Internal Score |
 |---|---:|
@@ -823,15 +849,32 @@ The assessment system currently distinguishes:
 | **Confident areas** | `7.5 / 10` |
 | **Key strengths** | `10.0 / 10` |
 
-The internal numerical representation allows the platform to:
+The internal numerical representation is used to:
 
-- Calculate the current overall skill score
-- Build skill graphs
-- Compare skill development
-- Generate assessment history
-- Track learner progression over time
+- Calculate the learner's current overall skill score
+- Build skill-progress graphs
+- Compare skill development over time
+- Generate historical assessment snapshots
+- Support term-based progress reporting
 
-The descriptive assessment category remains the primary pedagogical interpretation.
+Only subskills that have actually been assessed are included when calculating the parent skill's average score.
+
+For example:
+
+```text
+Speaking
+
+Fluency                                  7.5
+Grammar & vocabulary (Accuracy & range)  6.0
+Pronunciation                             —
+Interaction                              5.0
+                                         ───
+Average score                            6.2 / 10
+```
+
+The unrated `Pronunciation` subskill is excluded from the calculation rather than being treated as a zero score.
+
+This allows the assessment score to represent only the areas that have genuinely been assessed.
 
 ---
 
