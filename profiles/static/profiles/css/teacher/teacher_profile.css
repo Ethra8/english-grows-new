@@ -2837,19 +2837,6 @@ div:has(> .student-action-btn) {
     margin-bottom: 0;
 }
 
-.subskill-group ul {
-    margin: 0;
-    /* padding-left: 1.5rem; */
-    color: #6a7f81;
-}
-
-.subskill-group li {
-    display: list-item;
-    list-style-type: disc;
-    margin-bottom: 0.25rem;
-    /* padding-left: 1.5rem; */
-}
-
 .teacher-subskill {
     display: inline;
 }

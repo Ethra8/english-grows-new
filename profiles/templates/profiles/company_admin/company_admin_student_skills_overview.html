@@ -143,47 +143,172 @@
     {% endif %}
 
     
+{% if skills %}
+
     <div class="skills-grid">
-    {% if skills %}    
-    {% for skill in skills %}
 
-        <article class="skill-card">
+        {% for skill in skills %}
 
-            <div class="skill-card-header">
-                
-                <h2 class="{{ skill.name|lower }}">
-                    <span><i class="{{ skill.icon }} mr-3"></i></span>
-                    {{ skill.name }}
-                </h2>
-                
-                <!-- <hr> -->
-                <div class="skill-ring {{ skill.name|lower }}"
-                        style="--skill-progress: {{ skill.percentage|default:'0' }};">
-                    <div>
-                        <strong>{{ skill.percentage|default:"0" }}%</strong>
-                        <span>
-                            {% if skill.percentage <= 49 %}
-                                Needs work
-                            {% elif skill.percentage >= 50 and skill.percentage < 60 %}
-                                Developing
-                            {% elif skill.percentage >= 60 and skill.percentage < 75 %}
-                                Pass
-                            {% elif skill.percentage >= 75 and skill.percentage < 80 %}
-                                Confident
-                            {% elif skill.percentage >= 80 %}
-                                Strong
-                            {% endif %}
-                        </span>
-                    </div>
+            <article class="skill-card">
+
+                <div class="skill-card-header">
+                    <h2 class="{{ skill.name|lower }}"><span><i class="{{ skill.icon }} mr-3"></i></span>
+                        {{ skill.name }}</h2>
+                    <!-- <hr> -->
+                    <!-- <div class="skill-ring {{ skill.name|lower }}" style="--skill-progress: {{ skill.score|floatformat:'-1'|default:'0' }};">
+                        <div>
+                            <strong>{{ skill.score|floatformat:"-1"|default:"0" }}/10</strong>
+                            <span>Overall</span>
+                        </div>
+                    </div> -->
                 </div>
-            </div>
 
-        </article>
-    {% endfor %}
+                <div class="skill-card-body">
+
+                    <div class="skill-details">
+
+                        <h3>
+                            {{ skill.subskills|length }}
+                            subskill{{ skill.subskills|length|pluralize }}
+                            assessed
+                        </h3>
+
+
+                        <!-- STRONG -->
+                        {% if skill.strengths %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Key strengths</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.strengths %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- CONFIDENT -->
+                        {% if skill.confident %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Confident areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.confident %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- REQUIRED STANDARD -->
+                        {% if skill.required_standard %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Required standard achieved</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.required_standard %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- DEVELOPING -->
+                        {% if skill.developing %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Developing areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.developing %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- NEEDS WORK -->
+                        {% if skill.needs_work %}
+
+                            <div class="subskill-group">
+
+                                <p>
+                                    <strong>Priority areas</strong>
+                                </p>
+
+                                <ul>
+                                    {% for subskill in skill.needs_work %}
+                                        <li>
+                                            <span class="teacher-subskill">
+                                                {{ subskill }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </article>
+
+        {% endfor %}
+
     </div>
-    {% else %}
-    <p class="text-dark">The employee's skills & subskills assessment cards will appear here after being evaluated.</p>
-    {% endif %}
+
+{% else %}
+
+    <p class="text-dark mt-4">
+        The employee's skills assessment will appear here once the teacher
+        has completed an evaluation.</p>
+
+{% endif %}
 
 </section>
 {% endblock %}
@@ -197,50 +322,110 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const chartEl = document.getElementById("skillsProgressChart");
-    const chartDataEl = document.getElementById("skills-chart-data");
+    document.addEventListener("DOMContentLoaded", function () {
+        const chartEl = document.getElementById("skillsProgressChart");
+        const chartDataEl = document.getElementById("skills-chart-data");
 
-    if (!chartEl || !chartDataEl) {
-        return;
-    }
+        if (!chartEl || !chartDataEl) {
+            return;
+        }
 
-    const chartData = JSON.parse(chartDataEl.textContent);
+        const chartData = JSON.parse(chartDataEl.textContent);
 
-    if (!chartData.labels || chartData.labels.length === 0) {
-        chartEl.parentElement.innerHTML = `
-            <p class="text-dark">
-                No skill progress data yet. Save a skill assessment first.
-            </p>
-        `;
-        return;
-    }
+        console.log("Student chart data:", chartData);
 
-    new Chart(chartEl, {
-        type: "line",
-        data: chartData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            spanGaps: true,
-            scales: {
-                y: {
-                    min: 0,
-                    max: 100,
-                    ticks: {
-                        callback: function(value) {
-                            return value + "%";
+        if (!chartData.labels || chartData.labels.length === 0) {
+            chartEl.parentElement.innerHTML = `
+                <p class="text-dark">
+                    No skill progress data yet.
+                    Your skills progress graph will display here once your
+                    teacher has completed an evaluation.
+                </p>
+            `;
+            return;
+        }
+
+        // ---------------------------------------------------------
+        // Apply consistent visual settings to every skill dataset.
+        // The actual skill colors already come from chart_data.
+        // ---------------------------------------------------------
+        chartData.datasets.forEach(function (dataset) {
+            dataset.tension = 0.2;
+            dataset.fill = false;
+            dataset.borderWidth = 2.5;
+            dataset.pointRadius = 4;
+            dataset.pointHoverRadius = 6;
+        });
+
+        new Chart(chartEl, {
+            type: "line",
+
+            data: chartData,
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                spanGaps: true,
+
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 10,
+
+                        ticks: {
+                            stepSize: 1,
+
+                            callback: function (value) {
+                                return value;
+                            }
+                        },
+
+                        title: {
+                            display: true,
+                            text: "Assessment score / 10"
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: false
+                        }
+                    }
+                },
+
+                plugins: {
+                    legend: {
+                        position: "bottom",
+
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: "circle",
+                            padding: 18
+                        }
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const value = context.parsed.y;
+
+                                return (
+                                    context.dataset.label
+                                    + ": "
+                                    + Number(value).toFixed(1).replace(".0", "")
+                                    + " / 10"
+                                );
+                            }
                         }
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    position: "bottom"
-                }
             }
-        }
+        });
     });
-});
 </script>
 {% endblock %}

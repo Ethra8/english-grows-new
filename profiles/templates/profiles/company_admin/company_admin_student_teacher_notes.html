@@ -159,12 +159,12 @@
                     </div>
                 {% endif %}
 
-                {% if note.minimum_level_requirements %}
+                {% if note.required_standard %}
                     <div class="subskill-group">
-                        <p><strong>Minimum level requirements (Pass):</strong></p>
+                        <p><strong>Required Standard Achieved</strong></p>
 
                         <ul>
-                            {% for subskill in note.minimum_level_requirements %}
+                            {% for subskill in note.required_standard %}
                                 <li><span class="teacher-subskill">{{ subskill }}</span></li>
                             {% endfor %}
                         </ul>

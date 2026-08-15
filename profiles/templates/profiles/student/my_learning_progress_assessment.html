@@ -163,8 +163,7 @@
             <div class="teacher-skill-note">
 
                 <h4>
-                    {{ note.skill }}
-                    <small>{{ note.score|default:"0" }} / 10</small>
+                    {{ note.skill }} : <small>{{ note.score|default:"0" }} / 10</small>
                 </h4>
 
 
@@ -187,14 +186,14 @@
                 {% endif %}
 
 
-                {% if note.minimum_level_requirements %}
+                {% if note.required_standard %}
                     <div class="subskill-group">
                         <p>
                             <strong>Minimum level requirements:</strong>
                         </p>
 
                         <ul>
-                            {% for subskill in note.minimum_level_requirements %}
+                            {% for subskill in note.required_standard %}
                                 <li>
                                     <span class="teacher-subskill">
                                         {{ subskill }}

@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 
+from decimal import Decimal, ROUND_HALF_UP
+
 from courses.models import Course
 
 
@@ -414,22 +416,37 @@ class StudentSkillAssessment(models.Model):
         )
 
     @property
-    def average_percentage(self):
-        subskills = self.subskill_assessments.all()
-
-        if not subskills.exists():
-            return 0
-
-        total = sum(
-            subskill.percentage
-            for subskill in subskills
+    def average_score(self):
+        assessed_subskills = (
+            self.subskill_assessments
+            .exclude(rating__isnull=True)
+            .exclude(rating="")
         )
 
-        return round(total / subskills.count())
+        if not assessed_subskills.exists():
+            return None
 
-    @property
-    def average_score(self):
-        return round(self.average_percentage / 10, 1)
+        scores = [
+            subskill.score
+            for subskill in assessed_subskills
+            if subskill.score is not None
+        ]
+
+        if not scores:
+            return None
+
+        total = sum(
+            scores,
+            Decimal("0"),
+        )
+
+        average = total / Decimal(len(scores))
+
+        return average.quantize(
+            Decimal("0.1"),
+            rounding=ROUND_HALF_UP,
+        )
+
 
     def generate_teacher_notes(self):
         subskills = self.subskill_assessments.all()
@@ -438,18 +455,22 @@ class StudentSkillAssessment(models.Model):
             return ""
 
         strengths = []
-        minimum_level_requirements = []
+        confident = []
+        required_standard = []
         developing = []
         needs_work = []
 
         for subskill in subskills:
             label = subskill.get_subskill_display()
 
-            if subskill.rating in ["strong", "confident"]:
+            if subskill.rating == "strong":
                 strengths.append(label)
 
-            elif subskill.rating == "minimum_level_requirements":
-                minimum_level_requirements.append(label)
+            elif subskill.rating == "confident":
+                confident.append(label)
+
+            elif subskill.rating == "required_standard":
+                required_standard.append(label)
 
             elif subskill.rating == "developing":
                 developing.append(label)
@@ -457,16 +478,22 @@ class StudentSkillAssessment(models.Model):
             elif subskill.rating == "needs_work":
                 needs_work.append(label)
 
+
         notes = []
 
         if strengths:
             notes.append(
-                f"Strengths: {', '.join(strengths)}."
+                f"Key strengths: {', '.join(strengths)}."
             )
 
-        if minimum_level_requirements:
+        if confident:
             notes.append(
-                f"Minimum level requirements (pass): {', '.join(minimum_level_requirements)}."
+                f"Confident areas: {', '.join(confident)}."
+            )
+
+        if required_standard:
+            notes.append(
+                f"Required standard achieved: {', '.join(required_standard)}."
             )
 
         if developing:
@@ -476,7 +503,7 @@ class StudentSkillAssessment(models.Model):
 
         if needs_work:
             notes.append(
-                f"Needs work: {', '.join(needs_work)}."
+                f"Priority areas: {', '.join(needs_work)}."
             )
 
         return "\n".join(notes)
@@ -484,20 +511,39 @@ class StudentSkillAssessment(models.Model):
 
 class StudentSubSkillAssessment(models.Model):
 
-    RATING_CHOICES = [
-        ("needs_work", "Needs Work"),
-        ("developing", "Developing"),
-        ("minimum_level_requirements", "Minimum level requirements (pass)"),
-        ("confident", "Confident"),
-        ("strong", "Strong"),
-    ]
+    class Rating(models.TextChoices):
+        NEEDS_WORK = (
+            "needs_work",
+            "Priority areas",
+        )
+        DEVELOPING = (
+            "developing",
+            "Developing areas",
+        )
+        REQUIRED_STANDARD = (
+            "required_standard",
+            "Required standard achieved",
+        )
+        CONFIDENT = (
+            "confident",
+            "Confident areas",
+        )
+        STRONG = (
+            "strong",
+            "Key strengths",
+        )
 
-    RATING_PERCENTAGES = {
-        "needs_work": 40,
-        "developing": 50,
-        "minimum_level_requirements": 60,
-        "confident": 75,
-        "strong": 100,
+    # Numeric representation of each assessment rating.
+    # Used for:
+    # - overall skill averages
+    # - progress graphs
+    # - historical snapshots
+    SCORE_BY_RATING = {
+        Rating.NEEDS_WORK: Decimal("4.0"),
+        Rating.DEVELOPING: Decimal("5.0"),
+        Rating.REQUIRED_STANDARD: Decimal("6.0"),
+        Rating.CONFIDENT: Decimal("7.5"),
+        Rating.STRONG: Decimal("10.0"),
     }
 
     skill_assessment = models.ForeignKey(
@@ -511,30 +557,86 @@ class StudentSubSkillAssessment(models.Model):
         choices=SUBSKILL_CHOICES,
     )
 
-    percentage = models.PositiveSmallIntegerField(
-        default=50,
-        editable=False,
-    )
-
     rating = models.CharField(
         max_length=30,
-        choices=RATING_CHOICES,
-        default="developing",
+        choices=Rating.choices,
+        blank=True,
+        null=True,
     )
 
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
 
     class Meta:
-        unique_together = ("skill_assessment", "subskill")
+        unique_together = (
+            "skill_assessment",
+            "subskill",
+        )
         ordering = ["subskill"]
 
+    @property
+    def score(self):
+        """
+        Return the numeric representation of this
+        subskill assessment on a 0-10 scale.
+        """
+        if not self.rating:
+            return None
+
+        return self.SCORE_BY_RATING.get(self.rating)
+
     def save(self, *args, **kwargs):
-        self.percentage = self.RATING_PERCENTAGES.get(
-            self.rating,
-            50,
+        """
+        Save the subskill assessment.
+
+        Create a historical snapshot ONLY when:
+        - a real teacher rating is assigned for the first time, or
+        - an existing teacher rating is changed.
+
+        Saving an unrated subskill does NOT create a snapshot.
+        """
+
+        previous_rating = None
+
+        # -----------------------------------------------------
+        # GET PREVIOUS RATING
+        # -----------------------------------------------------
+        if self.pk:
+            previous_rating = (
+                StudentSubSkillAssessment.objects
+                .filter(pk=self.pk)
+                .values_list("rating", flat=True)
+                .first()
+            )
+
+        # A real assessment exists only when rating is not blank/null.
+        has_real_rating = bool(self.rating)
+
+        rating_changed = (
+            has_real_rating
+            and previous_rating != self.rating
         )
 
+        # -----------------------------------------------------
+        # SAVE FIRST
+        #
+        # The new rating must exist in the DB before calculating
+        # the new overall skill average.
+        # -----------------------------------------------------
         super().save(*args, **kwargs)
+
+        # -----------------------------------------------------
+        # CREATE HISTORICAL SNAPSHOT
+        # -----------------------------------------------------
+        if rating_changed:
+            current_score = self.skill_assessment.average_score
+
+            if current_score is not None:
+                StudentSkillAssessmentSnapshot.objects.create(
+                    skill_assessment=self.skill_assessment,
+                    score=current_score,
+                )
 
     def __str__(self):
         return (
@@ -543,28 +645,89 @@ class StudentSubSkillAssessment(models.Model):
         )
 
 
+class StudentSkillAssessmentSnapshot(models.Model):
+    """
+    Stores the overall skill score whenever any subskill
+    rating changes.
 
-# Creates a Snapshot every time teacher assesses SKILLS
-# To then read snapshots in time to create 
-# visual STUDENT PROGRESS GRAPH
+    Used to build the detailed skill progress history.
+    """
+    skill_assessment = models.ForeignKey(
+        StudentSkillAssessment,
+        on_delete=models.CASCADE,
+        related_name="assessment_snapshots",
+    )
+
+    score = models.DecimalField(
+        max_digits=3,
+        decimal_places=1,
+    )
+
+    recorded_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ["recorded_at"]
+
+    def __str__(self):
+        score_display = (
+            int(self.score)
+            if self.score == self.score.to_integral()
+            else self.score
+        )
+
+        return (
+            f"{self.skill_assessment.student.get_full_name()} · "
+            f"{self.skill_assessment.get_skill_display()} · "
+            f"{score_display}/10 · "
+            f"{self.recorded_at:%d %b %Y %H:%M}"
+        )
+
+
+
 class StudentSkillTermSnapshot(models.Model):
+    '''
+    For TERM ASSESSMENTS snapshots
+    (ALL SKILLS Assessed)
+    To display progress over time
+    '''
+
     skill_assessment = models.ForeignKey(
         StudentSkillAssessment,
         on_delete=models.CASCADE,
         related_name="term_snapshots",
     )
 
-    term_label = models.CharField(max_length=50)  # e.g. "Term 1", "Jun 2026"
-    percentage = models.PositiveSmallIntegerField()
-    recorded_at = models.DateField(auto_now_add=True)
+    term_label = models.CharField(
+        max_length=50,
+    )
+
+    score = models.DecimalField(
+        max_digits=3,
+        decimal_places=1,
+    )
+
+    recorded_at = models.DateField(
+        auto_now_add=True,
+    )
 
     class Meta:
-        unique_together = ("skill_assessment", "term_label")
+        unique_together = (
+            "skill_assessment",
+            "term_label",
+        )
         ordering = ["recorded_at"]
 
     def __str__(self):
+        score_display = (
+            int(self.score)
+            if self.score == self.score.to_integral()
+            else self.score
+        )
+
         return (
             f"{self.skill_assessment.student.get_full_name()} · "
             f"{self.skill_assessment.get_skill_display()} · "
-            f"{self.term_label}: {self.percentage}%"
+            f"{self.term_label}: {score_display}/10"
         )

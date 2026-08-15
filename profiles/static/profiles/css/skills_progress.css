@@ -4,17 +4,17 @@
     border: 2px inset rgba(95, 255, 234, 0.45);
     border-radius: 8px;
     padding: 1.5rem 1rem;
-    min-height: 380px;
+    min-height: 580px;
 }
 
 .skills-chart-header h2 {
     color: #003366;
-    margin-bottom: 1.5rem;
+    margin: 0.25rem 1rem 1.5rem 3rem;
 }
 
 .skills-chart-canvas-wrap {
     position: relative;
-    height: 300px;
+    height: 500px;
     width: 100%;
 }
 

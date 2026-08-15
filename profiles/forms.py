@@ -2,7 +2,15 @@ from django import forms
 from django.forms import inlineformset_factory
 from crispy_forms.helper import FormHelper
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, LearningGoal, StudentSkillAssessment, StudentSubSkillAssessment
+from .models import (
+    UserProfile,
+    TeacherProfile,
+    StudentAcademicProfile,
+    LearningGoal,
+    StudentSkillAssessment,
+    StudentSubSkillAssessment,
+)
+
 
 class UserProfileForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -22,68 +30,67 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = [
-            'first_name',
-            'last_name',
-            'email',
-            'native_language',
-            'country',
-            'profile_photo',
+            "first_name",
+            "last_name",
+            "email",
+            "native_language",
+            "country",
+            "profile_photo",
         ]
 
-
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop("user", None)
 
         super().__init__(*args, **kwargs)
-        self.fields['profile_photo'].label = "Profile picture"
+
+        self.fields["profile_photo"].label = "Profile picture"
 
         if self.user:
-            self.fields['first_name'].initial = self.user.first_name
-            self.fields['last_name'].initial = self.user.last_name
-            self.fields['email'].initial = self.user.email
+            self.fields["first_name"].initial = self.user.first_name
+            self.fields["last_name"].initial = self.user.last_name
+            self.fields["email"].initial = self.user.email
 
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
+        self.helper.form_method = "POST"
 
         placeholders = {
-            'first_name': 'First name',
-            'last_name': 'Last name',
-            'email': 'Email address',
-            'native_language': 'Native Language',
-            'country': 'Country',
+            "first_name": "First name",
+            "last_name": "Last name",
+            "email": "Email address",
+            "native_language": "Native Language",
+            "country": "Country",
         }
 
-        self.fields['first_name'].widget.attrs['autofocus'] = True
+        self.fields["first_name"].widget.attrs["autofocus"] = True
 
         for field_name, field in self.fields.items():
-            if field_name == 'country':
+            if field_name == "country":
                 field.widget.attrs.update({
-                    'aria-label': 'Country selection',
-                    'class': 'border-black rounded-0 profile-form-input',
-                })
-            
-            elif field_name == 'profile_photo':
-                field.widget.attrs.update({
-                    'class': 'border-black rounded-0 profile-form-input',
+                    "aria-label": "Country selection",
+                    "class": "border-black rounded-0 profile-form-input",
                 })
 
-    
+            elif field_name == "profile_photo":
+                field.widget.attrs.update({
+                    "class": "border-black rounded-0 profile-form-input",
+                })
+
             else:
                 field.widget.attrs.update({
-                    'placeholder': placeholders[field_name],
-                    'class': 'border-black rounded-0 profile-form-input',
+                    "placeholder": placeholders[field_name],
+                    "class": "border-black rounded-0 profile-form-input",
                 })
 
-            if field_name != 'profile_photo':
+            if field_name != "profile_photo":
                 field.label = False
 
     def save(self, commit=True):
         profile = super().save(commit=False)
 
         if self.user:
-            self.user.first_name = self.cleaned_data.get('first_name')
-            self.user.last_name = self.cleaned_data.get('last_name')
-            self.user.email = self.cleaned_data.get('email')
+            self.user.first_name = self.cleaned_data.get("first_name")
+            self.user.last_name = self.cleaned_data.get("last_name")
+            self.user.email = self.cleaned_data.get("email")
 
             if commit:
                 self.user.save()
@@ -133,25 +140,38 @@ class StudentAcademicProfileForm(forms.ModelForm):
 
         widgets = {
             "learning_goals": forms.CheckboxSelectMultiple,
-            "next_review_date": forms.DateInput(attrs={"type": "date"}),
-            "teacher_notes": forms.Textarea(attrs={"rows": 2}),
+            "next_review_date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                }
+            ),
+            "teacher_notes": forms.Textarea(
+                attrs={
+                    "rows": 2,
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["learning_goals"].queryset = LearningGoal.objects.filter(
-            is_active=True
+        self.fields["learning_goals"].queryset = (
+            LearningGoal.objects.filter(
+                is_active=True,
+            )
         )
 
 
-
+# ---------------------------------------------------------
+# SKILL ASSESSMENT
+# ---------------------------------------------------------
 class StudentSkillAssessmentForm(forms.ModelForm):
     class Meta:
         model = StudentSkillAssessment
         fields = [
             "teacher_notes",
         ]
+
         widgets = {
             "teacher_notes": forms.Textarea(
                 attrs={
@@ -161,14 +181,48 @@ class StudentSkillAssessmentForm(forms.ModelForm):
         }
 
 
+# ---------------------------------------------------------
+# SUBSKILL ASSESSMENT
+#
+# A blank rating means:
+# "Not assessed yet"
+#
+# This is important because unrated subskills must:
+# - have no score
+# - be excluded from average_score
+# - create no historical snapshot
+# ---------------------------------------------------------
 class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
+
     class Meta:
         model = StudentSubSkillAssessment
         fields = [
             "rating",
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        # The model already allows blank / NULL ratings.
+        # Explicitly keep the form field optional as well.
+        self.fields["rating"].required = False
+
+        # Give the empty option a meaningful label instead
+        # of Django's default "---------".
+        self.fields["rating"].empty_label = "Not assessed yet"
+
+
+# ---------------------------------------------------------
+# INLINE FORMSET
+#
+# Only existing predefined subskills are displayed.
+#
+# extra=0:
+#     Do not create blank/new subskill forms.
+#
+# can_delete=False:
+#     Teachers cannot remove predefined subskills.
+# ---------------------------------------------------------
 StudentSubSkillAssessmentFormSet = inlineformset_factory(
     StudentSkillAssessment,
     StudentSubSkillAssessment,

@@ -183,8 +183,6 @@ def profile_settings(request):
 # ************************************|
 
 # STUDENT COURSE INFO PAGE
-# STUDENT COURSE INFO PAGE
-
 @login_required
 def my_course(request):
     profile = get_object_or_404(
@@ -771,10 +769,8 @@ def my_skills(request):
         user=student,
     )
 
-    # ---------------------------------------------------------
     # SECURITY
     # Only learner roles can access this page.
-    # ---------------------------------------------------------
     if student_profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
         UserProfile.ROLE_INDIVIDUAL,
@@ -782,14 +778,11 @@ def my_skills(request):
         return redirect("home")
 
 
-    # ---------------------------------------------------------
     # ALL ACTIVE ENROLLMENTS
     # Only include courses that are also active.
-    #
     # This queryset is used for:
     # - the course selector
     # - validating ?course=...
-    # ---------------------------------------------------------
     active_enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -808,10 +801,7 @@ def my_skills(request):
         )
     )
 
-
-    # ---------------------------------------------------------
     # SELECTED COURSE
-    # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
     if selected_course_id:
@@ -825,21 +815,15 @@ def my_skills(request):
         active_enrollment = active_enrollments.first()
 
         # Make the selected/default course explicit in the URL.
-        #
         # /my-skills/
-        #
         # becomes:
-        #
         # /my-skills/?course=4
         if active_enrollment:
             return redirect(
                 f"{request.path}?course={active_enrollment.course_id}"
             )
 
-
-    # ---------------------------------------------------------
     # NO ACTIVE COURSE
-    # ---------------------------------------------------------
     if not active_enrollment:
         return render(
             request,
@@ -862,16 +846,10 @@ def my_skills(request):
             },
         )
 
-
-    # ---------------------------------------------------------
     # SELECTED COURSE
-    # ---------------------------------------------------------
     course = active_enrollment.course
 
-
-    # ---------------------------------------------------------
     # SKILL ICONS
-    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -879,16 +857,11 @@ def my_skills(request):
         "listening": "fa-solid fa-headphones",
     }
 
-
-    # ---------------------------------------------------------
     # IMPORTANT:
     # DO NOT create assessments from the learner-facing view.
-    #
     # The teacher view may use get_or_create() because the teacher
     # is responsible for evaluating/editing skills.
-    #
     # The student view should only READ existing assessments.
-    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -901,40 +874,53 @@ def my_skills(request):
         .order_by("skill")
     )
 
-
-    # ---------------------------------------------------------
     # SKILL NOTEs DISPLAY
-    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
-
-    # ---------------------------------------------------------
     # BUILD SKILL CARDS
-    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
+
+        # Build the grouped subskill assessment information:
+        # -strengths
+        # -confident
+        # -required_standard
+        # -developing
+        # -needs_work
+        note_display = build_skill_note_display(assessment)
+
         skills.append({
             "assessment": assessment,
             "assessment_id": assessment.id,
             "skill_value": assessment.skill,
             "name": assessment.get_skill_display(),
+
             "icon": skill_icons.get(
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
-            "percentage": assessment.average_percentage,
+
+            # Overall assessment score /10
+            "score": assessment.average_score,
+
             "teacher_notes": assessment.teacher_notes,
+
+            # Number of assessed subskills
             "subskills": assessment.subskill_assessments.all(),
+
+            # Grouped assessment results
+            "strengths": note_display["strengths"],
+            "confident": note_display["confident"],
+            "required_standard": note_display["required_standard"],
+            "developing": note_display["developing"],
+            "needs_work": note_display["needs_work"],
         })
 
-
-    # ---------------------------------------------------------
     # TEACHER NOTES
-    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -947,29 +933,20 @@ def my_skills(request):
         .order_by("skill")
     )
 
-
-    # ---------------------------------------------------------
     # ACADEMIC PROFILE
-    # ---------------------------------------------------------
     academic_profile = getattr(
         student,
         "academic_profile",
         None
     )
 
-
-    # ---------------------------------------------------------
     # SKILL PROGRESS CHART
-    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
-
-    # ---------------------------------------------------------
     # CONTEXT
-    # ---------------------------------------------------------
     context = {
         "student": student,
         "student_profile": student_profile,
@@ -1205,19 +1182,6 @@ def my_learning_progress_assessment(request):
     else:
         skill_notes = StudentSkillAssessment.objects.none()
 
-
-    # =========================================================
-    # TEMPORARY DEBUG
-    # =========================================================
-
-    print("ASSESSMENT requested_course_id:", requested_course_id)
-    print("ASSESSMENT selected course:", course.id if course else None)
-    print(
-        "ASSESSMENT active courses:",
-        list(active_enrollments.values_list("course_id", flat=True))
-    )
-
-
     context = {
         "profile": profile,
         "student": student,
@@ -1242,7 +1206,6 @@ def my_learning_progress_assessment(request):
         "profiles/student/my_learning_progress_assessment.html",
         context,
     )
-
 
 
 
@@ -1979,9 +1942,9 @@ def teacher_course_students_list(request, course_id):
 def build_skill_progress_chart_data(student, course):
     """
     Build the shared Chart.js data structure for skills progress.
-
-    All learner, teacher and company-admin views should call this
-    helper instead of building chart datasets independently.
+    - Assessment values are stored and displayed on a 0–10 scale.
+    - All user.role views should call this
+    helper so chart colors, order and values remain consistent.
     SKILL_CHART_COLORS is the single source of truth for both
     skill colors and dataset/legend order.
     """
@@ -2023,7 +1986,7 @@ def build_skill_progress_chart_data(student, course):
                     break
 
             skill_chart_values[skill_name].append(
-                matching_snapshot.percentage
+                float(matching_snapshot.score)
                 if matching_snapshot
                 else None
             )
@@ -2036,7 +1999,7 @@ def build_skill_progress_chart_data(student, course):
             "data": skill_chart_values[skill_name],
             "borderColor": color,
             "backgroundColor": color,
-            "tension": 0.35,
+            "tension": 0.2,
         })
 
     return {
@@ -2050,19 +2013,24 @@ def build_skill_note_display(skill_assessment):
 
     return {
         "skill": skill_assessment.get_skill_display(),
-        "percentage": skill_assessment.average_percentage,
         "score": skill_assessment.average_score,
 
         "strengths": [
             subskill.get_subskill_display()
             for subskill in subskills
-            if subskill.rating in ["strong", "confident"]
+            if subskill.rating == "strong"
         ],
 
-        "minimum_level_requirements": [
+        "confident": [
             subskill.get_subskill_display()
             for subskill in subskills
-            if subskill.rating == "minimum_level_requirements"
+            if subskill.rating == "confident"
+        ],
+
+        "required_standard": [
+            subskill.get_subskill_display()
+            for subskill in subskills
+            if subskill.rating == "required_standard"
         ],
 
         "developing": [
@@ -2482,7 +2450,7 @@ def student_skills_overview(request, course_id, enrollment_id):
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
-            "percentage": assessment.average_percentage,
+            "score": assessment.average_score,
             "teacher_notes": assessment.teacher_notes,
             "subskills": assessment.subskill_assessments.all(),
         })
@@ -2528,11 +2496,21 @@ def student_skills_overview(request, course_id, enrollment_id):
 
 @login_required
 def teacher_edit_student_skill(request, skill_assessment_id):
+
+    # ---------------------------------------------------------
+    # GET SKILL ASSESSMENT
+    #
+    # Security:
+    # The skill assessment must belong to a course taught
+    # by the currently logged-in teacher.
+    # ---------------------------------------------------------
     skill_assessment = get_object_or_404(
-        StudentSkillAssessment.objects.select_related(
+        StudentSkillAssessment.objects
+        .select_related(
             "student",
             "course",
-        ).prefetch_related(
+        )
+        .prefetch_related(
             "subskill_assessments",
         ),
         id=skill_assessment_id,
@@ -2542,7 +2520,11 @@ def teacher_edit_student_skill(request, skill_assessment_id):
     skill = StudentSkillAssessment.SKILL_AREA_CHOICES
 
 
+    # ---------------------------------------------------------
+    # POST
+    # ---------------------------------------------------------
     if request.method == "POST":
+
         form = StudentSkillAssessmentForm(
             request.POST,
             instance=skill_assessment,
@@ -2553,39 +2535,133 @@ def teacher_edit_student_skill(request, skill_assessment_id):
             instance=skill_assessment,
         )
 
+
+        # -----------------------------------------------------
+        # VALID FORMS
+        # -----------------------------------------------------
         if form.is_valid() and formset.is_valid():
+
+            # -------------------------------------------------
+            # SAVE GENERAL SKILL FORM
+            #
+            # Currently this saves teacher_notes.
+            # -------------------------------------------------
             form.save()
+
+
+            # -------------------------------------------------
+            # SAVE SUBSKILL RATINGS
+            #
+            # IMPORTANT:
+            #
+            # Each StudentSubSkillAssessment is saved through
+            # its own model save() method.
+            #
+            # That model method:
+            # - checks whether the rating genuinely changed
+            # - ignores unrated subskills
+            # - recalculates the overall skill average
+            # - creates a StudentSkillAssessmentSnapshot
+            #   when a real rating is added or changed
+            #
+            # Therefore NO snapshot creation is needed here.
+            # -------------------------------------------------
             formset.save()
-            # Clear old prefetched subskills cache
-            if hasattr(skill_assessment, "_prefetched_objects_cache"):
+
+
+            # -------------------------------------------------
+            # CLEAR PREFETCH CACHE
+            #
+            # skill_assessment was loaded with:
+            #
+            #     prefetch_related("subskill_assessments")
+            #
+            # After formset.save(), that cached queryset may
+            # still contain the old values.
+            #
+            # Clearing the cache ensures the newly saved
+            # ratings are used below.
+            # -------------------------------------------------
+            if hasattr(
+                skill_assessment,
+                "_prefetched_objects_cache",
+            ):
                 skill_assessment._prefetched_objects_cache = {}
 
-            skill_assessment.teacher_notes = skill_assessment.generate_teacher_notes()
-            skill_assessment.save(update_fields=["teacher_notes", "updated_at"])
 
-            current_term = timezone.localdate().strftime("%d %b %Y")
-
-            StudentSkillTermSnapshot.objects.update_or_create(
-                skill_assessment=skill_assessment,
-                term_label=current_term,
-                defaults={
-                    "percentage": skill_assessment.average_percentage,
-                },
+            # -------------------------------------------------
+            # REGENERATE TEACHER NOTES
+            #
+            # Uses the latest saved subskill ratings.
+            # -------------------------------------------------
+            skill_assessment.teacher_notes = (
+                skill_assessment.generate_teacher_notes()
             )
 
+
+            # -------------------------------------------------
+            # SAVE GENERATED NOTES
+            #
+            # Do NOT create a snapshot here.
+            #
+            # Snapshot creation belongs to:
+            #
+            # StudentSubSkillAssessment.save()
+            #
+            # because the snapshot represents an actual
+            # subskill assessment change.
+            # -------------------------------------------------
+            skill_assessment.save(
+                update_fields=[
+                    "teacher_notes",
+                    "updated_at",
+                ]
+            )
+
+
+            # -------------------------------------------------
+            # IMPORTANT:
+            # NO StudentSkillTermSnapshot HERE
+            #
+            # StudentSkillTermSnapshot is reserved for formal
+            # term assessments only.
+            #
+            # Ordinary teacher changes are stored as:
+            #
+            # StudentSkillAssessmentSnapshot
+            #
+            # via StudentSubSkillAssessment.save().
+            # -------------------------------------------------
+
+
+            # -------------------------------------------------
+            # GET COURSE ENROLLMENT
+            #
+            # Needed for redirect back to the teacher's
+            # student skills overview.
+            # -------------------------------------------------
             enrollment = get_object_or_404(
                 CourseEnrollment,
                 student=skill_assessment.student,
                 course=skill_assessment.course,
             )
 
+
+            # -------------------------------------------------
+            # REDIRECT
+            # -------------------------------------------------
             return redirect(
                 "profiles:student_skills_overview",
                 course_id=skill_assessment.course.id,
                 enrollment_id=enrollment.id,
             )
 
+
+    # ---------------------------------------------------------
+    # GET
+    # ---------------------------------------------------------
     else:
+
         form = StudentSkillAssessmentForm(
             instance=skill_assessment,
         )
@@ -2594,6 +2670,10 @@ def teacher_edit_student_skill(request, skill_assessment_id):
             instance=skill_assessment,
         )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "skill_assessment": skill_assessment,
         "form": form,
@@ -2601,6 +2681,10 @@ def teacher_edit_student_skill(request, skill_assessment_id):
         "skill": skill,
     }
 
+
+    # ---------------------------------------------------------
+    # RENDER
+    # ---------------------------------------------------------
     return render(
         request,
         "profiles/teacher/teacher_edit_student_skill.html",
@@ -2738,7 +2822,7 @@ def teacher_student_progress_skills_graph(request, course_id, enrollment_id):
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
-            "percentage": assessment.average_percentage,
+            "score": assessment.average_score,
             "teacher_notes": assessment.teacher_notes,
             "subskills": assessment.subskill_assessments.all(),
         })
@@ -5033,10 +5117,7 @@ def company_admin_student_skills_overview(request, student_id):
     if not company:
         return redirect("home")
 
-
-    # ---------------------------------------------------------
     # GET EMPLOYEE
-    # ---------------------------------------------------------
     student = get_object_or_404(
         User.objects.select_related("profile"),
         id=student_id,
@@ -5046,11 +5127,8 @@ def company_admin_student_skills_overview(request, student_id):
     student_profile = student.profile
 
 
-    # ---------------------------------------------------------
     # GET ACTIVE ENROLLMENTS
-    #
     # These populate the course selector.
-    # ---------------------------------------------------------
     active_enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -5068,19 +5146,12 @@ def company_admin_student_skills_overview(request, student_id):
         .order_by("course__name")
     )
 
-
-    # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
-    #
     # Example:
     # /profiles/company-admin/employees/3/skills/?course=9
-    # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-
-    # ---------------------------------------------------------
     # DETERMINE SELECTED ENROLLMENT
-    # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
             active_enrollments,
@@ -5089,10 +5160,7 @@ def company_admin_student_skills_overview(request, student_id):
     else:
         enrollment = active_enrollments.first()
 
-
-    # ---------------------------------------------------------
     # NO ACTIVE ENROLLMENT
-    # ---------------------------------------------------------
     if not enrollment:
         context = {
             "profile": profile,
@@ -5122,16 +5190,10 @@ def company_admin_student_skills_overview(request, student_id):
             context,
         )
 
-
-    # ---------------------------------------------------------
     # SELECTED COURSE
-    # ---------------------------------------------------------
     course = enrollment.course
 
-
-    # ---------------------------------------------------------
     # SKILL ICONS
-    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -5139,10 +5201,7 @@ def company_admin_student_skills_overview(request, student_id):
         "listening": "fa-solid fa-headphones",
     }
 
-
-    # ---------------------------------------------------------
     # SKILL ASSESSMENTS
-    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -5155,40 +5214,47 @@ def company_admin_student_skills_overview(request, student_id):
         .order_by("skill")
     )
 
-
-    # ---------------------------------------------------------
     # DISPLAY-FRIENDLY NOTES
-    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
-
-    # ---------------------------------------------------------
     # BUILD SKILLS LIST
-    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
+
+        note_display = build_skill_note_display(assessment)
+
         skills.append({
             "assessment": assessment,
             "assessment_id": assessment.id,
             "skill_value": assessment.skill,
             "name": assessment.get_skill_display(),
+
             "icon": skill_icons.get(
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
-            "percentage": assessment.average_percentage,
+
+            # Overall assessment score on a 0–10 scale
+            "score": assessment.average_score,
+
             "teacher_notes": assessment.teacher_notes,
+
+            # Raw assessed subskills
             "subskills": assessment.subskill_assessments.all(),
+
+            # Grouped assessment results
+            "strengths": note_display["strengths"],
+            "confident": note_display["confident"],
+            "required_standard": note_display["required_standard"],
+            "developing": note_display["developing"],
+            "needs_work": note_display["needs_work"],
         })
 
-
-    # ---------------------------------------------------------
     # SKILL NOTES
-    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -5199,29 +5265,19 @@ def company_admin_student_skills_overview(request, student_id):
         .order_by("skill")
     )
 
-
-    # ---------------------------------------------------------
     # ACADEMIC PROFILE
-    # ---------------------------------------------------------
     academic_profile = getattr(
         student,
         "academic_profile",
         None,
     )
 
-
-    # ---------------------------------------------------------
     # CHART DATA
-    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
-
-    # ---------------------------------------------------------
-    # CONTEXT
-    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
@@ -5603,7 +5659,7 @@ def company_admin_student_progress_skills_graph(request, student_id):
                 assessment.skill,
                 "fa-solid fa-chart-simple",
             ),
-            "percentage": assessment.average_percentage,
+            "average_score": assessment.average_score,
             "teacher_notes": assessment.teacher_notes,
             "subskills": assessment.subskill_assessments.all(),
         })
