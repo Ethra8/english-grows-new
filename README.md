@@ -767,6 +767,11 @@ The four principal language skills assessed are:
 - **Reading**
 - **Writing**
 
+Each skill is represented by a distinctive colour, to make it easier to visually track on the progress bars and skill cards
+
+<img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/c7694cb2-94e2-4a78-a2e2-2a9ddd330612" />
+
+
 ---
 
 #### Student Skill Assessment
