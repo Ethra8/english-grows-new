@@ -47,7 +47,7 @@
 
 ## 🎨 Colour Palette
 
-<img width="1600" height="1200" alt="color palette_final" src="https://github.com/user-attachments/assets/e51b22ce-87a6-4db6-a5fb-2643961db90a" />
+<img width="1600" height="1200" alt="palette (1)" src="https://github.com/user-attachments/assets/db56a36b-88ed-43df-8735-164a60407a70" />
 
 
 <img width="221" height="393" alt="image" src="https://github.com/user-attachments/assets/5aace972-d513-401b-b99d-0d1f1e01fe42" />
