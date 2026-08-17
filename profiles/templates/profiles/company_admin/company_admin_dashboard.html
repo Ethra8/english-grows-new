@@ -88,10 +88,9 @@
                 </div>
 
                 <div class="today-sessions-list">
-                    {% if todays_sessions %}
-                        {% for session in todays_sessions %}
-                            <div class="today-class-info">
-
+                    <div class="today-class-info">
+                        {% if todays_sessions %}
+                            {% for session in todays_sessions %}
                                 <div class="today-time">
                                     {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                                 </div>
@@ -110,13 +109,12 @@
                                 <a href="{% url 'profiles:company_admin_course_details' session.course_id  %}" class="btn-class-today btn">
                                     Course
                                     <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
-                                </a>
-
-                            </div>
+                                </a>  
                         {% endfor %}
                     {% else %}
                         <p>No upcoming classes scheduled for today.</p>
                     {% endif %}
+                    </div>
                 </div>
 
             </div>

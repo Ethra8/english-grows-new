@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="assigned-class-row"
      data-status-group="{{ session.class_status_group }}"
      data-today="{{ session.is_today|yesno:'true,false' }}"
@@ -6,70 +8,58 @@
 
     <div class="class-main-info">
 
-        <div class="assigned-class-level">
-            <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
-                {{ session.course.course_level|default:"Pending" }}
-            </span>
-        </div>
-
         <div class="class-list-group-name">
-            <h3>
-                {{ session.course.name }}
-                <span class="text-white">- Lesson {{ session.class_number }}</span>
-            </h3>
-
-            <p>
-                <i class="fa-solid fa-calendar-day mr-1"></i>
-                {{ session.start_time|date:"D, j M" }} |
-                {{ session.start_time|time:"H:i" }} -
-                {{ session.end_time|time:"H:i" }}
-            </p>
-
-            {% if session.class_status_group == "completed" %}
-                <span class="status-badge completed mt-2">Completed</span>
-            {% elif session.is_today %}
-                <span class="status-badge today mt-2">Today</span>
-            {% else %}
-                <span class="status-badge upcoming mt-2">Upcoming</span>
-            {% endif %}
-            <!-- {% if session.is_today or session.is_upcoming %}
-                <button
-                    type="button"
-                    class="status-badge pending-reschedule mt-2 js-open-reschedule-modal"
-                    data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
-                    data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
-                    data-class-date="{{ session.start_time|date:'D, j M' }}"
-                    data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
-                >
-                    <i class="fa-solid fa-rotate-right mr-2"></i>
-                    RESCHEDULE
-                    <i class="fa-solid fa-angles-right ml-2"></i>
-                </button>
-            {% endif %}             -->
+            <div>
+                {% if session.course.enrollments.count == 1 %}
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                {% else %}
+                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+                {% endif %}
+                <a href="{% url 'profiles:teacher_course_details' session.course.id %}">
+                    <div>
+                        <h3>{{ session.course.name }}</h3>
+                        <span>Lesson {{ session.class_number }}</span>                       
+                    </div>
+                </a>
+            </div>
         </div>
 
     </div>
 
+    <div>
+        <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+            {{ session.course.course_level|default:"Pending" }}</span>
+    </div>
+
+    <div class="class-list-date">
+        <div class="icon">
+            <i class="fa-solid fa-calendar-day"></i>
+        </div>
+        <div>
+            <strong>{{ session.start_time|date:"D, j M" }}</strong>
+            <span>{{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</span>
+        </div>
+    </div>
     <div class="class-list-student-num">
-        <strong>
-            {% if session.course.enrollments.count <= 1 %}
+        <div class="icon">
+            {% if session.course.enrollments.count == 1 %}
                 <i class="fa-solid fa-user"></i>
             {% elif session.course.enrollments.count == 2 %}
                 <i class="fa-solid fa-people-arrows"></i>
             {% else %}
                 <i class="fa-solid fa-users-line"></i>
             {% endif %}
-        </strong>
-
-        <span>
-            {{ session.course.enrollments.count }}
-            {% if session.course.enrollments.count <= 1 %}
-                Student
-            {% else %}
-                Students
-            {% endif %}
-        </span>
+        </div>
+        <strong>{{ session.course.enrollments.count }}</strong>   
     </div>
+
+    <!-- <div class="course-action">
+        <a href="#" class="btn-course-details">
+            <i class="fa-regular fa-eye mr-2"></i>
+            View
+            <i class="fa-solid fa-chevron-right ml-2"></i>
+        </a>
+    </div> -->
 
     <div class="course-action">
         {% if session.is_today or session.is_upcoming %}
@@ -82,7 +72,7 @@
             data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}">
             <span><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
             Reschedule</span>
-            <i class="fa-solid fa-chevron-right ml-2"></i>
+            <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
         </button>
         {% endif %}
     </div>
@@ -96,4 +86,7 @@
     </div> -->
 
 </div>
+</a>
+
+
 

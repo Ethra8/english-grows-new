@@ -217,7 +217,8 @@ h2 {
 
 
 /* CLASS LIST *********************/
-.assigned-classes-list {
+.assigned-classes-list,
+.teacher-assigned-classes-list {
     display: block;
     width: 100%;
     max-width: 100%;
@@ -235,15 +236,29 @@ h2 {
 }
 
 
-/* COURSE & CLASS ROW ********************* */
-
+/* CLASS ROW ********************* */
+/* Company admin (no reschedule btn) */
 .assigned-class-row {
     display: grid;
-    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr);    align-items: center;
+    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr);    
+    align-items: center;
     gap: 1rem;
     padding: 0.5rem 1.3rem;
     border-bottom: 1px solid rgba(0, 107, 125, 0.4);
-    min-width: 900px;
+    min-width: 960px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.teacher-assigned-classes-list .assigned-class-row {
+    display: grid;
+    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr) minmax(150px, 1fr);    
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.3rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    min-width: 1300px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
@@ -470,6 +485,18 @@ h2 {
     color: #6a7f81;
 }
 
+.course-action button{
+    margin: 0 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    width: fit-content;
+}
+
+.course-action img {
+    width: 32px;
+    margin-left: 0.5rem;
+}
+
 
 
 @media (max-width: 1250px) {
@@ -487,14 +514,12 @@ h2 {
 
 
 
-
 @media (max-width: 991.98px) {
 
     .assigned-classes-header {
         justify-content: stretch;
     }
 }
-
 
 
 
@@ -525,6 +550,8 @@ h2 {
 }
 
 
+
+
 @media (max-width: 576px) {
     .assigned-classes-header {
         flex-direction: column;
@@ -553,24 +580,12 @@ h2 {
         display: none;
     }
 
-    /* Assigned BY STATUS */
-    .course-action {
-        width: 100%;
-    }
-
 
 }
 
 
 
 @media (max-width: 370px) {
-    /*****************************************************|
-    |*** CLASSES LIST Page  ***************************|
-    |*****************************************************/
-
-    /* .classes-filter-btn {
-        border-radius: 0;
-    } */
 
 }
 
