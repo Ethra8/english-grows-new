@@ -315,7 +315,7 @@
     align-items: center;
     min-height: 48px;
     padding: 0.7rem 0.8rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #0B355F;
     border-bottom: 1px solid rgba(11, 53, 95, 0.14);
@@ -363,7 +363,7 @@
     min-width: 0;
     min-height: 125px;
     padding: 1rem;
-    border-left: 1px solid rgba(11, 53, 95, 0.08);
+    /* border-left: 1px solid rgba(11, 53, 95, 0.08); */
     border-bottom: 1px solid rgba(11, 53, 95, 0.10);
 }
 
@@ -415,7 +415,7 @@
 .completion-ring-value {
     position: relative;
     z-index: 1;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: #0B355F;
 }
@@ -428,34 +428,42 @@
 
 /* === ATTENDANCE =========== */
 .overview-attendance {
-    justify-content: flex-start;
+    justify-content: center;
 }
 
-.attendance-progress {
+.overview-metric .attendance-progress {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 190px;
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.25);
+    height: 17px;
+    overflow: visible;
 }
 
 .attendance-value {
-    font-size: 1.05rem;
-    padding-left: .5rem;
+    position: absolute;
+    font-size: 1.5rem;
+    padding-left: 8rem;
+    margin-bottom: .5rem;
+    top: -10px;
     font-weight: 600;
     color: #0B355F;
     z-index: 2;
 }
 
 .training-attendance-bar {
+    position: relative;
     width: 100%;
-    height: 25px;
-    min-height: 25px;
-    max-height: 25px;
-    overflow: hidden;
+    height: 17px;
+    min-height: 17px;
+    max-height: 17px;
+    /* overflow: hidden; */
     border-radius: 999px;
     background: rgba(11, 53, 95, 0.12);
     position: relative;
-    bottom: 25px;
+    /* bottom: 25px; */
     z-index: 1;
 }
 
@@ -523,6 +531,7 @@
 }
 
 
+
 @media (max-width: 991.99px) {
 
     .profile-dashboard .dashboard-general-info-card .meta-row {
@@ -581,7 +590,6 @@
     }
 
     /* ---- COURSE + LESSON -------------- */
-
     .today-course {
         grid-area: course;
         min-width: 0;
@@ -605,10 +613,7 @@
         display: block;
     }
 
-    /* -------------------------
-       LEVEL
-       ------------------------- */
-
+    /* --- LEVEL -------------------- */
     .today-level {
         grid-area: level;
 
@@ -620,10 +625,7 @@
         margin-right: 0 !important;
     }
 
-    /* -------------------------
-       COURSE BUTTON
-       ------------------------- */
-
+    /* ---COURSE BUTTON --------------- */
     .btn-class-today {
         grid-area: button;
         width: 100%;
@@ -667,10 +669,6 @@
         color: rgba(11, 53, 95, 0.72);
     }
 
-    .overview-attendance {
-        justify-content: center;
-    }
-
     .attendance-progress {
         align-items: center;
     }
@@ -684,21 +682,22 @@
 
 
 @media (max-width: 767.99px) {
-
-    /*****************************************************|
-    |*** DASHBOARD Page  *********************************|
-    |*****************************************************/
     
     .profile-dashboard .dashboard-general-info-card .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
+
+    .training-overview-grid > :nth-last-child(-n + 5) {
+        border-bottom: 1px solid rgba(11, 53, 95, 0.10);
+    }
+
 }
 
 
 
-
 @media (max-width: 600px) {
-        .training-overview {
+    
+    .training-overview {
         padding: 1rem;
     }
 
@@ -755,9 +754,6 @@
 
 @media (max-width: 576px) {
     
-    /*****************************************************|
-    |*** DASHBOARD Page  *********************************|
-    |*****************************************************/
     .profile-dashboard .dashboard-general-info-card .meta-card {
         padding: 0.25rem 2rem;
     }
@@ -766,6 +762,5 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
     }
-
 
 }

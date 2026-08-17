@@ -281,11 +281,6 @@
 
                             <div class="course-attendance-course">
 
-                                <div class="assigned-course-level">
-                                    <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                                        {{ course.course_level|default:"Pending" }}
-                                    </span>
-                                </div>
 
                                 <div class="attendance-class-info">
                                     <h3>{{ course.name }}</h3>
@@ -304,8 +299,14 @@
                                         {% endif %}
                                     </small>
                                 </div>
-
                             </div>
+    
+                            <div class="assigned-course-level">
+                                <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                                    {{ course.course_level|default:"Pending" }}
+                                </span>
+                            </div>
+
 
                             {# Employees #}
 

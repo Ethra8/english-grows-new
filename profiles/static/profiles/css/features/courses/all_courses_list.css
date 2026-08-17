@@ -363,7 +363,7 @@
         ),
         conic-gradient(
             #5eead4 calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
+            rgba(148, 148, 148, 0.2) 0
         );
     border: 0.25px solid #a2b8bb;
 }

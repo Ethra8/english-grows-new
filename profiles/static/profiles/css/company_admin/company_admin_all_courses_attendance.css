@@ -261,13 +261,12 @@
 /* MAIN CARD parent to list rows, includes header 
 & titleAttendance by Course */
 .all-course-attendance .attendance-list-card {
-    padding: 1.5rem;
     min-height: fit-content;
     background: linear-gradient(61deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    padding: 1.6rem;
+    padding: 1.6rem 0.25rem 0.25rem 0.25rem;
     overflow-x: auto;
 }
 
@@ -277,6 +276,7 @@
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    padding: 0 1.25rem;
 }
 
 .all-course-attendance .attendance-list-header h2 {
@@ -306,7 +306,8 @@
     display: grid;
 
     grid-template-columns:
-        minmax(310px, 2fr)      /* Course */
+        320px /* Course */
+        80px     /* Level */
         minmax(90px, 0.55fr)    /* Employees */
         minmax(110px, 0.7fr)    /* Submitted */
         minmax(165px, 0.95fr)   /* Submission status */
@@ -319,7 +320,7 @@
     min-width: 1180px;
     overflow: hidden;
     border: 1px solid rgba(0, 103, 108, 0.2);
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 
@@ -658,7 +659,7 @@
 .all-course-attendance .course-attendance-rate .completion-ring {
     --ring-size: 52px;
     --ring-thickness: 1px;
-    --ring-center: rgba(11, 53, 95, 0.95);
+    --ring-center: whitesmoke;
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -682,17 +683,17 @@
         ),
         conic-gradient(
             #5eead4 calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
+            rgba(148, 148, 148, 0.2) 0
         );
-    border: 0.25px solid #a2b8bb;
+    border: 0.25px solid rgba(148, 148, 148, 0.08);
 }
 
 .all-course-attendance .course-attendance-rate .completion-ring-value {
     position: relative;
     z-index: 1;
 
-    color: #ffffff;
-    font-size: 0.78rem;
+    color: #0B355F;
+    font-size: 0.9rem;
     font-weight: 500;
     line-height: 1;
 }
