@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
 {% endblock %}
 
 
@@ -66,7 +67,9 @@
                 {% endif %}        
             </div>
             <div class="course-meta-text">
-                <strong>Students<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                <strong>Students
+                    <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
+                </strong>
                 <span>{{ enrollments|length }}</span>
             </div>
         </a>
@@ -78,7 +81,9 @@
                 <i class="fa-solid fa-clipboard-check"></i>
             </div>
             <div class="course-meta-text">
-                <strong>Attendance<i class="fa-solid fa-angle-right ml-3"></i></strong>
+                <strong>Attendance
+                    <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
+                </strong>
                 <span>{{ average_attendance }} %</span>
             </div>
         </a>

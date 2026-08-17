@@ -45,6 +45,7 @@ h3 {
 .go-back-link a:hover {
     color: #008F8F !important;
     font-weight: 600;
+    transform: translateY(-1px);
 }
 
 /* *** PAGES & SECTIONS ************************************/
@@ -108,7 +109,7 @@ main.profile-main {
     margin-top: 100px;
 }
 
-/* .course-details header > div:nth-child(2),
+.course-details header > div:nth-child(2),
 .course-details header > div:nth-child(3),
 .course-details header > div:nth-child(4) {
     display: flex;
@@ -155,9 +156,18 @@ main.profile-main {
 .course-details header h2 > span:nth-child(2) {
     padding: 0 .8rem;
     color: #006b7d;
-} */
+}
 
-
+.course-details-child, 
+.course-info-child, 
+.course-materials-child {
+    background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
+    border-radius: 8px;
+    margin: 0;
+    padding: 1rem .25rem 0.25rem;
+    border: 1px solid rgba(94, 234, 212, 0.8);
+    width: 100%;
+}
 
 /* *** H1 **************************************************/
 
@@ -182,7 +192,6 @@ main.profile-main {
 /* ****** BUTTONS **************************************** */
 /* *** BUTTONS ************************************************** */
 
-.btn-class-today,
 .btn-course-details,
 .btn-attendance-tools,
 .btn-email-all,
@@ -193,7 +202,7 @@ main.profile-main {
 .skill-edit-link,
 .btn-skill-save-assessment {
     border: 1px solid #5ff0df;
-    color: #5ff0df;
+    color: #0B355F;
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
@@ -207,11 +216,10 @@ main.profile-main {
     background: rgba(94, 234, 212, 0.1);
     align-self: center;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 20, 40, 0.5);
+    box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.btn-class-today:hover,
 .btn-course-details:hover,
 .btn-attendance-tools:hover,
 .btn-email-all:hover,
@@ -221,9 +229,12 @@ main.profile-main {
 .student-edit-attendance-btn:hover,
 .skill-edit-link:hover,
 .btn-skill-save-assessment:hover  {
-    background: rgba(94, 234, 212, 0.15);
-    color: #fff;
+    background: rgba(0, 107, 125, 0.25);
+    /* background: rgba(94, 234, 212, 0.15); */
+    color: #0B355F;
     text-decoration: none;
+    box-shadow: 0 0 0 rgba(0, 20, 40, 0.5);
+    transform: translateY(-1px);
 }
 
 div:has(> .student-action-btn) {
@@ -231,7 +242,6 @@ div:has(> .student-action-btn) {
     grid-template-columns: repeat(2, 1fr);
 }
 
-.btn-class-today i, 
 .btn-email-all i,
 .btn-to-student-detail i {
     display: inline-flex;
@@ -287,7 +297,6 @@ div:has(> .student-action-btn) {
     filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
 }
 
-.course-status-btn i,
 .classes-filter-btn i {
     font-size: 1.3rem;
     color: #5eead4;
@@ -298,7 +307,6 @@ div:has(> .student-action-btn) {
     /* color: #5eead4; */
 }
 
-.course-status-btn strong,
 .classes-filter-btn strong,
 .attendance-filter-btn strong,
 .assigned-classes-filter-header strong {
@@ -313,7 +321,6 @@ div:has(> .student-action-btn) {
     width: 35px;
 }
 
-.course-status-btn strong,
 .classes-filter-btn strong,
 .attendance-filter-btn strong {
     font-size: 1.2rem;
@@ -403,7 +410,7 @@ div:has(> .student-action-btn) {
 
 /* ********* WRAPPERS ************************************* */
 
-.wrapper-next-class-card,
+/* .wrapper-next-class-card,
 .wrapper-course-card,
 .wrapper-attendance-progress-card,
 .wrapper-attendance-details,
@@ -412,12 +419,12 @@ div:has(> .student-action-btn) {
     padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(95, 240, 223, 0.2);
-}
+} */
 
-.wrapper-next-class-card {
+/* .wrapper-next-class-card {
     min-width: fit-content;
     max-width: fit-content;
-}
+} */
 
 
 
@@ -644,6 +651,112 @@ div:has(> .student-action-btn) {
 
 /* END of STATUS-BADGES *************/
 
+/* COMPLETION RING */
+.completion-ring {
+    --ring-size: 52px;
+    --ring-thickness: 1px;
+    --ring-center: rgba(11, 53, 95, 0.95);
+
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(50% - var(--ring-thickness)),
+            transparent calc(50% - var(--ring-thickness) + 1px)
+        ),
+        conic-gradient(
+            #5eead4 calc(var(--completion, 0) * 1%),
+            rgba(255, 255, 255, 0.2) 0
+        );
+}
+
+.completion-ring-value {
+    position: relative;
+    z-index: 1;
+
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.completion-ring::before,
+.completion-ring::after {
+    z-index: 1;
+}
+
+/* END COMPLETION RING */
+
+/* LEVEL CARD SMALL *********************************************/
+.level {
+    width: 60px;
+    height: 26px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B355F;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.level-a1 {
+    background: rgba(114, 255, 117, 0.4);
+    border: outset 1px rgba(114, 255, 117, 0.75);
+}
+
+.level-a2 {
+    background: rgba(255, 147, 114, 0.4);
+    border: outset 1px rgba(255, 147, 114, 0.75);
+}
+
+.level-b1,
+.level-b11,
+.level-b12 {
+    background: rgba(24, 77, 250, 0.4);
+    border: outset 1px rgba(24, 77, 250, 0.75);
+}
+
+.level-b2,
+.level-b21,
+.level-b22 {
+    background: rgba(92, 0, 138, 0.4);
+    border: outset 1px rgba(114, 38, 152, 0.75);
+}
+
+.level-c1,
+.level-c11,
+.level-c12 {
+    background: rgba(1, 138, 88, 0.4);
+    border: outset 1px rgba(1, 138, 88, 0.75);
+}
+
+.level-c2,
+.level-c21,
+.level-c22 {
+    background: rgba(255, 229, 60, 0.4);
+    border: outset 1px rgba(255, 229, 60, 0.75);
+}
+
+.level-pending,
+.level-unknown {
+    background: rgba(83, 85, 86, 0.4);
+    border: outset 1px rgba(216, 231, 239, 0.35);
+}
+
 
 /* **************************************************|
 ******** MAIN PROFILE *******************************|
@@ -681,103 +794,6 @@ div:has(> .student-action-btn) {
     font-weight: 500;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
-}
-
-.next-class-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    min-height: 230px;
-    border-radius: 8px;
-    background-color: whitesmoke;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    min-width: 290px;
-    max-width: fit-content;
-}
-
-.profile-dashboard .next-class-card .circle-panel1::after {
-    content: "\f51c"; /* <i class="fa-solid fa-chalkboard-user"></i> */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.2);
-    position: absolute;
-    top: 170px;
-    right: 20%;
-}
-
-.next-class-card .circle-panel1 {
-    position: absolute;
-    top: -70px;
-    left: -170px;
-    width: 380px;
-    height: 380px;
-    border-radius: 50%;
-    background: #0B355F;
-    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
-    box-shadow:
-        0 10px 25px rgba(0,107,125,.25),
-        inset 0 1px rgba(255,255,255,.15);
-    padding-left: 205px;
-    padding-top: 90px;
-    z-index: 2;
-}
-
-.next-class-card .circle-panel2 {
-    position: absolute;
-    top: -80px;
-    left: -155px;
-    width: 380px;
-    height: 380px;
-    border-radius: 50%;
-    background: #0B355F;
-    color: whitesmoke;
-    padding-left: 205px;
-    padding-top: 90px;
-    z-index: 1;
-    border: solid 2px whitesmoke;
-}
-
-.next-class-card .circle-panel1 h2 {
-    font-family: "Big Shoulders Display", sans-serif;    
-    letter-spacing: 0.03em;
-    margin: 3rem 1rem 0 0;
-    font-size: 2rem;
-    font-weight: 600;
-    line-height: 1.1;
-    color: whitesmoke;
-}
-
-.next-class-card .info {
-    padding: 2rem 2rem 2rem 17rem;
-    width: 100%;
-    max-width: fit-content;
-    border-radius: 8px;
-}
-
-.next-class-card .info p {
-    color: #0B355F;
-}
-
-.class-session-next-class {
-    display: flex;
-    align-items: center;
-}
-
-.class-session-next-class img {
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.profile-card {
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    min-width: 340px;
-    max-width: 70%;
-    background: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -1387,22 +1403,16 @@ div:has(> .student-action-btn) {
 .meta-percentage::after {
     content: "";
     position: absolute;
-
-    width: 90px;
-    height: 90px;
-
+    width: 110px;
+    height: 110px;
     background-image: url("/static/icons/percentage_turquoise_icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
-    top: 0px;
+    top: -5px;
     right: 25px;
-
     transform: rotate(0deg);
-
     opacity: 0.1;
-
     pointer-events: none;
 }
 
@@ -1471,13 +1481,13 @@ div:has(> .student-action-btn) {
 } */
 
 /* *** Current Attendace PROGRESS *****/
-.wrapper-attendance-progress-card,
+/* .wrapper-attendance-progress-card,
 .wrapper-absence-details,
 .wrapper-attendance-details {
     width: 100%;
     max-width: 100% !important;
     margin-top: 1.25rem;    
-}
+} */
 
 .attendance-progress-card {
     position: relative;
@@ -1837,9 +1847,9 @@ div:has(> .student-action-btn) {
 
 @media (max-width: 1250px) {
 
-    .profile-page {
+    /* .profile-page {
         padding: 70px 15px 70px 15px;
-    }
+    } */
 
     /* === SIDEBAR ===================================== */
     .profile-sidebar {
@@ -1847,7 +1857,24 @@ div:has(> .student-action-btn) {
         padding: 2rem 0.75rem;
     }
 
-    /* STUDENT: Course page **************************/
+    /******************************************************/
+    /* COURSE DETAILS Page ***************************** */
+    /******************************************************/
+
+    .student-list-header-buttons {
+        /* flex-direction: column; */
+        gap: 0.5rem;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
+
+    .course-materials-child {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding: 1.5rem;
+        align-items: baseline;
+    }
 
     .course-card .info {
         padding: 10.5rem 4% 2rem;
@@ -1986,11 +2013,46 @@ div:has(> .student-action-btn) {
         width: 100%;
     }
 
+    /******************************************************|
+    |*** COURSES Page *************************************|
+    |*** & CLASSES LIST Page ******************************|
+    |******************************************************/
+    .assigned-classes-header {
+        justify-content: stretch;
+    }
 
-    /* STUDENT Course page ************************/
-    /* .course-details header h1 {
-        font-size: 2.5rem;    
-    } */
+    .course-details-masonry {
+        grid-template-columns: 1fr;
+    }
+
+    .wrapper-course-details:nth-child(1),
+    .wrapper-course-details:nth-child(2),
+    .wrapper-course-details:nth-child(3),
+    .wrapper-course-details:nth-child(4) {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .student-list-header-buttons {
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .student-list-header-buttons a {
+        margin: 0 1.5rem 0.5rem; 
+    }
+
+    /*****************************************************|
+    |*** COURSE DETAIL Page *******************************|
+    |*****************************************************/
+    .course-materials-child {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding: 1.5rem;
+        align-items: baseline;
+    }
 
     .my-course .course-card {
         min-width: none !important;
@@ -2054,10 +2116,10 @@ div:has(> .student-action-btn) {
 
     /*  STUDENT: My DASHBOARD Page ************* */
     
-    .next-class-card,
+    /* .next-class-card,
     .next-class-card .info {
         margin: 0 auto;
-    }
+    } */
 
 
     /* STUDENT: My COURSE Page ***************** */
@@ -2200,7 +2262,7 @@ div:has(> .student-action-btn) {
         padding: 0px 3% 70px;
     }
 
-    /* STUDENT: My DASHBOARD Page ***** */
+    /* STUDENT: My DASHBOARD Page *****
 
     .wrapper-next-class-card {
         min-width: 100%;
@@ -2226,7 +2288,7 @@ div:has(> .student-action-btn) {
         justify-content: space-between !important;
     }
 
-    .profile-dashboard .next-class-card .circle-panel1::after {
+    .next-class-card .circle-panel1::after {
         font-size: 5.5rem;
         color: rgba(94, 242, 220, 0.1);
         position: absolute;
@@ -2248,7 +2310,7 @@ div:has(> .student-action-btn) {
 
     .btn-join-class {
         width: 100%;
-    }
+    } */
 
     /* *** MY COURSE Page ******************************** */
 

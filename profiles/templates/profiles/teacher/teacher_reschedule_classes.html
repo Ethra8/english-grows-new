@@ -53,36 +53,28 @@
 
                         {% for session in pending_sessions %}
 
-                            <div class="assigned-course-row reschedule-class-row">
+                            <div class="assigned-class-row reschedule-class-row">
 
-                                <div class="course-main-info">
+                                <div class="class-main-info">
 
-                                    <div class="assigned-course-level">
+                                    <div class="assigned-class-level">
                                         <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
                                             {{ session.course.course_level }}
                                         </span>
                                     </div>
 
-                                    <div class="course-list-group-name">
+                                    <div class="class-list-group-name">
                                         <h3>
                                             {{ session.course.name }}
+                                            <span class="text-white">- Lesson {{ session.class_number }}</span>
                                         </h3>
 
-                                        <p class="text-white mb-0">
-                                            Lesson {{ session.class_number }}
-                                        </p>
-
-                                        <p class="text-white mb-0">
-                                            {{ session.start_time|date:"D, d M Y" }}
-                                            ·
-                                            {{ session.start_time|time:"H:i" }}
-                                            -
+                                        <p>
+                                            <i class="fa-solid fa-calendar-day mr-1"></i>
+                                            {{ session.start_time|date:"D, j M" }} |
+                                            {{ session.start_time|time:"H:i" }} -
                                             {{ session.end_time|time:"H:i" }}
                                         </p>
-
-                                        <!-- <span class="status-badge pending-reschedule mt-2">
-                                            Pending Reschedule
-                                        </span> -->
 
                                     </div>
 
@@ -104,7 +96,7 @@
 
                         {% empty %}
 
-                            <p class="text-white p-3">
+                            <p class="p-3">
                                 No classes are currently pending reschedule.
                             </p>
 

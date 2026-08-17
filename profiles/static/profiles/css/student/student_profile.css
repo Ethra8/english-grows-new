@@ -1,0 +1,195 @@
+/* DASHBOARD */
+.wrapper-next-class-card,
+.wrapper-course-card,
+.wrapper-attendance-progress-card,
+.wrapper-attendance-details,
+.wrapper-absence-details {
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: rgba(95, 240, 223, 0.2);
+    min-width: fit-content;
+    max-width: fit-content;
+}
+
+.wrapper-attendance-progress-card,
+.wrapper-absence-details,
+.wrapper-attendance-details {
+    width: 100%;
+    max-width: 100% !important;
+    margin-top: 1.25rem;    
+}
+
+.next-class-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    min-height: 230px;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    min-width: 290px;
+    max-width: fit-content;
+}
+
+.next-class-card .circle-panel1::after {
+    content: "\f51c"; /* <i class="fa-solid fa-chalkboard-user"></i> */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(94, 242, 220, 0.2);
+    position: absolute;
+    top: 170px;
+    right: 20%;
+}
+
+.next-class-card .circle-panel1 {
+    position: absolute;
+    top: -70px;
+    left: -170px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: #0B355F;
+    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    box-shadow:
+        0 10px 25px rgba(0,107,125,.25),
+        inset 0 1px rgba(255,255,255,.15);
+    padding-left: 205px;
+    padding-top: 90px;
+    z-index: 2;
+}
+
+.next-class-card .circle-panel2 {
+    position: absolute;
+    top: -80px;
+    left: -155px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: #0B355F;
+    color: whitesmoke;
+    padding-left: 205px;
+    padding-top: 90px;
+    z-index: 1;
+    border: solid 2px whitesmoke;
+}
+
+.next-class-card .circle-panel1 h2 {
+    font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
+    margin: 3rem 1rem 0 0;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: whitesmoke;
+}
+
+.next-class-card .info {
+    padding: 2rem 2rem 2rem 17rem;
+    width: 100%;
+    max-width: fit-content;
+    border-radius: 8px;
+}
+
+.next-class-card .info p {
+    color: #0B355F;
+}
+
+.class-session-next-class {
+    display: flex;
+    align-items: center;
+}
+
+.class-session-next-class img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* ************************************* */
+
+.profile-card {
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    min-width: 340px;
+    max-width: 70%;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+
+
+@media (max-width: 767.99px) {
+    /* DASHBOARD */
+    .next-class-card,
+    .next-class-card .info {
+        margin: 0 auto;
+    }
+}
+
+
+
+@media (max-width: 576px) {
+
+    /* STUDENT: My DASHBOARD Page ***** */
+
+    .wrapper-next-class-card {
+        min-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .next-class-card,
+    .next-class-card .info {
+        margin: 0 auto;
+        min-width: 100%;
+    }
+
+    .next-class-card .circle-panel1 {
+        top: -490px;
+        left: -170px;
+        width: 600px;
+        height: 600px;
+    }
+
+    .next-class-card .info{
+        padding: 10.5rem 3.5rem 2rem;
+        max-width: max-content;
+        justify-content: space-between !important;
+    }
+
+    .next-class-card .circle-panel1::after {
+        font-size: 5.5rem;
+        color: rgba(94, 242, 220, 0.1);
+        position: absolute;
+        top: 480px;
+        right: 180px;
+    }
+
+    .next-class-card .circle-panel1 h2 {
+        margin: 27rem 1rem 0;
+    }
+
+    .next-class-card .circle-panel2 {
+        top: -488px;
+        left: -165px;
+        width: 610px;
+        height: 610px;
+        min-width: 290px;
+    }
+
+    .btn-join-class {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 370px) {
+
+    .next-class-card .info {
+        padding: 10.5rem 2rem 2rem;
+    }
+
+}

@@ -7,7 +7,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/all_courses_list.css' %}">
 {% endblock %}
 
 
@@ -27,6 +28,29 @@
         </div>
         <hr>
     </header>
+
+    <div class="wrapper-assigned-courses-small-cards">
+        <div class="card">
+            <div class="card-header"><span><i class="fa-regular fa-circle-play mr-2"></i>Active</span></div>
+            <div class="card-body">{{ active_courses }}</div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-regular fa-circle-check mr-2"></i>Confirmed</span></div>
+            <div class="card-body">{{ confirmed_courses }}</div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-regular fa-circle-pause mr-2"></i>Paused</span></div>
+            <div class="card-body">{{ paused_courses }}</div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>Cancelled</span></div>
+            <div class="card-body">{{ cancelled_courses }}</div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>All Courses</span></div>
+            <div class="card-body">{{ courses|length }}</div>
+        </div>
+    </div>
 
     <div class="wrapper-assigned-courses-panel">
         <div class="assigned-courses-panel">
@@ -80,7 +104,7 @@
 
             <div class="assigned-courses-list">
                 {% if courses|length == 0 %}
-                    <p class="text-white p-3">No courses assigned yet.</p>
+                    <p class="p-3">No courses assigned yet.</p>
                 {% endif %}    
     
                 {% for course in courses %}
@@ -88,9 +112,9 @@
 
                     <div class="course-main-info">
 
-                        <!-- <div class="assigned-course-level">
+                        <div>
                             <span class="level level-{{ course.course_level|lower|cut:'.' }}">{{ course.course_level }}</span>
-                        </div> -->
+                        </div>
 
                         <div class="course-list-group-name">
                             <div>
@@ -146,7 +170,7 @@
 
 {% block postloadjs %}
     {{ block.super }}
-<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/all_courses_list.js' %}"></script>
 
 {% endblock %}
     

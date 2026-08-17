@@ -1,3 +1,4 @@
+
 .student-detail-page {
     color: whitesmoke;
     width: 100%;
@@ -808,6 +809,11 @@
 
 
 @media (max-width: 767.99px) {
+    /* DASHBOARD */
+    .next-class-card,
+    .next-class-card .info {
+        margin: 0 auto;
+    }
 
     .student-detail-page header {
         padding: 0;
@@ -873,13 +879,19 @@
 
 @media (max-width: 576px) {
 
-    /* .student-detail-page header {
-        gap: 3rem;
-    } */
+    /* *** MY COURSE Page ******************************** */
 
-    /* .student-main-info {
-        padding: 2rem .75rem 3rem;
-    } */
+    .my-course {
+        padding: 0 3% 70px;
+    }
+
+    .my-course header h1 {
+        padding: 0;
+    }
+
+    .my-course .course-card .info {       
+        padding: 10.5rem 1rem 3rem;
+    }
 
     .student-main-info p a {
         font-size: 1rem;
@@ -934,3 +946,6 @@
 
 
 }
+
+
+

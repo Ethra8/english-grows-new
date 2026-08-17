@@ -1,3 +1,38 @@
+
+/* ***********************************|
+|*  DASHBOARD Page *******************|
+|*********************************** */
+
+.dashboard-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.96), rgba(0, 107, 125, 0.75));
+    /* background: rgba(11, 53, 95, 0.75);  Oxford Navy ##0B355F */
+    border: 1px solid rgba(80, 230, 220, 0.85);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-card-left {
+    flex: 0 0 25%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+/* GENERAL INFO Card ***********/
+.dashboard-general-info-card {
+    min-width: 100% !important;
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+
+
+
 /************************************************|
 **** company_admin_amployees_list.html **********|
 ***** Sidebar: PERFORMANCE **********************|
@@ -43,7 +78,7 @@
     padding: 0.5rem 1.5rem;
     border: 1px solid rgba(94, 234, 212, 0.8);
     width: 100%;
-    min-width: fit-content;
+    min-width: 1000px;
 }
 
 .employees-list-grid {
@@ -109,6 +144,7 @@
 .company-admin-employees-list-page .employees-list-row .view-progress-course .btn-to-student-detail {
     background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    color: whitesmoke;
 }
 
 .company-admin-employees-list-page .employees-list-row .view-progress-course .btn-to-student-detail:hover {
@@ -119,55 +155,10 @@
 }
 
 
-/************************************************|
-**** COURSES Page *******************************|
-**** = company_admin_courses.html  **************|
-*********************************************** */
-
-.admin-assigned-courses-page .course-main-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    gap: 0.5rem;
-
-}
-
-.admin-assigned-courses-page .course-main-info img {
-    width: 46px;
-    height: 46px;
-    background: #C7FFF9;
-    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
-    border-radius: 999px;
-    margin-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-}
-
-.admin-assigned-courses-page .course-main-info span {
-    color: #6a7f81;
-}
 
 /************************************************|
 **** company_admin_course_details.html **********|
 *********************************************** */
-
-/* .company-admin-course-details-page .course-meta-card.meta-attendance::after {
-    content: "\f46c";  fa-clipboard-check 
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.1);
-    position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
-} */
-
 .company-admin-course-details-page header > div:nth-child(2) {
     display: flex;
     flex-direction: row;
@@ -195,22 +186,26 @@
     color: #008F8F;
 }
 
-/* .company-admin-course-details-page hr {
-    margin-top: 2rem !important;
-} */
-
-.company-admin-course-details-page .course-detail-grid {
-    grid-template-columns: 1fr;
+/* PAGE GRID CONFIG */
+.course-details-two-col {
+    width: 100%;
+    /* margin-top: 4rem; */
 }
 
-.company-admin-course-details-page .student-row-parent {
-    /* background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: whitesmoke;
-    padding: 0 1.25rem;
+.company-admin-course-details-page .course-details-masonry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* All boxes */
+.wrapper-course-details {
+    width: 100%;
     border-radius: 8px;
-    border: 1px solid rgba(94, 234, 212, 0.2);
-    margin-top: 0.5rem;
+    padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: rgba(106, 250, 225, 0.2);
 }
 
 /* LEFT COLUMN boxes */
@@ -223,6 +218,106 @@
     grid-column: 2;
     grid-row: 1 / span 2;
 }
+
+/* BOTH COLUMNS */
+.wrapper-course-details h4 i {
+    color: #c7fff9 ;
+}
+
+.course-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+}
+
+.course-detail-item {
+    /* background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
+    background: #edf9f7;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border: 1px solid rgba(94, 234, 212, 0.25);
+    padding: 1rem 1.25rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.course-details-child .course-detail-item > div:first-of-type,
+.course-info-child .course-detail-item > div:first-of-type {
+    background-color: rgba(199, 255, 249, 0.4);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #dfe5e4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.course-detail-item span {
+    display: block;
+}
+
+.course-detail-item hr,
+.student-row hr {
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    border-radius: 0;
+    margin: 0.5rem auto;
+}
+
+.course-detail-item p {
+    display: inline;
+    color: whitesmoke;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.company-admin-course-details-page .detail-row {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.75fr) minmax(220px, 0.75fr);
+    align-items: center;
+    width: 100%;
+    gap: 0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+.course-details-child,
+.course-info-child,
+.course-materials-child {
+    background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
+    border-radius: 8px;
+    margin: 0;
+    padding: 1rem .5rem 0.5rem;
+    border: 1px solid rgba(94, 234, 212, 0.8);
+    width: 100%;
+}
+
+.course-materials-child {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 1.5rem;
+    align-items: center;
+}
+
+.wrapper-course-details h3 {
+    color: #c7fff9;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.course-details-child h3,
+.course-info-child h3 {
+    padding: 0.25rem 1.5rem;
+}
+
+.company-admin-course-details-page .student-row-parent {
+    /* background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
+    background: whitesmoke;
+    padding: 0 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
 
 
 /************************************************|
@@ -289,8 +384,7 @@
 /* DATES in ROW */
 .class-list-date,
 .class-list-attendance-rate,
-.class-list-student-num,
-.course-list-date {
+.class-list-student-num {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -305,9 +399,7 @@
 
 .class-list-date .icon,
 .class-list-attendance-rate .icon,
-.class-list-student-num .icon,
-.course-list-date .icon,
-.course-list-student-num .icon {
+.class-list-student-num .icon {
     width: 36px;
     height: 36px;
     border: 1px solid #006b7d;
@@ -318,17 +410,13 @@
 
 .class-list-date i,
 .class-list-student-num i,
-.class-list-attendance-rate i,
-.course-list-date i,
-.course-list-student-num i {
+.class-list-attendance-rate i {
     color: #006b7d;
 }
 
 .class-list-date strong,
 .class-list-attendance-rate strong,
-.class-list-student-num strong,
-.course-list-date strong,
-.course-list-student-num strong {
+.class-list-student-num strong {
     color: #006b7d;
     font-size: 1rem;
     margin-bottom: 0;
@@ -337,9 +425,7 @@
 /* Keep span elements in separate lines */
 .class-list-date span,
 .class-list-attendance-rate span,
-.class-list-student-num span,
-.course-list-date span,
-.course-list-student-num span {
+.class-list-student-num span {
     display: block;
 }
 
@@ -383,7 +469,7 @@
     background: rgba(94, 234, 212, 0.1);
     align-self: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
+    box-shadow: 1px 3px 5px rgba(0, 20, 40, 0.25);
     transition:
         transform 0.2s ease,
         background 0.2s ease,
@@ -395,7 +481,7 @@
     color: #ffffff;
     transform: translateY(-1px);
     background: linear-gradient(135deg, #00acaf, #008589);
-    box-shadow: 0 10px 20px rgba(0, 122, 125, 0.24);
+    box-shadow: 0 1px 5px rgba(0, 122, 125, 0.24);
 
 }
 
@@ -432,13 +518,18 @@
 } */
 
 
+@media (min-width:1200px) and (max-width: 1439.98px) {
+    .company-admin-course-details-page .detail-row {
+        grid-template-columns: 1fr;
+    }
+}
 
 
-
-@media (max-width: 992px) {
-
+@media (max-width: 1199.98px) {
+    
     .company-admin-course-details-page .course-details-masonry {
         gap: 0;
+        grid-template-columns: 1fr;
     }
 
     .company-admin-course-details-page .wrapper-course-details:nth-child(1) {
@@ -451,10 +542,20 @@
         margin-top: 2.5rem;
     }
 
+    .company-admin-course-details-page .detail-row {
+        grid-template-columns: minmax(190px, 0.75fr) minmax(220px, 0.75fr);
+    }
 }
 
 
-@media (max-width: 767px) {
+
+@media (max-width: 991.98px) {
+
+
+}
+
+
+@media (max-width: 767.98px) {
 
     /* COURSE DETAILS Page ********************************** */
     /* .company-admin-course-details-page.profile-page header h1 {

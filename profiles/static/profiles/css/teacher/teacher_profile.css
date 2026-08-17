@@ -2,17 +2,6 @@
     line-height: 1.5 !important;
 }
 
-/* h1 {
-    color: #0B355F;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.02em;
-    margin-left: 0%;
-    padding-left: 0%;
-    font-size: clamp(2rem, 3vw, 3.2rem);
-    font-weight: 600;
-    margin-bottom: 3.5rem;
-} */
-
 h2 {
    color: #c7fff9; 
 }
@@ -76,469 +65,15 @@ h2 {
 }
 
 
-/* *** SECTIONS & PAGES *********************************************/
-
-
-/* *** HEADERS *******************************************************/
-
-
 /**** WRAPPERS *******************************************************/
 
-.wrapper-dashboard-card,
-.wrapper-assigned-classes-panel,
-.wrapper-assigned-courses-panel {
+.wrapper-assigned-classes-panel {
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
 }
 
-.wrapper-dashboard-card {
-    width: 100%;
-}
-
-/* .profile-dashboard .dashboard-cards .wrapper-dashboard-card:first-child {
-    margin-top: 1.8rem;
-} */
-
-.profile-dashboard .dashboard-cards .wrapper-dashboard-card:not(:first-child) {
-    margin-top: 3.8rem;
-}
-
-
-/* *** META ROW / CARD in HEADERS ***********************************/
-
-
-.profile-dashboard .dashboard-general-info-card .meta-row {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin: 2rem 0 1rem;}
-
-.profile-dashboard .weekly-overview .meta-row {
-    grid-template-columns: repeat(4, 1fr);
-    margin: 2rem 0 1rem;
-}
-
-/* Course Details page */
-/* Course Students List page */
-.course-header-meta-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin: 3rem 0;
-}
-
-.meta-card,
-.course-meta-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    min-height: fit-content;
-    padding: 0.25rem 2rem 0.15rem 0.25rem;
-    border: 1.5px solid rgba(94, 242, 220, 0.35);
-    border-radius: 50px;
-    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.meta-card::after,
-.course-meta-card::after {
-    content: "";
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-}
-
-.profile-dashboard .dashboard-general-info-card .meta-card {
-    padding: 0.5rem 1.5rem 0.5rem 3rem ;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-}
-
-.completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 1px;
-    --ring-center: rgba(11, 53, 95, 0.95);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(50% - var(--ring-thickness)),
-            transparent calc(50% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            #5eead4 calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-}
-
-.completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: #ffffff;
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.course-header-meta-row .completion-ring,
-#monthly_overview .completion-ring,
-#weekly_overview .completion-ring {
-    width: 60px !important;
-    height: 60px !important;
-    margin-right: 0;
-}
-
-.course-header-meta-row .completion-ring-value,
-#monthly_overview .completion-ring-value,
-#weekly_overview .completion-ring-value {
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: whitesmoke;
-    font-size: 1rem;
-    font-weight: 300;
-}
-
-.completion-ring::before,
-.completion-ring::after {
-    z-index: 1;
-}
-
-.profile-dashboard .dashboard-general-info-card .meta-card.meta-courses::after {
-    content: "\f144"; /* fa-circle-play */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.1);
-    position: absolute;
-    top: 30px;
-    right: -5px;
-    rotate: calc(-15deg);
-}
-
-.profile-dashboard .dashboard-general-info-card .meta-card.meta-students::after {
-    content: "\f500"; /* fa-user-group */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    /* color: rgba(106, 250, 225, 0.3); */
-    color: rgba(94, 242, 220, 0.1);
-    position: absolute;
-    top: 35px;
-    right: 15px;
-}
-
-.profile-dashboard .dashboard-general-info-card .meta-card.meta-attendance::after,
-.teacher-course-details-page .course-meta-card.meta-attendance::after,
-.teacher-course-students-list .course-meta-card.meta-attendance::after,
-.course-meta-card.meta-attendance::after {
-    content: "\f46c"; /* fa-clipboard-check */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.1);
-    position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
-}
-
-.meta-icon,
-.course-meta-icon {
-    z-index: 1;
-    width: 55px;
-    height: 55px;
-    min-width: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: rgba(11, 53, 95, 0.6);
-    border: 1px solid rgba(94, 242, 220, 0.35);
-}
-
-.meta-icon i,
-.course-meta-icon i {
-    color: rgba(94, 242, 220, 0.9);
-    font-size: 1.8rem;
-}
-
-.course-meta-icon .completion-ring {
-    margin-left: 0.5rem;
-}
-
-.meta-text,
-.course-meta-text {
-    z-index: 1;
-}
-
-.meta-text strong,
-.course-meta-text strong {
-    display: block;
-    color: #ffffff;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    text-transform: capitalize;
-    letter-spacing: 0.03em;
-    margin-bottom: 0;
-    margin-top: 0;
-}
-
-.meta-text span,
-.course-meta-text span {
-    /* color: #ffffff; */
-    color: rgba(94, 242, 220, 0.9);
-    font-size: 1.4rem;
-    font-weight: 400;
-}
-
-.course-details-info-icon {
-    z-index: 1;
-
-    width: 35px;
-    height: 35px;
-    min-width: 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-    background-color: rgba(11, 53, 95, 0.6);
-    border: 1px solid rgba(94, 242, 220, 0.35);
-}
-
-.course-details-info-icon i {
-    color: rgba(94, 242, 220, 0.9);
-    font-size: 1rem;
-}
-
-
-/* LEVEL CARD SMALL *********************************************/
-
-.level {
-    width: 60px;
-    height: 26px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0B355F;
-    font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* *** LEVELS PILLS for Teacher_classes_List / Teacher_courses ******/
-.level-a1 {
-    background: rgba(114, 255, 117, 0.4);
-    border: outset 1px rgba(114, 255, 117, 0.75);
-}
-
-.level-a2 {
-    background: rgba(255, 147, 114, 0.4);
-    border: outset 1px rgba(255, 147, 114, 0.75);
-}
-
-.level-b1,
-.level-b11,
-.level-b12 {
-    background: rgba(24, 77, 250, 0.4);
-    border: outset 1px rgba(24, 77, 250, 0.75);
-}
-
-.level-b2,
-.level-b21,
-.level-b22 {
-    background: rgba(92, 0, 138, 0.4);
-    border: outset 1px rgba(114, 38, 152, 0.75);
-}
-
-.level-c1,
-.level-c11,
-.level-c12 {
-    background: rgba(1, 138, 88, 0.4);
-    border: outset 1px rgba(1, 138, 88, 0.75);
-}
-
-.level-c2,
-.level-c21,
-.level-c22 {
-    background: rgba(255, 229, 60, 0.4);
-    border: outset 1px rgba(255, 229, 60, 0.75);
-}
-
-.level-pending,
-.level-unknown {
-    background: rgba(83, 85, 86, 0.4);
-    border: outset 1px rgba(216, 231, 239, 0.35);
-}
-
-
-/* ***********************************|
-|*  DASHBOARD Page *******************|
-|*********************************** */
-
-.dashboard-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.96), rgba(0, 107, 125, 0.75));
-    /* background: rgba(11, 53, 95, 0.75);  Oxford Navy ##0B355F */
-    border: 1px solid rgba(80, 230, 220, 0.85);
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.dashboard-card-left {
-    flex: 0 0 25%;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-
-/* GENERAL INFO Card ***********/
-.dashboard-general-info-card {
-    min-width: 100% !important;
-    width: 100%;
-    display: flex;
-    align-items: baseline;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-
-/* TODAY'S CLASSES Card *******/
-.today-classes-card {
-    min-width: 100% !important;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 2rem;
-}
-
-.today-sessions-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-sizing: border-box;
-}
-
-.today-sessions-list p {
-    color: whitesmoke;
-}
-
-.today-icon {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: rgba(0, 150, 145, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1.4rem;
-}
-
-.today-title h3 {
-    /* margin: 0; */
-    color: #fff;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.02em;
-    font-weight: 400;
-}
-
-.today-title span {
-    color: #5eead4;
-    margin: 0;
-}
-
-.today-class-info {
-    gap: 0;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(345deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.35));
-    border: 1px solid rgba(80, 230, 220, 0.25);
-    border-radius: 8px;
-    overflow: hidden;
-    padding-right: 0.8rem;
-}
-
-.today-class-main {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-    height: max-content;
-}
-
-.today-time,
-.today-course {
-    padding: 0.9rem 1rem;
-    margin: 0 auto;
-}
-
-.today-time {
-    flex: 0 0 auto;
-    color: #5eead4;
-    font-weight: 700;
-    background: rgba(11, 53, 95, 0.45);
-    height: 70px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.today-course {
-    color: #fff;
-    flex: 1;
-    min-width: 0;
-    border-left: 1px solid rgba(80, 230, 220, 0.2);
-    display: flex;
-}
-
-.today-course .course-name-and-class-num {
-    display: flex;
-    flex-direction: column;
-    padding-left: 0.5rem;
-}
-
-
-/* WEEKLY OVERVIEW Card *******/
-
-.wrapper-dashboard-card .weekly-overview .meta-card {
-    /* display: flex !important; */
-    flex-direction: column;
-    border-radius: 8px;
-    padding: 1rem;
-    /* background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: rgba(11, 53, 95, 0.75);
-}
 
 /* ***********************************************************|
 |***  CLASSES LIST Page **************************************|
@@ -594,8 +129,7 @@ h2 {
 }
 
 
-/* COURSE & CLASS LIST *********************/
-.assigned-courses-list,
+/* CLASS LIST *********************/
 .assigned-classes-list {
     display: block;
     width: 100%;
@@ -629,35 +163,19 @@ h2 {
     box-sizing: border-box;
 }
 
-.assigned-course-row {
-    display: grid;
-    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(140px, 0.5fr) minmax(180px, 1fr) minmax(90px, 0.5fr) minmax(130px, 1fr) ;
-    align-items: center;
-    /* gap: 0.5rem; */
-    padding: 0.75rem 1.3rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
-    min-width: 1300px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.assigned-course-row:hover,
 .assigned-class-row:hover {
     background: rgba(199, 255, 249, 0.3);
 }
 
-/* COURSE & CLASS MAIN INFO */
-/* For COURSE & CLASS List */
-.course-main-info,
+/* CLASS MAIN INFO */
+/* For CLASS List */
 .class-main-info {
     display: flex;
     align-items: center;
     gap: 1.3rem;
 }
 
-.class-main-info h3,
-.course-main-info h3 {
+.class-main-info h3 {
     font-weight: 500;
     color: #0B355F;
     margin: 0 0 .35rem;
@@ -666,13 +184,11 @@ h2 {
     transition: all 0.2s ease;
 }
 
-.class-main-info h3:hover,
-.course-main-info h3:hover {
+.class-main-info h3:hover {
     font-weight: 600;
 }
 
-.assigned-course-level span.status-badge, 
-.course-main-info span.status-badge,
+.assigned-class-level span.status-badge
 .class-main-info span.status-badge {
     border-radius: 20px;
     padding: 0.2rem 1rem !important;
@@ -684,16 +200,11 @@ h2 {
 
 /* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
 .assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
-.assigned-courses-list > .assigned-course-row:not(.class-hidden):not(:has(~ .assigned-course-row:not(.class-hidden))),
 .attendance-row:last-child  {
     border-bottom: none !important;
 }
 
 /* ROW DATA: BUTTON at the end */
-/* .course-action {
-    justify-self: end !important;
-
-} */
 .course-list-group-name > div:first-of-type,
 .class-list-group-name > div:first-of-type,
 .attendance-list .attendance-row > div:first-of-type {
@@ -728,8 +239,7 @@ h2 {
 }
 
 /* LEVEL CELL in DATA ROW */
-.assigned-class-row > div:nth-of-type(2),
-.assigned-course-row > div:nth-of-type(2) {
+.assigned-class-row > div:nth-of-type(2) {
     height: 100%; 
     min-height: 80%;
     display: flex;
@@ -739,54 +249,13 @@ h2 {
     justify-content: center;
     }
 
-.assigned-class-row .level,
-.assigned-course-row .level {
+.assigned-class-row .level {
     width: 50px;
 }
 
-/* COURSE STATUS Text & DOT in ROW */
-.course-list-status {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
-    height: 70%;    
-    justify-content: center;
-}
-
-.course-list-status .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.status-dot.status-confirmed {
-    background: #17c964;
-}
-
-.status-dot.status-active {
-    background: #5ff0df;
-}
-
-.status-dot.status-paused {
-    background: #ffb000;
-}
-
-.status-dot.status-cancelled {
-    background: #ef4444;
-}
-
-.status-dot.status-completed {
-    background: #7c7c7c;
-}
 
 /* DATES in ROW */
-.class-list-date,
-.course-list-date {
+.class-list-date {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -800,8 +269,7 @@ h2 {
     justify-content: center;
 }
 
-.class-list-student-num,
-.course-list-student-num {
+.class-list-student-num {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -816,9 +284,7 @@ h2 {
 }
 
 .class-list-date .icon,
-.class-list-student-num .icon,
-.course-list-date .icon,
-.course-list-student-num .icon {
+.class-list-student-num .icon {
     width: 36px;
     height: 36px;
     border: 1px solid #006b7d;
@@ -828,16 +294,12 @@ h2 {
 }
 
 .class-list-date i,
-.class-list-student-num i,
-.course-list-date i,
-.course-list-student-num i {
+.class-list-student-num i {
     color: #006b7d;
 }
 
 .class-list-date strong,
-.class-list-student-num strong,
-.course-list-date strong,
-.course-list-student-num strong {
+.class-list-student-num strong {
     color: #006b7d;
     font-size: 1rem;
     margin-bottom: 0;
@@ -845,9 +307,7 @@ h2 {
 
 /* Keep span elements in separate lines */
 .class-list-date span,
-.class-list-student-num span,
-.course-list-date span,
-.course-list-student-num span {
+.class-list-student-num span {
     display: block;
 }
 
@@ -939,7 +399,6 @@ h2 {
 - Courses: active/confirmed/paused/completed
 - Classes: Upcoming/Complete/ & today/weekly/monthly/all ******* */
 
-.assigned-courses-panel,
 .assigned-classes-panel {
     width: 100%;
     background: rgba(11, 53, 95, 0.9);
@@ -999,11 +458,11 @@ h2 {
     width: fit-content;
 }
 
-.course-status-buttons {
+/* .course-status-buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 0.25rem;
-}
+} */
 
 .attendance-filter-card.two-filters {
     display: grid;
@@ -1052,24 +511,6 @@ h2 {
     outline: none;
 }
 
-/* .assigned-courses-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border: outset 1px #5ff0df;
-    background: #c7fff9;
-    background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(95, 240, 223, 1) 100%);    color: #0B355F;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,.35);
-}
-
-.assigned-courses-icon i {
-    color: #0B355F;
-    font-size: 1.5rem;
-} */
-
 .course-status-filter {
     border-radius: 8px;
     padding: .6rem 2.5rem .6rem 1rem;
@@ -1117,16 +558,6 @@ h2 {
     justify-content: flex-start;
 }
 
-/* .teacher-course-students-list header h2,
-.teacher-group-attendance-page header h2 {
-    color: #c7fff9;
-    font-size: 1.5rem;
-    margin-top: 0;
-    padding-top: 0;
-    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
-} */
-
-
 .teacher-course-students-list header .header-last-child > div:last-child,
 .teacher-group-attendance-page header .header-last-child > div:last-child {
     display: flex;
@@ -1139,97 +570,7 @@ h2 {
     width: 50px;
 }
 
-/* META: Course Details Page *********************/
-/* Level background icon */
-.course-meta-card.meta-level::after {
-    content: "\f5fd"; /* fa-layer-group */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.1);
-    position: absolute;
-    top: 35px;
-    right: -5px;
-}
 
-/* Students background icon */
-.course-meta-card.meta-students::after {
-    content: "\f0c0"; /* fa-users */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(106, 250, 225, 0.1);
-    position: absolute;
-    top: 35px;
-    right: -5px;
-}
-
-/* Completion background icon */
-.course-meta-card.meta-completion::after {
-    content: "";
-    position: absolute;
-    top: 55px;
-    right: -5px;
-
-    width: 90px;
-    height: 90px;
-
-    border-radius: 50%;
-
-    background:
-        conic-gradient(
-            rgba(94, 242, 220, 0.15) 0deg 70deg,
-            rgba(94, 242, 220, 0.07) 70deg 360deg
-        );
-
-    opacity: 1;
-    pointer-events: none;
-}
-
-.course-meta-card .completion-ring {
-    background:
-        conic-gradient(
-            #5eead4 calc(var(--completion) * 1%),
-            rgba(255, 255, 255, 0.3) 0
-        );
-
-}
-
-.metric-icon {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* SMALL ring: Attendance / Completion icons */
-.metric-icon .progress-ring {
-    position: absolute;
-    inset: 5px;
-    border-radius: 50%;
-    background:
-        conic-gradient(
-            #5fffea calc(var(--percentage) * 1%),
-            rgba(105, 255, 235, 0.18) 0
-        );
-}
-
-.metric-icon .progress-ring::after {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border-radius: 50%;
-    background: #043f68;
-}
-
-.metric-icon i {
-    position: relative;
-    z-index: 2;
-    color: #5fffea;
-    font-size: 1.2rem;
-}
 
 /* PAGE GRID CONFIG */
 .course-details-two-col {
@@ -1395,11 +736,6 @@ h2 {
 }
 
 
-/*****************************************|
-**** COURSE_DETAIL Page ******************|
-**************************************** */
-
-
 /************************************************|
 **** COURSE_STUDENTS_LIST Page ******************|
 *********************************************** */
@@ -1554,11 +890,6 @@ h2 {
 
 /**** ATTENDANCE Page ************************************ */
 
-/* .teacher-take-attendance-page header,
-.teacher-attendance-detail-page header {
-    margin-bottom: 1rem;
-} */
-
 #attendanceDateFilter {
     color-scheme: light;
     cursor: pointer;
@@ -1569,10 +900,6 @@ h2 {
     opacity: .9;
     cursor: pointer;
 }
-
-/* .teacher-attendance-detail-page header > div.d-flex {
-    flex-direction: column;
-} */
 
 
 /* Main list card */
@@ -2093,8 +1420,6 @@ h2 {
 }
 
 
-
-
 /************************************************|
 **** EDIT STD SKILLS Page *************|
 *********************************************** */
@@ -2177,33 +1502,6 @@ h2 {
 
 
 
-@media (max-width: 1600px) {
-
-    /******************************************************/
-    /* DASHBOARD Page *********************************** */
-    /******************************************************/
-    
-    /* Today's Classes ********** */
-    
-    .today-classes-card {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 0.5rem;
-    }
-
-    .dashboard-card-left {
-        padding: 1.5rem 1.5rem 0.15rem;
-    }
-
-    .today-time,
-    .today-course {
-        border: 0;
-    }
-
-
-}
-
-
 @media (min-width: 991.98px) and (max-width: 1367.98px) {
     .detail-row, .student-course-details .detail-row {
         grid-template-columns: 1fr;
@@ -2217,18 +1515,6 @@ h2 {
 
 
 @media (max-width: 1367px) {
-
-    
-    /*****************************************************|
-    |*** CLASSES LIST Page  ******************************|
-    |*****************************************************/
-
-    /* .wrapper-assigned-classes-panel {
-        margin: 1rem auto;
-        width: 100%;
-    }
- */
-
 
     /* .assigned-course-row, */
     .assigned-class-row {
@@ -2272,31 +1558,6 @@ h2 {
 
 @media (max-width: 1250px) {
 
-
-    /* .teacher-attendance-page {
-        margin-left: 0;
-    } */
-
-
-    /******************************************************/
-    /* DASHBOARD Page *********************************** */
-    /******************************************************/
-    .today-sessions-list p {
-        color: whitesmoke;
-        padding: 0 1.75rem;
-    }
-
-    .profile-dashboard .weekly-overview .meta-row {
-        gap: 0.5rem;
-    }
-
-
-    /******************************************************/
-    /* COURSES Page (All courses assigned) ************** */
-    /******************************************************/
-
-
-
     /******************************************************/
     /* CLASSES LIST Page ******************************** */
     /******************************************************/
@@ -2305,45 +1566,8 @@ h2 {
         grid-template-columns: repeat(4, 1fr);
         gap: 0.25rem;
     } 
-
-    /* .class-list-group-name {
-        display: grid;
-        grid-template-columns: 1fr 2fr 1fr auto;
-    } */
-
-    /* include: class-list-student.html */
-    /* .class-list-student-num {
-        display: none;
-    } */
     
 
-    /******************************************************/
-    /* COURSE DETAILS Page ***************************** */
-    /******************************************************/
-    .course-meta-card.meta-completion {
-        grid-column: auto;
-    }
-
-    /* .course-detail-grid {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 1.2rem;
-    } */
-
-    .student-list-header-buttons {
-        /* flex-direction: column; */
-        gap: 0.5rem;
-        align-items: baseline;
-        margin-bottom: 1.5rem;
-    }
-
-    .course-materials-child {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        padding: 1.5rem;
-        align-items: baseline;
-    }
 
 
     /******************************************************/
@@ -2384,14 +1608,6 @@ h2 {
 
 
 
-@media (min-width: 992px) and (max-width: 1199.98px) {
-    
-    .profile-dashboard .dashboard-general-info-card .meta-card {
-        padding: 0.5rem 1.5rem 0.5rem 2rem;
-        background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-    }
-
-}
 
 
 
@@ -2413,64 +1629,6 @@ h2 {
 
 @media (max-width: 991.99px) {
 
-    .profile-dashboard .dashboard-general-info-card .meta-row {
-        gap: 0.5rem;
-    }
-
-    /* .profile-dashboard .dashboard-general-info-card .meta-card {
-        padding: 0.15rem 1rem 0.15rem 1.5em;
-    }
- */
-    .course-header-meta-row,
-    .course-header-meta-row,
-    .profile-dashboard .dashboard-general-info-card .meta-row {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-
-    /******************************************************|
-    |*** COURSES Page *************************************|
-    |*** & CLASSES LIST Page ******************************|
-    |******************************************************/
-
-    .assigned-courses-header,
-    .assigned-classes-header {
-        justify-content: stretch;
-    }
-
-    .course-details-masonry {
-        grid-template-columns: 1fr;
-    }
-
-    .wrapper-course-details:nth-child(1),
-    .wrapper-course-details:nth-child(2),
-    .wrapper-course-details:nth-child(3),
-    .wrapper-course-details:nth-child(4) {
-        grid-column: 1;
-        grid-row: auto;
-    }
-
-    .student-list-header-buttons {
-        flex-direction: row;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .student-list-header-buttons a {
-        margin: 0 1.5rem 0.5rem; 
-    }
-
-    /*****************************************************|
-    |*** COURSE DETAIL Page *******************************|
-    |*****************************************************/
-
-    .course-materials-child {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        padding: 1.5rem;
-        align-items: baseline;
-    }
 
     /*****************************************************|
     |*** ALL ATTENDANCE Pages ****************************|
@@ -2563,21 +1721,6 @@ h2 {
         margin: 0 auto;
     }
 
-    /*****************************************************|
-    |*** STUDENT DETAIL Page  ****************************|
-    |*****************************************************/
-    /* .student-detail-tabs-wrapper {
-        margin-bottom: .5rem;
-    }
-
-    .student-detail-tabs {
-        justify-content: flex-start;
-    }
-
-    .student-detail-tabs a {
-        padding-inline: 1rem;
-    }
- */
 
 }
 
@@ -2601,55 +1744,9 @@ h2 {
         width: max-content !important;
     }
 
-
-    /*****************************************************|
-    |*** DASHBOARD Page  *********************************|
-    |*****************************************************/
-    
-    .profile-dashboard .dashboard-general-info-card .meta-row {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .today-class-info {
-        flex-direction: column;
-        align-items: stretch;
-        padding-right: 0;
-    }
-
-    .today-class-main {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .today-time {
-        width: 100%;
-        border-bottom: 1px solid rgba(80, 230, 220, 0.25);
-        height: 50px;
-    }
-
-    .today-course {
-        width: 100%;
-    }
-
-    .btn-class-today {
-        width: calc(100% - 2rem) !important;
-        margin: 0.9rem 1rem;
-        box-sizing: border-box;    
-    }
-
-
     /*****************************************************|
     |*** CLASSES LIST Page  ******************************|
     |*****************************************************/
-
-    /* #upcomingClassesCollapse select,
-    #completedClassesCollapse select,
-    .assigned-courses-header select,
-    .assigned-classes-overview-smaller-devices {
-        display: block !important;
-    }
-
     
     .classes-filter-buttons {
         display: none;
@@ -2663,10 +1760,6 @@ h2 {
 
     .wrapper-assigned-courses-panel {
         margin: 1rem auto;
-    }
-
-    .course-status-buttons {
-        display: none;
     }
 
     .assigned-courses-header select {
@@ -2743,6 +1836,9 @@ h2 {
         gap: 0.75rem;
     }
 
+    .course-status-buttons {
+        display: none;
+    }
 
     /*****************************************************|
     |*** TAKE ATTENDANCE Page  ***************************|
@@ -2877,23 +1973,6 @@ h2 {
 @media (max-width: 576px) {
     
     /*****************************************************|
-    |*** DASHBOARD Page  *********************************|
-    |*****************************************************/
-    .profile-dashboard .dashboard-general-info-card .meta-card {
-        padding: 0.25rem 2rem;
-    }
-
-    .profile-dashboard .weekly-overview .meta-row {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-    }
-
-    .today-classes-card {
-        padding: 1rem 0.5rem;
-    }
-
-
-    /*****************************************************|
     |*** CLASSES LIST Page  *********************************|
     |*****************************************************/
 
@@ -2928,16 +2007,6 @@ h2 {
 
     }
 
-    
-    /*****************************************************|
-    |*** COURSES Page  ***********************************|
-    |*****************************************************/
-    
-    .assigned-courses-page header .course-status-row .item {
-        /* phones: 1 per row */
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
 
     
     /* *** COURSES Page **********************************/
@@ -3160,10 +2229,6 @@ h2 {
         /* flex-grow: 10; */
     }
 
-    /* .assigned-course-level {
-        display: none;
-    } */
-
 }
 
 
@@ -3244,7 +2309,6 @@ h2 {
 }
 
 /* MUST STAY AT THE END OF CSS FILE */
-.assigned-course-row.course-hidden,
 .assigned-class-row.class-hidden {
     display: none !important;
 }    

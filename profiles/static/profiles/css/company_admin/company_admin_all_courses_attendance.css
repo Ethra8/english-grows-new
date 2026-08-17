@@ -220,32 +220,38 @@
 
 .all-course-attendance .btn-attendance-tools {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: center;
-    min-height: 36px;
+    /* justify-self: flex-end; */
+    min-width: 100px;
+    min-height: 46px;
     padding: 0.25rem 1rem;
     border-radius: 8px;
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     color: #ffffff;
     border: 1px solid #008b8d;
     background: linear-gradient(135deg, #009da0, #003366);
-    box-shadow: 0 7px 16px rgba(0, 122, 125, 0.18);
+    box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
+    margin: auto auto 0;
 }
 
 .all-course-attendance .btn-attendance-tools:hover {
     color: #ffffff;
     transform: translateY(-2px);
     background: linear-gradient(135deg, #00acaf, #008589);
-    box-shadow: 0 10px 20px rgba(0, 122, 125, 0.24);
+    box-shadow: 0 0 0 rgba(0, 122, 125, 0.24);
 }
+
+
+.all-course-attendance #attendanceDateFilter::-webkit-calendar-picker-indicator {
+    color-scheme: dark;
+    opacity: 0.75;
+    cursor: pointer;
+}
+
 
 
 /* =========================================================
