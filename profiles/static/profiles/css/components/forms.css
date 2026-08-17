@@ -7,19 +7,55 @@
     padding: 4px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     background: rgba(106, 250, 225, 0.2);
+    /* background: linear-gradient(319deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85)); */
     max-width: fit-content;
     width: 70%;
 }
 
+/* BUTTON ***************************** */
+.btn-update {
+    border: 1px outset #006b7d;
+    color: #006b7d;
+    padding: 0.25rem 0.85rem;
+    border-radius: 8px;
+    text-decoration: none;
+    /* text-transform: capitalize; */
+    font-weight: 500;
+    width: max-content;
+    max-height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(94, 234, 212, 0.1);
+    align-self:right;
+    cursor: pointer;
+    box-shadow: 1px 2px 4px rgba(0, 20, 40, 0.5);
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-update:hover {
+    border: outset 1px rgba(95, 240, 223, 0.5);
+    box-shadow: 0 1px 1px 0 #4b4b4b;
+    background: linear-gradient(23deg, rgba(11, 53, 95, 0.35), rgba(0, 122, 120, 0.55));
+    color: #006b7d;
+}
+
+.btn-update img {
+    width: 32px;
+    margin-left: .5rem;
+}
+/* ********************************************* */
+
+
 .account-settings-form {
-    background: linear-gradient(319deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85));
+    background-color: #edf9f7;
     padding: 2rem;
     border: 1px solid rgba(94, 234, 212, 0.85);
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 #0B355F;
     border-radius: 8px;
     min-width: 100%;
-    color: whitesmoke;
+    color: #0B355F;
     line-height: 1.7;
 }
 
@@ -34,10 +70,11 @@
 
 .account-settings-form label {
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.2rem;
-    color: #c7fff9;
-    border-top: outset 1px #5ff5cf;
+    color: #006b7d;
+    border-top: outset 1px gray;
+    margin-top: 1rem;
     padding-top: 1rem;
     width: 100%;
 }
@@ -49,16 +86,6 @@
     border-top: none;
     padding-top: 0;
     margin: 0 0 0 0.35rem;
-    font-size: 0.9rem;
-    vertical-align: middle;
-}
-
-.account-settings-form #div_id_profile_photo input[type="checkbox"] {
-    display: inline-block;
-    width: auto;
-    border-top: none;
-    padding-top: 0;
-    margin: 0 0 0 0.9rem;
     font-size: 0.9rem;
     vertical-align: middle;
 }
@@ -81,6 +108,13 @@
 #id_specialties_helptext {
     color: lightgray !important;
 }
+
+#id_profile_photo {
+    margin-top: 1rem;
+}
+
+
+
 
 /* ********************************************* */
 /* *** ACADEMIC STUDENT PROFILE FORM *************/

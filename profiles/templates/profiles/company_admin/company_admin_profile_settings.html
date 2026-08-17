@@ -9,7 +9,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/forms.css' %}">
 {% endblock %}
 
 
@@ -32,7 +32,8 @@
                         {% csrf_token %}
                         {{ user_form|crispy }}
                         <button class="btn btn-update text-uppercase mt-5" type="submit">
-                            <i class="fa-solid fa-check-to-slot mr-3"></i>Update My Profile<i class="fa-solid fa-angles-right ml-3"></i> 
+                           Update
+                           <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                         </button>
                     </form>                
                 </div>
