@@ -650,24 +650,24 @@
 
 /* Chrome, Edge and Safari */
 
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar {
+.classes-list .assigned-courses-list::-webkit-scrollbar {
     width: auto;
     height: 14px;
 }
 
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-track {
+.classes-list .assigned-courses-list::-webkit-scrollbar-track {
     background: #0B355F;
     border-radius: 999px;
 }
 
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
+.classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
     min-width: 60px;
     background: #5ff0df;
     border: 3px solid #0B355F;
     border-radius: 999px;
 }
 
-.company-admin-classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
+.classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
     background: #c7fff9;
 }
 

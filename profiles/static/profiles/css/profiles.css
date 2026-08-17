@@ -257,7 +257,6 @@ div:has(> .student-action-btn) {
 }
 
 .course-status-btn,
-.classes-filter-btn,
 .attendance-filter-btn {
     position: relative;
     display: flex;
@@ -280,7 +279,6 @@ div:has(> .student-action-btn) {
 }
 
 .course-status-btn.active::after,
-.classes-filter-btn.active::after,
 .attendance-filter-btn.active::after {
     content: "";
     position: absolute;
@@ -297,19 +295,13 @@ div:has(> .student-action-btn) {
     filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
 }
 
-.classes-filter-btn i {
-    font-size: 1.3rem;
-    color: #5eead4;
-}
-
 .attendance-filter-btn i {
     font-size: 1.3rem;
     /* color: #5eead4; */
 }
 
-.classes-filter-btn strong,
-.attendance-filter-btn strong,
-.assigned-classes-filter-header strong {
+
+.attendance-filter-btn strong {
     background: rgba(106, 250, 225, 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
@@ -321,21 +313,18 @@ div:has(> .student-action-btn) {
     width: 35px;
 }
 
-.classes-filter-btn strong,
 .attendance-filter-btn strong {
     font-size: 1.2rem;
 }
 
-.assigned-classes-filter-header strong {
+/* .assigned-classes-filter-header strong {
     font-size: 1.8rem;
     margin-left: 1.5rem;
     text-align: center !important;
-}
+} */
 
 .course-status-btn.active,
-.course-status-btn:hover,
-.classes-filter-btn.active,
-.classes-filter-btn:hover {
+.course-status-btn:hover {
     background: rgba(0, 155, 155, 0.25);
     border-color: #5eead4;
     color: #fff;
@@ -2017,10 +2006,10 @@ div:has(> .student-action-btn) {
     |*** COURSES Page *************************************|
     |*** & CLASSES LIST Page ******************************|
     |******************************************************/
-    .assigned-classes-header {
+    /* .assigned-classes-header {
         justify-content: stretch;
     }
-
+ */
     .course-details-masonry {
         grid-template-columns: 1fr;
     }

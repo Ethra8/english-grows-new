@@ -65,22 +65,12 @@ h2 {
 }
 
 
-/**** WRAPPERS *******************************************************/
-
-.wrapper-assigned-classes-panel {
-    border-radius: 8px;
-    padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(106, 250, 225, 0.2);
-}
-
 
 /* ***********************************************************|
 |***  CLASSES LIST Page **************************************|
 |*********************************************************** */
 
-/* page grid to keep Upcoming/Past Classes selector cards in place */
-.all-assigned-classes {
+/* .all-assigned-classes {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
@@ -129,7 +119,6 @@ h2 {
 }
 
 
-/* CLASS LIST *********************/
 .assigned-classes-list {
     display: block;
     width: 100%;
@@ -146,9 +135,6 @@ h2 {
     scrollbar-gutter: stable;
     scrollbar-width: auto;
 }
-
-
-/* COURSE & CLASS ROW ********************* */
 
 .assigned-class-row {
     display: grid;
@@ -167,8 +153,6 @@ h2 {
     background: rgba(199, 255, 249, 0.3);
 }
 
-/* CLASS MAIN INFO */
-/* For CLASS List */
 .class-main-info {
     display: flex;
     align-items: center;
@@ -198,13 +182,11 @@ h2 {
     position: relative;
 }
 
-/* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
 .assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
 .attendance-row:last-child  {
     border-bottom: none !important;
 }
 
-/* ROW DATA: BUTTON at the end */
 .course-list-group-name > div:first-of-type,
 .class-list-group-name > div:first-of-type,
 .attendance-list .attendance-row > div:first-of-type {
@@ -238,23 +220,18 @@ h2 {
     color: #6a7f81;
 }
 
-/* LEVEL CELL in DATA ROW */
 .assigned-class-row > div:nth-of-type(2) {
     height: 100%; 
     min-height: 80%;
     display: flex;
     align-items: center;
-    /* align-self: center;
-    align-content: center; */
-    justify-content: center;
-    }
+}
 
 .assigned-class-row .level {
     width: 50px;
 }
 
 
-/* DATES in ROW */
 .class-list-date {
     display: flex;
     flex-direction: row;
@@ -305,14 +282,11 @@ h2 {
     margin-bottom: 0;
 }
 
-/* Keep span elements in separate lines */
 .class-list-date span,
 .class-list-student-num span {
     display: block;
 }
 
-/* ROW DATA: COURSE STATISTICS */
-/* For COURSE & CLASS List */
 .course-stat {
     display: flex;
     flex-direction: row;
@@ -380,7 +354,7 @@ h2 {
 
 .course-stat span {
     color: #6a7f81;
-}
+} */
 
 /* ****** END OF CLASS & COURSE ROWS in LIST Pages *********** */
 
@@ -399,14 +373,14 @@ h2 {
 - Courses: active/confirmed/paused/completed
 - Classes: Upcoming/Complete/ & today/weekly/monthly/all ******* */
 
-.assigned-classes-panel {
+/* .assigned-classes-panel {
     width: 100%;
     background: rgba(11, 53, 95, 0.9);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
-}
+} */
 
 .assigned-courses-header {
     display: flex;
@@ -434,30 +408,6 @@ h2 {
     font-family: "Big Shoulders Display", sans-serif;
 }
 
-.assigned-classes-overview-smaller-devices {
-    display: none;
-}
-
-.assigned-classes-overview-smaller-devices h3 {
-    margin-bottom: 0;
-}
-
-.assigned-classes-overview-smaller-devices .classes-filter-btn {
-    text-align: left;
-    justify-content: flex-start;
-    padding-left: 3rem;
-    border-radius: 0;
-    border: none;
-    /* border-bottom: 1px solid rgba(106, 250, 225, 0.45); */
-    border-top: 1px solid rgba(106, 250, 225, 0.15);
-    box-shadow: none;
-}
-
-.assigned-classes-overview-smaller-devices .classes-filter-btn strong {
-    height: fit-content;
-    width: fit-content;
-}
-
 /* .course-status-buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -470,8 +420,6 @@ h2 {
     gap: 0.25rem;
 }
 
-#upcomingClassesCollapse select,
-#completedClassesCollapse select,
 .assigned-courses-header select {
     display: none;
     width: 100% !important;
@@ -497,15 +445,11 @@ h2 {
     transition: all 0.2s ease;
 }
 
-#upcomingClassesCollapse select option,
-#completedClassesCollapse select option,
 .assigned-courses-header select option {
     background: whitesmoke;
     color: #0B355F;
 }
 
-#upcomingClassesCollapse select:focus,
-#completedClassesCollapse select:focus,
 .assigned-courses-header select:focus {
     border: 3px inset #00fee1 !important;
     outline: none;
@@ -1561,11 +1505,11 @@ h2 {
     /******************************************************/
     /* CLASSES LIST Page ******************************** */
     /******************************************************/
-    .classes-filter-buttons {
+    /* .classes-filter-buttons {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 0.25rem;
-    } 
+    }  */
     
 
 
@@ -1748,11 +1692,11 @@ h2 {
     |*** CLASSES LIST Page  ******************************|
     |*****************************************************/
     
-    .classes-filter-buttons {
+    /* .classes-filter-buttons {
         display: none;
     }
-
  */
+
 
     /*****************************************************|
     |*** COURSES Page  ******************************|
@@ -1976,7 +1920,7 @@ h2 {
     |*** CLASSES LIST Page  *********************************|
     |*****************************************************/
 
-    .assigned-classes-filter-header h2 {
+    /* .assigned-classes-filter-header h2 {
         padding: 0.25rem 0;
         font-size: 1.6rem;
         font-weight: 400;
@@ -1996,17 +1940,15 @@ h2 {
     #completedClassesCollapse select,
     .assigned-courses-header select,
     .assigned-classes-overview-smaller-devices {
-        /* display: block !important; */
         display: none;
-    }
+    } */
 
     
-    .classes-filter-buttons {
-        /* display: none; */
+    /* .classes-filter-buttons {
         grid-template-columns: repeat(2, 1fr);
 
     }
-
+ */
 
     
     /* *** COURSES Page **********************************/
@@ -2020,17 +1962,16 @@ h2 {
     }
     
     /* Course Assigned BY STATUS */
-    .course-action {
+    /* .course-action {
         width: 100%;
-    }
+    } */
 
-    .assigned-courses-header,
-    .assigned-classes-header {
+    /* .assigned-courses-header {
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
     }
-
+ */
 
     /*****************************************************|
     |*** COURSE DETAIL Page  *****************************|
@@ -2251,13 +2192,13 @@ h2 {
     |*** CLASSES LIST Page  ***************************|
     |*****************************************************/
 
-    classes-filter-buttons {
+    /* classes-filter-buttons {
         gap: 0;
     }
 
     .classes-filter-btn {
         border-radius: 0;
-    }
+    } */
     /*****************************************************|
     |*** TAKE ATTENDANCE Page  ***************************|
     |*****************************************************/
@@ -2298,11 +2239,11 @@ h2 {
    Keep this at the end of the CSS file
 ======================================================= */
 
-.company-admin-classes-list,
-/* .company-admin-classes-list .all-assigned-classes, */
-.company-admin-classes-list .wrapper-assigned-classes-panel,
-.company-admin-classes-list .assigned-classes-panel,
-.company-admin-classes-list .classes-panel-collapse {
+.classes-list,
+/* .classes-list .all-assigned-classes, */
+.wrapper-assigned-classes-panel,
+.assigned-classes-panel,
+.classes-panel-collapse {
     width: 100%;
     max-width: 100%;
     min-width: 0;

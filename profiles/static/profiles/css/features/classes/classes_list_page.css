@@ -1,0 +1,598 @@
+
+/* ***********************************************************|
+|***  CLASSES LIST Page **************************************|
+|*********************************************************** */
+h2 {
+   color: #c7fff9; 
+}
+
+/**** WRAPPERS *******************************************************/
+
+.wrapper-assigned-classes-panel {
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: rgba(106, 250, 225, 0.2);
+}
+
+
+/* BUTTONS ********************************************************* */
+
+
+.classes-filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 70px;
+    border: 1px solid rgba(106, 250, 225, 0.45);
+    border-radius: 8px;
+    background: rgba(11, 53, 95, 0.45);
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.classes-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #5eead4;
+    filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
+}
+
+.classes-filter-btn i {
+    font-size: 1.3rem;
+    color: #5eead4;
+}
+
+.assigned-classes-filter-header strong {
+    background: rgba(106, 250, 225, 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    height: 35px;
+    width: 35px;
+    font-size: 1.8rem;
+    margin-left: 1.5rem;
+    text-align: center !important;
+}
+
+.classes-filter-btn strong {
+    font-size: 1.2rem;
+    background: rgba(106, 250, 225, 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    height: 35px;
+    width: 35px;
+}
+
+.classes-filter-btn.active,
+.classes-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    color: #fff;
+}
+
+/* SELECT SMALLER DEVICES **********************************/
+#upcomingClassesCollapse select,
+#completedClassesCollapse select {
+    display: none;
+    width: 98% !important;
+    margin: 0 auto .25rem;
+    /* max-width: 320px; */
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: outset 1px #006b7d;
+    border-radius: 8px;
+    background-color: #006b7d;
+    color: whitesmoke;
+    color-scheme: red ;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+#upcomingClassesCollapse select option,
+#completedClassesCollapse select option {
+    background: whitesmoke;
+    color: #0B355F;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+#upcomingClassesCollapse select:focus,
+#completedClassesCollapse select:focus {
+    border: 1px outset #05ffcd !important;
+    outline: none;
+}
+
+.mobile-filter-select {
+    /* Remove browser arrow */
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    /* Leave room for w3.org chevron */
+    padding-right: 3rem !important;
+    /* Custom light chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F5FFFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 36px !important;
+    cursor: pointer !important;
+}
+
+/* page grid to keep Upcoming/Past Classes selector cards in place */
+.all-assigned-classes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+.assigned-classes-filter-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem 1.3rem;
+}
+
+.assigned-classes-filter-header h2 {
+    padding: 0.25rem 2rem 0.25rem 0rem;
+    font-weight: 400;
+}
+
+.assigned-classes-filter-header i {
+    color: whitesmoke;
+    font-size: 2rem;
+    padding: 0.25rem 0.5rem 0.25rem 0rem;
+    cursor: pointer;
+    align-self: center;
+}
+
+.classes-filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+}
+
+.classes-list-filter {
+    background-color: rgba(11, 53, 95, 0.6);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    border: solid 2px #5eead4;
+    border-radius: 8px;
+    padding: .6rem 2.5rem .6rem 1rem;
+    color: whitesmoke;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
+}
+
+.assigned-classes-panel,
+.assigned-classes-filter-header {
+    position: relative;
+    z-index: 5;
+}
+
+.assigned-classes-panel {
+    width: 100%;
+    background: rgba(11, 53, 95, 0.9);
+    border: 1px solid rgba(80, 230, 220, 0.85);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
+}
+
+
+
+/* CLASS LIST *********************/
+.assigned-classes-list {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: whitesmoke;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-x: scroll !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
+}
+
+
+/* COURSE & CLASS ROW ********************* */
+
+.assigned-class-row {
+    display: grid;
+    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr);    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.3rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    min-width: 900px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.assigned-class-row:hover {
+    background: rgba(199, 255, 249, 0.3);
+}
+
+/* CLASS MAIN INFO */
+/* For CLASS List */
+.class-main-info {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+}
+
+.class-main-info h3 {
+    font-weight: 500;
+    color: #0B355F;
+    margin: 0 0 .35rem;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.005em;
+    transition: all 0.2s ease;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.class-main-info h3:hover {
+    font-weight: 600;
+}
+
+.assigned-class-level span.status-badge
+.class-main-info span.status-badge {
+    border-radius: 20px;
+    padding: 0.2rem 1rem !important;
+    font-weight: 700;
+    width: fit-content;
+    font-size: .75rem;
+    position: relative;
+}
+
+/* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
+.assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
+.attendance-row:last-child  {
+    border-bottom: none !important;
+}
+
+/* ROW DATA: BUTTON at the end */
+.course-list-group-name > div:first-of-type,
+.class-list-group-name > div:first-of-type,
+.attendance-list .attendance-row > div:first-of-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    gap: 0.5rem;
+}
+
+.class-list-group-name > div:first-of-type img,
+.course-list-group-name > div:first-of-type img,
+.attendance-list .attendance-row > div:first-of-type img {
+    width: 46px;
+    height: 46px;
+    background: #C7FFF9;
+    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
+    border-radius: 999px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+}
+
+.class-list-group-name > div:first-of-type span,
+.course-list-group-name > div:first-of-type span,
+.attendance-list .attendance-row > div:first-of-type span {
+    color: #6a7f81;
+}
+
+/* LEVEL CELL in DATA ROW */
+.assigned-class-row > div:nth-of-type(2) {
+    height: 100%; 
+    min-height: 80%;
+    display: flex;
+    align-items: center;
+    /* align-self: center;
+    align-content: center; */
+    justify-content: center;
+    }
+
+.assigned-class-row .level {
+    width: 50px;
+}
+
+
+/* DATES in ROW */
+.class-list-date {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    height: 70%;    
+    min-width: 200px;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.class-list-student-num {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);    
+    height: 70%;    
+    min-width: 100px;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.class-list-date .icon,
+.class-list-student-num .icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #006b7d;
+    background: transparent;
+    border-radius: 999px;
+    text-align: center !important;
+}
+
+.class-list-date i,
+.class-list-student-num i {
+    color: #006b7d;
+}
+
+.class-list-date strong,
+.class-list-student-num strong {
+    color: #006b7d;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Keep span elements in separate lines */
+.class-list-date span,
+.class-list-student-num span {
+    display: block;
+}
+
+/* ROW DATA: COURSE STATISTICS */
+/* For COURSE & CLASS List */
+.course-stat {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    height: 70%;
+    min-width: 100px;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.course-stat .completion-ring {
+    --ring-size: 52px;
+    --ring-thickness: 1px;
+    --ring-center: whitesmoke;
+
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(55% - var(--ring-thickness)),
+            transparent calc(55% - var(--ring-thickness) + 1px)
+        ),
+        conic-gradient(
+            #5eead4 calc(var(--completion, 0) * 1%),
+            rgba(255, 255, 255, 0.2) 0
+        );
+    border: 0.25px solid #a2b8bb;
+}
+
+.course-stat .completion-ring-value {
+    position: relative;
+    z-index: 1;
+
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.completion-ring span{
+    position:relative;
+    z-index:2;
+    font-size:0.95rem;
+    font-weight:500;
+    color:#006b7d;
+    line-height:1;
+}
+
+.course-stat span {
+    color: #6a7f81;
+}
+
+
+
+@media (max-width: 1250px) {
+
+    /******************************************************/
+    /* CLASSES LIST Page ******************************** */
+    /******************************************************/
+    .classes-filter-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.25rem;
+    } 
+
+}
+
+
+
+
+@media (max-width: 991.98px) {
+
+    .assigned-classes-header {
+        justify-content: stretch;
+    }
+}
+
+
+
+
+@media (max-width: 767.99px) {
+
+    .classes-filter-buttons {
+        display: none;
+    }
+
+    .mobile-filter-select {
+        display: block !important;
+        /* display: none; */
+    }
+
+    .assigned-course-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem;
+        padding: 1.5rem 1.4rem 1rem;
+    }
+
+    .class-list-group-name {
+        border-left: none;
+        padding-left: 0;
+        padding-bottom: 0.75rem;
+    }
+}
+
+
+@media (max-width: 576px) {
+    .assigned-classes-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .assigned-classes-filter-header h2 {
+        font-size: 1.6rem;
+        font-weight: 400;
+    }
+
+    .assigned-classes-filter-header i {
+        font-size: 1.6rem;
+        padding-left: 0.5rem;
+    }
+
+    .assigned-classes-filter-header strong {
+        font-size: 1.3rem;
+        margin-left: 0.8rem;
+    }
+
+    #upcomingClassesCollapse select,
+    #completedClassesCollapse select {
+        /* display: block !important; */
+        display: none;
+    }
+
+    /* Assigned BY STATUS */
+    .course-action {
+        width: 100%;
+    }
+
+
+}
+
+
+
+@media (max-width: 370px) {
+    /*****************************************************|
+    |*** CLASSES LIST Page  ***************************|
+    |*****************************************************/
+
+    /* .classes-filter-btn {
+        border-radius: 0;
+    } */
+
+}
+
+
+
+
+/* =======================================================
+   CLASS LIST: HORIZONTAL SCROLL FIX
+   Keep this at the end of the CSS file
+======================================================= */
+
+.classes-list,
+/* .classes-list .all-assigned-classes, */
+.wrapper-assigned-classes-panel,
+.assigned-classes-panel,
+.classes-panel-collapse {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* MUST STAY AT THE END OF CSS FILE */
+.assigned-class-row.class-hidden {
+    display: none !important;
+}    

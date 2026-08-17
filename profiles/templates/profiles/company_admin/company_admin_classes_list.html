@@ -6,13 +6,14 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_page.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="company-admin-classes-list teacher-classes-list profile-page">    
+<section class="classes-list profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
@@ -71,30 +72,11 @@
 
                     </div>
                     
-                    <div class="assigned-classes-overview-smaller-devices">
-                        <h3 class="classes-filter-btn">
-                            <span>Today</span>
-                            <strong>{{ class_filter_counts.upcoming.today }}</strong>
-                        </h3>
-                        <h3 class="classes-filter-btn">
-                            <span>This Week</span>
-                            <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
-                        </h3>
-                        <h3 class="classes-filter-btn">
-                            <span>This Month</span>
-                            <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
-                        </h3>
-                        <h3 class="classes-filter-btn">
-                            <span>All</span>
-                            <strong>{{ class_filter_counts.upcoming.all }}</strong>
-                        </h3>
-                    </div>
-
                     <select class="mobile-filter-select classes-panel-select">
-                        <option value="today">Today</option>
-                        <option value="weekly">This Week</option>
-                        <option value="monthly">This Month</option>
-                        <option value="all">All</option>
+                        <option value="today">Today: {{ class_filter_counts.upcoming.today }}</option>
+                        <option value="weekly">This Week: {{ class_filter_counts.upcoming.weekly }}</option>
+                        <option value="monthly">This Month: {{ class_filter_counts.upcoming.monthly }}</option>
+                        <option value="all">All: {{ class_filter_counts.upcoming.all }}</option>
                     </select>                        
 
                     <div class="assigned-classes-list">
@@ -162,10 +144,10 @@
                     </div>
 
                     <select class="mobile-filter-select classes-panel-select">
-                        <option value="today">Today</option>
-                        <option value="weekly">This Week</option>
-                        <option value="monthly">This Month</option>
-                        <option value="all">All</option>
+                        <option value="today">Today: {{ class_filter_counts.completed.today }}</option>
+                        <option value="weekly">This Week: {{ class_filter_counts.completed.weekly }}</option>
+                        <option value="monthly">This Month: {{ class_filter_counts.completed.monthly }}</option>
+                        <option value="all">All: {{ class_filter_counts.completed.all }} <i class="fa-solid fa-chevron-down classes-panel-arrow"></i></option>
                     </select>                        
 
                     <div class="assigned-classes-list">

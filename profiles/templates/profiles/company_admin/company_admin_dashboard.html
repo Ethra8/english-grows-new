@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/dashboards_admin_and_teacher.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/dashboards_admin_and_teacher.css' %}">
 {% endblock %}
 
 
@@ -123,146 +123,280 @@
         </div>
 
         <div class="wrapper-dashboard-card">
-            <div class="weekly-overview dashboard-card">
-                <div class="dashboard-card-left">
+
+            <section class="training-overview dashboard-card">
+
+                <!-- HEADER -->
+                <div class="training-overview-header">
+
                     <div class="today-icon">
-                        <i class="fa-solid fa-calendar-week"></i>
+                        <i class="fa-solid fa-chart-column"></i>
                     </div>
 
                     <div class="today-title">
-                        <h3>This Week</h3>
-                        <span>Overview</span>
+                        <h3>Training Overview</h3>
+                        <span>Weekly & monthly performance</span>
                     </div>
+
                 </div>
 
-                <div id="weekly_overview" class="meta-row mt-5">
 
-                    <div class="meta-card meta-sessions">
-                        <div class="meta-icon">
-                            <i class="fa-solid fa-chalkboard"></i>
-                        </div>
-                        <div class="meta-text">
-                            <strong>Total Classes</strong>
-                            <span>{{ total_weekly_sessions|default:"0" }}</span>
-                        </div>
+                <!-- OVERVIEW TABLE -->
+                <div class="training-overview-grid">
+
+                    <!-- =========================
+                        COLUMN HEADERS
+                        ========================= -->
+
+                    <div class="overview-grid-header overview-period-header"></div>
+
+                    <div class="overview-grid-header">
+                        Total Classes
                     </div>
 
-                    <div class="meta-card meta-completed">
-                        <div>
-                            <div class="completion-ring" style="--completion: {{ completed_weekly_percentage|default:'0' }};">
-                                <span class="completion-ring-value">{{ completed_weekly_percentage|default:"0" }}%</span>
-                            </div>
+                    <div class="overview-grid-header">
+                        Completed Classes
+                    </div>
+
+                    <div class="overview-grid-header">
+                        Upcoming Classes
+                    </div>
+
+                    <div class="overview-grid-header">
+                        Attendance
+                    </div>
+
+
+                    <!-- =========================
+                        THIS WEEK
+                        ========================= -->
+
+                    <div class="overview-period">
+
+                        <div class="overview-period-icon">
+                            <i class="fa-solid fa-calendar-week"></i>
                         </div>
-                        <div class="meta-text">
-                            <strong>Completed Classes</strong>
-                            <span>
+
+                        <div>
+                            <strong>This Week</strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- TOTAL CLASSES -->
+                    <div class="overview-metric overview-total">
+
+                        <span class="overview-mobile-label">
+                            Total Classes
+                        </span>
+
+                        <span class="overview-number">
+                            {{ total_weekly_sessions|default:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- COMPLETED CLASSES -->
+                    <div class="overview-metric overview-completed">
+
+                        <span class="overview-mobile-label">
+                            Completed Classes
+                        </span>
+
+                        <div class="overview-completion">
+
+                            <div
+                                class="completion-ring"
+                                style="--completion: {{ completed_weekly_percentage|default:'0' }};"
+                            >
+                                <span class="completion-ring-value">
+                                    {{ completed_weekly_percentage|default:"0" }}%
+                                </span>
+                            </div>
+
+                            <span class="completion-count">
                                 {{ completed_weekly_sessions|default:"0" }}
-                                <!-- <small>({{ completed_weekly_percentage|default:"0" }}%)</small> -->
                             </span>
+
                         </div>
+
                     </div>
 
-                    <div class="meta-card meta-upcoming">
-                        <div class="meta-icon">
-                            <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
-                        </div>
-                        <div class="meta-text">
-                            <strong>Upcoming Classes</strong>
-                            <span>
-                                {{ upcoming_weekly_sessions|default:"0" }}
-                                <!-- <small>({{ upcoming_weekly_percentage|default:"0" }}%)</small> -->
-                            </span>
-                        </div>
+
+                    <!-- UPCOMING CLASSES -->
+                    <div class="overview-metric overview-upcoming">
+
+                        <span class="overview-mobile-label">
+                            Upcoming Classes
+                        </span>
+
+                        <span class="overview-number">
+                            {{ upcoming_weekly_sessions|default:"0" }}
+                        </span>
+
                     </div>
 
-                    <div class="meta-card meta-attendance">
-                        <div>
-                            <div class="completion-ring" style="--completion: {{ weekly_attendance_rate|default:'0' }};">
-                                <span class="completion-ring-value">{{ weekly_attendance_rate|default:"0" }}%</span>
+
+                    <!-- ATTENDANCE -->
+                    <div class="overview-metric overview-attendance">
+
+                        <span class="overview-mobile-label">
+                            Attendance
+                        </span>
+
+                        <div class="attendance-progress">
+
+                            <span class="attendance-value">
+                                {{ weekly_attendance_rate|default:"0" }}%
+                            </span>
+
+                            <div
+                                class="training-attendance-bar"
+                                role="progressbar"
+                                aria-label="Weekly attendance"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ weekly_attendance_rate|default:'0' }}"
+                            >
+                                <div
+                                    class="training-attendance-bar-fill"
+                                    data-percentage="{{ weekly_attendance_rate|default:'0' }}"
+                                ></div>
                             </div>
+
                         </div>
-                        <div class="meta-text">
-                            <strong>Weekly Attendance</strong>
-                            <span>
-                                <!-- {{ weekly_attendance_rate|default:"0" }} -->
-                                <!-- ({{ weekly_attendance_completed_percentage|default:"0" }}%) -->
-                            </span>
-                        </div>
+
                     </div>
 
-                </div>
-            </div>
-        </div>
 
-        <div class="wrapper-dashboard-card">
-            <div class="weekly-overview dashboard-card">
-                <div class="dashboard-card-left">
-                    <div class="today-icon">
-                        <i class="fa-regular fa-calendar-days"></i>
-                    </div>
+                    <!-- =========================
+                        THIS MONTH
+                        ========================= -->
 
-                    <div class="today-title">
-                        <h3>This Month</h3>
-                        <span>Overview</span>
-                    </div>
-                </div>
+                    <div class="overview-period">
 
-                <div id="monthly_overview" class="meta-row mt-5">
-
-                    <div class="meta-card meta-sessions">
-                        <div class="meta-icon">
-                            <i class="fa-solid fa-chalkboard"></i>
+                        <div class="overview-period-icon">
+                            <i class="fa-regular fa-calendar-days"></i>
                         </div>
-                        <div class="meta-text">
-                            <strong>Total Classes</strong>
-                            <span>{{ total_monthly_sessions|default:"0" }}</span>
-                        </div>
-                    </div>
 
-                    <div class="meta-card meta-completed">
                         <div>
-                            <div class="completion-ring" style="--completion: {{ total_monthly_completed_percentage|default:'0' }};">
-                                <span class="completion-ring-value">{{ total_monthly_completed_percentage|default:"0" }}%</span>
-                            </div>
+                            <strong>This Month</strong>
                         </div>
-                        <div class="meta-text">
-                            <strong>Completed Classes</strong>
-                            <span>
+
+                    </div>
+
+
+                    <!-- TOTAL CLASSES -->
+                    <div class="overview-metric overview-total">
+
+                        <span class="overview-mobile-label">
+                            Total Classes
+                        </span>
+
+                        <span class="overview-number">
+                            {{ total_monthly_sessions|default:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- COMPLETED CLASSES -->
+                    <div class="overview-metric overview-completed">
+
+                        <span class="overview-mobile-label">
+                            Completed Classes
+                        </span>
+
+                        <div class="overview-completion">
+
+                            <div
+                                class="completion-ring"
+                                style="--completion: {{ total_monthly_completed_percentage|default:'0' }};"
+                            >
+                                <span class="completion-ring-value">
+                                    {{ total_monthly_completed_percentage|default:"0" }}%
+                                </span>
+                            </div>
+
+                            <span class="completion-count">
                                 {{ total_monthly_completed_sessions|default:"0" }}
                             </span>
+
                         </div>
+
                     </div>
 
-                    <div class="meta-card meta-upcoming">
-                        <div class="meta-icon">
-                            <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
-                        </div>
-                        <div class="meta-text">
-                            <strong>Upcoming Classes</strong>
-                            <span>
-                                {{ total_monthly_upcoming_sessions|default:"0" }}
-                                <!-- ({{ total_monthly_upcoming_percentage|default:"0" }}%) -->
+
+                    <!-- UPCOMING CLASSES -->
+                    <div class="overview-metric overview-upcoming">
+
+                        <span class="overview-mobile-label">
+                            Upcoming Classes
+                        </span>
+
+                        <span class="overview-number">
+                            {{ total_monthly_upcoming_sessions|default:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- ATTENDANCE -->
+                    <div class="overview-metric overview-attendance">
+
+                        <span class="overview-mobile-label">
+                            Attendance
+                        </span>
+
+                        <div class="attendance-progress">
+
+                            <span class="attendance-value">
+                                {{ monthly_attendance_rate|default:"0" }}%
                             </span>
-                        </div>
-                    </div>
 
-                    <div class="meta-card meta-attendance">
-                        <div>
-                            <div class="completion-ring" style="--completion: {{ monthly_attendance_rate|default:'0' }};">
-                                <span class="completion-ring-value">{{ monthly_attendance_rate|default:"0" }}%</span>
+                            <div
+                                class="training-attendance-bar"
+                                role="progressbar"
+                                aria-label="Monthly attendance"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ monthly_attendance_rate|default:'0' }}"
+                            >
+                                <div
+                                    class="training-attendance-bar-fill"
+                                    data-percentage="{{ monthly_attendance_rate|default:'0' }}"
+                                ></div>
                             </div>
+
                         </div>
-                        <div class="meta-text">
-                            <strong>Monthly Attendance</strong>
-                            <span>
-                                <!-- {{ monthly_attendance_rate|default:"0" }} -->
-                            </span>
-                        </div>
+
                     </div>
 
                 </div>
-            </div>
+
+            </section>
+
+        </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+
+<script>
+    document
+        .querySelectorAll(".training-attendance-bar-fill")
+        .forEach((bar) => {
+
+            const percentage =
+                parseFloat(bar.dataset.percentage) || 0;
+
+            bar.style.width =
+                `${Math.min(Math.max(percentage, 0), 100)}%`;
+        });
+</script>
 {% endblock %}
