@@ -13,14 +13,14 @@
 
 {% block profile_content %}
 
-<section class="assigned-courses-page profile-page admin-assigned-courses-page">    
+<section class="assigned-courses-page profile-page company-admin-courses">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
     <header>
         <div class="row" >        
             <div class="col-12 ml-0 pl-0">
-                <h1>Registered Courses</h1>
+                <h1>All Courses</h1>
             </div>
         </div>
         <hr>
@@ -42,6 +42,10 @@
         <div class="card">
             <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>Cancelled</span></div>
             <div class="card-body">{{ cancelled_courses }}</div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-solid fa-check-to-slot mr-2"></i>Completed</span></div>
+            <div class="card-body">{{ completed_courses }}</div>
         </div>
         <div class="card">
             <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>All Courses</span></div>
@@ -81,6 +85,12 @@
                             <strong>{{ cancelled_courses }}</strong>
                         </button>
 
+                        <button type="button" class="course-status-btn" data-status="completed">
+                            <!-- <i class="fa-regular fa-circle-xmark"></i> -->
+                            <span>Completed</span>
+                            <strong>{{ completed_courses }}</strong>
+                        </button>
+
                         <button type="button" class="course-status-btn" data-status="all">
                             <!-- <i class="fa-solid fa-border-all"></i> -->
                             <span>All</span>
@@ -94,6 +104,7 @@
                         <option value="confirmed">Confirmed</option>
                         <option value="paused">Paused</option>
                         <option value="cancelled">Cancelled</option>
+                        <option value="completed">Completed</option>
                         <option value="all">All Status</option>
                     </select>
                 </div>            
@@ -110,15 +121,15 @@
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
                     <div class="course-main-info">
-                                    {% if course.enrollment_count == 1 %}
-                                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                                    {% else %}
-                                    <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
-                                    {% endif %}
-                                    <div>
-                                        <h3>{{ course.name }}</h3>
-                                        <span>{{ course.course_type }}</span> 
-                                    </div>
+                        {% if course.enrollment_count == 1 %}
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        {% else %}
+                        <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+                        {% endif %}
+                        <div>
+                            <h3>{{ course.name }}</h3>
+                            <span>{{ course.course_type }}</span> 
+                        </div>
                     </div>
                     
                     <div>

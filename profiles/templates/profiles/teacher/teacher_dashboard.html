@@ -33,7 +33,7 @@
         <div class="dashboard-general-info-card">
             <div class="meta-row">
 
-                <a href="{% url 'profiles:company_admin_courses' %}">
+                <a href="{% url 'profiles:teacher_courses' %}">
                     <div class="meta-card meta-courses">
                         <div class="meta-text">
                             <strong>All Courses
@@ -47,7 +47,7 @@
                 <a href="{% url 'profiles:company_admin_employees_list' %}">
                     <div class="meta-card meta-students">
                         <div class="meta-text">
-                            <strong>Active Employees
+                            <strong>Active Learners
                                 <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                             </strong>
                             <span>{{ total_students|default:"0" }}</span>

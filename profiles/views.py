@@ -1531,6 +1531,7 @@ def teacher_courses(request):
     active_courses = courses.filter(status="active").count()
     confirmed_courses = courses.filter(status="confirmed").count()
     cancelled_courses = courses.filter(status="cancelled").count()
+    completed_courses = courses.filter(status="completed").count()
     paused_courses = courses.filter(status="paused").count()
 
     active_courses_list = courses.filter(status="active")
@@ -1543,6 +1544,7 @@ def teacher_courses(request):
         "confirmed_courses": confirmed_courses,
         "cancelled_courses": cancelled_courses,
         "paused_courses": paused_courses,
+        "completed_courses": completed_courses,
         "active_courses_list": active_courses_list,
     }
 
@@ -3854,6 +3856,7 @@ def company_admin_courses(request):
     active_courses = courses.filter(status="active").count()
     confirmed_courses = courses.filter(status="confirmed").count()
     cancelled_courses = courses.filter(status="cancelled").count()
+    completed_courses = courses.filter(status="completed").count()
     paused_courses = courses.filter(status="paused").count()
 
     active_courses_list = courses.filter(status="active")
@@ -3867,6 +3870,7 @@ def company_admin_courses(request):
         "confirmed_courses": confirmed_courses,
         "cancelled_courses": cancelled_courses,
         "paused_courses": paused_courses,
+        "completed_courses": completed_courses,
         "active_courses_list": active_courses_list,
     }
 
