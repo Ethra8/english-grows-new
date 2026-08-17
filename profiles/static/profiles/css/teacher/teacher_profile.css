@@ -1009,6 +1009,7 @@ h2 {
 
 /* Wrapper of attendace-summary-cards */
 .wrapper-attendance-summary-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));    
     display: flex;
     gap: 0.2rem;
     border-radius: 8px;
@@ -1060,23 +1061,7 @@ h2 {
     color: whitesmoke;
 }
 
-/* Take Attendance page: SUMMARY CARDS *****/
-.teacher-take-attendance-page .wrapper-attendance-summary-card {
-    gap: 0.1rem;
-    padding: 0 !important;
-    margin-bottom: 1.5rem;
-    width: 100%;
-}
-
-.teacher-take-attendance-page .attendance-summary-card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    align-items: center;
-}
-
 /* Attendance Detail page : SUMMARY CARDS */
-.wrapper-attendance-summary-card,
 .wrapper-attendance-summary-card {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -1084,13 +1069,27 @@ h2 {
     width: fit-content;
 }
 
+/* Take Attendance page: SUMMARY CARDS *****/
+.take-attendance-page .wrapper-attendance-summary-card {
+    gap: 0.1rem;
+    padding: 0 !important;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.take-attendance-page .attendance-summary-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    align-items: center;
+}
 
 /* *** TAKE ATTENDANCE Page ************************/
 
 /* Empty messages */
 .attendance-empty-message {
     text-align: left;
-    color: whitesmoke;
+    color: gray;
     font-size: 1rem;
 }
 
@@ -1105,7 +1104,8 @@ h2 {
 .take-attendance-card, 
 .attendance-detail-card {
     /* background: rgba(0, 48, 92, 0.75); */
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85)); */
+    background-color: whitesmoke;
     border: 1px solid rgba(95, 255, 234, 0.45);
     border-radius: 8px;
     padding: 1.6rem;
@@ -1128,7 +1128,7 @@ h2 {
 .attendance-list-header h2,
 .take-attendance-form .take-attendance-card-header h2,
 .attendance-detail-card-header h2 {
-    color: #ffffff;
+    color: #006b7d;
     margin: 0 0 0.4rem;
     font-size: 1.8rem;
     font-family: "Big Shoulders Display", sans-serif;
@@ -1139,7 +1139,7 @@ h2 {
 .take-attendance-form .take-attendance-card-header p,
 .attendance-detail-card-header p {
     margin: 0;
-    color: #bffaf4;
+    color: #6a7f81;
 }
 
 .take-attendance-form .take-attendance-card-header span {
@@ -1190,7 +1190,10 @@ h2 {
 .mark-all-actions {
     display: flex;
     gap: 0.9rem;
-    margin: 1.5rem auto 2.5rem !important;
+    margin: 0 auto 2.5rem !important;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    padding: 0.5rem;
+    border-radius: 8px;
 }
 
 .mark-all-btn {
@@ -1244,21 +1247,41 @@ h2 {
     gap: 1.5rem;
     align-items: center;
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(95, 255, 234, 0.22);
+    border-bottom: 1px solid lightgray;
 }
 
-.take-attendance-list .student-main-info h3 {
-    font-size: 1.2rem;
+.take-attendance-row .student-main-info {
+    gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
 }
 
-.take-attendance-list .student-main-info h3 a {
+.take-attendance-row .student-main-info .student-name {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-content: center;
+}
+
+.take-attendance-list .student-main-info h3 a,
+.take-attendance-page .student-main-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+    color: #0B355F;
+}
+
+.take-attendance-row .student-main-info .student-name span,
+.take-attendance-page .student-main-info span {
     text-decoration: none;
-    color: whitesmoke;
+    color: #006b7d;
 }
 
-.take-attendance-list .student-main-info h3 a:hover {
+.take-attendance-list .student-main-info a:hover,
+.take-attendance-page .student-main-info a:hover {
     text-decoration: none;
-    color: #5ff0df;
+    color: #008b87;
+    font-weight: 500;
 }
 
 .take-attendance-row:last-child {
@@ -1276,6 +1299,7 @@ h2 {
     padding: 0.4rem 0.7rem;
     border-radius: 8px;
     border: 1.5px outset rgba(95, 255, 234, 0.22);
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
 }
 
 .attendance-radio-pill {
@@ -1635,13 +1659,13 @@ h2 {
         width: 100%;
     }
 
-    .teacher-take-attendance-page .take-attendance-row {
+    .take-attendance-page .take-attendance-row {
         display: flex;
         gap: 0;
         flex-direction: column;
     }
 
-    .teacher-take-attendance-page .student-main-info {
+    .take-attendance-page .student-main-info {
         display: flex;
         align-items: center;
         justify-content: flex-start !important;
@@ -1650,7 +1674,7 @@ h2 {
         width: 100%;
     }
 
-    .teacher-take-attendance-page .attendance-radio-group {
+    .take-attendance-page .attendance-radio-group {
         display: flex;
         justify-content: flex-start;
         gap: 2.5rem;
@@ -1862,7 +1886,6 @@ h2 {
         flex-direction: column;
         align-items: center;
         /* text-align: center; */
-        justify-content: center !important;
         gap: 1rem;
         align-self: baseline;
         width: 100%;
@@ -2077,14 +2100,14 @@ h2 {
         width: 100%;
     }
 
-    .teacher-take-attendance-page .wrapper-attendance-summary-card {
+    .take-attendance-page .wrapper-attendance-summary-card {
         flex-direction: row;
         display: flex;
         align-content: space-around;
         min-height: 80px;
     }
 
-    .teacher-take-attendance-page .attendance-summary-card {
+    .take-attendance-page .attendance-summary-card {
         min-height: 0;
         max-height: 56px;
         padding: 0.6rem;
@@ -2098,7 +2121,7 @@ h2 {
         flex-direction: column;
     }
 
-    .teacher-take-attendance-page .attendance-radio-group {
+    .take-attendance-page .attendance-radio-group {
         justify-content: space-around;
         width: 100%;
         padding: 0.4rem 1rem;
@@ -2206,7 +2229,7 @@ h2 {
     |*** TAKE ATTENDANCE Page  ***************************|
     |*****************************************************/
 
-    .teacher-take-attendance-page .wrapper-attendance-summary-card span {
+    .take-attendance-page .wrapper-attendance-summary-card span {
         padding-right: 0 !important;
         border: none;
     }

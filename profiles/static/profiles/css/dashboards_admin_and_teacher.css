@@ -105,7 +105,9 @@
 }
 
 .today-sessions-list p {
-    color: whitesmoke;
+    color: gray;
+    padding: 0;
+    margin: 0;
 }
 
 .today-icon {
@@ -500,7 +502,7 @@
     /* DASHBOARD Page *********************************** */
     /******************************************************/
     .today-sessions-list p {
-        color: whitesmoke;
+        color: gray;
         padding: 0 1.75rem;
     }
 

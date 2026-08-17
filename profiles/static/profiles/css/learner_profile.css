@@ -55,10 +55,6 @@
     min-width: 0;
 }
 
-.take-attendance-row .student-main-info {
-    gap: 2rem;
-}
-
 .student-main-info h1,
 .student-main-info p {
     min-width: 0;

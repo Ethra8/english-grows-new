@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learners_list.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -122,7 +123,7 @@
                 <div class="take-attendance-row">
 
                     <div class="student-main-info">
-                        <div class="student-avatar">
+                        <div class="small-avatar">
                             {% if attendance.student.profile.profile_photo %}
                                 <img src="{{ attendance.student.profile.profile_photo.url }}" alt="{{ attendance.student.get_full_name }}">
                             {% else %}
@@ -130,7 +131,7 @@
                             {% endif %}
                         </div>
 
-                        <div>
+                        <div class="student-name">
                             <h3>
                                 {% if attendance.enrollment %}
                                     <a href="{% url 'profiles:teacher_student_detail' class_session.course.id attendance.enrollment.id %}"

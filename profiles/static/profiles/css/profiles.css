@@ -187,7 +187,13 @@ main.profile-main {
 }
 
 
-
+/* EMPTY MESSAGE */
+.empty-message {
+    background-color: whitesmoke;
+    padding: 1rem;
+    color:#6a7f81 !important;
+    border-radius: 8px;
+}
 
 /* ****** BUTTONS **************************************** */
 /* *** BUTTONS ************************************************** */

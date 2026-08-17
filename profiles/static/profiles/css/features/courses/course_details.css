@@ -1,0 +1,5 @@
+@media (max-width: 600px) {
+        .company-admin-course-details-page .detail-row {
+        grid-template-columns: 1fr;
+    }
+}
