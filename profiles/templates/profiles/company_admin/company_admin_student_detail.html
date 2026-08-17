@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">    
 {% endblock %}
 
@@ -72,7 +72,7 @@
                 <div class="header-last-child">      
 
                     <div class="level-pill larger-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
@@ -82,7 +82,7 @@
                         </span>
                     </div>
                     <div class="level-pill smaller-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
@@ -146,10 +146,8 @@
     <div class="student-overview-grid">
 
         <article class="student-detail-card">
-            <div>
-                <h2><i class="fa-solid fa-circle-info mr-3"></i>{{ course.name }}</h2>
-                <h3></h3>
-                <hr>
+            <div class="course-info-detail-card">
+                <h2>{{ course.name }}</h2>
 
                 <div class="current-course-block">
 
@@ -179,21 +177,16 @@
 
             <div>
                 <a href="{% url 'profiles:company_admin_course_details' course.id %}" class="btn-course-details mt-3">
-                    <i class="fa-regular fa-eye mr-3"></i>                    
                     Details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>
             </div>
         </article>
 
         <article class="student-detail-card">
-            <div>
-                <h2>
-                    <i class="fa-solid fa-clipboard-list mr-2"></i>
-                    Attendance Rate
-                </h2>
+            <div class="student-detail-card-attendance">
 
-                <hr>
+                <h2>Attendance</h2>
 
                 <div class="student-ring-layout">
 
@@ -222,21 +215,16 @@
             <div>
                 <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}"
                 class="btn-course-details mt-3">
-                    <i class="fa-regular fa-eye mr-3"></i>
                     Details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>            
             </div>
         </article>
 
         <article class="student-detail-card">
-            <div>
-                <h2>
-                    <i class="fa-solid fa-chart-simple mr-2"></i>
-                    Course Completion
-                </h2>
+            <div class="course-completion-detail-card">
 
-                <hr>
+                <h2>Course Completion</h2>
 
                 <div class="student-ring-layout">
 
@@ -266,19 +254,18 @@
 
             <div>
                 <a href="{% url 'profiles:company_admin_course_details' course.id %}" class="btn-course-details mt-3">
-                    <i class="fa-regular fa-eye mr-3"></i>                    
                     Details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>
             </div>
         </article>
     </div>
 
-    <div class="student-details-skills-overview-grid">
+    <div class="student-details-skills-overview-grid mt-4">
         <article class="skills-progress-section">
             <div class="skills-chart-card">
                 <div class="skills-chart-header">
-                    <h2><i class="fa-solid fa-chart-line mr-2"></i>Progress Over Time</h2>
+                    <h2>Progress Over Time</h2>
                 </div>
 
                 <div class="skills-chart-canvas-wrap">

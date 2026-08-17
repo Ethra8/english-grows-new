@@ -180,6 +180,166 @@ main.profile-main {
 
 
 /* ****** BUTTONS **************************************** */
+/* *** BUTTONS ************************************************** */
+
+.btn-class-today,
+.btn-course-details,
+.btn-attendance-tools,
+.btn-email-all,
+.edit-attendance-btn,
+.btn-to-student-detail,
+.student-action-btn,
+.student-edit-attendance-btn,
+.skill-edit-link,
+.btn-skill-save-assessment {
+    border: 1px solid #5ff0df;
+    color: #5ff0df;
+    padding: 0.25rem 0.85rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-weight: 400;
+    width: max-content;
+    max-height: fit-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(94, 234, 212, 0.1);
+    align-self: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 20, 40, 0.5);
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-class-today:hover,
+.btn-course-details:hover,
+.btn-attendance-tools:hover,
+.btn-email-all:hover,
+.edit-attendance-btn:hover,
+.btn-to-student-detail:hover,
+.student-action-btn:hover,
+.student-edit-attendance-btn:hover,
+.skill-edit-link:hover,
+.btn-skill-save-assessment:hover  {
+    background: rgba(94, 234, 212, 0.15);
+    color: #fff;
+    text-decoration: none;
+}
+
+div:has(> .student-action-btn) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.btn-class-today i, 
+.btn-email-all i,
+.btn-to-student-detail i {
+    display: inline-flex;
+    position: relative;
+}
+
+.btn-course-details i,
+.btn-attendance-tools i {
+    position: relative;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    /* padding: 0.2rem 0.8rem; */
+}
+
+.course-status-btn,
+.classes-filter-btn,
+.attendance-filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 70px;
+    border: 1px solid rgba(106, 250, 225, 0.45);
+    border-radius: 8px;
+    background: rgba(11, 53, 95, 0.45);
+    color: whitesmoke;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.course-status-btn.active::after,
+.classes-filter-btn.active::after,
+.attendance-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #5eead4;
+    filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
+}
+
+.course-status-btn i,
+.classes-filter-btn i {
+    font-size: 1.3rem;
+    color: #5eead4;
+}
+
+.attendance-filter-btn i {
+    font-size: 1.3rem;
+    /* color: #5eead4; */
+}
+
+.course-status-btn strong,
+.classes-filter-btn strong,
+.attendance-filter-btn strong,
+.assigned-classes-filter-header strong {
+    background: rgba(106, 250, 225, 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: #fff;
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    height: 35px;
+    width: 35px;
+}
+
+.course-status-btn strong,
+.classes-filter-btn strong,
+.attendance-filter-btn strong {
+    font-size: 1.2rem;
+}
+
+.assigned-classes-filter-header strong {
+    font-size: 1.8rem;
+    margin-left: 1.5rem;
+    text-align: center !important;
+}
+
+.course-status-btn.active,
+.course-status-btn:hover,
+.classes-filter-btn.active,
+.classes-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    color: #fff;
+}
+
+.attendance-filter-btn.active,
+.attendance-filter-btn:hover {
+    background: rgba(0, 155, 155, 0.25);
+    border-color: #5eead4;
+    /* color: #fff; */
+}
 
 .btn-join-class {
     border: 1px solid #5ff0df;
@@ -509,6 +669,7 @@ main.profile-main {
     color: whitesmoke;
     font-size: 1.2rem;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 .level-pill .current-level-value {
@@ -627,7 +788,7 @@ main.profile-main {
 
 .my-course header {
     max-width: fit-content;
-    margin-top: 4rem;
+    margin-top: 2rem;
 }
 
 .my-course header > div:nth-child(1) {
@@ -1144,6 +1305,73 @@ main.profile-main {
 }
 /* END OF COURSE SELECTOR FORM */
 
+
+/* META ROW */
+.meta-row {
+    display: grid;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* META CARD */
+
+.meta-card,
+.course-meta-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-width: fit-content;
+    min-height: fit-content;
+    padding: 0.35rem 0.35rem 0.35rem 2rem;
+    border: 1.5px solid rgba(94, 242, 220, 0.35);
+    border-radius: 50px;
+    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.meta-card::after,
+.course-meta-card::after {
+    content: "";
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.meta-card .meta-icon {
+    background: rgba(237, 249, 247, 0.9);
+}
+
+.meta-card .meta-icon img {
+    width: 42px;
+    height: 42px;
+}
+
+.meta-text strong {
+    display: block;
+    color: #ffffff;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    letter-spacing: 0.03em;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.meta-text span {
+    color: rgba(94, 242, 220, 0.9);
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+/* END META CARD */
+
+.meta-attendance::after,
 .learner-employee-detail-page .course-meta-card.meta-attendance::after {
     content: "\f46c"; /* fa-clipboard-check */
     font-family: "Font Awesome 6 Free";
@@ -1155,6 +1383,29 @@ main.profile-main {
     right: -5px;
     rotate: calc(-15deg);
 }
+
+.meta-percentage::after {
+    content: "";
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    background-image: url("/static/icons/percentage_turquoise_icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    top: 0px;
+    right: 25px;
+
+    transform: rotate(0deg);
+
+    opacity: 0.1;
+
+    pointer-events: none;
+}
+
 
 /* Attendance Detail page : SUMMARY CARDS */
 .learner-employee-detail-page .wrapper-attendance-summary-card {
@@ -1590,7 +1841,6 @@ main.profile-main {
         padding: 70px 15px 70px 15px;
     }
 
-
     /* === SIDEBAR ===================================== */
     .profile-sidebar {
         max-width: 220px;
@@ -1649,9 +1899,9 @@ main.profile-main {
 
 @media (max-width: 991.98px) {
 
-    /* .profile-page {
-        padding: 70px 15px;
-    } */
+    .student-detail-page.profile-page {
+        padding: 20px 5% 70px;
+    }
 
     /* *** H1 ****************************************/
 
@@ -1797,6 +2047,9 @@ main.profile-main {
 @media (max-width: 767.98px) {
 
     /*  MAIN PROFILE *************************** */
+    .student-detail-page.profile-page {
+        padding: 10px 5% 70px;
+    }
 
 
     /*  STUDENT: My DASHBOARD Page ************* */
@@ -1943,8 +2196,10 @@ main.profile-main {
     .profile-page {
         padding: 30px 4%;
     }
+    .student-detail-page.profile-page {
+        padding: 0px 3% 70px;
+    }
 
-    
     /* STUDENT: My DASHBOARD Page ***** */
 
     .wrapper-next-class-card {
@@ -2066,5 +2321,9 @@ main.profile-main {
         padding: 10.5rem 2rem 2rem;
     }
 
+    .student-detail-card h2,
+    .recent-attendance-card h2 {
+        font-size: 1.5rem;
+    }
 
 }

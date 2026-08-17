@@ -9,7 +9,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
 {% endblock %}
 
@@ -60,7 +60,7 @@
                     <!-- <div class="header-last-child">       -->
                 <div class="mt-4">  
                     <div class="level-pill larger-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
@@ -70,7 +70,7 @@
                         </span>
                     </div>
                     <div class="level-pill smaller-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
@@ -175,9 +175,9 @@
             </div> 
             <div>
                 <a href="{% url 'profiles:my_course' %}?course={{ course.id }}" class="btn-course-details mt-3">
-                    <i class="fa-regular fa-eye mr-3"></i>                    
+                    <!-- <i class="fa-regular fa-eye mr-3"></i>                     -->
                     details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>
             </div>
         </article>
@@ -211,9 +211,9 @@
             </div>
             <div>
                 <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" class="btn-course-details mt-3">
-                    <i class="fa-regular fa-eye mr-3"></i>
+                    <!-- <i class="fa-regular fa-eye mr-3"></i> -->
                     details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>
             </div>
         </article>
@@ -249,7 +249,7 @@
                 <a href="#" class="btn-course-details mt-3">
                     <i class="fa-regular fa-eye mr-3"></i>                    
                     details
-                    <i class="fa-solid fa-arrow-right ml-3"></i>
+                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                 </a>
             </div> -->
         </article>

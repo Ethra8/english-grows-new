@@ -1,0 +1,936 @@
+.student-detail-page {
+    color: whitesmoke;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.student-detail-page header {
+    color: whitesmoke;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 180px;
+    padding: 1.5rem 4rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.student-detail-page header h1 {
+    color: #F4FFFE;
+    padding: 0 !important;
+    /* font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em; */
+}
+
+.student-detail-page header a {
+    color: #c9fffc;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.student-detail-page header p {
+    color: #c9fffc;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+}
+
+
+/* STUDENT-MAIN-INFO */
+.student-main-info {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.take-attendance-row .student-main-info {
+    gap: 2rem;
+}
+
+.student-main-info h1,
+.student-main-info p {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.student-main-info h1 {
+    color: whitesmoke;
+    margin-bottom: 0;
+    /* font-size: 2.8rem; */
+}
+
+.student-avatar-large {
+    position: relative;
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    background: rgba(95, 255, 234, 0.16);
+    border: 2px outset rgba(84, 85, 85, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    color: #5fffea;
+    margin: 0 auto;
+    border-right:  2px solid #006b7d;
+}
+
+.student-avatar-large img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* when no profile_photo, user icon displays */
+.student-avatar-large i {
+    font-size: 46px;
+}
+
+/* AVATAR STATUS DOT - PROFILE STATUS - My-Progress/Student details pages**********************/
+.avatar-status-dot {
+    position: absolute;
+    right: 7%;
+    bottom: 8%;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #1d7180;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(4, 31, 54, 0.35);
+    z-index: 10;
+}
+
+.student-avatar-large.avatar-active .avatar-status-dot {
+    background-color: #38df9c;
+}
+
+.student-avatar-large.avatar-inactive .avatar-status-dot {
+    background-color: #9aa9b5;
+}
+/* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
+
+
+.student-main-info a:hover {
+    color: #07c0c7;
+}
+
+.profile-user-role span {
+    display: inline-block;
+    /* border: 1px solid #5ff0df; */
+    border-radius: 999px;
+    /* padding: 0.5rem 1rem; */
+    color: #5ff0df;
+    font-size: 1rem;
+    max-width: fit-content;
+    max-height: 42px;
+}
+
+/* DIV WITH LEVEL ************/
+.student-detail-page header .header-last-child {
+    margin: 2rem 0 0;
+    min-width: max-content;
+    width: 100%;
+}
+
+/* LEVEL PILL ***********************/
+.student-detail-page .level-pill {
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    max-width: fit-content;
+    border: 1px outset #006b7d;
+    border-radius: 999px;
+    background: #006b7d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    font-family: "Big Shoulders Display", sans-serif;    
+    letter-spacing: 0.03em;
+    padding: 0 0 0 .25rem;
+    /* max-height: 42px; */
+}
+
+.student-detail-page .level-pill.smaller-devs {
+    display: none;
+}
+
+.student-detail-page .level-pill .current-level-label {
+    padding: 6px 18px 6px 22px;
+    color: whitesmoke;
+    font-size: 1.2rem;
+}
+
+.student-detail-page .level-pill .current-level-value {
+    padding: 6px 22px 6px 18px;
+    background: #0B355F;
+    color: whitesmoke;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+/* END LEVEL PILL *******************/
+
+
+/* .current-course-block {
+    background-color: whitesmoke;
+} */
+
+
+/* NOT SURE STILL IF NEEDED (previously: .teacher-student-detail-page******************* */
+.student-detail-page .course-meta-card.meta-attendance::after {
+    content: "\f46c"; /* fa-clipboard-check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 5.5rem;
+    color: rgba(94, 242, 220, 0.1);
+    position: absolute;
+    top: 25px;
+    right: -5px;
+    rotate: calc(-15deg);
+}
+
+.student-detail-page .wrapper-attendance-summary-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 1.5rem auto;
+    width: fit-content;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+}
+
+.student-detail-page .progress-ring {
+    --percentage: 0;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #5fffea calc(var(--percentage) * 1%),
+            rgba(105, 255, 235, 0.18) 0
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/*  *** ATTENDANCE DETAIL page ***************|
+*  *** STUDENT DETAIL page ******************/
+.detail-row {
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+.detail-row:last-child,
+.student-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row span:first-child {
+    color: #006b7d;
+    font-weight: 600;
+}
+
+.detail-row span:last-child,
+.detail-row span a {
+    color: #6a7f81;
+    font-weight: 400;
+    text-align: left;
+}
+
+.detail-row span a:hover {
+   color: #006b7d;
+   font-weight: 500;
+}
+
+.student-detail-card {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start; */
+    align-self: flex-end;
+    height: 100%;
+    justify-content: space-between;
+    background: whitesmoke;
+    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85)); */
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.student-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 220px;
+    padding: 2rem 4rem;
+    width: 100%;
+    max-width: 100%;
+    /* min-width: 0; */
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85));
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.student-detail-card hr:first-of-type {
+    border: 1px solid rgba(0, 194, 178, 0.35);
+    margin: 0.25rem 0 1rem;
+}
+
+.student-detail-card h2,
+.recent-attendance-card h2,
+.skills-chart-header h2 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0 0 2rem;
+    padding: 0 0.75rem 0 4.3rem;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    border-radius: 999px;
+    border: 2px solid rgba(0, 107, 125, 0.65);
+    color: whitesmoke;
+    font-size: 1.5rem;
+    overflow-wrap: normal;
+    word-break: normal;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.recent-attendance-card h2::after,
+.student-detail-card-attendance h2::after {
+    content: "\f46c"; /* fa-clipboard-check */
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    top: 0;
+    left: 2%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: rgba(94, 242, 220, 0.3);
+    rotate: calc(-15deg);
+}
+
+.course-info-detail-card h2::after {
+    content: "\f05a";
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 3.3rem;
+    color: rgba(94, 242, 220, 0.3);
+    rotate: calc(-15deg);
+}
+
+.course-completion-detail-card h2::after {
+    content: "\e522"; /* fa-magnifying-glass-chart */
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    top: 0;
+    left: 2%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: rgba(94, 242, 220, 0.3);
+    rotate: calc(-15deg);
+}
+
+.student-main-info > div:last-child {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+}
+
+.student-main-info h1,
+.student-main-info p,
+.student-meta-line,
+.student-meta-line span {
+    /* 4 rules to prevent text 
+    from overflowing container */
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.student-main-info h1 {
+    color: whitesmoke;
+    margin-bottom: 0;
+}
+
+.student-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(95, 255, 234, 0.16);
+    border: 1px outset rgba(241, 255, 253, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #5fffea;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.student-avatar img,
+.student-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-main-info h3 {
+    margin: 0 0 0.25rem;
+    color: #ffffff;
+    font-size: 1.05rem;
+}
+
+.student-main-info span {
+    color: #bffaf4;
+    font-size: 0.9rem;
+}
+
+
+/*****************************************|
+|**** STUDENT DETAIL Page *****************|
+|*****************************************/
+
+.student-detail-page,
+.teacher-student-skills-page,
+.teacher-edit-skill-page {
+    color: whitesmoke;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.student-header-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.student-header-actions > div:first-child {
+    display: flex;
+    gap: 1rem;
+    align-content: stretch;
+    flex-wrap: wrap !important;
+}
+
+.student-level-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.student-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 2fr;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.student-level-area small {
+    color: rgba(255,255,255,0.75);
+}
+
+.student-level-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.student-level-form select {
+    border-radius: 0.45rem;
+    padding: 0.45rem;
+}
+
+.student-level-form button {
+    border: none;
+    border-radius: 0.45rem;
+    padding: 0.45rem 0.75rem;
+    background: #00c2b2;
+    color: #0B355F;
+    font-weight: 700;
+}
+ 
+.student-detail-card h3, 
+.recent-attendance-card h3 {
+    /* border-bottom: 1px solid rgba(255, 255, 255, 0.08); */
+    padding: 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.current-course-block h3 {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0.5rem;
+}
+
+.student-course-details .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.3);
+    padding: 0.6rem 0;
+    margin: 0;
+}
+
+.progress-ring-inner {
+    width: 6rem;
+    height: 6rem;
+    background: #0B355F;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-inner strong {
+    font-size: 1.6rem;
+}
+
+.progress-ring-inner span {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+}
+
+/* BIG ring: Student detail page */
+.student-detail-page .progress-ring {
+    --percentage: 0;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            #5fffea calc(var(--percentage) * 1%),
+            rgba(105, 255, 235, 0.18) 0
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.student-stat-list {
+    flex: 1;
+}
+
+.student-stat-list p {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0.6rem 0;
+    margin: 0;
+}
+
+.student-stat-list span,
+.student-detail-card .detail-row span {
+    /* color: rgba(255,255,255,0.7); */
+    color: #006b7d;
+}
+
+.student-detail-card .detail-row strong {
+    color:#6A7F81;
+    font-weight: 500;
+}
+
+.student-detail-card > div:nth-of-type(2) {
+    display: inline-flex;
+    justify-content: flex-end;
+}
+
+.student-detail-card .btn-course-details {
+    color: #006b7d;
+}
+
+.student-detail-card .btn-course-details:hover {
+    background: rgba(0, 107, 125, 0.25);
+    /* color: #fff; */
+    text-decoration: none;
+    box-shadow: 0 2px 2px rgba(0, 20, 40, 0.5);
+}
+
+.student-detail-card .btn-course-details img {
+    width: 42px;
+    margin-left: 0.5rem;
+}
+
+.recent-attendance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0, 107, 125, 0.3);
+    padding: 0.85rem 0;
+}
+
+.recent-attendance-row p {
+    margin-bottom: 0;
+}
+
+.recent-attendance-row small {
+    color: rgba(255,255,255,0.65);
+}
+
+
+
+
+/************************************************|
+**** STUDENT ATTENDANCE RECORD Page *************|
+*********************************************** */
+.attendance-record-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 2fr;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.recent-attendance-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 1.25rem;
+    height: 100%;
+    justify-content: space-between;
+    background: whitesmoke;
+    gap: 1rem; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85)); */
+}
+
+.recent-attendance-card-header {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+    /* padding: 1rem; */
+    background-color: whitesmoke;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.recent-attendance-card-header .icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    flex: 0 0 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: whitesmoke;
+    border: 1px solid rgba(11, 53, 95, 0.3);
+}
+
+.recent-attendance-card-header .icon i {
+    margin: 0;
+    font-size: 1.45rem;
+    color:#0B355F;
+}
+
+.recent-attendance-card-header strong {
+    color: #006b7d;
+}
+
+.recent-attendance-info span,
+.recent-attendance-info small {
+    color: #6A7F81;
+}
+
+.recent-attendance-info small {
+    font-weight: 600;
+}
+
+.attendance-edit-form button {
+    border-width: 1px;
+}
+
+.attendance-edit-form button:hover {
+    border-color: whitesmoke;
+}
+
+
+/************************************************|
+**** STUDENT SKILLS OVERVIEW Page *************|
+*********************************************** */
+
+.student-skills-notes-card {
+    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    border: 1px solid rgba(95, 255, 234, 0.35);
+    border-radius: 8px;
+    padding: 0.5rem;
+    color: #6A7F81;
+    margin-top: 1.25rem;
+}
+
+/* ASSESSMENT PAGES all profiles */
+.teacher-skill-note {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding-bottom: .75rem;
+}
+
+.student-skills-notes-card > .teacher-skill-note:last-of-type {
+    margin-bottom: 0 !important;
+}
+
+.teacher-skill-note ul {
+    color:#003366;
+    padding-left: 1.5rem;
+}
+
+.teacher-skill-note h4 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    background: #edf9f7; 
+    color: #003366;
+    padding: 0 1rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom: 1px solid #006b7d;
+}
+
+.teacher-skill-note li {
+    color:#003366;
+}
+
+.teacher-skill-note p {
+    color:#003366;
+    text-justify: none;
+    padding: 0.25rem 1rem;
+    margin-bottom: 0;
+}
+
+.teacher-subskill {
+    display: inline;
+}
+
+.empty-assessment-state {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    padding: .75rem 1rem;
+}
+
+.empty-assessment-state p {
+    padding-top: 1rem;
+}
+/* END ASSESSMENT pages */
+
+
+
+
+@media (max-width: 1499.98px) {
+
+    .student-detail-page header {
+        flex-direction: column;
+        align-items: start;
+        /* padding: 2rem 4rem; */
+    }
+
+    .student-main-info {
+        gap: 4rem;
+    }
+
+    .profile-status {
+        margin-right: 0;
+        margin-left: auto;
+    }
+
+}
+
+
+
+@media (max-width: 1360.98px) {
+
+    .student-overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+
+@media (max-width: 991.99px) {
+    
+    .student-detail-page header h1 {
+        font-size: 2.6rem;
+    }
+
+
+}
+
+
+@media (max-width: 767.99px) {
+
+    .student-detail-page header {
+        padding: 0;
+    }
+
+    .student-main-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center !important;
+        gap: 2.5rem;
+        align-self: baseline;
+        width: 100%;
+        padding: 2.5rem 0;
+        /* padding: 2rem 4rem; */
+    }
+
+    .student-avatar-large {
+        width: 200px;
+        height: 200px;
+    }
+    .student-main-info > div:last-child {
+        padding: 0;
+        min-width: fit-content;
+        max-width: fit-content;
+    }
+
+    /* .student-main-info h1 {
+        margin: 1rem auto 1rem;
+    } */
+
+    .student-main-info p a {
+        margin: 1rem auto 1rem;
+        text-align: center;
+    }
+
+    /* .student-main-info p:nth-of-type(1) {
+        margin-top: 2rem;
+    } */
+
+    .student-detail-page .wrapper-attendance-summary-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin: 1.5rem auto;
+        width: 100%;
+    }
+
+    .student-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .attendance-record-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2fr;
+        gap: 1rem;
+        margin-top: 1.25rem;
+    }
+
+}
+
+
+
+@media (max-width: 576px) {
+
+    /* .student-detail-page header {
+        gap: 3rem;
+    } */
+
+    /* .student-main-info {
+        padding: 2rem .75rem 3rem;
+    } */
+
+    .student-main-info p a {
+        font-size: 1rem;
+    }
+
+    .student-detail-page .attendance-summary-card {
+        min-height: 0;
+        height: 56px;
+        padding: 1.4rem;
+        width: 100%;
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .attendance-detail-page .attendance-summary-card strong,
+    .student-detail-page .attendance-summary-card strong {
+        padding: 0.15rem 0.8rem;
+    }
+
+}
+
+
+
+@media (max-width: 480px) {
+
+    /* .student-main-info > div:last-child {
+        padding: 2.5rem 0 0 1rem;
+    } */
+
+    .student-detail-page .level-pill.larger-devs {
+        display: none;
+    }
+
+    .student-detail-page .level-pill.smaller-devs {
+        display: inline-flex;
+        min-width: 100%;
+    }
+
+    .student-detail-page .level-pill .current-level-label {
+        padding: 6px 11% 6px 22px;
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .student-detail-page .level-pill .current-level-value {
+        padding: 6px 22px 6px 11%;
+        display: flex;
+        width: 50%;
+        flex-grow: 1;
+    }
+
+
+}

@@ -10,7 +10,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
 {% endblock %}
 
 
@@ -81,7 +81,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
                 <span class="current-level-value">
                     {{ active_enrollment.course.course_level|default:"Level Pending" }}
                 </span>

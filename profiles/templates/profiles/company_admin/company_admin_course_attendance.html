@@ -6,8 +6,9 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/course_class_attendance_list_page.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -43,7 +44,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
                 <span class="current-level-value">
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
@@ -67,44 +68,29 @@
         
     </header> 
     <hr>    
-            <div class="meta-row">
 
-                <a href="{% url 'profiles:company_admin_employees_list' %}">
-                    <div class="meta-card meta-students">
-                        <div class="meta-text">
-                            <strong>Attendance Submitted:</strong>
-                            <span>{{ completed_count }}</span>
-                        </div>
-                    </div>
-                </a>
+    <div class="meta-row">
 
-                <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
-                    <div class="meta-card meta-attendance">
-                        <div class="meta-text">
-                            <strong>Attendance Rate:</strong>
-                            <span>
-                                {{ average_attendance }} %
-                            </span>
-                        </div>
-                    </div>
-                </a>
-
+        <div class="meta-card meta-attendance">
+            <div class="meta-text">
+                <strong>Attendance Submitted:</strong>
+                <span>{{ completed_count }} / {{ total_classes }} <small>total classes</small></span>
             </div>
-                    <!-- <div class="attendance-filter-card two-filters">
+        </div>
 
-                        <div>
-                            <span class="status-pill completed">
-                                <i class="fa-solid fa-clipboard-check"></i>
-                            </span>
-                            <h2>Attendance Submitted:</h2>
-                            <strong>{{ completed_count }}</strong>
-                        </div>
+        <div class="meta-card meta-percentage">
+            <div class="meta-text">
+                <strong>Current Attendance Rate:</strong>
+                <span>
+                    {{ average_attendance }} %
+                </span>
+            </div>
+        </div>
 
-                    </div>
- -->
+    </div>
 
-    <div class="wrapper-assigned-courses-panel mt-5">
-        <div class="assigned-courses-panel">
+    <div class="wrapper-attendance-list-panel mt-5">
+        <div class="attendance-list-panel">
 
             <div class="attendance-list-card">
 
@@ -151,10 +137,29 @@
                                 </div>
                             </div>
 
+                            <div class="class-list-attendance-rate">
+                                <div class="icon">
+                                    <i class="fa-solid fa-clipboard-check"></i>
+                                </div>
+                                <div>
+                                    <strong>Attendance</strong><br>
+                                    <span> {{ class_session.attendance_percentage }}%</span>
+                                </div>
+                            </div>
+
+                            <div class="class-list-student-num">
+                                <div class="icon">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <div>
+                                    <strong>Attended</strong>
+                                    <span>{{ class_session.attended_count }}/{{ class_session.registered_count }}</span>
+                                </div>
+                            </div>
+
                             <div class="attendance-action">
                                 <a href="{% url 'profiles:company_admin_course_attendance_detail' class_session.id %}" 
                                    class="btn-attendance-details">
-                                    <i class="fa-solid fa-clipboard-check"></i>
                                     Review
                                     <i class="fa-solid fa-chevron-right ml-2"></i>
                                 </a>

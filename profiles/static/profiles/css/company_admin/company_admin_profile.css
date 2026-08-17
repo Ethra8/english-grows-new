@@ -19,35 +19,6 @@
     font-size: 1rem;
 }
 
-/* META CARD */
-.company-admin-employees-list-page .meta-card {
-    padding: 0.25rem 2.6rem 0.15rem 0.45rem;
-    width: fit-content;
-    margin: 3rem 0;
-}
-
-.company-admin-employees-list-page .meta-card .meta-icon {
-    background: rgba(237, 249, 247, 0.9);
-}
-
-.company-admin-employees-list-page .meta-card .meta-icon img {
-    width: 42px;
-    height: 42px;
-}
-
-.company-admin-employees-list-page .meta-text strong {
-    display: block;
-    color: #ffffff;
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    text-transform: capitalize;
-    letter-spacing: 0.03em;
-    margin-bottom: 0;
-    margin-top: 0;
-}
-/* END META CARD */
-
 
 /* EMPLOYEES LIST */
 .wrapper-employees-list {
@@ -69,13 +40,10 @@
     background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
     border-radius: 8px;
     margin: 0;
-    padding: 0.5rem;
+    padding: 0.5rem 1.5rem;
     border: 1px solid rgba(94, 234, 212, 0.8);
     width: 100%;
-        min-width: fit-content;
-
-    display: flex;
-    flex-direction: column;
+    min-width: fit-content;
 }
 
 .employees-list-grid {
@@ -102,24 +70,6 @@
 .employees-list-grid div:last-child,
 .assigned-classes-list a > div.assigned-classes-row:last-of-type {
     border-bottom: none !important;
-}
-
-.company-admin-employees-list-page .employees-list-row .avatar {
-    border-radius: 50%;
-    background: rgba(95, 255, 234, 0.16);
-    border: 1px outset rgba(170, 170, 170, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: #006b7d;
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
-}
-
-.company-admin-employees-list-page .employees-list-row .avatar,
-.company-admin-employees-list-page .employees-list-row .avatar img {
-    width: 60px;
-    height: 60px;
 }
 
 .company-admin-employees-list-page .employees-list-row .main-info {
@@ -206,8 +156,8 @@
 **** company_admin_course_details.html **********|
 *********************************************** */
 
-.company-admin-course-details-page .course-meta-card.meta-attendance::after {
-    content: "\f46c"; /* fa-clipboard-check */
+/* .company-admin-course-details-page .course-meta-card.meta-attendance::after {
+    content: "\f46c";  fa-clipboard-check 
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
@@ -216,7 +166,7 @@
     top: 25px;
     right: -5px;
     rotate: calc(-15deg);
-}
+} */
 
 .company-admin-course-details-page header > div:nth-child(2) {
     display: flex;
@@ -254,7 +204,8 @@
 }
 
 .company-admin-course-details-page .student-row-parent {
-    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    /* background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
+    background: whitesmoke;
     padding: 0 1.25rem;
     border-radius: 8px;
     border: 1px solid rgba(94, 234, 212, 0.2);
@@ -290,31 +241,9 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
-.course-attendance .meta-card {
-    padding: .25rem 2rem;
-}
-
-/* .course-attendance .wrapper-assigned-courses-panel {
-    max-width: 1000px; 
-} */
-
 .course-attendance .wrapper-assigned-courses-panel h2 {
     color: whitesmoke;
 }
-
-/* .course-attendance .wrapper-assigned-courses-panel .attendance-filter-btn strong {
-    font-size: 1.5rem;
-    bottom: .5rem;
-    height: 45px;
-    width: 45px;
-    text-align: center;
-}
-
-.course-attendance .attendance-filter-card.two-filters {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
-} */
 
 .course-attendance .attendance-list,
 .course-attendance .attendance-row {
@@ -346,26 +275,81 @@
 
 .course-attendance .attendance-row {
     display: grid;
-    grid-template-columns: minmax(200px, 200px) minmax(260px, 260px) auto;
+    grid-template-columns: minmax(220px, 0.75fr) minmax(260px, 1fr) minmax(220px, 0.75fr) minmax(220px, 0.75fr) minmax(200px, 0.75fr);
     align-items: center;
     align-content: space-around;
     gap: 1.2rem;
-    padding: 0.75rem 0;
+    padding: 0.75rem 0.25rem;
     border-bottom: 1px solid rgba(0, 194, 178, 0.35);
     /* width: 900px; */
-    /* min-width: 900px; */
+    min-width: 1230px;
     max-width: none;
 }
 
-.course-attendance .attendance-time strong,
-.attendance-students strong {
+/* DATES in ROW */
+.class-list-date,
+.class-list-attendance-rate,
+.class-list-student-num,
+.course-list-date {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #6a7f81;
+    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    height: 70%;
+    min-width: 200px;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    padding-left: 3rem;
+}
+
+.class-list-date .icon,
+.class-list-attendance-rate .icon,
+.class-list-student-num .icon,
+.course-list-date .icon,
+.course-list-student-num .icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #006b7d;
+    background: transparent;
+    border-radius: 999px;
+    text-align: center !important;
+}
+
+.class-list-date i,
+.class-list-student-num i,
+.class-list-attendance-rate i,
+.course-list-date i,
+.course-list-student-num i {
+    color: #006b7d;
+}
+
+.class-list-date strong,
+.class-list-attendance-rate strong,
+.class-list-student-num strong,
+.course-list-date strong,
+.course-list-student-num strong {
+    color: #006b7d;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Keep span elements in separate lines */
+.class-list-date span,
+.class-list-attendance-rate span,
+.class-list-student-num span,
+.course-list-date span,
+.course-list-student-num span {
+    display: block;
+}
+
+.class-list-attendance-students strong {
     color: #006b7d;
     font-size: 0.95rem;
     font-weight: 700;
 }
 
-.attendance-time span,
-.attendance-students span {
+.class-list-attendance-students span {
     color: #96a0a1;
     font-size: 0.9rem;
 }
@@ -390,7 +374,7 @@
     text-decoration: none;
     text-transform: capitalize;
     font-weight: 400;
-    width: 160px;
+    width: 120px;
     max-height: fit-content;
     display: inline-flex;
     align-items: center;
@@ -529,6 +513,12 @@
         display: inline-block !important;
         width: 100%;
     }
+
+    /* COURSE ATTENDANCE page *******************************/
+    .course-attendance .meta-row {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
 
     /* ATTENDANCE - All Courses *******************************/
     .attendance-tools {

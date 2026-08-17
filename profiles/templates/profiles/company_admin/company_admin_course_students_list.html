@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/learners_list.css' %}">
     {% endblock %}
 
 {% block profile_content %}
@@ -44,7 +45,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
                 <span class="current-level-value">
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
@@ -88,6 +89,28 @@
                     </div>
                 {% endif %}
             </div>                    
+    <div class="wrapper-employees-list">
+        <!-- <div class="course-details-child"> -->
+        <div class="employees-list-toolbar">
+
+            <span class="sort-label">
+                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                Sort by
+            </span>
+
+            <div class="sort-options">
+                <a href="?sort=name"
+                class="sort-option {% if sort_by == 'name' %}active{% endif %}">
+                    Name A–Z
+                </a>
+
+                <a href="?sort=level"
+                class="sort-option {% if sort_by == 'level' %}active{% endif %}">
+                    Level
+                </a>
+            </div>
+
+        </div>
 
             <div class="course-detail-grid"> 
                 {% if enrollments %}
@@ -95,30 +118,13 @@
                         {% for enrollment in enrollments %}
                             <div class="student-row">
 
-                                <button type="button"
-                                        class="level level-{{ enrollment.student.profile.current_level|lower|cut:'.' }} mr-2"
-                                        onclick="toggleLevelForm('{{ enrollment.id }}')">
-                                    {{ enrollment.student.profile.current_level|default:"?" }}
-                                </button>  
-
-                                <form method="POST"
-                                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
-                                      class="d-none"
-                                      id="level-form-{{ enrollment.id }}">
-
-                                    {% csrf_token %}
-
-                                    <select name="current_level">
-                                        {% for value, label in level_choices %}
-                                            <option value="{{ value }}"
-                                                {% if enrollment.student.profile.current_level == value %}selected{% endif %}>
-                                                {{ label }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-
-                                    <button type="submit">Save</button>
-                                </form>                                  
+                                <div class="small-avatar">
+                                    {% if enrollment.student.profile.profile_photo %}
+                                        <img src="{{ enrollment.student.profile.profile_photo.url }}" alt="{{ enrollment.student.get_full_name }}">
+                                    {% else %}
+                                        <i class="fa-solid fa-user"></i>
+                                    {% endif %}
+                                </div>
 
                                 <div>
                                     <strong>
@@ -130,7 +136,7 @@
                                     </a>
                                 </div>
 
-                                <a href="{% url 'profiles:company_admin_student_detail' course.id enrollment.id %}" class="btn-to-student-detail">
+                                <a href="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}" class="btn-to-student-detail">
                                     <i class="fa-regular fa-eye mr-2"></i>
                                     View
                                     <i class="fa-solid fa-chevron-right ml-2"></i>

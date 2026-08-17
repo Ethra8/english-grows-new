@@ -8,7 +8,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -70,7 +70,7 @@
                 <div class="header-last-child">      
 
                     <div class="level-pill larger-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
@@ -80,7 +80,7 @@
                         </span>
                     </div>
                     <div class="level-pill smaller-devs">
-                        <span class="current-level-label">CEFR Level</span>
+                        <span class="current-level-label">Level</span>
                         <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
@@ -104,6 +104,7 @@
 
             <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}" class="active">
                 Attendance</a>
+
             <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
                 Assessment</a> -->
         </nav>
@@ -140,19 +141,23 @@
         </form>
     {% endif %}
 
-    <div class="student-overview-grid">
+    <div class="attendance-record-grid">
 
         <article class="recent-attendance-card">
-            <div class="recent-attendance-card-header student-stat-list">
-                <h2>
-                    <i class="fa-solid fa-list-check mr-2"></i>
-                    Attendance Records
-                </h2>
+            <div class="recent-attendance-card-header">
+                
+                <h2>Attendance Records</h2>
+
+                <div class="detail-row">
+                    <strong>Course:</strong>
+                    <span>{{ course.name }}</span>
+                </div>
 
                 <div class="detail-row">
                     <strong>Course Past Classes:</strong>
                     <span>{{ completed_classes }}</span>
                 </div>
+
                 <div class="detail-row">
                     <strong>Past Classes since enrollment:</strong>
                     <span>{{ total_attendance_records }}</span>
@@ -199,11 +204,8 @@
                     <div class="recent-attendance-row">
 
                         <div class="recent-attendance-info">
-                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small><br>
-                            <span>
-                                {{ course.name }}<br>
-                                · Lesson {{ attendance.class_session.class_number }} 
-                            </span>
+                            <span>{{ attendance.class_session.start_time|date:"j M Y" }}</span><br>
+                            <small>Lesson {{ attendance.class_session.class_number }}</small>
                         </div>
 
                         <div class="attendance-status">
@@ -224,7 +226,7 @@
                             {% endif %}
                         </div>
 
-                        <form class="attendance-edit-form d-none"
+                        <!-- <form class="attendance-edit-form d-none"
                               method="POST"
                               action="{% url 'profiles:update_student_attendance_status' course.id enrollment.id attendance.id %}">
                             {% csrf_token %}
@@ -240,7 +242,7 @@
                             <button type="submit" name="status" value="excused" class="status-pill pending">
                                 <i class="fa-solid fa-user-minus"></i>
                             </button>
-                        </form>
+                        </form> -->
 
                     </div>
                 {% empty %}

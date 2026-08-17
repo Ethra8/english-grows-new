@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student/learner_profile.css' %}">
 {% endblock %}
 
 
@@ -18,6 +19,17 @@
 <section class="company-admin-course-details-page my-course profile-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
+
+    <div class="row mb-3">
+        <div class="col-12 mb-2">
+            <p class="go-back-link">
+                <a href="#" class="text-white js-back-link">
+                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                    Go Back
+                </a>
+            </p>
+        </div>
+    </div>    
 
     <header>
         <!-- 1st Child -->
@@ -34,7 +46,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>LEVEL</span>
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
                 <span class="current-level-value">
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
