@@ -64,6 +64,7 @@
 | **Blue Slate** | `#4F6870` | Secondary text — metadata, supporting information |
 | **Cool Steel** | `#7A949B` | Low-emphasis neutral — disabled, inactive, muted UI content and tertiary UI elements |
 
+---
 
 # SITE STRUCTURE
 
