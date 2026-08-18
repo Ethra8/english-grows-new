@@ -1848,7 +1848,7 @@ Semantic and status colours are used where the interface needs to communicate op
 | :--- | :---: | :---: |
 | **Attended** | ![#38df9c](https://img.shields.io/badge/Attended-38df9c?style=flat&labelColor=38df9c&color=38df9c) | `#38df9c` |
 | **Missed** | ![#FF5A5A](https://img.shields.io/badge/Missed-FF5A5A?style=flat&labelColor=FF5A5A&color=FF5A5A) | `#FF5A5A` |
-| **Excused** | ![#FFB347](https://img.shields.io/badge/Excused-FFB347?style=flat&labelColor=FFB347&color=FFB347) | `#FFB347` |
+| **Excused** | ![#07C0C7](https://img.shields.io/badge/Excused-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` |
 
 
 The overall colour architecture therefore consists of three distinct layers:
