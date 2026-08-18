@@ -1739,7 +1739,7 @@ The English Grows interface palette consists of nine colours:
 | **Icy Aqua** | ![#C7FFF9](https://img.shields.io/badge/Icy_Aqua-C7FFF9?style=flat&labelColor=C7FFF9&color=C7FFF9) | `#C7FFF9` | Soft highlighted backgrounds and subtle accent surfaces |
 | **Turquoise** | ![#5FF0DF](https://img.shields.io/badge/Turquoise-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Secondary accent, indicators and selected interface elements |
 | **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Light surfaces, backgrounds and subtle visual separation |
-| **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Data surfaces and backgrounds for cards, occasionally por text on dark surfaces |
+| **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Data surfaces and backgrounds for cards, occasionally for text on dark surfaces |
 | **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
 | **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
 
