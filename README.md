@@ -1835,7 +1835,7 @@ Semantic and status colours are used where the interface needs to communicate op
 | Status | Preview | Hex |
 | :--- | :---: | :---: |
 | **Active** | ![#5FF0DF](https://img.shields.io/badge/Active-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` |
-| **Confirmed** | ![#17C964](https://img.shields.io/badge/Confirmed-17C964?style=flat&labelColor=17C964&color=17C964) | `#17C964` |
+| **Confirmed** | ![#07C0C7](https://img.shields.io/badge/Confirmed-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` |
 | **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` |
 | **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` |
 | **Completed** | ![#4F6870](https://img.shields.io/badge/Completed-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` |
@@ -1846,7 +1846,7 @@ Semantic and status colours are used where the interface needs to communicate op
 
 | Status | Preview | Hex |
 | :--- | :---: | :---: |
-| **Attended** | ![#4DFFB5](https://img.shields.io/badge/Attended-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` |
+| **Attended** | ![#38df9c](https://img.shields.io/badge/Attended-38df9c?style=flat&labelColor=38df9c&color=38df9c) | `#38df9c` |
 | **Missed** | ![#FF5A5A](https://img.shields.io/badge/Missed-FF5A5A?style=flat&labelColor=FF5A5A&color=FF5A5A) | `#FF5A5A` |
 | **Excused** | ![#FFB347](https://img.shields.io/badge/Excused-FFB347?style=flat&labelColor=FFB347&color=FFB347) | `#FFB347` |
 
