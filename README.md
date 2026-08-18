@@ -47,7 +47,7 @@
 
 # 🎨 Colour Palette
 
-<img width="1600" height="1200" alt="Color Palette English Grows" src="https://github.com/user-attachments/assets/62c5a832-5686-4b1a-8c8e-3582d1521437" />
+<img width="1600" height="1200" alt="COLOR PALETTE_EnglishGrows" src="https://github.com/user-attachments/assets/2b2790f2-79ea-4f58-a725-e2c14d3d32e3" />
 
 
 <img width="221" height="393" alt="image" src="https://github.com/user-attachments/assets/5aace972-d513-401b-b99d-0d1f1e01fe42" />
@@ -1724,49 +1724,169 @@ Role-specific dashboards and navigation expose the information most relevant to 
 
 ### Colour System
 
-The interface uses a restrained palette centred around navy, teal and neutral tones.
+The **English Grows** interface uses a carefully defined colour system centred around navy, teal, cyan, aqua and turquoise tones, supported by cool neutral colours.
 
-Colour is primarily used to communicate:
+The palette has been designed to reinforce the platform's **boutique corporate identity** while maintaining clear visual hierarchy, consistency and readability across dashboards, navigation, cards, forms and data-driven interfaces.
 
-- hierarchy;
-- interaction;
-- status;
+Colour is used deliberately to communicate:
+
+- brand identity;
+- visual hierarchy;
+- interaction and emphasis;
+- interface depth;
+- application status;
 - assessment categories;
-- data series.
+- data visualisation.
 
-It is intentionally not used as decoration alone.
+Colour is therefore treated as a **functional component of the design system**, rather than as decoration alone.
 
-#### Core Interface Palette
+#### Core Brand Palette
 
-| Purpose | Colour | Hex |
-| :--- | :--- | :---: |
-| **Primary Navy** | Navy | `#0B355F` |
-| **Dark Teal** | Teal | `#007A78` |
-| **Accent Mint** | Mint | `#5FF0DF` |
-| **Dark Neutral** | Slate Grey | `#4F6870` |
-| **Secondary Neutral** | Grey Teal | `#6A7F81` |
+The final English Grows interface palette consists of nine colours:
+
+| Colour | Preview | Hex | Primary UI Role |
+| :--- | :---: | :---: | :--- |
+| **Oxford Blue** | ![#0B355F](https://img.shields.io/badge/Oxford_Blue-0B355F?style=flat&labelColor=0B355F&color=0B355F) | `#0B355F` | Primary brand colour, navigation, headings and high-emphasis elements |
+| **Stormy Teal** | ![#006B7D](https://img.shields.io/badge/Stormy_Teal-006B7D?style=flat&labelColor=006B7D&color=006B7D) | `#006B7D` | Strong secondary brand colour, darker accents and interactive emphasis |
+| **Strong Cyan** | ![#07C0C7](https://img.shields.io/badge/Strong_Cyan-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` | Primary interactive colour and distinctive brand accent |
+| **Electric Aqua** | ![#5FF5FC](https://img.shields.io/badge/Electric_Aqua-5FF5FC?style=flat&labelColor=5FF5FC&color=5FF5FC) | `#5FF5FC` | Bright accent and high-visibility interface details |
+| **Icy Aqua** | ![#C7FFF9](https://img.shields.io/badge/Icy_Aqua-C7FFF9?style=flat&labelColor=C7FFF9&color=C7FFF9) | `#C7FFF9` | Soft highlighted backgrounds and subtle accent surfaces |
+| **Turquoise** | ![#5FF0DF](https://img.shields.io/badge/Turquoise-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Secondary accent, indicators and selected interface elements |
+| **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Light surfaces, backgrounds and subtle visual separation |
+| **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
+| **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
+
+The complete palette can be represented as:
+
+```text
+Oxford Blue      → #0B355F
+Stormy Teal      → #006B7D
+Strong Cyan      → #07C0C7
+Electric Aqua    → #5FF5FC
+Icy Aqua         → #C7FFF9
+Turquoise        → #5FF0DF
+Azure Mist       → #EDF9F7
+Blue Slate       → #4F6870
+Cool Steel       → #7A949B
+```
+
+The palette follows a deliberate progression from darker corporate tones to brighter accent colours:
+
+```text
+PRIMARY / CORPORATE
+#0B355F  Oxford Blue
+    │
+    └── #006B7D  Stormy Teal
+            │
+            └── #07C0C7  Strong Cyan
+                    │
+                    └── #5FF5FC  Electric Aqua
+
+LIGHT / ACCENT
+#5FF0DF  Turquoise
+    │
+    └── #C7FFF9  Icy Aqua
+            │
+            └── #EDF9F7  Azure Mist
+
+NEUTRALS
+#4F6870  Blue Slate
+    │
+    └── #7A949B  Cool Steel
+```
+
+**Oxford Blue** and **Stormy Teal** establish the corporate foundation of the interface, while **Strong Cyan**, **Electric Aqua** and **Turquoise** provide the distinctive English Grows visual identity.
+
+The lighter **Icy Aqua** and **Azure Mist** tones provide subtle surface differentiation and highlighted areas without relying exclusively on pure white backgrounds.
+
+The neutral **Blue Slate** and **Cool Steel** tones support secondary information, borders and lower-emphasis interface elements without competing visually with primary content.
+
+This hierarchy allows brighter colours to remain distinctive because they are used selectively against a restrained corporate foundation.
 
 #### Language Skill Colours
 
-The four principal language skills assessed are assigned persistent colours throughout the platform:
+The language assessment system uses a separate semantic colour set for the four principal language skills.
 
-| Skill | Colour | Hex |
-| :--- | :--- | :---: |
-| 🎙️ **Speaking** | Sunflower Gold | `#F5BE58` |
-| 🎧 **Listening** | Indigo Velvet | `#4E2496` |
-| 📖 **Reading** | Chocolate | `#E1752D` |
-| ✍️ **Writing** | Pacific Blue | `#0EA5B7` |
+| Skill | Preview | Colour | Hex |
+| :--- | :---: | :--- | :---: |
+| 🎙️ **Speaking** | ![#F5BE58](https://img.shields.io/badge/Sunflower_Gold-F5BE58?style=flat&labelColor=F5BE58&color=F5BE58) | Sunflower Gold | `#F5BE58` |
+| 🎧 **Listening** | ![#4E2496](https://img.shields.io/badge/Indigo_Velvet-4E2496?style=flat&labelColor=4E2496&color=4E2496) | Indigo Velvet | `#4E2496` |
+| 📖 **Reading** | ![#E1752D](https://img.shields.io/badge/Chocolate-E1752D?style=flat&labelColor=E1752D&color=E1752D) | Chocolate | `#E1752D` |
+| ✍️ **Writing** | ![#0EA5B7](https://img.shields.io/badge/Pacific_Blue-0EA5B7?style=flat&labelColor=0EA5B7&color=0EA5B7) | Pacific Blue | `#0EA5B7` |
 
 These colours remain consistent across:
 
 - skill assessment cards;
-- progress charts;
+- subskill assessment interfaces;
+- skill progress graphs;
+- chart datasets;
 - legends;
 - skill-specific visual indicators.
 
-Maintaining the same mapping allows users to recognise a skill visually before reading its label and prevents charts and assessment screens from developing unrelated colour systems.
+The skill colours are deliberately kept separate from the principal English Grows brand palette.
 
-Status colours are treated separately from skill colours so that semantic states such as success, warning or cancellation cannot easily be confused with assessment categories.
+This creates a clear distinction between **brand/interface colour** and **assessment/data colour**, preventing the primary cyan, aqua and turquoise palette from carrying multiple semantic meanings.
+
+Maintaining a permanent colour assignment for each skill also improves visual recognition across different areas of the application.
+
+```text
+Speaking        → #F5BE58
+Listening       → #4E2496
+Reading         → #E1752D
+Writing         → #0EA5B7
+```
+
+For example, **Sunflower Gold** consistently represents Speaking, while **Indigo Velvet** consistently represents Listening, regardless of whether the user is viewing an assessment card, progress chart or historical assessment.
+
+#### Semantic and Status Colours
+
+Application states are treated independently from both the brand palette and the language skill palette.
+
+Semantic colour is used where the interface needs to communicate operational states such as:
+
+- active;
+- confirmed;
+- completed;
+- pending;
+- warning;
+- cancelled;
+- missed;
+- successful.
+
+The overall colour architecture therefore consists of three distinct layers:
+
+```text
+COLOUR SYSTEM
+│
+├── BRAND / INTERFACE COLOURS
+│   │
+│   ├── #0B355F  Oxford Blue
+│   ├── #006B7D  Stormy Teal
+│   ├── #07C0C7  Strong Cyan
+│   ├── #5FF5FC  Electric Aqua
+│   ├── #C7FFF9  Icy Aqua
+│   ├── #5FF0DF  Turquoise
+│   ├── #EDF9F7  Azure Mist
+│   ├── #4F6870  Blue Slate
+│   └── #7A949B  Cool Steel
+│
+├── ASSESSMENT / DATA COLOURS
+│   │
+│   ├── #F5BE58  Speaking
+│   ├── #4E2496  Listening
+│   ├── #E1752D  Reading
+│   └── #0EA5B7  Writing
+│
+└── SEMANTIC / STATUS COLOURS
+    │
+    ├── Success / Completed
+    ├── Warning
+    ├── Pending
+    ├── Error / Cancelled
+    └── Operational Status
+```
+
+Keeping these systems conceptually independent reduces ambiguity and makes colour usage more predictable throughout the application.
 
 ---
 
@@ -1808,21 +1928,37 @@ The principal visualisations currently include:
 
 - course completion indicators;
 - attendance percentages;
-- skill scores;
+- skill assessment scores;
 - historical skill progress graphs.
 
-Progress charts use historical assessment snapshots rather than current assessment values. This ensures that each data point represents the student's assessment at a particular stage instead of repeatedly displaying the latest score.
-
-Each language skill retains the same colour throughout the system:
+The surrounding interface follows the core **English Grows brand palette**:
 
 ```text
-Speaking   → #F5BE58
-Listening  → #4E2496
-Reading    → #E1752D
-Writing    → #0EA5B7
+Oxford Blue      → #0B355F
+Stormy Teal      → #006B7D
+Strong Cyan      → #07C0C7
+Electric Aqua    → #5FF5FC
+Icy Aqua         → #C7FFF9
+Turquoise        → #5FF0DF
+Azure Mist       → #EDF9F7
+Blue Slate       → #4F6870
+Cool Steel       → #7A949B
 ```
 
-Skill progress graphs therefore remain visually consistent with the assessment cards used elsewhere in the application.
+Skill-specific data visualisation uses the dedicated assessment palette:
+
+```text
+Speaking        → #F5BE58
+Listening       → #4E2496
+Reading         → #E1752D
+Writing         → #0EA5B7
+```
+
+This separation ensures that brand colours retain their interface function while skill colours communicate a specific pedagogical meaning.
+
+Progress charts use historical assessment snapshots rather than current assessment values. This ensures that each data point represents the student's assessment at a particular stage of the course instead of repeatedly displaying the latest score.
+
+Each language skill retains the same colour throughout the system, meaning that skill progress graphs remain visually consistent with assessment cards and other skill-related components.
 
 Charts use restrained styling and smoothed data lines to communicate progression without overwhelming the surrounding interface.
 
@@ -1835,4 +1971,12 @@ Assessment ability, however, is displayed using a `/10` score rather than a perc
 
 This distinction prevents visually similar metrics from implying the same meaning.
 
-The overall design philosophy is therefore to use graphical representation only when it improves interpretation, while keeping detailed records accessible through the corresponding dedicated pages.
+The overall visualisation strategy therefore follows three principles:
+
+1. **Brand colours provide interface structure and identity.**
+2. **Assessment colours identify pedagogical data consistently.**
+3. **Semantic colours communicate application state and operational meaning.**
+
+This approach allows data visualisation to remain consistent with the wider English Grows design system while ensuring that colour always carries a clear and predictable purpose.
+
+
