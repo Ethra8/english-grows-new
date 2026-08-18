@@ -1776,7 +1776,7 @@ NEUTRALS
 
 - The lighter **Icy Aqua** and **Azure Mist** tones provide subtle surface differentiation and highlighted areas without relying exclusively on pure white backgrounds.
 
-- The **White Smoke** provides a clean surface areas to display data
+- The **White Smoke** provides a clean surface area to display data on.
 
 - The neutral **Blue Slate** and **Cool Steel** tones support secondary information, borders and lower-emphasis interface elements without competing visually with primary content.
 
