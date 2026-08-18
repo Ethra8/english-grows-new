@@ -1,0 +1,58 @@
+:root {
+
+    /*** BRAND COLOURS *****/
+
+    /* Oxford Blue */
+    --color-navy: #0b355f;
+    --color-navy-rgb: 11, 53, 95;
+    /* Stormy Teal */
+    --color-teal: #006b7d;
+    --color-teal-rgb: 0, 107, 125;
+    /* Strong Cyan */
+    --color-cyan: #07C0C7;
+    --color-cyan-rgb: 7, 192, 199;
+    /* Turquoise */
+    --color-turquoise: #5ff0df;
+    --color-turquoise-rgb: 95, 240, 223;
+    /* Electric aqua */
+    --color-aqua: #5FF5FC;
+    --color-aqua-rgb: 95, 245, 252;
+    /* Icy Aqua */
+    --color-icy: #C7fff9;
+    --color-icy-rgb: 199, 255, 249;
+    /* Azure Mist */
+    --color-mist: #EDF9F7;
+    --color-mist-rgb: 237, 249, 247;
+    /* Blue Slate */
+    --color-slate: #4F6870;
+    --color-slate-rgb: 79, 104, 112;
+    /* Cool Steel */
+    --color-steel: #7A949B;
+    --color-steel-rgb: 106, 127, 129;
+    /* White Smoke */
+    --color-whitesmoke: #F5F5F5;
+    --color-whitesmoke-rgb: 245, 245, 245;
+
+    /* SHADOW */
+    --color-shadow-rgb: 0, 0, 0;
+    --color-shadow-rgba: 0, 0, 0, 0.25;
+
+    /**** SKILLS COLOURS ****/
+    --color-listening: #4e2496;
+    --color-listening-rgb: 78, 36, 150;
+
+    --color-reading: #E1752D;
+    --color-reading-rgb: 225, 117, 45;
+
+    --color-speaking: #F5BE58;
+    --color-speaking-rgb: 245, 190, 88;
+
+    --color-writing: #0EA5B7;
+    --color-writing-rgb: 14, 165, 183;
+
+
+    /* STATUS DOTs */
+    --color-active-dot: #38df9c;
+
+    --color-inactive-dot: #7A949B;
+}

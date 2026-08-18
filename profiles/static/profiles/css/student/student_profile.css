@@ -6,8 +6,8 @@
 .wrapper-absence-details {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(95, 240, 223, 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
     min-width: fit-content;
     max-width: fit-content;
 }
@@ -26,8 +26,8 @@
     display: flex;
     min-height: 230px;
     border-radius: 8px;
-    background-color: whitesmoke;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-whitesmoke);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 290px;
     max-width: fit-content;
 }
@@ -37,7 +37,7 @@
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(var(--color-turquoise-rgb), 0.2);
     position: absolute;
     top: 170px;
     right: 20%;
@@ -50,11 +50,11 @@
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    background: #0B355F;
-    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    background: var(--color-navy);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     box-shadow:
         0 10px 25px rgba(0,107,125,.25),
-        inset 0 1px rgba(255,255,255,.15);
+        inset 0 1px rgba(var(--color-steel-rgb),.15);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 2;
@@ -67,12 +67,12 @@
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    background: #0B355F;
-    color: whitesmoke;
+    background: var(--color-navy);
+    color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px whitesmoke;
+    border: solid 2px var(--color-whitesmoke);
 }
 
 .next-class-card .circle-panel1 h2 {
@@ -82,7 +82,7 @@
     font-size: 2rem;
     font-weight: 600;
     line-height: 1.1;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
 }
 
 .next-class-card .info {
@@ -93,7 +93,7 @@
 }
 
 .next-class-card .info p {
-    color: #0B355F;
+    color: var(--color-navy);
 }
 
 .class-session-next-class {
@@ -113,7 +113,7 @@
 .profile-card {
     border-radius: 8px;
     padding: 30px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 340px;
     max-width: 70%;
     background: rgba(255, 255, 255, 0.9);
@@ -161,7 +161,7 @@
 
     .next-class-card .circle-panel1::after {
         font-size: 5.5rem;
-        color: rgba(94, 242, 220, 0.1);
+        color: rgba(var(--color-turquoise-rgb), 0.1);
         position: absolute;
         top: 480px;
         right: 180px;

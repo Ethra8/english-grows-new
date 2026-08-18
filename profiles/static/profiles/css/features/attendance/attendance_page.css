@@ -2,18 +2,18 @@
 .wrapper-attendance-list-panel {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(106, 250, 225, 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
 }
 
 .course-attendance .wrapper-assigned-courses-panel h2,
 .wrapper-attendance-list-panel h2 {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
 }
 
 .attendance-list-panel {
     width: 100%;
-    background: rgba(11, 53, 95, 0.9);
+    background: rgba(var(--color-navy-rgb), 0.9);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
@@ -22,8 +22,8 @@
 
 .attendance-list-card {
     min-height: fit-content;
-    background: linear-gradient(285deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-    border: 1px solid rgba(95, 255, 234, 0.45);
+    background: linear-gradient(285deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     padding: 1.6rem;
@@ -34,7 +34,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     margin: 0 0 0.4rem;
     font-size: 1.8rem;
     font-family: "Big Shoulders Display", sans-serif;
@@ -52,8 +52,8 @@
 .attendance-tools input {
     height: 42px;
     background: rgba(0, 30, 60, 0.7);
-    border: 1px solid rgba(95, 255, 234, 0.45);
-    color: #ffffff;
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    color: var(--color-whitesmoke)fff;
     border-radius: 8px;
     padding: 0.8rem 1rem;
     font-size: 1rem;
@@ -73,8 +73,8 @@
 
 .attendance-tools input:focus {
     outline: none;
-    border-color: #5fffea;
-    box-shadow: 0 0 0 3px rgba(95, 255, 234, 0.12);
+    border-color: var(--color-turquoise);
+    box-shadow: 0 0 0 3px rgba(var(--color-turquoise-rgb), 0.12);
 }
 
 .attendance-list {
@@ -88,8 +88,8 @@
     align-content: space-around;
     gap: 1.2rem;
     padding: 1.3rem 1rem;
-    border-bottom: 1px solid rgba(95, 255, 234, 0.22);
-    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.85));
+    border-bottom: 1px solid rgba(var(--color-turquoise-rgb), 0.22);
+    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
 }
 
 .attendance-list .attendance-row > div:first-of-type {
@@ -105,8 +105,8 @@
 .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
     height: 46px;
-    background: #C7FFF9;
-    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: var(--color-icy);
+    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -116,7 +116,7 @@
 }
 
 .attendance-list .attendance-row > div:first-of-type span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 .attendance-row:last-child {
@@ -173,8 +173,8 @@
 
     .attendance-list-card {
         min-height: 260px;
-        background: linear-gradient(270deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-        border: 1px solid rgba(95, 255, 234, 0.45);
+        background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
+        border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
         padding: .6rem;
     }
 

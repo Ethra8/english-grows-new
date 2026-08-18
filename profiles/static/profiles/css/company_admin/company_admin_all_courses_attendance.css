@@ -25,12 +25,12 @@
 /* .company-admin-attendance-page header hr {
     margin: 2rem 0 1.25rem;
     border: 0;
-    border-top: 1px solid rgba(0, 103, 108, 0.3);
+    border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);
 } */
 
 .company-admin-attendance-page header p {
     margin: 0;
-    color: #007a7d;
+    color: var(--color-teal);
     font-size: 1rem;
 }
 
@@ -51,9 +51,9 @@
     gap: 1rem;
     min-height: 130px;
     padding: 0.25rem 1.25rem;
-    border: 1px solid rgba(0, 103, 108, 0.22);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.22);
     border-radius: 12px;
-    background: linear-gradient(223deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
     box-shadow:
         0 10px 24px rgba(0, 64, 70, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -65,7 +65,7 @@
 
 .company-attendance-summary .attendance-summary-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(0, 103, 108, 0.42);
+    border-color: rgba(var(--color-teal-rgb), 0.42);
     box-shadow:
         0 14px 28px rgba(0, 64, 70, 0.13),
         inset 0 1px 0 rgba(255, 255, 255, 0.85);
@@ -80,14 +80,14 @@
 }
 
 .company-attendance-summary .attendance-summary-card span {
-    color: #c7fff9;
+    color: var(--color-icy);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.25;
 }
 
 .company-attendance-summary .attendance-summary-card strong {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1;
@@ -110,8 +110,8 @@
 }
 
 .company-attendance-summary .status-pill.completed {
-    color: whitesmoke;
-    border: 1px solid #5ff0df;
+    color: var(--color-whitesmoke);
+    border: 1px solid var(--color-turquoise);
     background: rgba(0, 210, 155, 0.12);
 }
 
@@ -138,7 +138,7 @@
 
 .all-course-attendance .assigned-courses-panel {
     overflow: hidden;
-    border: 1px solid rgba(0, 103, 108, 0.28);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.28);
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.76);
     box-shadow:
@@ -149,14 +149,14 @@
 
 .all-course-attendance .assigned-courses-header {
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(0, 103, 108, 0.18);
-    /* background: linear-gradient(223deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    background-color: rgba(237, 249, 247, 0.5);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    /* background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
+    background-color: rgba(var(--color-mist-rgb), 0.5);
 }
 
 .all-course-attendance .course-status-filter-header h3 {
     margin: 0;
-    color: #007a7d;
+    color: var(--color-teal);
     font-size: 1rem;
     font-weight: 700;
 }
@@ -198,7 +198,7 @@
     min-height: 48px;
     padding: 0.75rem 0.9rem;
     color: #123f43;
-    border: 1px solid rgba(0, 103, 108, 0.27);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.27);
     border-radius: 9px;
     outline: none;
     background: rgba(255, 255, 255, 0.92);
@@ -214,7 +214,7 @@
 
 .all-course-attendance .attendance-tools input:focus {
     border-color: #00a7a5;
-    background: #ffffff;
+    background: var(--color-whitesmoke)fff;
     box-shadow: 0 0 0 3px rgba(0, 167, 165, 0.13);
 }
 
@@ -231,15 +231,15 @@
     white-space: nowrap;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     border: 1px solid #008b8d;
-    background: linear-gradient(135deg, #009da0, #003366);
+    background: linear-gradient(135deg, #009da0, var(--color-navy));
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
     margin: auto auto 0;
 }
 
 .all-course-attendance .btn-attendance-tools:hover {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     transform: translateY(-2px);
     background: linear-gradient(135deg, #00acaf, #008589);
     box-shadow: 0 0 0 rgba(0, 122, 125, 0.24);
@@ -262,8 +262,8 @@
 & titleAttendance by Course */
 .all-course-attendance .attendance-list-card {
     min-height: fit-content;
-    background: linear-gradient(61deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-    border: 1px solid rgba(95, 255, 234, 0.45);
+    background: linear-gradient(61deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     padding: 1.6rem 0.25rem 0.25rem 0.25rem;
@@ -281,7 +281,7 @@
 
 .all-course-attendance .attendance-list-header h2 {
     margin: 0 0 0.25rem;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 1.55rem;
     font-weight: 500;
 }
@@ -289,7 +289,7 @@
 .all-course-attendance .attendance-list-header p {
     margin: 0;
     /* color: #627b7e; */
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 0.88rem;
 }
 
@@ -319,7 +319,7 @@
 
     min-width: 1180px;
     overflow: hidden;
-    border: 1px solid rgba(0, 103, 108, 0.2);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.2);
     border-radius: 8px;
 }
 
@@ -352,8 +352,8 @@
 .all-course-attendance .course-attendance-table-header {
     min-height: 58px;
     color: #dedede;
-    border-bottom: 1px solid rgba(0, 103, 108, 0.22);
-    background: #003366;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.22);
+    background: var(--color-navy);
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -406,10 +406,10 @@
 
 .all-course-attendance .course-attendance-row {
     min-height: 112px;
-    border-bottom: 1px solid rgba(0, 103, 108, 0.17);
-    /* background: linear-gradient(223deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65)); */
-    background: whitesmoke;
-    /* background: rgba(199, 255, 249, 0.8); */
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.17);
+    /* background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
+    background: var(--color-whitesmoke);
+    /* background: rgba(var(--color-icy-rgb), 0.8); */
     transition:
         background 0.2s ease,
         box-shadow 0.2s ease;
@@ -461,7 +461,7 @@
 .all-course-attendance .attendance-class-info h3 {
     margin: 0 0 0.25rem;
     overflow: hidden;
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 1rem;
     font-weight: 750;
     line-height: 1.3;
@@ -473,7 +473,7 @@
     display: block;
     margin-bottom: 0.35rem;
     overflow: hidden;
-    color: #006b7d !important;
+    color: var(--color-teal) !important;
     font-weight: 500;
     font-size: 0.84rem;
     text-overflow: ellipsis;
@@ -483,7 +483,7 @@
 .all-course-attendance .attendance-class-info small {
     display: block;
     overflow: hidden;
-    color: #6a7f81;
+    color: var(--color-steel);
     font-size: 0.78rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -615,7 +615,7 @@
 }
 
 .all-course-attendance .attendance-pill.attended > span {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     background: rgba(19, 185, 139, 0.52);
 }
 
@@ -626,7 +626,7 @@
 }
 
 .all-course-attendance .attendance-pill.missed > span {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     background: rgba(240, 93, 103, 0.48);
 }
 
@@ -637,7 +637,7 @@
 }
 
 .all-course-attendance .attendance-pill.excused > span {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     background: rgba(217, 154, 16, 0.48);
 }
 
@@ -659,7 +659,7 @@
 .all-course-attendance .course-attendance-rate .completion-ring {
     --ring-size: 52px;
     --ring-thickness: 1px;
-    --ring-center: whitesmoke;
+    --ring-center: var(--color-whitesmoke);
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -692,7 +692,7 @@
     position: relative;
     z-index: 1;
 
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1;
@@ -701,7 +701,7 @@
 /* .all-course-attendance .course-attendance-rate .completion-ring {
     --ring-size: 6px;
     --ring-thickness: 1px;
-    --ring-center: rgba(11, 53, 95, 0.95);
+    --ring-center: rgba(var(--color-navy-rgb), 0.95);
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -735,7 +735,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 1rem;
     font-weight: 300;
 } */
@@ -763,7 +763,7 @@
 }
 
 .all-course-attendance .attendance-filter-btn {
-    background-color: #0B355F;
+    background-color: var(--color-navy);
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -773,7 +773,7 @@
 } */
 
 .all-course-attendance .course-status-filter-header h3 {
-    color: #003366;
+    color: var(--color-navy);
     font-weight: 400;
     font-size: 1.5rem;
 }
@@ -799,7 +799,7 @@
 }
 
 .all-course-attendance .attendance-empty-message > i {
-    color: rgba(0, 103, 108, 0.45);
+    color: rgba(var(--color-teal-rgb), 0.45);
     font-size: 2rem;
 }
 

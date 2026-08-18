@@ -1,13 +1,13 @@
 .small-avatar {
     border-radius: 50%;
-    background: rgba(95, 255, 234, 0.16);
+    background: rgba(var(--color-turquoise-rgb), 0.16);
     border: 1px outset rgba(170, 170, 170, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    color: #006b7d;
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+    color: var(--color-teal);
+    box-shadow: 0 3px 3px rgba(var(--color-shadow-rgba));
 }
 
 .small-avatar,
@@ -37,7 +37,7 @@
 }
 
 .sort-label i {
-    color: #5FF0DF;
+    color: var(--color-turquoise);
 }
 
 
@@ -50,9 +50,9 @@
 
     padding: 0.2rem;
 
-    background-color: rgba(11, 53, 95, 0.35);
+    background-color: rgba(var(--color-navy-rgb), 0.35);
 
-    border: 1px solid rgba(95, 240, 223, 0.35);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
     border-radius: 6px;
 }
 
@@ -77,11 +77,11 @@
 }
 
 .sort-option:hover {
-    color: #5FF0DF;
+    color: var(--color-turquoise);
     text-decoration: none;
 }
 
 .sort-option.active {
-    color: #5FF0DF;
-    background-color: rgba(95, 240, 223, 0.14);
+    color: var(--color-turquoise);
+    background-color: rgba(var(--color-turquoise-rgb), 0.14);
 }

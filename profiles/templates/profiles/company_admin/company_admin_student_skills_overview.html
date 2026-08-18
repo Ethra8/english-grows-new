@@ -188,8 +188,8 @@
                             aria-controls="skill-body-{{ forloop.counter }}"
                         >
                             <span class="skill-subskills-count">
-                                {{ skill.subskills|length }}
-                                subskill{{ skill.subskills|length|pluralize }}
+                                <strong>{{ skill.subskills|length }} {{ skill.name }}
+                                subskill{{ skill.subskills|length|pluralize }}</strong>
                                 assessed
                             </span>
 
@@ -203,7 +203,7 @@
 
                 </div>
                 <div
-                    class="skill-card-body"
+                    class="skill-card-body {{ skill.name|lower }}"
                     id="skill-body-{{ forloop.counter }}"
                     hidden
                 >

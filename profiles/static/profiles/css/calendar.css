@@ -8,7 +8,7 @@
 }
 
 /* #my_calendar_page h1 {
-    color: #003366;
+    color: var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
     margin: 0;
     font-size: clamp(2rem, 3vw, 3.2rem);
@@ -29,9 +29,9 @@
 #calendar {
     border-radius: 8px;
     padding: 20px 12px 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    /* background: rgba(106, 250, 225, 0.2); */
-    background: linear-gradient(23deg, rgba(11, 53, 95, 0.95), rgba(0, 122, 120, 0.65));
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    /* background: rgba(var(--color-turquoise-rgb), 0.2); */
+    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-turquoise-rgb), 0.65));
     margin: 0 auto 60px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -58,7 +58,7 @@
 }
 
 .fc th {
-    background-color: rgba(106, 250, 225, 0.3) /* #6afae1; */
+    background-color: rgba(var(--color-turquoise-rgb), 0.3) /* #6afae1; */
 }
 
 
@@ -105,7 +105,7 @@
 
 /* Right chunk: month/week/list/year */
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button {
-    background-color: #c7fff9;
+    background-color: var(--color-icy);
     color: rgb(59, 59, 59);
     text-transform: capitalize;
     font-weight: 600;
@@ -115,7 +115,7 @@
 
 /* Title itself: week/month/day date */
 .fc-toolbar-title {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-size: 2rem;
@@ -123,7 +123,7 @@
     max-width: 100%;
     min-width: 50%;
     padding: 0.5rem 120px;
-    background-color: #0B355F;
+    background-color: var(--color-navy);
     border: outset 1px #007A78;
     box-shadow: 0 1px 2px 0 #404143;
     text-align: center;
@@ -143,8 +143,8 @@
     border-radius: 6px;
     transform: translateY(-50%);
     z-index: 5;
-    background-color: #0B355F !important;
-    color: whitesmoke !important;
+    background-color: var(--color-navy) !important;
+    color: var(--color-whitesmoke) !important;
     box-shadow: 0 1px 2px 0 #404143;
 }
 
@@ -185,7 +185,7 @@
 
 .fc .fc-button-group > .fc-button {
     padding: 0.35rem 0.55rem !important;
-    box-shadow: 0 1px 2px 0 #0B355F;
+    box-shadow: 0 1px 2px 0 var(--color-navy);
 }
 
 .fc .fc-button-group > .fc-button.fc-button-active,
@@ -208,7 +208,7 @@
 .fc .fc-col-header-cell-cushion {
     display: flex;
     padding: 2px 4px;
-    color: #0B355F;
+    color: var(--color-navy);
     min-height: 3rem !important;
     align-items: center;
     justify-content: center;
@@ -252,7 +252,7 @@
 
 /* Day numbers in monthly grid */
 .fc .fc-daygrid-day-number {
-    color: #0B355F;
+    color: var(--color-navy);
 }
 
 /* Day cell frame */
@@ -272,7 +272,7 @@
 }
 
 .my-calendar .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
-    color: #0B355F;
+    color: var(--color-navy);
     font-weight: 700;
 }
 
@@ -379,7 +379,7 @@
     width: 100%;
     max-width: 100%;
     overflow: hidden !important;
-    color: #ffffff !important;
+    color: var(--color-whitesmoke)fff !important;
 }
 
 .my-calendar .fc-timegrid-event .fc-event-time,
@@ -388,7 +388,7 @@
     max-width: 100%;
     overflow: hidden !important;
     text-overflow: ellipsis;
-    color: #ffffff !important;
+    color: var(--color-whitesmoke)fff !important;
     line-height: 1.2;
 }
 
@@ -413,7 +413,7 @@
     max-width: 100%;
     padding: 0.25rem 0.35rem;
     overflow: hidden;
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     line-height: 1.2;
 }
 
@@ -423,7 +423,7 @@
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
 }
 
 .my-calendar .calendar-grid-event-time {
@@ -445,7 +445,7 @@
 
 .fc .fc-list-day-text,
 .fc .fc-list-day-side-text {
-    color: #0B355F !important;
+    color: var(--color-navy) !important;
 }
 
 /* Month List date header aligned left */
@@ -493,8 +493,8 @@
     justify-content: center;
     padding: 0.35rem 0.75rem;
     border-radius: 6px;
-    background-color: #0B355F;
-    color: #ffffff !important;
+    background-color: var(--color-navy);
+    color: var(--color-whitesmoke)fff !important;
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none !important;
@@ -503,8 +503,8 @@
 }
 
 .my-calendar .calendar-join-btn:hover {
-    background-color: #007A7D;
-    color: #ffffff !important;
+    background-color: var(--color-teal);
+    color: var(--color-whitesmoke)fff !important;
 }
 
 
@@ -519,25 +519,25 @@
 }
 
 .calendar-session-modal .modal-header {
-    background-color: #0B355F;
-    color: #ffffff;
+    background-color: var(--color-navy);
+    color: var(--color-whitesmoke)fff;
 }
 
 .calendar-session-modal .close {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     opacity: 1;
 }
 
 .calendar-modal-join-btn {
-    background-color: #0B355F;
-    color: #ffffff !important;
+    background-color: var(--color-navy);
+    color: var(--color-whitesmoke)fff !important;
     font-weight: 600;
     border-radius: 6px;
 }
 
 .calendar-modal-join-btn:hover {
-    background-color: #007A7D;
-    color: #ffffff !important;
+    background-color: var(--color-teal);
+    color: var(--color-whitesmoke)fff !important;
 }
 
 
@@ -549,12 +549,12 @@
 .bank-holiday-event {
     background-color: #8b0000 !important;
     border-color: #8b0000 !important;
-    color: #fff !important;
+    color: var(--color-whitesmoke) !important;
 }
 
 /* Confirmed Courses */
 .course-confirmed-event {
-    background-color: #fff3cd !important;
+    background-color: var(--color-whitesmoke)3cd !important;
     border-color: #ffe69c !important;
 }
 
@@ -703,7 +703,7 @@
         grid-template-areas:
             "time time"
             "dot title";
-        border-bottom: 1px solid rgba(11, 53, 95, 0.25) !important;
+        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.25) !important;
     }
 
     .my-calendar .fc-list-event td {

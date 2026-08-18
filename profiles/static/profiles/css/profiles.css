@@ -1,13 +1,13 @@
-/* teal site bg #00686b stormy teal / rgba (0, 122, 120) */
+/* teal site bg #00686b stormy teal / rgba (var(--color-turquoise-rgb)) */
 /* teal sidebar #008f8f; dark cyan */
 
-/*  NEW COLOR: Deep Ocean rgba(0, 122, 120, 1) --- #007A78 */
+/*  NEW COLOR: Deep Ocean rgba(var(--color-turquoise-rgb), 1) --- #007A78 */
 #employeeSkillsGraphOverview {
     scroll-margin-top: 90px; /* adjust to your navbar height */
 }
 
 h1 {
-    color: #0B355F;
+    color: var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.02em;
     margin-left: 0%;
@@ -128,7 +128,7 @@ main.profile-main {
 }
 
 .course-details header > div:nth-child(2) i {
-    background: radial-gradient(circle,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 0.9) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 1) 100%);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 0.9) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border-radius: 50%;
     width: 76px;
     height: 76px;
@@ -136,8 +136,8 @@ main.profile-main {
     color: rgba(95, 245, 207, 0.3);
     font-size: 2.5rem;
     padding: 0.5rem 0.65rem;
-    border: 1px outset #006b7d;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    border: 1px outset var(--color-teal);
+    box-shadow: 0 6px 12px rgba(var(--color-shadow-rgba));
 
 }
 
@@ -146,26 +146,26 @@ main.profile-main {
 }
 
 .course-details header h2 {
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 1.5rem;
     margin-top: 0;
     padding-top: 0;
-    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
 }
 
 .course-details header h2 > span:nth-child(2) {
     padding: 0 .8rem;
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .course-details-child, 
 .course-info-child, 
 .course-materials-child {
-    background: linear-gradient(214deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
+    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
     border-radius: 8px;
     margin: 0;
     padding: 1rem .25rem 0.25rem;
-    border: 1px solid rgba(94, 234, 212, 0.8);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.8);
     width: 100%;
 }
 
@@ -174,7 +174,7 @@ main.profile-main {
 /* main.profile-main h1, */
 .my-course header h1,
 .profile-settings-page header h1 {
-    color: #003366;
+    color: var(--color-navy);
     /* font-family: "Big Shoulders Display", sans-serif;
     font-size: clamp(2rem, 3vw, 3.2rem);
     letter-spacing: 0.03em; */
@@ -189,9 +189,9 @@ main.profile-main {
 
 /* EMPTY MESSAGE */
 .empty-message {
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     padding: 1rem;
-    color:#6a7f81 !important;
+    color:var(--color-steel) !important;
     border-radius: 8px;
 }
 
@@ -207,8 +207,8 @@ main.profile-main {
 .student-edit-attendance-btn,
 .skill-edit-link,
 .btn-skill-save-assessment {
-    border: 1px solid #5ff0df;
-    color: #0B355F;
+    border: 1px solid var(--color-turquoise);
+    color: var(--color-navy);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
@@ -219,7 +219,7 @@ main.profile-main {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(94, 234, 212, 0.1);
+    background: rgba(var(--color-turquoise-rgb), 0.1);
     align-self: center;
     cursor: pointer;
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
@@ -235,9 +235,9 @@ main.profile-main {
 .student-edit-attendance-btn:hover,
 .skill-edit-link:hover,
 .btn-skill-save-assessment:hover  {
-    background: rgba(0, 107, 125, 0.25);
-    /* background: rgba(94, 234, 212, 0.15); */
-    color: #0B355F;
+    background: rgba(var(--color-teal-rgb), 0.25);
+    /* background: rgba(var(--color-turquoise-rgb), 0.15); */
+    color: var(--color-navy);
     text-decoration: none;
     box-shadow: 0 0 0 rgba(0, 20, 40, 0.5);
     transform: translateY(-1px);
@@ -270,16 +270,16 @@ div:has(> .student-action-btn) {
     justify-content: center;
     gap: 0.75rem;
     min-height: 70px;
-    border: 1px solid rgba(106, 250, 225, 0.45);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-radius: 8px;
-    background: rgba(11, 53, 95, 0.45);
-    color: whitesmoke;
+    background: rgba(var(--color-navy-rgb), 0.45);
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 400;
     font-size: 1.3rem;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 0;
     white-space: nowrap;
 }
@@ -298,7 +298,7 @@ div:has(> .student-action-btn) {
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
     border-top: 14px solid #5eead4;
-    filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
+    filter: drop-shadow(0 3px 4px rgba(var(--color-navy-rgb), 0.45));
 }
 
 .attendance-filter-btn i {
@@ -308,10 +308,10 @@ div:has(> .student-action-btn) {
 
 
 .attendance-filter-btn strong {
-    background: rgba(106, 250, 225, 0.18);
+    background: rgba(var(--color-turquoise-rgb), 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
-    color: #fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
@@ -333,19 +333,19 @@ div:has(> .student-action-btn) {
 .course-status-btn:hover {
     background: rgba(0, 155, 155, 0.25);
     border-color: #5eead4;
-    color: #fff;
+    color: var(--color-whitesmoke);
 }
 
 .attendance-filter-btn.active,
 .attendance-filter-btn:hover {
     background: rgba(0, 155, 155, 0.25);
     border-color: #5eead4;
-    /* color: #fff; */
+    /* color: var(--color-whitesmoke); */
 }
 
 .btn-join-class {
-    border: 1px solid #5ff0df;
-    color: whitesmoke;
+    border: 1px solid var(--color-turquoise);
+    color: var(--color-whitesmoke);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
@@ -359,7 +359,7 @@ div:has(> .student-action-btn) {
     background: linear-gradient(
         222deg,
         #00a7ad 0%,
-        #006b7d 90%,
+        var(--color-teal) 90%,
         #004d63 100%
     );
 
@@ -370,7 +370,7 @@ div:has(> .student-action-btn) {
 }
 
 .btn-join-class:hover {
-    color: white !important;  /* #5ff0df */
+   color: var(--color-whitesmoke) !important;  /* var(--color-turquoise) */
     box-shadow: 0 1px 2px 0 #8b8b8b;
     font-weight: 500;
 }
@@ -385,8 +385,8 @@ div:has(> .student-action-btn) {
 .wrapper-absence-details {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(95, 240, 223, 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
 } */
 
 /* .wrapper-next-class-card {
@@ -406,8 +406,8 @@ div:has(> .student-action-btn) {
     flex: 0 0 270px;
     min-height: 100vh;
 
-    background-color: #0b355f;
-    color: whitesmoke;
+    background-color: var(--color-navy);
+    color: var(--color-whitesmoke);
     padding: 2rem;
     position: relative;
     z-index: 1028;
@@ -418,7 +418,7 @@ div:has(> .student-action-btn) {
     font-weight: 500;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     line-height: 1.3 !important;
     text-transform: capitalize;
 }
@@ -435,7 +435,7 @@ div:has(> .student-action-btn) {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #5ff0df;
+    background-color: var(--color-turquoise);
     color: #003b6f;
     display: flex;
     align-items: center;
@@ -458,16 +458,16 @@ div:has(> .student-action-btn) {
 
 .sidebar-user span {
     display: inline-block;
-    border: 1px solid #5ff0df;
+    border: 1px solid var(--color-turquoise);
     border-radius: 999px;
     padding: 0.5rem 1.4rem;
-    color: #5ff0df;
+    color: var(--color-turquoise);
     font-size: 0.9rem;
 }
 
 .profile-sidebar hr {
-    /* border: 1px solid rgba(199, 255, 249, 0.7); */
-    border: 1px outset #5ff0df;
+    /* border: 1px solid rgba(var(--color-icy-rgb), 0.7); */
+    border: 1px outset var(--color-turquoise);
 }
 
 .sidebar-nav {
@@ -481,7 +481,7 @@ div:has(> .student-action-btn) {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     text-decoration: none;
     padding: 0.6rem 1rem;
     border-radius: 8px;
@@ -489,8 +489,8 @@ div:has(> .student-action-btn) {
 
 .sidebar-link:hover,
 .sidebar-link.active {
-    background-color: #006b7d;
-    color: whitesmoke;
+    background-color: var(--color-teal);
+    color: var(--color-whitesmoke);
     text-decoration: none;
 }
 
@@ -511,11 +511,11 @@ div:has(> .student-action-btn) {
     justify-content: center;
 
     padding: 0;
-    border: 1px solid rgba(95, 240, 223, 0.8);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.8);
     border-radius: 8px;
 
     background: transparent;
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-size: 1.35rem;
 
     cursor: pointer;
@@ -527,9 +527,9 @@ div:has(> .student-action-btn) {
 
 .mobile-sidebar-toggle:hover,
 .mobile-sidebar-toggle:focus {
-    background-color: #007a7d;
-    border-color: #5ff0df;
-    color: #ffffff;
+    background-color: var(--color-teal);
+    border-color: var(--color-turquoise);
+    color: var(--color-whitesmoke)fff;
     outline: none;
 }
 
@@ -554,7 +554,7 @@ div:has(> .student-action-btn) {
     display: inline-block;
     padding: .2rem .75rem;
     border-radius: 20px;
-    color: #fff;
+    color: var(--color-whitesmoke);
     font-size: .75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -570,22 +570,22 @@ div:has(> .student-action-btn) {
     align-items: center;
     justify-content: space-evenly;
     background: transparent;
-    color: #0B355F;
-    border: 2px solid #0b355f !important;
+    color: var(--color-navy);
+    border: 2px solid var(--color-navy) !important;
     border-radius: 999px;
     height: 38px;
     max-height: 38px;
 }
 
 .status-badge.status-badge-student i {
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 1.2rem;
 }
 
 .status-badge.today {
-    background: #c7fff9;
-    color: #0B355F;
-    border: 1px outset #c7fff9 !important;
+    background: var(--color-icy);
+    color: var(--color-navy);
+    border: 1px outset var(--color-icy) !important;
 }
 
 .status-badge.active,
@@ -596,7 +596,7 @@ div:has(> .student-action-btn) {
 
 .status-badge.confirmed {
     background: #f5c542;
-    color: #0B355F;
+    color: var(--color-navy);
     border: 1px outset #f5c542 !important;
 }
 
@@ -613,8 +613,8 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.completed {
-    background: rgba(94, 234, 212, 0.15);
-    border: 0.5px solid rgba(94, 234, 212, 0.15) !important;
+    background: rgba(var(--color-turquoise-rgb), 0.15);
+    border: 0.5px solid rgba(var(--color-turquoise-rgb), 0.15) !important;
 }
 
 /* END of STATUS-BADGES *************/
@@ -623,7 +623,7 @@ div:has(> .student-action-btn) {
 .completion-ring {
     --ring-size: 52px;
     --ring-thickness: 1px;
-    --ring-center: rgba(11, 53, 95, 0.95);
+    --ring-center: rgba(var(--color-navy-rgb), 0.95);
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -655,7 +655,7 @@ div:has(> .student-action-btn) {
     position: relative;
     z-index: 1;
 
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
@@ -676,9 +676,9 @@ div:has(> .student-action-btn) {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0B355F;
+    color: var(--color-navy);
     font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(var(--color-shadow-rgba));
 }
 
 .level-a1 {
@@ -734,10 +734,10 @@ div:has(> .student-action-btn) {
     align-items: center;
     overflow: hidden;
     max-width: fit-content;
-    border: 1px outset #006b7d;
+    border: 1px outset var(--color-teal);
     border-radius: 999px;
-    background: #006b7d;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    background: var(--color-teal);
+    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
     padding: 0 0 0 .25rem;
@@ -747,7 +747,7 @@ div:has(> .student-action-btn) {
 
 .level-pill .current-level-label {
     padding: 9px 22px;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -756,8 +756,8 @@ div:has(> .student-action-btn) {
 .level-pill .current-level-value {
     padding: 9px 22px 6px;
 
-    background: #0B355F;
-    color: whitesmoke;
+    background: var(--color-navy);
+    color: var(--color-whitesmoke);
     font-size: 1.2rem;
     font-weight: 500;
     border-top-right-radius: 50px;
@@ -803,7 +803,7 @@ div:has(> .student-action-btn) {
     Irrelevant, takes up too much space
     display: none;
 
-    background: radial-gradient(circle,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 0.9) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 1) 100%);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 0.9) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border-radius: 50%;
     width: 76px;
     height: 76px;
@@ -811,8 +811,8 @@ div:has(> .student-action-btn) {
     color: rgba(95, 245, 207, 0.3);
     font-size: 2.5rem;
     padding: 0.5rem 0.65rem;
-    border: 1px outset #006b7d;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    border: 1px outset var(--color-teal);
+    box-shadow: 0 6px 12px rgba(var(--color-shadow-rgba));
 } */
 
 .my-course header > div:nth-child(2) {
@@ -828,28 +828,28 @@ div:has(> .student-action-btn) {
 }
 
 .my-course header h2 {
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 1.5rem;
     margin-top: 0;
     padding-top: 0;
-    text-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
 }
 
 /* horizontal line separating course type | total_hours */
 .my-course header h2 > span:nth-child(2) {
     padding: 0 .8rem;
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .my-course .course-card {
     border-radius: 8px;
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     position: relative;
     overflow: hidden;
     display: flex;
     min-height: 230px;
     border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .my-course .course-card strong {
@@ -868,7 +868,7 @@ div:has(> .student-action-btn) {
 }
 
 .no-course-assigned h2 {
-    color:#0B355F;
+    color:var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-size: 1.8rem;
@@ -883,12 +883,12 @@ div:has(> .student-action-btn) {
     width: 500px;
     height: 500px;
     border-radius: 50%;
-    background: #0B355F;
-    background: radial-gradient(circle,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    background: var(--color-navy);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     box-shadow:
         0 10px 25px rgba(0,107,125,.25),
-        inset 0 1px rgba(255,255,255,.15);
-    color: whitesmoke;
+        inset 0 1px rgba(var(--color-steel-rgb),.15);
+    color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 2;
@@ -899,7 +899,7 @@ div:has(> .student-action-btn) {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 7.5rem;
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(var(--color-turquoise-rgb), 0.2);
     position: absolute;
     top: 100px;
     right: 80px;
@@ -912,12 +912,12 @@ div:has(> .student-action-btn) {
     width: 510px;
     height: 510px;
     border-radius: 50%;
-    background: #0B355F;
-    color: whitesmoke;
+    background: var(--color-navy);
+    color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px whitesmoke;
+    border: solid 2px var(--color-whitesmoke);
 }
 
 .course-card .circle-panel1 h2 {
@@ -928,7 +928,7 @@ div:has(> .student-action-btn) {
     font-size: 2rem;
     font-weight: 600;
     line-height: 1.3;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
 }
 
 .course-card .info {
@@ -942,7 +942,7 @@ div:has(> .student-action-btn) {
 }
 
 .course-card .info p {
-    color: #0B355F;
+    color: var(--color-navy);
 }
 
 .course-card .item,
@@ -952,7 +952,7 @@ div:has(> .student-action-btn) {
     align-items: center;
     gap: 1rem;
     padding: 0.9rem 0;
-    border-bottom: 1px solid rgba(0, 128, 128, 0.15);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
 }
 
 .course-card .item-icon,
@@ -965,12 +965,12 @@ div:has(> .student-action-btn) {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: outset 1px #5ff0df;
+    border: outset 1px var(--color-turquoise);
     background-color: #F4FFFE;
-    /* background: #c7fff9;
-    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%); */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-    color: #006b7d;
+    /* background: var(--color-icy);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%); */
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
+    color: var(--color-teal);
 }
 
 .course-card .item-text,
@@ -984,14 +984,14 @@ div:has(> .student-action-btn) {
 .course-card .item-text > strong:first-of-type,
 .attendance-progress-card .item-text > strong:first-of-type,
 .detailed-attendance-card .item-text > strong:first-of-type {
-    color: #006b7d;
+    color: var(--color-teal);
     font-weight: 700;
 }
 
 .course-card .item-text strong,
 .attendance-progress-card .item-text strong,
 .detailed-attendance-card .item-text strong {
-    color: #6a7f81;
+    color: var(--color-steel);
     font-weight: 550;
 }
 
@@ -999,7 +999,7 @@ div:has(> .student-action-btn) {
 .course-card .item-text span,
 .attendance-progress-card .item-text span,
 .detailed-attendance-card .item-text span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 .course-card .info > div:first-of-type {
@@ -1008,19 +1008,19 @@ div:has(> .student-action-btn) {
     flex-direction: row;
     /* justify-content: space-between; */
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     margin-bottom: 0.5rem;
     /* for 'upcoming ribbon */
     padding: 0;
 }
 
 .course-card .info > div:first-of-type .item-icon {
-    background: #c7fff9;
-    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    background: var(--color-icy);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     width: 46px;
     height: 46px;
     color: #edf9ed;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
 }
 
 .course-card .info > div:first-of-type .item-icon i {
@@ -1070,10 +1070,10 @@ div:has(> .student-action-btn) {
     background: linear-gradient(
         135deg,
         #0099a5,
-        #006b7d
+        var(--color-teal)
     );
 
-    color: white;
+   color: var(--color-whitesmoke);
     text-align: center;
 
     text-transform: uppercase;
@@ -1092,7 +1092,7 @@ div:has(> .student-action-btn) {
 ******** STUDENT: My LEARNING PROGRESS PAGE *********|
 *****************************************************/
 .learner-employee-detail-page {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
 }
 
 .learner-employee-detail-page .student-detail-header h1 {
@@ -1100,7 +1100,7 @@ div:has(> .student-action-btn) {
 }
 
 .learner-employee-detail-page .student-main-info span {
-    color: whitesmoke !important;
+    color: var(--color-whitesmoke) !important;
     font-size: 1rem !important;
 }
 
@@ -1122,9 +1122,9 @@ div:has(> .student-action-btn) {
     display: flex;
     gap: 2rem;
     padding: 0 1.25rem;
-    border-bottom: 1px solid rgba(0, 194, 178, 0.35);
+    border-bottom: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     /* margin-bottom: 1.7rem; */
-    background-color: #003366;
+    background-color: var(--color-navy);
     margin-top: 0.25rem;
     border-radius: 8px;
 
@@ -1137,7 +1137,7 @@ div:has(> .student-action-btn) {
 }
 
 .student-detail-tabs a {
-    color: rgba(255,255,255,0.75);
+    color: rgba(var(--color-whitesmoke-rgb), 0.85);
     padding: 1rem 0;
     text-decoration: none;
     position: relative;
@@ -1174,17 +1174,17 @@ div:has(> .student-action-btn) {
     width: fit-content;
     max-width: 100%;
     margin: 1.25rem 0 0;
-    background: whitesmoke;
+    background: var(--color-whitesmoke);
     padding: 0.5rem;
     border-radius: 8px;
-    border: outset 1px rgba(0, 107, 125, 0.3);
+    border: outset 1px rgba(var(--color-teal-rgb), 0.3);
 }
 
 .course-selector-form img {
     width: 46px;
     height: 46px;
-    background: #C7FFF9;
-    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: var(--color-icy);
+    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -1199,13 +1199,13 @@ div:has(> .student-action-btn) {
     align-items: center;
     gap: 0.65rem;
     margin: 0;
-    color: #0b355f;
+    color: var(--color-navy);
     font-size: 0.95rem;
     font-weight: 600;
 }
 
 .course-selector-label i {
-    color: #007a7d;
+    color: var(--color-teal);
     font-size: 1rem;
 }
 
@@ -1228,13 +1228,13 @@ div:has(> .student-action-btn) {
 
     padding: 0.7rem 3rem 0.7rem 1.1rem;
 
-    color: #ffffff;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.9) 0%, rgba(0, 107, 125, 0.7) 100%);
-    border: 1px solid rgba(95, 240, 223, 0.85);
+    color: var(--color-whitesmoke)fff;
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.9) 0%, rgba(var(--color-teal-rgb), 0.7) 100%);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.85);
     border-radius: 10px;
 
     box-shadow:
-        0 5px 14px rgba(11, 53, 95, 0.18),
+        0 5px 14px rgba(var(--color-navy-rgb), 0.18),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
     font-size: 0.95rem;
@@ -1250,26 +1250,26 @@ div:has(> .student-action-btn) {
 }
 
 .course-select:hover {
-    border-color: #5ff0df;
+    border-color: var(--color-turquoise);
 
     box-shadow:
-        0 7px 18px rgba(11, 53, 95, 0.24),
-        0 0 0 2px rgba(95, 240, 223, 0.08);
+        0 7px 18px rgba(var(--color-navy-rgb), 0.24),
+        0 0 0 2px rgba(var(--color-turquoise-rgb), 0.08);
 }
 
 .course-select:focus {
-    border-color: #5ff0df;
+    border-color: var(--color-turquoise);
 
     box-shadow:
-        0 0 0 3px rgba(95, 240, 223, 0.22),
-        0 6px 16px rgba(11, 53, 95, 0.22);
+        0 0 0 3px rgba(var(--color-turquoise-rgb), 0.22),
+        0 6px 16px rgba(var(--color-navy-rgb), 0.22);
 }
 
 .course-select-arrow {
     position: absolute;
     right: 1rem;
 
-    color: #5ff0df;
+    color: var(--color-turquoise);
     font-size: 0.8rem;
 
     pointer-events: none;
@@ -1283,8 +1283,8 @@ div:has(> .student-action-btn) {
 
 /* Native dropdown options */
 .course-select option {
-    color: #0b355f;
-    background: #ffffff;
+    color: var(--color-navy);
+    background: var(--color-whitesmoke)fff;
     font-weight: 500;
 }
 /* END OF COURSE SELECTOR FORM */
@@ -1309,10 +1309,10 @@ div:has(> .student-action-btn) {
     min-width: fit-content;
     min-height: fit-content;
     padding: 0.35rem 0.35rem 0.35rem 2rem;
-    border: 1.5px solid rgba(94, 242, 220, 0.35);
+    border: 1.5px solid rgba(var(--color-turquoise-rgb), 0.35);
     border-radius: 50px;
-    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .meta-card::after,
@@ -1328,7 +1328,7 @@ div:has(> .student-action-btn) {
 }
 
 .meta-card .meta-icon {
-    background: rgba(237, 249, 247, 0.9);
+    background: rgba(var(--color-mist-rgb), 0.9);
 }
 
 .meta-card .meta-icon img {
@@ -1338,7 +1338,7 @@ div:has(> .student-action-btn) {
 
 .meta-text strong {
     display: block;
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.5rem;
     font-weight: 400;
@@ -1349,7 +1349,7 @@ div:has(> .student-action-btn) {
 }
 
 .meta-text span {
-    color: rgba(94, 242, 220, 0.9);
+    color: rgba(var(--color-turquoise-rgb), 0.9);
     font-size: 1.3rem;
     font-weight: 400;
 }
@@ -1361,7 +1361,7 @@ div:has(> .student-action-btn) {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.1);
+    color: rgba(var(--color-turquoise-rgb), 0.1);
     position: absolute;
     top: 25px;
     right: -5px;
@@ -1400,8 +1400,8 @@ div:has(> .student-action-btn) {
     border-radius: 50%;
     background:
         conic-gradient(
-            #5fffea calc(var(--percentage) * 1%),
-            rgba(105, 255, 235, 0.18) 0
+            var(--color-turquoise) calc(var(--percentage) * 1%),
+            rgba(var(--color-turquoise-rgb), 0.18) 0
         );
     display: flex;
     align-items: center;
@@ -1432,17 +1432,17 @@ div:has(> .student-action-btn) {
 /* .my-attendance header p {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #0B355F;
+    color: var(--color-navy);
     margin-bottom: 0;
 } */
 
 /* .my-attendance header i.fa-chalkboard-user, */
 /* .course-selector-form i.fa-chalkboard-user {
-    color: rgba(95, 240, 223, 0.65);
+    color: rgba(var(--color-turquoise-rgb), 0.65);
     font-size: 1.4rem;
-    background: radial-gradient(circle,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 0.9) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 1) 100%);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 0.9) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border-radius: 50%;
-    border: 1px solid #0B355F;
+    border: 1px solid var(--color-navy);
     padding: 0.25rem 0.5rem;
     width: 46px;
     height: 46px;
@@ -1464,8 +1464,8 @@ div:has(> .student-action-btn) {
     /* min-height: 230px; */
     border-radius: 8px;
     /* background: rgba(193, 247, 227, 0.8); */
-    background-color: whitesmoke;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-whitesmoke);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .attendance-progress-card .circle-panel1 {
@@ -1475,11 +1475,11 @@ div:has(> .student-action-btn) {
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background: linear-gradient(64deg,rgba(11, 53, 95, 1) 0%, rgba(0, 107, 125, 1) 68%, rgba(7, 192, 199, 0.8) 90%, rgba(95, 240, 223, 0.9) 100%);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
 
     box-shadow:
         0 10px 25px rgba(0,107,125,.25),
-        inset 0 1px rgba(255,255,255,.15);
+        inset 0 1px rgba(var(--color-steel-rgb),.15);
     padding-left: 150px;
     padding-top: 90px;
     z-index: 2;
@@ -1492,7 +1492,7 @@ div:has(> .student-action-btn) {
     font-size: 2rem;
     font-weight: 500;
     line-height: 1.1;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     max-height: 50px;
 }
 
@@ -1501,7 +1501,7 @@ div:has(> .student-action-btn) {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 8.5rem;
-    color: rgba(94, 242, 220, 0.2);
+    color: rgba(var(--color-turquoise-rgb), 0.2);
     position: absolute;
     top: 184px;
     right: 76px;
@@ -1515,9 +1515,9 @@ div:has(> .student-action-btn) {
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    border: solid 1px #c7fff9;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(var(--color-navy-rgb), 1) 87%, rgba(0, 45, 89, 1) 100%);
+    border: solid 1px var(--color-icy);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .circle-panel1 .fa-solid {
@@ -1534,12 +1534,12 @@ div:has(> .student-action-btn) {
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background: #0B355F;
-    color: whitesmoke;
+    background: var(--color-navy);
+    color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px whitesmoke;
+    border: solid 2px var(--color-whitesmoke);
 }
 
 .attendance-percentage-card {
@@ -1551,7 +1551,7 @@ div:has(> .student-action-btn) {
 .attendance-percentage-card p {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 2rem;
     margin-bottom: 0%;
 }
@@ -1570,7 +1570,7 @@ div:has(> .student-action-btn) {
     height: 25px;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     border-radius: 50px;
 }
 
@@ -1580,21 +1580,21 @@ div:has(> .student-action-btn) {
 }
 
 .attendance-progress::-webkit-progress-value {
-    background: linear-gradient(233deg,rgba(0, 128, 128, 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(106, 250, 225, 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border-radius: 999px;
 }
 
 .attendance-progress::-moz-progress-bar {
-    background: linear-gradient(233deg,rgba(0, 128, 128, 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(106, 250, 225, 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border-radius: 999px;
 }
 
 .attendance-warning {
     background-color: #e9e9e9;
-    color: #0B355F;
+    color: var(--color-navy);
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    border: solid 1px #0B355F;
+    border: solid 1px var(--color-navy);
 }
 
 .attendance-warning .fa-solid {
@@ -1619,7 +1619,7 @@ div:has(> .student-action-btn) {
     max-width: 100%;
     border-radius: 8px;
     padding: 125px 20px 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     background: rgba(255, 255, 255, 0.9);
     z-index: 2;
 }
@@ -1631,15 +1631,15 @@ div:has(> .student-action-btn) {
     width: 500px;
     height: 500px;
     border-radius: 50%;
-    background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(11, 53, 95, 1) 87%, rgba(0, 45, 89, 1) 100%);
-    color: white;
+    background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(var(--color-navy-rgb), 1) 87%, rgba(0, 45, 89, 1) 100%);
+   color: var(--color-whitesmoke);
     z-index: 2;
 }
 
 .detailed-attendance-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 2rem;
     margin: 410px 2rem 1rem 11.5rem;
     line-height: 1.1;
@@ -1652,12 +1652,12 @@ div:has(> .student-action-btn) {
     width: 480px;
     height: 480px;
     border-radius: 50%;
-    background-color: rgb(0, 107, 125);
-    color: white;
+    background-color: rgb(var(--color-teal-rgb));
+   color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px #ffffff;
+    border: solid 2px var(--color-whitesmoke)fff;
 }
 
 
@@ -1674,7 +1674,7 @@ div:has(> .student-action-btn) {
     margin: 0%; 
     height: 100%;
     max-height: 100%;
-    background: rgba(106, 250, 225, 0);
+    background: rgba(var(--color-turquoise-rgb), 0);
     border-radius: 10px !important;
 }
 
@@ -1684,7 +1684,7 @@ div:has(> .student-action-btn) {
     margin: 0.5rem; 
     height: 100%;
     max-height: 100%;
-    background: rgba(106, 250, 225, 0);
+    background: rgba(var(--color-turquoise-rgb), 0);
 }
 
 #attendance_accordion .card,
@@ -1694,14 +1694,14 @@ div:has(> .student-action-btn) {
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
     border-radius: 10px !important;
-    border: outset 1px #0B355F;
+    border: outset 1px var(--color-navy);
     background: #008f8f;;
 }
 
 #parentAttendanceHeading,
 #parentAbsenceHeading {
-    color: white;
-    background-color: #006b7d;
+   color: var(--color-whitesmoke);
+    background-color: var(--color-teal);
     border-radius: 8px;
 }
 
@@ -1710,7 +1710,7 @@ div:has(> .student-action-btn) {
     top: 1px;
     left: 4px;
     font-size: 1.2rem;
-    color:#0B355F;
+    color:var(--color-navy);
 }
 
 #parentAbsenceHeading .fa-solid {
@@ -1718,18 +1718,18 @@ div:has(> .student-action-btn) {
     top: 1px;
     left: 1px;
     font-size: 1.2rem;
-    color:#0B355F;
+    color:var(--color-navy);
 }
 
 #parentAttendanceHeading .fa-solid.fa-chevron-down,
 #parentAbsenceHeading .fa-solid.fa-chevron-down {
-    color:#c7fff9;
+    color:var(--color-icy);
 }
 
 #parentAttendanceHeading.card-header,
 #parentAbsenceHeading.card-header {
-    color: white;
-    background-color: #006b7d;
+   color: var(--color-whitesmoke);
+    background-color: var(--color-teal);
     border-radius: 8px;
     padding: 0.5rem;
     display: flex;
@@ -1744,7 +1744,7 @@ div:has(> .student-action-btn) {
     max-height: 100%; /* height of profile form + submit button */
     border-bottom-right-radius: 10px !important;
     border-bottom-left-radius: 10px !important;
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     margin: 0%;
     padding: 1rem;
 }
@@ -1753,7 +1753,7 @@ div:has(> .student-action-btn) {
 #absence_accordion .card-body p {
     line-height: 1.4;
     margin: 0%;
-    color: #0B355F;
+    color: var(--color-navy);
 }
 
 .attendance-history-item {
@@ -1767,14 +1767,14 @@ div:has(> .student-action-btn) {
     height: 35px;
     min-width: 35px;
     border-radius: 50%;
-    border: solid 2px #5ff0df;
-    background: linear-gradient(233deg,rgba(0, 128, 128, 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(106, 250, 225, 1) 100%);
-    color: #ffffff;
+    border: solid 2px var(--color-turquoise);
+    background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
+    color: var(--color-whitesmoke)fff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .attendance-history-text {
@@ -1784,16 +1784,16 @@ div:has(> .student-action-btn) {
 }
 
 .attendance-history-text h6 {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-weight: 500;
 }
 
 .attendance-history-text h6:hover {
-    color: #c7fff9;
+    color: var(--color-icy);
 }
 
 .attendance-history-text span {
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
 }
 
 
@@ -1871,7 +1871,7 @@ div:has(> .student-action-btn) {
 
     .my-course .course-card .circle-panel1::after {
         font-size: 7.5rem;
-        color: rgba(94, 242, 220, 0.1);
+        color: rgba(var(--color-turquoise-rgb), 0.1);
         position: absolute;
         top: 430px;
         right: 305px;
@@ -1929,14 +1929,14 @@ div:has(> .student-action-btn) {
         overflow-y: auto;
         overflow-x: hidden;
 
-        background-color: #0b355f;
+        background-color: var(--color-navy);
 
         transform: translateX(-100%);
         visibility: hidden;
 
         z-index: 1060;
 
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 10px 0 30px rgba(var(--color-shadow-rgb), 0.3);
 
         transition:
             transform 0.3s ease,
@@ -2198,7 +2198,7 @@ div:has(> .student-action-btn) {
 
     .attendance-progress-card .circle-panel1::after {
         font-size: 5rem;
-        color: rgba(94, 242, 220, 0.1);
+        color: rgba(var(--color-turquoise-rgb), 0.1);
         position: absolute;
         top: 475px;
         right: 186px;
@@ -2258,7 +2258,7 @@ div:has(> .student-action-btn) {
 
     .next-class-card .circle-panel1::after {
         font-size: 5.5rem;
-        color: rgba(94, 242, 220, 0.1);
+        color: rgba(var(--color-turquoise-rgb), 0.1);
         position: absolute;
         top: 480px;
         right: 180px;

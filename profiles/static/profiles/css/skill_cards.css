@@ -21,8 +21,8 @@
 
 /* SKILL CARD **********************/
 .skill-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.1), rgba(0, 103, 108, 0.2));
-    border: 1px solid rgba(95, 255, 234, 0.35);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.1), rgba(var(--color-teal-rgb), 0.2));
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
     border-radius: 8px;
     overflow: hidden;
     padding: 0.5px;
@@ -33,7 +33,7 @@
     gap: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 
 .skill-subskills-heading {
@@ -46,7 +46,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0;
+    padding: 0.25rem 0.5rem;
     border: 0;
     background: transparent;
     color: inherit;
@@ -57,6 +57,11 @@
 
 .skill-subskills-count {
     display: inline-block;
+    color: rgba(var(--color-slate-rgb), 0.8);
+}
+
+.skill-subskills-count strong {
+    font-weight: 600;
 }
 
 .skill-chevron {
@@ -90,7 +95,7 @@
     justify-content: space-between;
     padding: 1rem 1rem 0.5rem;
     gap: 1rem;
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     /* border-top-left-radius: 8px;
     border-top-right-radius: 8px; */
 }
@@ -103,20 +108,21 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
+    height: 52px;
     width: 100%;
     min-width: 0;
     max-width: 100%;
     font-size: 1.7rem;
     margin: 0;
     padding: 0rem 0.75rem 0rem 3.2rem;
-    /* background-color: rgba(11, 53, 95, 0.05); */
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.05), rgba(0, 103, 108, 0.05));    
+    /* background-color: rgba(var(--color-navy-rgb), 0.05); */
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.05), rgba(var(--color-teal-rgb), 0.05));    
     border-radius: 999px;
-    color: #0B355F;
-    /* color:whitesmoke; */
+    color: var(--color-navy);
+    /* color:var(--color-whitesmoke); */
     overflow-wrap: normal;
     word-break: normal;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     overflow: hidden;
 }
 
@@ -124,7 +130,7 @@
     content: "\f025"; /* fa-headphones */
     font-family: "Font Awesome 6 Free";
     position: absolute;
-    top: 9px;
+    top: 7px;
     left: 0;
     transform: translateY(-50%);
     width: 40px;
@@ -132,8 +138,8 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 2.5rem;
-    color: rgba(78, 36, 150, 0.7);
-    /* color: rgba(94, 242, 220, 0.2); */
+    color: rgba(var(--color-listening-rgb), 0.7);
+    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 
@@ -141,7 +147,7 @@
     content: "\f1ea"; /* fa-book-open */
     font-family: "Font Awesome 6 Free";
     position: absolute;
-    top: 10px;
+    top: 7px;
     left: 0%;
     transform: translateY(-50%);
     width: 40px;
@@ -149,8 +155,8 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 2.5rem;
-    color: rgba(225, 117, 45, 0.7);
-    /* color: rgba(94, 242, 220, 0.2); */
+    color: rgba(var(--color-reading-rgb), 0.7);
+    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 
@@ -158,7 +164,7 @@
     content: "\f3c9"; /* fa-microphone-lines */
     font-family: "Font Awesome 6 Free";
     position: absolute;
-    top: 10px;
+    top: 5px;
     left: 2%;
     transform: translateY(-50%);
     width: 40px;
@@ -166,8 +172,8 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 2.7rem;
-    color: rgba(245, 190, 88, 0.8);
-    /* color: rgba(94, 242, 220, 0.2); */
+    color: rgba(var(--color-speaking-rgb), 0.8);
+    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 
@@ -183,11 +189,10 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 2rem;
-    color: rgba(14, 165, 183, 0.7);
-    /* color: rgba(94, 242, 220, 0.2); */
+    color: rgba(var(--color-writing-rgb), 0.7);
+    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-70deg);
 }
-
 
 .skill-card h2 .skill-heading {
     display: flex;
@@ -205,8 +210,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: whitesmoke;
-    border: 1px solid rgba(11, 53, 95, 0.3);
+    background-color: var(--color-whitesmoke);
+    border: 1px solid rgba(var(--color-navy-rgb), 0.3);
 }
 
 .skill-icon i {
@@ -216,7 +221,7 @@
 
 .skill-name {
     min-width: 0;
-    /* color: #0B355F; */
+    /* color: var(--color-navy); */
     white-space: nowrap;
 }
 
@@ -228,39 +233,39 @@
 }
 
 .skill-card h2.listening {
-    /* background-color: #7c3aed; */
-    border: 2px outset #4E2496;
+    background-color: rgba(var(--color-listening-rgb), 0.1);
+    border: 2px outset var(--color-listening);
 }
 
 .skill-card h2.listening i {
-    color: #4E2496;
+    color: var(--color-listening);
 }
 
 .skill-card h2.speaking {
-    /* background-color: #f5be58; */
-    border: 2px outset #f5be58;
+    background-color: rgba(var(--color-speaking-rgb), 0.1);
+    border: 2px outset var(--color-speaking);
 }
 
 .skill-card h2.speaking i {
-    color: #f5be58;
+    color: var(--color-speaking);
 }
 
 .skill-card h2.reading {
-    /* background-color: #1e6bff; */
-    border: 2px outset #E1752D;
+    background-color: rgba(var(--color-reading-rgb), 0.1);
+    border: 2px outset var(--color-reading);
 }
 
 .skill-card h2.reading i {
-    color: #E1752D;
+    color: var(--color-reading);
 }
 
 .skill-card h2.writing {
-    /* background-color: #006b7d; */
-    border: 2px outset #0ea5b7;
+    background-color: rgba(var(--color-writing-rgb), 0.1);
+    border: 2px outset var(--color-writing);
 }
 
 .skill-card h2.writing i {
-    color: #0ea5b7;
+    color: var(--color-writing);
 }
 
 .skill-card .skill-title {
@@ -272,17 +277,17 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    /* background-color: rgba(11, 53, 95, 0.6); */
-    background-color: whitesmoke;
-    /* border: 1px solid rgba(94, 242, 220, 0.35); */
-    border: 1px solid rgba(11, 53, 95, 0.3);
+    /* background-color: rgba(var(--color-navy-rgb), 0.6); */
+    background-color: var(--color-whitesmoke);
+    /* border: 1px solid rgba(var(--color-turquoise-rgb), 0.35); */
+    border: 1px solid rgba(var(--color-navy-rgb), 0.3);
     margin-right: 1.2rem;
 }
 
 .skill-card .skill-card-header h3 {
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
     font-size: clamp(1rem, 0.5vw, 1.2rem);
-    color: #6a7f81;
+    color: var(--color-steel);
     justify-self: flex-end;
     justify-content: flex-end;
     justify-items: flex-end;
@@ -296,28 +301,34 @@
 }    
 
 .skill-card-body {
+    position:relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 0.5rem 1rem 1.5rem;
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     /* stretch to occupy available height: */
     flex: 1;
-    border-top: 1px solid rgba(0, 128, 128, 0.25);
+    border-top: 1px solid rgba(var(--color-teal-rgb), 0.25);
 }
 
+.skill-card-body.listening i::after {
+      top: 50%;
+    left: 75%;
+  
+}
 .skill-details {
     width: 100%;
 }
 
 .skill-details strong {
-    color: #006b7d;
+    color: var(--color-teal);
     font-size: 1rem;
     margin-top: 0.5rem;
 }
 
 /* .skill-details span {
-    color: #4F6870;
+    color: var(--color-slate);
 } */
 
 .subskill-row,
@@ -342,7 +353,7 @@
 .subskill-group ul {
     margin: 0;
     font-weight: 500;
-    color: #4f6870
+    color: var(--color-slate)
 }
 
 .subskill-group li {
@@ -367,10 +378,10 @@
     
     padding: 0.45rem 0.8rem;
 
-    border: 1px solid #007A7D;
+    border: 1px solid var(--color-teal);
     border-radius: 6px;
 
-    color: #007A7D;
+    color: var(--color-teal);
     background: transparent;
 
     font-size: 0.9rem;
@@ -385,8 +396,8 @@
 }
 
 .btn-skill-edit:hover {
-    background-color: #007A7D;
-    color: white;
+    background-color: var(--color-teal);
+   color: var(--color-whitesmoke);
     text-decoration: none;
 }
 

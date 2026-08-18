@@ -3,7 +3,7 @@
 |***  CLASSES LIST Page **************************************|
 |*********************************************************** */
 h2 {
-   color: #c7fff9; 
+   color: var(--color-icy); 
 }
 
 /**** WRAPPERS *******************************************************/
@@ -11,8 +11,8 @@ h2 {
 .wrapper-assigned-classes-panel {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(106, 250, 225, 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
 }
 
 
@@ -26,16 +26,16 @@ h2 {
     justify-content: center;
     gap: 0.75rem;
     min-height: 70px;
-    border: 1px solid rgba(106, 250, 225, 0.45);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-radius: 8px;
-    background: rgba(11, 53, 95, 0.45);
-    color: whitesmoke;
+    background: rgba(var(--color-navy-rgb), 0.45);
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 400;
     font-size: 1.3rem;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 0;
     white-space: nowrap;
 }
@@ -53,7 +53,7 @@ h2 {
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
     border-top: 14px solid #5eead4;
-    filter: drop-shadow(0 3px 4px rgba(11, 53, 95, 0.45));
+    filter: drop-shadow(0 3px 4px rgba(var(--color-navy-rgb), 0.45));
 }
 
 .classes-filter-btn i {
@@ -62,10 +62,10 @@ h2 {
 }
 
 .assigned-classes-filter-header strong {
-    background: rgba(106, 250, 225, 0.18);
+    background: rgba(var(--color-turquoise-rgb), 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
-    color: #fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
@@ -78,10 +78,10 @@ h2 {
 
 .classes-filter-btn strong {
     font-size: 1.2rem;
-    background: rgba(106, 250, 225, 0.18);
+    background: rgba(var(--color-turquoise-rgb), 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
-    color: #fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
@@ -93,7 +93,7 @@ h2 {
 .classes-filter-btn:hover {
     background: rgba(0, 155, 155, 0.25);
     border-color: #5eead4;
-    color: #fff;
+    color: var(--color-whitesmoke);
 }
 
 /* SELECT SMALLER DEVICES **********************************/
@@ -107,10 +107,10 @@ h2 {
     padding-right: 3rem;
     font-size: 1.2rem;
     font-weight: 500;
-    border: outset 1px #006b7d;
+    border: outset 1px var(--color-teal);
     border-radius: 8px;
-    background-color: #006b7d;
-    color: whitesmoke;
+    background-color: var(--color-teal);
+    color: var(--color-whitesmoke);
     color-scheme: red ;
     cursor: pointer;
     appearance: none;
@@ -128,8 +128,8 @@ h2 {
 
 #upcomingClassesCollapse select option,
 #completedClassesCollapse select option {
-    background: whitesmoke;
-    color: #0B355F;
+    background: var(--color-whitesmoke);
+    color: var(--color-navy);
     font-weight: 500;
     border-radius: 8px;
 }
@@ -175,7 +175,7 @@ h2 {
 }
 
 .assigned-classes-filter-header i {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 2rem;
     padding: 0.25rem 0.5rem 0.25rem 0rem;
     cursor: pointer;
@@ -189,12 +189,12 @@ h2 {
 }
 
 .classes-list-filter {
-    background-color: rgba(11, 53, 95, 0.6);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background-color: rgba(var(--color-navy-rgb), 0.6);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     border: solid 2px #5eead4;
     border-radius: 8px;
     padding: .6rem 2.5rem .6rem 1rem;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-weight: 600;
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
 }
@@ -207,7 +207,7 @@ h2 {
 
 .assigned-classes-panel {
     width: 100%;
-    background: rgba(11, 53, 95, 0.9);
+    background: rgba(var(--color-navy-rgb), 0.9);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
@@ -225,7 +225,7 @@ h2 {
     min-width: 0;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background: whitesmoke;
+    background: var(--color-whitesmoke);
     padding: 1rem;
     box-sizing: border-box;
     overflow-x: scroll !important;
@@ -244,7 +244,7 @@ h2 {
     align-items: center;
     gap: 1rem;
     padding: 0.5rem 1.3rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
     min-width: 960px;
     width: 100%;
     max-width: 100%;
@@ -257,7 +257,7 @@ h2 {
     align-items: center;
     gap: 1rem;
     padding: 0.5rem 1.3rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
     min-width: 1300px;
     width: 100%;
     max-width: 100%;
@@ -265,7 +265,7 @@ h2 {
 }
 
 .assigned-class-row:hover {
-    background: rgba(199, 255, 249, 0.3);
+    background: rgba(var(--color-icy-rgb), 0.3);
 }
 
 /* CLASS MAIN INFO */
@@ -278,7 +278,7 @@ h2 {
 
 .class-main-info h3 {
     font-weight: 500;
-    color: #0B355F;
+    color: var(--color-navy);
     margin: 0 0 .35rem;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.005em;
@@ -325,8 +325,8 @@ h2 {
 .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
     height: 46px;
-    background: #C7FFF9;
-    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: var(--color-icy);
+    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -338,7 +338,7 @@ h2 {
 .class-list-group-name > div:first-of-type span,
 .course-list-group-name > div:first-of-type span,
 .attendance-list .attendance-row > div:first-of-type span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 /* LEVEL CELL in DATA ROW */
@@ -364,8 +364,8 @@ h2 {
     align-content: center;
     align-self: center;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;    
     min-width: 200px;
     gap: 0.75rem;
@@ -378,8 +378,8 @@ h2 {
     align-content: center;
     align-self: center;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);    
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);    
     height: 70%;    
     min-width: 100px;
     gap: 0.75rem;
@@ -390,7 +390,7 @@ h2 {
 .class-list-student-num .icon {
     width: 36px;
     height: 36px;
-    border: 1px solid #006b7d;
+    border: 1px solid var(--color-teal);
     background: transparent;
     border-radius: 999px;
     text-align: center !important;
@@ -398,12 +398,12 @@ h2 {
 
 .class-list-date i,
 .class-list-student-num i {
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .class-list-date strong,
 .class-list-student-num strong {
-    color: #006b7d;
+    color: var(--color-teal);
     font-size: 1rem;
     margin-bottom: 0;
 }
@@ -422,8 +422,8 @@ h2 {
     align-content: center;
     align-self: center;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 100px;
     gap: 0.75rem;
@@ -433,7 +433,7 @@ h2 {
 .course-stat .completion-ring {
     --ring-size: 52px;
     --ring-thickness: 1px;
-    --ring-center: whitesmoke;
+    --ring-center: var(--color-whitesmoke);
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -466,7 +466,7 @@ h2 {
     position: relative;
     z-index: 1;
 
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
@@ -477,12 +477,12 @@ h2 {
     z-index:2;
     font-size:0.95rem;
     font-weight:500;
-    color:#006b7d;
+    color:var(--color-teal);
     line-height:1;
 }
 
 .course-stat span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 .course-action button{

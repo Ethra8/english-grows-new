@@ -1,6 +1,6 @@
 .allauth-form-inner-content {
     /* background-color: rgba(255, 255, 255, 0.7); */
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     padding: 7%;
     border-radius: 8px;
     box-shadow: 0 1px 3px 0 #cfd7df;
@@ -12,7 +12,7 @@
     border-radius: 5px;
     font-size: 1.1rem;
     background: rgb(191, 48, 48);
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     border: outset 1px #5ff0fc;
@@ -31,8 +31,8 @@
     /* max-width: 320px;  */
     border-radius: 5px;
     font-size: 1.1rem;
-    background: #0B355F;
-    color: white;
+    background: var(--color-navy);
+   color: var(--color-whitesmoke);
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     border: outset 1px #5ff0fc;
@@ -46,8 +46,8 @@
 .allauth-form-inner-content form input.btn:hover,
 .allauth-form-inner-content form input.btn:active,
 .allauth-form-inner-content form input.btn:focus {
-    background: #006b7d;
-    color: whitesmoke;
+    background: var(--color-teal);
+    color: var(--color-whitesmoke);
     /* font-weight: 600; */
 }
 
@@ -60,7 +60,7 @@
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
-    color: #0B355F;
+    color: var(--color-navy);
     font-size: 3rem;
     line-height: 1.2;
     padding: 1.5rem 0;
@@ -75,7 +75,7 @@
 .form-group input:not([class='qty-input']),
 .form-group textarea,
 .allauth-form-inner-content input:not([type='checkbox']) {
-    border-color: #0B355F;
+    border-color: var(--color-navy);
     border-radius: 5px;
 }
 
@@ -97,15 +97,15 @@
     /* btn */
     display: inline-block;
     font-weight: 400;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     text-align: center;
     vertical-align: middle;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: #0B355F;
-    border: 2px solid whitesmoke;
+    background-color: var(--color-navy);
+    border: 2px solid var(--color-whitesmoke);
     padding: .375rem .75rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -117,13 +117,13 @@
 }
 
 .allauth-form-inner-content input[type='submit']:hover {	
-    color: #fff;
+    color: var(--color-whitesmoke);
     background-color: #222;
     border-color: #222;
 }
 
 .allauth-form-inner-content a {
-    color: #0B355F; /* text-info */
+    color: var(--color-navy); /* text-info */
     font-weight: 500;
 }
 

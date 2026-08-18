@@ -21,10 +21,10 @@
 }
 
 .wrapper-assigned-courses-small-cards .card-header {
-    color:whitesmoke;
+    color:var(--color-whitesmoke);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    background: linear-gradient(123deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
     box-shadow: 0 10px 24px rgba(0, 64, 70, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -34,14 +34,14 @@
 .wrapper-assigned-courses-panel {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: rgba(106, 250, 225, 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
 }
 /* ************ */
 
 .assigned-courses-panel {
     width: 100%;
-    background: rgba(11, 53, 95, 0.9);
+    background: rgba(var(--color-navy-rgb), 0.9);
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
@@ -63,9 +63,9 @@
     padding-right: 3rem;
     font-size: 1.2rem;
     font-weight: 500;
-    border: inset 2px #5ff0df;
-    background-color: whitesmoke;
-    color: #0B355F;
+    border: inset 2px var(--color-turquoise);
+    background-color: var(--color-whitesmoke);
+    color: var(--color-navy);
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -81,8 +81,8 @@
 }
 
 .assigned-courses-header select option {
-    background: whitesmoke;
-    color: #0B355F;
+    background: var(--color-whitesmoke);
+    color: var(--color-navy);
 }
 
 .assigned-courses-header select:focus {
@@ -107,10 +107,10 @@
 }
 
 .course-status-btn strong {
-    background: rgba(106, 250, 225, 0.18);
+    background: rgba(var(--color-turquoise-rgb), 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
-    color: #fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-size: 1.2rem;
@@ -126,7 +126,7 @@
     min-width: 0;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    background: whitesmoke;
+    background: var(--color-whitesmoke);
     padding: 1rem;
     box-sizing: border-box;
     overflow-x: scroll !important;
@@ -146,7 +146,7 @@
     align-items: center;
     /* gap: 0.5rem; */
     padding: 0.75rem 1.3rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.4);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
     min-width: 1300px;
     width: 100%;
     max-width: 100%;
@@ -154,7 +154,7 @@
 }
 
 .assigned-course-row:hover {
-    background: rgba(199, 255, 249, 0.3);
+    background: rgba(var(--color-icy-rgb), 0.3);
 }
 
 .assigned-course-row > div:nth-of-type(2) {
@@ -187,7 +187,7 @@
 
 .course-main-info h3 {
     font-weight: 500;
-    color: #0B355F;
+    color: var(--color-navy);
     margin: 0 0 .35rem;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.005em;
@@ -210,8 +210,8 @@
 .course-main-info img {
     width: 46px;
     height: 46px;
-    background: #C7FFF9;
-    background: radial-gradient(circle, rgba(199, 255, 249, 0.97) 1%, rgba(237, 249, 247, 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: var(--color-icy);
+    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -221,7 +221,7 @@
 }
 
 .course-main-info span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 /* COURSE STATUS Text & DOT in ROW */
@@ -231,8 +231,8 @@
     gap: .6rem;
     font-size: 1rem;
     font-weight: 500;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;    
     justify-content: center;
 }
@@ -249,7 +249,7 @@
 }
 
 .status-dot.status-active {
-    background: #5ff0df;
+    background: var(--color-turquoise);
 }
 
 .status-dot.status-paused {
@@ -270,8 +270,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 200px;
     gap: 0.75rem;
@@ -285,8 +285,8 @@
     align-content: center;
     align-self: center;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);    
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);    
     height: 70%;    
     min-width: 100px;
     gap: 0.75rem;
@@ -297,7 +297,7 @@
 .course-list-student-num .icon {
     width: 36px;
     height: 36px;
-    border: 1px solid #006b7d;
+    border: 1px solid var(--color-teal);
     background: transparent;
     border-radius: 999px;
     text-align: center !important;
@@ -305,12 +305,12 @@
 
 .course-list-date i,
 .course-list-student-num i {
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .course-list-date strong,
 .course-list-student-num strong {
-    color: #006b7d;
+    color: var(--color-teal);
     font-size: 1rem;
     margin-bottom: 0;
 }
@@ -328,8 +328,8 @@
     align-content: center;
     align-self: center;
     align-items: center;
-    color: #6a7f81;
-    border-left: 1px solid rgba(0, 107, 125, 0.2);
+    color: var(--color-steel);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 100px;
     gap: 0.75rem;
@@ -339,7 +339,7 @@
 .course-stat .completion-ring {
     --ring-size: 52px;
     --ring-thickness: 1px;
-    --ring-center: whitesmoke;
+    --ring-center: var(--color-whitesmoke);
 
     width: var(--ring-size);
     height: var(--ring-size);
@@ -372,7 +372,7 @@
     position: relative;
     z-index: 1;
 
-    color: #ffffff;
+    color: var(--color-whitesmoke)fff;
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
@@ -383,12 +383,12 @@
     z-index:2;
     font-size:0.95rem;
     font-weight:500;
-    color:#006b7d;
+    color:var(--color-teal);
     line-height:1;
 }
 
 .course-stat span {
-    color: #6a7f81;
+    color: var(--color-steel);
 }
 
 

@@ -1,6 +1,6 @@
 
 .student-detail-page {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -8,7 +8,7 @@
 }
 
 .student-detail-page header {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -18,10 +18,10 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125, 0.85));
-    border: 1px solid rgba(0, 194, 178, 0.35);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     border-radius: 8px;
-    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+    box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
 .student-detail-page header h1 {
@@ -62,7 +62,7 @@
 }
 
 .student-main-info h1 {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     margin-bottom: 0;
     /* font-size: 2.8rem; */
 }
@@ -72,15 +72,15 @@
     width: 175px;
     height: 175px;
     border-radius: 50%;
-    background: rgba(95, 255, 234, 0.16);
+    background: rgba(var(--color-turquoise-rgb), 0.16);
     border: 2px outset rgba(84, 85, 85, 0.75);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: visible;
-    color: #5fffea;
+    color: var(--color-turquoise);
     margin: 0 auto;
-    border-right:  2px solid #006b7d;
+    border-right: 2px solid var(--color-teal);
 }
 
 .student-avatar-large img {
@@ -103,32 +103,32 @@
     bottom: 8%;
     width: 20px;
     height: 20px;
-    border: 3px solid #1d7180;
+    border: 3px solid var(--color-teal);
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(4, 31, 54, 0.35);
     z-index: 10;
 }
 
 .student-avatar-large.avatar-active .avatar-status-dot {
-    background-color: #38df9c;
+    background-color: var(--color-active-dot);
 }
 
 .student-avatar-large.avatar-inactive .avatar-status-dot {
-    background-color: #9aa9b5;
+    background-color: var(--color-inactive-dot);
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
 
 .student-main-info a:hover {
-    color: #07c0c7;
+    color: var(--color-cyan);
 }
 
 .profile-user-role span {
     display: inline-block;
-    /* border: 1px solid #5ff0df; */
+    /* border: 1px solid var(--color-turquoise); */
     border-radius: 999px;
     /* padding: 0.5rem 1rem; */
-    color: #5ff0df;
+    color: var(--color-turquoise) !important;
     font-size: 1rem;
     max-width: fit-content;
     max-height: 42px;
@@ -147,10 +147,10 @@
     align-items: center;
     overflow: hidden;
     max-width: fit-content;
-    border: 1px outset #006b7d;
+    border: 1px outset var(--color-teal);
     border-radius: 999px;
-    background: #006b7d;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    background: var(--color-teal);
+    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
     padding: 0 0 0 .25rem;
@@ -163,14 +163,14 @@
 
 .student-detail-page .level-pill .current-level-label {
     padding: 6px 18px 6px 22px;
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     font-size: 1.2rem;
 }
 
 .student-detail-page .level-pill .current-level-value {
     padding: 6px 22px 6px 18px;
-    background: #0B355F;
-    color: whitesmoke;
+    background: var(--color-navy);
+    color: var(--color-whitesmoke);
     font-size: 1.2rem;
     font-weight: 500;
     border-top-right-radius: 50px;
@@ -180,7 +180,7 @@
 
 
 /* .current-course-block {
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
 } */
 
 
@@ -190,7 +190,7 @@
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
-    color: rgba(94, 242, 220, 0.1);
+    color: rgba(var(--color-turquoise-rgb), 0.1);
     position: absolute;
     top: 25px;
     right: -5px;
@@ -202,7 +202,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     margin: 1.5rem auto;
     width: fit-content;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
 }
 
 .student-detail-page .progress-ring {
@@ -212,14 +212,14 @@
     border-radius: 50%;
     background:
         conic-gradient(
-            #5fffea calc(var(--percentage) * 1%),
-            rgba(105, 255, 235, 0.18) 0
+            var(--color-turquoise) calc(var(--percentage) * 1%),
+            rgba(var(--color-turquoise-rgb), 0.18) 0
         );
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 3px 10px rgba(var(--color-shadow-rgba));
 }
 
 
@@ -227,12 +227,12 @@
 *  *** STUDENT DETAIL page ******************/
 .detail-row {
     display: grid;
-    grid-template-columns: 50% 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
     width: 100%;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+    gap: 0.25rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(var(--color-steel-rgb), 0.2);
 }
 
 .detail-row:last-child,
@@ -241,19 +241,20 @@
 }
 
 .detail-row span:first-child {
-    color: #006b7d;
+    color: var(--color-teal);
     font-weight: 600;
 }
 
 .detail-row span:last-child,
 .detail-row span a {
-    color: #6a7f81;
-    font-weight: 400;
+    color: var(--color-slate);
+    font-weight: 500;
     text-align: left;
+    overflow: hidden;
 }
 
 .detail-row span a:hover {
-   color: #006b7d;
+   color: var(--color-teal);
    font-weight: 500;
 }
 
@@ -265,11 +266,11 @@
     align-self: flex-end;
     height: 100%;
     justify-content: space-between;
-    background: whitesmoke;
-    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85)); */
-    border: 1px solid rgba(0, 194, 178, 0.35);
+    background: var(--color-whitesmoke);
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85)); */
+    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     border-radius: 8px;
-    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+    box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
 .student-detail-header {
@@ -282,14 +283,14 @@
     max-width: 100%;
     /* min-width: 0; */
     box-sizing: border-box;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85));
-    border: 1px solid rgba(0, 194, 178, 0.35);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85));
+    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     border-radius: 8px;
-    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
+    box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
 .student-detail-card hr:first-of-type {
-    border: 1px solid rgba(0, 194, 178, 0.35);
+    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     margin: 0.25rem 0 1rem;
 }
 
@@ -303,17 +304,18 @@
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    height: 52px;
     margin: 0 0 2rem;
     padding: 0 0.75rem 0 4.3rem;
     gap: 1rem;
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.65));
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
     border-radius: 999px;
-    border: 2px solid rgba(0, 107, 125, 0.65);
-    color: whitesmoke;
+    border: 2px solid rgba(var(--color-teal-rgb), 0.65);
+    color: var(--color-whitesmoke);
     font-size: 1.5rem;
     overflow-wrap: normal;
     word-break: normal;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     overflow: hidden;
     white-space: nowrap;
 }
@@ -331,7 +333,7 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 3.5rem;
-    color: rgba(94, 242, 220, 0.3);
+    color: rgba(var(--color-turquoise-rgb), 0.3);
     rotate: calc(-15deg);
 }
 
@@ -347,7 +349,7 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 3.3rem;
-    color: rgba(94, 242, 220, 0.3);
+    color: rgba(var(--color-turquoise-rgb), 0.3);
     rotate: calc(-15deg);
 }
 
@@ -363,7 +365,7 @@
     border-radius: 50%;
     font-weight: 900;
     font-size: 3.5rem;
-    color: rgba(94, 242, 220, 0.3);
+    color: rgba(var(--color-turquoise-rgb), 0.3);
     rotate: calc(-15deg);
 }
 
@@ -387,7 +389,7 @@
 }
 
 .student-main-info h1 {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     margin-bottom: 0;
 }
 
@@ -395,14 +397,14 @@
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: rgba(95, 255, 234, 0.16);
-    border: 1px outset rgba(241, 255, 253, 0.35);
+    background: rgba(var(--color-turquoise-rgb), 0.16);
+    border: 1px outset rgba(var(--color-steel-rgb), 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    color: #5fffea;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    color: var(--color-turquoise);
+    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 
 .student-avatar img,
@@ -413,16 +415,22 @@
 }
 
 .student-main-info h3 {
-    margin: 0 0 0.25rem;
-    color: #ffffff;
+    margin: 0;
+    color: var(--color-navy);
     font-size: 1.05rem;
 }
 
-.student-main-info span {
-    color: #bffaf4;
+.student-main-info span,
+.student-main-info a {
+    color: var(--color-steel);
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
+.student-main-info a span:hover {
+    color: var(--color-teal);
+    font-weight: 600;
+}
 
 /*****************************************|
 |**** STUDENT DETAIL Page *****************|
@@ -431,7 +439,7 @@
 .student-detail-page,
 .teacher-student-skills-page,
 .teacher-edit-skill-page {
-    color: whitesmoke;
+    color: var(--color-whitesmoke);
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -469,7 +477,7 @@
 }
 
 .student-level-area small {
-    color: rgba(255,255,255,0.75);
+    color: rgba(var(--color-steel-rgb),0.75);
 }
 
 .student-level-form {
@@ -486,8 +494,8 @@
     border: none;
     border-radius: 0.45rem;
     padding: 0.45rem 0.75rem;
-    background: #00c2b2;
-    color: #0B355F;
+    background: var(--color-cyan);
+    color: var(--color-navy);
     font-weight: 700;
 }
  
@@ -499,23 +507,23 @@
 }
 
 .current-course-block h3 {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(var(--color-steel-rgb),0.08);
     padding: 0.5rem;
 }
 
-.student-course-details .detail-row {
+/* .student-course-details .detail-row {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 1rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.3);
-    padding: 0.6rem 0;
+    grid-template-columns: 1fr;
+    gap: .25rem;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
+    padding: 0.8rem 0;
     margin: 0;
-}
+} */
 
 .progress-ring-inner {
     width: 6rem;
     height: 6rem;
-    background: #0B355F;
+    background: var(--color-navy);
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -529,7 +537,7 @@
 
 .progress-ring-inner span {
     font-size: 0.8rem;
-    color: rgba(255,255,255,0.75);
+    color: rgba(var(--color-steel-rgb),0.75);
 }
 
 /* BIG ring: Student detail page */
@@ -540,8 +548,8 @@
     border-radius: 50%;
     background:
         conic-gradient(
-            #5fffea calc(var(--percentage) * 1%),
-            rgba(105, 255, 235, 0.18) 0
+            var(--color-turquoise) calc(var(--percentage) * 1%),
+            rgba(var(--color-turquoise-rgb), 0.18) 0
         );
     display: flex;
     align-items: center;
@@ -557,19 +565,19 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(var(--color-steel-rgb),0.08);
     padding: 0.6rem 0;
     margin: 0;
 }
 
 .student-stat-list span,
 .student-detail-card .detail-row span {
-    /* color: rgba(255,255,255,0.7); */
-    color: #006b7d;
+    /* color: rgba(var(--color-steel-rgb),0.7); */
+    color: var(--color-teal);
 }
 
 .student-detail-card .detail-row strong {
-    color:#6A7F81;
+    color:var(--color-steel);
     font-weight: 500;
 }
 
@@ -579,12 +587,12 @@
 }
 
 .student-detail-card .btn-course-details {
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .student-detail-card .btn-course-details:hover {
-    background: rgba(0, 107, 125, 0.25);
-    /* color: #fff; */
+    background: rgba(var(--color-teal-rgb), 0.25);
+    /* color: var(--color-whitesmoke); */
     text-decoration: none;
     box-shadow: 0 2px 2px rgba(0, 20, 40, 0.5);
 }
@@ -599,7 +607,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid rgba(0, 107, 125, 0.3);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
     padding: 0.85rem 0;
 }
 
@@ -608,7 +616,7 @@
 }
 
 .recent-attendance-row small {
-    color: rgba(255,255,255,0.65);
+    color: rgba(var(--color-steel-rgb),0.65);
 }
 
 
@@ -628,15 +636,15 @@
 .recent-attendance-card {
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(95, 255, 234, 0.35);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
     border-radius: 8px;
     padding: 1.25rem;
     height: 100%;
     justify-content: space-between;
-    background: whitesmoke;
+    background: var(--color-whitesmoke);
     gap: 1rem; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-    /* background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 107, 125,0.85)); */
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85)); */
 }
 
 .recent-attendance-card-header {
@@ -645,7 +653,7 @@
     /* align-items: center; */
     justify-content: space-between;
     /* padding: 1rem; */
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
@@ -659,23 +667,23 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: whitesmoke;
-    border: 1px solid rgba(11, 53, 95, 0.3);
+    background-color: var(--color-whitesmoke);
+    border: 1px solid rgba(var(--color-navy-rgb), 0.3);
 }
 
 .recent-attendance-card-header .icon i {
     margin: 0;
     font-size: 1.45rem;
-    color:#0B355F;
+    color:var(--color-navy);
 }
 
 .recent-attendance-card-header strong {
-    color: #006b7d;
+    color: var(--color-teal);
 }
 
 .recent-attendance-info span,
 .recent-attendance-info small {
-    color: #6A7F81;
+    color: var(--color-steel);
 }
 
 .recent-attendance-info small {
@@ -687,7 +695,7 @@
 }
 
 .attendance-edit-form button:hover {
-    border-color: whitesmoke;
+    border-color: var(--color-whitesmoke);
 }
 
 
@@ -696,17 +704,17 @@
 *********************************************** */
 
 .student-skills-notes-card {
-    background: linear-gradient(135deg, rgba(11, 53, 95, 0.95), rgba(0, 103, 108, 0.75));
-    border: 1px solid rgba(95, 255, 234, 0.35);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
     border-radius: 8px;
     padding: 0.5rem;
-    color: #6A7F81;
+    color: var(--color-steel);
     margin-top: 1.25rem;
 }
 
 /* ASSESSMENT PAGES all profiles */
 .teacher-skill-note {
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     border-radius: 8px;
     margin-bottom: 1rem;
     padding-bottom: .75rem;
@@ -717,7 +725,7 @@
 }
 
 .teacher-skill-note ul {
-    color:#003366;
+    color:var(--color-navy);
     padding-left: 1.5rem;
 }
 
@@ -726,20 +734,20 @@
     font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 0.01em;
-    background: #edf9f7; 
-    color: #003366;
+    background: var(--color-mist); 
+    color: var(--color-navy);
     padding: 0 1rem;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    border-bottom: 1px solid #006b7d;
+    border-bottom: 1px solid var(--color-teal);
 }
 
 .teacher-skill-note li {
-    color:#003366;
+    color:var(--color-navy);
 }
 
 .teacher-skill-note p {
-    color:#003366;
+    color:var(--color-navy);
     text-justify: none;
     padding: 0.25rem 1rem;
     margin-bottom: 0;
@@ -750,7 +758,7 @@
 }
 
 .empty-assessment-state {
-    background-color: whitesmoke;
+    background-color: var(--color-whitesmoke);
     border-radius: 8px;
     padding: .75rem 1rem;
 }
@@ -887,6 +895,11 @@
 
     .my-course .course-card .info {       
         padding: 10.5rem 1rem 3rem;
+    }
+
+    .detail-row {
+        gap: 0.25rem;
+        grid-template-columns: 1fr;
     }
 
     .student-main-info p a {
