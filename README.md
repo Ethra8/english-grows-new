@@ -1835,7 +1835,7 @@ Semantic and status colours are used where the interface needs to communicate op
 | Status | Preview | Hex |
 | :--- | :---: | :---: |
 | **Active** | ![#5FF0DF](https://img.shields.io/badge/Active-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` |
-| **Confirmed** | ![#07C0C7](https://img.shields.io/badge/Confirmed-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` |
+| **Confirmed** | ![#006b7d](https://img.shields.io/badge/Confirmed-006b7d?style=flat&labelColor=006b7d&color=006b7d) | `#006b7d` |
 | **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` |
 | **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` |
 | **Completed** | ![#4F6870](https://img.shields.io/badge/Completed-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` |
