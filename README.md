@@ -1819,16 +1819,37 @@ For example, **Sunflower Gold** consistently represents Speaking, while **Indigo
 
 Application states are treated independently from both the brand palette and the language skill palette.
 
-Semantic colour is used where the interface needs to communicate operational states such as:
+Semantic and status colours are used where the interface needs to communicate operational states such as the following:
 
-- active;
-- confirmed;
-- completed;
-- pending;
-- warning;
-- cancelled;
-- missed;
-- successful.
+#### Learner Status
+
+| Status | Preview | Hex |
+| :--- | :---: | :---: |
+| **Active** | ![#38DF9C](https://img.shields.io/badge/Active-38DF9C?style=flat&labelColor=38DF9C&color=38DF9C) | `#38DF9C` |
+| **Inactive** | ![#7A949B](https://img.shields.io/badge/Inactive-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` |
+
+---
+
+#### Course Status
+
+| Status | Preview | Hex |
+| :--- | :---: | :---: |
+| **Active** | ![#5FF0DF](https://img.shields.io/badge/Active-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` |
+| **Confirmed** | ![#17C964](https://img.shields.io/badge/Confirmed-17C964?style=flat&labelColor=17C964&color=17C964) | `#17C964` |
+| **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` |
+| **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` |
+| **Completed** | ![#4F6870](https://img.shields.io/badge/Completed-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` |
+
+---
+
+#### Attendance Status
+
+| Status | Preview | Hex |
+| :--- | :---: | :---: |
+| **Attended** | ![#4DFFB5](https://img.shields.io/badge/Attended-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` |
+| **Missed** | ![#FF5A5A](https://img.shields.io/badge/Missed-FF5A5A?style=flat&labelColor=FF5A5A&color=FF5A5A) | `#FF5A5A` |
+| **Excused** | ![#FFB347](https://img.shields.io/badge/Excused-FFB347?style=flat&labelColor=FFB347&color=FFB347) | `#FFB347` |
+
 
 The overall colour architecture therefore consists of three distinct layers:
 
