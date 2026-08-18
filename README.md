@@ -1,5 +1,5 @@
 ## 📑 Table of Contents
-- [Color Palette](#color-palette)
+
 - [Site Structure](#site-structure)
   - [Home App](#home-app)
   - [Profiles App](#profiles-app)
@@ -40,29 +40,14 @@
 
 - [Design Choices](#design-choices)
   - [Colour System](#colour-system)
+    - [Core Brand Palette](#core-brand-palette)
+    - [Language Skills Colours](#language-skills-colours)
+    - [Semantic and Status Colours](#semantic-and-status-colours)
   - [Responsive Design](#responsive-design)
   - [Data Visualisation](#data-visualisation)
 
 ---
 
-# 🎨 Colour Palette
-
-<img width="1600" height="1200" alt="COLOR PALETTE_EnglishGrows" src="https://github.com/user-attachments/assets/2b2790f2-79ea-4f58-a725-e2c14d3d32e3" />
-
-
-<img width="221" height="393" alt="image" src="https://github.com/user-attachments/assets/5aace972-d513-401b-b99d-0d1f1e01fe42" />
-
-| Colour | Hex | Role in the Design System |
-|---|---|---|
-| **Oxford Navy** | `#0B355F` | Primary brand colour — headings, navigation, sidebar and major UI elements |
-| **Stormy Teal** | `#006B7D` | Secondary brand colour — H3 headings, icons and secondary emphasis |
-| **Strong Cyan** | `#07C0C7` | Functional accent — interactive elements, active states, progress indicators and data visualisation |
-| **Turquoise** | `#5FF0DF` | Structural accent — borders, dividers, HRs and subtle button details |
-| **Electric Aqua** | `#5FF5FC` | Expressive brand accent — marketing and occasional high-impact UI highlights on dark backgrounds |
-| **Icy Aqua** | `#C7FFF9` | Highlight surface — selected states, pills, badges and softly highlighted areas |
-| **Azure Mist** | `#EDF9F7` | Subtle surface — section backgrounds, cards and low-emphasis UI areas |
-| **Blue Slate** | `#4F6870` | Secondary text — metadata, supporting information |
-| **Cool Steel** | `#7A949B` | Low-emphasis neutral — disabled, inactive, muted UI content and tertiary UI elements |
 
 ---
 
@@ -773,7 +758,9 @@ StudentSkillAssessment
         └── StudentSkillTermSnapshot
 ```
 
-### The four principal language skills assessed are:
+### Language Skills Assessed:
+
+Each skill is represented by a distinctive colour, to make it easier to visually track on the progress bars and skill cards
 
 | Skill | Colour | Hex |
 | :--- | :---: | :---: |
@@ -781,12 +768,6 @@ StudentSkillAssessment
 | 🎧 **Listening** | 🟪 Indigo Velvet | `#4E2496` |
 | 📖 **Reading** | 🟧 Chocolate | `#E1752D` |
 | ✍️ **Writing** | 🟦 Pacific Blue | `#0EA5B7` |
-
-
-Each skill is represented by a distinctive colour, to make it easier to visually track on the progress bars and skill cards
-
-<img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/c7694cb2-94e2-4a78-a2e2-2a9ddd330612" />
-
 
 ---
 
@@ -1746,6 +1727,8 @@ Colour is therefore treated as a **functional component of the design system**, 
 
 The final English Grows interface palette consists of nine colours:
 
+<img width="1600" height="1200" alt="COLOR PALETTE_EnglishGrows" src="https://github.com/user-attachments/assets/2b2790f2-79ea-4f58-a725-e2c14d3d32e3" />
+
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
 | **Oxford Blue** | ![#0B355F](https://img.shields.io/badge/Oxford_Blue-0B355F?style=flat&labelColor=0B355F&color=0B355F) | `#0B355F` | Primary brand colour, navigation, headings and high-emphasis elements |
@@ -1794,10 +1777,13 @@ NEUTRALS
 
 ---
 
-### Language Skill Colours
+### Language Skills Colours
 
 The language assessment system uses a separate semantic colour set for the four principal language skills, deliberately kept separate from the principal English Grows brand palette.
 This creates a clear distinction between **brand/interface colour** and **assessment/data colour**, preventing the primary cyan, aqua and turquoise palette from carrying multiple semantic meanings.
+
+
+<img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/c7694cb2-94e2-4a78-a2e2-2a9ddd330612" />
 
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
@@ -1819,6 +1805,8 @@ These colours remain consistent across:
 Maintaining a permanent colour assignment for each skill also improves visual recognition across different areas of the application.
 
 For example, **Sunflower Gold** consistently represents Speaking, while **Indigo Velvet** consistently represents Listening, regardless of whether the user is viewing an assessment card, progress chart or historical assessment.
+
+---
 
 ### Semantic and Status Colours
 
