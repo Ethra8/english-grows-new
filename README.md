@@ -1420,3 +1420,419 @@ EnglishGrows implements database constraints and application-level business rule
 - A term label can occur only once for each skill assessment.
 
 Together, these constraints help ensure that the database remains a consistent **single source of truth** for course delivery, attendance, learner assessment, and historical progress.
+
+---
+
+## Application Data Flow
+
+The application follows a **role-aware data flow** in which authenticated users interact with the same underlying business data through interfaces adapted to their permissions and responsibilities.
+
+At a high level, application data moves through the following structure:
+
+```text
+User Authentication
+        │
+        ▼
+UserProfile
+        │
+        ├── Teacher
+        ├── Individual Student
+        ├── Employee
+        └── Company Administrator
+        │
+        ▼
+Role-specific Dashboard / Navigation
+        │
+        ▼
+Courses
+        │
+        ├── Course Configuration
+        │       ├── Course Type
+        │       ├── Level
+        │       ├── Timetable
+        │       ├── Teacher
+        │       ├── Company
+        │       └── Class Duration
+        │
+        ├── Enrolments
+        │       └── Students / Employees
+        │
+        └── Class Sessions
+                │
+                ├── Attendance
+                ├── Rescheduling
+                ├── Lesson Information
+                └── Course Progress
+                        │
+                        ├── Skill Assessment
+                        ├── Subskill Assessment
+                        ├── Teacher Notes
+                        └── Assessment Snapshots
+```
+
+The Django views act as the intermediary between the database and the user interface. Each view retrieves only the information relevant to the authenticated user's role and, where appropriate, further restricts access by teacher, company, course or student.
+
+For example:
+
+- A **teacher** may access only courses assigned to them and the students enrolled in those courses.
+- A **company administrator** may access employees and courses belonging to their own company.
+- A **student or employee** may access only their own enrolments, attendance records, assessments and course information.
+
+This approach allows the platform to maintain a **single source of truth at database level** while presenting different views of that information depending on the user's role.
+
+Course activity also drives several dependent data flows automatically. When class sessions are generated, attendance records are created for enrolled students. When new students join a course already in progress, attendance records are generated only for the relevant future sessions.
+
+Attendance, session completion and assessment data then contribute to the progress information displayed throughout the platform.
+
+---
+
+## Architectural Design Choices
+
+The architecture of **English Grows** has been designed around the separation of identity, learning configuration, lesson delivery and assessment history.
+
+Several areas that could initially appear suitable for a single model have deliberately been separated in order to reduce duplication, improve maintainability and preserve historical data.
+
+### Authentication vs. Application Profile
+
+Django's built-in `User` model is responsible for authentication-related information such as:
+
+- username;
+- email;
+- password;
+- login state;
+- authentication permissions.
+
+Application-specific information is stored separately in `UserProfile`.
+
+The profile contains information such as:
+
+- application role;
+- company;
+- current English level;
+- native language;
+- country;
+- profile photograph;
+- active status.
+
+This avoids modifying Django's authentication model unnecessarily and keeps authentication concerns separate from business-specific user information.
+
+The relationship is therefore:
+
+```text
+User
+ │
+ └── UserProfile
+        ├── Role
+        ├── Company
+        ├── Current level
+        ├── Native language
+        ├── Country
+        └── Profile information
+```
+
+This structure also allows the same authentication system to support several user roles while providing each role with different application functionality.
+
+---
+
+### Course Configuration vs. Lesson Delivery
+
+A `Course` represents the overall teaching programme rather than an individual lesson.
+
+It stores long-term configuration such as:
+
+- course name;
+- course type;
+- level;
+- teacher;
+- company;
+- total contracted hours;
+- class duration;
+- number of classes;
+- start and end dates;
+- meeting link;
+- course status.
+
+Recurring timetable information is stored independently through `CourseTimetableSlot`.
+
+```text
+Course
+ │
+ ├── CourseTimetableSlot
+ │      ├── Day of week
+ │      ├── Start time
+ │      └── End time
+ │
+ └── ClassSession
+        ├── Date and time
+        ├── Class number
+        ├── Topic
+        ├── Status
+        └── Meeting link
+```
+
+`ClassSession`, by contrast, represents one concrete occurrence of a lesson.
+
+This separation is important because individual classes may later:
+
+- be completed;
+- be rescheduled;
+- become pending reschedule;
+- receive a different date or time;
+- contain specific lesson information;
+- generate attendance records.
+
+Changing one class therefore does not require changing the general course configuration.
+
+---
+
+### Enrolment vs. User Identity
+
+A student's identity and their participation in a course are intentionally stored separately.
+
+`User` and `UserProfile` describe **who the person is**, while `CourseEnrollment` describes **their relationship with a particular course**.
+
+An enrolment can therefore contain course-specific information such as:
+
+- enrolment status;
+- enrolment date;
+- target level;
+- learning objective;
+- attendance statistics;
+- course participation.
+
+The relationship can be represented as:
+
+```text
+Student
+   │
+   ├── CourseEnrollment ─── Course A
+   │
+   ├── CourseEnrollment ─── Course B
+   │
+   └── CourseEnrollment ─── Course C
+```
+
+This is particularly important because the same student may participate in more than one course over time.
+
+Completed or previous enrolments can remain in the database without altering the student's account or creating duplicate user records.
+
+The same architecture also supports employees who may undertake multiple company-sponsored courses during their time with an organisation.
+
+---
+
+### Current Assessment vs. Assessment History
+
+The assessment system deliberately separates a student's **current assessment state** from their **historical progress data**.
+
+`StudentSkillAssessment` represents the current teacher assessment for one principal skill:
+
+- Speaking;
+- Listening;
+- Reading;
+- Writing.
+
+Each skill contains several pedagogically relevant subskills stored through `StudentSubSkillAssessment`.
+
+```text
+StudentSkillAssessment
+        │
+        ├── Skill
+        ├── Current aggregated score
+        ├── Teacher notes
+        │
+        └── StudentSubSkillAssessment
+                ├── Subskill
+                └── Rating
+```
+
+Subskills are evaluated using qualitative assessment categories such as:
+
+- **Strong**
+- **Confident**
+- **Required Standard**
+- **Developing**
+- **Needs Work**
+
+The overall skill score is derived from the student's subskill assessments and presented on a `/10` scale.
+
+Historical progress is stored independently through assessment snapshots.
+
+```text
+Current Assessment
+        │
+        ├── Snapshot — Term / Assessment Point 1
+        ├── Snapshot — Term / Assessment Point 2
+        └── Snapshot — Term / Assessment Point 3
+```
+
+A snapshot records a skill score at a particular stage of the course without replacing earlier results.
+
+This distinction is essential because updating the student's current assessment should not destroy the data required to visualise their development over time.
+
+The resulting historical records are used by the progress charts shown to teachers, students and company administrators.
+
+---
+
+### Shared Data, Role-Specific Presentation
+
+The platform does not create separate course, attendance or assessment data for each type of user.
+
+Instead, the same underlying records are reused across role-specific views.
+
+For example:
+
+```text
+                    Attendance
+                        │
+          ┌─────────────┼─────────────┐
+          │             │             │
+          ▼             ▼             ▼
+       Teacher       Student      Company Admin
+        View           View            View
+```
+
+The difference lies in:
+
+- what information each user is authorised to access;
+- what actions they may perform;
+- how the information is presented.
+
+A teacher may record or modify an assessment, while a student can only view their own assessment.
+
+Similarly, a company administrator can review employee progress but does not receive the same teaching controls as the teacher.
+
+This architecture reduces duplicated business logic and ensures that different areas of the platform remain synchronised because they are reading from the same underlying records.
+
+---
+
+## Design Choices
+
+The user interface has been designed for a **boutique corporate training environment**, rather than as a generic educational platform.
+
+The visual system therefore prioritises:
+
+- clarity;
+- restrained use of colour;
+- professional hierarchy;
+- easily scannable business information;
+- consistent interaction patterns;
+- responsive behaviour across devices.
+
+Role-specific dashboards and navigation expose the information most relevant to each user while secondary information remains available through dedicated pages.
+
+---
+
+### Colour System
+
+The interface uses a restrained palette centred around navy, teal and neutral tones.
+
+Colour is primarily used to communicate:
+
+- hierarchy;
+- interaction;
+- status;
+- assessment categories;
+- data series.
+
+It is intentionally not used as decoration alone.
+
+#### Core Interface Palette
+
+| Purpose | Colour | Hex |
+| :--- | :--- | :---: |
+| **Primary Navy** | Navy | `#0B355F` |
+| **Dark Teal** | Teal | `#007A78` |
+| **Accent Mint** | Mint | `#5FF0DF` |
+| **Dark Neutral** | Slate Grey | `#4F6870` |
+| **Secondary Neutral** | Grey Teal | `#6A7F81` |
+
+#### Language Skill Colours
+
+The four principal language skills assessed are assigned persistent colours throughout the platform:
+
+| Skill | Colour | Hex |
+| :--- | :--- | :---: |
+| 🎙️ **Speaking** | Sunflower Gold | `#F5BE58` |
+| 🎧 **Listening** | Indigo Velvet | `#4E2496` |
+| 📖 **Reading** | Chocolate | `#E1752D` |
+| ✍️ **Writing** | Pacific Blue | `#0EA5B7` |
+
+These colours remain consistent across:
+
+- skill assessment cards;
+- progress charts;
+- legends;
+- skill-specific visual indicators.
+
+Maintaining the same mapping allows users to recognise a skill visually before reading its label and prevents charts and assessment screens from developing unrelated colour systems.
+
+Status colours are treated separately from skill colours so that semantic states such as success, warning or cancellation cannot easily be confused with assessment categories.
+
+---
+
+### Responsive Design
+
+The platform follows a responsive interface strategy intended to support **desktop, tablet and mobile use**.
+
+Desktop layouts make greater use of:
+
+- multi-column grids;
+- persistent side navigation;
+- wider data tables;
+- horizontally distributed dashboard metrics.
+
+At smaller viewport sizes, layouts progressively collapse into simpler structures.
+
+Key responsive behaviours include:
+
+- grid layouts reducing to a single column;
+- navigation converting to a mobile sidebar controlled through a burger button;
+- a backdrop appearing behind the open mobile navigation;
+- horizontally scrollable wrappers for information-heavy tables;
+- adaptive page padding;
+- flexible typography;
+- cards expanding to the available width;
+- charts constrained to their parent container.
+
+The main content area uses flexible sizing together with `min-width: 0` where necessary so that charts, tables and long content cannot force the page outside its intended layout.
+
+Responsive behaviour is therefore considered part of the component architecture rather than being added as a separate mobile-only interface.
+
+---
+
+### Data Visualisation
+
+Data visualisation is used selectively where graphical representation communicates progress more effectively than isolated numerical values.
+
+The principal visualisations currently include:
+
+- course completion indicators;
+- attendance percentages;
+- skill scores;
+- historical skill progress graphs.
+
+Progress charts use historical assessment snapshots rather than current assessment values. This ensures that each data point represents the student's assessment at a particular stage instead of repeatedly displaying the latest score.
+
+Each language skill retains the same colour throughout the system:
+
+```text
+Speaking   → #F5BE58
+Listening  → #4E2496
+Reading    → #E1752D
+Writing    → #0EA5B7
+```
+
+Skill progress graphs therefore remain visually consistent with the assessment cards used elsewhere in the application.
+
+Charts use restrained styling and smoothed data lines to communicate progression without overwhelming the surrounding interface.
+
+Percentage-based indicators are used where the underlying data represents an actual proportion, such as:
+
+- attendance;
+- course completion.
+
+Assessment ability, however, is displayed using a `/10` score rather than a percentage because the value represents a pedagogical evaluation rather than completion of a quantity.
+
+This distinction prevents visually similar metrics from implying the same meaning.
+
+The overall design philosophy is therefore to use graphical representation only when it improves interpretation, while keeping detailed records accessible through the corresponding dedicated pages.
