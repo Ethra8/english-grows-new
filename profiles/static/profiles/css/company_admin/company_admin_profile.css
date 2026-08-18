@@ -3,9 +3,8 @@
 |*  DASHBOARD Page *******************|
 |*********************************** */
 
-.dashboard-card {
+/* .dashboard-card {
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
-    /* background: rgba(var(--color-navy-rgb), 0.75);  Oxford Navy #var(--color-navy) */
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     padding: 1rem 1.2rem;
@@ -17,7 +16,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-}
+} */
 
 
 /* GENERAL INFO Card ***********/
@@ -151,7 +150,7 @@
 }
 
 .company-admin-employees-list-page .employees-list-row .view-progress-course .btn-to-student-detail:hover {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     transform: translateY(-0.5px);
     background: linear-gradient(135deg, #00acaf, #008589);
     box-shadow: 0 10px 20px rgba(0, 122, 125, 0.24);
@@ -489,7 +488,7 @@
 }
 
 .course-attendance .attendance-action .btn-attendance-details:hover {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     transform: translateY(-1px);
     background: linear-gradient(135deg, #00acaf, #008589);
     box-shadow: 0 1px 5px rgba(0, 122, 125, 0.24);
@@ -530,6 +529,9 @@
 
 @media (max-width: 991.98px) {
 
+    .course-attendance .attendance-list-card .attendance-list-header h3 {
+        margin: .25rem auto 1rem;
+    }
 
 }
 

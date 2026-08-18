@@ -379,7 +379,7 @@
     width: 100%;
     max-width: 100%;
     overflow: hidden !important;
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
 }
 
 .my-calendar .fc-timegrid-event .fc-event-time,
@@ -388,7 +388,7 @@
     max-width: 100%;
     overflow: hidden !important;
     text-overflow: ellipsis;
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
     line-height: 1.2;
 }
 
@@ -413,7 +413,7 @@
     max-width: 100%;
     padding: 0.25rem 0.35rem;
     overflow: hidden;
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     line-height: 1.2;
 }
 
@@ -423,7 +423,7 @@
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
 }
 
 .my-calendar .calendar-grid-event-time {
@@ -494,7 +494,7 @@
     padding: 0.35rem 0.75rem;
     border-radius: 6px;
     background-color: var(--color-navy);
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none !important;
@@ -504,7 +504,7 @@
 
 .my-calendar .calendar-join-btn:hover {
     background-color: var(--color-teal);
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
 }
 
 
@@ -520,24 +520,24 @@
 
 .calendar-session-modal .modal-header {
     background-color: var(--color-navy);
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
 }
 
 .calendar-session-modal .close {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     opacity: 1;
 }
 
 .calendar-modal-join-btn {
     background-color: var(--color-navy);
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
     font-weight: 600;
     border-radius: 6px;
 }
 
 .calendar-modal-join-btn:hover {
     background-color: var(--color-teal);
-    color: var(--color-whitesmoke)fff !important;
+    color: var(--color-whitesmoke) !important;
 }
 
 

@@ -97,10 +97,10 @@
 .meta-text strong,
 .course-meta-text strong {
     display: block;
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 300;
+    font-size: 1.8rem;
+    font-weight: 400;
     text-transform: capitalize;
     letter-spacing: 0.03em;
     margin-bottom: 0;
@@ -109,7 +109,7 @@
 
 .meta-text span,
 .course-meta-text span {
-    /* color: var(--color-whitesmoke)fff; */
+    /* color: var(--color-whitesmoke); */
     color: rgba(var(--color-turquoise-rgb), 0.9);
     font-size: 1.4rem;
     font-weight: 400;

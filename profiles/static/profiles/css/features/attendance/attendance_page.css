@@ -53,7 +53,7 @@
     height: 42px;
     background: rgba(0, 30, 60, 0.7);
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     border-radius: 8px;
     padding: 0.8rem 1rem;
     font-size: 1rem;

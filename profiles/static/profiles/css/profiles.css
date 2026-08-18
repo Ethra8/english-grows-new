@@ -208,7 +208,7 @@ main.profile-main {
 .skill-edit-link,
 .btn-skill-save-assessment {
     border: 1px solid var(--color-turquoise);
-    color: var(--color-navy);
+    color: var(--color-teal);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
@@ -234,13 +234,22 @@ main.profile-main {
 .student-action-btn:hover,
 .student-edit-attendance-btn:hover,
 .skill-edit-link:hover,
-.btn-skill-save-assessment:hover  {
+.btn-skill-save-assessment:hover,
+a.btn-course-details:hover,
+a.btn-attendance-tools:hover,
+a.btn-email-all:hover,
+a.edit-attendance-btn:hover,
+a.btn-to-student-detail:hover,
+a.student-action-btn:hover,
+a.student-edit-attendance-btn:hover,
+a.skill-edit-link:hover,
+a.btn-skill-save-assessment:hover  {
     background: rgba(var(--color-teal-rgb), 0.25);
-    /* background: rgba(var(--color-turquoise-rgb), 0.15); */
-    color: var(--color-navy);
+    /* color: var(--color-whitesmoke); */
     text-decoration: none;
-    box-shadow: 0 0 0 rgba(0, 20, 40, 0.5);
-    transform: translateY(-1px);
+    box-shadow: 0 2px 2px rgba(0, 20, 40, 0.5);
+    color: var(--color-teal);
+    font-weight: 500;
 }
 
 div:has(> .student-action-btn) {
@@ -515,7 +524,7 @@ div:has(> .student-action-btn) {
     border-radius: 8px;
 
     background: transparent;
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-size: 1.35rem;
 
     cursor: pointer;
@@ -529,7 +538,7 @@ div:has(> .student-action-btn) {
 .mobile-sidebar-toggle:focus {
     background-color: var(--color-teal);
     border-color: var(--color-turquoise);
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     outline: none;
 }
 
@@ -655,7 +664,7 @@ div:has(> .student-action-btn) {
     position: relative;
     z-index: 1;
 
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
@@ -1228,7 +1237,7 @@ div:has(> .student-action-btn) {
 
     padding: 0.7rem 3rem 0.7rem 1.1rem;
 
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.9) 0%, rgba(var(--color-teal-rgb), 0.7) 100%);
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.85);
     border-radius: 10px;
@@ -1284,7 +1293,7 @@ div:has(> .student-action-btn) {
 /* Native dropdown options */
 .course-select option {
     color: var(--color-navy);
-    background: var(--color-whitesmoke)fff;
+    background: var(--color-whitesmoke);
     font-weight: 500;
 }
 /* END OF COURSE SELECTOR FORM */
@@ -1338,7 +1347,7 @@ div:has(> .student-action-btn) {
 
 .meta-text strong {
     display: block;
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.5rem;
     font-weight: 400;
@@ -1657,7 +1666,7 @@ div:has(> .student-action-btn) {
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    border: solid 2px var(--color-whitesmoke)fff;
+    border: solid 2px var(--color-whitesmoke);
 }
 
 
@@ -1769,7 +1778,7 @@ div:has(> .student-action-btn) {
     border-radius: 50%;
     border: solid 2px var(--color-turquoise);
     background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1784,7 +1793,7 @@ div:has(> .student-action-btn) {
 }
 
 .attendance-history-text h6 {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-weight: 500;
 }
 
@@ -1793,7 +1802,7 @@ div:has(> .student-action-btn) {
 }
 
 .attendance-history-text span {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
 }
 
 

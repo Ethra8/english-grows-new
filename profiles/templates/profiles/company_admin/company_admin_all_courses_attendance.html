@@ -6,7 +6,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_all_courses_attendance.css' %}">
 {% endblock %}
@@ -43,7 +43,7 @@
             </div>
 
             <div>
-                <span>Total Courses</span>
+                <span>Active Courses</span>
                 <strong>{{ total_courses }}</strong>
             </div>
         </div>
@@ -54,7 +54,7 @@
             </div>
 
             <div>
-                <span>Employees</span>
+                <span>Employees Enrolled</span>
                 <strong>{{ total_employees }}</strong>
             </div>
         </div>
@@ -234,6 +234,10 @@
                                 Course
                             </div>
 
+                            <div class="level-heading">
+                                Level
+                            </div>
+
                             <div class="employees-heading">
                                 Employees
                             </div>
@@ -400,11 +404,10 @@
                             <div class="attendance-action">
                                 <a
                                     href="{% url 'profiles:company_admin_course_attendance' course.id %}"
-                                    class="btn-attendance-tools"
+                                    class="btn-course-details"
                                 >
-                                    <i class="fa-regular fa-eye mr-2"></i>
                                     Details
-                                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="">
                                 </a>
                             </div>
 

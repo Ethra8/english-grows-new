@@ -993,7 +993,7 @@ stacks every slide in precisely the same screen position.
 }
 
 .platform-current-slide {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
 
     font-size: 0.95rem;
     font-weight: 500;

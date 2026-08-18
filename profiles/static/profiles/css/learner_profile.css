@@ -586,10 +586,6 @@
     justify-content: flex-end;
 }
 
-.student-detail-card .btn-course-details {
-    color: var(--color-teal);
-}
-
 .student-detail-card .btn-course-details:hover {
     background: rgba(var(--color-teal-rgb), 0.25);
     /* color: var(--color-whitesmoke); */

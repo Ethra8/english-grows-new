@@ -5,8 +5,6 @@
 .company-admin-attendance-page {
     position: relative;
     min-height: 100vh;
-    /* padding: 3rem 2.25rem 5rem;
-    overflow: hidden; */
 }
 
 .company-admin-attendance-page
@@ -14,19 +12,6 @@
     position: relative;
     z-index: 2;
 }
-
-.company-admin-attendance-page header h1 {
-    margin: 0;
-    /* font-size: clamp(2rem, 3vw, 3.2rem);
-    font-weight: 600;
-    letter-spacing: 0.02em; */
-}
-
-/* .company-admin-attendance-page header hr {
-    margin: 2rem 0 1.25rem;
-    border: 0;
-    border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);
-} */
 
 .company-admin-attendance-page header p {
     margin: 0;
@@ -47,7 +32,8 @@
 
 .company-attendance-summary .attendance-summary-card {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: row;
     gap: 1rem;
     min-height: 130px;
     padding: 0.25rem 1.25rem;
@@ -63,20 +49,28 @@
         border-color 0.2s ease;
 }
 
-.company-attendance-summary .attendance-summary-card:hover {
+/* .company-attendance-summary .attendance-summary-card:hover {
     transform: translateY(-3px);
     border-color: rgba(var(--color-teal-rgb), 0.42);
     box-shadow:
         0 14px 28px rgba(0, 64, 70, 0.13),
         inset 0 1px 0 rgba(255, 255, 255, 0.85);
+} */
+
+.company-attendance-summary .attendance-summary-card div {
+    display: flex;
+    align-self: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
 }
 
-.company-attendance-summary
-.attendance-summary-card > div:last-child {
+.company-attendance-summary .attendance-summary-card > div:last-child {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
     min-width: 0;
+    align-items: flex-start;
 }
 
 .company-attendance-summary .attendance-summary-card span {
@@ -214,13 +208,14 @@
 
 .all-course-attendance .attendance-tools input:focus {
     border-color: #00a7a5;
-    background: var(--color-whitesmoke)fff;
+    background: var(--color-whitesmoke);
     box-shadow: 0 0 0 3px rgba(0, 167, 165, 0.13);
 }
 
 .all-course-attendance .btn-attendance-tools {
     display: flex;
     align-items: center;
+    align-content: center;
     justify-content: center;
     /* justify-self: flex-end; */
     min-width: 100px;
@@ -231,23 +226,28 @@
     white-space: nowrap;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    color: var(--color-whitesmoke)fff;
-    border: 1px solid #008b8d;
-    background: linear-gradient(135deg, #009da0, var(--color-navy));
+    color: var(--color-whitesmoke);
+    border: 1px outset var(--color-navy);
+    /* background: linear-gradient(135deg, rgba(var(--color-cyan-rgb), 0.85), rgba(var(--color-navy-rgb), 0.85)); */
+    background-color: var(--color-navy);
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
-    margin: auto auto 0;
+    margin: auto 0 0 0;
 }
 
 .all-course-attendance .btn-attendance-tools:hover {
-    color: var(--color-whitesmoke)fff;
+    border: 1px outset var(--color-teal);
     transform: translateY(-2px);
-    background: linear-gradient(135deg, #00acaf, #008589);
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.85), rgba(var(--color-navy-rgb), 0.75));
     box-shadow: 0 0 0 rgba(0, 122, 125, 0.24);
 }
 
+.all-course-attendance .attendance-tools .btn-course-details {
+    margin: auto 0 0 0;
+    min-height: 46px;
+}
 
 .all-course-attendance #attendanceDateFilter::-webkit-calendar-picker-indicator {
-    color-scheme: dark;
+    color-scheme: light;
     opacity: 0.75;
     cursor: pointer;
 }
@@ -371,30 +371,16 @@
 
 /* Course and status headings stay left aligned */
 
-.all-course-attendance
-.course-attendance-table-header .course-heading,
-.all-course-attendance
-.course-attendance-table-header .status-heading {
-    justify-content: flex-start;
-    text-align: left;
-}
-
-/* Numeric and action headings are centred */
-
-.all-course-attendance
-.course-attendance-table-header .employees-heading,
-.all-course-attendance
-.course-attendance-table-header .submitted-heading,
-.all-course-attendance
-.course-attendance-table-header .attended-heading,
-.all-course-attendance
-.course-attendance-table-header .missed-heading,
-.all-course-attendance
-.course-attendance-table-header .excused-heading,
-.all-course-attendance
-.course-attendance-table-header .rate-heading,
-.all-course-attendance
-.course-attendance-table-header .action-heading {
+.all-course-attendance .course-attendance-table-header .course-heading,
+.all-course-attendance .course-attendance-table-header .status-heading,
+.all-course-attendance .course-attendance-table-header .level-heading,
+.all-course-attendance .course-attendance-table-header .employees-heading,
+.all-course-attendance .course-attendance-table-header .submitted-heading,
+.all-course-attendance .course-attendance-table-header .attended-heading,
+.all-course-attendance .course-attendance-table-header .missed-heading,
+.all-course-attendance .course-attendance-table-header .excused-heading,
+.all-course-attendance .course-attendance-table-header .rate-heading,
+.all-course-attendance .course-attendance-table-header .action-heading {
     justify-content: center;
     text-align: center;
 }
@@ -539,7 +525,7 @@
    ========================================================= */
 
 .all-course-attendance .submission-status-cell {
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .all-course-attendance .submission-status {
@@ -615,7 +601,7 @@
 }
 
 .all-course-attendance .attendance-pill.attended > span {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     background: rgba(19, 185, 139, 0.52);
 }
 
@@ -626,7 +612,7 @@
 }
 
 .all-course-attendance .attendance-pill.missed > span {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     background: rgba(240, 93, 103, 0.48);
 }
 
@@ -637,7 +623,7 @@
 }
 
 .all-course-attendance .attendance-pill.excused > span {
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     background: rgba(217, 154, 16, 0.48);
 }
 
@@ -754,7 +740,12 @@
 .all-course-attendance .attendance-action {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+}
+
+.all-course-attendance .attendance-action img {
+    width: 28px;
+    margin-left: .5rem;
 }
 
 .all-course-attendance .attendance-filter-card.two-filters {

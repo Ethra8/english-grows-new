@@ -77,6 +77,10 @@
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
+.dashboard-card h3 {
+    color: var(--color-whitesmoke);
+}
+
 /* left part of TODAY card */
 .dashboard-card-left {
     flex: 0 0 25%;
@@ -281,13 +285,8 @@
     flex-shrink: 0;
 }
 
-.training-overview-header .today-title h3 {
-    color: var(--color-navy);
+.training-overview-header h3 {
     margin-bottom: 0.15rem;
-}
-
-.training-overview-header .today-title span {
-    color: var(--color-teal);
 }
 
 
@@ -304,6 +303,8 @@
 
     align-items: stretch;
     width: 100%;
+    background: var(--color-whitesmoke);
+    border-radius: 8px;
 }
 
 
@@ -315,7 +316,7 @@
     align-items: center;
     min-height: 48px;
     padding: 0.7rem 0.8rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--color-navy);
     border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.14);
@@ -350,7 +351,7 @@
 }
 
 .overview-period strong {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--color-navy);
 }
 
@@ -368,7 +369,7 @@
 }
 
 .overview-number {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     line-height: 1;
     font-weight: 600;
     color: var(--color-navy);
@@ -382,7 +383,7 @@
 /* === COMPLETION RING ====================== */
 .overview-completion {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 0.45rem;
 }
@@ -390,6 +391,7 @@
 .completion-ring {
     --ring-size: 54px;
     --ring-width: 7px;
+    --ring-center: var(--color-whitesmoke);
     position: relative;
     width: var(--ring-size);
     height: var(--ring-size);
@@ -409,7 +411,7 @@
     position: absolute;
     inset: var(--ring-width);
     border-radius: 50%;
-    background: rgba(var(--color-steel-rgb), 0.4);
+    background: var(--color-whitesmoke);
 }
 
 .completion-ring-value {
@@ -421,7 +423,7 @@
 }
 
 .completion-count {
-    font-size: 1rem;
+    font-size: 1.3rem;
     font-weight: 600;
     color: var(--color-navy);
 }
@@ -438,16 +440,16 @@
     width: 100%;
     max-width: 190px;
     box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
-    height: 17px;
+    height: 10px;
     overflow: visible;
 }
 
 .attendance-value {
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     padding-left: 8rem;
     margin-bottom: .5rem;
-    top: -10px;
+    top: -30px;
     font-weight: 600;
     color: var(--color-navy);
     z-index: 2;
@@ -456,14 +458,13 @@
 .training-attendance-bar {
     position: relative;
     width: 100%;
-    height: 17px;
-    min-height: 17px;
-    max-height: 17px;
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
     /* overflow: hidden; */
     border-radius: 999px;
     background: rgba(var(--color-navy-rgb), 0.12);
     position: relative;
-    /* bottom: 25px; */
     z-index: 1;
 }
 

@@ -245,23 +245,23 @@
 }
 
 .status-dot.status-confirmed {
-    background: #17c964;
+    background: var(--color-course-status-confirmed);
 }
 
 .status-dot.status-active {
-    background: var(--color-turquoise);
+    background: var(--color-course-status-active);
 }
 
 .status-dot.status-paused {
-    background: #ffb000;
+    background: var(--color-course-status-paused);
 }
 
 .status-dot.status-cancelled {
-    background: #ef4444;
+    background: var(--color-course-status-cancelled);
 }
 
 .status-dot.status-completed {
-    background: #7c7c7c;
+    background: var(--color-course-status-completed);
 }
 /* ************ */
 
@@ -372,7 +372,7 @@
     position: relative;
     z-index: 1;
 
-    color: var(--color-whitesmoke)fff;
+    color: var(--color-whitesmoke);
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
