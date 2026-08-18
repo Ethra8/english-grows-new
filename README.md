@@ -45,7 +45,7 @@
 
 ---
 
-## 🎨 Colour Palette
+# 🎨 Colour Palette
 
 <img width="1600" height="1200" alt="palette (1)" src="https://github.com/user-attachments/assets/db56a36b-88ed-43df-8735-164a60407a70" />
 
@@ -65,7 +65,7 @@
 | **Cool Steel** | `#96A0A1` | Low-emphasis neutral — disabled, inactive and tertiary UI elements |
 
 
-## SITE STRUCTURE
+# SITE STRUCTURE
 
 EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
 
@@ -90,11 +90,11 @@ Access to platform functionality and data is controlled according to the authent
 
 ---
 
-### HOME App
+## HOME App
 
 The `home` app is responsible primarily for the public-facing area of EnglishGrows and serves as the entry point to the platform.
 
-#### Main responsibilities
+### Main responsibilities
 
 - Provides the public **landing page**
 - Presents EnglishGrows' training services and platform
@@ -107,7 +107,7 @@ The Home app is intentionally kept separate from the teaching-management functio
 
 ---
 
-### PROFILES App
+## PROFILES App
 
 The `profiles` app contains most of the user-facing platform experience.
 
@@ -123,7 +123,7 @@ The same underlying course, attendance, and assessment data is presented differe
 
 ---
 
-#### USER PROFILE & ROLE MANAGEMENT
+### USER PROFILE & ROLE MANAGEMENT
 
 The platform uses Django's authenticated `User` as the primary user identity and associates it with a dedicated `UserProfile`.
 
@@ -143,7 +143,7 @@ Instead, role-based access is determined through the user's profile.
 
 ---
 
-#### LEARNER / EMPLOYEE AREA
+### LEARNER / EMPLOYEE AREA
 
 Learners have access to a dedicated learning area containing information specific to their own active course enrolments.
 
@@ -167,7 +167,7 @@ Learners therefore interact only with relevant current training data rather than
 
 ---
 
-#### TEACHER AREA
+### TEACHER AREA
 
 Teachers have a dedicated operational dashboard for managing the courses and learners assigned to them.
 
@@ -196,7 +196,7 @@ The teacher dashboard provides operational summaries for current teaching activi
 
 ---
 
-#### COMPANY ADMIN AREA
+### COMPANY ADMIN AREA
 
 Company administrators have a dedicated B2B management area allowing them to monitor the training delivered to employees belonging to their organisation.
 
@@ -222,7 +222,7 @@ This prevents cross-company data exposure while allowing an authorised company r
 
 ---
 
-#### ROLE-BASED ACCESS CONTROL
+### ROLE-BASED ACCESS CONTROL
 
 Role-based views validate the authenticated user's `UserProfile` before exposing protected information.
 
@@ -241,7 +241,7 @@ Learner / Employee
 Only that learner's own enrolments,
 attendance and assessment data
 
-### COURSES App
+## COURSES App
 
 The `courses` app contains the core **course-delivery, scheduling, enrolment, and attendance architecture** of the EnglishGrows platform.
 
@@ -272,7 +272,7 @@ The principal models managed by this area of the application include:
 
 ---
 
-#### Course Types
+### Course Types
 
 `CourseType` defines the reusable categories of training that can be offered through the platform.
 
@@ -300,7 +300,7 @@ This separates the **type of training being offered** from the **actual delivery
 
 ---
 
-#### Course Management
+### Course Management
 
 The `Course` model represents a concrete training programme delivered to one or more learners.
 
@@ -344,7 +344,7 @@ A course is not considered completed simply because its scheduled end date has p
 
 Instead, course completion depends on its actual lessons:
 
-
+```text
 Course
    │
    ▼
@@ -356,6 +356,7 @@ All sessions completed?
    ├── No  → Course remains open
    │
    └── Yes → Course becomes completed
+```
 
 When all `ClassSession` records belonging to a course have reached `completed` status, the course is automatically moved to `completed`.
 
@@ -365,13 +366,13 @@ This ensures that course status reflects **actual teaching delivery rather than 
 
 ---
 
-#### Course Enrolment
+### Course Enrolment
 
 Learners are connected to courses through the `CourseEnrollment` model.
 
 This is an association model between `User` and `Course`:
 
-
+```text
 User
   │
   │ 1 : N
@@ -381,6 +382,7 @@ CourseEnrollment
   │ N : 1
   │
 Course
+```
 
 Using a dedicated enrolment model rather than a simple many-to-many relationship allows EnglishGrows to store information that belongs specifically to the learner's participation in a particular course.
 
@@ -395,12 +397,12 @@ Each enrolment can contain:
 
 Enrolment statuses include:
 
-
+```text
 Active
 Paused
 Completed
 Cancelled
-
+```
 
 The database prevents the same learner from being enrolled more than once in the same course.
 
@@ -412,7 +414,7 @@ This prevents a learner who joins a course after it has started from receiving a
 
 ---
 
-#### Course Timetable
+### Course Timetable
 
 Recurring weekly scheduling is managed through `CourseTimetableSlot`.
 
@@ -420,8 +422,8 @@ A timetable slot defines the normal weekly teaching pattern of a course.
 
 For example:
 
-Monday       09:00 – 10:30
-Wednesday    09:00 – 10:30
+|Monday|09:00 – 10:30|
+|Wednesday|09:00 – 10:30|
 
 
 Each timetable slot stores:
@@ -435,7 +437,7 @@ The timetable represents a **scheduling rule**, not an individual lesson.
 
 This distinction is important:
 
-
+```text
 CourseTimetableSlot
         │
         │ defines recurring schedule
@@ -447,20 +449,20 @@ CourseTimetableSlot
    Actual lesson
 
 The database prevents duplicate timetable slots with the same:
-
-
+```
+```
 course
 + day_of_week
 + start_time
 + end_time
-
+```
 Validation also ensures that the end time occurs after the start time.
 
 The timetable architecture allows the system to generate individual class sessions automatically while keeping those generated lessons independent enough to be completed or rescheduled later.
 
 ---
 
-#### Class Session Generation
+### Class Session Generation
 
 `ClassSession` represents an **actual lesson instance** belonging to a course.
 
@@ -522,11 +524,11 @@ course + class_number
 
 is unique.
 
-Attendance records are also generated for active learners when the class-session structure is created.
+Attendance records are also automatically generated for active learners when the class-session structure is created.
 
 ---
 
-#### Class Session Lifecycle
+### Class Session Lifecycle
 
 A `ClassSession` has its own lifecycle independently of the parent course.
 
@@ -538,6 +540,8 @@ scheduled
     ▼
 completed
 ```
+
+### Rescheduling a Class Lesson
 
 When a lesson needs to be rescheduled, either the **learner/employee or the teacher** can mark the session as requiring rescheduling:
 
@@ -634,7 +638,7 @@ The distinction between the statuses is therefore:
 This workflow allows rescheduling to be initiated by either side while keeping responsibility for modifying the official course schedule with the teacher.
 ---
 
-#### Attendance
+### Attendance
 
 The `Attendance` model records the attendance status of an individual learner for an individual `ClassSession`.
 
@@ -661,7 +665,7 @@ Each attendance record can store:
 - **Teacher notes**
 - **Recorded timestamp**
 
-Attendance statuses include:
+**Attendance statuses include:**
 
 ```text
 Scheduled
@@ -672,7 +676,7 @@ Cancelled
 Pending reschedule
 ```
 
-The database enforces a unique learner/session relationship:
+**The database enforces a unique learner/session relationship:**
 
 ```text
 class_session + student = unique
@@ -694,11 +698,11 @@ Attendance records initially act as scheduled placeholders and are subsequently 
 
 ---
 
-#### Attendance Reporting
+### Attendance Reporting
 
 Attendance data provides a shared source of information for the three principal authenticated areas of the platform.
 
-##### Learners
+#### Learners
 
 Learners can review their own:
 
@@ -709,7 +713,7 @@ Learners can review their own:
 - **Excused absences**
 - **Individual lesson records**
 
-##### Teachers
+#### Teachers
 
 Teachers can:
 
@@ -720,7 +724,7 @@ Teachers can:
 - **Review attendance by learner**
 - **Review attendance by course**
 
-##### Company Administrators
+#### Company Administrators
 
 Company administrators can review:
 
@@ -732,11 +736,11 @@ Company administrators can review:
 - **Attendance submission status**
 - **Company-wide training participation**
 
-Attendance percentages are calculated from **recorded attendance outcomes**.
+**Attendance percentages** are calculated from ***recorded attendance outcomes***.
 
 Future `scheduled` records are not treated as attended or missed lessons and are therefore excluded from the denominator used to calculate the learner's actual attendance rate.
 
-This prevents future lessons from artificially reducing attendance statistics.
+**This prevents future lessons from artificially reducing attendance statistics.**
 
 ---
 
@@ -777,7 +781,7 @@ Each skill is represented by a distinctive colour, to make it easier to visually
 
 ---
 
-#### Student Skill Assessment
+### Student Skill Assessment
 
 `StudentSkillAssessment` represents the learner's **current assessment state for one main language skill within one course**.
 
@@ -828,15 +832,15 @@ StudentSkillAssessment
 
 Only subskills that have actually been rated participate in this calculation.
 
-Unrated subskills are excluded rather than being interpreted as zero performance.
+***Unrated subskills are excluded rather than being interpreted as zero performance.***
 
 ---
 
-#### Student Subskill Assessment
+### Student Subskill Assessment
 
 `StudentSubSkillAssessment` provides the detailed assessment information from which the overall skill assessment is calculated.
 
-Each principal language skill is divided into several pedagogically relevant subskills, aligned with CEFR descriptors and informed by Cambridge English assessment criteria.
+**Each principal language skill is divided into several pedagogically relevant subskills, *aligned with CEFR descriptors and informed by Cambridge English assessment criteria***.
 
 The current subskill structure is:
 
