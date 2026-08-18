@@ -47,7 +47,7 @@
 
 # 🎨 Colour Palette
 
-<img width="1600" height="1200" alt="palette (1)" src="https://github.com/user-attachments/assets/db56a36b-88ed-43df-8735-164a60407a70" />
+<img width="1600" height="1200" alt="Color Palette English Grows" src="https://github.com/user-attachments/assets/62c5a832-5686-4b1a-8c8e-3582d1521437" />
 
 
 <img width="221" height="393" alt="image" src="https://github.com/user-attachments/assets/5aace972-d513-401b-b99d-0d1f1e01fe42" />
@@ -61,8 +61,8 @@
 | **Electric Aqua** | `#5FF5FC` | Expressive brand accent — marketing and occasional high-impact UI highlights on dark backgrounds |
 | **Icy Aqua** | `#C7FFF9` | Highlight surface — selected states, pills, badges and softly highlighted areas |
 | **Azure Mist** | `#EDF9F7` | Subtle surface — section backgrounds, cards and low-emphasis UI areas |
-| **Slate Grey** | `#6A7F81` | Secondary text — metadata, supporting information and muted UI content |
-| **Cool Steel** | `#96A0A1` | Low-emphasis neutral — disabled, inactive and tertiary UI elements |
+| **Blue Slate** | `#4F6870` | Secondary text — metadata, supporting information |
+| **Cool Steel** | `#7A949B` | Low-emphasis neutral — disabled, inactive, muted UI content and tertiary UI elements |
 
 
 # SITE STRUCTURE
@@ -75,9 +75,11 @@ The application follows Django's Model-Template-View architecture and is current
 - **Profiles**
 - **Courses**
 
-Each app contains the relevant combination of **models**, **views**, **URLs**, **templates**, **forms**, static assets, and supporting logic required for its area of responsibility.
+Each app contains the relevant combination of ***models***, ***views***, ***URLs***, ***templates***, ***forms***, static assets, and supporting logic required for its area of responsibility.
 
-Authentication is handled using Django's authentication system together with **django-allauth**. Application-specific user information and role-based behaviour are managed through the `UserProfile` model.
+## USER ROLES
+
+**User Authentication is handled using Django's authentication system together with ***django-allauth***. Application-specific user information and role-based behaviour are managed through the `UserProfile` model.**
 
 The platform supports four principal user roles:
 
@@ -99,7 +101,7 @@ The `home` app is responsible primarily for the public-facing area of EnglishGro
 - Provides the public **landing page**
 - Presents EnglishGrows' training services and platform
 - Provides navigation into the authenticated learning platform
-- Contains public-facing marketing and informational content
+- Contains public-facing informational and marketing content
 - Directs users towards the relevant learning or company-training journey
 - Integrates the public website with the authenticated Django platform
 
@@ -130,7 +132,7 @@ The platform uses Django's authenticated `User` as the primary user identity and
 The profile stores additional application information such as:
 
 - User role
-- Associated company, where applicable
+- Associated company *(where applicable)*
 - Native language
 - Country
 - Current CEFR level
@@ -152,6 +154,7 @@ Principal functionality includes:
 - **Learner dashboard**
 - **My Course**
 - **My Attendance**
+- **My Calendar**
 - **My Learning Progress**
 - **Skill overview**
 - **Detailed skill progress graphs**
@@ -160,6 +163,7 @@ Principal functionality includes:
 - **Upcoming-class information**
 - **Attendance and absence history**
 - **Course completion information**
+- **Account settings**
 
 Only enrolments that are currently active and belong to active courses are exposed through the learner-facing course selectors.
 
@@ -212,9 +216,9 @@ Principal functionality includes:
 - **Company-wide attendance reporting**
 - **Employee attendance records**
 - **Employee skill development**
-- **Assessment information**
-- **Progress graphs**
-- **Company calendar**
+- **Employee assessment information**
+- **Employee progress graphs**
+- **Company class calendar**
 
 Company administrators can only access information associated with their own `Company`.
 
@@ -228,6 +232,7 @@ Role-based views validate the authenticated user's `UserProfile` before exposing
 
 The application therefore applies restrictions such as:
 
+```text
 Teacher
     ↓
 Only courses assigned to that teacher
@@ -240,6 +245,8 @@ Learner / Employee
     ↓
 Only that learner's own enrolments,
 attendance and assessment data
+```
+---
 
 ## COURSES App
 
@@ -288,13 +295,13 @@ A course type can contain information such as:
 
 A single `CourseType` can therefore be associated with multiple `Course` instances.
 
-
+```text
 CourseType
     │
     │ 1 : N
     ▼
   Course
-
+```
 
 This separates the **type of training being offered** from the **actual delivery of that training**.
 
@@ -540,6 +547,7 @@ scheduled
     ▼
 completed
 ```
+---
 
 ### Rescheduling a Class Lesson
 
