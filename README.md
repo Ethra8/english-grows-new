@@ -330,13 +330,13 @@ A course stores delivery-specific information including:
 
 Course statuses currently support:
 
-
+```text
 Confirmed
 Active
 Paused
 Completed
 Cancelled
-
+```
 
 Course duration and class-generation logic are linked. The application uses the total number of training hours and lesson duration to determine the number of lessons required.
 
@@ -740,7 +740,7 @@ This prevents future lessons from artificially reducing attendance statistics.
 
 ---
 
-### Learning Assessment & Progress
+## Learning Assessment & Progress
 
 The assessment architecture tracks both a learner's **current language-skill performance** and the **historical development of those skills over time**.
 
@@ -760,7 +760,7 @@ StudentSkillAssessment
         └── StudentSkillTermSnapshot
 ```
 
-## The four principal language skills assessed are:
+### The four principal language skills assessed are:
 
 | Skill | Colour | Hex |
 | :--- | :---: | :---: |
