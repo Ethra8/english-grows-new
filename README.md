@@ -1865,24 +1865,34 @@ COLOUR SYSTEM
 │   ├── #C7FFF9  Icy Aqua
 │   ├── #5FF0DF  Turquoise
 │   ├── #EDF9F7  Azure Mist
-    ├── #F5F5F5  White Smoke
+│   ├── #F5F5F5  White Smoke
 │   ├── #4F6870  Blue Slate
 │   └── #7A949B  Cool Steel
 │
 ├── ASSESSMENT / DATA COLOURS
 │   │
-│   ├── #F5BE58  Speaking
-│   ├── #4E2496  Listening
-│   ├── #E1752D  Reading
-│   └── #0EA5B7  Writing
+│   ├── #F5BE58  Speaking — Sunflower Gold
+│   ├── #4E2496  Listening — Indigo Velvet
+│   ├── #E1752D  Reading — Chocolate
+│   └── #0EA5B7  Writing — Pacific Blue
 │
 └── SEMANTIC / STATUS COLOURS
     │
-    ├── Success / Completed
-    ├── Warning
-    ├── Pending
-    ├── Error / Cancelled
-    └── Operational Status
+    ├── LEARNER STATUS
+    │   ├── #38DF9C  Active
+    │   └── #7A949B  Inactive
+    │
+    ├── COURSE STATUS
+    │   ├── #5FF0DF  Active
+    │   ├── #006B7D  Confirmed
+    │   ├── #FFB000  Paused
+    │   ├── #EF4444  Cancelled
+    │   └── #4F6870  Completed
+    │
+    └── ATTENDANCE STATUS
+        ├── #38DF9C  Attended
+        ├── #FF5A5A  Missed
+        └── #07C0C7  Excused
 ```
 
 Keeping these systems conceptually independent reduces ambiguity and makes colour usage more predictable throughout the application.
