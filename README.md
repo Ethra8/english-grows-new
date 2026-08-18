@@ -762,17 +762,14 @@ StudentSkillAssessment
 
 The four principal language skills assessed are:
 
-- **Speaking**
-  <img width="237" height="125" alt="image" src="https://github.com/user-attachments/assets/346d8a44-04d6-4da0-b156-211d1b61ba12" />
+The four principal language skills assessed are:
 
-- **Listening**
-  <img width="237" height="125" alt="image" src="https://github.com/user-attachments/assets/619706c6-8509-4b9a-b2c1-4134858a29b3" />
-
-- **Reading**
-  <img width="237" height="125" alt="image" src="https://github.com/user-attachments/assets/8d2656a6-fd9f-49b7-bd87-6eea17622855" />
-
-- **Writing**
-  <img width="237" height="125" alt="image" src="https://github.com/user-attachments/assets/dcc52918-a3b6-4abe-b7fe-47d8983cf738" />
+| Skill | Colour | Hex |
+| :--- | :---: | :---: |
+| 🎙️ **Speaking** | 🟨 Sunflower Gold | `#F5BE58` |
+| 🎧 **Listening** | 🟪 Indigo Velvet | `#4E2496` |
+| 📖 **Reading** | 🟧 Chocolate | `#E1752D` |
+| ✍️ **Writing** | 🟦 Pacific Blue | `#0EA5B7` |
 
 
 Each skill is represented by a distinctive colour, to make it easier to visually track on the progress bars and skill cards
