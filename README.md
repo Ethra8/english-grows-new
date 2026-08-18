@@ -1705,7 +1705,7 @@ This architecture reduces duplicated business logic and ensures that different a
 
 ---
 
-## Design Choices
+# Design Choices
 
 The user interface has been designed for a **boutique corporate training environment**, rather than as a generic educational platform.
 
@@ -1722,7 +1722,7 @@ Role-specific dashboards and navigation expose the information most relevant to 
 
 ---
 
-### Colour System
+## Colour System
 
 The **English Grows** interface uses a carefully defined colour system centred around navy, teal, cyan, aqua and turquoise tones, supported by cool neutral colours.
 
@@ -1740,7 +1740,9 @@ Colour is used deliberately to communicate:
 
 Colour is therefore treated as a **functional component of the design system**, rather than as decoration alone.
 
-#### Core Brand Palette
+---
+
+### Core Brand Palette
 
 The final English Grows interface palette consists of nine colours:
 
@@ -1756,19 +1758,6 @@ The final English Grows interface palette consists of nine colours:
 | **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
 | **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
 
-The complete palette can be represented as:
-
-```text
-Oxford Blue      → #0B355F
-Stormy Teal      → #006B7D
-Strong Cyan      → #07C0C7
-Electric Aqua    → #5FF5FC
-Icy Aqua         → #C7FFF9
-Turquoise        → #5FF0DF
-Azure Mist       → #EDF9F7
-Blue Slate       → #4F6870
-Cool Steel       → #7A949B
-```
 
 The palette follows a deliberate progression from darker corporate tones to brighter accent colours:
 
@@ -1795,17 +1784,20 @@ NEUTRALS
     └── #7A949B  Cool Steel
 ```
 
-**Oxford Blue** and **Stormy Teal** establish the corporate foundation of the interface, while **Strong Cyan**, **Electric Aqua** and **Turquoise** provide the distinctive English Grows visual identity.
+- **Oxford Blue** and **Stormy Teal** establish the corporate foundation of the interface, while **Strong Cyan**, **Electric Aqua** and **Turquoise** provide the distinctive English Grows visual identity.
 
-The lighter **Icy Aqua** and **Azure Mist** tones provide subtle surface differentiation and highlighted areas without relying exclusively on pure white backgrounds.
+- The lighter **Icy Aqua** and **Azure Mist** tones provide subtle surface differentiation and highlighted areas without relying exclusively on pure white backgrounds.
 
-The neutral **Blue Slate** and **Cool Steel** tones support secondary information, borders and lower-emphasis interface elements without competing visually with primary content.
+- The neutral **Blue Slate** and **Cool Steel** tones support secondary information, borders and lower-emphasis interface elements without competing visually with primary content.
 
-This hierarchy allows brighter colours to remain distinctive because they are used selectively against a restrained corporate foundation.
+**This hierarchy allows brighter colours to remain distinctive because they are used selectively against a restrained corporate foundation.**
 
-#### Language Skill Colours
+---
 
-The language assessment system uses a separate semantic colour set for the four principal language skills.
+### Language Skill Colours
+
+The language assessment system uses a separate semantic colour set for the four principal language skills, deliberately kept separate from the principal English Grows brand palette.
+This creates a clear distinction between **brand/interface colour** and **assessment/data colour**, preventing the primary cyan, aqua and turquoise palette from carrying multiple semantic meanings.
 
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
@@ -1823,22 +1815,12 @@ These colours remain consistent across:
 - legends;
 - skill-specific visual indicators.
 
-The skill colours are deliberately kept separate from the principal English Grows brand palette.
-
-This creates a clear distinction between **brand/interface colour** and **assessment/data colour**, preventing the primary cyan, aqua and turquoise palette from carrying multiple semantic meanings.
 
 Maintaining a permanent colour assignment for each skill also improves visual recognition across different areas of the application.
 
-```text
-Speaking        → #F5BE58
-Listening       → #4E2496
-Reading         → #E1752D
-Writing         → #0EA5B7
-```
-
 For example, **Sunflower Gold** consistently represents Speaking, while **Indigo Velvet** consistently represents Listening, regardless of whether the user is viewing an assessment card, progress chart or historical assessment.
 
-#### Semantic and Status Colours
+### Semantic and Status Colours
 
 Application states are treated independently from both the brand palette and the language skill palette.
 
@@ -1890,7 +1872,7 @@ Keeping these systems conceptually independent reduces ambiguity and makes colou
 
 ---
 
-### Responsive Design
+## Responsive Design
 
 The platform follows a responsive interface strategy intended to support **desktop, tablet and mobile use**.
 
@@ -1920,7 +1902,7 @@ Responsive behaviour is therefore considered part of the component architecture 
 
 ---
 
-### Data Visualisation
+## Data Visualisation
 
 Data visualisation is used selectively where graphical representation communicates progress more effectively than isolated numerical values.
 
