@@ -1767,6 +1767,9 @@ NEUTRALS
 #4F6870  Blue Slate
     │
     └── #7A949B  Cool Steel
+
+#F5F5F5  White Smoke
+
 ```
 
 - **Oxford Blue** and **Stormy Teal** establish the corporate foundation of the interface, while **Strong Cyan**, **Electric Aqua** and **Turquoise** provide the distinctive English Grows visual identity.
@@ -1841,6 +1844,7 @@ COLOUR SYSTEM
 │   ├── #C7FFF9  Icy Aqua
 │   ├── #5FF0DF  Turquoise
 │   ├── #EDF9F7  Azure Mist
+    ├── #F5F5F5  White Smoke
 │   ├── #4F6870  Blue Slate
 │   └── #7A949B  Cool Steel
 │
