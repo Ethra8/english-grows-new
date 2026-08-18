@@ -1725,9 +1725,10 @@ Colour is therefore treated as a **functional component of the design system**, 
 
 ### Core Brand Palette
 
-The final English Grows interface palette consists of nine colours:
+The English Grows interface palette consists of nine colours:
 
-<img width="1600" height="1200" alt="COLOR PALETTE_EnglishGrows" src="https://github.com/user-attachments/assets/2b2790f2-79ea-4f58-a725-e2c14d3d32e3" />
+<img width="1600" height="1200" alt="Color Palette_EnglishGrows" src="https://github.com/user-attachments/assets/a92e4372-16ec-4776-96e2-314406eaeed6" />
+
 
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
@@ -1738,6 +1739,7 @@ The final English Grows interface palette consists of nine colours:
 | **Icy Aqua** | ![#C7FFF9](https://img.shields.io/badge/Icy_Aqua-C7FFF9?style=flat&labelColor=C7FFF9&color=C7FFF9) | `#C7FFF9` | Soft highlighted backgrounds and subtle accent surfaces |
 | **Turquoise** | ![#5FF0DF](https://img.shields.io/badge/Turquoise-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Secondary accent, indicators and selected interface elements |
 | **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Light surfaces, backgrounds and subtle visual separation |
+| **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Data surfaces and backgrounds for cards, occasionally por text on dark surfaces |
 | **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
 | **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
 
@@ -1770,6 +1772,8 @@ NEUTRALS
 - **Oxford Blue** and **Stormy Teal** establish the corporate foundation of the interface, while **Strong Cyan**, **Electric Aqua** and **Turquoise** provide the distinctive English Grows visual identity.
 
 - The lighter **Icy Aqua** and **Azure Mist** tones provide subtle surface differentiation and highlighted areas without relying exclusively on pure white backgrounds.
+
+- The **White Smoke** provides a clean surface areas to display data
 
 - The neutral **Blue Slate** and **Cool Steel** tones support secondary information, borders and lower-emphasis interface elements without competing visually with primary content.
 
