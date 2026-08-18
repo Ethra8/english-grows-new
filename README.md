@@ -760,9 +760,7 @@ StudentSkillAssessment
         └── StudentSkillTermSnapshot
 ```
 
-The four principal language skills assessed are:
-
-The four principal language skills assessed are:
+## The four principal language skills assessed are:
 
 | Skill | Colour | Hex |
 | :--- | :---: | :---: |
