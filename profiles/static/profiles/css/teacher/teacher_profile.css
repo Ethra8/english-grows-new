@@ -490,30 +490,30 @@ h2 {
 |**** COURSE_DETAIL Page *****************|
 |*****************************************/
 
-.teacher-course-students-list header .header-last-child,
-.teacher-group-attendance-page header .header-last-child {
+.teacher-course-students-list header .header-level,
+.teacher-group-attendance-page header .header-level {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
 }
 
 
-.teacher-course-students-list header .header-last-child > div:first-child,
-.teacher-group-attendance-page header .header-last-child > div:first-child {
+.teacher-course-students-list header .header-level > div:first-child,
+.teacher-group-attendance-page header .header-level > div:first-child {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.teacher-course-students-list header .header-last-child > div:last-child,
-.teacher-group-attendance-page header .header-last-child > div:last-child {
+.teacher-course-students-list header .header-level > div:last-child,
+.teacher-group-attendance-page header .header-level > div:last-child {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.teacher-course-students-list header .header-last-child span,
-.teacher-group-attendance-page header .header-last-child span {
+.teacher-course-students-list header .header-level span,
+.teacher-group-attendance-page header .header-level span {
     width: 50px;
 }
 

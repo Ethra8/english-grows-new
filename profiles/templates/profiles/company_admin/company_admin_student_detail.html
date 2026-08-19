@@ -34,27 +34,18 @@
 
         <div class="student-main-info">
             <div>
-                <div class="student-avatar-large
-                    {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
+                <div class="student-avatar-large {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
 
                     {% if student_profile.profile_photo %}
-                        <img
-                            src="{{ student_profile.profile_photo.url }}"
-                            alt="{{ student.get_full_name }}"
-                        >
+                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
                     {% else %}
                         {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                            <i class="fa-solid fa-user-tie"></i>
+                        <i class="fa-solid fa-user-tie"></i>
                         {% else %}
-                            <i class="fa-regular fa-user"></i>
+                        <i class="fa-regular fa-user"></i>
                         {% endif %}
                     {% endif %}
-
-                    <span
-                        class="avatar-status-dot"
-                        aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"
-                        title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}">
-                    </span>
+                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
                 </div>
             </div>
             
@@ -69,7 +60,7 @@
                         {{ student_profile.get_role_display|default:"Employee" }}</span>
                 </div> 
 
-                <div class="header-last-child">      
+                <div class="header-level">      
 
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">Level</span>

@@ -138,7 +138,6 @@ main.profile-main {
     padding: 0.5rem 0.65rem;
     border: 1px outset var(--color-teal);
     box-shadow: 0 6px 12px rgba(var(--color-shadow-rgba));
-
 }
 
 .course-details header h1 {
@@ -193,6 +192,7 @@ main.profile-main {
     padding: 1rem;
     color:var(--color-steel) !important;
     border-radius: 8px;
+    width: 100%;
 }
 
 /* ****** BUTTONS **************************************** */

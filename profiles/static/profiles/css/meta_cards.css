@@ -89,7 +89,8 @@
 .course-meta-text {
     z-index: 1;
 }
-
+/* ONLY company_admin_all_courses_attendance 
+ & company_admincourse_attendance */
 .course-attendance .meta-text {
     padding-left: 3rem;
 }
@@ -99,7 +100,7 @@
     display: block;
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.8rem;
+    /* font-size: 1.75rem; */
     font-weight: 400;
     text-transform: capitalize;
     letter-spacing: 0.03em;
@@ -225,13 +226,13 @@
 
 @media (max-width: 991.99px) {
 
-    .profile-dashboard .dashboard-general-info-card .meta-row {
+    .dashboard-meta-cards .meta-row {
         gap: 0.5rem;
     }
 
     .course-header-meta-row,
     .course-header-meta-row,
-    .profile-dashboard .dashboard-general-info-card .meta-row {
+    .dashboard-meta-cards .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 }
@@ -243,7 +244,7 @@
     |*** DASHBOARD Page  *********************************|
     |*****************************************************/
     
-    .profile-dashboard .dashboard-general-info-card .meta-row {
+    .dashboard-meta-cards .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 

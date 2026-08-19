@@ -135,7 +135,7 @@
 }
 
 /* DIV WITH LEVEL ************/
-.student-detail-page header .header-last-child {
+.student-detail-page header .header-level {
     margin: 2rem 0 0;
     min-width: max-content;
     width: 100%;
