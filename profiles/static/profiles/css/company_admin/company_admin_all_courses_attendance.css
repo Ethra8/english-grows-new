@@ -7,8 +7,7 @@
     min-height: 100vh;
 }
 
-.company-admin-attendance-page
-> *:not(.overlay-birds):not(.overlay-azure-mist) {
+.company-admin-attendance-page > *:not(.overlay-birds):not(.overlay-azure-mist) {
     position: relative;
     z-index: 2;
 }
@@ -35,27 +34,19 @@
     align-items: flex-start;
     flex-direction: row;
     gap: 1rem;
-    min-height: 130px;
-    padding: 0.25rem 1.25rem;
+    /* min-height: 130px; */
+    padding: 0.75rem 1rem 0.75rem 0.25rem;
     border: 1px solid rgba(var(--color-teal-rgb), 0.22);
-    border-radius: 12px;
+    border-radius: 999px;
     background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
     box-shadow:
-        0 10px 24px rgba(0, 64, 70, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 10px 24px rgba(var(--color-teal-rgb), 0.08),
+        inset 0 0 10px rgba(var(--color-icy-rgb), 0.8);
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
         border-color 0.2s ease;
 }
-
-/* .company-attendance-summary .attendance-summary-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(var(--color-teal-rgb), 0.42);
-    box-shadow:
-        0 14px 28px rgba(0, 64, 70, 0.13),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-} */
 
 .company-attendance-summary .attendance-summary-card div {
     display: flex;
@@ -68,7 +59,7 @@
 .company-attendance-summary .attendance-summary-card > div:last-child {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    /* gap: 1.2rem; */
     min-width: 0;
     align-items: flex-start;
 }
@@ -145,7 +136,7 @@
     padding: 1.5rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.18);
     /* background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
-    background-color: rgba(var(--color-mist-rgb), 0.5);
+    background-color: rgba(var(--color-mist-rgb), 0.95);
 }
 
 .all-course-attendance .course-status-filter-header h3 {
@@ -252,6 +243,26 @@
     cursor: pointer;
 }
 
+/* =========================================================
+   FILTER RESULT
+   ========================================================= */
+
+.filter-result {
+    background-color: rgba(var(--color-teal-rgb), 0.1);
+    border-radius: 8px;
+    margin-top: 1rem;
+    padding: .45rem 1.25rem;
+    width: 34%;
+    border: 1px outset rgba(var(--color-teal-rgb), 0.45);
+}
+
+.filter-result p {
+    color: var(--color-teal);
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+}
 
 
 /* =========================================================
@@ -321,6 +332,19 @@
     overflow: hidden;
     border: 1px solid rgba(var(--color-teal-rgb), 0.2);
     border-radius: 8px;
+}
+
+
+/* ==== HORIZONTAL SCROLL ON LIST ======================= */
+#globalCourseAttendanceList {
+    overflow-x: scroll !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 

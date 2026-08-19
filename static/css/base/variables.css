@@ -54,7 +54,7 @@
 
     /* USER ENROLLED STATUS dots ***************************/
     /* Active Enrollment*/
-    --color-active-dot: #38df9c;
+    --color-active-dot: #4dffb5;
     /* Inactive Enrollment */
     --color-inactive-dot: #7A949B;
 
@@ -74,7 +74,7 @@
 
     /* ATTENDANCE STATUS badges ****************************/
     /* Attended */
-    --color-attendance-status-attended: #38df9c;
+    --color-attendance-status-attended: #4dffb5;
     --color-attendance-status-attended-rgb: 35, 201, 154;
     /* Missed */
     --color-attendance-status-missed: #ff5a5a;

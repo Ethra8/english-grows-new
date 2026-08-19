@@ -7,8 +7,10 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -49,7 +51,7 @@
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
             </div>
-            <span class="status-badge status-badge-student">
+            <span class="status-badge status-course">
                 {% if course.status == 'confirmed' %}
                     <i class="fa-regular fa-circle-check mr-2"></i>
                 {% elif course.status == 'active' %}
@@ -106,7 +108,7 @@
                 </div>
             </div>
 
-            <div class="attendance-summary-card danger">
+            <div class="attendance-summary-card missed">
                 <div class="status-pill missed">
                     <i class="fa-solid fa-user-xmark"></i>
                     <strong>{{ missed_count }}</strong>
@@ -116,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="attendance-summary-card warning">
+            <div class="attendance-summary-card pending">
                 <div class="status-pill pending">
                     <i class="fa-solid fa-user-minus"></i>
                     <strong>{{ excused_count }}</strong>

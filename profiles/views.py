@@ -1,12 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.db.models import Count, Q, Prefetch
-from django.http import JsonResponse
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+
+from django.db.models import Count, Q, Prefetch, Value
+from django.db.models.functions import Coalesce, NullIf, Lower
+
+from django.http import JsonResponse
+
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
+
 from django.forms import inlineformset_factory
 from django.urls import reverse
 
@@ -4387,7 +4392,10 @@ def company_admin_course_details(request, course_id):
 
 @login_required
 def company_admin_course_students_list(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -4403,47 +4411,93 @@ def company_admin_course_students_list(request, course_id):
         company=company,
     )
 
+    # ---------------------------------------------------------
+    # ENROLLMENTS
+    # ---------------------------------------------------------
     enrollments = (
         course.enrollments
-        .select_related("student", "student__profile")
+        .select_related(
+            "student",
+            "student__profile",
+        )
         .filter(
-            status__in=[
-                "active",
-                "completed",
-                "paused",
-            ]
+            status="active"
+        )
+        .annotate(
+            sort_name=Lower(
+                Coalesce(
+                    NullIf("student__first_name", Value("")),
+                    "student__username",
+                )
+            )
         )
     )
+    # ---------------------------------------------------------
+    # SORTING
+    # ---------------------------------------------------------
+    sort_by = request.GET.get("sort", "name")
 
+    if sort_by == "level":
+        enrollments = enrollments.order_by(
+            "student__profile__current_level",
+            "sort_name",
+            "student__last_name",
+        )
+
+    else:
+        # Default: Name A-Z
+        sort_by = "name"
+
+        enrollments = enrollments.order_by(
+            "sort_name",
+            "student__last_name",
+        )
+    # ---------------------------------------------------------
+    # COURSE SESSIONS
+    # ---------------------------------------------------------
     sessions = (
         course.class_sessions
         .all()
         .order_by("start_time")
     )
 
-    now = timezone.now()
-
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    # ---------------------------------------------------------
     total_classes = course.total_sessions
     completed_classes = course.completed_sessions
     remaining_classes = course.remaining_sessions
     completion_percentage = course.completion_percentage
 
+    # ---------------------------------------------------------
+    # AVERAGE ATTENDANCE
+    # ---------------------------------------------------------
     attendance_percentages = []
 
     for enrollment in enrollments:
         total_completed = enrollment.total_completed_classes
 
         if total_completed > 0:
+            attendance_percentage = (
+                enrollment.classes_attended
+                / total_completed
+            ) * 100
+
             attendance_percentages.append(
-                (enrollment.classes_attended / total_completed) * 100
+                attendance_percentage
             )
 
     average_attendance = 0
+
     if attendance_percentages:
         average_attendance = round(
-            sum(attendance_percentages) / len(attendance_percentages)
+            sum(attendance_percentages)
+            / len(attendance_percentages)
         )
 
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    # ---------------------------------------------------------
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
@@ -4465,26 +4519,36 @@ def company_admin_course_students_list(request, course_id):
             "end": end,
         })
 
+    # ---------------------------------------------------------
+    # EMAIL ALL STUDENTS
+    # ---------------------------------------------------------
     student_emails = [
         enrollment.student.email
         for enrollment in enrollments
         if enrollment.student.email
     ]
 
-    bcc_student_emails = ",".join(student_emails)
+    bcc_student_emails = ",".join(
+        student_emails
+    )
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
         "course": course,
         "enrollments": enrollments,
         "sessions": sessions,
+        "sort_by": sort_by,
 
         "total_classes": total_classes,
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "completion_percentage": completion_percentage,
         "average_attendance": average_attendance,
+
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
         "level_choices": UserProfile.LEVEL_CHOICES,
@@ -4493,8 +4557,9 @@ def company_admin_course_students_list(request, course_id):
     return render(
         request,
         "profiles/company_admin/company_admin_course_students_list.html",
-        context
+        context,
     )
+
 
 
 @login_required

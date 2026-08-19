@@ -16,9 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
 // CLASSES LIST Selector buttons & select element
 document.addEventListener("DOMContentLoaded", function () {
     const panels = document.querySelectorAll(".assigned-classes-panel");

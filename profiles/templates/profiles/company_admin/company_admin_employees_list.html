@@ -7,10 +7,9 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/student/learner_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learners_list.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
 {% endblock %}
 
@@ -97,11 +96,11 @@
                                     </span>  
                                 </div>
 
-                                <div class="view-progress-course">
+                                <div class="review">
                                         <a href="{% url 'profiles:company_admin_student_detail' employee.student.id %}"
                                         class="btn-to-student-detail">
                                             <!-- <i class="fa-solid fa-chart-line mr-2"></i> -->
-                                                view
+                                                Review
                                             <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                                         </a>
                                 </div>                               

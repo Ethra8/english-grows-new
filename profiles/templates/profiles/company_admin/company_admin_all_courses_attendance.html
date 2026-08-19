@@ -6,8 +6,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_all_courses_attendance.css' %}">
 {% endblock %}
 
@@ -92,30 +90,6 @@
             </div>
         </div>
 
-        <!-- <div class="attendance-summary-card danger">
-            <div class="status-pill missed">
-                <i class="fa-solid fa-user-xmark"></i>
-            </div>
-
-            <div>
-                <span>Missed</span>
-                <strong>{{ global_missed_count }}</strong>
-                <small>{{ global_missed_rate }}%</small>
-            </div>
-        </div>
-
-        <div class="attendance-summary-card warning">
-            <div class="status-pill pending">
-                <i class="fa-solid fa-user-minus"></i>
-            </div>
-
-            <div>
-                <span>Excused</span>
-                <strong>{{ global_excused_count }}</strong>
-                <small>{{ global_excused_rate }}%</small>
-            </div>
-        </div> -->
-
     </div>
 
     {# ============================================================ #}
@@ -125,80 +99,6 @@
     <div class="wrapper-assigned-courses-panel mt-5">
         <div class="assigned-courses-panel">
 
-            <div class="assigned-courses-header">
-                <div class="course-status-filter-header">
-
-                    <h3>
-                        <i class="fa-solid fa-magnifying-glass mr-2"></i>
-                        Search attendance by date, course or employee
-                    </h3>
-
-                    <div class="mt-3">
-                        <form method="get" class="attendance-tools">
-
-                            <div class="attendance-filter-field">
-                                <label for="attendanceDateFilter">
-                                    Class date
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="attendanceDateFilter"
-                                    name="date"
-                                    value="{{ selected_date }}"
-                                >
-                            </div>
-
-                            <div class="attendance-filter-field">
-                                <label for="attendanceCourseSearchInput">
-                                    Course
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="attendanceCourseSearchInput"
-                                    name="course"
-                                    value="{{ course_search }}"
-                                    placeholder="Course name or type..."
-                                    autocomplete="off"
-                                >
-                            </div>
-
-                            <div class="attendance-filter-field">
-                                <label for="attendanceEmployeeSearchInput">
-                                    Employee
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="attendanceEmployeeSearchInput"
-                                    name="employee"
-                                    value="{{ employee_search }}"
-                                    placeholder="Employee name or email..."
-                                    autocomplete="off"
-                                >
-                            </div>
-
-                            <button type="submit" class="btn-attendance-tools">
-                                <i class="fa-solid fa-magnifying-glass mr-2"></i>
-                                Search
-                            </button>
-
-                            {% if selected_date or course_search or employee_search %}
-                                <a
-                                    href="{% url 'profiles:company_admin_all_courses_attendance' %}"
-                                    class="btn-course-details"
-                                >
-                                    <i class="fa-solid fa-xmark mr-2"></i>
-                                    Clear
-                                </a>
-                            {% endif %}
-
-                        </form>
-                    </div>
-
-                </div>
-            </div>
 
             {# ==================================================== #}
             {# COURSE ATTENDANCE LIST                                #}
@@ -209,14 +109,90 @@
                 <div class="attendance-list-header">
                     <div>
                         <h2>Attendance by Course</h2>
-
-                        <p>
-                            {{ total_courses }}
-                            course{{ total_courses|pluralize }}
-                            found.
-                        </p>
                     </div>
                 </div>
+                <div class="assigned-courses-header">
+                    <div class="course-status-filter-header">
+
+                        <h3>
+                            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+                            Search attendance by date, course or employee
+                        </h3>
+
+                        <div class="mt-3">
+                            <form method="get" class="attendance-tools">
+
+                                <div class="attendance-filter-field">
+                                    <label for="attendanceDateFilter">
+                                        Class date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="attendanceDateFilter"
+                                        name="date"
+                                        value="{{ selected_date }}"
+                                    >
+                                </div>
+
+                                <div class="attendance-filter-field">
+                                    <label for="attendanceCourseSearchInput">
+                                        Course
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="attendanceCourseSearchInput"
+                                        name="course"
+                                        value="{{ course_search }}"
+                                        placeholder="Course name or type..."
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <div class="attendance-filter-field">
+                                    <label for="attendanceEmployeeSearchInput">
+                                        Employee
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="attendanceEmployeeSearchInput"
+                                        name="employee"
+                                        value="{{ employee_search }}"
+                                        placeholder="Employee name or email..."
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <button type="submit" class="btn-attendance-tools">
+                                    <i class="fa-solid fa-magnifying-glass mr-2"></i>
+                                    Search
+                                </button>
+
+                                {% if selected_date or course_search or employee_search %}
+                                    <a
+                                        href="{% url 'profiles:company_admin_all_courses_attendance' %}"
+                                        class="btn-course-details"
+                                    >
+                                        <i class="fa-solid fa-xmark mr-2"></i>
+                                        Clear
+                                    </a>
+                                {% endif %}
+
+                            </form>
+                        </div>
+
+                        <div class="filter-result">
+                            <p>
+                                {{ total_courses }}
+                                course{{ total_courses|pluralize }}
+                                found.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                 <div
                     id="globalCourseAttendanceList"
@@ -353,42 +329,6 @@
 
                             </div>
 
-                            <!-- {# Attended pill #}
-
-                            <div class="course-attendance-cell">
-                                <div class="attendance-pill attended">
-                                    <i class="fa-solid fa-user-check"></i>
-
-                                    <span>
-                                        {{ course.attended_count }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {# Missed pill #}
-
-                            <div class="course-attendance-cell">
-                                <div class="attendance-pill missed">
-                                    <i class="fa-solid fa-user-xmark"></i>
-
-                                    <span>
-                                        {{ course.missed_count }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {# Excused pill #}
-
-                            <div class="course-attendance-cell">
-                                <div class="attendance-pill excused">
-                                    <i class="fa-solid fa-user-minus"></i>
-
-                                    <span>
-                                        {{ course.excused_count }}
-                                    </span>
-                                </div>
-                            </div>
- -->
                             {# Attendance rate #}
 
                             <div class="course-attendance-rate">
@@ -402,13 +342,9 @@
                             {# Action #}
 
                             <div class="attendance-action">
-                                <a
-                                    href="{% url 'profiles:company_admin_course_attendance' course.id %}"
-                                    class="btn-course-details"
-                                >
+                                <a href="{% url 'profiles:company_admin_course_attendance' course.id %}" class="btn-course-details">
                                     Details
-                                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="">
-                                </a>
+                                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
                             </div>
 
                         </div>
@@ -418,17 +354,11 @@
                         <div class="attendance-empty-message">
                             <i class="fa-solid fa-magnifying-glass mb-3"></i>
 
-                            <p>
-                                No courses matched the selected filters.
-                            </p>
+                            <p>No courses matched the selected filters.</p>
 
                             {% if selected_date or course_search or employee_search %}
-                                <a
-                                    href="{% url 'profiles:company_admin_all_courses_attendance' %}"
-                                    class="btn-course-details"
-                                >
-                                    Clear filters
-                                </a>
+                                <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="btn-course-details">
+                                    Clear filters</a>
                             {% endif %}
                         </div>
 
@@ -436,7 +366,6 @@
 
                 </div>
 
-            </div>
 
         </div>
     </div>

@@ -751,8 +751,6 @@
 }
 
 
-
-
 @media (max-width: 576px) {
     
     .profile-dashboard .dashboard-general-info-card .meta-card {
@@ -762,6 +760,20 @@
     .profile-dashboard .weekly-overview .meta-row {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
+    }
+
+}
+
+
+
+@media (max-width: 370px) {
+
+    .next-class-card .info {
+        padding: 10.5rem 2rem 2rem;
+    }
+
+    .student-detail-card h2 {
+        font-size: 1.5rem;
     }
 
 }

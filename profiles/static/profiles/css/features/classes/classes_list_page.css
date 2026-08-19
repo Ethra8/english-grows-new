@@ -610,4 +610,28 @@ h2 {
 /* MUST STAY AT THE END OF CSS FILE */
 .assigned-class-row.class-hidden {
     display: none !important;
-}    
+}
+
+/* Chrome, Edge and Safari */
+
+.classes-list .assigned-courses-list::-webkit-scrollbar {
+    width: auto;
+    height: 14px;
+}
+
+.classes-list .assigned-courses-list::-webkit-scrollbar-track {
+    background: var(--color-navy);
+    border-radius: 999px;
+}
+
+.classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
+    min-width: 60px;
+    background: var(--color-turquoise);
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+}
+
+.classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
+    background: var(--color-icy);
+}
+

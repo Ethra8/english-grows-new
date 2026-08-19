@@ -428,6 +428,16 @@
         gap: 0.75rem;
         display: none;
     }
+
+    .course-status-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .course-status-buttons {
+        display: none;
+    }
+
 }
 
 

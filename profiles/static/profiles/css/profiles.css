@@ -573,7 +573,7 @@ div:has(> .student-action-btn) {
     text-align: center;
 }
 
-.status-badge.status-badge-student {
+.status-badge.status-course {
     display:flex;
     align-content: center;
     align-items: center;
@@ -586,7 +586,7 @@ div:has(> .student-action-btn) {
     max-height: 38px;
 }
 
-.status-badge.status-badge-student i {
+.status-badge.status-course i {
     color: var(--color-navy);
     font-size: 1.2rem;
 }
@@ -1824,25 +1824,10 @@ div:has(> .student-action-btn) {
 
 @media (max-width: 1250px) {
 
-    /* .profile-page {
-        padding: 70px 15px 70px 15px;
-    } */
-
     /* === SIDEBAR ===================================== */
     .profile-sidebar {
         max-width: 220px;
         padding: 2rem 0.75rem;
-    }
-
-    /******************************************************/
-    /* COURSE DETAILS Page ***************************** */
-    /******************************************************/
-
-    .student-list-header-buttons {
-        /* flex-direction: column; */
-        gap: 0.5rem;
-        align-items: baseline;
-        margin-bottom: 1.5rem;
     }
 
     .course-materials-child {
@@ -1903,9 +1888,10 @@ div:has(> .student-action-btn) {
 
 @media (max-width: 991.98px) {
 
-    .student-detail-page.profile-page {
-        padding: 20px 5% 70px;
+    h1 {
+        font-weight: 700;
     }
+
 
     /* *** H1 ****************************************/
 
@@ -2010,54 +1996,13 @@ div:has(> .student-action-btn) {
         grid-row: auto;
     }
 
-    .student-list-header-buttons {
-        flex-direction: row;
-        gap: 1rem;
-        align-items: center;
-    }
 
-    .student-list-header-buttons a {
-        margin: 0 1.5rem 0.5rem; 
-    }
-
-    /*****************************************************|
-    |*** COURSE DETAIL Page *******************************|
-    |*****************************************************/
-    .course-materials-child {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        padding: 1.5rem;
-        align-items: baseline;
-    }
-
-    .my-course .course-card {
-        min-width: none !important;
-        margin: 0 auto;
-    }
-
-    /*****************************************************|
-    |*** STUDENT DETAIL Page  ****************************|
-    |*****************************************************/
-    .student-detail-tabs-wrapper {
-        margin-bottom: .5rem;
-    }
-
-    .student-detail-tabs {
-        justify-content: flex-start;
-    }
-
-    .student-detail-tabs a {
-        padding-inline: 1rem;
-    }
-
-
-    /* ACCOUNT SETTINGS Page *********************/
+    /* ACCOUNT SETTINGS Page */
     .profile-settings-page {
         padding: 70px 2%;
     }
 
-    /* Course Selector Form */
+    /* FORM: COURSE SELECTOR */
     .course-selector-form {
         flex-direction: column;
         align-items: stretch;
@@ -2078,7 +2023,7 @@ div:has(> .student-action-btn) {
         width: 100%;
         font-size: 0.9rem;
     }
-
+    /* END FORM Course selector */
 
 }
 
@@ -2088,141 +2033,6 @@ div:has(> .student-action-btn) {
     /*  MAIN PROFILE *************************** */
     .student-detail-page.profile-page {
         padding: 10px 5% 70px;
-    }
-
-
-    /*  STUDENT: My DASHBOARD Page ************* */
-    
-    /* .next-class-card,
-    .next-class-card .info {
-        margin: 0 auto;
-    } */
-
-
-    /* STUDENT: My COURSE Page ***************** */
-
-    h1 {
-        font-weight: 700;
-    }
-
-    .my-course {
-        padding: 0 4% 70px;
-    }
-
-    .my-course header {
-        margin: 3rem auto 0 1rem;
-        text-align: center;
-        /* flex-direction: column;
-        gap: 0.75rem; */
-    }
-
-    .my-course header > div:nth-child(1) {
-        flex-direction: column;
-        gap: 2.5rem;    
-        }
-
-    .my-course header h1 {
-        text-align: left;
-    }
-
-    .my-course header h2 {
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-        margin-top: 1.75rem;
-    }
-
-    .my-course header h2 span:nth-of-type(2) {
-        display: none;
-    }
-
-    .wrapper-course-card {
-        margin: 0 auto;
-    }
-
-    .my-course .course-card {
-        padding: 0%;
-    }
-
-    .course-card .info {
-        /* min-width: 0 !important; */
-        padding: 10.5rem 2rem 2rem;
-    }
-
-    .course-card .info .col:first-child {
-        padding-left: 0.5rem;
-    }
-
-    .course-card .info .col:nth-child(2) {
-        padding-left: 0;
-    }
-
-    .course-card .info .col:last-child {
-        padding-left: 0;
-    }
-
-    .course-card .info > div:first-of-type {
-        flex-direction: column;
-    }
-
-    .course-card .info > div:first-of-type .next-class-info {
-        padding-left: 0.5rem;
-    }
-
-    .course-card .info > div:first-of-type .timetable-info {
-        gap: 1rem;
-        padding-left: 0.5rem;
-    }
-
-    .course-card .info > div:first-of-type .next-class-info::before {
-        transform: translateY(0);
-        background: transparent;
-    }
-
-    /* STUDENT: MY LEARNING PROGRESS Page */
-
-    .learner-employee-detail-page .wrapper-attendance-summary-card {
-        display: grid;
-        grid-template-columns: 1fr;
-        margin: 1.5rem auto;
-        width: 100%;
-    }
-
-    /* STUDENT: My ATTENDANCE Page ****** */
-
-    /* .my-attendance {
-        margin: 0 auto;
-    } */
-
-    .attendance-progress-card .info {
-        padding: 7.5rem 4% 2rem;
-    }
-
-    .attendance-progress-card .circle-panel1 {
-        top: -490px;
-        left: -170px;
-        width: 600px;
-        height: 600px;
-    }
-
-    .attendance-progress-card .circle-panel1::after {
-        font-size: 5rem;
-        color: rgba(var(--color-turquoise-rgb), 0.1);
-        position: absolute;
-        top: 475px;
-        right: 186px;
-        rotate: calc(12deg);
-    }
-
-    .attendance-progress-card .circle-panel1 h2 {
-        margin: 26rem 1rem 0 5rem;
-    }
-
-    .attendance-progress-card .circle-panel2 {
-        top: -490px;
-        left: -160px;
-        width: 610px;
-        height: 610px;
     }
 
 
@@ -2239,130 +2049,5 @@ div:has(> .student-action-btn) {
         padding: 0px 3% 70px;
     }
 
-    /* STUDENT: My DASHBOARD Page *****
-
-    .wrapper-next-class-card {
-        min-width: 100%;
-        margin: 0 auto;
-    }
-    
-    .next-class-card,
-    .next-class-card .info {
-        margin: 0 auto;
-        min-width: 100%;
-    }
-
-    .next-class-card .circle-panel1 {
-        top: -490px;
-        left: -170px;
-        width: 600px;
-        height: 600px;
-    }
-
-    .next-class-card .info{
-        padding: 10.5rem 3.5rem 2rem;
-        max-width: max-content;
-        justify-content: space-between !important;
-    }
-
-    .next-class-card .circle-panel1::after {
-        font-size: 5.5rem;
-        color: rgba(var(--color-turquoise-rgb), 0.1);
-        position: absolute;
-        top: 480px;
-        right: 180px;
-    }
-
-    .next-class-card .circle-panel1 h2 {
-        margin: 27rem 1rem 0;
-    }
-
-    .next-class-card .circle-panel2 {
-        top: -488px;
-        left: -165px;
-        width: 610px;
-        height: 610px;
-        min-width: 290px;
-    }
-
-    .btn-join-class {
-        width: 100%;
-    } */
-
-    /* *** MY COURSE Page ******************************** */
-
-    .my-course {
-        padding: 0 3% 70px;
-    }
-
-    .my-course header h1 {
-        padding: 0;
-    }
-
-    .my-course .course-card .info {       
-        padding: 10.5rem 1rem 3rem;
-    }
-
-    .course-card .info > div:first-of-type .next-class-info {
-        padding-left: 0.5rem;
-    }
-
-    .course-card .info > div:first-of-type .timetable-info {
-        gap: 1rem;
-        padding-left: 0.5rem;
-    }
-
-
-    /*****************************************************|
-    |*** ATTENDANCE DETAIL Page  *************************|
-    |*****************************************************/
-    .learner-employee-detail-page .attendance-summary-card {
-        min-height: 0;
-        height: 56px;
-        padding: 1.4rem;
-        width: 100%;
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    .learner-employee-detail-page .attendance-summary-card strong {
-        padding: 0.15rem 0.8rem;
-    }
-
-    /* My ATTENDANCE Page ******************************* */
-
-    /* .my-attendance {
-        padding: 70px 3%;
-        width: stretch;
-    } */
-
-    /* .my-attendance header .item strong {
-        font-size: 1.2rem;
-    }
-
-    .my-attendance header .item-icon {
-        width: 36px;
-        height: 36px;
-    }
-
-    .my-attendance header .item .fa-solid {
-        font-size: 1.2rem;
-    } */
-
-
-}
-
-
-
-@media (max-width: 370px) {
-
-    .next-class-card .info {
-        padding: 10.5rem 2rem 2rem;
-    }
-
-    .student-detail-card h2,
-    .recent-attendance-card h2 {
-        font-size: 1.5rem;
-    }
 
 }

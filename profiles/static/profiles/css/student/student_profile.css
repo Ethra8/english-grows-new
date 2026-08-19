@@ -127,6 +127,39 @@
     .next-class-card .info {
         margin: 0 auto;
     }
+
+    /* STUDENT: My ATTENDANCE Page ****** */
+    .attendance-progress-card .info {
+        padding: 7.5rem 4% 2rem;
+    }
+
+    .attendance-progress-card .circle-panel1 {
+        top: -490px;
+        left: -170px;
+        width: 600px;
+        height: 600px;
+    }
+
+    .attendance-progress-card .circle-panel1::after {
+        font-size: 5rem;
+        color: rgba(var(--color-turquoise-rgb), 0.1);
+        position: absolute;
+        top: 475px;
+        right: 186px;
+        rotate: calc(12deg);
+    }
+
+    .attendance-progress-card .circle-panel1 h2 {
+        margin: 26rem 1rem 0 5rem;
+    }
+
+    .attendance-progress-card .circle-panel2 {
+        top: -490px;
+        left: -160px;
+        width: 610px;
+        height: 610px;
+    }
+
 }
 
 

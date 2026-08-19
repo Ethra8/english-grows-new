@@ -8,10 +8,9 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details.css' %}">
 {% endblock %}
 
 
@@ -52,7 +51,7 @@
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
             </div>
-            <span class="status-badge status-badge-student">
+            <span class="status-badge status-course">
                 {% if course.status == 'confirmed' %}
                     <i class="fa-regular fa-circle-check mr-2"></i>
                 {% elif course.status == 'active' %}

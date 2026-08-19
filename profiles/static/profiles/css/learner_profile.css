@@ -800,10 +800,28 @@
 
 @media (max-width: 991.99px) {
     
+    .student-detail-page.profile-page {
+        padding: 20px 5% 70px;
+    }
+
     .student-detail-page header h1 {
         font-size: 2.6rem;
     }
 
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  ****************************|
+    |*****************************************************/
+    .student-detail-tabs-wrapper {
+        margin-bottom: .5rem;
+    }
+
+    .student-detail-tabs {
+        justify-content: flex-start;
+    }
+
+    .student-detail-tabs a {
+        padding-inline: 1rem;
+    }
 
 }
 
@@ -865,12 +883,23 @@
         grid-template-columns: 1fr;
     }
 
-    .attendance-record-grid {
-        display: grid;
+
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  ****************************|
+    |*****************************************************/
+
+    .student-detail-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .student-overview-grid {
         grid-template-columns: 1fr;
-        grid-template-rows: 2fr;
-        gap: 1rem;
-        margin-top: 1.25rem;
+    }
+
+    .student-ring-row {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
 }
@@ -954,3 +983,10 @@
 
 
 
+@media (max-width: 370px) {
+
+    .student-detail-card h2 {
+        font-size: 1.5rem;
+    }
+
+}
