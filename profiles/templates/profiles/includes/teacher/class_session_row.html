@@ -1,92 +1,152 @@
 {% load static %}
 
-<div class="assigned-class-row"
-     data-status-group="{{ session.class_status_group }}"
-     data-today="{{ session.is_today|yesno:'true,false' }}"
-     data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
-     data-monthly="{{ session.is_this_month|yesno:'true,false' }}">
+<div
+    class="assigned-class-row"
+    data-status-group="{{ session.class_status_group }}"
+    data-today="{{ session.is_today|yesno:'true,false' }}"
+    data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
+    data-monthly="{{ session.is_this_month|yesno:'true,false' }}"
+>
 
+    <!-- COURSE / CLASS INFO -->
     <div class="class-main-info">
 
         <div class="class-list-group-name">
+
             <div>
+
                 {% if session.course.enrollments.count == 1 %}
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="One-to-one course"
+                    >
+
                 {% else %}
-                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+
+                    <img
+                        src="{% static 'icons/group_course_icon.png' %}"
+                        alt="Group course"
+                    >
+
                 {% endif %}
+
+
                 <a href="{% url 'profiles:teacher_course_details' session.course.id %}">
+
                     <div>
-                        <h3>{{ session.course.name }}</h3>
-                        <span>Lesson {{ session.class_number }}</span>                       
+
+                        <h3>
+                            {{ session.course.name }}
+                        </h3>
+
+                        <span>
+                            Lesson {{ session.class_number }}
+                        </span>
+
                     </div>
+
                 </a>
+
             </div>
+
         </div>
 
     </div>
 
+
+    <!-- LEVEL -->
     <div>
-        <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
-            {{ session.course.course_level|default:"Pending" }}</span>
+
+        <span
+            class="level level-{{ session.course.course_level|lower|cut:'.' }}"
+        >
+            {{ session.course.course_level|default:"Pending" }}
+        </span>
+
     </div>
 
+
+    <!-- DATE / TIME -->
     <div class="class-list-date">
+
         <div class="icon">
             <i class="fa-solid fa-calendar-day"></i>
         </div>
+
         <div>
-            <strong>{{ session.start_time|date:"D, j M" }}</strong>
-            <span>{{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</span>
+
+            <strong>
+                {{ session.start_time|date:"D, j M" }}
+            </strong>
+
+            <span>
+                {{ session.start_time|time:"H:i" }}
+                -
+                {{ session.end_time|time:"H:i" }}
+            </span>
+
         </div>
+
     </div>
+
+
+    <!-- STUDENT COUNT -->
     <div class="class-list-student-num">
+
         <div class="icon">
+
             {% if session.course.enrollments.count == 1 %}
+
                 <i class="fa-solid fa-user"></i>
+
             {% elif session.course.enrollments.count == 2 %}
+
                 <i class="fa-solid fa-people-arrows"></i>
+
             {% else %}
+
                 <i class="fa-solid fa-users-line"></i>
+
             {% endif %}
+
         </div>
-        <strong>{{ session.course.enrollments.count }}</strong>   
+
+        <strong>
+            {{ session.course.enrollments.count }}
+        </strong>
+
     </div>
 
-    <!-- <div class="course-action">
-        <a href="#" class="btn-course-details">
-            <i class="fa-regular fa-eye mr-2"></i>
-            View
-            <i class="fa-solid fa-chevron-right ml-2"></i>
-        </a>
-    </div> -->
 
+    <!-- TEACHER ACTION -->
     <div class="course-action">
-        {% if session.is_today or session.is_upcoming %}
-        <button
-            type="button"
-            class="js-open-reschedule-modal btn-course-details"
-            data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
-            data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
-            data-class-date="{{ session.start_time|date:'D, j M' }}"
-            data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}">
-            <span><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
-            Reschedule</span>
-            <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
-        </button>
-        {% endif %}
-    </div>
 
-    <!-- <div class="course-action">
-        <a href="#" class="btn-course-details">
-            <i class="fa-regular fa-eye mr-2"></i>
-            View
-            <i class="fa-solid fa-chevron-right ml-2"></i>
-        </a>
-    </div> -->
+        {% if session.is_today or session.is_upcoming %}
+
+            <button
+                type="button"
+                class="js-open-reschedule-modal btn-course-details"
+                data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+                data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                data-class-date="{{ session.start_time|date:'D, j M' }}"
+                data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
+            >
+
+                <span>
+                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-2"></i>
+                    Reschedule
+                </span>
+
+                <img
+                    src="{% static 'icons/arrow_right_teal_icon.png' %}"
+                    alt=""
+                >
+
+            </button>
+
+        {% endif %}
+
+    </div>
 
 </div>
-</a>
-
-
-

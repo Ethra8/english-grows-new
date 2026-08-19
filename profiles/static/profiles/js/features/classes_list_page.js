@@ -1,0 +1,280 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =========================================================
+       CLASS SESSIONS
+       Upcoming / Past tabs + Today / Week / Month / All filters
+    ========================================================= */
+
+    const statusTabs =
+        document.querySelectorAll(".classes-status-tab");
+
+    const statusPanels =
+        document.querySelectorAll(".classes-status-panel");
+
+
+    /* ---------------------------------------------------------
+       HELPERS
+    --------------------------------------------------------- */
+
+    function datasetIsTrue(value) {
+        return (
+            value === "true" ||
+            value === "True" ||
+            value === "1"
+        );
+    }
+
+
+    /* ---------------------------------------------------------
+       APPLY FILTER TO ONE STATUS PANEL
+    --------------------------------------------------------- */
+
+    function applyFilter(panel, filter) {
+
+        const rows =
+            panel.querySelectorAll(".assigned-class-row");
+
+        const noClassesMessage =
+            panel.querySelector(".no-classes-message");
+
+        let visibleRows = 0;
+
+
+        rows.forEach(row => {
+
+            let shouldShow = false;
+
+            switch (filter) {
+
+                case "today":
+                    shouldShow =
+                        datasetIsTrue(row.dataset.today);
+                    break;
+
+                case "weekly":
+                    shouldShow =
+                        datasetIsTrue(row.dataset.weekly);
+                    break;
+
+                case "monthly":
+                    shouldShow =
+                        datasetIsTrue(row.dataset.monthly);
+                    break;
+
+                case "all":
+                    shouldShow = true;
+                    break;
+
+                default:
+                    shouldShow = true;
+            }
+
+
+            row.classList.toggle(
+                "class-hidden",
+                !shouldShow
+            );
+
+
+            if (shouldShow) {
+                visibleRows++;
+            }
+
+        });
+
+
+        /* Empty-state message */
+        if (noClassesMessage) {
+            noClassesMessage.hidden =
+                visibleRows !== 0;
+        }
+    }
+
+
+    /* ---------------------------------------------------------
+       SET FILTER FOR ONE PANEL
+    --------------------------------------------------------- */
+
+    function setPanelFilter(panel, filter) {
+
+        const buttons =
+            panel.querySelectorAll(".classes-filter-btn");
+
+        const select =
+            panel.querySelector(".classes-panel-select");
+
+
+        /* Desktop buttons */
+        buttons.forEach(button => {
+
+            const isActive =
+                button.dataset.filter === filter;
+
+            button.classList.toggle(
+                "active",
+                isActive
+            );
+
+        });
+
+
+        /* Mobile select */
+        if (select) {
+            select.value = filter;
+        }
+
+
+        /* Remember filter separately for each panel */
+        panel.dataset.activeFilter = filter;
+
+
+        /* Actually filter rows */
+        applyFilter(panel, filter);
+    }
+
+
+    /* ---------------------------------------------------------
+       INITIALISE FILTER CONTROLS FOR EACH PANEL
+    --------------------------------------------------------- */
+
+    statusPanels.forEach(panel => {
+
+        const buttons =
+            panel.querySelectorAll(".classes-filter-btn");
+
+        const select =
+            panel.querySelector(".classes-panel-select");
+
+
+        /* Desktop filter buttons */
+        buttons.forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const filter =
+                        this.dataset.filter;
+
+                    setPanelFilter(
+                        panel,
+                        filter
+                    );
+                }
+            );
+
+        });
+
+
+        /* Mobile select */
+        if (select) {
+
+            select.addEventListener(
+                "change",
+                function () {
+
+                    setPanelFilter(
+                        panel,
+                        this.value
+                    );
+                }
+            );
+
+        }
+
+
+        /*
+         * Default filter for BOTH panels.
+         *
+         * Upcoming -> Today
+         * Past     -> Today
+         */
+        setPanelFilter(
+            panel,
+            "today"
+        );
+
+    });
+
+
+    /* ---------------------------------------------------------
+       UPCOMING / PAST STATUS NAVIGATION
+    --------------------------------------------------------- */
+
+    function showStatusPanel(status) {
+
+        statusTabs.forEach(tab => {
+
+            const isActive =
+                tab.dataset.statusTab === status;
+
+            tab.classList.toggle(
+                "active",
+                isActive
+            );
+
+            tab.setAttribute(
+                "aria-selected",
+                isActive ? "true" : "false"
+            );
+
+        });
+
+
+        statusPanels.forEach(panel => {
+
+            const isActive =
+                panel.dataset.statusPanel === status;
+
+            panel.classList.toggle(
+                "active",
+                isActive
+            );
+
+            panel.hidden = !isActive;
+
+
+            /*
+             * Reapply this panel's own filter when it
+             * becomes visible.
+             */
+            if (isActive) {
+
+                const activeFilter =
+                    panel.dataset.activeFilter || "today";
+
+                applyFilter(
+                    panel,
+                    activeFilter
+                );
+            }
+
+        });
+
+    }
+
+
+    statusTabs.forEach(tab => {
+
+        tab.addEventListener(
+            "click",
+            function () {
+
+                showStatusPanel(
+                    this.dataset.statusTab
+                );
+
+            }
+        );
+
+    });
+
+
+    /* ---------------------------------------------------------
+       DEFAULT VIEW
+       Upcoming Classes
+    --------------------------------------------------------- */
+
+    showStatusPanel("upcoming");
+
+});
