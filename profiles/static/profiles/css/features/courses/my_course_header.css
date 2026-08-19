@@ -1,0 +1,96 @@
+.my-course header {
+    max-width: fit-content;
+    margin-top: 2rem;
+}
+
+.my-course header > div:nth-child(1) {
+    gap: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-course header h1 {
+    color: var(--color-navy);
+    /* font-family: "Big Shoulders Display", sans-serif;
+    font-size: clamp(2rem, 3vw, 3.2rem);
+    letter-spacing: 0.03em; */
+    margin-left: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.my-course header > div:nth-child(2) {
+    gap: 1.95rem;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    margin: 1.75rem 0 2rem;
+}    
+
+.my-course header h2 {
+    color: var(--color-navy);
+    font-size: 1.5rem;
+    margin-top: 0;
+    padding-top: 0;
+    text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
+}
+
+/* horizontal line separating course type | total_hours */
+.my-course header h2 > span:nth-child(2) {
+    padding: 0 .8rem;
+    color: var(--color-teal);
+}
+
+
+
+
+
+@media (max-width: 767.98px) {
+
+    .my-course {
+        padding: 0 4% 70px;
+    }
+
+    .my-course header {
+        margin: 3rem auto 0 1rem;
+        text-align: center;
+    }
+
+    .my-course header > div:nth-child(1) {
+        flex-direction: column;
+        gap: 2.5rem;    
+        }
+
+    .my-course header h1 {
+        text-align: left;
+        font-weight: 700;
+    }
+
+    .my-course header h2 {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .my-course header h2 span:nth-of-type(2) {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    /* *** MY COURSE Page ******************************** */
+
+    .my-course {
+        padding: 0 3% 70px;
+    }
+
+    .my-course header h1 {
+        padding: 0;
+    }
+
+}

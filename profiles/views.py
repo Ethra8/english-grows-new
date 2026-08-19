@@ -1714,7 +1714,7 @@ def teacher_group_attendance(request, course_id):
 
 
 @login_required
-def teacher_session_attendance_detail(request, session_id):
+def teacher_attendance_detail(request, session_id):
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
@@ -1752,7 +1752,7 @@ def teacher_session_attendance_detail(request, session_id):
 
     return render(
         request,
-        "profiles/teacher/teacher_session_attendance_detail.html",
+        "profiles/teacher/teacher_attendance_detail.html",
         context,
     )
 

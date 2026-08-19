@@ -170,6 +170,7 @@ h3 > div {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    min-width: fit-content;
     color: var(--color-teal);
     box-shadow: 0 3px 3px rgba(var(--color-shadow-rgba));
 }
@@ -324,12 +325,12 @@ h3 > div {
         padding-top: 2rem;
     }
 
-    .company-admin-course-details-page .student-row-parent,
+    .course-details-page .student-row-parent,
     .teacher-course-details-page .student-row-parent {
         padding: 0;
     }
 
-    .company-admin-course-details-page .student-row,
+    .course-details-page .student-row,
     .teacher-course-details-page .student-row {
         padding: 0.25rem 0.25rem 0.75rem;
     }

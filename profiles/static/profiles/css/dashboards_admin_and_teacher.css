@@ -1,3 +1,9 @@
+.dashboard-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+}
+
 .wrapper-dashboard-card {
     border-radius: 8px;
     padding: 4px;
@@ -27,7 +33,7 @@
 
 .dashboard-meta-cards .meta-card {
     padding: 0.25rem 1.5rem 0.25rem 3rem;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
 }
 
 .dashboard-meta-cards .meta-card.meta-courses::after {
@@ -180,7 +186,7 @@
     display: flex;
     align-items: center;
     /* justify-content: flex-start; */
-    color: #5eead4;
+    color: var(--color-turquoise);
     font-weight: 700;
     background: rgba(var(--color-navy-rgb), 0.95);
     border-radius: 8px;

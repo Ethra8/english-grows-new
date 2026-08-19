@@ -8,51 +8,69 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="teacher-attendance-detail-page profile-page course-details">
+<section class="course-details-page my-course profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
+    <div class="row mb-3">
+        <div class="col-12 mb-2">
+            <p class="go-back-link">
+                <a href="#" class="text-white js-back-link">
+                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                    Go Back
+                </a>
+            </p>
+        </div>
+    </div>    
+
     <header>
         <!-- 1st Child -->
-        <div class="row mb-3">
-            <div class="col-12 mb-2">
-                <p class="go-back-link">
-                    <a href="#" class="js-back-link">
-                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                        Go Back
-                    </a>
-                </p>
-            </div>
-        </div>    
-        <!-- 2nd Child -->
         <div>
-            <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                {{ course.course_level|default:"Pending" }}</span>
-            
-            <h1>{{ course.name }}</h1>
-        </div>
-        <!-- 3rd Child -->
-        <div>   
-            <h2>
-                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name }}</span>
-                <span>|</span>
-                <span><i class="fa-regular fa-clock mr-3"></i>{{ course.total_hours|clean_decimal }} h.</span>
-            </h2>
-        </div>
-        
-        <span class="status-badge {{ course.status }} mb-3">
-        {{ course.get_status_display }}</span>
-        
-        <hr>
+            <div>
+                <h1>{{ course.name|default:"Course Name" }}</h1>
+                <h2>
+                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
+                    <span>|</span>
+                    <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ course.total_hours|clean_decimal }} h.</span>
+                </h2>
 
-    </header>
+            </div>
+        </div>
+        <div>
+            <div class="col-12 level-pill">
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
+                <span class="current-level-value">
+                    {{ course.course_level|default:"Level Pending" }}
+                </span>
+            </div>
+            <span class="status-badge status-course">
+                {% if course.status == 'confirmed' %}
+                    <i class="fa-regular fa-circle-check mr-2"></i>
+                {% elif course.status == 'active' %}
+                    <i class="fa-regular fa-circle-play mr-2"></i>
+                {% elif course.status == 'completed' %}
+                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                {% elif course.status == 'paused' %}
+                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                {% elif course.status == 'cancelled' %}
+                    <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% endif %}
+                    {{ course.get_status_display|default:"In progress" }}
+            </span>
+
+        </div>
+        
+    </header> 
+    <hr>    
+
 
     <div class="wrapper-attendance-course-info">
         <div>
@@ -73,7 +91,7 @@
 
         <div class="attendance-detail-card-header">
             <div>
-                <h2>Registered Attendance</h2>
+                <h3>Registered Attendance</h3>
                 <p><strong>{{ total_count }}</strong> student record{{ total_count|pluralize }} saved for this session.</p>
             </div>
 

@@ -107,7 +107,7 @@ h2 {
 .classes-list-filter {
     background-color: rgba(var(--color-navy-rgb), 0.6);
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    border: solid 2px #5eead4;
+    border: solid 2px var(--color-turquoise);
     border-radius: 8px;
     padding: .6rem 2.5rem .6rem 1rem;
     color: var(--color-whitesmoke);
@@ -156,13 +156,13 @@ h2 {
     background: rgba(var(--color-icy-rgb), 0.3);
 }
 
-.class-main-info {
+.class-list-course {
     display: flex;
     align-items: center;
     gap: 1.3rem;
 }
 
-.class-main-info h3 {
+.class-list-course h3 {
     font-weight: 500;
     color: var(--color-navy);
     margin: 0 0 .35rem;
@@ -171,12 +171,12 @@ h2 {
     transition: all 0.2s ease;
 }
 
-.class-main-info h3:hover {
+.class-list-course h3:hover {
     font-weight: 600;
 }
 
 .assigned-class-level span.status-badge
-.class-main-info span.status-badge {
+.class-list-course span.status-badge {
     border-radius: 20px;
     padding: 0.2rem 1rem !important;
     font-weight: 700;
@@ -191,7 +191,7 @@ h2 {
 }
 
 .course-list-group-name > div:first-of-type,
-.class-list-group-name > div:first-of-type,
+.class-list-course > div:first-of-type,
 .attendance-list .attendance-row > div:first-of-type {
     display: flex;
     flex-direction: row;
@@ -202,7 +202,7 @@ h2 {
     gap: 0.5rem;
 }
 
-.class-list-group-name > div:first-of-type img,
+.class-list-course > div:first-of-type img,
 .course-list-group-name > div:first-of-type img,
 .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
@@ -217,7 +217,7 @@ h2 {
     justify-content: center;
 }
 
-.class-list-group-name > div:first-of-type span,
+.class-list-course > div:first-of-type span,
 .course-list-group-name > div:first-of-type span,
 .attendance-list .attendance-row > div:first-of-type span {
     color: var(--color-steel);
@@ -330,7 +330,7 @@ h2 {
             transparent calc(55% - var(--ring-thickness) + 1px)
         ),
         conic-gradient(
-            #5eead4 calc(var(--completion, 0) * 1%),
+            var(--color-turquoise) calc(var(--completion, 0) * 1%),
             rgba(255, 255, 255, 0.2) 0
         );
     border: 0.25px solid #a2b8bb;
@@ -663,7 +663,7 @@ h2 {
 }
 
 .student-row a span:hover {
-    color: #5eead4 !important;
+    color: var(--color-turquoise) !important;
 }
 
 .student-row span {
@@ -1194,7 +1194,7 @@ h2 {
     }
  */
 
-    .class-list-group-name, 
+    .class-list-course, 
     .course-list-group-name {
         border-left: none;
         padding-left: 0;
@@ -1300,114 +1300,6 @@ h2 {
     }
 
 
-    /*****************************************************|
-    |*** ALL ATTENDANCE PageS  ***************************|
-    |*****************************************************/
-    /* .teacher-attendance-page {
-        padding: 2rem 1rem;
-    } */
-
-    .attendance-list-card {
-        min-height: 260px;
-        background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-        border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
-        padding: .6rem;
-    }
-
-    .attendance-filter-btn {
-        padding: 0.25rem 0.8rem;
-        gap: 1rem;
-        justify-content: space-between;
-        display: flex;
-        align-items: center;
-    }
-
-    .attendance-filter-btn span {
-        text-align: left;
-    }
-
-    /* .attendance-filter-btn.active::after {
-        display: none;
-    }
- */
-
-    /*****************************************************|
-    |*** TAKE ATTENDANCE Page  ***************************|
-    |*****************************************************/
-    
-    .wrapper-attendance-summary-card {
-        width: 100%;
-    }
-
-    .take-attendance-page .wrapper-attendance-summary-card {
-        flex-direction: row;
-        display: flex;
-        align-content: space-around;
-        min-height: 80px;
-    }
-
-    .take-attendance-page .attendance-summary-card {
-        min-height: 0;
-        max-height: 56px;
-        padding: 0.6rem;
-        gap: 0.6rem;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .mark-all-actions {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    .take-attendance-page .attendance-radio-group {
-        justify-content: space-around;
-        width: 100%;
-        padding: 0.4rem 1rem;
-    }
-
-
-    .take-attendance-save-bar .take-attendance-save-btn,
-    .take-attendance-save-bar .take-attendance-cancel-btn {
-        min-width: 0;
-    }
-
-
-    /*****************************************************|
-    |*** ATTENDANCE DETAIL Page  *************************|
-    |*****************************************************/
-    .attendance-summary-card,
-    .attendance-summary-card {
-        min-height: 0;
-        height: 56px;
-        padding: 1.4rem;
-        width: 100%;
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    .attendance-summary-card strong,
-    .attendance-summary-card strong {
-        padding: 0.15rem 0.8rem;
-    }
-
-    .take-attendance-row {
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: flex-start;
-        flex-wrap: nowrap;
-        gap: 1rem;
-    }
-
-    /* .student-avatar {
-        display: none;
-        visibility: hidden;
-    } */
-
-    .take-attendance-card,
-    .attendance-detail-card {
-        padding: 0.4rem;
-    }
 
     /*****************************************************|
     |*** STUDENT DETAIL Page  *************************|

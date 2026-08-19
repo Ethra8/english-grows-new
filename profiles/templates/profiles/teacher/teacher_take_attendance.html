@@ -16,44 +16,60 @@
 
 {% block profile_content %}
 
-<section class="take-attendance-page profile-page course-details">
+<section class="course-details-page my-course take-attendance-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
+    <div class="row mb-3">
+        <div class="col-12 mb-2">
+            <p class="go-back-link">
+                <a href="#" class="text-white js-back-link">
+                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
+                    Go Back
+                </a>
+            </p>
+        </div>
+    </div>    
+
     <header>
         <!-- 1st Child -->
-        <div class="row mb-3">
-            <div class="col-12 mb-2">
-                <p class="go-back-link">
-                    <a href="#" class="js-back-link">
-                        <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                        Go Back
-                    </a>
-                </p>
-            </div>
-        </div>    
-        <!-- 2nd Child -->
         <div>
-            <span class="level level-{{ class_session.course.course_level|lower|cut:'.' }}">
-                {{ class_session.course.course_level|default:"Pending" }}</span>
-            
-            <h1>{{ class_session.course.name }}</h1>
-        </div>
-        <!-- 3rd Child -->
-        <div>   
-            <h2>
-                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ class_session.course.course_type.name }}</span>
-                <span>|</span>
-                <span><i class="fa-regular fa-clock mr-3"></i>{{ class_session.course.total_hours|clean_decimal }} h.</span>
-            </h2>
-        </div>
-        
-        <span class="status-badge {{ class_session.course.status }} mb-3">
-        {{ class_session.course.get_status_display }}</span>
-        
-        <hr>
+            <div>
+                <h1>{{ class_session.course.name|default:"Course Name" }}</h1>
+                <h2>
+                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ class_session.course.course_type.name|default:"Course Type" }}</span>
+                    <span>|</span>
+                    <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ class_session.course.total_hours|clean_decimal }} h.</span>
+                </h2>
 
-    </header>
+            </div>
+        </div>
+        <div>
+            <div class="col-12 level-pill">
+                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
+                <span class="current-level-value">
+                    {{ class_session.course.course_level|default:"Level Pending" }}
+                </span>
+            </div>
+            <span class="status-badge status-course">
+                {% if class_session.course.status == 'confirmed' %}
+                    <i class="fa-regular fa-circle-check mr-2"></i>
+                {% elif class_session.course.status == 'active' %}
+                    <i class="fa-regular fa-circle-play mr-2"></i>
+                {% elif class_session.course.status == 'completed' %}
+                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                {% elif class_session.course.status == 'paused' %}
+                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                {% elif class_session.course.status == 'cancelled' %}
+                    <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% endif %}
+                    {{ class_session.course.get_status_display|default:"In progress" }}
+            </span>
+
+        </div>
+        
+    </header> 
+    <hr>    
 
     <div class="wrapper-attendance-course-info">
         <div>
@@ -78,7 +94,10 @@
 
             <div class="take-attendance-card-header">
             <div class="w-100">
+                <h3>Take Attendance</h3>
+
                 <p>Mark each student as:</p>
+
                 <div class="wrapper-attendance-summary-card">
 
                     <div class="attendance-summary-card">
@@ -111,6 +130,8 @@
                 </div>
 
             </div>
+                <p>Mark all students at once:</p>
+
                 <div class="mark-all-actions">
                     <button type="button" class="mark-all-btn mark-all-attended-btn" data-status="attended">
                        <i class="fa-solid fa-users-viewfinder mr-2"></i> ALL <i class="fa-solid fa-user-check ml-2"></i>

@@ -103,7 +103,7 @@
 
 .course-status-btn i {
     font-size: 1.3rem;
-    color: #5eead4;
+    color: var(--color-turquoise);
 }
 
 .course-status-btn strong {
@@ -362,7 +362,7 @@
             transparent calc(55% - var(--ring-thickness) + 1px)
         ),
         conic-gradient(
-            #5eead4 calc(var(--completion, 0) * 1%),
+            var(--color-turquoise) calc(var(--completion, 0) * 1%),
             rgba(148, 148, 148, 0.2) 0
         );
     border: 0.25px solid #a2b8bb;
