@@ -430,21 +430,24 @@
 }
 
 .attendance-detail-card-header {
-    display: flex;
+    /* display: flex; */
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.attendance-list-header h3,
-.attendance-detail-card-header h2 {
+.attendance-list-header h3 {
     color: var(--color-teal);
     margin: 0 0 0.4rem;
     font-size: 1.8rem;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
+}
+
+.attendance-detail-card-header h3 {
+    margin-bottom: 1.5rem;
 }
 
 .take-attendance-form .take-attendance-card-header p,
@@ -484,8 +487,17 @@
     align-content: center;
 }
 
-.take-attendance-list .student-main-info h3 a,
-.take-attendance-page .student-main-info h3 {
+.student-name strong {
+    margin: 0;
+    color: var(--color-navy);
+    font-size: 1.1rem;
+    padding: 0;
+    background: transparent;
+    font-weight: 600;
+}
+
+.take-attendance-list .student-main-info strong a,
+.take-attendance-page .student-main-info strong {
     font-size: 1.4rem;
     margin-bottom: 0;
     color: var(--color-navy);
@@ -621,6 +633,7 @@
 .course-attendance .meta-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    margin-top: 2.5rem;
 }
 
 .course-attendance .wrapper-assigned-courses-panel h2 {
@@ -711,7 +724,7 @@
     font-size: 0.9rem;
 }
 
-.course-attendance .attendance-class-info h3 {
+.course-attendance .attendance-class-info strong {
     margin: 0 0 0.25rem;
     color: var(--color-navy);
     font-size: 1.4rem;
@@ -832,14 +845,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.student-main-info h3 {
-    margin: 0;
-    color: var(--color-navy);
-    font-size: 1.05rem;
-    padding: 0;
-    background: transparent;
 }
 
 .attendance-list .attendance-row > div:first-of-type {
@@ -1008,7 +1013,7 @@
         width: 100%;
     }
 
-    .student-main-info {
+    .take-attendance-card .student-main-info {
         display: flex;
         flex-direction: column;
         align-items: center;

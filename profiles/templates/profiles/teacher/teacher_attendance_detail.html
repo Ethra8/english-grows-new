@@ -150,7 +150,7 @@
                         </div>
 
                         <div class="student-name">
-                            <h3>
+                            <strong>
                                 {% if attendance.enrollment %}
                                     <a href="{% url 'profiles:teacher_student_detail' class_session.course.id attendance.enrollment.id %}"
                                     class="student-detail-link">
@@ -159,7 +159,7 @@
                                 {% else %}
                                     {{ attendance.student.get_full_name|default:attendance.student.username }}
                                 {% endif %}
-                            </h3>
+                            </strong>
                             <a href="mailto: {{ attendance.student.email }}">                              
                                 <span>{{ attendance.student.email }}</span>
                             </a>

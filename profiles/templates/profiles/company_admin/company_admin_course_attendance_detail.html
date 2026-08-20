@@ -143,15 +143,10 @@
                                 <i class="fa-solid fa-user"></i>
                             {% endif %}
                         </div>
-
-                        <div>
-                            <h3>
-                                {{ attendance.student.get_full_name|default:attendance.student.username }}
-                            </h3>
-
+                        <div class="student-name">
+                            <strong>{{ attendance.student.get_full_name|default:attendance.student.username }}</strong>
                             <a href="mailto:{{ attendance.student.email }}">                              
-                                <span>{{ attendance.student.email }}</span>
-                            </a>
+                                <span>{{ attendance.student.email }}</span></a>
                         </div>
                     </div>
 

@@ -468,7 +468,7 @@
     min-width: 0;
 }
 
-.all-course-attendance .attendance-class-info h3 {
+.all-course-attendance .attendance-class-info strong {
     margin: 0 0 0.25rem;
     overflow: hidden;
     color: var(--color-navy);

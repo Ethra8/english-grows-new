@@ -1116,29 +1116,6 @@ h2 {
         width: max-content !important;
     }
 
-    /*****************************************************|
-    |*** CLASSES LIST Page  ******************************|
-    |*****************************************************/
-    
-    /* .classes-filter-buttons {
-        display: none;
-    }
- */
-
-
-    /*****************************************************|
-    |*** COURSES Page  ******************************|
-    |*****************************************************/
-
-    .wrapper-assigned-courses-panel {
-        margin: 1rem auto;
-    }
-
-    .assigned-courses-header select {
-        display: block !important;
-    }
-
-
     /* *** COURSE DETAILS Page ****************************/
     /* *** COURSE STUDENTS LIST Page **********************/
     .teacher-course-details-page .course-detail-grid,

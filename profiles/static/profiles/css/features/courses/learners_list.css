@@ -13,8 +13,9 @@ h3 {
     gap: .75rem;
     color: var(--color-whitesmoke);
     padding: 0.75rem 1.1rem 0.75rem 2rem;
-    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));;
+    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
     border-radius: 999px;
+    height: 58px;
 }
 
 h3 > div {

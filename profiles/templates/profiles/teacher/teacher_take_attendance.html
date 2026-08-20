@@ -162,13 +162,13 @@
                             </div>
 
                             <div class="student-name">
-                                <h3>
+                                <strong>
                                     {% if enrollment.student.get_full_name %}
                                         {{ enrollment.student.get_full_name }}
                                     {% else %}
                                         {{ enrollment.student.username }}
                                     {% endif %}
-                                </h3>
+                                </strong>
                                 <span>{{ enrollment.student.email }}</span>
                             </div>
                         </div>

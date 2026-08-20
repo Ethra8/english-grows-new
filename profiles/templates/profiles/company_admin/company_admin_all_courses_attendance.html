@@ -263,21 +263,15 @@
 
 
                                 <div class="attendance-class-info">
-                                    <h3>{{ course.name }}</h3>
-
-                                    <span>
-                                        {{ course.course_type.name|default:"Course type pending" }}
-                                    </span>
-
+                                    <strong>{{ course.name }}</strong>
+                                    <span>{{ course.course_type.name|default:"Course type pending" }}</span>
                                     <small>
                                         <i class="fa-solid fa-chalkboard-user mr-2"></i>
-
                                         {% if course.teacher %}
                                             {{ course.teacher.get_full_name|default:course.teacher.email }}
                                         {% else %}
                                             Teacher pending
-                                        {% endif %}
-                                    </small>
+                                        {% endif %}</small>
                                 </div>
                             </div>
     
