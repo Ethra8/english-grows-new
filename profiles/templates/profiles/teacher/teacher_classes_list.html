@@ -174,77 +174,41 @@
 </section>
 
 
-<!-- =========================================================
-     RESCHEDULE MODAL
-========================================================= -->
-
-<div
-    class="reschedule-modal-overlay"
-    id="rescheduleModal"
->
+<!-- ===RESCHEDULE MODAL === -->
+<div class="reschedule-modal-overlay" id="rescheduleModal">
     <div class="reschedule-modal-box">
 
-        <h3>
-            Mark class as
-            <strong>
-                pending to reschedule
-            </strong>?
-        </h3>
+        <h3>Mark class as
+            <strong>pending to reschedule</strong>?</h3>
 
-        <p
-            id="rescheduleModalClassName"
-            class="reschedule-modal-class-name"
-        ></p>
+        <p id="rescheduleModalClassName" class="reschedule-modal-class-name"></p>
 
-        <p
-            class="reschedule-modal-current-time"
-            id="rescheduleModalClassTime"
-        ></p>
+        <p class="reschedule-modal-current-time" id="rescheduleModalClassTime"></p>
 
-        <p>
-            This class will be moved to the Reschedule page and marked as
+        <p>This class will be moved to the Reschedule page and marked as
             <strong>pending reschedule</strong>
-            until you agree on a new date and time with your student(s).
-        </p>
+            until you agree on a new date and time with your student(s).</p>
 
         <div class="reschedule-modal-actions">
 
-            <button
-                type="button"
-                class="reschedule-modal-cancel"
-                id="cancelRescheduleModal"
-            >
-                Cancel
-            </button>
+            <button type="button" class="reschedule-modal-cancel" id="cancelRescheduleModal">
+                Cancel</button>
 
-
-            <form
-                method="POST"
-                id="rescheduleConfirmForm"
-            >
+            <form method="POST" id="rescheduleConfirmForm">
                 {% csrf_token %}
 
-                <button
-                    type="submit"
-                    class="reschedule-modal-confirm"
-                >
-                    OK, mark as pending
-                </button>
-
+                <button type="submit" class="reschedule-modal-confirm">
+                    OK, mark as pending</button>
             </form>
 
         </div>
 
     </div>
 </div>
-
 {% endblock %}
 
-
 {% block postloadjs %}
-
     {{ block.super }}
-
     <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
     <script type="text/javascript" src="{% static 'profiles/js/features/classes_list_page.js' %}"></script>
 {% endblock %}

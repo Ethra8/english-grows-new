@@ -590,13 +590,15 @@ select:focus {
 .course-action {
     display: flex;
     justify-content: flex-end;
+    gap: .7rem;
 }
 
 .course-action button {
-    margin: 0 0 0 auto;
     display: flex;
     justify-content: flex-end;
     width: fit-content;
+    height: 34px;
+    align-items: center;
 }
 
 .course-action img {

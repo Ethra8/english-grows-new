@@ -130,15 +130,26 @@
                             </div>
 
                             <!-- ACTION -->
+                            <div class="today-action">
                             {% if session.meeting_link %}
+                            <button type="button" class="js-open-reschedule-modal btn-course-details"
+                                data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+                                data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                                data-class-date="{{ session.start_time|date:'D, j M' }}"
+                                data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
+                                aria-label="open rescheduling modal">
+                                
+                                <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
+                                
                             <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
                                 Start
                                 <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
                             {% else %}
                             <a href="{% url 'profiles:teacher_calendar' session.course_id %}" class="btn-class-today btn" aria-label="check calendar">
-                                Course
+                                Calendar
                                 <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
                             {% endif %}
+                            </div>
                         </div>
 
                     {% endfor %}
@@ -152,10 +163,8 @@
         </div>
     </div>
 
-    <!-- =====================================================
-            TRAINING OVERVIEW
-            ===================================================== -->
 
+    <!-- === TRAINING OVERVIEW === -->
     <div class="wrapper-dashboard-card">
 
         <section class="training-overview dashboard-card">
@@ -309,6 +318,37 @@
 
 </section>
 
+<!-- ===RESCHEDULE MODAL === -->
+<div class="reschedule-modal-overlay" id="rescheduleModal">
+    <div class="reschedule-modal-box">
+
+        <h3>Mark class as
+            <strong>pending to reschedule</strong>?</h3>
+
+        <p id="rescheduleModalClassName" class="reschedule-modal-class-name"></p>
+
+        <p class="reschedule-modal-current-time" id="rescheduleModalClassTime"></p>
+
+        <p>This class will be moved to the Reschedule page and marked as
+            <strong>pending reschedule</strong>
+            until you agree on a new date and time with your student(s).</p>
+
+        <div class="reschedule-modal-actions">
+
+            <button type="button" class="reschedule-modal-cancel" id="cancelRescheduleModal">
+                Cancel</button>
+
+            <form method="POST" id="rescheduleConfirmForm">
+                {% csrf_token %}
+
+                <button type="submit" class="reschedule-modal-confirm">
+                    OK, mark as pending</button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
 {% endblock %}
 
 
@@ -316,5 +356,7 @@
 {{ block.super }}
 
 <script src="{% static 'profiles/js/features/dashboards.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/classes_list_page.js' %}"></script>
 
 {% endblock %}

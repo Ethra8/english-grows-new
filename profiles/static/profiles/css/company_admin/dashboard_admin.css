@@ -1,0 +1,31 @@
+#company_admin .wrapper-dashboard-card:not(:first-child) {
+    margin-top: 0;
+}
+
+#company_admin .today-classes-card.dashboard-card,
+#company_admin .training-overview.dashboard-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem 0.5rem;
+}
+
+#company_admin .today-classes-card .header,
+#company_admin .training-overview .header {
+    padding: 0 0 0.5rem 0.9rem;
+    margin-bottom: 0;
+}
+
+#company_admin .today-time,
+#company_admin .today-course {
+    border: 0;
+}
+
+#company_admin .overview-grid-header {
+    font-size: 0.9rem;
+}
+
+#company_admin .today-class-info {
+    grid-template-columns: 140px minmax(320px, 1fr) 60px;
+    width: fit-content;
+}
