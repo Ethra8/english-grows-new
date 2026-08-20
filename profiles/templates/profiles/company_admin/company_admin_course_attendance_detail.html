@@ -7,8 +7,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
 {% endblock %}
@@ -91,7 +91,7 @@
 
         <div class="attendance-detail-card-header">
             <div>
-                <h3><i class="fa-solid fa-clipboard-list m-3"></i>Registered Attendance</h3>
+                <h3><i class="fa-solid fa-clipboard-list"></i>Registered Attendance</h3>
                 <p>{{ total_count }} employee record{{ total_count|pluralize }} saved for this class session.</p>
             </div>
         </div>
@@ -130,10 +130,10 @@
 
         </div>
 
-        <div class="take-attendance-list mt-5">
+        <div class="attendance-detail-list mt-5">
 
             {% for attendance in attendances %}
-                <div class="take-attendance-row">
+                <div class="attendance-detail-row">
 
                     <div class="student-main-info">
                         <div class="student-avatar">

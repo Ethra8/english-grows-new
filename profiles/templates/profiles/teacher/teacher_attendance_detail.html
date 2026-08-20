@@ -8,8 +8,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}"> -->
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
 {% endblock %}
@@ -91,14 +91,9 @@
 
         <div class="attendance-detail-card-header">
             <div>
-                <h3>Registered Attendance</h3>
+                <h3><i class="fa-solid fa-clipboard-list"></i>Registered Attendance</h3>
                 <p><strong>{{ total_count }}</strong> student record{{ total_count|pluralize }} saved for this session.</p>
             </div>
-
-            <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="edit-attendance-btn">
-                <i class="fa-regular fa-pen-to-square mr-3"></i>
-                <span>Edit</span>
-            </a>
         </div>
 
         <div class="wrapper-attendance-summary-card">
@@ -135,53 +130,59 @@
 
         </div>
 
-        <div class="take-attendance-list mt-5">
+        <div class="edit-attendance">
+            <a href="{% url 'profiles:teacher_take_attendance' class_session.id %}" class="edit-attendance-btn">
+                <i class="fa-regular fa-pen-to-square mr-3"></i>
+                <span>Edit</span>
+            </a>
+        </div>
+        <div class="attendance-detail-list">
 
-            {% for attendance in attendances %}
-                <div class="take-attendance-row">
+        {% for attendance in attendances %}
+            <div class="attendance-detail-row">
 
-                    <div class="student-main-info">
-                        <div class="small-avatar">
-                            {% if attendance.student.profile.profile_photo %}
-                                <img src="{{ attendance.student.profile.profile_photo.url }}" alt="{{ attendance.student.get_full_name }}">
-                            {% else %}
-                                <i class="fa-solid fa-user"></i>
-                            {% endif %}
-                        </div>
-
-                        <div class="student-name">
-                            <strong>
-                                {% if attendance.enrollment %}
-                                    <a href="{% url 'profiles:teacher_student_detail' class_session.course.id attendance.enrollment.id %}"
-                                    class="student-detail-link">
-                                        {{ attendance.student.get_full_name|default:attendance.student.username }}
-                                    </a>
-                                {% else %}
-                                    {{ attendance.student.get_full_name|default:attendance.student.username }}
-                                {% endif %}
-                            </strong>
-                            <a href="mailto: {{ attendance.student.email }}">                              
-                                <span>{{ attendance.student.email }}</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="attendance-status">
-                        {% if attendance.status == "attended" %}
-                            <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
-                        {% elif attendance.status == "missed" %}
-                            <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
-                        {% elif attendance.status == "excused" %}
-                            <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
+                <div class="student-main-info">
+                    <div class="small-avatar">
+                        {% if attendance.student.profile.profile_photo %}
+                            <img src="{{ attendance.student.profile.profile_photo.url }}" alt="{{ attendance.student.get_full_name }}">
                         {% else %}
-                            <span class="status-pill pending">{{ attendance.status|title }}</span>
+                            <i class="fa-solid fa-user"></i>
                         {% endif %}
                     </div>
 
+                    <div class="student-name">
+                        <strong>
+                            {% if attendance.enrollment %}
+                                <a href="{% url 'profiles:teacher_student_detail' class_session.course.id attendance.enrollment.id %}"
+                                class="student-detail-link">
+                                    {{ attendance.student.get_full_name|default:attendance.student.username }}
+                                </a>
+                            {% else %}
+                                {{ attendance.student.get_full_name|default:attendance.student.username }}
+                            {% endif %}
+                        </strong>
+                        <a href="mailto: {{ attendance.student.email }}">                              
+                            <span>{{ attendance.student.email }}</span>
+                        </a>
+                    </div>
                 </div>
-            {% empty %}
-                <p class="attendance-empty-message">No attendance has been registered for this session yet.</p>
-            {% endfor %}
+
+                <div class="attendance-status">
+                    {% if attendance.status == "attended" %}
+                        <span class="status-pill completed"><i class="fa-solid fa-user-check"></i></span>
+                    {% elif attendance.status == "missed" %}
+                        <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
+                    {% elif attendance.status == "excused" %}
+                        <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
+                    {% else %}
+                        <span class="status-pill pending">{{ attendance.status|title }}</span>
+                    {% endif %}
+                </div>
+
+            </div>
+        {% empty %}
+            <p class="attendance-empty-message">No attendance has been registered for this session yet.</p>
+        {% endfor %}
         </div>
 
     </div>

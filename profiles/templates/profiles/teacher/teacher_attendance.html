@@ -6,7 +6,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
 {% endblock %}
 
@@ -51,7 +51,7 @@
             </div>    
             <div class="attendance-list-card">
 
-                <div class="attendance-list-header">
+                <div class="attendance-list-header-filter">
                     <h2 id="attendanceListTitle">Pending Attendance</h2>
 
                     <div class="attendance-tools">
@@ -68,15 +68,15 @@
                             data-search="{{ session.course.name|lower }} {{ session.course.course_type.name|lower }}"
                             data-date="{{ session.start_time|date:'Y-m-d' }}">
 
-                                <div class="assigned-course-level">
-                                    <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
-                                        {{ session.course.course_level|default:"Pending" }}
-                                    </span>
-                                </div>
-
                             <div class="attendance-class-info">
                                 <strong>{{ session.course.name }} - <span>Lesson {{ session.class_number }}</span></strong>
                                 <span>{{ session.course.course_type.name }}</span>
+                            </div>
+
+                            <div class="assigned-course-level">
+                                <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+                                    {{ session.course.course_level|default:"Pending" }}
+                                </span>
                             </div>
 
                             <div class="attendance-time">
@@ -112,12 +112,12 @@
 
                         </div>
                     {% empty %}
-                        <p class="attendance-empty-message">No attendance sessions found.</p>
+                        <p class="empty-message">No attendance sessions found.</p>
                     {% endfor %}
 
                 </div>
 
-                <p id="attendanceNoResults" class="attendance-empty-message d-none">
+                <p id="attendanceNoResults" class="empty-message d-none">
                     No classes found for this filter.
                 </p>
 

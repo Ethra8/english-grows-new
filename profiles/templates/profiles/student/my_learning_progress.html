@@ -8,8 +8,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
 {% endblock %}
 
@@ -52,10 +52,10 @@
             <div>
                 <h1>{{ student.get_full_name|default:student.username }}</h1>
 
-                <div class="profile-user-role">
+                <!-- <div class="profile-user-role">
                     <span><i class="fa-regular fa-user mr-2"></i>
                         {{ student_profile.get_role_display|default:"Learner" }}</span>
-                </div> 
+                </div>  -->
 
                 <div class="mt-4">  
                     <div class="level-pill larger-devs">

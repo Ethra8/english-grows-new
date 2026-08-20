@@ -193,6 +193,8 @@ main.profile-main {
     color:var(--color-steel) !important;
     border-radius: 8px;
     width: 100%;
+    display: flex;
+    align-content: center;
 }
 
 /* ****** BUTTONS **************************************** */

@@ -24,13 +24,6 @@
     box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
-.student-detail-page header h1 {
-    color: #F4FFFE;
-    padding: 0 !important;
-    /* font-family: "Big Shoulders Display", sans-serif;    
-    letter-spacing: 0.03em; */
-}
-
 .student-detail-page header a {
     color: #c9fffc;
     font-size: 1.2rem;
@@ -45,8 +38,9 @@
 }
 
 
-/* STUDENT-MAIN-INFO */
-.student-main-info {
+/* HEADER STUDENT DETAILS **************
+** STUDENT-MAIN-INFO ******************/
+header .student-main-info {
     display: flex;
     align-items: center;
     gap: 4rem;
@@ -55,19 +49,19 @@
     min-width: 0;
 }
 
-.student-main-info h1,
-.student-main-info p {
+header .student-main-info h1,
+header .student-main-info p {
     min-width: 0;
     max-width: 100%;
 }
 
-.student-main-info h1 {
+header .student-main-info h1 {
     color: var(--color-whitesmoke);
     margin-bottom: 0;
     /* font-size: 2.8rem; */
 }
 
-.student-avatar-large {
+header .student-avatar-large {
     position: relative;
     width: 175px;
     height: 175px;
@@ -83,7 +77,7 @@
     border-right: 2px solid var(--color-teal);
 }
 
-.student-avatar-large img {
+header .student-avatar-large img {
     display: block;
     width: 100%;
     height: 100%;
@@ -92,12 +86,12 @@
 }
 
 /* when no profile_photo, user icon displays */
-.student-avatar-large i {
+header .student-avatar-large i {
     font-size: 46px;
 }
 
 /* AVATAR STATUS DOT - PROFILE STATUS - My-Progress/Student details pages**********************/
-.avatar-status-dot {
+header .avatar-status-dot {
     position: absolute;
     right: 7%;
     bottom: 8%;
@@ -109,17 +103,17 @@
     z-index: 10;
 }
 
-.student-avatar-large.avatar-active .avatar-status-dot {
+header .student-avatar-large.avatar-active .avatar-status-dot {
     background-color: var(--color-active-dot);
 }
 
-.student-avatar-large.avatar-inactive .avatar-status-dot {
+header .student-avatar-large.avatar-inactive .avatar-status-dot {
     background-color: var(--color-inactive-dot);
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
 
-.student-main-info a:hover {
+header .student-main-info a:hover {
     color: var(--color-cyan);
 }
 
@@ -369,15 +363,14 @@
     rotate: calc(-15deg);
 }
 
-.student-main-info > div:last-child {
+/* Level & status */
+header .student-main-info > div:last-child {
     flex: 1;
     min-width: 0;
     max-width: 100%;
     width: 100%;
 }
 
-.student-main-info h1,
-.student-main-info p,
 .student-meta-line,
 .student-meta-line span {
     /* 4 rules to prevent text 
@@ -388,7 +381,7 @@
     word-break: break-word;
 }
 
-.student-main-info h1 {
+header .student-main-info h1 {
     color: var(--color-whitesmoke);
     margin-bottom: 0;
 }
@@ -623,7 +616,7 @@
 *********************************************** */
 .attendance-record-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: 2fr;
     gap: 1rem;
     margin-top: 1.25rem;
@@ -775,7 +768,7 @@
         /* padding: 2rem 4rem; */
     }
 
-    .student-main-info {
+    header .student-main-info {
         gap: 4rem;
     }
 
@@ -837,7 +830,7 @@
         padding: 0;
     }
 
-    .student-main-info {
+    header .student-main-info {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -853,7 +846,8 @@
         width: 200px;
         height: 200px;
     }
-    .student-main-info > div:last-child {
+    
+    header .student-main-info > div:last-child {
         padding: 0;
         min-width: fit-content;
         max-width: fit-content;
@@ -863,7 +857,7 @@
         margin: 1rem auto 1rem;
     } */
 
-    .student-main-info p a {
+    header .student-main-info p a {
         margin: 1rem auto 1rem;
         text-align: center;
     }

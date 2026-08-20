@@ -7,9 +7,9 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">    
 {% endblock %}
 
@@ -154,11 +154,16 @@
 
                             <div class="detail-row">
                                 <span>Total Hours</span>
-                                <strong>{{ course.total_hours|clean_decimal }} h.</strong>
+                                {% if course.total_hours %}
+                                    <strong>{{ course.total_hours|clean_decimal }} h.</strong>
+                                {% else %}
+                                    <strong>Not assigned</strong>
+                                {% endif %}
                             </div>
                             <div class="detail-row">
                                 <span>Dates</span>
-                                <strong>{{ course.start_date|date:"j M" }} - {{ course.end_date|date:"j M 'y" }}</strong>
+                                {% if course.start_date %}
+                                <strong>{{ course.start_date|date:"j M" }}{% else %} ? {% endif %} - {% if course.end_date %}{{ course.end_date|date:"j M 'y" }} {% else %} ? {% endif %}</strong>
                             </div>
                        </div>
                     </div>

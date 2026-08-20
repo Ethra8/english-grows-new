@@ -134,6 +134,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 0.25rem;
     padding: 0.5rem 0.25rem;
+    margin-bottom: 1rem;
 }
 
 /* Mobile filter */
@@ -273,9 +274,9 @@ select:focus {
 .all-assigned-classes {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.5rem;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-turquoise-rgb), 0.3);
+    background: rgba(var(--color-whitesmoke-rgb), 0.8);
     border: outset 2px rgba(var(--color-teal-rgb), 0.2);
     border-radius: 8px;
 }
@@ -335,6 +336,7 @@ select:focus {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    border-top: 2px rgba(var(--color-teal-rgb), 0.6) solid;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
     background: var(--color-whitesmoke);
@@ -455,9 +457,8 @@ select:focus {
     }
 
 .assigned-class-row .level {
-    width: 50px;
+    width: 46px;
 }
-
 
 /* DATES in ROW */
 .class-list-date {
