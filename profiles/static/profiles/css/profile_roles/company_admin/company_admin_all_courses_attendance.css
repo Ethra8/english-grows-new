@@ -450,21 +450,11 @@
    COURSE COLUMN
    ========================================================= */
 
-.all-course-attendance .course-attendance-course {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 0;
-}
-
-.all-course-attendance .assigned-course-level {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .all-course-attendance .attendance-class-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
     min-width: 0;
 }
 
@@ -499,6 +489,50 @@
     white-space: nowrap;
 }
 
+/* Course Status dot & text *************** */
+.all-course-attendance .attendance-class-info small.course-list-status {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
+.course-list-status .status-dot {
+    display: inline-flex;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.status-confirmed {
+    background: var(--color-course-status-confirmed);
+}
+
+.status-dot.status-active {
+    background: var(--color-course-status-active);
+}
+
+.status-dot.status-paused {
+    background: var(--color-course-status-paused);
+}
+
+.status-dot.status-cancelled {
+    background: var(--color-course-status-cancelled);
+}
+
+.status-dot.status-completed {
+    background: var(--color-course-status-completed);
+}
+
+
+/* LEVEL COLUMN *********************************************/
+.all-course-attendance .assigned-course-level {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 /* =========================================================
    GENERIC COURSE CELLS

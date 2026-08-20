@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
-from django.db.models import Count, Q, Prefetch, Value
+from django.db.models import Count, Q, Prefetch, Value, Case, When, Value, IntegerField, F, DateField
 from django.db.models.functions import Coalesce, NullIf, Lower
 
 from django.http import JsonResponse
@@ -4845,21 +4845,14 @@ def company_admin_student_detail(request, student_id):
 
 
     # ---------------------------------------------------------
-    # GET ALL ACTIVE ENROLLMENTS FOR THIS EMPLOYEE
-    #
-    # These are used to populate the course selector.
-    #
-    # We only include:
-    # - active enrollments
-    # - active courses
+    # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
     # - courses belonging to this company
     # ---------------------------------------------------------
-    active_enrollments  = (
+
+    enrollments = (
         CourseEnrollment.objects
         .filter(
             student=student,
-            status="active",
-            course__status="active",
             course__company=company,
         )
         .select_related(
@@ -4867,10 +4860,35 @@ def company_admin_student_detail(request, student_id):
             "course__teacher",
             "course__course_type",
             "course__company",
+            "student",
+            "student__profile",
         )
-        .order_by("course__name")
-    )
+        .annotate(
+            status_order=Case(
+                When(course__status="active", then=Value(1)),
+                When(course__status="confirmed", then=Value(2)),
+                When(course__status="paused", then=Value(3)),
+                When(course__status="completed", then=Value(4)),
+                When(course__status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
 
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
+    )
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
@@ -4890,11 +4908,11 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
-            active_enrollments,
+            enrollments,
             course_id=selected_course_id,
         )
     else:
-        enrollment = active_enrollments.first()
+        enrollment = enrollments.first()
 
 
     # ---------------------------------------------------------
@@ -4911,7 +4929,7 @@ def company_admin_student_detail(request, student_id):
             "student": student,
             "student_profile": student_profile,
 
-            "active_enrollments": active_enrollments,
+            "enrollments": enrollments,
             "enrollment": None,
             "course": None,
 
@@ -5148,7 +5166,7 @@ def company_admin_student_detail(request, student_id):
         "student_profile": student_profile,
 
         # Course selector
-        "active_enrollments": active_enrollments,
+        "enrollments": enrollments,
 
         # Currently selected course
         "enrollment": enrollment,

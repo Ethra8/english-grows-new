@@ -530,7 +530,11 @@ header .student-main-info h1 {
 
 .progress-ring-inner span {
     font-size: 0.8rem;
-    color: rgba(var(--color-steel-rgb),0.75);
+    color: rgba(var(--color-steel-rgb), 0.75);
+}
+
+.student-detail-page .progress-ring-inner span {
+    color: rgba(var(--color-whiteesmoke-rgb), 0.85);
 }
 
 /* BIG ring: Student detail page */

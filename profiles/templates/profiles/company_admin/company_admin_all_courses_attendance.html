@@ -257,39 +257,39 @@
 
                         <div class="attendance-row course-attendance-row">
 
-                            {# Course information #}
+                            <!-- Course information -->
 
-                            <div class="course-attendance-course">
-
-
-                                <div class="attendance-class-info">
-                                    <strong>{{ course.name }}</strong>
-                                    <span>{{ course.course_type.name|default:"Course type pending" }}</span>
-                                    <small>
-                                        <i class="fa-solid fa-chalkboard-user mr-2"></i>
-                                        {% if course.teacher %}
-                                            {{ course.teacher.get_full_name|default:course.teacher.email }}
-                                        {% else %}
-                                            Teacher pending
-                                        {% endif %}</small>
-                                </div>
+                            <div class="attendance-class-info">
+                                <strong>{{ course.name }}</strong>
+                                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-1"></i>{{ course.course_type.name|default:"Course type pending" }}</span>
+                                <!-- <small>
+                                    <i class="fa-solid fa-chalkboard-user mr-2"></i>
+                                    {% if course.teacher %}
+                                        {{ course.teacher.get_full_name|default:course.teacher.email }}
+                                    {% else %}
+                                        Teacher pending
+                                    {% endif %}</small> -->
+                                <small class="course-list-status">
+                                    <span class="status-dot status-{{ course.status }}"></span>
+                                    <div class="status-text">{{ course.status }}</div>
+                                </small>    
                             </div>
-    
+
+                            <!-- Course level -->
                             <div class="assigned-course-level">
                                 <span class="level level-{{ course.course_level|lower|cut:'.' }}">
                                     {{ course.course_level|default:"Pending" }}
                                 </span>
                             </div>
 
-
-                            {# Employees #}
+                            <!-- Employees -->
 
                             <div class="course-attendance-cell employees-cell">
                                 <i class="fa-solid fa-users"></i>
                                 <strong>{{ course.employee_count }}</strong>
                             </div>
 
-                            {# Attendance submitted #}
+                            <!-- Attendance submitted -->
 
                             <div class="course-attendance-cell submitted-cell">
                                 <strong>{{ course.submitted_classes_count }} / {{ course.past_classes_count }}</strong>
@@ -297,7 +297,7 @@
                                 <small>{{ course.submission_rate }}%</small>
                             </div>
 
-                            {# Submission status #}
+                            <!-- Submission status -->
 
                             <div class="course-attendance-cell submission-status-cell">
 
@@ -323,7 +323,7 @@
 
                             </div>
 
-                            {# Attendance rate #}
+                            <!-- Attendance rate -->
 
                             <div class="course-attendance-rate">
                                 <div>
@@ -333,7 +333,7 @@
                                 </div>
                             </div>
 
-                            {# Action #}
+                            <!-- Action -->
 
                             <div class="attendance-action">
                                 <a href="{% url 'profiles:company_admin_course_attendance' course.id %}" class="btn-course-details">

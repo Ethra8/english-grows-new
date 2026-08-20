@@ -37,7 +37,7 @@
             <a href="{% url 'profiles:company_admin_courses' %}">
                 <div class="meta-card meta-courses">
                     <div class="meta-text">
-                        <strong>All Courses
+                        <strong>Active Courses
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                         </strong>
                         <span>{{ active_courses|default:"0" }}</span>
@@ -48,7 +48,7 @@
             <a href="{% url 'profiles:company_admin_employees_list' %}">
                 <div class="meta-card meta-students">
                     <div class="meta-text">
-                        <strong>Employees
+                        <strong>Active Employees
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                         </strong>
                         <span>{{ total_students|default:"0" }} <small>Enrolled</small></span>
