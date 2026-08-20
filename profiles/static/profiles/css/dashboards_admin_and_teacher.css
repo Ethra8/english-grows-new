@@ -172,7 +172,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.15rem;
     box-sizing: border-box;
     height: stretch;
 }
@@ -426,8 +426,8 @@ a.btn-class-today img {
     position: relative;
     display: flex;
     flex-direction: column;
-    /* width: 100%; */
-    max-width: 120px;
+    width: 60%;
+    max-width: 60%;
     box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
     height: 10px;
     /* overflow: visible; */
@@ -527,18 +527,18 @@ a.btn-class-today img {
         padding: 0.25rem 1.5rem 0.25rem 2rem;
     }
 
-    .today-classes-card.dashboard-card {
+    #teacher .today-classes-card.dashboard-card {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
     /* TODAY'S CLASSES */
-    .today-sessions-list {
+    #teacher .today-sessions-list {
         width: 100%;
         min-width: 0;
     }
 
-    .today-class-info {
+    #teacher .today-class-info {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-areas:
@@ -554,7 +554,7 @@ a.btn-class-today img {
     }
 
     /* Time */
-    .today-time {
+    #teacher .today-time {
         grid-area: time;
         width: fit-content;
         min-width: 0;
@@ -566,37 +566,37 @@ a.btn-class-today img {
     }
 
     /* Course & lesson */
-    .today-course {
+    #teacher .today-course {
         grid-area: course;
         min-width: 0;
         width: 100%;
         padding: 0.5rem 0.25rem 0.5rem 0;
     }
 
-    .course-name-and-class-num {
+    #teacher .course-name-and-class-num {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: .15rem;
     }
 
-    .today-course strong {
+    #teacher .today-course strong {
         overflow-wrap: anywhere;
     }
 
-    .class-number {
+    #teacher .class-number {
         display: block;
     }
 
     /* Level */
-    .today-level {
+    #teacher .today-level {
         grid-area: level;
 
         justify-self: end;
         align-self: center;
     }
 
-    .today-level .level {
+    #teacher .today-level .level {
         margin-right: 0 !important;
     }
 
@@ -629,9 +629,10 @@ a.btn-class-today img {
         display: block;
         font-size: 0.78rem;
         font-weight: 600;
-        text-align: center;
+        text-align: left;
         color: rgba(var(--color-navy-rgb), 0.72);
-        margin: 0 0 auto;    
+        margin: 0 0 auto;
+        width: 50%;    
     }
 
     .overview-period {
@@ -708,9 +709,9 @@ a.btn-class-today img {
         --ring-width: 6px;
     }
 
-    .attendance-progress {
+    /* .attendance-progress {
         max-width: 135px;
-    }
+    } */
 
     .training-attendance-bar {
         height: 7px;
@@ -719,8 +720,12 @@ a.btn-class-today img {
 }
 
 
+
 @media (max-width: 576px) {
     
+    .today-class-info {
+            padding: 0.5rem 0.5rem 0.15rem 0.5rem;
+    }
 
 }
 

@@ -4084,8 +4084,8 @@ def company_admin_all_courses_attendance(request):
         excused_count = 0
 
         for class_session in past_class_sessions:
-            # Under the new lifecycle, attendance is considered submitted
-            # only when the lesson itself has been explicitly completed.
+            # ULifecycle: attendance is considered submitted
+            # only when the lesson itself has been marked as completed.
             if class_session.status != ClassSession.STATUS_COMPLETED:
                 continue
 

@@ -1,11 +1,17 @@
+#company_admin .wrapper-dashboard-card {
+    flex: 1 1 0;    
+}
+
 #company_admin .wrapper-dashboard-card:not(:first-child) {
     margin-top: 0;
+    /* force card to take up all available width */
+
 }
 
 #company_admin .today-classes-card.dashboard-card,
 #company_admin .training-overview.dashboard-card {
     flex-direction: column;
-    align-items: stretch;
+    /* align-items: stretch; */
     gap: 0.5rem;
     padding: 1rem 0.5rem 0.5rem;
 }
@@ -22,10 +28,256 @@
 }
 
 #company_admin .overview-grid-header {
+    display: none;
     font-size: 0.9rem;
 }
 
 #company_admin .today-class-info {
     grid-template-columns: 140px minmax(320px, 1fr) 60px;
-    width: fit-content;
+}
+
+/* ********************** */
+
+#company_admin .training-overview-grid {
+    display: grid;    
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* align-items: stretch; */
+    width: 100%;
+    background: var(--color-whitesmoke);
+    border-radius: 8px;
+}
+
+#company_admin .overview-period {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 0;
+    border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
+
+    grid-column: 1 / -1;
+    padding: 1rem .5rem 1rem 1.7rem;
+    background: rgba(var(--color-turquoise-rgb), 0.1);
+    max-height: 56px !important;
+    min-height: 56px !important;
+    border-radius: 8px 8px 0 0;
+}
+
+#company_admin .overview-metric {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 125px;
+    /* border-left: 1px solid rgba(var(--color-navy-rgb), 0.08); */
+    border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
+
+    min-height: 120px;
+    flex-direction: column;
+    gap: 0.7rem;
+    border-left: 0;
+    padding: 2rem 0;
+}
+
+#company_admin .overview-mobile-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    color: rgba(var(--color-navy-rgb), 0.72);
+    margin: 0 0 auto;
+}
+
+#company_admin .overview-metric .attendance-progress {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    max-width: 60%;
+    border-radius: 50px;
+    box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
+    height: 10px;
+}
+
+
+
+
+@media (min-width: 1360px) and (max-width: 1599.98px) {
+
+        #company_admin .training-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+    }
+
+    #company_admin .overview-mobile-label {
+        font-size: 0.75rem;
+    }
+
+    #company_admin .overview-period:first-of-type {
+        margin-top: 0;
+    }
+
+    #company_admin .overview-metric {
+        min-height: 115px;
+        padding: 1rem 0.6rem;
+        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
+    }
+
+    #company_admin .overview-number {
+        font-size: 1.55rem;
+        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
+    }
+
+    #company_admin .completion-ring {
+        --ring-size: 48px;
+        --ring-width: 6px;
+    }
+
+    #company_admin .training-attendance-bar {
+        height: 7px;
+    }
+
+}
+
+
+
+@media (max-width: 1359.98px) {
+    #company_admin .dashboard-cards-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 991.99px) {
+}
+
+
+
+@media (max-width: 600px) {
+    #company_admin .today-class-info {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "time level"
+            "course course"
+            "button button";
+        gap: .5rem 1rem;
+        width: 100%;
+        min-width: 0;
+        padding: 0.75rem 1rem 0.15rem 1rem;
+        align-items: center;
+    }
+
+    #company_admin .today-classes-card.dashboard-card {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* TODAY'S CLASSES */
+    #company_admin .today-sessions-list {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Time */
+    #company_admin .today-time {
+        grid-area: time;
+        width: fit-content;
+        min-width: 0;
+        justify-self: start;
+        margin: 0;
+        font-weight: 600;
+        white-space: nowrap;
+        height: 40px;
+    }
+
+    /* Course & lesson */
+    #company_admin .today-course {
+        grid-area: course;
+        min-width: 0;
+        width: 100%;
+        padding: 0.5rem 0.25rem 0.5rem 0;
+    }
+
+    #company_admin .course-name-and-class-num {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .15rem;
+    }
+
+    #company_admin .today-course strong {
+        overflow-wrap: anywhere;
+    }
+
+    #company_admin .class-number {
+        display: block;
+    }
+
+    /* Level */
+    #company_admin .today-level {
+        grid-area: level;
+
+        justify-self: end;
+        align-self: center;
+    }
+
+    #company_admin .today-level .level {
+        margin-right: 0 !important;
+    }
+
+    #company_admin .training-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+    }
+
+    #company_admin .overview-mobile-label {
+        font-size: 0.75rem;
+    }
+
+    #company_admin .overview-period:first-of-type {
+        margin-top: 0;
+    }
+
+    #company_admin .overview-metric {
+        min-height: 115px;
+        padding: 1rem 0.6rem;
+        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
+    }
+
+    #company_admin .overview-number {
+        font-size: 1.55rem;
+        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
+    }
+
+    #company_admin .completion-ring {
+        --ring-size: 48px;
+        --ring-width: 6px;
+    }
+
+    #company_admin .training-attendance-bar {
+        height: 7px;
+    }
+
+}
+
+
+
+@media (max-width: 370px) {
+
+    #company_admin .next-class-card .info {
+        padding: 10.5rem 2rem 2rem;
+    }
+
+    #company_admin .student-detail-card h2 {
+        font-size: 1.5rem;
+    }
+
+    #company_admin .today-classes-card .header,
+    #company_admin .training-overview .header {
+        gap: 0;
+    }
+
 }

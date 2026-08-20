@@ -15,7 +15,7 @@
 
 {% block profile_content %}
 
-<section class="profile-dashboard profile-page">
+<section id="teacher" class="profile-dashboard profile-page">
 
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
@@ -140,7 +140,7 @@
                                 aria-label="open rescheduling modal">
                                 
                                 <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
-                                
+
                             <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
                                 Start
                                 <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
