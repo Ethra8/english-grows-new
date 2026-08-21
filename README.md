@@ -53,6 +53,7 @@
 ---
 
 # SITE STRUCTURE
+---
 
 EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
 
@@ -80,6 +81,7 @@ Access to platform functionality and data is controlled according to the authent
 ---
 
 ## HOME App
+---
 
 The `home` app is responsible primarily for the public-facing area of EnglishGrows and serves as the entry point to the platform.
 
@@ -97,6 +99,7 @@ The Home app is intentionally kept separate from the teaching-management functio
 ---
 
 ## PROFILES App
+---
 
 The `profiles` app contains most of the user-facing platform experience.
 
@@ -133,6 +136,7 @@ Instead, role-based access is determined through the user's profile.
 ---
 
 ### LEARNER / EMPLOYEE AREA
+---
 
 Learners have access to a dedicated learning area containing information specific to their own active course enrolments.
 
@@ -159,6 +163,7 @@ Learners therefore interact only with relevant current training data rather than
 ---
 
 ### TEACHER AREA
+---
 
 Teachers have a dedicated operational dashboard for managing the courses and learners assigned to them.
 
@@ -188,6 +193,7 @@ The teacher dashboard provides operational summaries for current teaching activi
 ---
 
 ### COMPANY ADMIN AREA
+---
 
 Company administrators have a dedicated B2B management area allowing them to monitor the training delivered to employees belonging to their organisation.
 
@@ -214,6 +220,7 @@ This prevents cross-company data exposure while allowing an authorised company r
 ---
 
 ### ROLE-BASED ACCESS CONTROL
+---
 
 Role-based views validate the authenticated user's `UserProfile` before exposing protected information.
 
@@ -236,6 +243,7 @@ attendance and assessment data
 ---
 
 ## COURSES App
+---
 
 The `courses` app contains the core **course-delivery, scheduling, enrolment, and attendance architecture** of the EnglishGrows platform.
 
@@ -267,6 +275,7 @@ The principal models managed by this area of the application include:
 ---
 
 ### Course Types
+---
 
 `CourseType` defines the reusable categories of training that can be offered through the platform.
 
@@ -295,6 +304,7 @@ This separates the **type of training being offered** from the **actual delivery
 ---
 
 ### Course Management
+---
 
 The `Course` model represents a concrete training programme delivered to one or more learners.
 
@@ -409,6 +419,7 @@ This prevents a learner who joins a course after it has started from receiving a
 ---
 
 ### Course Timetable
+---
 
 Recurring weekly scheduling is managed through `CourseTimetableSlot`.
 
@@ -457,6 +468,7 @@ The timetable architecture allows the system to generate individual class sessio
 ---
 
 ### Class Session Generation
+---
 
 `ClassSession` represents an **actual lesson instance** belonging to a course.
 
@@ -694,11 +706,13 @@ Attendance records initially act as scheduled placeholders and are subsequently 
 ---
 
 ### Attendance Reporting
+---
 
 Attendance data provides a shared source of information for the three principal authenticated areas of the platform.
 
+---
 #### Learners
-
+---
 Learners can review their own:
 
 - **Attendance history**
@@ -708,8 +722,9 @@ Learners can review their own:
 - **Excused absences**
 - **Individual lesson records**
 
+---
 #### Teachers
-
+---
 Teachers can:
 
 - **Submit attendance**
@@ -740,6 +755,7 @@ Future `scheduled` records are not treated as attended or missed lessons and are
 ---
 
 ## Learning Assessment & Progress
+---
 
 The assessment architecture tracks both a learner's **current language-skill performance** and the **historical development of those skills over time**.
 
@@ -758,8 +774,9 @@ StudentSkillAssessment
         │
         └── StudentSkillTermSnapshot
 ```
-
+---
 ### Language Skills Assessed:
+---
 
 Each skill is represented by a distinctive colour, to make it easier to visually track on the progress bars and skill cards
 
@@ -773,6 +790,7 @@ Each skill is represented by a distinctive colour, to make it easier to visually
 ---
 
 ### Student Skill Assessment
+---
 
 `StudentSkillAssessment` represents the learner's **current assessment state for one main language skill within one course**.
 
@@ -828,6 +846,7 @@ Only subskills that have actually been rated participate in this calculation.
 ---
 
 ### Student Subskill Assessment
+---
 
 `StudentSubSkillAssessment` provides the detailed assessment information from which the overall skill assessment is calculated.
 
@@ -1026,6 +1045,7 @@ This separation allows EnglishGrows to provide both **fine-grained progress grap
 ---
 
 ### Calendar
+---
 
 EnglishGrows includes a role-aware calendar built from the platform's existing `ClassSession` records.
 
@@ -1084,6 +1104,7 @@ The calendar therefore acts as a visual representation of the underlying lesson-
 ---
 
 ### Django Admin
+---
 
 The built-in Django Admin interface provides authorised administrative access to the application's core database records.
 
@@ -1122,6 +1143,7 @@ The Django Admin therefore complements the role-specific application interfaces 
 ---
 
 ## DATABASE STRUCTURE — MODELS
+---
 
 EnglishGrows uses a **relational database architecture** managed through Django's ORM.
 
@@ -1351,15 +1373,19 @@ Assessment history is deliberately separated from current assessment state throu
 
 EnglishGrows implements database constraints and application-level business rules to protect the consistency of teaching and learner data.
 
+---
 #### User & Organisation
 
+---
 - Each authenticated user has one `UserProfile`.
 - A profile may optionally be associated with a `Company`.
 - A company may contain multiple employees and company administrators.
 - Corporate courses can be associated with a company.
 - Individual courses do not require a company relationship.
 
+---
 #### Course & Enrolment
+---
 
 - A teacher may teach multiple courses.
 - A learner may participate in multiple courses.
@@ -1368,7 +1394,9 @@ EnglishGrows implements database constraints and application-level business rule
 - Enrolment status is maintained independently from course status.
 - Completing a course automatically completes its active enrolments.
 
+---
 #### Timetable & Sessions
+---
 
 - A course may contain multiple timetable slots.
 - Duplicate timetable slots for the same course, day, start time, and end time are prevented.
@@ -1380,7 +1408,9 @@ EnglishGrows implements database constraints and application-level business rule
 - A rescheduled lesson remains the same `ClassSession`.
 - A course only becomes completed when all of its sessions are completed.
 
+---
 #### Attendance
+---
 
 - Each attendance record belongs to one learner and one class session.
 - A learner can have only one attendance record per class session.
@@ -1388,7 +1418,9 @@ EnglishGrows implements database constraints and application-level business rule
 - Learners joining an existing course receive attendance records only for unfinished sessions.
 - Future `scheduled` attendance does not affect recorded attendance-rate calculations.
 
+---
 #### Assessment
+---
 
 - Skill assessments are course-specific.
 - One current `StudentSkillAssessment` exists for each student/course/skill combination.
@@ -1406,6 +1438,7 @@ Together, these constraints help ensure that the database remains a consistent *
 ---
 
 ## Application Data Flow
+---
 
 The application follows a **role-aware data flow** in which authenticated users interact with the same underlying business data through interfaces adapted to their permissions and responsibilities.
 
@@ -1470,6 +1503,8 @@ Attendance, session completion and assessment data then contribute to the progre
 
 ## Architectural Design Choices
 
+---
+
 The architecture of **English Grows** has been designed around the separation of identity, learning configuration, lesson delivery and assessment history.
 
 Several areas that could initially appear suitable for a single model have deliberately been separated in order to reduce duplication, improve maintainability and preserve historical data.
@@ -1517,6 +1552,8 @@ This structure also allows the same authentication system to support several use
 ---
 
 ### Course Configuration vs. Lesson Delivery
+
+---
 
 A `Course` represents the overall teaching programme rather than an individual lesson.
 
@@ -1604,6 +1641,8 @@ The same architecture also supports employees who may undertake multiple company
 
 ### Current Assessment vs. Assessment History
 
+---
+
 The assessment system deliberately separates a student's **current assessment state** from their **historical progress data**.
 
 `StudentSkillAssessment` represents the current teacher assessment for one principal skill:
@@ -1657,6 +1696,8 @@ The resulting historical records are used by the progress charts shown to teache
 
 ### Shared Data, Role-Specific Presentation
 
+---
+
 The platform does not create separate course, attendance or assessment data for each type of user.
 
 Instead, the same underlying records are reused across role-specific views.
@@ -1689,6 +1730,8 @@ This architecture reduces duplicated business logic and ensures that different a
 
 # Design Choices
 
+---
+
 The user interface has been designed for a **boutique corporate training environment**, rather than as a generic educational platform.
 
 The visual system therefore prioritises:
@@ -1705,6 +1748,8 @@ Role-specific dashboards and navigation expose the information most relevant to 
 ---
 
 ## Colour System
+
+---
 
 The **English Grows** interface uses a carefully defined colour system centred around navy, teal, cyan, aqua and turquoise tones, supported by cool neutrals and a small set of purpose-specific semantic colours.
 
@@ -1725,6 +1770,8 @@ Colour is therefore treated as a **functional component of the design system**, 
 ---
 
 ### Colour Architecture
+
+---
 
 The overall colour architecture is organised into **three functional layers**:
 
@@ -1795,6 +1842,8 @@ Colour is always accompanied by text, labels, icons or other interface context r
 
 ### Core Brand - Interface Palette
 
+---
+
 The core **English Grows** interface palette consists of ten colours:
 
 <img width="1600" height="1200" alt="Color Palette_EnglishGrows" src="https://github.com/user-attachments/assets/a92e4372-16ec-4776-96e2-314406eaeed6" />
@@ -1812,7 +1861,9 @@ The core **English Grows** interface palette consists of ten colours:
 | **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
 | **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
 
+---
 #### Brand Palette Rationale
+---
 
 The core palette is organised into four complementary functional families:
 
@@ -1853,6 +1904,8 @@ This hierarchy allows brighter colours to remain distinctive because they are us
 ---
 
 ### CEFR Level Colours
+
+---
 
 The application uses a dedicated colour system to provide immediate visual identification of a learner's **CEFR proficiency level**.
 
@@ -1919,6 +1972,8 @@ SEMANTIC / STATUS       → Operational meaning and application state
 
 ### Language Skills Colours
 
+---
+
 The language assessment system uses a dedicated colour set for the four principal language skills.
 
 These colours are intentionally separate from the core brand palette because they carry a **persistent pedagogical meaning**, rather than a general interface function.
@@ -1950,6 +2005,8 @@ This creates a clear distinction between **interface colour** and **assessment c
 ---
 
 ### Semantic / Status Colours
+
+---
 
 Semantic colours communicate the **state or operational meaning of application data**, rather than the identity of an interface component.
 
@@ -2028,6 +2085,8 @@ This distinction is particularly important for **Excused**. An excused absence r
 
 ### Colour Usage Principles
 
+---
+
 Across the application, colour follows several consistent principles:
 
 - **Colour reinforces meaning rather than replacing it.** Statuses and assessment information are always accompanied by text, labels, icons or other contextual information.
@@ -2039,7 +2098,11 @@ Across the application, colour follows several consistent principles:
 
 Together, these principles create a colour system that is **consistent, scalable and semantically meaningful**, while preserving the restrained boutique/corporate visual identity of English Grows.
 
+---
+
 ## Responsive Design
+
+---
 
 The platform follows a responsive interface strategy intended to support **desktop, tablet and mobile use**.
 
@@ -2070,6 +2133,8 @@ Responsive behaviour is therefore considered part of the component architecture 
 ---
 
 ## Data Visualisation
+
+---
 
 Data visualisation is used selectively where graphical representation communicates progress more effectively than isolated numerical values.
 
