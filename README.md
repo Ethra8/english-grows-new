@@ -41,7 +41,7 @@
 - [Design Choices](#design-choices)
   - [Colour System](#colour-system)
     - [Core Brand / Interface Palette](#core-brand---interface-palette)
-    - [CEFR Levels Colours](#cefr-levels-colours)
+    - [CEFR Level Colours](#cefr-level-colours)
     - [Language Skills Colours](#language-skills-colours)
     - [Semantic and Status Colours](#semantic-and-status-colours)
   - [Responsive Design](#responsive-design)
