@@ -2136,61 +2136,224 @@ Responsive behaviour is therefore considered part of the component architecture 
 
 ---
 
-Data visualisation is used selectively where graphical representation communicates progress more effectively than isolated numerical values.
+Data visualisation is used selectively throughout **English Grows** where graphical representation improves the interpretation of progress, performance or application data more effectively than isolated numerical values.
 
 The principal visualisations currently include:
 
 - course completion indicators;
-- attendance percentages;
+- attendance rates and attendance summaries;
 - skill assessment scores;
-- historical skill progress graphs.
+- historical skill progress graphs;
+- CEFR proficiency level indicators;
+- status and lifecycle indicators.
 
-The surrounding interface follows the core **English Grows brand palette**:
+Visualisations follow the wider English Grows design system and maintain a clear distinction between **interface identity, pedagogical data, proficiency classification and operational status**.
+
+### Visualisation Colour Architecture
+
+Colour used within data visualisation follows the same four functional layers established by the wider colour system:
+
+```text
+DATA VISUALISATION
+│
+├── BRAND / INTERFACE COLOURS
+│   └── Structure, hierarchy and supporting visual elements
+│
+├── ASSESSMENT / DATA COLOURS
+│   └── Persistent identification of language skills
+│
+├── CEFR LEVEL COLOURS
+│   └── Persistent identification of proficiency levels
+│
+└── SEMANTIC / STATUS COLOURS
+    └── Operational states, outcomes and exceptions
+```
+
+This separation ensures that colour has a **predictable purpose** rather than being applied decoratively or assigned independently to individual components.
+
+---
+
+### Brand Colours in Visualisation
+
+The surrounding interface and supporting elements of data visualisations follow the core **English Grows brand palette**:
 
 ```text
 Oxford Blue      → #0B355F
 Stormy Teal      → #006B7D
 Strong Cyan      → #07C0C7
 Electric Aqua    → #5FF5FC
-Icy Aqua         → #C7FFF9
 Turquoise        → #5FF0DF
+Icy Aqua         → #C7FFF9
 Azure Mist       → #EDF9F7
+White Smoke      → #F5F5F5
 Blue Slate       → #4F6870
 Cool Steel       → #7A949B
 ```
 
-Skill-specific data visualisation uses the dedicated assessment palette:
+These colours provide visual structure through elements such as:
+
+- chart containers and card surfaces;
+- headings and labels;
+- progress indicators;
+- supporting lines and borders;
+- active interface elements;
+- secondary and de-emphasised information.
+
+Brighter accent colours are used selectively so that they retain visual prominence, while the lighter and neutral tones provide sufficient space for data to remain the primary focus.
+
+---
+
+### Skill Assessment Visualisation
+
+Skill-specific data visualisation uses the dedicated **Assessment / Data palette**:
 
 ```text
-Speaking        → #F5BE58
-Listening       → #4E2496
-Reading         → #E1752D
-Writing         → #0EA5B7
+Speaking         → #F5BE58  Sunflower Gold
+Listening        → #4E2496  Indigo Velvet
+Reading          → #E1752D  Chocolate
+Writing          → #0EA5B7  Pacific Blue
 ```
 
-This separation ensures that brand colours retain their interface function while skill colours communicate a specific pedagogical meaning.
+Each language skill retains the same colour throughout the application.
 
-Progress charts use historical assessment snapshots rather than current assessment values. This ensures that each data point represents the student's assessment at a particular stage of the course instead of repeatedly displaying the latest score.
+This creates a persistent visual relationship between:
 
-Each language skill retains the same colour throughout the system, meaning that skill progress graphs remain visually consistent with assessment cards and other skill-related components.
+- skill assessment cards;
+- subskill information;
+- chart datasets;
+- chart legends;
+- historical progress graphs;
+- other skill-specific indicators.
+
+The user can therefore associate a colour with a particular skill regardless of the page or visualisation in which that skill appears.
+
+These colours function as **categorical identifiers**. They do not indicate whether performance is positive or negative; they identify the pedagogical category represented by the data.
+
+---
+
+### Historical Skill Progress
+
+Historical skill progress graphs use `StudentSkillTermSnapshot` records to represent assessment results at different stages of a learner's course.
+
+Each snapshot stores a skill score at a particular assessment point, allowing progression to be visualised over time without replacing previous results.
+
+Conceptually:
+
+```text
+ASSESSMENT HISTORY
+
+Assessment 1        Assessment 2        Assessment 3
+     │                   │                   │
+     ●───────────────────●───────────────────●
+     │                   │                   │
+   Score               Score               Score
+```
+
+Each skill retains its dedicated assessment colour throughout the graph, allowing several skill datasets to be displayed together while remaining visually distinguishable.
 
 Charts use restrained styling and smoothed data lines to communicate progression without overwhelming the surrounding interface.
 
-Percentage-based indicators are used where the underlying data represents an actual proportion, such as:
+Historical visualisation is deliberately separated from the learner's current assessment state: the current assessment describes **where the learner is now**, while snapshots provide the historical data required to show **how that assessment has developed over time**.
 
-- attendance;
-- course completion.
+---
 
-Assessment ability, however, is displayed using a `/10` score rather than a percentage because the value represents a pedagogical evaluation rather than completion of a quantity.
+### CEFR Level Visualisation
+
+CEFR colours provide persistent visual identification of language proficiency levels:
+
+```text
+A1  → #6EFF7F  Mint Glow
+A2  → #FF954F  Tangerine Dream
+B1  → #436EFD  Electric Sapphire
+B2  → #7B27A5  Indigo Bloom
+C1  → #DBDF2B  Lemon Lime
+C2  → #902331  Burgundy
+```
+
+These colours function as **categorical identifiers**, rather than as indicators of performance, success or application status.
+
+For example, the green used for **A1** does not imply a successful state, and the Burgundy used for **C2** does not represent an error or warning. Each colour simply provides a persistent visual identity for its corresponding proficiency level.
+
+CEFR colours are always accompanied by their textual level labels to ensure that proficiency information never depends on colour alone.
+
+---
+
+### Semantic and Status Visualisation
+
+Semantic colours are used when the visualisation represents an **application state, outcome or exception**, rather than a pedagogical category.
+
+Examples include:
+
+```text
+LEARNER
+Active           → #38DF9C
+Inactive         → #7A949B
+
+COURSE
+Confirmed        → #006B7D
+Active           → #5FF0DF
+Paused           → #FFB000
+Cancelled        → #EF4444
+Completed        → #4F6870
+
+ATTENDANCE
+Attended         → #38DF9C
+Excused          → #07C0C7
+Missed           → #FF5A5A
+```
+
+The semantic system follows a consistent visual rationale:
+
+- **green** communicates a positive or successfully fulfilled state;
+- **cyan, teal and turquoise** communicate informational or operational states;
+- **amber** communicates interruption or attention;
+- **red** communicates negative outcomes or termination;
+- **blue-grey neutrals** communicate inactive, completed, historical or de-emphasised states.
+
+This prevents semantic colours from being confused with categorical colours used for skills or CEFR proficiency levels.
+
+---
+
+### Proportional Indicators
+
+Percentage-based visualisations are used only where the underlying value represents a genuine proportion.
+
+Examples include:
+
+- attendance rates;
+- course completion;
+- completed versus remaining classes.
+
+Course completion can therefore be represented through progress bars or completion rings because the value describes progress towards a finite total.
+
+Attendance percentages similarly represent a proportion derived from completed attendance records.
+
+Assessment ability, however, is displayed using a **`/10` score rather than a percentage** because the value represents a pedagogical evaluation rather than completion of a quantity.
 
 This distinction prevents visually similar metrics from implying the same meaning.
 
-The overall visualisation strategy therefore follows three principles:
+```text
+COURSE COMPLETION     → Percentage / proportion
+ATTENDANCE RATE       → Percentage / proportion
+SKILL ASSESSMENT      → Score /10
+CEFR LEVEL            → Categorical classification
+STATUS                → Semantic state
+```
+
+---
+
+### Visualisation Principles
+
+The overall data visualisation strategy follows several consistent principles:
 
 1. **Brand colours provide interface structure and identity.**
-2. **Assessment colours identify pedagogical data consistently.**
-3. **Semantic colours communicate application state and operational meaning.**
+2. **Assessment colours identify language skills consistently.**
+3. **CEFR colours identify proficiency categories consistently.**
+4. **Semantic colours communicate application state and operational meaning.**
+5. **Percentages are reserved for genuinely proportional data.**
+6. **Assessment scores use a `/10` scale to distinguish evaluation from completion.**
+7. **Historical data is preserved and visualised separately from current assessment state.**
+8. **Colour reinforces information but never acts as its sole means of communication.**
 
-This approach allows data visualisation to remain consistent with the wider English Grows design system while ensuring that colour always carries a clear and predictable purpose.
-
+This approach allows data visualisation to remain consistent with the wider **English Grows design system** while ensuring that each visual element communicates a clear and predictable meaning.
 
