@@ -1,22 +1,36 @@
 .skills-grid {
     display: grid;
-    grid-template-columns: minmax(340px, 3fr) minmax(340px, 1fr);
+    grid-template-columns: minmax(340px, 3fr) minmax(300px, 1fr);
     gap: 1.2rem;
     margin-top: 1.25rem;
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    align-items: stretch;
 }
 
 .skills-grid > div:nth-child(2) {
-    display:flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 1rem;
+    min-height: 0;
 }
 
-.skills-grid p {
+/* Once one accordion opens, allow cards to size naturally */
+.skills-grid > div:last-child:has(.skill-accordion-toggle[aria-expanded="true"]) {
+    grid-template-rows: auto;
+}
+/* .skills-grid p {
     width: 100%;
     margin: 1.2rem 0.25rem 0.25rem;
+} */
+
+.skills-grid p.skills-assessment-pending  {
+    color: var(--color-slate);
+    background-color: rgba(var(--color-steel-rgb), 0.2);
+    border-radius: 8px;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
 }
 
 /* SKILL CARD **********************/
@@ -29,6 +43,8 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    min-height: 0;
+    height: auto;    
     box-sizing: border-box;
     gap: 0;
     display: flex;
@@ -91,13 +107,12 @@
 .skill-card-header {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
+    flex: 1 1 auto;
     justify-content: space-between;
     padding: 1rem 1rem 0.5rem;
     gap: 1rem;
     background-color: var(--color-whitesmoke);
-    /* border-top-left-radius: 8px;
-    border-top-right-radius: 8px; */
+    height: auto;
 }
 
 .skill-card h2 {
@@ -307,6 +322,8 @@
     justify-content: space-between;
     padding: 0.5rem 1rem 1.5rem;
     background-color: var(--color-whitesmoke);
+        height: auto;
+    overflow: visible;
     /* stretch to occupy available height: */
     flex: 1;
     border-top: 1px solid rgba(var(--color-teal-rgb), 0.25);

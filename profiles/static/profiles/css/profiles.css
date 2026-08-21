@@ -1165,8 +1165,8 @@ div:has(> .student-action-btn) {
     width: fit-content;
     max-width: 100%;
     margin: 1.25rem 0 0;
-    background: var(--color-whitesmoke);
-    padding: 0.5rem;
+    background: rgba(var(--color-teal-rgb), 0.15);
+    padding: 0.15rem 0.15rem 0.15rem 0.5rem;    
     border-radius: 8px;
     border: outset 1px rgba(var(--color-teal-rgb), 0.3);
 }

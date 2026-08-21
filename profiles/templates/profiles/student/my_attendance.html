@@ -106,7 +106,7 @@
 
     <!-- <div class="student-detail-tabs-wrapper"> -->
 
-    {% if active_enrollments|length > 1 %}
+    {% if enrollments|length > 1 %}
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
@@ -121,12 +121,12 @@
                     class="course-select"
                     onchange="this.form.submit()"
                 >
-                    {% for item in active_enrollments %}
+                    {% for item in enrollments %}
                         <option
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
                         >
-                            {{ item.course.name }}
+                            {{ item.course.name }} - {{ item.course.get_status_display }}
                         </option>
                     {% endfor %}
                 </select>
@@ -137,31 +137,31 @@
         </form>
     {% endif %}   
 
-    <div class="wrapper-attendance-progress-card mb-4">
+    <div class="wrapper-attendance-progress-card mt-4 mb-4">
         <div class="attendance-progress-card">
             <div class="circle-panel1">
                 <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
                 <h2>Attendance<br>Rate</h2>
             </div>
             <div class="circle-panel2"></div>
-{% if active_enrollment %}                
+        {% if enrollment %}                
             <div class="info">
                 <div class="attendance-percentage-card mt-3 mb-3">
                     <div class="mb-2">
                         <!-- <strong>Attendance</strong> -->
-                        <p>{{ active_enrollment.attendance_percentage|default:"0" }}%</p>
+                        <p>{{ enrollment.attendance_percentage|default:"0" }}%</p>
                         
                     </div>
 
                     <progress
                         class="attendance-progress"
-                        value="{{ active_enrollment.attendance_percentage }}"
+                        value="{{ enrollment.attendance_percentage }}"
                         max="100">
-                        {{ active_enrollment.attendance_percentage|default:"0" }}%
+                        {{ enrollment.attendance_percentage|default:"0" }}%
                     </progress>
                 </div>                            
 
-                {% if active_enrollment.has_low_attendance_warning %}
+                {% if enrollment.has_low_attendance_warning %}
                 <div class="attendance-warning ml-4 mr-3">                
                     <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level of 75%!</p>
                 </div>
@@ -174,7 +174,7 @@
 
                     <div class="item-text">
                         <strong>Lessons Attended</strong>
-                        <span>{{ active_enrollment.classes_attended|default:"0" }} / {{ active_enrollment.total_completed_classes|default:"0" }}</span>
+                        <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }}</span>
                     </div>
                 </div>                    
 
@@ -200,7 +200,7 @@
 
                             <div class="item-text">
                                 <strong>Lessons Attended</strong>
-                                <span>{{ active_enrollment.classes_attended|default:"0" }}</span>
+                                <span>{{ enrollment.classes_attended|default:"0" }}</span>
                             </div>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
 
                             <div class="item-text">
                                 <strong>Past Lessons</strong>
-                                <span>{{ active_enrollment.total_completed_classes|default:"0" }}</span>
+                                <span>{{ enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
                         </div>                    
                     </div>
@@ -224,7 +224,7 @@
 
                             <div class="item-text">
                                 <strong>Upcoming Lessons</strong>
-                                <span>{{ active_enrollment.upcoming_classes|default:"0" }}</span>
+                                <span>{{ enrollment.upcoming_classes|default:"0" }}</span>
                             </div>
                         </div>                  
                     </div>
@@ -303,7 +303,7 @@
                                             </div>
                                             {% endfor %}
                                         {% else %}
-                                            <p class="p-2">You don't have any recent attendance yet.</p>
+                                            <p class="text-dark p-2">You don't have any recent attendance yet.</p>
                                         {% endif %}
 
                                         </div>
@@ -331,7 +331,7 @@
 
                             <div class="item-text">
                                 <strong>Total Absences</strong>
-                                <span>{{ active_enrollment.total_absences|default:"0" }}</span>
+                                <span>{{ enrollment.total_absences|default:"0" }}</span>
                             </div>
                         </div>            
                     </div>
@@ -343,7 +343,7 @@
 
                             <div class="item-text">
                                 <strong>Lessons Missed</strong>
-                                <span>{{ active_enrollment.classes_missed|default:"0" }}</span>
+                                <span>{{ enrollment.classes_missed|default:"0" }}</span>
                             </div>
                         </div>            
                     </div>
@@ -355,7 +355,7 @@
 
                             <div class="item-text">
                                 <strong>Excused Absences</strong>
-                            <span> {{ active_enrollment.classes_excused|default:"0" }} </span>
+                            <span> {{ enrollment.classes_excused|default:"0" }} </span>
                             </div>
                         </div> 
                     </div>
@@ -435,7 +435,7 @@
                                             </div>
                                             {% endfor %}
                                         {% else %}
-                                            <p class="p-2">You don't have any recent absence yet.</p>
+                                            <p class="text-dark p-2">You don't have any recent absence yet.</p>
                                         {% endif %}
 
                                         </div>

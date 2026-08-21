@@ -127,7 +127,7 @@
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
                         >
-                            {{ item.course.name }}
+                            {{ item.course.name }} - {{ item.course.get_status_display }}
                         </option>
                     {% endfor %}
                 </select>
@@ -144,9 +144,9 @@
         <article class="student-detail-card">
             <div class="course-info-detail-card">
                 <h2>
-                    {% if active_enrollments|length > 1 %}
+                    {% if enrollments|length > 1 %}
                         Course Details
-                    {% elif active_enrollments|length <= 1 %}
+                    {% elif enrollments|length <= 1 %}
                         {{ course.name }}
                     {% endif %}
                 </h2>    
@@ -174,12 +174,14 @@
                                 <strong>{{ course.course_type|default:"Not assigned" }}</strong>
                             </div>
                             <div class="detail-row">
-                                <span>Total Hours</span>
-                                <strong>{{ course.total_hours|clean_decimal }} h.</strong>
-                            </div>
-                            <div class="detail-row">
-                                <span>Dates</span>
-                                <strong>{{ course.start_date|date:"j M"|default:"Pending" }} - {{ course.end_date|date:"j M 'y"|default:"Pending" }}</strong>
+                                {% if course.status == "completed" or course.status == "confirmed" %}
+                                    <span>Dates</span>
+                                    {% if course.start_date %}
+                                        <strong>{{ course.start_date|date:"j M" }}{% else %} ? {% endif %} - {% if course.end_date %}{{ course.end_date|date:"j M 'y" }} {% else %} ? {% endif %}</strong>
+                                {% elif course.status == "active" %}
+                                    <span>Timetable</span>
+                                    <strong></strong>
+                                {% endif %}
                             </div>
 
                         </div>

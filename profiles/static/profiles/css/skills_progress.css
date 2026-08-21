@@ -9,8 +9,8 @@
     background: var(--color-whitesmoke);
     border: 2px inset rgba(var(--color-turquoise-rgb), 0.45);
     border-radius: 8px;
-    padding: 1.5rem 1rem;
-    min-height: 480px;
+    padding: 1.5rem 1rem 1rem;
+    /* min-height: 520px; */
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 
@@ -23,7 +23,7 @@
     min-width: 0;
     max-width: 100%;
     height: 52px;
-    margin: 0 0 2rem;
+    margin-bottom: 0.5rem;
     padding: 0 0.75rem 0 4.3rem;
     gap: 1rem;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
@@ -56,13 +56,14 @@
 
 .skills-chart-canvas-wrap {
     position: relative;
-    height: 405px; /* = 4 skill cards height */
+    height: 500px; /* = 4 skill cards height  */
     width: 100%;
 }
 
 #skillsProgressChart {
     width: 100% !important;
     height: 100% !important;
+    margin-top: 1.75rem;
 }
 
 

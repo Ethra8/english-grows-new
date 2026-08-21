@@ -221,6 +221,12 @@ header .student-main-info a:hover {
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
 }
 
+/* Attendance & Course completion cards body */
+.student-ring-layout {
+    display: flex;
+    gap: 2rem;
+}
+
 .student-detail-page .progress-ring {
     --percentage: 0;
     width: 8rem;
@@ -653,6 +659,10 @@ header .student-main-info a:hover {
     background-color: var(--color-whitesmoke);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+.recent-attendance-card-header .detail-row {
+    gap: 0;
 }
 
 .recent-attendance-card-header .icon {

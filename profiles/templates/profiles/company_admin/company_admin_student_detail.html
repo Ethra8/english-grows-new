@@ -122,7 +122,7 @@
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
                         >
-                            {{ item.course.name }} - {{ item.course.status }}
+                            {{ item.course.name }} - {{ item.course.get_status_display }}
                         </option>
                     {% endfor %}
                 </select>

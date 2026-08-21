@@ -422,12 +422,29 @@ def my_learning_progress(request):
     student = request.user
     student_profile = student.profile
 
-    active_enrollments = (
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Within each status:
+    # - course name A-Z
+    #
+    # Completed courses additionally use end_date as a
+    # tie-breaker, newest first.
+    # ---------------------------------------------------------
+    enrollments = (
         CourseEnrollment.objects
         .filter(
-            student=request.user,
-            status="active",
-            course__status="active",
+            student=student,
         )
         .select_related(
             "course",
@@ -435,41 +452,90 @@ def my_learning_progress(request):
             "course__course_type",
             "course__company",
         )
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
         .order_by(
-            "-id",
+            "status_order",
+            "course__name",
+            "-completed_date_order",
         )
     )
 
+
+    # ---------------------------------------------------------
+    # GET SELECTED COURSE FROM URL
+    #
+    # Example:
+    # /profiles/student/my_learning_progress/?course=4
+    # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
+
 
     # ---------------------------------------------------------
     # COURSE SELECTED IN URL
     # ---------------------------------------------------------
     if selected_course_id:
-        active_enrollment = get_object_or_404(
-            active_enrollments,
+        enrollment = get_object_or_404(
+            enrollments,
             course_id=selected_course_id,
         )
+
 
     # ---------------------------------------------------------
     # NO COURSE SELECTED IN URL
     # ---------------------------------------------------------
     else:
-        # Pick the default course according to the queryset order.
-        active_enrollment = active_enrollments.first()
+        # Because the queryset is already ordered by lifecycle
+        # priority, this naturally prefers:
+        #
+        # active -> confirmed -> paused -> completed -> cancelled
+        enrollment = enrollments.first()
 
-        # If a default course exists, redirect to the canonical URL
-        # so the currently displayed course is always explicit.
-        if active_enrollment:
+        # If a default course exists, redirect to the canonical
+        # URL so the currently displayed course is explicit.
+        if enrollment:
             return redirect(
-                f"{request.path}?course={active_enrollment.course_id}"
+                f"{request.path}?course={enrollment.course_id}"
             )
 
 
     # ---------------------------------------------------------
-    # NO ELIGIBLE ACTIVE COURSE
+    # NO ENROLLMENTS
     # ---------------------------------------------------------
-    if not active_enrollment:
+    if not enrollment:
         return render(
             request,
             "profiles/student/my_learning_progress.html",
@@ -477,24 +543,38 @@ def my_learning_progress(request):
                 "student": student,
                 "student_profile": student_profile,
 
-                # Full queryset for the selector
-                "active_enrollments": active_enrollments,
+                # Full queryset for selector
+                "enrollments": enrollments,
 
                 # No selected enrollment/course
-                "active_enrollment": None,
+                "enrollment": None,
                 "course": None,
 
-                "chart_data": {
+                "overall_skill_chart_data": {
                     "labels": [],
                     "datasets": [],
                 },
+
+                "attended_count": 0,
+                "missed_count": 0,
+                "excused_count": 0,
+                "total_attendance_records": 0,
+                "attendance_percentage": 0,
+                "recent_attendance": [],
+
+                "completed_classes": 0,
+                "remaining_classes": 0,
+                "total_classes": 0,
+                "completion_percentage": 0,
             },
         )
+
 
     # ---------------------------------------------------------
     # SELECTED / DEFAULT COURSE
     # ---------------------------------------------------------
-    course = active_enrollment.course
+    course = enrollment.course
+
 
     # ---------------------------------------------------------
     # SKILLS PROGRESS GRAPH
@@ -505,29 +585,49 @@ def my_learning_progress(request):
             course=course,
         )
     )
+
+
     # ---------------------------------------------------------
     # ATTENDANCE
+    #
+    # Historical course status does not matter.
+    # We are explicitly retrieving records for the selected
+    # student + selected course.
     # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
             student=student,
             class_session__course=course,
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
         )
-        .select_related("class_session")
-        .order_by("-class_session__start_time")
+        .select_related(
+            "class_session",
+            "class_session__course",
+        )
+        .order_by(
+            "-class_session__start_time"
+        )
     )
 
+
+    # ---------------------------------------------------------
+    # ATTENDANCE COUNTS
+    # ---------------------------------------------------------
     attended_count = attendances.filter(
-        status="attended"
+        status=Attendance.STATUS_ATTENDED
     ).count()
 
     missed_count = attendances.filter(
-        status="missed"
+        status=Attendance.STATUS_MISSED
     ).count()
 
     excused_count = attendances.filter(
-        status="excused"
+        status=Attendance.STATUS_EXCUSED
     ).count()
 
     total_attendance_records = (
@@ -536,8 +636,10 @@ def my_learning_progress(request):
         + excused_count
     )
 
-    completed_classes = course.completed_sessions
 
+    # ---------------------------------------------------------
+    # ATTENDANCE %
+    # ---------------------------------------------------------
     attendance_percentage = (
         round(
             attended_count
@@ -548,43 +650,65 @@ def my_learning_progress(request):
         else 0
     )
 
-    total_classes = course.total_sessions
 
-    remaining_classes = max(
-        total_classes - completed_classes,
-        0,
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    #
+    # Use the selected enrollment rather than generic course
+    # totals, so progress reflects the sessions actually
+    # assigned to this learner.
+    # ---------------------------------------------------------
+    completed_classes = (
+        enrollment.total_completed_classes
     )
 
+    total_classes = (
+        enrollment.total_assigned_classes
+    )
+
+    remaining_classes = (
+        enrollment.upcoming_classes
+    )
+
+
+    # ---------------------------------------------------------
+    # COMPLETION %
+    # ---------------------------------------------------------
     completion_percentage = (
         round(
-            completed_classes
-            / total_classes
-            * 100
+            (completed_classes / total_classes) * 100
         )
         if total_classes > 0
         else 0
     )
 
+
+    # ---------------------------------------------------------
+    # RECENT ATTENDANCE
+    # ---------------------------------------------------------
     recent_attendance = (
         attendances
-        .filter(
-            status__in=[
-                "attended",
-                "missed",
-                "excused",
-            ]
-        )
-        .order_by("-class_session__start_time")[:5]
+        .order_by(
+            "-class_session__start_time"
+        )[:5]
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "student": student,
         "student_profile": student_profile,
 
-        "active_enrollments": active_enrollments,
-        "active_enrollment": active_enrollment,
+        # ALL enrollments -> selector
+        "enrollments": enrollments,
+
+        # ONE selected enrollment/course
+        "enrollment": enrollment,
         "course": course,
 
+        # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
@@ -592,12 +716,13 @@ def my_learning_progress(request):
         "attendance_percentage": attendance_percentage,
         "recent_attendance": recent_attendance,
 
+        # Progress
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
 
-        # Skills graph data
+        # Skills graph
         "overall_skill_chart_data": overall_skill_chart_data,
     }
 
@@ -616,17 +741,32 @@ def my_attendance(request):
         user=request.user
     )
 
+    student = request.user
+    student_profile = profile
+
+
     # ---------------------------------------------------------
-    # ALL ACTIVE ENROLLMENTS
-    # Only include courses that are also currently active.
-    # These are used to populate the course selector.
+    # ALL ENROLLMENTS
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Within each status:
+    # - course name A-Z
+    #
+    # Completed courses additionally use end_date as a
+    # tie-breaker, newest first.
     # ---------------------------------------------------------
-    active_enrollments = (
+    enrollments = (
         CourseEnrollment.objects
         .filter(
-            student=request.user,
-            status="active",
-            course__status="active",
+            student=student,
         )
         .select_related(
             "course",
@@ -634,8 +774,48 @@ def my_attendance(request):
             "course__company",
             "course__teacher",
         )
-        .order_by("course__name")
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
     )
+
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
@@ -645,41 +825,40 @@ def my_attendance(request):
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
+
     # ---------------------------------------------------------
     # DETERMINE WHICH ENROLLMENT / COURSE TO DISPLAY
     # ---------------------------------------------------------
     if selected_course_id:
-        active_enrollment = (
-            active_enrollments
+        enrollment = (
+            enrollments
             .filter(course_id=selected_course_id)
             .first()
         )
 
-        # If an invalid/stale course ID is supplied,
-        # fall back to the first available active enrollment.
-        if not active_enrollment:
-            active_enrollment = active_enrollments.first()
+        # Invalid / stale course id:
+        # fall back to the first available enrollment.
+        if not enrollment:
+            enrollment = enrollments.first()
 
     else:
-        active_enrollment = active_enrollments.first()
+        enrollment = enrollments.first()
+
 
     # ---------------------------------------------------------
-    # VARIABLES REQUIRED BY SHARED STUDENT HEADER
+    # COURSE CURRENTLY BEING DISPLAYED
     # ---------------------------------------------------------
-    student = request.user
-    student_profile = profile
-
-    # Course currently being displayed.
     course = (
-        active_enrollment.course
-        if active_enrollment
+        enrollment.course
+        if enrollment
         else None
     )
 
+
     # ---------------------------------------------------------
-    # NO ACTIVE COURSE
+    # NO ENROLLMENTS
     # ---------------------------------------------------------
-    if not active_enrollment:
+    if not enrollment:
         return render(
             request,
             "profiles/student/my_attendance.html",
@@ -691,22 +870,30 @@ def my_attendance(request):
                 "student_profile": student_profile,
                 "course": None,
 
-                "active_enrollments": active_enrollments,
-                "active_enrollment": None,
+                # Course selector
+                "enrollments": enrollments,
+
+                # No selected enrollment
+                "enrollment": None,
+
+                # Attendance
                 "recent_attendance": [],
                 "recent_absences": [],
             }
         )
 
+
     # ---------------------------------------------------------
     # ATTENDED CLASSES
+    #
     # Data comes from the SELECTED course only.
+    # Historical course status does not matter.
     # ---------------------------------------------------------
     recent_attendance = (
         Attendance.objects
         .filter(
-            student=request.user,
-            class_session__course=active_enrollment.course,
+            student=student,
+            class_session__course=course,
             class_session__status=ClassSession.STATUS_COMPLETED,
             status=Attendance.STATUS_ATTENDED,
         )
@@ -714,18 +901,22 @@ def my_attendance(request):
             "class_session",
             "class_session__course",
         )
-        .order_by("-class_session__start_time")
+        .order_by(
+            "-class_session__start_time"
+        )
     )
+
 
     # ---------------------------------------------------------
     # ABSENCES
+    #
     # Data comes from the SELECTED course only.
     # ---------------------------------------------------------
     recent_absences = (
         Attendance.objects
         .filter(
-            student=request.user,
-            class_session__course=active_enrollment.course,
+            student=student,
+            class_session__course=course,
             class_session__status=ClassSession.STATUS_COMPLETED,
             status__in=[
                 Attendance.STATUS_MISSED,
@@ -736,25 +927,30 @@ def my_attendance(request):
             "class_session",
             "class_session__course",
         )
-        .order_by("-class_session__start_time")
+        .order_by(
+            "-class_session__start_time"
+        )
     )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
 
-        # -----------------------------------------------------
-        # SHARED STUDENT HEADER
-        # -----------------------------------------------------
+        # Shared student header
         "student": student,
         "student_profile": student_profile,
         "course": course,
 
-        # ALL active courses -> selector
-        "active_enrollments": active_enrollments,
+        # ALL enrollments -> course selector
+        "enrollments": enrollments,
 
-        # ONE selected course -> page content
-        "active_enrollment": active_enrollment,
+        # ONE selected enrollment -> page content
+        "enrollment": enrollment,
 
+        # Attendance
         "recent_attendance": recent_attendance,
         "recent_absences": recent_absences,
     }
@@ -766,17 +962,19 @@ def my_attendance(request):
     )
 
 
-
 @login_required
 def my_skills(request):
     student = request.user
+
     student_profile = get_object_or_404(
         UserProfile,
         user=student,
     )
 
+    # ---------------------------------------------------------
     # SECURITY
     # Only learner roles can access this page.
+    # ---------------------------------------------------------
     if student_profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
         UserProfile.ROLE_INDIVIDUAL,
@@ -784,17 +982,28 @@ def my_skills(request):
         return redirect("home")
 
 
-    # ALL ACTIVE ENROLLMENTS
-    # Only include courses that are also active.
-    # This queryset is used for:
-    # - the course selector
-    # - validating ?course=...
-    active_enrollments = (
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Within each status:
+    # - course name A-Z
+    #
+    # Completed courses additionally use end_date as a
+    # tie-breaker, newest first.
+    # ---------------------------------------------------------
+    enrollments = (
         CourseEnrollment.objects
         .filter(
             student=student,
-            status="active",
-            course__status="active",
         )
         .select_related(
             "course",
@@ -802,60 +1011,133 @@ def my_skills(request):
             "course__course_type",
             "course__company",
         )
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
         .order_by(
-            "-id",
+            "status_order",
+            "course__name",
+            "-completed_date_order",
         )
     )
 
+
+    # ---------------------------------------------------------
     # SELECTED COURSE
+    #
+    # Example:
+    # /profiles/student/my_skills/?course=4
+    # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
+
+    # ---------------------------------------------------------
+    # COURSE SELECTED IN URL
+    # ---------------------------------------------------------
     if selected_course_id:
-        active_enrollment = get_object_or_404(
-            active_enrollments,
+        enrollment = get_object_or_404(
+            enrollments,
             course_id=selected_course_id,
         )
 
+
+    # ---------------------------------------------------------
+    # NO COURSE SELECTED
+    # ---------------------------------------------------------
     else:
-        # Use the first active enrollment as the default.
-        active_enrollment = active_enrollments.first()
+        # Because enrollments is already ordered by status
+        # priority, the default naturally prefers:
+        #
+        # active -> confirmed -> paused -> completed -> cancelled
+        enrollment = enrollments.first()
 
         # Make the selected/default course explicit in the URL.
-        # /my-skills/
+        #
+        # /my_skills/
+        #
         # becomes:
-        # /my-skills/?course=4
-        if active_enrollment:
+        #
+        # /my_skills/?course=4
+        if enrollment:
             return redirect(
-                f"{request.path}?course={active_enrollment.course_id}"
+                f"{request.path}?course={enrollment.course_id}"
             )
 
-    # NO ACTIVE COURSE
-    if not active_enrollment:
+
+    # ---------------------------------------------------------
+    # NO ENROLLMENTS
+    # ---------------------------------------------------------
+    if not enrollment:
         return render(
             request,
             "profiles/student/my_skills.html",
             {
                 "student": student,
                 "student_profile": student_profile,
-                "active_enrollments": active_enrollments,
-                "active_enrollment": None,
+
+                # Full queryset for selector
+                "enrollments": enrollments,
+
+                # No selected enrollment/course
+                "enrollment": None,
                 "course": None,
+
                 "skills": [],
                 "skill_notes": [],
                 "skill_note_display": [],
                 "academic_profile": None,
+
                 "chart_data": {
                     "labels": [],
                     "datasets": [],
                 },
+
                 "level_choices": UserProfile.LEVEL_CHOICES,
             },
         )
 
-    # SELECTED COURSE
-    course = active_enrollment.course
 
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
     # SKILL ICONS
+    # ---------------------------------------------------------
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -863,11 +1145,14 @@ def my_skills(request):
         "listening": "fa-solid fa-headphones",
     }
 
+
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    #
     # IMPORTANT:
-    # DO NOT create assessments from the learner-facing view.
-    # The teacher view may use get_or_create() because the teacher
-    # is responsible for evaluating/editing skills.
-    # The student view should only READ existing assessments.
+    # Learner-facing views only READ existing assessments.
+    # They do not create or modify assessment records.
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -880,24 +1165,26 @@ def my_skills(request):
         .order_by("skill")
     )
 
-    # SKILL NOTEs DISPLAY
+
+    # ---------------------------------------------------------
+    # SKILL NOTES DISPLAY
+    # ---------------------------------------------------------
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
     # BUILD SKILL CARDS
+    # ---------------------------------------------------------
     skills = []
 
     for assessment in skill_assessments:
 
-        # Build the grouped subskill assessment information:
-        # -strengths
-        # -confident
-        # -required_standard
-        # -developing
-        # -needs_work
-        note_display = build_skill_note_display(assessment)
+        note_display = build_skill_note_display(
+            assessment
+        )
 
         skills.append({
             "assessment": assessment,
@@ -915,7 +1202,7 @@ def my_skills(request):
 
             "teacher_notes": assessment.teacher_notes,
 
-            # Number of assessed subskills
+            # Number / list of assessed subskills
             "subskills": assessment.subskill_assessments.all(),
 
             # Grouped assessment results
@@ -926,7 +1213,10 @@ def my_skills(request):
             "needs_work": note_display["needs_work"],
         })
 
+
+    # ---------------------------------------------------------
     # TEACHER NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -939,37 +1229,49 @@ def my_skills(request):
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
     # ACADEMIC PROFILE
+    # ---------------------------------------------------------
     academic_profile = getattr(
         student,
         "academic_profile",
         None
     )
 
+
+    # ---------------------------------------------------------
     # SKILL PROGRESS CHART
+    #
+    # Historical course status does not matter.
+    # Data is explicitly scoped to selected student + course.
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+
+    # ---------------------------------------------------------
     # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "student": student,
         "student_profile": student_profile,
 
-        # ALL active enrollments -> course selector
-        "active_enrollments": active_enrollments,
+        # ALL enrollments -> course selector
+        "enrollments": enrollments,
 
         # ONE selected enrollment -> current page
-        "active_enrollment": active_enrollment,
+        "enrollment": enrollment,
 
+        # Selected course
         "course": course,
 
         "skills": skills,
         "academic_profile": academic_profile,
 
-        # Use normal Python object because your template already
-        # uses json_script.
+        # Normal Python object because template uses json_script.
         "chart_data": chart_data,
 
         "skill_notes": skill_notes,

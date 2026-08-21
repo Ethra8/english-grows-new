@@ -116,7 +116,7 @@
 
             <label for="course-select" class="course-selector-label">
                 <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>Select Active Course</span>
+                <span>Select Course</span>
             </label>
 
             <div class="course-select-wrapper">
@@ -131,7 +131,7 @@
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
                         >
-                            {{ item.course.name }} - {{ item.course.status }}
+                            {{ item.course.name }} - {{ item.course.get_status_display }}
                         </option>
                     {% endfor %}
                 </select>

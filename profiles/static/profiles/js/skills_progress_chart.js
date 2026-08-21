@@ -1,25 +1,41 @@
+// =========================================================
+// INDIVIDUAL SKILLS PROGRESS GRAPH
+// 4 skill lines: Speaking, Listening, Reading, Writing
+// =========================================================
+
 document.addEventListener("DOMContentLoaded", function () {
+
     const chartEl = document.getElementById("skillsProgressChart");
     const chartDataEl = document.getElementById("skills-chart-data");
 
+    // This JS file may be loaded on pages where this chart
+    // does not exist. In that case, do nothing.
     if (!chartEl || !chartDataEl) {
         return;
     }
 
-    const chartData = JSON.parse(chartDataEl.textContent);
 
-    console.log("Student chart data:", chartData);
+    // ---------------------------------------------------------
+    // GET CHART DATA
+    //
+    // Empty data is VALID:
+    //
+    // {
+    //     "labels": [],
+    //     "datasets": []
+    // }
+    //
+    // Chart.js will still render the chart and Y axis.
+    // ---------------------------------------------------------
 
-    if (!chartData.labels || chartData.labels.length === 0) {
-        chartEl.parentElement.innerHTML = `
-            <p class="text-dark">
-                No skill progress data yet.
-                Your skills progress graph will display here once your
-                teacher has completed an evaluation.
-            </p>
-        `;
-        return;
-    }
+    const chartData = JSON.parse(
+        chartDataEl.textContent
+    );
+
+    console.log(
+        "Student chart data:",
+        chartData
+    );
 
 
     // ---------------------------------------------------------
@@ -32,24 +48,32 @@ document.addEventListener("DOMContentLoaded", function () {
     // This plugin keeps the REAL data coordinates unchanged,
     // but visually offsets the dots a few pixels horizontally
     // so every skill colour remains visible.
+    //
+    // If there are no datasets yet, this simply has
+    // nothing to draw.
     // ---------------------------------------------------------
+
     const separateOverlappingPoints = {
         id: "separateOverlappingPoints",
 
         afterDatasetsDraw(chart) {
-            const { ctx } = chart;
 
+            const { ctx } = chart;
             const groups = new Map();
 
 
             // -------------------------------------------------
             // FIND POINTS THAT SHARE THE SAME X + Y POSITION
             // -------------------------------------------------
+
             chart.data.datasets.forEach(function (
                 dataset,
                 datasetIndex
             ) {
-                const meta = chart.getDatasetMeta(datasetIndex);
+
+                const meta = chart.getDatasetMeta(
+                    datasetIndex
+                );
 
                 if (meta.hidden) {
                     return;
@@ -59,7 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     point,
                     pointIndex
                 ) {
-                    const rawValue = dataset.data[pointIndex];
+
+                    const rawValue = (
+                        dataset.data[pointIndex]
+                    );
 
                     if (
                         rawValue === null
@@ -68,18 +95,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         return;
                     }
 
+
                     // Round pixel coordinates slightly so tiny
                     // floating-point differences do not prevent
                     // genuinely overlapping points being grouped.
+
                     const key = (
                         Math.round(point.x)
                         + "-"
                         + Math.round(point.y)
                     );
 
+
                     if (!groups.has(key)) {
                         groups.set(key, []);
                     }
+
 
                     groups.get(key).push({
                         dataset: dataset,
@@ -92,13 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
             // -------------------------------------------------
             // DRAW POINTS
             // -------------------------------------------------
+
             groups.forEach(function (points) {
 
                 // ---------------------------------------------
                 // ONE POINT:
                 // Draw normally at its real position.
                 // ---------------------------------------------
+
                 if (points.length === 1) {
+
                     drawPoint(
                         ctx,
                         points[0].point.x,
@@ -124,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 //
                 //       ●
                 // ---------------------------------------------
+
                 const spacing = 8;
 
                 const totalWidth = (
@@ -140,10 +175,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     item,
                     index
                 ) {
+
                     const offsetX = (
                         startOffset
                         + (index * spacing)
                     );
+
 
                     drawPoint(
                         ctx,
@@ -160,7 +197,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // ---------------------------------------------------------
     // DRAW CUSTOM POINT
     // ---------------------------------------------------------
+
     function drawPoint(ctx, x, y, color) {
+
         ctx.save();
 
         ctx.beginPath();
@@ -178,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // White outline helps overlapping colours remain
         // visually distinct.
+
         ctx.lineWidth = 1.5;
         ctx.strokeStyle = "#ffffff";
         ctx.stroke();
@@ -188,38 +228,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------------------------------------------------
     // APPLY CONSISTENT VISUAL SETTINGS
+    //
+    // With datasets: normal styling is applied.
+    // Without datasets: forEach simply has nothing to process.
     // ---------------------------------------------------------
+
     chartData.datasets.forEach(function (dataset) {
+
         dataset.tension = 0.2;
         dataset.fill = false;
         dataset.borderWidth = 2.5;
 
         // Hide Chart.js default points because our plugin
         // redraws them and handles overlapping values.
+
         dataset.pointRadius = 0;
 
         // Still keep a generous hover/click area around
         // the REAL data coordinate.
-        dataset.pointHitRadius = 12;
 
+        dataset.pointHitRadius = 12;
         dataset.pointHoverRadius = 0;
     });
 
 
     // ---------------------------------------------------------
     // CREATE CHART
+    //
+    // IMPORTANT:
+    // The chart is created EVEN WHEN labels/datasets are empty.
+    // This keeps the graph structure visible before the
+    // learner's first assessment.
     // ---------------------------------------------------------
+
     new Chart(chartEl, {
+
         type: "line",
 
         data: chartData,
 
         // Register our custom point plugin.
+
         plugins: [
             separateOverlappingPoints
         ],
 
         options: {
+
             responsive: true,
             maintainAspectRatio: false,
             spanGaps: true,
@@ -230,6 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
 
             scales: {
+
                 y: {
                     min: 0,
                     max: 10,
@@ -256,6 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
 
             plugins: {
+
                 legend: {
                     position: "bottom",
 
@@ -268,8 +325,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 tooltip: {
                     callbacks: {
+
                         label: function (context) {
-                            const value = context.parsed.y;
+
+                            const value = (
+                                context.parsed.y
+                            );
 
                             return (
                                 context.dataset.label
@@ -289,7 +350,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// GRAPH FOR 4 SKILLS AVERAGE (1 DOT for average of 4 skills)
+
+
+// =========================================================
+// OVERALL SKILLS PROGRESS GRAPH
+// 1 DOT / LINE = average of the 4 skills
+// =========================================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const chartEl = document.getElementById(
@@ -300,31 +367,41 @@ document.addEventListener("DOMContentLoaded", function () {
         "overall-skills-chart-data"
     );
 
+
+    // This JS file may be loaded on pages where this chart
+    // does not exist. In that case, do nothing.
+
     if (!chartEl || !chartDataEl) {
         return;
     }
+
+
+    // ---------------------------------------------------------
+    // GET CHART DATA
+    //
+    // Empty data is VALID and should still create the graph.
+    // ---------------------------------------------------------
 
     const chartData = JSON.parse(
         chartDataEl.textContent
     );
 
-    if (
-        !chartData.labels
-        || chartData.labels.length === 0
-    ) {
-        chartEl.parentElement.innerHTML = `
-            <p class="text-dark">
-                No overall skills progress data yet.
-                Progress will appear once all four skills
-                have been assessed.
-            </p>
-        `;
 
-        return;
-    }
+    console.log(
+        "Overall skills chart data:",
+        chartData
+    );
 
+
+    // ---------------------------------------------------------
+    // APPLY DATASET SETTINGS
+    //
+    // If no assessment data exists yet, datasets is empty,
+    // so nothing happens here and the chart still renders.
+    // ---------------------------------------------------------
 
     chartData.datasets.forEach(function (dataset) {
+
         dataset.tension = 0.2;
         dataset.fill = false;
         dataset.borderWidth = 2.5;
@@ -333,17 +410,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+    // ---------------------------------------------------------
+    // CREATE CHART
+    //
+    // IMPORTANT:
+    // Do NOT return when labels is empty.
+    //
+    // The empty chart is intentional and represents the
+    // learner's pre-assessment state.
+    // ---------------------------------------------------------
+
     new Chart(chartEl, {
+
         type: "line",
 
         data: chartData,
 
         options: {
+
             responsive: true,
             maintainAspectRatio: false,
             spanGaps: true,
 
             scales: {
+
                 y: {
                     min: 0,
                     max: 10,
@@ -356,16 +446,24 @@ document.addEventListener("DOMContentLoaded", function () {
                         display: true,
                         text: "Overall assessment / 10"
                     }
+                },
+
+                x: {
+                    title: {
+                        display: false
+                    }
                 }
             },
 
             plugins: {
+
                 legend: {
                     display: false
                 },
 
                 tooltip: {
                     callbacks: {
+
                         label: function (context) {
 
                             const value = Number(
