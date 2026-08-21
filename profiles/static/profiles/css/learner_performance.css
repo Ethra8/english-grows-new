@@ -1,4 +1,6 @@
 
+
+
 .student-detail-page {
     color: var(--color-whitesmoke);
     width: 100%;
@@ -24,16 +26,14 @@
     box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
-.student-detail-page header a {
-    color: #c9fffc;
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
+/* email */
+.student-detail-page header a,
 .student-detail-page header p {
-    color: #c9fffc;
-    font-size: 1.2rem;
-    font-weight: 500;
+    color: var(--color-icy);
+    font-size: 1.1rem;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin: 0 0 0.75rem;
 }
 
@@ -49,22 +49,10 @@ header .student-main-info {
     min-width: 0;
 }
 
-header .student-main-info h1,
-header .student-main-info p {
-    min-width: 0;
-    max-width: 100%;
-}
-
-header .student-main-info h1 {
-    color: var(--color-whitesmoke);
-    margin-bottom: 0;
-    /* font-size: 2.8rem; */
-}
-
 header .student-avatar-large {
     position: relative;
-    width: 175px;
-    height: 175px;
+    width: 135px;
+    height: 135px;
     border-radius: 50%;
     background: rgba(var(--color-turquoise-rgb), 0.16);
     border: 2px outset rgba(84, 85, 85, 0.75);
@@ -112,6 +100,17 @@ header .student-avatar-large.avatar-inactive .avatar-status-dot {
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
+header .student-main-info h1,
+header .student-main-info p {
+    min-width: 0;
+    max-width: 100%;
+}
+
+header .student-main-info h1 {
+    color: var(--color-whitesmoke);
+    margin-bottom: 0;
+    font-size: clamp(2.2rem, 2.5vw, 2.8rem);
+}
 
 header .student-main-info a:hover {
     color: var(--color-cyan);
@@ -130,10 +129,30 @@ header .student-main-info a:hover {
 
 /* DIV WITH LEVEL ************/
 .student-detail-page header .header-level {
-    margin: 2rem 0 0;
+    margin: 1.2rem 0 0;    
     min-width: max-content;
     width: 100%;
 }
+
+/* Level & status */
+/* header .student-main-info > div:last-child {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+} */
+
+.student-meta-line,
+.student-meta-line span {
+    /* 4 rules to prevent text 
+    from overflowing container */
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
 
 /* LEVEL PILL ***********************/
 .student-detail-page .level-pill {
@@ -176,6 +195,9 @@ header .student-main-info a:hover {
 /* .current-course-block {
     background-color: var(--color-whitesmoke);
 } */
+
+
+
 
 
 /* NOT SURE STILL IF NEEDED (previously: .teacher-student-detail-page******************* */
@@ -294,7 +316,7 @@ header .student-main-info a:hover {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -312,6 +334,26 @@ header .student-main-info a:hover {
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     overflow: hidden;
     white-space: nowrap;
+}
+
+.student-detail-card .course-info-detail-card h2 {
+    margin-bottom: 0.75rem;
+}
+
+.course-info-detail-card .status-badge.status-course {
+    justify-self: flex-end;
+    background-color: rgba(var(--color-whitesmoke-rgb), 1) !important;
+    color: var(--color-teal);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.4) !important;
+    font-size: 0.8rem;
+    font-weight: 400;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
+    z-index: 999;
+}
+
+.course-info-detail-card .status-badge.status-course i {
+    color: var(--color-teal);
+
 }
 
 .recent-attendance-card h2::after,
@@ -363,44 +405,6 @@ header .student-main-info a:hover {
     rotate: calc(-15deg);
 }
 
-/* Level & status */
-header .student-main-info > div:last-child {
-    flex: 1;
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-}
-
-.student-meta-line,
-.student-meta-line span {
-    /* 4 rules to prevent text 
-    from overflowing container */
-    min-width: 0;
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-header .student-main-info h1 {
-    color: var(--color-whitesmoke);
-    margin-bottom: 0;
-}
-
-.student-avatar {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: rgba(var(--color-turquoise-rgb), 0.16);
-    border: 1px outset rgba(var(--color-steel-rgb), 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: var(--color-turquoise);
-    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
-}
-
-.student-avatar img,
 .student-avatar-large img {
     width: 100%;
     height: 100%;

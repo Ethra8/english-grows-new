@@ -693,47 +693,47 @@ div:has(> .student-action-btn) {
 }
 
 .level-a1 {
-    background: rgba(114, 255, 117, 0.4);
-    border: outset 1px rgba(114, 255, 117, 0.75);
+    background: rgba(var(--color-a1-rgb), 0.4);
+    border: outset 1px rgba(var(--color-a1-rgb), 0.75);
 }
 
 .level-a2 {
-    background: rgba(255, 147, 114, 0.4);
-    border: outset 1px rgba(255, 147, 114, 0.75);
+    background: rgba(var(--color-a2-rgb), 0.4);
+    border: outset 1px rgba(var(--color-a2-rgb), 0.75);
 }
 
 .level-b1,
 .level-b11,
 .level-b12 {
-    background: rgba(24, 77, 250, 0.4);
-    border: outset 1px rgba(24, 77, 250, 0.75);
+    background: rgba(var(--color-b1-rgb), 0.4);
+    border: outset 1px rgba(var(--color-b1-rgb), 0.75);
 }
 
 .level-b2,
 .level-b21,
 .level-b22 {
-    background: rgba(92, 0, 138, 0.4);
-    border: outset 1px rgba(114, 38, 152, 0.75);
+    background: rgba(var(--color-b2-rgb), 0.4);
+    border: outset 1px rgba(var(--color-b2-rgb), 0.75);
 }
 
 .level-c1,
 .level-c11,
 .level-c12 {
-    background: rgba(1, 138, 88, 0.4);
-    border: outset 1px rgba(1, 138, 88, 0.75);
+    background: rgba(var(--color-c1-rgb), 0.4);
+    border: outset 1px rgba(var(--color-c1-rgb), 0.75);
 }
 
 .level-c2,
 .level-c21,
 .level-c22 {
-    background: rgba(255, 229, 60, 0.4);
-    border: outset 1px rgba(255, 229, 60, 0.75);
+    background: rgba(var(--color-c2-rgb), 0.4);
+    border: outset 1px rgba(var(--color-c2-rgb), 0.75);
 }
 
 .level-pending,
 .level-unknown {
-    background: rgba(83, 85, 86, 0.4);
-    border: outset 1px rgba(216, 231, 239, 0.35);
+    background: rgba(var(--color-steel-rgb), 0.4);
+    border: outset 1px rgba(var(--color-steel-rgb), 0.35);
 }
 
 

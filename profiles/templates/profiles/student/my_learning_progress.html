@@ -57,7 +57,7 @@
                         {{ student_profile.get_role_display|default:"Learner" }}</span>
                 </div>  -->
 
-                <div class="mt-4">  
+                <div class="header-level mt-4">  
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">Level</span>
                         <span class="current-level-value">
@@ -107,7 +107,7 @@
 
     <!-- <div class="student-detail-tabs-wrapper"> -->
 
-    {% if active_enrollments|length > 1 %}
+    {% if enrollments|length > 1 %}
         <form method="get" class="course-selector-form">
 
             <label for="course-select" class="course-selector-label">
@@ -122,7 +122,7 @@
                     class="course-select"
                     onchange="this.form.submit()"
                 >
-                    {% for item in active_enrollments %}
+                    {% for item in enrollments %}
                         <option
                             value="{{ item.course.id }}"
                             {% if course and item.course.id == course.id %}selected{% endif %}
@@ -142,14 +142,29 @@
 
                         <!-- Current Course -->
         <article class="student-detail-card">
-            <div>
-                <h2><i class="fa-solid fa-circle-info mr-3"></i>
+            <div class="course-info-detail-card">
+                <h2>
                     {% if active_enrollments|length > 1 %}
                         Course Details
                     {% elif active_enrollments|length <= 1 %}
                         {{ course.name }}
                     {% endif %}
                 </h2>    
+
+                <span class="status-badge status-course">
+                    {% if course.status == 'confirmed' %}
+                        <i class="fa-regular fa-circle-check mr-2"></i>
+                    {% elif course.status == 'active' %}
+                        <i class="fa-regular fa-circle-play mr-2"></i>
+                    {% elif course.status == 'completed' %}
+                        <i class="fa-solid fa-hourglass-end mr-2"></i>
+                    {% elif course.status == 'paused' %}
+                        <i class="fa-regular fa-circle-pause mr-2"></i>
+                    {% elif course.status == 'cancelled' %}
+                        <i class="fa-regular fa-circle-xmark mr-2"></i>
+                    {% endif %}
+                        {{ course.get_status_display|default:"none" }}
+                </span>
 
                 <div class="current-course-block">
                     <div>
@@ -183,11 +198,8 @@
 
         <!-- Attendance Overview -->
         <article class="student-detail-card">
-            <div>
-                <h2>
-                    <i class="fa-solid fa-clipboard-list mr-2"></i>
-                    Attendance Overview
-                </h2>
+            <div class="student-detail-card-attendance">
+                <h2>Attendance Overview</h2>
 
                 <div class="student-ring-layout mt-4">
 
@@ -219,11 +231,8 @@
 
         <!-- Course Progress -->
         <article class="student-detail-card">
-            <div>
-                <h2>
-                    <i class="fa-solid fa-chart-simple mr-2"></i>
-                    Course Completion
-                </h2>
+            <div class="course-completion-detail-card">
+                <h2>Course Completion</h2>
 
                 <div class="student-ring-layout">
 
@@ -254,11 +263,11 @@
         </article>
     </div>
     
-    <div class="student-details-skills-overview-grid">
+    <div class="student-details-skills-overview-grid mt-4">
         <article class="skills-progress-section">
             <div class="skills-chart-card">
                 <div class="skills-chart-header">
-                    <h2><i class="fa-solid fa-chart-line mr-2"></i>My Progress Over Time</h2>
+                    <h2>My Progress Over Time</h2>
                 </div>
 
                 <div class="skills-chart-canvas-wrap">

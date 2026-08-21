@@ -52,6 +52,27 @@
     --color-writing-rgb: 14, 165, 183;
 
 
+    /**** CEFR LEVELS **************************************/
+    /* A1 - Mint Glow */
+    --color-a1: #6EFF7F;
+    --color-a1-rgb: 110, 255, 127;
+    /* A2 - Tangerine Dream */
+    --color-a2: #ff954f;
+    --color-a2-rgb: 255, 149, 79;
+    /* B1 - Electric Sapphire */
+    --color-b1: #436EFD;
+    --color-b1-rgb: 67, 110, 253;
+    /* B2 - Indigo Bloom */
+    --color-b2: #7B27A5;
+    --color-b2-rgb:123, 39, 165;
+    /* C1 - Lemon Lime */
+    --color-c1: #DBDF2B;
+    --color-c1-rgb: 219, 223, 43;
+    /* C2 - Burgundy */
+    --color-c2: #902331;
+    --color-c2-rgb: 144, 35, 49;
+    
+
     /* USER ENROLLED STATUS dots ***************************/
     /* Active Enrollment*/
     --color-active-dot: #4dffb5;
@@ -59,7 +80,7 @@
     --color-inactive-dot: #7A949B;
 
 
-    /* COURSE STATUS dots **********************************/
+    /**** COURSE STATUS dots **********************************/
     /* Active */
     --color-course-status-active: #5ff0df;
     /* Confirmed */
