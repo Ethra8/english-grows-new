@@ -40,7 +40,8 @@
 
 - [Design Choices](#design-choices)
   - [Colour System](#colour-system)
-    - [Core Brand Palette](#core-brand-palette)
+    - [Core Brand / Interface Palette](#core-brand---interface-palette)
+    - [CEFR Levels Colours](#cefr-levels-colours)
     - [Language Skills Colours](#language-skills-colours)
     - [Semantic and Status Colours](#semantic-and-status-colours)
   - [Responsive Design](#responsive-design)
@@ -1792,7 +1793,7 @@ Colour is always accompanied by text, labels, icons or other interface context r
 
 ---
 
-### Brand / Interface Colours
+### Core Brand - Interface Palette
 
 The core **English Grows** interface palette consists of ten colours:
 
@@ -1851,7 +1852,72 @@ This hierarchy allows brighter colours to remain distinctive because they are us
 
 ---
 
-### Assessment / Data Colours
+### CEFR Level Colours
+
+The application uses a dedicated colour system to provide immediate visual identification of a learner's **CEFR proficiency level**.
+
+The official [**Common European Framework of Reference for Languages (CEFR)**](https://www.coe.int/en/web/common-european-framework-reference-languages/level-descriptions), developed by the **Council of Europe**, defines six principal proficiency levels from **A1 to C2** through language proficiency descriptors. It does **not prescribe a mandatory or universal colour scheme** for those levels.
+
+Colour coding is nevertheless commonly used in language-learning materials and multi-level course series to help learners and teachers distinguish proficiency levels visually. Major educational publishers such as **Pearson** organise extensive course ranges around clearly differentiated CEFR levels, although the colours assigned to individual levels vary between publishers and product families.
+
+English Grows follows this broader visual convention while defining its **own consistent CEFR colour mapping** as part of the application's design system.
+
+| CEFR Level | Preview | Colour | Hex |
+| :---: | :---: | :--- | :---: |
+| **A1** | ![#6EFF7F](https://img.shields.io/badge/A1-6EFF7F?style=flat&labelColor=6EFF7F&color=6EFF7F) | Mint Glow | `#6EFF7F` |
+| **A2** | ![#FF954F](https://img.shields.io/badge/A2-FF954F?style=flat&labelColor=FF954F&color=FF954F) | Tangerine Dream | `#FF954F` |
+| **B1** | ![#436EFD](https://img.shields.io/badge/B1-436EFD?style=flat&labelColor=436EFD&color=436EFD) | Electric Sapphire | `#436EFD` |
+| **B2** | ![#7B27A5](https://img.shields.io/badge/B2-7B27A5?style=flat&labelColor=7B27A5&color=7B27A5) | Indigo Bloom | `#7B27A5` |
+| **C1** | ![#DBDF2B](https://img.shields.io/badge/C1-DBDF2B?style=flat&labelColor=DBDF2B&color=DBDF2B) | Lemon Lime | `#DBDF2B` |
+| **C2** | ![#902331](https://img.shields.io/badge/C2-902331?style=flat&labelColor=902331&color=902331) | Burgundy | `#902331` |
+
+#### CEFR Colour Rationale
+
+The CEFR palette is intentionally **more varied than the core English Grows brand palette**.
+
+Unlike brand colours, which establish interface identity and hierarchy, CEFR colours need to make adjacent proficiency levels immediately distinguishable when they appear in course lists, learner profiles, filters, badges and other data-dense interfaces.
+
+The six colours therefore function primarily as **categorical identifiers**:
+
+```text
+CEFR LEVEL COLOURS
+│
+├── BASIC USER
+│   ├── A1  #6EFF7F  Mint Glow
+│   └── A2  #FF954F  Tangerine Dream
+│
+├── INDEPENDENT USER
+│   ├── B1  #436EFD  Electric Sapphire
+│   └── B2  #7B27A5  Indigo Bloom
+│
+└── PROFICIENT USER
+    ├── C1  #DBDF2B  Lemon Lime
+    └── C2  #902331  Burgundy
+```
+
+This grouping reflects the three broad CEFR proficiency bands:
+
+- **A1–A2 — Basic User**
+- **B1–B2 — Independent User**
+- **C1–C2 — Proficient User**
+
+The individual colours are deliberately distinct in hue so that the level can be recognised quickly without requiring progressively darker or lighter versions of a single colour.
+
+The CEFR colours are therefore used as **persistent level identifiers**, rather than as indicators of success, warning or status. For example, **C2 Burgundy does not represent an error state**, just as **A1 Mint Glow does not represent a success state**; each colour identifies a proficiency category within the learning system.
+
+As with the rest of the English Grows colour system, colour reinforces rather than replaces textual information. CEFR colours are always accompanied by their corresponding **A1, A2, B1, B2, C1 or C2 label**, ensuring that proficiency level remains explicit regardless of colour perception.
+
+The resulting hierarchy keeps four different uses of colour clearly separated:
+
+```text
+BRAND / INTERFACE       → Product identity and UI hierarchy
+ASSESSMENT / DATA       → Speaking, Listening, Reading and Writing
+CEFR LEVELS             → Language proficiency classification
+SEMANTIC / STATUS       → Operational meaning and application state
+```
+---
+
+### Language Skills Colours
 
 The language assessment system uses a dedicated colour set for the four principal language skills.
 
