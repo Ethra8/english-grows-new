@@ -6,10 +6,10 @@
 {% block extra_title %}| Student Attendance {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -95,52 +95,85 @@
         </div>
     </header>
 
+    {% if enrollments|length > 1 %}
+    <form method="get" class="course-selector-form smaller-devs">
+
+        <label for="course-select" class="course-selector-label">
+            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+            <span>Select Course</span>
+        </label>
+
+        <div class="course-select-wrapper">
+            <select
+                id="course-select"
+                name="course"
+                class="course-select"
+                onchange="this.form.submit()">
+                {% for item in enrollments %}
+                    <option
+                        value="{{ item.course.id }}"
+                        {% if course and item.course.id == course.id %}selected{% endif %}>
+                        · {{ item.course.name }} - {{ item.course.get_status_display }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+        </div>
+
+    </form>
+    {% endif %}
+
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}">
-                Overview</a>
 
-            <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
-                Skills</a>
+            {% if enrollments|length > 1 %}
+            <div class="wrapper-course-selector-form">
 
-            <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}" class="active">
-                Attendance</a>
+                <form method="get" class="course-selector-form">
 
-            <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
-                Assessment</a> -->
+                    <label for="course-select" class="course-selector-label">
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        <span>Select Course</span>
+                    </label>
+
+                    <div class="course-select-wrapper">
+                        <select
+                            id="course-select"
+                            name="course"
+                            class="course-select"
+                            onchange="this.form.submit()">
+                            {% for item in enrollments %}
+                                <option
+                                    value="{{ item.course.id }}"
+                                    {% if course and item.course.id == course.id %}selected{% endif %}>
+                                    {{ item.course.name }} - {{ item.course.get_status_display }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </div>
+
+                </form>
+                
+            </div>
+            {% endif %}
+            <div class="wrapper-links-inner-nav">
+                <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}">
+                    Overview</a>
+
+                <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
+                    Skills</a>
+
+                <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}" class="active">
+                    Attendance</a>
+                <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}">
+                    Assessment</a> -->
+            </div>
         </nav>
     </div>    
-
-    {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>Select Course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-                <select
-                    id="course-select"
-                    name="course"
-                    class="course-select"
-                    onchange="this.form.submit()"
-                >
-                    {% for item in enrollments %}
-                        <option
-                            value="{{ item.course.id }}"
-                            {% if course and item.course.id == course.id %}selected{% endif %}
-                        >
-                            {{ item.course.name }} - {{ item.course.get_status_display }}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-            </div>
-
-        </form>
-    {% endif %}
+ 
 
     <div class="attendance-record-grid">
 
@@ -247,5 +280,5 @@
 
 {% block postloadjs %}
 {{ block.super }}
-<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 {% endblock %}

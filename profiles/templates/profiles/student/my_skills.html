@@ -6,11 +6,11 @@
 {% block extra_title %}| My Skills{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/skill_cards.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/skills_progress.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/skill_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -75,45 +75,76 @@
         </div>
     </header>
 
+    {% if enrollments|length > 1 %}
+    <form method="get" class="course-selector-form smaller-devs">
+
+        <label for="course-select" class="course-selector-label">
+            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+            <span>Select Course</span>
+        </label>
+
+        <div class="course-select-wrapper">
+            <select
+                id="course-select"
+                name="course"
+                class="course-select"
+                onchange="this.form.submit()">
+                {% for item in enrollments %}
+                    <option
+                        value="{{ item.course.id }}"
+                        {% if course and item.course.id == course.id %}selected{% endif %}>
+                        · {{ item.course.name }} - {{ item.course.get_status_display }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+        </div>
+
+    </form>
+    {% endif %}
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">Overview</a>
-            <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active">Skills</a>
-            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">Attendance</a>
+            {% if enrollments|length > 1 %}
+            <div class="wrapper-course-selector-form">
+
+                <form method="get" class="course-selector-form">
+
+                    <label for="course-select" class="course-selector-label">
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        <span>Select Course</span>
+                    </label>
+
+                    <div class="course-select-wrapper">
+                        <select
+                            id="course-select"
+                            name="course"
+                            class="course-select"
+                            onchange="this.form.submit()">
+                            {% for item in enrollments %}
+                                <option
+                                    value="{{ item.course.id }}"
+                                    {% if course and item.course.id == course.id %}selected{% endif %}>
+                                    {{ item.course.name }} - {{ item.course.get_status_display }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </div>
+
+                </form>
+                
+            </div>
+            {% endif %}
+            <div class="wrapper-links-inner-nav">
+                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">Overview</a>
+                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active">Skills</a>
+                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">Attendance</a>
+            </div>
         </nav>
     </div>
-
-
-    {% if enrollments|length > 1 %}
-
-        <form method="get" class="course-selector-form">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>Select course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-
-                <select id="course-select" name="course" class="course-select" onchange="this.form.submit()">
-
-                    {% for item in enrollments %}
-                        <option value="{{ item.course.id }}" {% if enrollment and item.id == enrollment.id %}selected{% endif %}>
-                            {{ item.course.name }} - {{ item.course.get_status_display }}
-                        </option>
-                    {% endfor %}
-
-                </select>
-
-                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-
-            </div>
-
-        </form>
-
-    {% endif %}
-
 
     <div class="skills-grid">
 
@@ -162,7 +193,11 @@
                                 </span>
 
                                 <span class="skill-score">
-                                    {{ skill.score|floatformat:"-1" }}/10
+                                    {% if skill.score is not None %}
+                                        {{ skill.score|floatformat:"-1" }}/10
+                                    {% else %}
+                                        —/10
+                                    {% endif %}
                                 </span>
                             </h2>
 
@@ -174,13 +209,17 @@
                                     aria-controls="skill-body-{{ forloop.counter }}">
 
                                     <span class="skill-subskills-count">
-                                        <strong>
-                                            {{ skill.subskills|length }} {{ skill.name }}
-                                            subskill{{ skill.subskills|length|pluralize }}
-                                        </strong>
-                                        assessed
+                                        {% if skill.subskills|length %}
+                                            <strong>
+                                                {{ skill.subskills|length }} {{ skill.name }}
+                                                subskill{{ skill.subskills|length|pluralize }}
+                                            </strong>
+                                            assessed
+                                        {% else %}
+                                            <strong>0 {{ skill.name }} subskills</strong>
+                                            assessed yet
+                                        {% endif %}
                                     </span>
-
                                     <img src="{% static 'icons/chevron_down_teal.png' %}" alt="" class="skill-chevron">
 
                                 </button>
@@ -210,7 +249,7 @@
 
                                 {% if skill.confident %}
                                     <div class="subskill-group">
-                                        <p><strong>Confident areas</strong></p>
+                                        <p><strong>Confident in</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.confident %}
@@ -249,7 +288,7 @@
 
                                 {% if skill.needs_work %}
                                     <div class="subskill-group">
-                                        <p><strong>Priority areas</strong></p>
+                                        <p><strong>Focus areas</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.needs_work %}
@@ -266,92 +305,6 @@
                     </article>
 
                 {% endfor %}
-
-
-            {% else %}
-
-                <article class="skill-card skill-card-empty">
-
-                    <div class="skill-card-header">
-
-                        <h2 class="listening">
-                            <span class="skill-heading">
-                                <span class="skill-name">Listening</span>
-                            </span>
-
-                            <span class="skill-score">—/10</span>
-                        </h2>
-
-                        <div class="skill-empty-state">
-                            <span>Not assessed yet</span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="skill-card skill-card-empty">
-
-                    <div class="skill-card-header">
-
-                        <h2 class="reading">
-                            <span class="skill-heading">
-                                <span class="skill-name">Reading</span>
-                            </span>
-
-                            <span class="skill-score">—/10</span>
-                        </h2>
-
-                        <div class="skill-empty-state">
-                            <span>Not assessed yet</span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="skill-card skill-card-empty">
-
-                    <div class="skill-card-header">
-
-                        <h2 class="speaking">
-                            <span class="skill-heading">
-                                <span class="skill-name">Speaking</span>
-                            </span>
-
-                            <span class="skill-score">—/10</span>
-                        </h2>
-
-                        <div class="skill-empty-state">
-                            <span>Not assessed yet</span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="skill-card skill-card-empty">
-
-                    <div class="skill-card-header">
-
-                        <h2 class="writing">
-                            <span class="skill-heading">
-                                <span class="skill-name">Writing</span>
-                            </span>
-
-                            <span class="skill-score">—/10</span>
-                        </h2>
-
-                        <div class="skill-empty-state">
-                            <span>Not assessed yet</span>
-                        </div>
-
-                    </div>
-
-                </article>
 
             {% endif %}
 
@@ -372,32 +325,7 @@
 {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'profiles/js/skills_progress_chart.js' %}"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const accordionToggles = document.querySelectorAll(".skill-accordion-toggle");
-
-    accordionToggles.forEach(function (toggle) {
-
-        toggle.addEventListener("click", function () {
-
-            const body = document.getElementById(toggle.getAttribute("aria-controls"));
-
-            if (!body) return;
-
-            const isOpen = toggle.getAttribute("aria-expanded") === "true";
-
-            toggle.setAttribute("aria-expanded", isOpen ? "false" : "true");
-
-            body.hidden = isOpen;
-
-        });
-
-    });
-
-});
-</script>
+<script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
+<script src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
 
 {% endblock %}

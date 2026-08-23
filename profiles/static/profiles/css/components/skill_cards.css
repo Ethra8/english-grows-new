@@ -1,6 +1,6 @@
 .skills-grid {
     display: grid;
-    grid-template-columns: minmax(340px, 3fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(340px, 2fr) minmax(300px, 1fr);
     gap: 1.2rem;
     margin-top: 1.25rem;
     width: 100%;
@@ -109,7 +109,7 @@
     flex-direction: column;
     flex: 1 1 auto;
     justify-content: space-between;
-    padding: 1rem 1rem 0.5rem;
+    padding: 1.25rem 1rem 0.5rem;
     gap: 1rem;
     background-color: var(--color-whitesmoke);
     height: auto;
@@ -378,6 +378,10 @@
     list-style-type: disc;
     margin-bottom: 0.25rem;
     /* padding-left: 1.5rem; */
+}
+
+.subskill-group p {
+    margin-bottom: 0;
 }
 
 .teacher-subskill {

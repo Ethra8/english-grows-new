@@ -2,7 +2,7 @@
 .wrapper-next-class-card,
 .wrapper-course-card,
 .wrapper-attendance-progress-card,
-.wrapper-attendance-details,
+/* .wrapper-attendance-details, */
 .wrapper-absence-details {
     border-radius: 8px;
     padding: 4px;
@@ -12,9 +12,9 @@
     max-width: fit-content;
 }
 
+/* .wrapper-attendance-details, */
 .wrapper-attendance-progress-card,
-.wrapper-absence-details,
-.wrapper-attendance-details {
+.wrapper-absence-details {
     width: 100%;
     max-width: 100% !important;
     margin-top: 1.25rem;    

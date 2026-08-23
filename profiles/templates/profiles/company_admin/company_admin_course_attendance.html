@@ -5,9 +5,9 @@
 {% block extra_title %}| Attendance Record {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -181,5 +181,5 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/company_admin.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/company_admin.js' %}"></script>
 {% endblock %}

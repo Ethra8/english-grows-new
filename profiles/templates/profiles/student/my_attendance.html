@@ -6,10 +6,10 @@
 {% block extra_title %}| Attendance{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -82,62 +82,78 @@
     </header>
 
     
-    <!-- INTERNAL NAV -->
+    {% if enrollments|length > 1 %}
+    <form method="get" class="course-selector-form smaller-devs">
+
+        <label for="course-select" class="course-selector-label">
+            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+            <span>Select Course</span>
+        </label>
+
+        <div class="course-select-wrapper">
+            <select
+                id="course-select"
+                name="course"
+                class="course-select"
+                onchange="this.form.submit()">
+                {% for item in enrollments %}
+                    <option
+                        value="{{ item.course.id }}"
+                        {% if course and item.course.id == course.id %}selected{% endif %}>
+                        · {{ item.course.name }} - {{ item.course.get_status_display }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+        </div>
+
+    </form>
+    {% endif %}
+
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
+            {% if enrollments|length > 1 %}
+            <div class="wrapper-course-selector-form">
 
-            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">
-                Overview</a>
+                <form method="get" class="course-selector-form">
 
-            <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
-                Skills</a>
+                    <label for="course-select" class="course-selector-label">
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        <span>Select Course</span>
+                    </label>
 
-            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" class="active">
-                Attendance</a>
+                    <div class="course-select-wrapper">
+                        <select
+                            id="course-select"
+                            name="course"
+                            class="course-select"
+                            onchange="this.form.submit()">
+                            {% for item in enrollments %}
+                                <option
+                                    value="{{ item.course.id }}"
+                                    {% if course and item.course.id == course.id %}selected{% endif %}>
+                                    {{ item.course.name }} - {{ item.course.get_status_display }}
+                                </option>
+                            {% endfor %}
+                        </select>
 
-            <!-- <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}">
-                Assessment</a> -->
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </div>
 
-            <!-- <a href="#">
-                History</a> -->
-
+                </form>
+                
+            </div>
+            {% endif %}
+            <div class="wrapper-links-inner-nav">
+                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">Overview</a>
+                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">Skills</a>
+                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" class="active">Attendance</a>
+            </div>
         </nav>
     </div>
 
-    <!-- <div class="student-detail-tabs-wrapper"> -->
-
-    {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>My active course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-                <select
-                    id="course-select"
-                    name="course"
-                    class="course-select"
-                    onchange="this.form.submit()"
-                >
-                    {% for item in enrollments %}
-                        <option
-                            value="{{ item.course.id }}"
-                            {% if course and item.course.id == course.id %}selected{% endif %}
-                        >
-                            {{ item.course.name }} - {{ item.course.get_status_display }}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-            </div>
-
-        </form>
-    {% endif %}   
-
-    <div class="wrapper-attendance-progress-card mt-4 mb-4">
+    <div class="wrapper-attendance-progress-card">
         <div class="attendance-progress-card">
             <div class="circle-panel1">
                 <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
@@ -146,11 +162,9 @@
             <div class="circle-panel2"></div>
         {% if enrollment %}                
             <div class="info">
-                <div class="attendance-percentage-card mt-3 mb-3">
-                    <div class="mb-2">
-                        <!-- <strong>Attendance</strong> -->
+                <div class="attendance-percentage-card">
+                    <div>
                         <p>{{ enrollment.attendance_percentage|default:"0" }}%</p>
-                        
                     </div>
 
                     <progress
@@ -167,17 +181,6 @@
                 </div>
                 {% endif %}
                 
-                <div class="item pl-4">
-                    <div class="item-icon">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-
-                    <div class="item-text">
-                        <strong>Lessons Attended</strong>
-                        <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }}</span>
-                    </div>
-                </div>                    
-
             </div>
         </div>
 
@@ -185,8 +188,8 @@
         
     <div class="row-details">
 
-        <div class="row mt-5 mb">
-            <div class="col-12 col-lg wrapper-attendance-details">
+        <div class="row">
+            <div class="col-12 col-md-6 wrapper-attendance-details">
                 <div class="detailed-attendance-card">
                     <div class="circle-panel1">
                         <h2>Attendance<br><small>Details</small></h2>
@@ -294,7 +297,7 @@
 
                                                     <div class="card-body row">
                                                         <div class="col-12">
-                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ attendance.class_session.start_time|ordinal_sup|safe }}</span></p>
+                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ attendance.class_session.start_time|ordinal_sup_short|safe }}</span></p>
                                                             <p><strong>Status:</strong> {{ attendance.get_status_display }}</p>
                                                         </div>
                                                     </div>
@@ -317,7 +320,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg wrapper-absence-details">
+            <div class="col-12 col-md-6 wrapper-absence-details">
                 <div class="detailed-attendance-card mx-auto">
                     <div class="circle-panel1">
                         <h2>Absence<br><small>Details</small></h2>
@@ -426,7 +429,7 @@
 
                                                     <div class="card-body row">
                                                         <div class="col-12">
-                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ absence.class_session.start_time|ordinal_sup|safe }}</span></p>
+                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ absence.class_session.start_time|ordinal_sup_short|safe }}</span></p>
                                                             <p><strong>Status:</strong> {{ absence.get_status_display }}</p>
                                                         </div>
                                                     </div>

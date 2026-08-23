@@ -488,7 +488,7 @@ class StudentSkillAssessment(models.Model):
 
         if confident:
             notes.append(
-                f"Confident areas: {', '.join(confident)}."
+                f"Confident in: {', '.join(confident)}."
             )
 
         if required_standard:
@@ -498,12 +498,12 @@ class StudentSkillAssessment(models.Model):
 
         if developing:
             notes.append(
-                f"Developing areas: {', '.join(developing)}."
+                f"Developing: {', '.join(developing)}."
             )
 
         if needs_work:
             notes.append(
-                f"Priority areas: {', '.join(needs_work)}."
+                f"Focus areas: {', '.join(needs_work)}."
             )
 
         return "\n".join(notes)
@@ -514,11 +514,11 @@ class StudentSubSkillAssessment(models.Model):
     class Rating(models.TextChoices):
         NEEDS_WORK = (
             "needs_work",
-            "Priority areas",
+            "Focus areas",
         )
         DEVELOPING = (
             "developing",
-            "Developing areas",
+            "Developing",
         )
         REQUIRED_STANDARD = (
             "required_standard",
@@ -526,7 +526,7 @@ class StudentSubSkillAssessment(models.Model):
         )
         CONFIDENT = (
             "confident",
-            "Confident areas",
+            "Confident in",
         )
         STRONG = (
             "strong",

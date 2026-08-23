@@ -6,12 +6,12 @@
 {% block extra_title %}| Dashboard {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css//features/dashboards_admin_and_teacher.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/dashboard_admin.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/dashboards_admin_and_teacher.css' %}">
 {% endblock %}
 
 
@@ -291,5 +291,5 @@
 {% block postloadjs %}
 {{ block.super }}
 
-<script src="{% static 'profiles/js/features/dashboards.js' %}"></script>
+<script src="{% static 'profiles/js/features/dashboards_admin_and_teacher.js' %}"></script>
 {% endblock %}

@@ -5,9 +5,9 @@
 {% block extra_title %}| Company Classes {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -254,6 +254,6 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/features/classes_list_page.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/features/classes/classes_list_pages.js' %}"></script>
 {% endblock %}

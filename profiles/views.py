@@ -636,6 +636,128 @@ def my_learning_progress(request):
         + excused_count
     )
 
+    # ---------------------------------------------------------
+    # ATTENDED HOURS
+    #
+    # Calculate the actual duration of every class the learner
+    # attended. This correctly supports sessions with different
+    # durations, including a shorter final class.
+    # ---------------------------------------------------------
+    attended_minutes = 0
+
+    for attendance in attendances:
+        if (
+            attendance.status == Attendance.STATUS_ATTENDED
+            and attendance.class_session.start_time
+            and attendance.class_session.end_time
+        ):
+            session_duration = (
+                attendance.class_session.end_time
+                - attendance.class_session.start_time
+            )
+
+            attended_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    # Decimal version, useful if you ever need calculations.
+    attended_hours = attended_minutes / 60
+
+
+    # Human-friendly display:
+    # 90 minutes  -> 1h30
+    # 120 minutes -> 2h
+    attended_whole_hours, attended_remaining_minutes = divmod(
+        attended_minutes,
+        60,
+    )
+
+    if attended_remaining_minutes:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+            f"{attended_remaining_minutes:02d}"
+        )
+    else:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+        )
+
+
+    # ---------------------------------------------------------
+    # COMPLETED COURSE HOURS
+    #
+    # Total duration of all COMPLETED class sessions for the
+    # selected course, regardless of this learner's attendance.
+    # ---------------------------------------------------------
+
+    completed_course_sessions = (
+        course.class_sessions
+        .filter(
+            status=ClassSession.STATUS_COMPLETED,
+        )
+    )
+
+    completed_minutes = 0
+
+    for class_session in completed_course_sessions:
+        if (
+            class_session.start_time
+            and class_session.end_time
+        ):
+            session_duration = (
+                class_session.end_time
+                - class_session.start_time
+            )
+
+            completed_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    # Numeric version if needed elsewhere
+    completed_hours = completed_minutes / 60
+
+
+    # Human-friendly display
+    completed_whole_hours, completed_remaining_minutes = divmod(
+        completed_minutes,
+        60,
+    )
+
+    if completed_remaining_minutes:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+            f"{completed_remaining_minutes:02d}"
+        )
+    else:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+        )
+    
+    # ---------------------------------------------------------
+    # TOTAL COURSE HOURS
+    # ---------------------------------------------------------
+    total_hours = course.total_hours or 0
+
+    total_minutes = round(
+        float(total_hours) * 60
+    )
+
+    total_whole_hours, total_remaining_minutes = divmod(
+        total_minutes,
+        60,
+    )
+
+    if total_remaining_minutes:
+        total_hours_display = (
+            f"{total_whole_hours}h"
+            f"{total_remaining_minutes:02d}"
+        )
+    else:
+        total_hours_display = (
+            f"{total_whole_hours}h"
+        )
 
     # ---------------------------------------------------------
     # ATTENDANCE %
@@ -693,6 +815,29 @@ def my_learning_progress(request):
         )[:5]
     )
 
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    # ---------------------------------------------------------
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M"),
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -708,6 +853,8 @@ def my_learning_progress(request):
         "enrollment": enrollment,
         "course": course,
 
+        # Timetable
+        "formatted_timetable": formatted_timetable,
         # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
@@ -715,7 +862,17 @@ def my_learning_progress(request):
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
         "recent_attendance": recent_attendance,
+        # Attendance hours
+        "attended_minutes": attended_minutes,
+        "attended_hours": attended_hours,
+        "attended_hours_display": attended_hours_display,
+        "total_hours": total_hours,
+        "total_hours_display": total_hours_display,
 
+        # Completed course hours
+        "completed_minutes": completed_minutes,
+        "completed_hours": completed_hours,
+        "completed_hours_display": completed_hours_display,
         # Progress
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
@@ -1176,43 +1333,62 @@ def my_skills(request):
 
 
     # ---------------------------------------------------------
-    # BUILD SKILL CARDS
+    # BUILD ALL 4 SKILL CARDS
     # ---------------------------------------------------------
+
+    assessments_by_skill = {
+        assessment.skill: assessment
+        for assessment in skill_assessments
+    }
+
+    skill_areas = [
+        ("listening", "Listening"),
+        ("reading", "Reading"),
+        ("speaking", "Speaking"),
+        ("writing", "Writing"),
+    ]
+
     skills = []
 
-    for assessment in skill_assessments:
+    for skill_value, skill_name in skill_areas:
 
-        note_display = build_skill_note_display(
-            assessment
-        )
+        assessment = assessments_by_skill.get(skill_value)
 
-        skills.append({
-            "assessment": assessment,
-            "assessment_id": assessment.id,
-            "skill_value": assessment.skill,
-            "name": assessment.get_skill_display(),
+        if assessment:
 
-            "icon": skill_icons.get(
-                assessment.skill,
-                "fa-solid fa-chart-simple",
-            ),
+            note_display = build_skill_note_display(assessment)
 
-            # Overall assessment score /10
-            "score": assessment.average_score,
+            skills.append({
+                "assessment": assessment,
+                "assessment_id": assessment.id,
+                "skill_value": skill_value,
+                "name": skill_name,
+                "icon": skill_icons.get(skill_value),
+                "score": assessment.average_score,
+                "subskills": assessment.subskill_assessments.all(),
+                "strengths": note_display["strengths"],
+                "confident": note_display["confident"],
+                "required_standard": note_display["required_standard"],
+                "developing": note_display["developing"],
+                "needs_work": note_display["needs_work"],
+            })
 
-            "teacher_notes": assessment.teacher_notes,
+        else:
 
-            # Number / list of assessed subskills
-            "subskills": assessment.subskill_assessments.all(),
-
-            # Grouped assessment results
-            "strengths": note_display["strengths"],
-            "confident": note_display["confident"],
-            "required_standard": note_display["required_standard"],
-            "developing": note_display["developing"],
-            "needs_work": note_display["needs_work"],
-        })
-
+            skills.append({
+                "assessment": None,
+                "assessment_id": None,
+                "skill_value": skill_value,
+                "name": skill_name,
+                "icon": skill_icons.get(skill_value),
+                "score": None,
+                "subskills": [],
+                "strengths": [],
+                "confident": [],
+                "required_standard": [],
+                "developing": [],
+                "needs_work": [],
+            })
 
     # ---------------------------------------------------------
     # TEACHER NOTES
@@ -1906,7 +2082,10 @@ def teacher_course_details(request, course_id):
         average_attendance = round(
             sum(attendance_percentages) / len(attendance_percentages)
         )
-    
+
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    # ---------------------------------------------------------
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
@@ -1958,6 +2137,7 @@ def teacher_course_details(request, course_id):
         "profiles/teacher/teacher_course_details.html",
         context
     )
+
 
 
 @login_required
@@ -2107,7 +2287,11 @@ def teacher_course_students_list(request, course_id):
         average_attendance = round(
             sum(attendance_percentages) / len(attendance_percentages)
         )
-    
+
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    # ---------------------------------------------------------
+
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
@@ -2216,7 +2400,7 @@ def build_skill_progress_chart_data(student, course):
     chart_dates = sorted(daily_scores.keys())
 
     chart_labels = [
-        date.strftime("%d %b %Y")
+        date.strftime("%d/%m/%y")
         for date in chart_dates
     ]
 
@@ -2383,7 +2567,7 @@ def build_overall_skill_progress_chart_data(student, course):
 
 
         chart_labels.append(
-            date.strftime("%d %b %Y")
+            date.strftime("%d/%m/%y")
         )
 
         overall_scores.append(
@@ -5331,6 +5515,127 @@ def company_admin_student_detail(request, student_id):
     total_classes = enrollment.total_assigned_classes
     remaining_classes = enrollment.upcoming_classes
 
+    # ---------------------------------------------------------
+    # ATTENDED HOURS
+    #
+    # Calculate the actual duration of every class the learner
+    # attended. This correctly supports sessions with different
+    # durations, including a shorter final class.
+    # ---------------------------------------------------------
+    attended_minutes = 0
+
+    for attendance in attendances:
+        if (
+            attendance.status == Attendance.STATUS_ATTENDED
+            and attendance.class_session.start_time
+            and attendance.class_session.end_time
+        ):
+            session_duration = (
+                attendance.class_session.end_time
+                - attendance.class_session.start_time
+            )
+
+            attended_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    # Decimal version, useful if you ever need calculations.
+    attended_hours = attended_minutes / 60
+
+
+    # Human-friendly display:
+    # 90 minutes  -> 1h30
+    # 120 minutes -> 2h
+    attended_whole_hours, attended_remaining_minutes = divmod(
+        attended_minutes,
+        60,
+    )
+
+    if attended_remaining_minutes:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+            f"{attended_remaining_minutes:02d}"
+        )
+    else:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+        )
+
+    # ---------------------------------------------------------
+    # COMPLETED COURSE HOURS
+    #
+    # Total duration of all COMPLETED class sessions for the
+    # selected course, regardless of this learner's attendance.
+    # ---------------------------------------------------------
+
+    completed_course_sessions = (
+        course.class_sessions
+        .filter(
+            status=ClassSession.STATUS_COMPLETED,
+        )
+    )
+
+    completed_minutes = 0
+
+    for class_session in completed_course_sessions:
+        if (
+            class_session.start_time
+            and class_session.end_time
+        ):
+            session_duration = (
+                class_session.end_time
+                - class_session.start_time
+            )
+
+            completed_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    # Numeric version if needed elsewhere
+    completed_hours = completed_minutes / 60
+
+
+    # Human-friendly display
+    completed_whole_hours, completed_remaining_minutes = divmod(
+        completed_minutes,
+        60,
+    )
+
+    if completed_remaining_minutes:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+            f"{completed_remaining_minutes:02d}"
+        )
+    else:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+        )
+
+    # ---------------------------------------------------------
+    # TOTAL COURSE HOURS
+    # ---------------------------------------------------------
+    total_hours = course.total_hours or 0
+
+    total_minutes = round(
+        float(total_hours) * 60
+    )
+
+    total_whole_hours, total_remaining_minutes = divmod(
+        total_minutes,
+        60,
+    )
+
+    if total_remaining_minutes:
+        total_hours_display = (
+            f"{total_whole_hours}h"
+            f"{total_remaining_minutes:02d}"
+        )
+    else:
+        total_hours_display = (
+            f"{total_whole_hours}h"
+        )
 
     # ---------------------------------------------------------
     # COMPLETED HOURS
@@ -5459,6 +5764,31 @@ def company_admin_student_detail(request, student_id):
         )
     )
 
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    # ---------------------------------------------------------
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M"),
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
+
+
     context = {
         "profile": profile,
         "company": company,
@@ -5476,12 +5806,26 @@ def company_admin_student_detail(request, student_id):
 
         "level_choices": UserProfile.LEVEL_CHOICES,
 
+        # Timetable
+        "formatted_timetable": formatted_timetable,
+
         # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
+
+        # Attendance hours
+        "attended_minutes": attended_minutes,
+        "attended_hours": attended_hours,
+        "attended_hours_display": attended_hours_display,
+        "total_hours": total_hours,
+        "total_hours_display": total_hours_display,
+        # Completed course hours
+        "completed_minutes": completed_minutes,
+        "completed_hours": completed_hours,
+        "completed_hours_display": completed_hours_display,
 
         # Progress
         "completed_classes": completed_classes,
@@ -5851,7 +6195,11 @@ def company_admin_student_skills_overview(request, student_id):
     if not company:
         return redirect("home")
 
+
+    # ---------------------------------------------------------
     # GET EMPLOYEE
+    # ---------------------------------------------------------
+
     student = get_object_or_404(
         User.objects.select_related("profile"),
         id=student_id,
@@ -5861,14 +6209,23 @@ def company_admin_student_skills_overview(request, student_id):
     student_profile = student.profile
 
 
-    # GET ACTIVE ENROLLMENTS
-    # These populate the course selector.
-    active_enrollments = (
+    # ---------------------------------------------------------
+    # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    # ---------------------------------------------------------
+
+    enrollments = (
         CourseEnrollment.objects
         .filter(
             student=student,
-            status="active",
-            course__status="active",
             course__company=company,
         )
         .select_related(
@@ -5877,24 +6234,76 @@ def company_admin_student_skills_overview(request, student_id):
             "course__course_type",
             "course__company",
         )
-        .order_by("course__name")
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
     )
 
+
+    # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
+    #
     # Example:
     # /profiles/company-admin/employees/3/skills/?course=9
+    # ---------------------------------------------------------
+
     selected_course_id = request.GET.get("course")
 
+
+    # ---------------------------------------------------------
     # DETERMINE SELECTED ENROLLMENT
+    # ---------------------------------------------------------
+
     if selected_course_id:
         enrollment = get_object_or_404(
-            active_enrollments,
+            enrollments,
             course_id=selected_course_id,
         )
     else:
-        enrollment = active_enrollments.first()
+        enrollment = enrollments.first()
 
-    # NO ACTIVE ENROLLMENT
+
+    # ---------------------------------------------------------
+    # NO ENROLLMENTS
+    # ---------------------------------------------------------
+
     if not enrollment:
         context = {
             "profile": profile,
@@ -5903,17 +6312,23 @@ def company_admin_student_skills_overview(request, student_id):
             "student": student,
             "student_profile": student_profile,
 
-            "active_enrollments": active_enrollments,
+            "enrollments": enrollments,
             "enrollment": None,
             "course": None,
 
             "skills": [],
+
             "academic_profile": getattr(
                 student,
                 "academic_profile",
                 None,
             ),
-            "chart_data": None,
+
+            "chart_data": {
+                "labels": [],
+                "datasets": [],
+            },
+
             "skill_notes": [],
             "skill_note_display": [],
         }
@@ -5924,10 +6339,18 @@ def company_admin_student_skills_overview(request, student_id):
             context,
         )
 
+
+    # ---------------------------------------------------------
     # SELECTED COURSE
+    # ---------------------------------------------------------
+
     course = enrollment.course
 
+
+    # ---------------------------------------------------------
     # SKILL ICONS
+    # ---------------------------------------------------------
+
     skill_icons = {
         "speaking": "fa-solid fa-microphone",
         "reading": "fa-solid fa-book-open",
@@ -5935,7 +6358,15 @@ def company_admin_student_skills_overview(request, student_id):
         "listening": "fa-solid fa-headphones",
     }
 
-    # SKILL ASSESSMENTS
+
+    # ---------------------------------------------------------
+    # EXISTING SKILL ASSESSMENTS
+    #
+    # IMPORTANT:
+    # This may legitimately be empty for a confirmed/new course.
+    # We do NOT create assessments here.
+    # ---------------------------------------------------------
+
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -5948,69 +6379,164 @@ def company_admin_student_skills_overview(request, student_id):
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
     # DISPLAY-FRIENDLY NOTES
+    #
+    # Only existing assessments can have notes.
+    # ---------------------------------------------------------
+
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
-    # BUILD SKILLS LIST
+
+    # ---------------------------------------------------------
+    # BUILD ALL FOUR SKILL CARDS
+    #
+    # This is the important change.
+    #
+    # Even if no assessment exists yet, Listening, Reading,
+    # Speaking and Writing are still added to `skills`.
+    # ---------------------------------------------------------
+
+    assessments_by_skill = {
+        assessment.skill: assessment
+        for assessment in skill_assessments
+    }
+
+    skill_areas = [
+        ("listening", "Listening"),
+        ("reading", "Reading"),
+        ("speaking", "Speaking"),
+        ("writing", "Writing"),
+    ]
+
     skills = []
 
-    for assessment in skill_assessments:
+    for skill_value, skill_name in skill_areas:
 
-        note_display = build_skill_note_display(assessment)
+        assessment = assessments_by_skill.get(skill_value)
 
-        skills.append({
-            "assessment": assessment,
-            "assessment_id": assessment.id,
-            "skill_value": assessment.skill,
-            "name": assessment.get_skill_display(),
+        # -----------------------------------------------------
+        # ASSESSMENT EXISTS
+        # -----------------------------------------------------
 
-            "icon": skill_icons.get(
-                assessment.skill,
-                "fa-solid fa-chart-simple",
-            ),
+        if assessment:
 
-            # Overall assessment score on a 0–10 scale
-            "score": assessment.average_score,
+            note_display = build_skill_note_display(
+                assessment
+            )
 
-            "teacher_notes": assessment.teacher_notes,
+            skills.append({
+                "assessment": assessment,
+                "assessment_id": assessment.id,
+                "skill_value": skill_value,
+                "name": skill_name,
 
-            # Raw assessed subskills
-            "subskills": assessment.subskill_assessments.all(),
+                "icon": skill_icons.get(
+                    skill_value,
+                    "fa-solid fa-chart-simple",
+                ),
 
-            # Grouped assessment results
-            "strengths": note_display["strengths"],
-            "confident": note_display["confident"],
-            "required_standard": note_display["required_standard"],
-            "developing": note_display["developing"],
-            "needs_work": note_display["needs_work"],
-        })
+                "score": assessment.average_score,
 
+                "teacher_notes": assessment.teacher_notes,
+
+                "subskills": (
+                    assessment
+                    .subskill_assessments
+                    .all()
+                ),
+
+                "strengths": note_display["strengths"],
+                "confident": note_display["confident"],
+                "required_standard": note_display["required_standard"],
+                "developing": note_display["developing"],
+                "needs_work": note_display["needs_work"],
+            })
+
+
+        # -----------------------------------------------------
+        # NO ASSESSMENT YET
+        #
+        # Still build the card so the UI can show:
+        #
+        # Listening      —/10
+        # 0 subskills assessed yet
+        # -----------------------------------------------------
+
+        else:
+
+            skills.append({
+                "assessment": None,
+                "assessment_id": None,
+                "skill_value": skill_value,
+                "name": skill_name,
+
+                "icon": skill_icons.get(
+                    skill_value,
+                    "fa-solid fa-chart-simple",
+                ),
+
+                "score": None,
+                "teacher_notes": "",
+
+                "subskills": [],
+
+                "strengths": [],
+                "confident": [],
+                "required_standard": [],
+                "developing": [],
+                "needs_work": [],
+            })
+
+
+    # ---------------------------------------------------------
     # SKILL NOTES
+    # ---------------------------------------------------------
+
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
             student=student,
             course=course,
         )
-        .exclude(teacher_notes="")
+        .exclude(
+            teacher_notes=""
+        )
         .order_by("skill")
     )
 
+
+    # ---------------------------------------------------------
     # ACADEMIC PROFILE
+    # ---------------------------------------------------------
+
     academic_profile = getattr(
         student,
         "academic_profile",
         None,
     )
 
+
+    # ---------------------------------------------------------
     # CHART DATA
+    #
+    # Course status does not matter.
+    # No assessments yet simply means an empty chart.
+    # ---------------------------------------------------------
+
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
 
     context = {
         "profile": profile,
@@ -6019,26 +6545,30 @@ def company_admin_student_skills_overview(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
-        # Course selector
-        "active_enrollments": active_enrollments,
+        # Full enrollment list for selector
+        "enrollments": enrollments,
 
-        # Currently selected course
+        # Selected enrollment/course
         "enrollment": enrollment,
         "course": course,
 
+        # Always contains all four skill cards
         "skills": skills,
+
         "academic_profile": academic_profile,
+
         "chart_data": chart_data,
+
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
     }
+
 
     return render(
         request,
         "profiles/company_admin/company_admin_student_skills_overview.html",
         context,
     )
-
 
 
 @login_required

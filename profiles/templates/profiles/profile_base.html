@@ -6,7 +6,7 @@
 
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
 {% endblock %}
 
@@ -82,6 +82,6 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script src="{% static 'profiles/js/sidebar.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/countryfield.js' %}"></script>
+    <script src="{% static 'profiles/js/components/sidebar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/components/countryField.js' %}"></script>
 {% endblock %}

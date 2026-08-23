@@ -1,4 +1,3 @@
-console.log("sidebar.js loaded");
 
 const toggleButton = document.getElementById("mobileSidebarToggle");
 const sidebar = document.getElementById("profileSidebar");

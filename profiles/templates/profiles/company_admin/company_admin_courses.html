@@ -6,7 +6,7 @@
 {% block extra_title %}| My Groups {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/all_courses_list.css' %}">
 {% endblock %}
 
@@ -195,6 +195,6 @@
 
 {% block postloadjs %}
     {{ block.super }}
-<script type="text/javascript" src="{% static 'profiles/js/features/all_courses_list.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/courses/all_courses_list_pages.js' %}"></script>
 
 {% endblock %}

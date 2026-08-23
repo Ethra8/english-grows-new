@@ -6,9 +6,9 @@
 {% block extra_title %}| Teacher Notes {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/learner_performance.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -217,6 +217,6 @@
 {% block postloadjs %}
 {{ block.super }}
 
-<script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 
 {% endblock %}

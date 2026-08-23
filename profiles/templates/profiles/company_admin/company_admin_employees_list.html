@@ -6,11 +6,11 @@
 {% block extra_title %}| Company Employees {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/student/learner_performance.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/studentfeatures/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
 {% endblock %}
 
 {% block profile_content %}
@@ -118,5 +118,5 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/teacher.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 {% endblock %}

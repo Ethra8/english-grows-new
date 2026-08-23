@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/components/calendar.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/calendar.css' %}">
 {% endblock %}
 
 {% block extra_title %}| Calendar{% endblock %}
@@ -77,7 +77,7 @@
 {% block postloadjs %}
     {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js//components/calendar.js' %}"></script>
 
 {% endblock %}
     
