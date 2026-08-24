@@ -170,7 +170,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-LOGIN_REDIRECT_URL = reverse_lazy("profiles:profile")
 LOGIN_REDIRECT_URL = "/accounts/redirect/"
 
 
@@ -180,18 +179,25 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 if DEBUG:
     ACCOUNT_EMAIL_VERIFICATION = 'optional'
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-    EMAIL_HOST = os.environ.get("EMAIL_HOST")
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-    DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
+# Email configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    "English Grows <info@englishgrows.com>",
+)
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
