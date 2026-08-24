@@ -34,35 +34,39 @@
     /* margin-top: 4rem; */
 }
 
-.course-details-page .course-details-masonry {
+/* .course-details-page .course-details-masonry {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     align-items: start;
-}
+} */
 
 /* All boxes */
-.wrapper-course-details {
+.wrapper-course-detail-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
     width: 100%;
-    border-radius: 8px;
+    /* border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-turquoise-rgb), 0.2);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba)); */
+    /* background: rgba(var(--color-turquoise-rgb), 0.2); */
 }
 
 /* LEFT COLUMN boxes */
-.course-details-page .wrapper-course-details:nth-child(1) {
+.course-details-page .wrapper-course-detail-cards:nth-child(1) {
     grid-column: 1;
 }
 
 /* RIGHT COLUMN: Student List */
-.course-details-page .wrapper-course-details:nth-child(2) {
+.course-details-page .wrapper-course-detail-cards:nth-child(2) {
     grid-column: 2;
     grid-row: 1 / span 2;
 }
 
 /* BOTH COLUMNS */
-.wrapper-course-details h4 i {
+.wrapper-course-detail-cards h4 i {
     color: var(--color-icy) ;
 }
 
@@ -74,17 +78,16 @@
 
 .course-detail-item {
     /* background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
-    background: var(--color-mist);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    background: var(--color-whitesmoke);
+    border-radius: 8px;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
     padding: 1rem 1.25rem;
     margin-top: 0.5rem;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    /* box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba)); */
 }
 
-.course-details-child .course-detail-item > div:first-of-type,
-.course-info-child .course-detail-item > div:first-of-type {
+.course-detail-item > div:first-of-type,
+.course-info-card .course-detail-item > div:first-of-type {
     background-color: rgba(var(--color-icy-rgb), 0.4);
     border-radius: 8px;
     padding: 0.5rem 1rem;
@@ -120,18 +123,20 @@
     border-bottom: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
 }
 
-.course-details-child,
-.course-info-child,
-.course-materials-child {
-    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+.course-details-card,
+.course-info-card,
+.course-materials-card {
+    /* background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85)); */
     border-radius: 8px;
     margin: 0;
     padding: 1rem .5rem 0.5rem;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.8);
     width: 100%;
+    background-color: var(--color-whitesmoke);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
-.course-materials-child {
+.course-materials-card {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -139,15 +144,18 @@
     align-items: center;
 }
 
-.wrapper-course-details h3 {
-    color: var(--color-icy);
+.course-details-card h3,
+.course-info-card h3 {
+    display: flex;
+    align-items: center;
+    color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-}
-
-.course-details-child h3,
-.course-info-child h3 {
     padding: 0.25rem 1.5rem;
+    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    border-radius: 999px;
+    height: 52px;
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
 }
 
 .course-details-page .student-row-parent {
@@ -173,16 +181,19 @@
 
 @media (max-width: 1199.98px) {
     
-    .course-details-page .course-details-masonry {
+    /* .course-details-page .course-details-masonry {
         gap: 0;
+        grid-template-columns: 1fr;
+    } */
+    .course-details-page .wrapper-course-detail-cards {
         grid-template-columns: 1fr;
     }
 
-    .course-details-page .wrapper-course-details:nth-child(1) {
+    .course-details-page .wrapper-course-detail-cards:nth-child(1) {
         width: 100%;
     }
 
-    .course-details-page .wrapper-course-details:nth-child(2) {
+    .course-details-page .wrapper-course-detail-cards:nth-child(2) {
         grid-column: 1 / span 2;
         grid-row: 2 / span 2;
         margin-top: 2.5rem;
@@ -206,7 +217,7 @@
     |*** ONLY: 
     |*** TEACHER COURSE DETAILS Page *********************|
     |*****************************************************/
-    .course-materials-child {
+    .course-materials-card {
         display: flex;
         justify-content: space-between;
         flex-direction: row;

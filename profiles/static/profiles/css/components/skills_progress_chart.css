@@ -1,3 +1,7 @@
+#employeeSkillsGraphOverview {
+    scroll-margin-top: 90px; /* adjust to your navbar height */
+}
+
 .student-details-skills-overview-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

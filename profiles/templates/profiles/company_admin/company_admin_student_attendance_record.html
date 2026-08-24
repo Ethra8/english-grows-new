@@ -193,15 +193,26 @@
                 </div>
 
                 <div class="detail-row">
-                    <strong>Course Past Classes:</strong>
+                    <strong>Course Completed Lessons:</strong>
                     <span>{{ completed_classes }}</span>
                 </div>
 
-                <div class="detail-row">
-                    <strong>Past Classes since enrollment:</strong>
-                    <span>{{ total_attendance_records }}</span>
-                </div>
+                {% if show_enrollment_context %}
+                    <div class="detail-row">
+                        <strong>Enrollment date:</strong>
+                        <span>{{ enrollment.enrolled_at|date:"j M 'y" }}</span>
+                    </div>
 
+                    <div class="detail-row">
+                        <strong>Lessons before enrollment:</strong>
+                        <span>{{ lessons_before_enrollment }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Completed lessons since enrollment:</strong>
+                        <span>{{ completed_classes }}</span>
+                    </div>
+                {% endif %}
             </div>
             
             <div class="wrapper-attendance-summary-card">
@@ -257,7 +268,7 @@
                                     <i class="fa-solid fa-user-xmark"></i>
                                 </span>
                             {% elif attendance.status == "excused" %}
-                                <span class="status-pill pending">
+                                <span class="status-pill excused">
                                     <i class="fa-solid fa-user-minus"></i>
                                 </span>
                             {% else %}

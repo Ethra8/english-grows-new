@@ -101,9 +101,8 @@
     --color-attendance-status-missed: #ff5a5a;
     --color-attendance-status-missed-rgb: 255, 90, 90;
     /* Excused */
-    --color-attendance-status-excused: #07C0C7;
-    --color-attendance-status-excused-rgb: 255, 179, 71;
-
+    --color-attendance-status-excused: #666666;
+    --color-attendance-status-excused-rgb:  102, 102, 102;
 
     /* SHADOWS */
     --inner-shadow-navy:

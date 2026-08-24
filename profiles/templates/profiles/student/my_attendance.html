@@ -7,7 +7,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
@@ -157,7 +157,7 @@
         <div class="attendance-progress-card">
             <div class="circle-panel1">
                 <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
-                <h2>Attendance<br>Rate</h2>
+                <h2>Attendance <small>Rate</small></h2>
             </div>
             <div class="circle-panel2"></div>
         {% if enrollment %}                
@@ -186,21 +186,20 @@
 
     </div>
         
-    <div class="row-details">
-
-        <div class="row">
-            <div class="col-12 col-md-6 wrapper-attendance-details">
+    <div class="attendance-cards-grid">
+            <div class="wrapper-attendance-details">
                 <div class="detailed-attendance-card">
                     <div class="circle-panel1">
-                        <h2>Attendance<br><small>Details</small></h2>
+                        <h2>Attendance <small>Details</small></h2>
                     </div>
                     <div class="circle-panel2"></div>
                     <div class="col-12">
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-list-check"></i>
+                            <div class="attendance-status">
+                                <span class="status-pill attended">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </span>
                             </div>
-
                             <div class="item-text">
                                 <strong>Lessons Attended</strong>
                                 <span>{{ enrollment.classes_attended|default:"0" }}</span>
@@ -210,11 +209,11 @@
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="18px">
                             </div>
 
                             <div class="item-text">
-                                <strong>Past Lessons</strong>
+                                <strong>Completed Lessons</strong>
                                 <span>{{ enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
                         </div>                    
@@ -222,116 +221,42 @@
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
-                                <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
+                                <i class="fa-solid fa-calendar"></i>
                             </div>
 
                             <div class="item-text">
-                                <strong>Upcoming Lessons</strong>
-                                <span>{{ enrollment.upcoming_classes|default:"0" }}</span>
+                                <strong>Enrollment date:</strong>
+                                <span>{{ enrollment.enrolled_at|date:"j M 'y" }}</span>
                             </div>
-                        </div>                  
+                        </div>                    
                     </div>
-                
-                    <div class="col-12 wrapper-attendance-accordion mt-4">
-                        <!-- PARENT ACCORDION -->
-                        <div id="parentAttendanceAccordion" role="tablist">
-                            <div class="card mb-2 shadow-sm rounded">
-                                <!-- PARENT HEADER -->
-                                <div class="card-header" role="tab" id="parentAttendanceHeading">
-                                    <div class="mb-0 w-100 px-4">
-                                        <a class="collapsed text-white d-flex align-items-center justify-content-between w-100"
-                                        data-toggle="collapse"
-                                        href="#parentAttendanceCollapse"
-                                        aria-expanded="false"
-                                        aria-controls="parentAttendanceCollapse">
-                                            <div class="d-flex align-items-center">
-                                                <div class="attendance-history-icon mr-2">
-                                                    <i class="fa-solid fa-list-check mr-2"></i>
-                                                </div>
+                    {% if show_enrollment_context %}
 
-                                                <strong class="ml-3">Attendance<br>Record</strong>
-                                            </div>
-
-                                            <i class="fa-solid fa-chevron-down ml-2"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- PARENT COLLAPSE -->
-                                <div id="parentAttendanceCollapse"
-                                    class="collapse"
-                                    role="tabpanel"
-                                    aria-labelledby="parentAttendanceHeading"
-                                    data-parent="#parentAttendanceAccordion">
-
-                                    <div class="card-body">
-
-                                        <!-- CHILD ACCORDION -->
-                                        <div id="attendance_accordion" role="tablist">
-                                        {% if recent_attendance %}
-
-                                            {% for attendance in recent_attendance %}
-                                            <div class="card mb-1 shadow-sm">
-
-                                                <div class="card-header" role="tab" id="attendance_heading{{ forloop.counter }}">
-                                                    <a class="collapsed text-light d-block"
-                                                    data-toggle="collapse"
-                                                    href="#attendance_collapse{{ forloop.counter }}"
-                                                    aria-expanded="false"
-                                                    aria-controls="attendance_collapse{{ forloop.counter }}">
-
-                                                        <div class="attendance-history-item d-flex align-items-center justify-content-between">
-                                                            <div class="d-flex align-items-center">
-                                                                <h6 class="mb-0">Lesson {{ attendance.class_session.class_number }}</h6>                                                        
-                                                            </div>
-                                                            <i class="fa-solid fa-chevron-down ml-2"></i>
-                                                        </div>                    
-                                                    </a>
-                                                </div>
-
-                                                <div id="attendance_collapse{{ forloop.counter }}"
-                                                    class="collapse"
-                                                    role="tabpanel"
-                                                    aria-labelledby="attendance_heading{{ forloop.counter }}"
-                                                    data-parent="#attendance_accordion">
-
-                                                    <div class="card-body row">
-                                                        <div class="col-12">
-                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ attendance.class_session.start_time|ordinal_sup_short|safe }}</span></p>
-                                                            <p><strong>Status:</strong> {{ attendance.get_status_display }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            {% endfor %}
-                                        {% else %}
-                                            <p class="text-dark p-2">You don't have any recent attendance yet.</p>
-                                        {% endif %}
-
-                                        </div>
-                                        <!-- END CHILD ACCORDION -->
-
-                                    </div>
-                                </div>
-                            </div>
-
+                        <div class="detail-row">
+                            <strong>Lessons before enrollment:</strong>
+                            <span>{{ lessons_before_enrollment }}</span>
                         </div>
-                    </div>
+
+                        <div class="detail-row">
+                            <strong>Completed lessons since enrollment:</strong>
+                            <span>{{ completed_classes }}</span>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="col-12 col-md-6 wrapper-absence-details">
-                <div class="detailed-attendance-card mx-auto">
+            <div class="wrapper-absence-details">
+                <div class="detailed-attendance-card absence-details-card mx-auto">
                     <div class="circle-panel1">
-                        <h2>Absence<br><small>Details</small></h2>
+                        <h2>Absence <small>Details</small></h2>
                     </div>
                     <div class="circle-panel2"></div>
                     <div class="col-12">
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </div>
-
+                            <div class="attendance-status">
+                                <span class="status-pill missed">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                </span>
+                            </div>    
                             <div class="item-text">
                                 <strong>Total Absences</strong>
                                 <span>{{ enrollment.total_absences|default:"0" }}</span>
@@ -341,7 +266,7 @@
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
-                                <i class="fa-regular fa-calendar-xmark"></i>
+                                <i class="fa-solid fa-user-xmark"></i>
                             </div>
 
                             <div class="item-text">
@@ -353,7 +278,7 @@
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
-                                <i class="fa-regular fa-calendar-minus"></i>
+                                <i class="fa-solid fa-user-minus"></i>
                             </div>
 
                             <div class="item-text">
@@ -366,22 +291,22 @@
                     <div class="col-12 wrapper-attendance-accordion mt-4">
                         <!-- PARENT ACCORDION -->
                         <div id="parentAbsenceAccordion" role="tablist">
-                            <div class="card mb-2 shadow-sm rounded">
+                            <div>
                                 <!-- PARENT HEADER -->
-                                <div class="card-header" role="tab" id="parentAbsenceHeading">
+                                <div class="header" role="tab" id="parentAbsenceHeading">
                                     <div class="mb-0 w-100 px-4">
-                                        <a class="collapsed text-white d-flex align-items-center justify-content-between w-100"
+                                        <a class="collapsed d-flex align-items-center justify-content-between w-100"
                                         data-toggle="collapse"
                                         href="#parentAbsenceCollapse"
                                         aria-expanded="false"
                                         aria-controls="parentAbsenceCollapse">
                                             
                                             <div class="d-flex align-items-center">
-                                                <div class="attendance-history-icon mr-2">
+                                                <!-- <div class="attendance-history-icon mr-2">
                                                     <i class="fa-solid fa-user-xmark"></i>
                                                 </div>
-
-                                                <strong class="ml-3">Absence<br>Record</strong>
+ -->
+                                                <strong>Absence Record</strong>
                                             </div>
 
                                             <i class="fa-solid fa-chevron-down ml-2"></i>
@@ -403,42 +328,29 @@
                                         {% if recent_absences %}
 
                                             {% for absence in recent_absences %}
-                                            <div class="card mb-1 shadow-sm">
+                                                <div class="recent-attendance-row">
 
-                                                <div class="card-header" role="tab" id="absences_heading{{ forloop.counter }}">
-                                                    <a class="collapsed text-light d-block"
-                                                    data-toggle="collapse"
-                                                    href="#absences_collapse{{ forloop.counter }}"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapse{{ forloop.counter }}">
+                                                    <span>{{ absence.class_session.start_time|date:"j M Y" }}</span> 
 
-                                                        <div class="attendance-history-item d-flex align-items-center justify-content-between">
-                                                            <div class="d-flex align-items-center">
-                                                                <h6 class="mb-0">Lesson {{ absence.class_session.class_number }}</h6>                                                        
-                                                            </div>
-                                                            <i class="fa-solid fa-chevron-down ml-2"></i>
-                                                        </div>                    
-                                                    </a>
-                                                </div>
+                                                    <small>Lesson {{ absence.class_session.class_number }}</small>
 
-                                                <div id="absences_collapse{{ forloop.counter }}"
-                                                    class="collapse"
-                                                    role="tabpanel"
-                                                    aria-labelledby="absences_heading{{ forloop.counter }}"
-                                                    data-parent="#absence_accordion">
+                                                    <div class="absence-status">
+                                                        {% if absence.status == "missed" %}
+                                                            <span class="status-dot missed"></span>
+                                                            Missed
+                                                        {% elif absence.status == "excused" %}
+                                                            <span class="status-dot excused"></span>
+                                                            Excused
+                                                        {% else %}
+                                                            <span class="status-dot pending"></span>
+                                                            {{ absence.status|title }}
+                                                        {% endif %}
 
-                                                    <div class="card-body row">
-                                                        <div class="col-12">
-                                                            <p><span><i class="fa-solid fa-calendar-day mr-2"></i>{{ absence.class_session.start_time|ordinal_sup_short|safe }}</span></p>
-                                                            <p><strong>Status:</strong> {{ absence.get_status_display }}</p>
-                                                        </div>
                                                     </div>
                                                 </div>
-
-                                            </div>
                                             {% endfor %}
                                         {% else %}
-                                            <p class="text-dark p-2">You don't have any recent absence yet.</p>
+                                            <p class="text-dark p-2">You don't have any absence recorded yet.</p>
                                         {% endif %}
 
                                         </div>
@@ -453,7 +365,6 @@
                 
                 </div>    
             </div>
-        </div>
     </div>
 {% else %}
         <div class="no-course-assigned">
@@ -464,5 +375,13 @@
 {% endif %}
   
 </section>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+{{ block.super }}
+
+<script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>
 
 {% endblock %}

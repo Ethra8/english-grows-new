@@ -209,7 +209,7 @@ header .student-main-info a:hover {
     gap: 1rem;
     width: 100%;
     max-width: 100%;
-    margin: 0.25rem 0;
+    /* margin: 0.25rem 0; */
     /* background: rgba(var(--color-teal-rgb), 0.65); */
     background: rgba(var(--color-cyan-rgb), 0.45);
     padding: 0.15rem 0.15rem 0.15rem 1.2rem;
@@ -259,28 +259,22 @@ header .student-main-info a:hover {
 
 .course-select {
     width: 100%;
-    min-height: 44px;
+    min-height: 36px;
+    height: 36px;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    padding: 0.7rem 3rem 0.7rem 1.1rem;
+    padding: 0.45rem 3rem 0.45rem 1.1rem;
     color: var(--color-navy);
     /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.9) 0%, rgba(var(--color-teal-rgb), 0.7) 100%); */
     border: 1px solid var(--color-turquoise);
     border-radius: 8px;
-    box-shadow:
-        0 5px 14px rgba(var(--color-navy-rgb), 0.18),
-        inset 0 3px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18), inset 0 3px 10px rgba(0, 0, 0, 0.25);
     font-size: 0.95rem;
     font-weight: 500;
-
     cursor: pointer;
     outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .course-select:hover {
@@ -310,7 +304,6 @@ header .student-main-info a:hover {
     transition: transform 0.2s ease;
 }
 
-
 .course-select-wrapper:focus-within .course-select-arrow {
     transform: rotate(180deg);
 }
@@ -325,9 +318,10 @@ header .student-main-info a:hover {
 /* Course Selector form SMALL DEVS  **********/
 .course-selector-form.smaller-devs {
     display: none;
-    padding: 0.15rem 0.15rem 0.15rem 0.5rem;    
-    background: rgba(var(--color-teal-rgb), 0.2);
+    padding: 0.15rem 0.5rem;    
+    /* background: rgba(var(--color-teal-rgb), 0.2); */
     border: outset 1px rgba(var(--color-teal-rgb), 0.3);
+    border-radius: 0;
 }
 
 /* .course-selector-form.smaller-devs img {
@@ -382,7 +376,7 @@ header .student-main-info a:hover {
 .student-detail-tabs {
     display: flex;
     gap: 0.5rem;
-    padding: 0.25rem 1rem 0.25rem 0.25rem;
+    padding: 0rem 1rem 0rem 0.25rem;
     border-bottom: 1px solid rgba(var(--color-cyan-rgb), 0.35);
     /* margin-bottom: 1.7rem; */
     background-color: var(--color-navy);
@@ -414,7 +408,9 @@ header .student-main-info a:hover {
 .wrapper-course-selector-form {
     width: 670px;
     max-width: 100%;
-    min-width: none;
+    min-width: fit-content;
+    align-items: center;
+    display: inline-flex;
 }
 
 .student-detail-tabs a.active, .student-detail-tabs a:hover {
@@ -735,7 +731,7 @@ header .student-main-info a:hover {
     display: grid;
     grid-template-columns: minmax(340px, 1.75fr) minmax(300px, 1fr);
     gap: 1.2rem;
-    margin-top: 1.25rem;
+    margin-top: 2.5rem;
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -857,22 +853,7 @@ header .student-main-info a:hover {
     justify-content: flex-end;
 }
 
-.recent-attendance-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    padding: 0.85rem 0;
-}
 
-.recent-attendance-row p {
-    margin-bottom: 0;
-}
-
-.recent-attendance-row small {
-    color: rgba(var(--color-steel-rgb),0.65);
-}
 
 
 /************************************************|
@@ -883,7 +864,7 @@ header .student-main-info a:hover {
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 2fr;
     gap: 1rem;
-    margin-top: 1.25rem;
+    margin-top: 2.5rem;
 }
 
 .recent-attendance-card {
@@ -1069,10 +1050,10 @@ header .student-main-info a:hover {
         /* justify-content: space-around; */
         flex-direction: row;
         width: 100%;
-        padding: 0.15rem;
+        /* padding: 0.15rem; */
         border: none;
         gap: 0.2rem;
-        margin-top: 0.4rem;
+        /* margin-top: 0.4rem; */
     }
 
     .student-detail-tabs {
@@ -1108,6 +1089,30 @@ header .student-main-info a:hover {
     .student-detail-tabs a {
         padding-inline: 1rem;
     }
+
+    /* FORM: COURSE SELECTOR */
+    .course-selector-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .course-selector-label {
+        padding-left: 0.25rem;
+    }
+
+    .course-select-wrapper {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .course-select {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    /* END FORM Course selector */
+
 
 }
 
@@ -1202,6 +1207,7 @@ header .student-main-info a:hover {
 
     .course-selector-form.smaller-devs {
         flex-direction: column;
+        padding: 0.75rem;
     }
 
     /* *** MY COURSE Page ******************************** */

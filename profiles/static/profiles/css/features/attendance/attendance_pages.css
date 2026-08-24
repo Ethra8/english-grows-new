@@ -106,7 +106,7 @@
 /* ******************************************************* */
 
 .wrapper-attendance-progress-card {
-    margin: 1.25rem auto;
+    margin: 2.5rem auto;
 }
 
 .attendance-progress-card {
@@ -118,7 +118,7 @@
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
-.attendance-progress-card .circle-panel1 {
+/* .attendance-progress-card .circle-panel1 {
     position: absolute;
     top: -130px;
     left: -160px;
@@ -133,12 +133,38 @@
     padding-top: 90px;
     z-index: 2;
     overflow: hidden !important;
+} */
+
+.attendance-progress-card .circle-panel1 {
+    position: absolute;
+    top: -320px;
+    left: -130px;
+    width: 500px;
+    height: 501px;
+    border-radius: 50%;
+    background: linear-gradient(64deg, rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    box-shadow: 0 10px 25px rgba(0, 107, 125, .25), inset 0 1px rgba(var(--color-steel-rgb), .15);
+    padding-left: 150px;
+    padding-top: 90px;
+    z-index: 2;
+    overflow: hidden !important;
 }
+
+/* .attendance-progress-card .circle-panel1 h2 {
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    margin: 4.1rem 2rem 0 50px;
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-whitesmoke);
+    max-height: 50px;
+} */
 
 .attendance-progress-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    margin: 3.3rem 2rem 0 50px;
+    margin: 16rem 2rem 0 1.3rem;
     font-size: 1.8rem;
     font-weight: 500;
     line-height: 1.1;
@@ -158,7 +184,7 @@
     rotate: calc(12deg);
 }
 
-.circle-panel1 .icon-circle-bg {
+/* .circle-panel1 .icon-circle-bg {
     position: relative;
     top: 25px;
     left: 0;
@@ -175,16 +201,32 @@
     top: 9px;
     left: 13px;
     font-size: 1.8rem;
-}
+} */
 
-.attendance-progress-card .circle-panel2 {
+/* .attendance-progress-card .circle-panel2 {
     position: absolute;
     top: -120px;
     left: -150px;
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background: var(--color-navy);
+    background: linear-gradient(251deg, rgba(4, 72, 140, 1) 0%, rgba(var(--color-navy-rgb), 1) 87%, rgba(0, 45, 89, 1) 100%);
+    color: var(--color-whitesmoke);
+    padding-left: 205px;
+    padding-top: 90px;
+    z-index: 1;
+    border: solid 2px var(--color-whitesmoke);
+} */
+
+.attendance-progress-card .circle-panel2 {
+    position: absolute;
+    top: -320px;
+    left: -148px;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    /* background: var(--color-navy); */
+    background: linear-gradient(251deg, rgba(4, 72, 140, 1) 0%, rgba(var(--color-navy-rgb), 1) 87%, rgba(0, 45, 89, 1) 100%);
     color: var(--color-whitesmoke);
     padding-left: 205px;
     padding-top: 90px;
@@ -210,8 +252,15 @@
     margin-bottom: 0%;
 }
 
-.attendance-progress-card .info {
+/* .attendance-progress-card .info {
     padding: 0 2rem 0 17rem;
+    width: 100%;
+    min-height: 85px;
+    align-content: center;
+} */
+
+.attendance-progress-card .info {
+    padding: 0 2rem 0 25rem;
     width: 100%;
     min-height: 85px;
     align-content: center;
@@ -224,8 +273,11 @@
     height: 25px;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    /* box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba)); */
     border-radius: 50px;
+    box-shadow:
+        0 2px 2px rgba(0,107,125,.25),
+        inset 0 2px rgba(var(--color-icy-rgb),.75);
 }
 
 .attendance-progress::-webkit-progress-bar {
@@ -234,12 +286,15 @@
 }
 
 .attendance-progress::-webkit-progress-value {
-    background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-turquoise-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
     border-radius: 999px;
+    box-shadow:
+        0 2px 2px rgba(0,107,125,.25),
+        inset 0 2px rgba(var(--color-icy-rgb),.75);
 }
 
 .attendance-progress::-moz-progress-bar {
-    background: linear-gradient(233deg,rgba(var(--color-teal-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-turquoise-rgb), 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-turquoise-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
     border-radius: 999px;
 }
 
@@ -258,27 +313,37 @@
 
 
 /*** Detailed Attendance **********/
-.row-details>.row {
-    width: 100%;
-    display: flex;
+.attendance-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
+    width: 100%;
+    align-items: stretch;
 }
 
-.detailed-attendance-card {
+.detailed-attendance-card,
+.absence-details-card {
     position: relative;
     overflow: hidden;
+
+    width: 100%;
     max-width: 100%;
+    min-width: 0;
+    height: 100%;
+    box-sizing: border-box;
+
     border-radius: 8px;
-    padding: 125px 20px 20px;
+    padding: 100px 20px 20px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     background: rgba(255, 255, 255, 0.9);
     z-index: 2;
 }
 
-.detailed-attendance-card .circle-panel1 {
+.detailed-attendance-card .circle-panel1,
+.absence-details-card .circle-panel1 {
     position: absolute;
-    top: -400px;
-    left: -150px;
+    top: -430px;
+    left: -130px;
     width: 500px;
     height: 500px;
     border-radius: 50%;
@@ -287,19 +352,21 @@
     z-index: 2;
 }
 
-.detailed-attendance-card h2 {
+.detailed-attendance-card h2,
+.absence-details-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
     color: var(--color-whitesmoke);
     font-size: 1.8rem;
-    margin: 420px 2rem 1rem 11.8rem;
+    margin: 450px 2rem 1rem 10.8rem;
     line-height: 1.1;
 }
 
-.detailed-attendance-card .circle-panel2 {
+.detailed-attendance-card .circle-panel2,
+.absence-details-card .circle-panel2 {
     position: absolute;
-    top: -370px;
-    left: -130px;
+    top: -400px;
+    left: -110px;
     width: 480px;
     height: 480px;
     border-radius: 50%;
@@ -311,7 +378,6 @@
     border: solid 2px var(--color-whitesmoke);
 }
 
-
 /* ******* ACCORDION: My Attendance/Absence Records ********************* */
 
 .wrapper-attendance-accordion {
@@ -319,49 +385,23 @@
     /* padding-right: 0%; */
 }
 
-#parentAttendanceAccordion .card,
-#parentAbsenceAccordion .card {
-    padding: 0;
-    margin: 0%; 
-    height: 100%;
-    max-height: 100%;
-    background: rgba(var(--color-turquoise-rgb), 0);
-    border-radius: 10px !important;
-}
-
-#parentAttendanceAccordion .card-body,
-#parentAbsenceAccordion .card-body {
-    padding: 0;
-    margin: 0.5rem; 
-    height: 100%;
-    max-height: 100%;
-    background: rgba(var(--color-turquoise-rgb), 0);
-}
-
-#attendance_accordion .card,
-#absence_accordion .card {
-    padding: 0%;
-    margin: 0 auto;
-    height: 100%;
-    max-height: 100%; /* height of profile form + submit button */
-    border-radius: 10px !important;
-    border: outset 1px var(--color-navy);
-    background: #008f8f;;
-}
-
-#parentAttendanceHeading,
 #parentAbsenceHeading {
-   color: var(--color-whitesmoke);
-    background-color: var(--color-teal);
+    background-color: rgba(var(--color-steel-rgb), 0.1);
     border-radius: 8px;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-#parentAttendanceHeading .fa-solid {
-    position: relative;
-    top: 1px;
-    left: 4px;
-    font-size: 1.2rem;
-    color:var(--color-navy);
+#parentAbsenceHeading:hover {
+    background-color: rgba(var(--color-steel-rgb), 0.3);
+}
+
+#parentAbsenceHeading a {
+    color: var(--color-navy);
+    font-weight: 500;
+}    
+
+#parentAbsenceHeading a:hover {
+    color: var(--color-teal);
 }
 
 #parentAbsenceHeading .fa-solid {
@@ -369,43 +409,77 @@
     top: 1px;
     left: 1px;
     font-size: 1.2rem;
-    color:var(--color-navy);
+    color: var(--color-navy);
 }
 
-#parentAttendanceHeading .fa-solid.fa-chevron-down,
 #parentAbsenceHeading .fa-solid.fa-chevron-down {
-    color:var(--color-icy);
+    color: var(--color-teal);
 }
 
-#parentAttendanceHeading.card-header,
-#parentAbsenceHeading.card-header {
-   color: var(--color-whitesmoke);
-    background-color: var(--color-teal);
-    border-radius: 8px;
-    padding: 0.5rem;
+#parentAbsenceHeading.header {
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 1rem;
-
+    justify-content: space-between;
+    padding: 1rem 0.25rem;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: left;
 }
 
-#attendance_accordion .card-body,
-#absence_accordion .card-body {
+.absence-details-card .card-body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#absence_accordion {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.card-body #absence_accordion  {
     height: 100%;
     max-height: 100%; /* height of profile form + submit button */
-    border-bottom-right-radius: 10px !important;
-    border-bottom-left-radius: 10px !important;
+    border-radius: 8px;
     background-color: var(--color-whitesmoke);
     margin: 0%;
-    padding: 1rem;
+    padding: 0.5rem .75rem;
 }
 
-#attendance_accordion .card-body p,
-#absence_accordion .card-body p {
+#parentAbsenceCollapse .card-body {
+    padding: 1.25rem 0;
+    border-radius: 8px;
+}
+
+#parentAbsenceCollapse .card-body p {
     line-height: 1.4;
     margin: 0%;
     color: var(--color-navy);
 }
+
+.recent-attendance-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 1.5fr) minmax(120px, 1.25fr) minmax(120px, 1fr);
+    padding: 0.75rem;
+}
+
+/* .recent-attendance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
+    padding: 0.85rem 0;
+} */
+
+/* .recent-attendance-row p {
+    margin-bottom: 0;
+} */
 
 .attendance-history-item {
     display: flex;
@@ -413,7 +487,7 @@
     gap: 1rem;
 }
 
-.attendance-history-icon {
+/* .attendance-history-icon {
     width: 35px;
     height: 35px;
     min-width: 35px;
@@ -426,9 +500,9 @@
     justify-content: center;
     font-size: 1.2rem;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-}
+} */
 
-.attendance-history-text {
+/* .attendance-history-text {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
@@ -446,7 +520,7 @@
 .attendance-history-text span {
     color: var(--color-whitesmoke);
 }
-
+ */
 
 
 
@@ -587,26 +661,107 @@
     font-weight: 500;
 }
 
-.status-pill.pending,
+/* .attendance-status {
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
+} */
+
+.student-detail-page .status-pill {
+    display: inline-flex;
+    /* width: max-content; */
+    padding: 0.5rem;
+    /* border-radius: 999px; */
+    /* font-size: 1rem;
+    font-weight: 500; */
+    height: 36px;
+    width: 36px;
+    background: rgba(var(--color-teal-rgb), 0.75);
+}
+
 .status-pill.excused {
-    background: rgba(255, 179, 71, 0.18);
-    color: #ffb347;
-    border: 1px outset #ffb347;
+    background: rgba(var(--color-attendance-status-excused-rgb), 0.18);
+    color: var(--color-attendance-status-missed);
+    border: 1px outset var(--color-attendance-status-excused);
 }
 
 .status-pill.completed,
 .status-pill.attended {
-    background: rgba(77, 255, 181, 0.18);
+    /* background: rgba(var(--color-attendance-status-attended-rgb), 0.18); */
     color: var(--color-attendance-status-attended);
     border: 1px outset var(--color-attendance-status-attended);
 }
 
 .status-pill.missed {
-    background: rgba(255, 88, 88, 0.25);
-    color: #ff9b9b;
-    border: 1px outset #ff9b9b;
+    background: rgba(var(--color-attendance-status-missed-rgb), 0.25);
+    color: var(--color-attendance-status-missed);
+    border: 1px outset var(--color-attendance-status-missed);
 }
+
+.status-pill.pending {
+    background: rgba(255, 179, 71, 0.18);
+    color: #75736f;
+    border: 1px outset #75736f;
+}
+
 /* ******************************************************* */
+
+.recent-attendance-row span {
+    color: rgba(var(--color-teal-rgb, 0.7), 0.7);
+    font-weight: 500;
+}
+
+.recent-attendance-row small {
+    color: rgba(var(--color-steel-rgb), 0.95);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+
+.recent-attendance-row .absence-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* COURSE STATUS Text & DOT in ROW */
+.absence-status {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-steel);
+    /* border-left: 1px solid rgba(var(--color-teal-rgb), 0.2); */
+    height: 70%;    
+    justify-content: center;
+}
+
+.absence-status .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.attended {
+    background: var(--color-course-status-confirmed);
+}
+
+/* .status-dot.excused {
+    background: var(--color-course-status-active);
+} */
+
+.status-dot.excused {
+    background: var(--color-course-status-completed);
+}
+
+.status-dot.missed {
+    background: var(--color-course-status-cancelled);
+}
+
+/* .status-dot.status-completed {
+    background: var(--color-course-status-completed);
+} */
+/* ************ */
 
 
 /* Attendance Page: Sessions list (Pending/Completed) */
@@ -647,12 +802,27 @@
     display: none;
 }
 
-
 .wrapper-attendance-details,
 .wrapper-absence-details {
     /* override col default */
     padding-left: 0;
     padding-right: 0;
+    /* prevent cards from shrinking unequaly */
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+}
+
+/* When the accordion opens, cards stop stretching together */
+.attendance-cards-grid.absence-expanded {
+    align-items: start;
+}
+
+/* Absence card is allowed to grow naturally */
+.attendance-cards-grid.absence-expanded
+.wrapper-absence-details
+.detailed-attendance-card {
+    height: auto;
 }
 
 /* ** ALL ATTENDANCE PAGES *************************************|
@@ -801,10 +971,6 @@
     margin-bottom: 1.5rem;
 }
 
-/* .take-attendance-card-header h3 {
-    margin-bottom: 2rem;
-} */
-
 .attendance-detail-card-header {
     /* display: flex; */
     justify-content: space-between;
@@ -927,6 +1093,10 @@
     border-bottom: none;
 }
 
+/* .attendance-status {
+    background: transparent;
+} */
+
 .attendance-detail-row .attendance-status,
 .take-attendance-row .attendance-status {
     justify-self: end;
@@ -1002,13 +1172,8 @@
     background: rgba(255, 179, 71, 0.3);
 }
 
-.status-pill.missed,
 .attendance-summary-card.missed i {
     color: #ff5a5a;
-}
-
-.status-pill.missed {
-    background: rgba(255, 90, 90, 0.25);
 }
 
 .take-attendance-save-bar {
@@ -1307,31 +1472,30 @@
         width: 100%;
     }
 
+    /* Scrollable container */
+    #absence_accordion {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #absence_accordion .recent-attendance-row {
+        min-width: 500px;
+    }
 }
 
 
 
 @media (max-width: 991.98px) {
+    
 
-    .row-details > .row {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        gap: 1.5rem;
-
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-    .wrapper-attendance-details,
-    .wrapper-absence-details {
-        width: 100%;
-        max-width: 100%;
-        flex: 0 0 100%;
-    }
-
-    .detailed-attendance-card {
+    .detailed-attendance-card,
+    .absence-details-card {
         width: 100%;
         max-width: 100%;
         padding-right: 3%;
@@ -1367,11 +1531,89 @@
 
 
 @media (max-width: 767.98px) {
-    /* .attendance-progress-card {
+    /* LEARNER PROGRESS ATTENDANCE Page */
+    .attendance-cards-grid {
         display: flex;
         flex-direction: column;
-    } */
+        flex-wrap: nowrap;
+        gap: 1.5rem;
 
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .wrapper-attendance-details,
+    .wrapper-absence-details {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    /* LEARNER PROGRESS ATTENDANCE RATE CARD */
+    .wrapper-attendance-progress-card {
+        margin: 1.5rem auto;
+    }
+
+    .attendance-progress-card {
+        display: block;
+        min-height: 220px;
+        padding-top: 100px;
+    }
+
+    /* Reposition branded circular header */
+    .attendance-progress-card .circle-panel1 {
+        top: -430px;
+        left: -130px;
+        width: 500px;
+        height: 500px;
+    }
+
+    .attendance-progress-card .circle-panel2 {
+        top: -400px;
+        left: -110px;
+        width: 480px;
+        height: 480px;
+    }
+
+    /* Match detail-card heading placement */
+    .attendance-progress-card .circle-panel1 h2 {
+        margin: 360px 2rem 1rem .8rem;
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
+
+    .detailed-attendance-card h2, 
+    .absence-details-card h2 {
+        margin: 450px 2rem 1rem 10.3rem;
+    }
+
+    /* Remove desktop left offset */
+    .attendance-progress-card .info {
+        width: 100%;
+        min-height: 0;
+        padding: 1.5rem 2rem 2rem;
+    }
+
+    /* Stack percentage and progress vertically */
+    .attendance-percentage-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    /* Percentage */
+    .attendance-percentage-card p {
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    /* Full-width progress bar */
+    .attendance-progress {
+        width: 100%;
+    }
     
     /* COURSE ATTENDANCE page *******************************/
     .course-attendance .meta-row {
@@ -1460,7 +1702,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* text-align: center; */
         gap: 1rem;
         align-self: baseline;
         width: 100%;
@@ -1488,27 +1729,8 @@
     }
 
     /*****************************************************|
-    |*** ATTENDANCE DETAIL Page  *************************|
-    |*****************************************************/
-    .learner-employee-detail-page .attendance-summary-card {
-        min-height: 0;
-        height: 56px;
-        padding: 1.4rem;
-        width: 100%;
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    .learner-employee-detail-page .attendance-summary-card strong {
-        padding: 0.15rem 0.8rem;
-    }
-
-    /*****************************************************|
     |*** ALL ATTENDANCE PageS  ***************************|
     |*****************************************************/
-    /* .teacher-attendance-page {
-        padding: 2rem 1rem;
-    } */
 
     .attendance-list-card {
         min-height: 260px;

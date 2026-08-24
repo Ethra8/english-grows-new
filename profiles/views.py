@@ -4906,9 +4906,6 @@ def company_admin_course_students_list(request, course_id):
             "student",
             "student__profile",
         )
-        .filter(
-            status="active"
-        )
         .annotate(
             sort_name=Lower(
                 Coalesce(
@@ -5853,6 +5850,7 @@ def company_admin_student_detail(request, student_id):
     )
 
 
+
 @login_required
 def company_admin_student_attendance_record(request, student_id):
     profile = get_object_or_404(
@@ -6021,9 +6019,14 @@ def company_admin_student_attendance_record(request, student_id):
 
             # Progress
             "completed_classes": 0,
+            "course_completed_classes": 0,
             "remaining_classes": 0,
             "total_classes": 0,
             "completion_percentage": 0,
+
+            # Late enrollment context
+            "lessons_before_enrollment": 0,
+            "show_enrollment_context": False,
 
             # Attendance history
             "recent_attendance": [],
@@ -6091,15 +6094,77 @@ def company_admin_student_attendance_record(request, student_id):
 
 
     # ---------------------------------------------------------
-    # COURSE PROGRESS
+    # EMPLOYEE-SPECIFIC COMPLETED CLASSES
     #
-    # These enrollment properties continue to work for
-    # historical/completed enrollments.
+    # These are the completed attendance records applicable
+    # to this employee/enrollment.
     # ---------------------------------------------------------
     completed_classes = (
         enrollment.total_completed_classes
     )
 
+
+    # ---------------------------------------------------------
+    # COURSE-WIDE COMPLETED CLASSES
+    #
+    # Count every non-cancelled class session that has already
+    # finished, regardless of whether this employee was
+    # enrolled at the time.
+    #
+    # This gives us the true course-level historical total.
+    # ---------------------------------------------------------
+    course_completed_classes = (
+        ClassSession.objects
+        .filter(
+            course=course,
+            end_time__lt=timezone.now(),
+        )
+        .exclude(
+            status="cancelled",
+        )
+        .count()
+    )
+
+    # ---------------------------------------------------------
+    # LESSONS BEFORE EMPLOYEE ENROLLMENT
+    #
+    # Count actual non-cancelled course sessions that had
+    # already finished before this employee joined.
+    #
+    # This is more reliable than simply comparing:
+    #
+    # enrollment.enrolled_at.date() > course.start_date
+    #
+    # because a course may technically have started while no
+    # actual lesson had yet taken place.
+    # ---------------------------------------------------------
+    lessons_before_enrollment = (
+        ClassSession.objects
+        .filter(
+            course=course,
+            end_time__lt=enrollment.enrolled_at,
+        )
+        .exclude(
+            status="cancelled",
+        )
+        .count()
+    )
+
+
+    # ---------------------------------------------------------
+    # SHOW LATE-ENROLLMENT CONTEXT?
+    #
+    # Only display this explanatory information if at least
+    # one lesson had already happened before enrollment.
+    # ---------------------------------------------------------
+    show_enrollment_context = (
+        lessons_before_enrollment > 0
+    )
+
+
+    # ---------------------------------------------------------
+    # TOTAL / REMAINING CLASSES
+    # ---------------------------------------------------------
     total_classes = (
         enrollment.total_assigned_classes
     )
@@ -6119,6 +6184,8 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # COMPLETION %
+    #
+    # This remains employee/enrollment based.
     # ---------------------------------------------------------
     completion_percentage = (
         round(
@@ -6164,9 +6231,14 @@ def company_admin_student_attendance_record(request, student_id):
 
         # Progress
         "completed_classes": completed_classes,
+        "course_completed_classes": course_completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
+
+        # Late enrollment context
+        "lessons_before_enrollment": lessons_before_enrollment,
+        "show_enrollment_context": show_enrollment_context,
 
         # Attendance records
         "recent_attendance": recent_attendance,
@@ -6178,6 +6250,7 @@ def company_admin_student_attendance_record(request, student_id):
         "company_admin_student_attendance_record.html",
         context,
     )
+
 
 
 @login_required

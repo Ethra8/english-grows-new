@@ -539,7 +539,7 @@ h2 {
 }
 
 /* All boxes */
-.wrapper-course-details {
+.wrapper-course-detail-cards {
     width: 100%;
     border-radius: 8px;
     padding: 4px;
@@ -548,19 +548,19 @@ h2 {
 }
 
 /* LEFT COLUMN boxes */
-.wrapper-course-details:nth-child(1),
-.wrapper-course-details:nth-child(2) {
+.wrapper-course-detail-cards:nth-child(1),
+.wrapper-course-detail-cards:nth-child(2) {
     grid-column: 1;
 }
 
 /* RIGHT COLUMN: Student List */
-.wrapper-course-details:nth-child(3) {
+.wrapper-course-detail-cards:nth-child(3) {
     grid-column: 2;
     grid-row: 1 / span 3;
 }
 
 /* BOTH COLUMNS */
-.wrapper-course-details h4 i {
+.wrapper-course-detail-cards h4 i {
     color: var(--color-icy) ;
 }
 
@@ -581,8 +581,8 @@ h2 {
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
-.course-details-child .course-detail-item > div:first-of-type,
-.course-info-child .course-detail-item > div:first-of-type {
+.course-details-card .course-detail-item > div:first-of-type,
+.course-info-card .course-detail-item > div:first-of-type {
     background-color: rgba(var(--color-icy-rgb), 0.4);
     border-radius: 8px;
     padding: 0.5rem 1rem;
@@ -609,9 +609,9 @@ h2 {
 }
 
 
-.course-details-child,
-.course-info-child,
-.course-materials-child {
+.course-details-card,
+.course-info-card,
+.course-materials-card {
     background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
     border-radius: 8px;
     margin: 0;
@@ -620,7 +620,7 @@ h2 {
     width: 100%;
 }
 
-.course-materials-child {
+.course-materials-card {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -628,14 +628,14 @@ h2 {
     align-items: center;
 }
 
-.wrapper-course-details h3 {
+.wrapper-course-detail-cards h3 {
     color: var(--color-icy);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
 }
 
-.course-details-child h3,
-.course-info-child h3 {
+.course-details-card h3,
+.course-info-card h3 {
     padding: 0.25rem 1.5rem;
 }
 
@@ -682,7 +682,7 @@ h2 {
 **** COURSE_STUDENTS_LIST Page ******************|
 *********************************************** */
 
-.teacher-course-students-list .course-details-child h3 {
+.teacher-course-students-list .course-details-card h3 {
     padding: 0 0 1rem;
 }
 
@@ -1152,7 +1152,7 @@ h2 {
         gap: 0.75rem;
     }
 
-    .course-materials-child {
+    .course-materials-card {
         flex-direction: row;
         align-items: baseline;
     }
@@ -1238,7 +1238,7 @@ h2 {
     /*****************************************************|
     |*** COURSE DETAIL Page  *****************************|
     |*****************************************************/
-    .course-materials-child {
+    .course-materials-card {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -1262,13 +1262,13 @@ h2 {
 
     /* *** COURSE DETAILS Page ****************************/
     /* *** COURSE STUDENTS LIST Page **********************/
-    .course-details-child,
-    .course-info-child {
+    .course-details-card,
+    .course-info-card {
         padding: 0;
     }
 
-    .course-details-child h3,
-    .course-info-child h3 {
+    .course-details-card h3,
+    .course-info-card h3 {
         padding: 1rem 1.5rem;
     }
 
