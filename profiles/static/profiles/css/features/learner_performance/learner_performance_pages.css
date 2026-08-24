@@ -319,7 +319,7 @@ header .student-main-info a:hover {
 .course-selector-form.smaller-devs {
     display: none;
     padding: 0.15rem 0.5rem;    
-    /* background: rgba(var(--color-teal-rgb), 0.2); */
+    background: rgba(var(--color-teal-rgb), 0.2);
     border: outset 1px rgba(var(--color-teal-rgb), 0.3);
     border-radius: 0;
 }

@@ -149,14 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 //
                 // Move them slightly left/right around the
                 // REAL X position.
-                //
-                // Example:
-                //
-                //      ●  ●
-                //
-                // instead of:
-                //
-                //       ●
                 // ---------------------------------------------
 
                 const spacing = 8;
@@ -228,9 +220,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------------------------------------------------
     // APPLY CONSISTENT VISUAL SETTINGS
-    //
-    // With datasets: normal styling is applied.
-    // Without datasets: forEach simply has nothing to process.
     // ---------------------------------------------------------
 
     chartData.datasets.forEach(function (dataset) {
@@ -254,20 +243,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------------------------------------------------
     // CREATE CHART
-    //
-    // IMPORTANT:
-    // The chart is created EVEN WHEN labels/datasets are empty.
-    // This keeps the graph structure visible before the
-    // learner's first assessment.
     // ---------------------------------------------------------
 
-    new Chart(chartEl, {
+    const skillsProgressChart = new Chart(chartEl, {
 
         type: "line",
 
         data: chartData,
-
-        // Register our custom point plugin.
 
         plugins: [
             separateOverlappingPoints
@@ -350,8 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
 // =========================================================
 // OVERALL SKILLS PROGRESS GRAPH
 // 1 DOT / LINE = average of the 4 skills
@@ -395,9 +375,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------------------------------------------------
     // APPLY DATASET SETTINGS
-    //
-    // If no assessment data exists yet, datasets is empty,
-    // so nothing happens here and the chart still renders.
     // ---------------------------------------------------------
 
     chartData.datasets.forEach(function (dataset) {
@@ -412,15 +389,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------------------------------------------------
     // CREATE CHART
-    //
-    // IMPORTANT:
-    // Do NOT return when labels is empty.
-    //
-    // The empty chart is intentional and represents the
-    // learner's pre-assessment state.
     // ---------------------------------------------------------
 
-    new Chart(chartEl, {
+    const overallSkillsChart = new Chart(chartEl, {
 
         type: "line",
 

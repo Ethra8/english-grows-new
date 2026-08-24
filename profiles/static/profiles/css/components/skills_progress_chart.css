@@ -8,28 +8,36 @@
 
     width: 100%;
     min-width: 0;
-    height: 100%;
+
+    /* IMPORTANT:
+       Let the grid recalculate its natural height
+       when skill accordions open/close. */
+    height: auto;
+    align-items: stretch;
 }
 
 .skills-progress-section {
-    height: 100%;
+    display: flex;
+
     min-width: 0;
+    min-height: 0;
+
+    /* Do not preserve the previous expanded grid height */
+    height: auto;
 }
 
 /* Skills Graph SnapShot */
 .skills-chart-card {
     display: flex;
     flex-direction: column;
-
     width: 100%;
-    height: 100%;
     min-width: 0;
-
-    background: var(--color-whitesmoke);
-    border: 2px inset rgba(var(--color-turquoise-rgb), 0.45);
+    min-height: 0;
+    flex: 1 1 auto;
+    background-color: whitesmoke;
+    padding: 1.25rem;
     border-radius: 8px;
-    padding: 1.25rem 1rem;
-
+    border: 2px solid rgba(var(--color-turquoise-rgb), 0.6);
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 
@@ -76,16 +84,19 @@
 .skills-chart-canvas-wrap {
     position: relative;
 
-    flex: 1;
-    min-height: 0;
-
+    flex: 1 1 0;
     width: 100%;
+
+    min-width: 0;
+    min-height: 0;
 }
 
 #overallSkillsProgressChart,
 #skillsProgressChart {
-    width: 100%;
-    height: 100%;
+    display: block;
+    width: 100% !important;
+    max-width: 100%;
+
     margin-top: 1rem;
 }
 

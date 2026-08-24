@@ -9,6 +9,23 @@
     align-items: stretch;
 }
 
+/* =========================================================
+   SKILLS GRID — EXPANDED ACCORDION STATE
+========================================================= */
+
+/*
+When all accordions are closed:
+both grid columns stretch to the same height.
+
+When ANY skill accordion opens:
+stop stretching the two columns together.
+*/
+.skills-grid:has(
+    .skill-accordion-toggle[aria-expanded="true"]
+) {
+    align-items: start;
+}
+
 .skills-grid > div:nth-child(2) {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
@@ -20,10 +37,6 @@
 .skills-grid > div:last-child:has(.skill-accordion-toggle[aria-expanded="true"]) {
     grid-template-rows: auto;
 }
-/* .skills-grid p {
-    width: 100%;
-    margin: 1.2rem 0.25rem 0.25rem;
-} */
 
 .skills-grid p.skills-assessment-pending  {
     color: var(--color-slate);
@@ -171,7 +184,6 @@
     font-weight: 900;
     font-size: 2.5rem;
     color: rgba(var(--color-reading-rgb), 0.7);
-    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 
@@ -188,7 +200,6 @@
     font-weight: 900;
     font-size: 2.7rem;
     color: rgba(var(--color-speaking-rgb), 0.8);
-    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 
@@ -205,7 +216,6 @@
     font-weight: 900;
     font-size: 2rem;
     color: rgba(var(--color-writing-rgb), 0.7);
-    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
     rotate: calc(-70deg);
 }
 
@@ -236,7 +246,6 @@
 
 .skill-name {
     min-width: 0;
-    /* color: var(--color-navy); */
     white-space: nowrap;
 }
 
@@ -292,9 +301,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    /* background-color: rgba(var(--color-navy-rgb), 0.6); */
     background-color: var(--color-whitesmoke);
-    /* border: 1px solid rgba(var(--color-turquoise-rgb), 0.35); */
     border: 1px solid rgba(var(--color-navy-rgb), 0.3);
     margin-right: 1.2rem;
 }
@@ -324,7 +331,6 @@
     background-color: var(--color-whitesmoke);
         height: auto;
     overflow: visible;
-    /* stretch to occupy available height: */
     flex: 1;
     border-top: 1px solid rgba(var(--color-teal-rgb), 0.25);
 }
@@ -343,10 +349,6 @@
     font-size: 1rem;
     margin-top: 0.5rem;
 }
-
-/* .skill-details span {
-    color: var(--color-slate);
-} */
 
 .subskill-row,
 .subskill-main {
@@ -377,7 +379,6 @@
     display: list-item;
     list-style-type: disc;
     margin-bottom: 0.25rem;
-    /* padding-left: 1.5rem; */
 }
 
 .subskill-group p {
@@ -424,17 +425,6 @@
 
 
 @media (max-width: 1600px) {
-
-    /*****************************************************|
-    |*** STD. SKILLS OVERVIEW Page  **********************|
-    |*****************************************************/
-
-    /* .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.2rem;
-        margin-top: 1.5rem;
-    } */
 
 }
 
