@@ -5869,9 +5869,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # GET EMPLOYEE
-    #
-    # Employee must belong to the same company as the
-    # logged-in company admin.
     # ---------------------------------------------------------
     student = get_object_or_404(
         User.objects.select_related("profile"),
@@ -5884,20 +5881,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
-    #
-    # Historical enrollments remain accessible:
-    #
-    # 1. Active
-    # 2. Confirmed
-    # 3. Paused
-    # 4. Completed
-    # 5. Cancelled
-    #
-    # Within each status:
-    # - course name A-Z
-    #
-    # Completed courses additionally use end_date as a
-    # tie-breaker, newest first.
     # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
@@ -5915,26 +5898,11 @@ def company_admin_student_attendance_record(request, student_id):
         )
         .annotate(
             status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
+                When(course__status="active", then=Value(1)),
+                When(course__status="confirmed", then=Value(2)),
+                When(course__status="paused", then=Value(3)),
+                When(course__status="completed", then=Value(4)),
+                When(course__status="cancelled", then=Value(5)),
                 default=Value(99),
                 output_field=IntegerField(),
             ),
@@ -5958,39 +5926,24 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
-    #
-    # Example:
-    #
-    # /profiles/company-admin/employees/3/attendance/?course=9
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
 
     # ---------------------------------------------------------
     # DETERMINE SELECTED ENROLLMENT / COURSE
-    #
-    # The requested course must belong to one of this
-    # employee's enrollments for this company.
     # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
             enrollments,
             course_id=selected_course_id,
         )
-
     else:
-        # Because enrollments is already ordered by lifecycle
-        # priority, this naturally prefers:
-        #
-        # active -> confirmed -> paused -> completed -> cancelled
         enrollment = enrollments.first()
 
 
     # ---------------------------------------------------------
     # NO ENROLLMENTS
-    #
-    # Employee profile remains accessible even if no
-    # CourseEnrollment records exist.
     # ---------------------------------------------------------
     if not enrollment:
         context = {
@@ -6014,6 +5967,7 @@ def company_admin_student_attendance_record(request, student_id):
             "attended_count": 0,
             "missed_count": 0,
             "excused_count": 0,
+            "total_absences": 0,
             "total_attendance_records": 0,
             "attendance_percentage": 0,
 
@@ -6030,6 +5984,7 @@ def company_admin_student_attendance_record(request, student_id):
 
             # Attendance history
             "recent_attendance": [],
+            "recent_absences": [],
         }
 
         return render(
@@ -6049,10 +6004,8 @@ def company_admin_student_attendance_record(request, student_id):
     # ---------------------------------------------------------
     # ATTENDANCE RECORDS
     #
-    # Historical course status does NOT matter here.
-    #
-    # We are explicitly retrieving attendance belonging to
-    # the selected employee + selected course.
+    # Retrieve all submitted attendance records for this
+    # employee + selected course.
     # ---------------------------------------------------------
     attendances = (
         Attendance.objects
@@ -6076,6 +6029,23 @@ def company_admin_student_attendance_record(request, student_id):
 
 
     # ---------------------------------------------------------
+    # ABSENCE RECORDS
+    #
+    # Only missed + excused attendance records are needed
+    # for the Absence Record accordion.
+    # ---------------------------------------------------------
+    recent_absences = (
+        attendances
+        .filter(
+            status__in=[
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ]
+        )
+    )
+
+
+    # ---------------------------------------------------------
     # ATTENDANCE COUNTS
     # ---------------------------------------------------------
     total_attendance_records = attendances.count()
@@ -6092,12 +6062,11 @@ def company_admin_student_attendance_record(request, student_id):
         status=Attendance.STATUS_EXCUSED
     ).count()
 
+    total_absences = missed_count + excused_count
+
 
     # ---------------------------------------------------------
     # EMPLOYEE-SPECIFIC COMPLETED CLASSES
-    #
-    # These are the completed attendance records applicable
-    # to this employee/enrollment.
     # ---------------------------------------------------------
     completed_classes = (
         enrollment.total_completed_classes
@@ -6106,12 +6075,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # COURSE-WIDE COMPLETED CLASSES
-    #
-    # Count every non-cancelled class session that has already
-    # finished, regardless of whether this employee was
-    # enrolled at the time.
-    #
-    # This gives us the true course-level historical total.
     # ---------------------------------------------------------
     course_completed_classes = (
         ClassSession.objects
@@ -6125,18 +6088,9 @@ def company_admin_student_attendance_record(request, student_id):
         .count()
     )
 
+
     # ---------------------------------------------------------
     # LESSONS BEFORE EMPLOYEE ENROLLMENT
-    #
-    # Count actual non-cancelled course sessions that had
-    # already finished before this employee joined.
-    #
-    # This is more reliable than simply comparing:
-    #
-    # enrollment.enrolled_at.date() > course.start_date
-    #
-    # because a course may technically have started while no
-    # actual lesson had yet taken place.
     # ---------------------------------------------------------
     lessons_before_enrollment = (
         ClassSession.objects
@@ -6153,9 +6107,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # SHOW LATE-ENROLLMENT CONTEXT?
-    #
-    # Only display this explanatory information if at least
-    # one lesson had already happened before enrollment.
     # ---------------------------------------------------------
     show_enrollment_context = (
         lessons_before_enrollment > 0
@@ -6184,8 +6135,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     # ---------------------------------------------------------
     # COMPLETION %
-    #
-    # This remains employee/enrollment based.
     # ---------------------------------------------------------
     completion_percentage = (
         round(
@@ -6213,10 +6162,10 @@ def company_admin_student_attendance_record(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
-        # ALL enrollments -> course selector
+        # All enrollments -> course selector
         "enrollments": enrollments,
 
-        # ONE selected enrollment/course -> page content
+        # Selected enrollment/course
         "enrollment": enrollment,
         "course": course,
 
@@ -6226,6 +6175,7 @@ def company_admin_student_attendance_record(request, student_id):
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
+        "total_absences": total_absences,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
 
@@ -6240,8 +6190,9 @@ def company_admin_student_attendance_record(request, student_id):
         "lessons_before_enrollment": lessons_before_enrollment,
         "show_enrollment_context": show_enrollment_context,
 
-        # Attendance records
+        # Attendance / absence records
         "recent_attendance": recent_attendance,
+        "recent_absences": recent_absences,
     }
 
     return render(
