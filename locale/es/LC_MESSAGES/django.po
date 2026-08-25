@@ -11,24 +11,50 @@ msgid "English Grows"
 msgstr "English Grows"
 
 
-msgid "Dashboard"
-msgstr "Perfil"
+msgid "Profile navigation"
+msgstr "Barra de navegación del perfil"
 
-msgid "Logout"
-msgstr "Salir"
 
 msgid "Learner"
 msgstr "Estudiante"
 
 msgid "Company Admin"
-msgstr "Admin. empresa"
+msgstr "Admin. Empresa"
+
+msgid "Profile photo"
+msgstr "Foto de Perfil"
+
+
+
+msgid "Dashboard"
+msgstr "Tablero"
+
+msgid "Course Info"
+msgstr "Info del curso"
+
+msgid "Calendar"
+msgstr "Calendario"
+
+msgid "My Performance"
+msgstr "Mi Progreso"
+
+msgid "Materials"
+msgstr "Materiales"
+
+msgid "My Attendance"
+msgstr "Mi asistencia"
+
+msgid "Account Settings"
+msgstr "Configuración"
+
+msgid "Logout"
+msgstr "Salir"
+
+
 
 
 msgid "Class Calendar"
 msgstr "Calendario"
-
-msgid "My Performance"
-msgstr "My Progreso"
 
 msgid "Join class"
 msgstr "Unirse"

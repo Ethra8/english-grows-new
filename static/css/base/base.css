@@ -1515,7 +1515,8 @@ span.vertical-line {
 
     footer hr {
         display: block;
-        width: 90%;
+        width: 100%;
+        margin: 1.25rem 0;
     }
 
     .col-9 {

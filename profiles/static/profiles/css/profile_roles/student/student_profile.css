@@ -83,6 +83,9 @@
     font-weight: 600;
     line-height: 1.1;
     color: var(--color-whitesmoke);
+    /* force h2 on top of ::after */
+    position: relative;
+    z-index: 999;
 }
 
 .next-class-card .info {

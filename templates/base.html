@@ -1,9 +1,10 @@
 {% load static %}
+{% load i18n %}
 <!-- {% url 'profiles:profile' as profile %}
 {% url 'home:subscribe_form' as subscribe_form %} -->
 
 <!doctype html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     {% block meta %}
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -65,12 +66,13 @@
 
     <header class="container-fluid fixed-top w-100 p-0">
 
-      <div id="topnav" class="row d-none d-lg-flex m-0">
+      <div id="topnav" class="row d-none d-lg-flex m-0 notranslate"
+        translate="no">
 
         <div class="col-3 my-auto py-lg-0 text-center text-lg-left">
           <a href="{% url 'home' %}"
              class="nav-link"
-             aria-label="go to the home page">
+             aria-label="{% trans 'Go to the home page' %}">
 
             <img
               src="{% static 'images/logo_englishgrows.png' %}"
@@ -95,7 +97,7 @@
 
                       <a href="{% url 'profiles:teacher_dashboard' %}"
                          class="btn-navbar d-none d-lg-inline"
-                         aria-label="go to my teacher dashboard">
+                         aria-label="{% trans 'Dashboard' %}">
 
                         <i class="fa-regular fa-user mr-2"></i>
                         Dashboard
@@ -105,30 +107,30 @@
 
                       <a href="{% url 'profiles:profile' %}"
                          class="btn-navbar d-none d-lg-inline"
-                         aria-label="go to my student dashboard">
+                         aria-label="{% trans 'Dashboard' %}">
 
                         <i class="fa-regular fa-user"></i>
-                        Dashboard
+                        {% trans "Dashboard" %}
                       </a>
 
                     {% elif request.user.profile.role == "company_admin" %}
 
                       <a href="{% url 'profiles:company_admin_dashboard' %}"
                          class="btn-navbar d-none d-lg-inline"
-                         aria-label="go to company admin dashboard">
+                         aria-label="{% trans 'Dashboard' %}">
 
                         <i class="fa-regular fa-user"></i>
-                        Dashboard
+                        {% trans "Dashboard" %}
                       </a>
 
                     {% else %}
 
                       <a href="{% url 'profiles:profile' %}"
                          class="btn-navbar d-none d-lg-inline"
-                         aria-label="go to my profile page">
+                         aria-label="{% trans 'Dashboard' %}">
 
                         <i class="fa-regular fa-user"></i>
-                        Dashboard
+                        {% trans 'Dashboard' %}
                       </a>
 
                     {% endif %}
@@ -139,10 +141,10 @@
                 <li>
                   <a href="{% url 'account_logout' %}"
                      class="btn-navbar d-none d-lg-inline"
-                     aria-label="Logout">
+                     aria-label="{% trans 'Logout' %}">
 
                     <i class="fa-solid fa-arrow-right-from-bracket mr-2 mt-1"></i>
-                    Logout
+                    {% trans "Logout" %}
                   </a>
                 </li>
 
@@ -150,10 +152,10 @@
 
                 <li>
                   <a href="{% url 'account_login' %}"
-                     class="btn-navbar d-none d-lg-inline">
-
-                    Login
-                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                     class="btn-navbar d-none d-lg-inline"
+                     aria-label="{% trans 'Login' %}">
+                    {% trans 'Login' %}
+                    <img src="{% static 'icons/chevron_right_white_icon.png'%}" alt="icon" width="18px">
                   </a>
                 </li>
 
@@ -259,40 +261,40 @@
 
     <footer class="footer d-flex flex-column justify-content-center h-25">
 
-      <p class="topage-links mt-3 mb-3 text-center text-white">
+      <p class="topage-links mt-3 text-center text-white">
 
         <a href=""
            class="topage-link ml-2 mr-2"
-           aria-label="go to service page for companies">
-          Companies
+           aria-label="{% trans 'Companies' %}">
+          {% trans 'Companies' %}
         </a>
 
         <span> | </span>
 
         <a href=""
            class="topage-link ml-2 mr-2"
-           aria-label="go to service page for professionals">
-          Professionals
+           aria-label="{% trans 'Professionals' %}">
+          {% trans 'Professionals' %}
         </a>
 
         <span> | </span>
 
         <a href=""
            class="topage-link ml-2 mr-2"
-           aria-label="go to service page for companies">
-          Exam Candidates
+           aria-label="{% trans 'Exam Candidates' %}">
+          {% trans 'Exam Candidates' %}
         </a>
 
       </p>
 
       <hr>
 
-      <p class="topage-links mb-3 text-center text-white">
+      <p class="topage-links text-center text-white">
 
         <a href=""
            class="topage-link ml-2 mr-2"
-           aria-label="go to the about page">
-          About
+           aria-label="{% trans 'About' %}">
+          {% trans 'About' %}
         </a>
 
         <span> | </span>
@@ -307,11 +309,11 @@
 
       <hr>
 
-      <p class="topage-links mb-3 text-center text-white">
+      <p class="topage-links text-center text-white">
 
         <a href=""
            class="topage-link ml-2 mr-2"
-           aria-label="go to the about page">
+           aria-label="go to provacy policy page">
           Privacy Policy
         </a>
 
@@ -319,7 +321,7 @@
 
         <a href=""
            class="topage-link ml-2"
-           aria-label="go to the contact page">
+           aria-label="go to terms and conditions page">
           Terms & Cons
         </a>
 

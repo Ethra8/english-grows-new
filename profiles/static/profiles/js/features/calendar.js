@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const userRole = calendarEl.dataset.role;
     const eventsUrl = calendarEl.dataset.eventsUrl;
 
+
+    /*
+        ============================================================
+        HELPERS
+        ============================================================
+    */
+
     function capitalizeFirstLetter(text) {
 
         if (!text) {
@@ -20,21 +27,19 @@ document.addEventListener('DOMContentLoaded', function () {
             text.slice(1)
         );
     }
+
+
     /*
         ============================================================
         CONTROLLED CALENDAR TRANSLATIONS
         ============================================================
 
-        IMPORTANT:
-
-        The calendar HTML should remain:
+        Calendar HTML should remain protected from Google Translate:
 
             class="my-calendar notranslate"
             translate="no"
 
-        Google / Chrome translates the rest of the page.
-
-        FullCalendar translations are controlled entirely here.
+        FullCalendar translations are controlled here.
     */
 
     const calendarTranslations = {
@@ -296,98 +301,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
         ============================================================
-        DAY TITLE
-        ============================================================
-    */
-
-    function buildDayTitle(date) {
-
-        const language =
-            getCurrentLanguage();
-
-        const day =
-            date.getDate();
-
-        const year =
-            String(
-                date.getFullYear()
-            ).slice(-2);
-
-
-        /*
-            ENGLISH
-
-            25th Aug. '26
-        */
-
-        if (language === 'en') {
-
-            const suffix =
-                getOrdinalSuffix(day);
-
-            const month =
-                date.toLocaleString(
-                    'en-GB',
-                    {
-                        month: 'short'
-                    }
-                );
-
-
-            const fragment =
-                document.createDocumentFragment();
-
-
-            fragment.appendChild(
-                document.createTextNode(
-                    String(day)
-                )
-            );
-
-
-            const sup =
-                document.createElement('sup');
-
-            sup.textContent =
-                suffix;
-
-            fragment.appendChild(
-                sup
-            );
-
-
-            fragment.appendChild(
-                document.createTextNode(
-                    ` ${month}. '${year}`
-                )
-            );
-
-
-            return fragment;
-        }
-
-
-        /*
-            SPANISH / CATALAN / FRENCH
-        */
-
-        const month =
-            date.toLocaleString(
-                getDateLocale(),
-                {
-                    month: 'short'
-                }
-            );
-
-
-        return document.createTextNode(
-            `${day} ${month} '${year}`
-        );
-    }
-
-
-    /*
-        ============================================================
         DAY GRID HEADER
         ============================================================
     */
@@ -490,22 +403,17 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
+
     /*
         ============================================================
         TOOLBAR BUTTON CONTENT
         ============================================================
 
-        replaceChildren() is intentional.
-
-        It removes anything previously inserted by FullCalendar
-        or a browser translator before adding the correct label.
-
-        This prevents:
+        replaceChildren() prevents duplicated labels such as:
 
             TodayToday
             HoyToday
             SemanaWeek
-            etc.
     */
 
     function replaceButtonText(selector, text) {
@@ -569,11 +477,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ============================================================
         TOOLBAR TITLE
         ============================================================
-
-        The title is ALWAYS replaced completely.
-
-        This prevents a Day title remaining attached when changing
-        to Week, Month, Month List or Year.
     */
 
     function updateCalendarTitle(info) {
@@ -587,6 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+
         const language =
             getCurrentLanguage();
 
@@ -596,15 +500,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const viewType =
             info.view.type;
 
-
-        /*
-            Helper:
-            Capitalize month names.
-
-            agosto -> Agosto
-            august -> August
-            août   -> Août
-        */
 
         function getCapitalizedMonth(date) {
 
@@ -624,21 +519,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ============================================================
+            ========================================================
             DAY
 
-            English:
+            EN:
                 25th August
 
-            Spanish:
+            ES:
                 25 Agosto
-
-            Catalan:
-                25 Agost
-
-            French:
-                25 Août
-            ============================================================
+            ========================================================
         */
 
         if (
@@ -654,11 +543,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
 
-            /*
-                ENGLISH:
-                25th August
-            */
-
             if (
                 language === 'en'
             ) {
@@ -671,15 +555,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 titleEl.innerHTML =
                     `${day}<sup>${suffix}</sup> ${month}`;
 
-            }
-
-
-            /*
-                OTHER LANGUAGES:
-                25 Agosto
-            */
-
-            else {
+            } else {
 
                 titleEl.replaceChildren(
                     document.createTextNode(
@@ -694,23 +570,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ============================================================
+            ========================================================
             WEEK
 
-            English:
+            EN:
                 25th - 31st August
 
-            Spanish:
+            ES:
                 25 - 31 Agosto
-
-            If week crosses months:
-
-            English:
-                31st August - 6th September
-
-            Spanish:
-                31 Agosto - 6 Septiembre
-            ============================================================
+            ========================================================
         */
 
         if (
@@ -729,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             /*
-                FullCalendar's end is exclusive.
+                FullCalendar end is exclusive.
             */
 
             end.setDate(
@@ -783,11 +651,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
 
 
-                /*
-                    Same month:
-                    25th - 31st August
-                */
-
                 if (
                     sameMonth &&
                     sameYear
@@ -797,15 +660,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         `${startDay}<sup>${startSuffix}</sup> - ` +
                         `${endDay}<sup>${endSuffix}</sup> ${endMonth}`;
 
-                }
-
-
-                /*
-                    Crosses months:
-                    31st August - 6th September
-                */
-
-                else {
+                } else {
 
                     titleEl.innerHTML =
                         `${startDay}<sup>${startSuffix}</sup> ${startMonth} - ` +
@@ -824,11 +679,6 @@ document.addEventListener('DOMContentLoaded', function () {
             let titleText;
 
 
-            /*
-                Same month:
-                25 - 31 Agosto
-            */
-
             if (
                 sameMonth &&
                 sameYear
@@ -837,15 +687,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 titleText =
                     `${startDay} - ${endDay} ${endMonth}`;
 
-            }
-
-
-            /*
-                Crosses months:
-                31 Agosto - 6 Septiembre
-            */
-
-            else {
+            } else {
 
                 titleText =
                     `${startDay} ${startMonth} - ` +
@@ -865,12 +707,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ============================================================
+            ========================================================
             MONTH
 
             Agosto '26
             August '26
-            ============================================================
+            ========================================================
         */
 
         if (
@@ -900,12 +742,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ============================================================
+            ========================================================
             MONTH LIST
 
-            Agosto 26
-            August 26
-            ============================================================
+            Agosto '26
+            August '26
+            ========================================================
         */
 
         if (
@@ -935,11 +777,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ============================================================
+            ========================================================
             YEAR
-
-            2026
-            ============================================================
+            ========================================================
         */
 
         if (
@@ -955,20 +795,15 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         }
     }
+
+
     /*
         ============================================================
         SYNC CALENDAR UI
         ============================================================
-
-        Called after every FullCalendar view/date change.
     */
 
     function syncCalendarUI(info) {
-
-        /*
-            Two animation frames ensure FullCalendar has finished
-            rebuilding the toolbar before we replace its contents.
-        */
 
         window.requestAnimationFrame(
             function () {
@@ -1013,10 +848,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 click:
                     function () {
-
-                        /*
-                            Go directly to TODAY in day view.
-                        */
 
                         calendar.changeView(
                             'timeGridDay',
@@ -1252,10 +1083,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
 
 
-                        /*
-                            WEEK / MONTH / YEAR
-                        */
-
                         return weekday;
                     },
 
@@ -1302,6 +1129,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             getLabels();
 
 
+                        /*
+                            Specific meeting URL returned by the
+                            Django calendar-events endpoint for
+                            this ClassSession.
+                        */
+
                         const meetingLink =
                             arg.event
                                 .extendedProps
@@ -1319,7 +1152,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                         /*
+                            =================================================
                             MONTH LIST
+                            =================================================
                         */
 
                         if (
@@ -1362,91 +1197,56 @@ document.addEventListener('DOMContentLoaded', function () {
                                 COMPANY ADMIN
                             */
 
-                            if (
-                                userRole ===
-                                'company_admin'
-                            ) {
+                            if (userRole === 'company_admin') {
 
-                                if (
-                                    groupDetailsUrl
-                                ) {
+                                if (groupDetailsUrl) {
 
                                     const detailsBtn =
                                         document.createElement(
                                             'a'
                                         );
 
+                                    detailsBtn.href = groupDetailsUrl;
 
-                                    detailsBtn.href =
-                                        groupDetailsUrl;
+                                    detailsBtn.target = '_self';
 
+                                    detailsBtn.classList.add('calendar-join-btn');
 
-                                    detailsBtn.target =
-                                        '_self';
+                                    detailsBtn.textContent = labels.groupDetails;
 
-
-                                    detailsBtn.classList.add(
-                                        'calendar-join-btn'
-                                    );
+                                    detailsBtn.addEventListener('click',function (event) {event.stopPropagation();});
 
 
-                                    detailsBtn.textContent =
-                                        labels.groupDetails;
-
-
-                                    detailsBtn.addEventListener(
-                                        'click',
-                                        function (event) {
-
-                                            event.stopPropagation();
-                                        }
-                                    );
-
-
-                                    row.appendChild(
-                                        detailsBtn
-                                    );
+                                    row.appendChild(detailsBtn);
                                 }
 
                             }
 
-
                             /*
                                 TEACHER / STUDENT / EMPLOYEE
+
+                                If this ClassSession has a meeting URL,
+                                show a Join button in Month List.
                             */
 
                             else {
 
-                                if (
-                                    meetingLink
-                                ) {
+                                if (meetingLink) {
 
                                     const joinBtn =
                                         document.createElement(
                                             'a'
                                         );
 
+                                    joinBtn.href = meetingLink;
 
-                                    joinBtn.href =
-                                        meetingLink;
+                                    joinBtn.target = '_blank';
 
+                                    joinBtn.rel = 'noopener noreferrer';
 
-                                    joinBtn.target =
-                                        '_blank';
+                                    joinBtn.classList.add('calendar-join-btn');
 
-
-                                    joinBtn.rel =
-                                        'noopener noreferrer';
-
-
-                                    joinBtn.classList.add(
-                                        'calendar-join-btn'
-                                    );
-
-
-                                    joinBtn.textContent =
-                                        labels.joinClass;
-
+                                    joinBtn.textContent = labels.joinClass;
 
                                     joinBtn.addEventListener(
                                         'click',
@@ -1456,140 +1256,76 @@ document.addEventListener('DOMContentLoaded', function () {
                                         }
                                     );
 
-
-                                    row.appendChild(
-                                        joinBtn
-                                    );
+                                    row.appendChild(joinBtn);
                                 }
                             }
 
 
                             return {
-
                                 domNodes:
                                     [row]
                             };
                         }
 
-
                         /*
+                            =================================================
                             WEEK / DAY GRID
+                            =================================================
                         */
 
-                        if (
-                            arg.view.type ===
-                                'timeGridWeek' ||
+                        if (arg.view.type === 'timeGridWeek' || arg.view.type === 'timeGridDay') {
 
-                            arg.view.type ===
-                                'timeGridDay'
-                        ) {
+                            const wrapper = document.createElement('div');
 
-                            const wrapper =
-                                document.createElement(
-                                    'div'
-                                );
+                            wrapper.classList.add('calendar-grid-event-content');
 
+                            const timeEl = document.createElement('div');
 
-                            wrapper.classList.add(
-                                'calendar-grid-event-content'
-                            );
+                            timeEl.classList.add('calendar-grid-event-time');
 
+                            timeEl.textContent = arg.timeText;
 
-                            const timeEl =
-                                document.createElement(
-                                    'div'
-                                );
+                            const titleEl = document.createElement('div');
 
+                            titleEl.classList.add('calendar-grid-event-title');
 
-                            timeEl.classList.add(
-                                'calendar-grid-event-time'
-                            );
+                            titleEl.textContent = title;
 
+                            wrapper.appendChild(timeEl);
 
-                            timeEl.textContent =
-                                arg.timeText;
-
-
-                            const titleEl =
-                                document.createElement(
-                                    'div'
-                                );
-
-
-                            titleEl.classList.add(
-                                'calendar-grid-event-title'
-                            );
-
-
-                            titleEl.textContent =
-                                title;
-
-
-                            wrapper.appendChild(
-                                timeEl
-                            );
-
-
-                            wrapper.appendChild(
-                                titleEl
-                            );
-
+                            wrapper.appendChild(titleEl);
 
                             return {
-
                                 domNodes:
                                     [wrapper]
                             };
                         }
-
 
                         /*
+                            =================================================
                             MONTH GRID
+                            =================================================
                         */
 
-                        if (
-                            arg.view.type ===
-                            'dayGridMonth'
-                        ) {
+                        if (arg.view.type === 'dayGridMonth') {
 
-                            const wrapper =
-                                document.createElement(
-                                    'div'
-                                );
+                            const wrapper = document.createElement('div');
 
+                            wrapper.classList.add('calendar-month-event-content');
 
-                            wrapper.classList.add(
-                                'calendar-month-event-content'
-                            );
+                            const textEl = document.createElement('span');
 
+                            textEl.classList.add('calendar-month-event-title');
 
-                            const textEl =
-                                document.createElement(
-                                    'span'
-                                );
+                            textEl.textContent = `${arg.timeText} ${title}`;
 
-
-                            textEl.classList.add(
-                                'calendar-month-event-title'
-                            );
-
-
-                            textEl.textContent =
-                                `${arg.timeText} ${title}`;
-
-
-                            wrapper.appendChild(
-                                textEl
-                            );
-
+                            wrapper.appendChild(textEl);
 
                             return {
-
                                 domNodes:
                                     [wrapper]
                             };
                         }
-
 
                         /*
                             FALLBACK
@@ -1641,11 +1377,25 @@ document.addEventListener('DOMContentLoaded', function () {
                             info.event.end;
 
 
+                        /*
+                            Meeting link for the exact ClassSession
+                            that the user clicked.
+                        */
+
                         const meetingLink =
                             info.event
                                 .extendedProps
                                 .meeting_link;
 
+                        console.log(
+                            'EVENT PROPS:',
+                            info.event.extendedProps
+                        );
+
+                        console.log(
+                            'MEETING LINK:',
+                            meetingLink
+                        );
 
                         const groupDetailsUrl =
                             info.event
@@ -1664,6 +1414,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                 .extendedProps
                                 .class_number;
 
+
+                        /*
+                            MODAL ELEMENTS
+                        */
 
                         const modalTitle =
                             document.getElementById(
@@ -1706,12 +1460,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
 
 
+                        /*
+                            TITLE
+                        */
+
                         modalTitle.textContent =
                             title;
 
 
                         /*
-                            Localized date + time.
+                            DATE + TIME
                         */
 
                         const startText =
@@ -1753,10 +1511,18 @@ document.addEventListener('DOMContentLoaded', function () {
                                 : startText;
 
 
+                        /*
+                            COURSE
+                        */
+
                         modalCourse.textContent =
                             course ||
                             labels.courseUnavailable;
 
+
+                        /*
+                            CLASS NUMBER
+                        */
 
                         modalClassNumber.textContent =
                             classNumber
@@ -1767,7 +1533,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                         /*
+                            =================================================
                             COMPANY ADMIN
+
+                            Opens group details.
+                            =================================================
                         */
 
                         if (
@@ -1783,8 +1553,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                 '_self';
 
 
-                            modalJoinBtn.rel =
-                                '';
+                            modalJoinBtn.removeAttribute(
+                                'rel'
+                            );
 
 
                             if (
@@ -1801,8 +1572,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             } else {
 
-                                modalJoinBtn.href =
-                                    '#';
+                                modalJoinBtn.removeAttribute(
+                                    'href'
+                                );
 
 
                                 modalJoinBtn.classList.add(
@@ -1814,7 +1586,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                         /*
+                            =================================================
                             TEACHER / STUDENT / EMPLOYEE
+
+                            Button href receives the meeting link
+                            of the clicked ClassSession.
+                            =================================================
                         */
 
                         else {
@@ -1831,9 +1608,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 'noopener noreferrer';
 
 
-                            if (
-                                meetingLink
-                            ) {
+                            if (meetingLink) {
 
                                 modalJoinBtn.href =
                                     meetingLink;
@@ -1845,16 +1620,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             } else {
 
-                                modalJoinBtn.href =
-                                    '#';
-
+                                modalJoinBtn.removeAttribute(
+                                    'href'
+                                );
 
                                 modalJoinBtn.classList.add(
                                     'd-none'
                                 );
                             }
                         }
-
 
                         $('#classSessionModal')
                             .modal('show');
@@ -1889,11 +1663,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             );
 
 
-                            /*
-                                Toolbar has been rebuilt.
-                                Reapply exactly one label per button.
-                            */
-
                             window.requestAnimationFrame(
                                 function () {
 
@@ -1914,19 +1683,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function applyCalendarLanguage() {
 
-        /*
-            FullCalendar locale.
-        */
-
         calendar.setOption(
             'locale',
             getFullCalendarLocale()
         );
 
-
-        /*
-            Standard view buttons.
-        */
 
         calendar.setOption(
             'buttonText',
@@ -1935,18 +1696,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            Redraw event buttons such as Join class.
+            Re-render event content so translated Join Class /
+            Group Details labels are refreshed.
         */
 
         calendar.rerenderEvents();
 
-
-        /*
-            Redraw the CURRENT view.
-
-            This makes dayHeaderContent execute again in the
-            newly selected language.
-        */
 
         const currentViewType =
             calendar.view.type;
@@ -1961,13 +1716,6 @@ document.addEventListener('DOMContentLoaded', function () {
             currentDate
         );
 
-
-        /*
-            Reassert the toolbar labels after FullCalendar finishes
-            rebuilding it.
-
-            replaceChildren() guarantees no duplicated words.
-        */
 
         window.requestAnimationFrame(
             function () {
@@ -1996,16 +1744,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ============================================================
         GOOGLE / CHROME LANGUAGE WATCH
         ============================================================
-
-        Detects:
-
-            <html lang="en">
-
-        changing to:
-
-            <html lang="es">
-            <html lang="ca">
-            <html lang="fr">
     */
 
     let lastLanguage =

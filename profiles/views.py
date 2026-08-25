@@ -196,15 +196,27 @@ def my_course(request):
     )
 
     # ---------------------------------------------------------
-    # Get ALL enrollments that are active AND whose course
-    # is also currently active.
+    # ALL ENROLLMENTS
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Within each status:
+    # - course name A-Z
+    #
+    # Completed courses additionally use end_date as a
+    # tie-breaker, newest first.
     # ---------------------------------------------------------
-    active_enrollments = (
+    enrollments = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active",
-            course__status="active",
         )
         .select_related(
             "course",
@@ -212,34 +224,66 @@ def my_course(request):
             "course__company",
             "course__teacher",
         )
-        .order_by("course__name")
+        .annotate(
+            status_order=Case(
+                When(course__status="active", then=Value(1)),
+                When(course__status="confirmed", then=Value(2)),
+                When(course__status="paused", then=Value(3)),
+                When(course__status="completed", then=Value(4)),
+                When(course__status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
     )
 
     # ---------------------------------------------------------
-    # Get the course selected in the <select>.
+    # GET SELECTED COURSE FROM URL
     #
-    # The form sends:
-    #     ?course=COURSE_ID
+    # Example:
+    # /profiles/student/my-course/?course=4
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
     # ---------------------------------------------------------
-    # Determine which enrollment/course should be displayed.
+    # DETERMINE WHICH ENROLLMENT / COURSE TO DISPLAY
     # ---------------------------------------------------------
     if selected_course_id:
-        active_enrollment = get_object_or_404(
-            active_enrollments,
+        enrollment = get_object_or_404(
+            enrollments,
             course_id=selected_course_id,
         )
     else:
-        # No selection in URL yet:
-        # display the first available active enrollment.
-        active_enrollment = active_enrollments.first()
+        enrollment = enrollments.first()
 
-    enrollment_status = None
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
+    course = (
+        enrollment.course
+        if enrollment
+        else None
+    )
 
-    if active_enrollment:
-        enrollment_status = active_enrollment.status
+    enrollment_status = (
+        enrollment.status
+        if enrollment
+        else None
+    )
 
     # ---------------------------------------------------------
     # TIMETABLE
@@ -247,24 +291,32 @@ def my_course(request):
     # ---------------------------------------------------------
     timetable_slots = None
 
-    if active_enrollment:
+    if enrollment:
         timetable_slots = (
-            active_enrollment.course.timetable_slots
+            course.timetable_slots
             .all()
-            .order_by("day_of_week", "start_time")
+            .order_by(
+                "day_of_week",
+                "start_time",
+            )
         )
 
     # ---------------------------------------------------------
     # NEXT CLASS
-    # Must also come from the SELECTED course.
+    #
+    # Must come from the SELECTED course.
+    #
+    # For completed/cancelled courses this will naturally
+    # return None because there should be no future scheduled
+    # sessions.
     # ---------------------------------------------------------
     next_class = None
 
-    if active_enrollment:
+    if enrollment:
         next_class = (
             ClassSession.objects
             .filter(
-                course=active_enrollment.course,
+                course=course,
                 start_time__gte=timezone.now(),
                 status__in=[
                     ClassSession.STATUS_SCHEDULED,
@@ -275,14 +327,18 @@ def my_course(request):
             .first()
         )
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
 
-        # ALL courses for the dropdown
-        "active_enrollments": active_enrollments,
+        # ALL enrollments -> course selector
+        "enrollments": enrollments,
 
-        # ONE selected course/enrollment for the page content
-        "active_enrollment": active_enrollment,
+        # ONE selected enrollment/course -> page content
+        "enrollment": enrollment,
+        "course": course,
 
         "enrollment_status": enrollment_status,
         "timetable_slots": timetable_slots,
@@ -2037,36 +2093,91 @@ def teacher_courses(request):
 
 @login_required
 def teacher_course_details(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+
+    # ---------------------------------------------------------
+    # COURSE
+    #
+    # Course remains accessible regardless of status,
+    # provided it belongs to this teacher.
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
-        teacher=request.user
+        teacher=request.user,
     )
 
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Keep historical enrollment records visible regardless
+    # of enrollment status.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Then alphabetically by student name.
+    # ---------------------------------------------------------
     enrollments = (
         course.enrollments
-        .select_related("student", "student__profile")
-        .filter(status="active")
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by(
+            "status_order",
+            "student__first_name",
+            "student__last_name",
+            "student__username",
+        )
     )
 
+
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    # ---------------------------------------------------------
     sessions = (
         course.class_sessions
         .all()
         .order_by("start_time")
     )
 
-    now = timezone.now()
 
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    # ---------------------------------------------------------
     total_classes = course.total_sessions
     completed_classes = course.completed_sessions
     remaining_classes = course.remaining_sessions
     completion_percentage = course.completion_percentage
 
+
+    # ---------------------------------------------------------
+    # AVERAGE COURSE ATTENDANCE
+    # ---------------------------------------------------------
     attendance_percentages = []
 
     for enrollment in enrollments:
@@ -2074,14 +2185,20 @@ def teacher_course_details(request, course_id):
 
         if total_completed > 0:
             attendance_percentages.append(
-                (enrollment.classes_attended / total_completed) * 100
+                (
+                    enrollment.classes_attended
+                    / total_completed
+                ) * 100
             )
 
-    average_attendance = 0
     if attendance_percentages:
         average_attendance = round(
-            sum(attendance_percentages) / len(attendance_percentages)
+            sum(attendance_percentages)
+            / len(attendance_percentages)
         )
+    else:
+        average_attendance = 0
+
 
     # ---------------------------------------------------------
     # COURSE TIMETABLE
@@ -2091,7 +2208,7 @@ def teacher_course_details(request, course_id):
     for slot in course.timetable_slots.all():
         key = (
             slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M")
+            slot.end_time.strftime("%Hh%M"),
         )
 
         timetable_groups[key].append(
@@ -2107,15 +2224,24 @@ def teacher_course_details(request, course_id):
             "end": end,
         })
 
-    # create list of all ss emails to send groupal email
+
+    # ---------------------------------------------------------
+    # GROUP EMAIL LIST
+    # ---------------------------------------------------------
     student_emails = [
         enrollment.student.email
         for enrollment in enrollments
         if enrollment.student.email
     ]
 
-    bcc_student_emails = ",".join(student_emails)
+    bcc_student_emails = ",".join(
+        student_emails
+    )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "course": course,
@@ -2127,6 +2253,7 @@ def teacher_course_details(request, course_id):
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "completion_percentage": completion_percentage,
+
         "average_attendance": average_attendance,
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
@@ -2135,7 +2262,7 @@ def teacher_course_details(request, course_id):
     return render(
         request,
         "profiles/teacher/teacher_course_details.html",
-        context
+        context,
     )
 
 
@@ -4754,45 +4881,75 @@ def company_admin_course_details(request, course_id):
     if not company:
         return redirect("home")
 
+
+    # ---------------------------------------------------------
+    # COURSE
+    #
+    # Course remains accessible regardless of status:
+    # active, confirmed, paused, completed or cancelled.
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
         company=company,
     )
 
-    # Include all relevant enrollments, not just active ones.
-    # This keeps historical course data visible after the course
-    # has been paused or completed.
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Keep all enrollment records available so historical
+    # course/student information remains accessible regardless
+    # of enrollment status.
+    # ---------------------------------------------------------
     enrollments = (
         course.enrollments
         .select_related(
             "student",
             "student__profile",
         )
-        .filter(
-            status__in=[
-                "active",
-                "completed",
-                "paused",
-            ]
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by(
+            "status_order",
+            "student__first_name",
+            "student__last_name",
+            "student__username",
         )
     )
 
+
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    # ---------------------------------------------------------
     sessions = (
         course.class_sessions
         .all()
         .order_by("start_time")
     )
 
+
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    # ---------------------------------------------------------
     total_classes = course.total_sessions
     completed_classes = course.completed_sessions
     remaining_classes = course.remaining_sessions
     completion_percentage = course.completion_percentage
 
-    # ---------------------------------------------
-    # AVERAGE COURSE ATTENDANCE
-    # ---------------------------------------------
 
+    # ---------------------------------------------------------
+    # AVERAGE COURSE ATTENDANCE
+    # ---------------------------------------------------------
     attendance_percentages = []
 
     for enrollment in enrollments:
@@ -4816,10 +4973,10 @@ def company_admin_course_details(request, course_id):
     else:
         average_attendance = 0
 
-    # ---------------------------------------------
-    # TIMETABLE DISPLAY
-    # ---------------------------------------------
 
+    # ---------------------------------------------------------
+    # TIMETABLE DISPLAY
+    # ---------------------------------------------------------
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
@@ -4841,29 +4998,39 @@ def company_admin_course_details(request, course_id):
             "end": end,
         })
 
-    # ---------------------------------------------
-    # EMAIL LIST
-    # ---------------------------------------------
 
+    # ---------------------------------------------------------
+    # EMAIL LIST
+    # ---------------------------------------------------------
     student_emails = [
         enrollment.student.email
         for enrollment in enrollments
         if enrollment.student.email
     ]
 
-    bcc_student_emails = ",".join(student_emails)
+    bcc_student_emails = ",".join(
+        student_emails
+    )
 
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
         "course": course,
+
         "enrollments": enrollments,
         "sessions": sessions,
+
         "total_classes": total_classes,
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "completion_percentage": completion_percentage,
+
         "average_attendance": average_attendance,
+
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
     }

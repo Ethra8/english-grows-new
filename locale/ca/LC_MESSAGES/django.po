@@ -10,6 +10,11 @@ msgstr ""
 msgid "English Grows"
 msgstr "English Grows"
 
+msgid "Profile navigation"
+msgstr "Barra de navegació del perfil"
+
+msgid "Profile photo"
+msgstr "Foto de Perfil"
 
 msgid "Learner"
 msgstr "Estudiant"

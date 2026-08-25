@@ -1,7 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
-{% load course_extras %}
+{% load time_extras %}
 
 
 {% block extra_title %}| My Groups {% endblock %}
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/my_course_header.css' %}">
 {% endblock %}
 
 
@@ -46,7 +47,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
+                <span class="current-level-label">Level</span>
                 <span class="current-level-value">
                     {{ course.course_level|default:"Level Pending" }}
                 </span>
@@ -67,9 +68,75 @@
             </span>
 
         </div>
+
+        <hr>    
+
+        {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form">
+
+            <label for="course-select" class="course-selector-label">
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                <span>Select course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()"
+                >
+
+                    {% for item in enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if enrollment and item.id == enrollment.id %}
+                                selected
+                            {% endif %}
+                        >
+                           · {{ item.course.name }} - {{ item.course.get_status_display }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+
+            </div>
+
+        </form>
+        {% endif %}
+        {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form smaller-devs">
+
+            <label for="course-select" class="course-selector-label">
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                <span>Select Course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()">
+                    {% for item in enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if course and item.course.id == course.id %}selected{% endif %}>
+                            · {{ item.course.name }} - {{ item.course.get_status_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+            </div>
+
+        </form>
+        {% endif %}
         
     </header> 
-    <hr>    
 
 
     <div class="course-header-meta-row">
@@ -170,7 +237,7 @@
                                     <i class="fa-regular fa-hourglass mr-2"></i>
                                     Class Duration:
                                 </span>
-                                <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
+                                <span>{{ course.class_duration_display|hours_duration|default:"Not assigned" }}</span>
                             </div>
 
                             {% if course.has_short_final_class %}
@@ -179,7 +246,7 @@
                                         <i class="fa-solid fa-triangle-exclamation mr-2"></i>
                                         Last Class Duration:
                                     </span>
-                                    <span>{{ course.final_class_duration_display }}</span>
+                                    <span>{{ course.final_class_duration_display|hours_duration }}</span>
                                 </div>
                             {% endif %}
                         </div>                

@@ -8,3 +8,6 @@ msgstr ""
 
 msgid "English Grows"
 msgstr "English Grows"
+
+msgid "Profile photo"
+msgstr "Photo de profil"

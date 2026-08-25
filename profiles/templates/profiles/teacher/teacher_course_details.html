@@ -1,7 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load date_extras %}
-{% load course_extras %}
+{% load time_extras %}
 
 
 {% block extra_title %}| My Groups {% endblock %}
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/my_course_header.css' %}">
 {% endblock %}
 
 
@@ -48,10 +49,87 @@
             </h2>
         </div>
         
-        <span class="status-badge {{ course.status }} mb-3">
-        {{ course.get_status_display }}</span>
+        <span class="status-badge status-course">
+            {% if course.status == 'confirmed' %}
+                <i class="fa-regular fa-circle-check mr-2"></i>
+            {% elif course.status == 'active' %}
+                <i class="fa-regular fa-circle-play mr-2"></i>
+            {% elif course.status == 'completed' %}
+                <i class="fa-solid fa-hourglass-end mr-2"></i>
+            {% elif course.status == 'paused' %}
+                <i class="fa-regular fa-circle-pause mr-2"></i>
+            {% elif course.status == 'cancelled' %}
+                <i class="fa-regular fa-circle-xmark mr-2"></i>
+            {% endif %}
+                {{ course.get_status_display|default:"In progress" }}
+        </span>
         
         <hr>
+
+        {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form">
+
+            <label for="course-select" class="course-selector-label">
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                <span>Select course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()"
+                >
+
+                    {% for item in enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if enrollment and item.id == enrollment.id %}
+                                selected
+                            {% endif %}
+                        >
+                           · {{ item.course.name }} - {{ item.course.get_status_display }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+
+            </div>
+
+        </form>
+        {% endif %}
+        {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form smaller-devs">
+
+            <label for="course-select" class="course-selector-label">
+                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                <span>Select Course</span>
+            </label>
+
+            <div class="course-select-wrapper">
+                <select
+                    id="course-select"
+                    name="course"
+                    class="course-select"
+                    onchange="this.form.submit()">
+                    {% for item in enrollments %}
+                        <option
+                            value="{{ item.course.id }}"
+                            {% if course and item.course.id == course.id %}selected{% endif %}>
+                            · {{ item.course.name }} - {{ item.course.get_status_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+            </div>
+
+        </form>
+        {% endif %}
 
     </header>
 

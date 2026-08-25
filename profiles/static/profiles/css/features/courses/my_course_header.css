@@ -43,7 +43,9 @@
     color: var(--color-teal);
 }
 
-
+.my-course .course-selector-form {
+    background: rgba(var(--color-teal-rgb), 0.75);
+}
 
 
 
