@@ -1,0 +1,5 @@
+msgid "Learner"
+msgstr "Estudiant"
+
+msgid "Pending"
+msgstr "Pendent"

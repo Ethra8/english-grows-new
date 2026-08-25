@@ -1,0 +1,32 @@
+msgid "Learner"
+msgstr "Estudiante"
+
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "A1 - Beginner"
+msgstr "A1 - Principiante"
+
+msgid "A2 - Elementary"
+msgstr "A2 - Elemental"
+
+msgid "B1.1 - Pre-Intermediate"
+msgstr "B1.1 - Preintermedio"
+
+msgid "B1.2 - Lower Intermediate"
+msgstr "B1.2 - Intermedio inicial"
+
+msgid "B2.1 - Intermediate"
+msgstr "B2.1 - Intermedio"
+
+msgid "B2.2 - Higher Intermediate"
+msgstr "B2.2 - Intermedio alto"
+
+msgid "C1.1 - Lower Advanced"
+msgstr "C1.1 - Avanzado inicial"
+
+msgid "C1.2 - Higher Advanced"
+msgstr "C1.2 - Avanzado alto"
+
+msgid "C2 Proficiency"
+msgstr "C2 - Maestría"

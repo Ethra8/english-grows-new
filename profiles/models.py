@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 
+from django.utils.translation import gettext_lazy as _
+
 from decimal import Decimal, ROUND_HALF_UP
 
 from courses.models import Course
@@ -81,15 +83,17 @@ class UserProfile(models.Model):
     """
 
     ROLE_TEACHER = "teacher"
-    ROLE_INDIVIDUAL = "individual_learner"
+    ROLE_INDIVIDUAL = "learner"
     ROLE_COMPANY_ADMIN = "company_admin"
     ROLE_EMPLOYEE = "employee"
 
+    # from django.utils.translation,
+    # _ allows translation
     ROLE_CHOICES = [
-        (ROLE_TEACHER, "Teacher"),
-        (ROLE_INDIVIDUAL, "Individual Learner"),
-        (ROLE_COMPANY_ADMIN, "Company Admin"),
-        (ROLE_EMPLOYEE, "Employee"),
+        (ROLE_TEACHER, _("Teacher")),
+        (ROLE_INDIVIDUAL, _("Learner")),
+        (ROLE_COMPANY_ADMIN, _("Company Admin")),
+        (ROLE_EMPLOYEE, _("Employee")),
     ]
 
     LEVEL_UNKNOWN = "Pending"
@@ -104,9 +108,9 @@ class UserProfile(models.Model):
     LEVEL_C2 = "C2"
 
     LEVEL_CHOICES = [
-        (LEVEL_UNKNOWN, "Pending"),
-        (LEVEL_A1, "A1 Beginner"),
-        (LEVEL_A2, "A2 Elementary"),
+        (LEVEL_UNKNOWN, _("Pending")),
+        (LEVEL_A1, "A1 - Beginner"),
+        (LEVEL_A2, "A2 - Elementary"),
         (LEVEL_B1_1, "B1.1 - Pre-Intermediate"),
         (LEVEL_B1_2, "B1.2 - Lower Intermediate"),
         (LEVEL_B2_1, "B2.1 - Intermediate"),

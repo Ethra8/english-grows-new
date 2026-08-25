@@ -17,6 +17,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -210,6 +212,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Translations
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("es", _("Spanish")),
+    ("ca", _("Catalan")),
+    ("fr", _("French")),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
