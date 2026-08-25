@@ -1,12 +1,13 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
 <link rel="stylesheet" href="{% static 'profiles/css/features/calendar.css' %}">
 {% endblock %}
 
-{% block extra_title %}| Calendar{% endblock %}
+{% block extra_title %}| {% trans "Calendar" %}{% endblock %}
 
 
 {% block profile_content %}
@@ -16,53 +17,103 @@
 
 <div id="my_calendar_page">
     <div class="container mb-4">
-        <h1>Class Calendar</h1>
+
+        <h1>{% trans "Class Calendar" %}</h1>
+
         <hr>
-        <div id="calendar" 
-            class="my-calendar" 
+
+        <div
+            id="calendar"
+            class="my-calendar notranslate"
+            data-django-language="{{ LANGUAGE_CODE }}"
+            translate="no"
             data-events-url="{% url 'profiles:company_admin_calendar_events' %}"
-            data-role="company_admin">
+            data-role="company_admin"
+
+            data-today-label="{% trans 'Today' %}"
+            data-week-label="{% trans 'Week' %}"
+            data-month-label="{% trans 'Month' %}"
+            data-month-list-label="{% trans 'Month List' %}"
+            data-year-label="{% trans 'Year' %}"
+
+            data-join-class-label="{% trans 'Join class' %}"
+            data-group-details-label="{% trans 'Group details' %}"
+            data-lesson-label="{% trans 'Lesson' %}"
+            data-course-unavailable-label="{% trans 'Course information unavailable' %}">
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="classSessionModal" tabindex="-1" role="dialog" aria-labelledby="classSessionModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+
+<div
+    class="modal fade"
+    id="classSessionModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="classSessionModalTitle"
+    aria-hidden="true">
+
+    <div
+        class="modal-dialog modal-dialog-centered"
+        role="document">
+
         <div class="modal-content calendar-session-modal">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="classSessionModalTitle"></h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <h5
+                    class="modal-title"
+                    id="classSessionModalTitle">
+                </h5>
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="{% trans 'Close' %}">
+
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+
                 </button>
+
             </div>
 
+
             <div class="modal-body">
+
                 <p class="mb-2">
-                    <strong>When:</strong>
+                    <strong>{% trans "When" %}:</strong>
                     <span id="classSessionModalTime"></span>
                 </p>
 
                 <p class="mb-2">
-                    <strong>Course:</strong>
+                    <strong>{% trans "Course" %}:</strong>
                     <span id="classSessionModalCourse"></span>
                 </p>
 
                 <p class="mb-0">
-                    <strong>Class:</strong>
+                    <strong>{% trans "Class" %}:</strong>
                     <span id="classSessionModalClassNumber"></span>
                 </p>
+
             </div>
 
+
             <div class="modal-footer">
-                <a href="#"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   id="classSessionModalJoinBtn"
-                   class="btn calendar-modal-join-btn">
-                    Join class
+
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="classSessionModalJoinBtn"
+                    class="btn calendar-modal-join-btn">
+
+                    {% trans "Join class" %}
+
                 </a>
+
             </div>
 
         </div>
@@ -73,8 +124,11 @@
 
 
 {% block postloadjs %}
-    {{ block.super }}
+
+{{ block.super }}
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js//components/calendar.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'profiles/js/features/calendar.js' %}"></script>
+
 {% endblock %}
-    

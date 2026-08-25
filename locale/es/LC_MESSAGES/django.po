@@ -6,6 +6,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
+msgid "English Grows"
+msgstr "English Grows"
+
+
 msgid "Dashboard"
 msgstr "Perfil"
 
@@ -19,12 +24,17 @@ msgid "Company Admin"
 msgstr "Admin. empresa"
 
 
+msgid "Class Calendar"
+msgstr "Calendario"
+
+msgid "My Performance"
+msgstr "My Progreso"
 
 msgid "Join class"
 msgstr "Unirse"
 
-msgid "All day"
-msgstr "Diario"
+msgid "All-day"
+msgstr "Festivo"
 
 msgid "Today"
 msgstr "Hoy"

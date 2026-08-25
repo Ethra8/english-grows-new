@@ -1,5 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
@@ -20,11 +22,27 @@
         <hr>
         <div
             id="calendar"
+            class="my-calendar notranslate"
+            data-django-language="{{ LANGUAGE_CODE }}"
+            translate="no"
             data-events-url="{% url 'profiles:teacher_calendar_events' %}"
-            data-role="teacher">
-        </div>    
+            data-role="teacher"
+
+            data-today-label="{% trans 'Today' %}"
+            data-week-label="{% trans 'Week' %}"
+            data-month-label="{% trans 'Month' %}"
+            data-month-list-label="{% trans 'Month List' %}"
+            data-year-label="{% trans 'Year' %}"
+
+            data-join-class-label="{% trans 'Join class' %}"
+            data-group-details-label="{% trans 'Group details' %}"
+            data-lesson-label="{% trans 'Lesson' %}"
+            data-course-unavailable-label="{% trans 'Course information unavailable' %}">
+        </div>
     </div>
 </div>
+
+
 
 <div class="modal fade" id="classSessionModal" tabindex="-1" role="dialog" aria-labelledby="classSessionModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -75,6 +93,6 @@
 {% block postloadjs %}
     {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js//components/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/calendar.js' %}"></script>
 {% endblock %}
     
