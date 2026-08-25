@@ -1,5 +1,51 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: English Grows\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Perfil"
+
+msgid "Logout"
+msgstr "Salir"
+
 msgid "Learner"
 msgstr "Estudiante"
+
+msgid "Company Admin"
+msgstr "Admin. empresa"
+
+
+
+msgid "Join class"
+msgstr "Unirse"
+
+msgid "All day"
+msgstr "Diario"
+
+msgid "Today"
+msgstr "Hoy"
+
+msgid "Week"
+msgstr "Semana"
+
+msgid "Month"
+msgstr "Mes"
+
+msgid "Month List"
+msgstr "Lista Mensual"
+
+msgid "Year"
+msgstr "Año"
+
+msgid "Lesson"
+msgstr "Clase"
+
+
+
 
 msgid "Pending"
 msgstr "Pendiente"

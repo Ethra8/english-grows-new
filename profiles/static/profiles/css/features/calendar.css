@@ -2,6 +2,8 @@
    MY CLASS CALENDAR PAGE
 ========================================================= */
 
+
+
 #my_calendar_page {
     padding: 70px 3%;
     width: stretch;
@@ -826,4 +828,27 @@
     .fc .fc-timegrid-axis-cushion {
         max-width: 80px;
     }
+}
+
+
+/* override the space before sup (th,nd,rd) */
+.fc-list-day sup {
+    margin: 0;
+    padding: 0;
+}
+
+.fc-list-day-text sup,
+.fc-list-day-side-text sup {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.calendar-list-date-label {
+    display: inline;
+}
+
+.calendar-list-date-label sup {
+    display: inline;
+    margin: 0;
+    padding: 0;
 }

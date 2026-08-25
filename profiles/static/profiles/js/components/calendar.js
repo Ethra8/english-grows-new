@@ -1,6 +1,5 @@
-
 document.addEventListener('DOMContentLoaded', function () {
-    
+
     const calendarEl = document.getElementById('calendar');
 
     if (!calendarEl) {
@@ -9,6 +8,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const userRole = calendarEl.dataset.role;
     const eventsUrl = calendarEl.dataset.eventsUrl;
+
+    /*
+        Get current site language from:
+        <html lang="en">
+        <html lang="es">
+        <html lang="ca">
+        <html lang="fr">
+
+        Also supports values such as:
+        en-gb, es-es, fr-fr, etc.
+    */
+    function getCurrentLanguage() {
+        const locale = document.documentElement.lang || 'en';
+
+        return locale.split('-')[0].toLowerCase();
+    }
+
+    /*
+        Custom weekday abbreviations.
+
+        We define these ourselves instead of relying on
+        Intl / FullCalendar "short" weekday formatting,
+        because translated abbreviations do not necessarily
+        have the same length in every language.
+    */
+    const dayNames = {
+        en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        es: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        ca: ['Diu', 'Dil', 'Dim', 'Dic', 'Dij', 'Div', 'Dis'],
+        fr: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa']
+    };
+
+    function getShortWeekday(date) {
+        const language = getCurrentLanguage();
+
+        const languageDayNames =
+            dayNames[language] || dayNames.en;
+
+        return languageDayNames[date.getDay()];
+    }
 
     function isMobileCalendar() {
         return window.innerWidth <= 768;
@@ -52,18 +91,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function formatBigDayTitle(date) {
         const day = date.getDate();
         const suffix = getOrdinalSuffix(day);
+
         const month = date.toLocaleString('en-GB', {
             month: 'short'
         });
+
         const year = String(date.getFullYear()).slice(-2);
 
         return `${day}<sup>${suffix}</sup> ${month}. '${year}`;
     }
 
     function formatDayGridHeader(date) {
-        const weekday = date.toLocaleString('en-GB', {
-            weekday: 'short'
-        });
+        const weekday = getShortWeekday(date);
 
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -73,7 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
+
         initialView: 'timeGridWeek',
+
         locale: 'en-gb',
 
         customButtons: {
@@ -94,16 +135,19 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         headerToolbar: getHeaderToolbar(),
+
         footerToolbar: false,
 
         events: eventsUrl,
 
         firstDay: 1,
+
         height: 'auto',
 
         weekends: false,
 
         slotMinTime: '08:00:00',
+
         slotMaxTime: '21:00:00',
 
         eventTimeFormat: {
@@ -118,105 +162,223 @@ document.addEventListener('DOMContentLoaded', function () {
             - Other views: FullCalendar default title
         */
         datesSet: function (info) {
+
             if (info.view.type !== 'timeGridDay') {
                 return;
             }
 
             /*
-                Wait until FullCalendar has finished writing its own title,
-                then replace the complete contents of the title element.
+                Wait until FullCalendar has finished writing
+                its own title, then replace the complete
+                contents of the title element.
             */
             window.requestAnimationFrame(function () {
-                const titleEl = calendarEl.querySelector('.fc-toolbar-title');
+
+                const titleEl =
+                    calendarEl.querySelector('.fc-toolbar-title');
 
                 if (!titleEl) {
                     return;
                 }
 
-                titleEl.innerHTML = formatBigDayTitle(info.start);
+                titleEl.innerHTML =
+                    formatBigDayTitle(info.start);
             });
         },
 
         /*
-            Grid column header:
-            - Only day view uses: Wed. 19/08/26
-            - Week/month views keep FullCalendar default headers
+            Grid column headers.
+
+            DAY VIEW:
+                Uses:
+                Wed. 19/08/26
+                Mi. 19/08/26
+                Dic. 19/08/26
+                Me. 19/08/26
+
+            WEEK / MONTH / YEAR:
+                Uses our controlled weekday abbreviation.
+
+            This avoids FullCalendar / browser locale formatting
+            producing unexpectedly long translated weekday names.
         */
         dayHeaderContent: function (arg) {
+
+            const weekday = getShortWeekday(arg.date);
+
             if (arg.view.type === 'timeGridDay') {
                 return formatDayGridHeader(arg.date);
             }
 
-            return arg.text;
-        },
+            if (arg.view.type === 'listMonth') {
 
+                const day = arg.date.getDate();
+                const language = getCurrentLanguage();
+
+                /*
+                    English gets ordinal suffixes:
+                    Wed. 3rd Oct.
+
+                    Other languages use a normal numeric day:
+                    Mi. 3 oct.
+                    Dic. 3 oct.
+                    Me. 3 oct.
+                */
+                if (language === 'en') {
+
+                    const suffix = getOrdinalSuffix(day);
+
+                    const month = arg.date.toLocaleString('en-GB', {
+                        month: 'short'
+                    });
+
+                    return {
+                        html: `
+                            <span class="calendar-list-date-label">
+                                ${weekday}. ${day}<sup>${suffix}</sup> ${month}.
+                            </span>
+                        `
+                    };
+                }
+
+                const localeMap = {
+                    es: 'es-ES',
+                    ca: 'ca-ES',
+                    fr: 'fr-FR'
+                };
+
+                const month = arg.date.toLocaleString(
+                    localeMap[language] || 'en-GB',
+                    {
+                        month: 'short'
+                    }
+                );
+
+                return `${weekday}. ${day} ${month}`;
+            }
+
+            return weekday;
+        },
         /*
             Month grid:
             Clicking an empty day cell opens that day view.
             Clicking an event still opens the event modal.
         */
         dateClick: function (info) {
+
             const clickableViews = [
                 'dayGridMonth',
                 'multiMonthYear'
             ];
 
             if (clickableViews.includes(info.view.type)) {
-                calendar.changeView('timeGridDay', info.dateStr);
+                calendar.changeView(
+                    'timeGridDay',
+                    info.dateStr
+                );
             }
         },
+
         /*
             Custom event rendering:
             - Month List gets custom layout with Join Class button.
-            - Week / Day / Month grids show event text without overflowing.
+            - Week / Day / Month grids show event text
+              without overflowing.
         */
         eventContent: function (arg) {
-            const meetingLink = arg.event.extendedProps.meeting_link;
-            const groupDetailsUrl = arg.event.extendedProps.group_details_url;
-            const title = arg.event.title;
+
+            const meetingLink =
+                arg.event.extendedProps.meeting_link;
+
+            const groupDetailsUrl =
+                arg.event.extendedProps.group_details_url;
+
+            const title =
+                arg.event.title;
 
             /*
                 MONTH LIST VIEW
                 Custom row with Join class button.
             */
             if (arg.view.type === 'listMonth') {
-                const row = document.createElement('div');
-                row.classList.add('calendar-list-event-row');
 
-                const titleEl = document.createElement('span');
-                titleEl.classList.add('calendar-list-event-title');
+                const row =
+                    document.createElement('div');
+
+                row.classList.add(
+                    'calendar-list-event-row'
+                );
+
+                const titleEl =
+                    document.createElement('span');
+
+                titleEl.classList.add(
+                    'calendar-list-event-title'
+                );
+
                 titleEl.textContent = title;
 
                 row.appendChild(titleEl);
 
                 if (userRole === 'company_admin') {
+
                     if (groupDetailsUrl) {
-                        const detailsBtn = document.createElement('a');
 
-                        detailsBtn.href = groupDetailsUrl;
-                        detailsBtn.target = '_self';
-                        detailsBtn.classList.add('calendar-join-btn');
-                        detailsBtn.textContent = 'Group details';
+                        const detailsBtn =
+                            document.createElement('a');
 
-                        detailsBtn.addEventListener('click', function (event) {
-                            event.stopPropagation();
-                        });
+                        detailsBtn.href =
+                            groupDetailsUrl;
+
+                        detailsBtn.target =
+                            '_self';
+
+                        detailsBtn.classList.add(
+                            'calendar-join-btn'
+                        );
+
+                        detailsBtn.textContent =
+                            'Group details';
+
+                        detailsBtn.addEventListener(
+                            'click',
+                            function (event) {
+                                event.stopPropagation();
+                            }
+                        );
 
                         row.appendChild(detailsBtn);
                     }
+
                 } else {
+
                     if (meetingLink) {
-                        const joinBtn = document.createElement('a');
 
-                        joinBtn.href = meetingLink;
-                        joinBtn.target = '_blank';
-                        joinBtn.rel = 'noopener noreferrer';
-                        joinBtn.classList.add('calendar-join-btn');
-                        joinBtn.textContent = 'Join class';
+                        const joinBtn =
+                            document.createElement('a');
 
-                        joinBtn.addEventListener('click', function (event) {
-                            event.stopPropagation();
-                        });
+                        joinBtn.href =
+                            meetingLink;
+
+                        joinBtn.target =
+                            '_blank';
+
+                        joinBtn.rel =
+                            'noopener noreferrer';
+
+                        joinBtn.classList.add(
+                            'calendar-join-btn'
+                        );
+
+                        joinBtn.textContent =
+                            'Join class';
+
+                        joinBtn.addEventListener(
+                            'click',
+                            function (event) {
+                                event.stopPropagation();
+                            }
+                        );
 
                         row.appendChild(joinBtn);
                     }
@@ -231,19 +393,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 WEEK / DAY GRID VIEW
                 Show time + title inside coloured event block.
             */
-            if (arg.view.type === 'timeGridWeek' || arg.view.type === 'timeGridDay') {
-                const wrapper = document.createElement('div');
-                wrapper.classList.add('calendar-grid-event-content');
+            if (
+                arg.view.type === 'timeGridWeek' ||
+                arg.view.type === 'timeGridDay'
+            ) {
 
-                const timeEl = document.createElement('div');
-                timeEl.classList.add('calendar-grid-event-time');
-                timeEl.textContent = arg.timeText;
+                const wrapper =
+                    document.createElement('div');
 
-                const titleEl = document.createElement('div');
-                titleEl.classList.add('calendar-grid-event-title');
-                titleEl.textContent = title;
+                wrapper.classList.add(
+                    'calendar-grid-event-content'
+                );
+
+                const timeEl =
+                    document.createElement('div');
+
+                timeEl.classList.add(
+                    'calendar-grid-event-time'
+                );
+
+                timeEl.textContent =
+                    arg.timeText;
+
+                const titleEl =
+                    document.createElement('div');
+
+                titleEl.classList.add(
+                    'calendar-grid-event-title'
+                );
+
+                titleEl.textContent =
+                    title;
 
                 wrapper.appendChild(timeEl);
+
                 wrapper.appendChild(titleEl);
 
                 return {
@@ -256,12 +439,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 Show compact text, clipped by CSS if too long.
             */
             if (arg.view.type === 'dayGridMonth') {
-                const wrapper = document.createElement('div');
-                wrapper.classList.add('calendar-month-event-content');
 
-                const textEl = document.createElement('span');
-                textEl.classList.add('calendar-month-event-title');
-                textEl.textContent = `${arg.timeText} ${title}`;
+                const wrapper =
+                    document.createElement('div');
+
+                wrapper.classList.add(
+                    'calendar-month-event-content'
+                );
+
+                const textEl =
+                    document.createElement('span');
+
+                textEl.classList.add(
+                    'calendar-month-event-title'
+                );
+
+                textEl.textContent =
+                    `${arg.timeText} ${title}`;
 
                 wrapper.appendChild(textEl);
 
@@ -270,8 +464,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
             }
 
-            const fallback = document.createElement('span');
-            fallback.textContent = title;
+            const fallback =
+                document.createElement('span');
+
+            fallback.textContent =
+                title;
 
             return {
                 domNodes: [fallback]
@@ -279,23 +476,54 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         eventClick: function (info) {
+
             info.jsEvent.preventDefault();
 
-            const title = info.event.title;
-            const start = info.event.start;
-            const end = info.event.end;
+            const title =
+                info.event.title;
 
-            const meetingLink = info.event.extendedProps.meeting_link;
-            const groupDetailsUrl = info.event.extendedProps.group_details_url;
+            const start =
+                info.event.start;
 
-            const course = info.event.extendedProps.course;
-            const classNumber = info.event.extendedProps.class_number;
+            const end =
+                info.event.end;
 
-            const modalTitle = document.getElementById('classSessionModalTitle');
-            const modalTime = document.getElementById('classSessionModalTime');
-            const modalCourse = document.getElementById('classSessionModalCourse');
-            const modalClassNumber = document.getElementById('classSessionModalClassNumber');
-            const modalJoinBtn = document.getElementById('classSessionModalJoinBtn');
+            const meetingLink =
+                info.event.extendedProps.meeting_link;
+
+            const groupDetailsUrl =
+                info.event.extendedProps.group_details_url;
+
+            const course =
+                info.event.extendedProps.course;
+
+            const classNumber =
+                info.event.extendedProps.class_number;
+
+            const modalTitle =
+                document.getElementById(
+                    'classSessionModalTitle'
+                );
+
+            const modalTime =
+                document.getElementById(
+                    'classSessionModalTime'
+                );
+
+            const modalCourse =
+                document.getElementById(
+                    'classSessionModalCourse'
+                );
+
+            const modalClassNumber =
+                document.getElementById(
+                    'classSessionModalClassNumber'
+                );
+
+            const modalJoinBtn =
+                document.getElementById(
+                    'classSessionModalJoinBtn'
+                );
 
             if (
                 !modalTitle ||
@@ -307,54 +535,106 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            modalTitle.textContent = title;
+            modalTitle.textContent =
+                title;
 
-            const startText = start ? start.toLocaleString('en-GB', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                hour: '2-digit',
-                minute: '2-digit'
-            }) : '';
+            const startText =
+                start
+                    ? start.toLocaleString(
+                        'en-GB',
+                        {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    )
+                    : '';
 
-            const endText = end ? end.toLocaleTimeString('en-GB', {
-                hour: '2-digit',
-                minute: '2-digit'
-            }) : '';
+            const endText =
+                end
+                    ? end.toLocaleTimeString(
+                        'en-GB',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    )
+                    : '';
 
-            modalTime.textContent = endText
-                ? `${startText} - ${endText}`
-                : startText;
+            modalTime.textContent =
+                endText
+                    ? `${startText} - ${endText}`
+                    : startText;
 
             modalCourse.textContent =
-                course || 'Course information unavailable';
+                course ||
+                'Course information unavailable';
 
             modalClassNumber.textContent =
-                classNumber ? `Lesson ${classNumber}` : '';
+                classNumber
+                    ? `Lesson ${classNumber}`
+                    : '';
 
             if (userRole === 'company_admin') {
-                modalJoinBtn.textContent = 'Group details';
-                modalJoinBtn.target = '_self';
-                modalJoinBtn.rel = '';
+
+                modalJoinBtn.textContent =
+                    'Group details';
+
+                modalJoinBtn.target =
+                    '_self';
+
+                modalJoinBtn.rel =
+                    '';
 
                 if (groupDetailsUrl) {
-                    modalJoinBtn.href = groupDetailsUrl;
-                    modalJoinBtn.classList.remove('d-none');
+
+                    modalJoinBtn.href =
+                        groupDetailsUrl;
+
+                    modalJoinBtn.classList.remove(
+                        'd-none'
+                    );
+
                 } else {
-                    modalJoinBtn.href = '#';
-                    modalJoinBtn.classList.add('d-none');
+
+                    modalJoinBtn.href =
+                        '#';
+
+                    modalJoinBtn.classList.add(
+                        'd-none'
+                    );
                 }
+
             } else {
-                modalJoinBtn.textContent = 'Join class';
-                modalJoinBtn.target = '_blank';
-                modalJoinBtn.rel = 'noopener noreferrer';
+
+                modalJoinBtn.textContent =
+                    'Join class';
+
+                modalJoinBtn.target =
+                    '_blank';
+
+                modalJoinBtn.rel =
+                    'noopener noreferrer';
 
                 if (meetingLink) {
-                    modalJoinBtn.href = meetingLink;
-                    modalJoinBtn.classList.remove('d-none');
+
+                    modalJoinBtn.href =
+                        meetingLink;
+
+                    modalJoinBtn.classList.remove(
+                        'd-none'
+                    );
+
                 } else {
-                    modalJoinBtn.href = '#';
-                    modalJoinBtn.classList.add('d-none');
+
+                    modalJoinBtn.href =
+                        '#';
+
+                    modalJoinBtn.classList.add(
+                        'd-none'
+                    );
                 }
             }
 
@@ -362,14 +642,18 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         windowResize: function () {
-            const newMobileState = isMobileCalendar();
+
+            const newMobileState =
+                isMobileCalendar();
 
             /*
                 Rebuild the toolbar only when crossing the
                 768px mobile/desktop breakpoint.
             */
             if (newMobileState !== calendarIsMobile) {
-                calendarIsMobile = newMobileState;
+
+                calendarIsMobile =
+                    newMobileState;
 
                 calendar.setOption(
                     'headerToolbar',
