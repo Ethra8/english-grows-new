@@ -45,6 +45,31 @@ SKILL_CHART_COLORS = {
     "Writing": "#0ea5b7",
 }
 
+# =========================================================
+# CALENDAR EVENT HELPERS
+# =========================================================
+
+def get_calendar_meeting_link(session):
+    """
+    Return the meeting link available for a ClassSession.
+
+    Prefer the session-specific link.
+
+    Fall back to the Course meeting link when the Course model
+    provides one.
+    """
+
+    if session.meeting_link:
+        return session.meeting_link
+
+    return getattr(
+        session.course,
+        "meeting_link",
+        "",
+    ) or ""
+
+
+
 
 @login_required
 def login_redirect(request):
@@ -383,6 +408,33 @@ def my_calendar(request):
 # STUDENT CALENDAR PAGE
 @login_required
 def my_calendar_events(request):
+    """
+    Calendar events for employee / individual learner profiles.
+
+    Event actions exposed to calendar.js:
+
+    - meeting_link:
+        Join class when available.
+
+    - group_details_url:
+        Fallback action when no meeting link exists.
+        Opens the learner's course page.
+    """
+
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if profile.role not in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL,
+    ]:
+        return JsonResponse(
+            [],
+            safe=False,
+        )
+
     start = request.GET.get("start")
     end = request.GET.get("end")
 
@@ -393,7 +445,10 @@ def my_calendar_events(request):
             status="active",
             course__status="active",
         )
-        .values_list("course_id", flat=True)
+        .values_list(
+            "course_id",
+            flat=True,
+        )
     )
 
     sessions = (
@@ -406,8 +461,12 @@ def my_calendar_events(request):
                 ClassSession.STATUS_COMPLETED,
             ],
         )
-        .select_related("course")
-        .order_by("start_time")
+        .select_related(
+            "course",
+        )
+        .order_by(
+            "start_time"
+        )
     )
 
     bank_holidays = (
@@ -415,61 +474,112 @@ def my_calendar_events(request):
         .filter(
             is_active=True,
         )
-        .order_by("start_date")
+        .order_by(
+            "start_date"
+        )
     )
 
     if start and end:
-        start_date = parse_datetime(start)
-        end_date = parse_datetime(end)
+        start_datetime = parse_datetime(start)
+        end_datetime = parse_datetime(end)
 
-        if start_date and end_date:
+        if start_datetime and end_datetime:
+
             sessions = sessions.filter(
-                start_time__gte=start_date,
-                start_time__lt=end_date,
+                start_time__gte=start_datetime,
+                start_time__lt=end_datetime,
             )
 
-            bank_holidays = bank_holidays.filter(
-                start_date__lt=end_date.date()
-            ).filter(
-                Q(end_date__isnull=True) |
-                Q(end_date__gte=start_date.date())
+            bank_holidays = (
+                bank_holidays
+                .filter(
+                    start_date__lt=end_datetime.date()
+                )
+                .filter(
+                    Q(end_date__isnull=True)
+                    | Q(
+                        end_date__gte=start_datetime.date()
+                    )
+                )
             )
 
     events = []
 
     for session in sessions:
+
         events.append({
             "id": session.id,
             "title": session.title,
             "start": session.start_time.isoformat(),
-            "end": session.end_time.isoformat() if session.end_time else None,
+            "end": (
+                session.end_time.isoformat()
+                if session.end_time
+                else None
+            ),
+
             "extendedProps": {
-                "course": session.course.name,
-                "class_number": session.class_number,
-                "meeting_link": session.meeting_link,
+                "type": "class_session",
+
+                "course":
+                    session.course.name,
+
+                "class_number":
+                    session.class_number,
+
+                "meeting_link":
+                    get_calendar_meeting_link(
+                        session
+                    ),
+
+                # This becomes the Group Details fallback
+                # in calendar.js when no meeting link exists.
+                
+                "group_details_url": (
+                    f"{reverse('profiles:my_course')}"
+                    f"?course={session.course.id}"
+                ),
             },
         })
 
     for holiday in bank_holidays:
+
         event = {
-            "id": f"holiday-{holiday.id}",
-            "title": holiday.title,
-            "start": holiday.start_date.isoformat(),
-            "allDay": True,
-            "display": "block",
-            "className": "bank-holiday-event",
+            "id":
+                f"holiday-{holiday.id}",
+
+            "title":
+                holiday.title,
+
+            "start":
+                holiday.start_date.isoformat(),
+
+            "allDay":
+                True,
+
+            "display":
+                "block",
+
+            "className":
+                "bank-holiday-event",
+
             "extendedProps": {
-                "type": "bank_holiday",
+                "type":
+                    "bank_holiday",
             },
         }
 
         if holiday.end_date:
-            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
+            event["end"] = (
+                holiday.end_date
+                + timedelta(days=1)
+            ).isoformat()
 
         events.append(event)
 
-    return JsonResponse(events, safe=False)
-
+    return JsonResponse(
+        events,
+        safe=False,
+    )
 
 
 # STUDENT MY LEARNING PROGRESS PAGE
@@ -3620,32 +3730,48 @@ def teacher_calendar(request):
 # Create Calendar EVENTS
 @login_required
 def teacher_calendar_events(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    """
+    Calendar events for teacher profiles.
+
+    Teacher action:
+
+    - meeting link exists
+        -> Join class
+
+    - no meeting link
+        -> Group details
+    """
+
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
-        return JsonResponse([], safe=False)
+        return JsonResponse(
+            [],
+            safe=False,
+        )
 
     start = request.GET.get("start")
     end = request.GET.get("end")
 
-    teacher_course_ids = (
-        Course.objects
-        .filter(teacher=request.user)
-        .values_list("id", flat=True)
-        )    
-    
     sessions = (
         ClassSession.objects
         .filter(
-            course_id__in=teacher_course_ids,
+            course__teacher=request.user,
             status__in=[
                 ClassSession.STATUS_SCHEDULED,
                 ClassSession.STATUS_RESCHEDULED,
                 ClassSession.STATUS_COMPLETED,
             ],
-            )
-        .select_related("course")
-        .order_by("start_time")
+        )
+        .select_related(
+            "course",
+        )
+        .order_by(
+            "start_time"
+        )
     )
 
     bank_holidays = (
@@ -3653,24 +3779,33 @@ def teacher_calendar_events(request):
         .filter(
             is_active=True,
         )
-        .order_by("start_date")
+        .order_by(
+            "start_date"
+        )
     )
 
     if start and end:
-        start_date = parse_datetime(start)
-        end_date = parse_datetime(end)
+        start_datetime = parse_datetime(start)
+        end_datetime = parse_datetime(end)
 
-        if start_date and end_date:
+        if start_datetime and end_datetime:
+
             sessions = sessions.filter(
-                start_time__gte=start_date,
-                start_time__lt=end_date,
+                start_time__gte=start_datetime,
+                start_time__lt=end_datetime,
             )
 
-            bank_holidays = bank_holidays.filter(
-                start_date__lt=end_date.date()
-            ).filter(
-                Q(end_date__isnull=True) |
-                Q(end_date__gte=start_date.date())
+            bank_holidays = (
+                bank_holidays
+                .filter(
+                    start_date__lt=end_datetime.date()
+                )
+                .filter(
+                    Q(end_date__isnull=True)
+                    | Q(
+                        end_date__gte=start_datetime.date()
+                    )
+                )
             )
 
     events = []
@@ -3680,45 +3815,106 @@ def teacher_calendar_events(request):
         status_class = ""
 
         if session.course.status == "confirmed":
-            status_class = "course-confirmed-event"
+            status_class = (
+                "course-confirmed-event"
+            )
+
         elif session.course.status == "paused":
-            status_class = "course-paused-event"
+            status_class = (
+                "course-paused-event"
+            )
+
         elif session.course.status == "cancelled":
-            status_class = "course-cancelled-event"
+            status_class = (
+                "course-cancelled-event"
+            )
 
         events.append({
-            "id": session.id,
-            "title": session.title,
-            "start": session.start_time.isoformat(),
-            "end": session.end_time.isoformat() if session.end_time else None,
-            "className": status_class,
+            "id":
+                session.id,
+
+            "title":
+                session.title,
+
+            "start":
+                session.start_time.isoformat(),
+
+            "end": (
+                session.end_time.isoformat()
+                if session.end_time
+                else None
+            ),
+
+            "className":
+                status_class,
+
             "extendedProps": {
-                "course": session.course.name,
-                "course_status": session.course.status,
-                "class_number": session.class_number,
-                "meeting_link": session.meeting_link,
+                "type":
+                    "class_session",
+
+                "course":
+                    session.course.name,
+
+                "course_status":
+                    session.course.status,
+
+                "class_number":
+                    session.class_number,
+
+                "meeting_link":
+                    get_calendar_meeting_link(
+                        session
+                    ),
+
+                "group_details_url":
+                    reverse(
+                        "profiles:teacher_course_details",
+                        args=[
+                            session.course.id
+                        ],
+                    ),
             },
         })
 
     for holiday in bank_holidays:
+
         event = {
-            "id": f"holiday-{holiday.id}",
-            "title": holiday.title,
-            "start": holiday.start_date.isoformat(),
-            "allDay": True,
-            "display": "block",
-            "className": "bank-holiday-event",
+            "id":
+                f"holiday-{holiday.id}",
+
+            "title":
+                holiday.title,
+
+            "start":
+                holiday.start_date.isoformat(),
+
+            "allDay":
+                True,
+
+            "display":
+                "block",
+
+            "className":
+                "bank-holiday-event",
+
             "extendedProps": {
-                "type": "bank_holiday",
+                "type":
+                    "bank_holiday",
             },
         }
 
         if holiday.end_date:
-            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
+            event["end"] = (
+                holiday.end_date
+                + timedelta(days=1)
+            ).isoformat()
 
         events.append(event)
 
-    return JsonResponse(events, safe=False)
+    return JsonResponse(
+        events,
+        safe=False,
+    )
 
 
 
@@ -7220,7 +7416,7 @@ def company_admin_calendar_events(request):
                 "course": session.course.name,
                 "course_status": session.course.status,
                 "class_number": session.class_number,
-                "meeting_link": session.meeting_link,
+                "meeting_link": get_calendar_meeting_link(session),
                 "teacher": teacher_name,
 
                 "group_details_url": reverse(

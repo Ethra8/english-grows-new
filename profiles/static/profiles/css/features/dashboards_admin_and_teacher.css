@@ -186,7 +186,7 @@
 /* TODAY CLASS INFO LIST */
 .today-class-info {
     display: grid;
-    grid-template-columns: 140px minmax(280px, 1fr) 60px minmax(120px, 1fr);
+    grid-template-columns: 150px minmax(280px, 1fr) 60px minmax(120px, 1fr);
     align-items: center;
     background: var(--color-whitesmoke);
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
@@ -198,13 +198,13 @@
 .today-time {
     display: flex;
     align-items: center;
-    /* justify-content: flex-start; */
+    justify-content: center;
     color: var(--color-turquoise);
     font-weight: 700;
     background: rgba(var(--color-navy-rgb), 0.95);
     border-radius: 8px;
-    padding: 0.9rem 1rem;
-    margin-right: auto;
+    padding: 0.9rem 0;
+    width: 150px;
 }
 
 .today-course {

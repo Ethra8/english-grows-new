@@ -578,8 +578,8 @@
 }
 
 .status-pill.pending {
-    background: rgba(255, 179, 71, 0.18);
-    color: #75736f;
+    background: rgba(var(--color-attendance-status-pending-rgb), 0.25);
+    color: var(--color-attendance-status-pending);
     border: 1px outset #75736f;
 }
 

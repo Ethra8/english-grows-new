@@ -103,6 +103,9 @@
     /* Excused */
     --color-attendance-status-excused: #666666;
     --color-attendance-status-excused-rgb:  102, 102, 102;
+    /* Attendance Pending */
+    --color-attendance-status-pending: #ffb000;
+    --color-attendance-status-pending-rgb: 255, 176, 0;
 
     /* SHADOWS */
     --inner-shadow-navy:
