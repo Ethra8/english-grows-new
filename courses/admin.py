@@ -11,6 +11,8 @@ from .models import (
     BankHoliday,
 )
 
+from courses.utils.course_dates import calculate_course_end_date
+
 
 @admin.register(CourseType)
 class CourseTypeAdmin(admin.ModelAdmin):
@@ -66,7 +68,6 @@ class CourseEnrollmentInline(admin.TabularInline):
     readonly_fields = (
         "enrolled_at",
     )
-
 
 
 # -------------------------------------------------------------------------
@@ -129,6 +130,7 @@ class CourseAdmin(admin.ModelAdmin):
         "class_duration_display",
         "final_class_duration_display",
         "number_of_classes",
+        "end_date",
     )
 
     list_filter = (
@@ -165,46 +167,155 @@ class CourseAdmin(admin.ModelAdmin):
         """
         Run after Django Admin has saved all Course-related inline objects.
 
-        The models already attempt automatic generation when the Course,
-        timetable slots and enrollments are saved.
+        Processing order:
 
-        Calling try_generate_class_sessions() here is an additional safe
-        final check after ALL related Admin inlines have been processed.
+        1. Save Course-related inline objects.
+        2. Synchronize automatically calculated class duration.
+        3. If ClassSessions already exist:
+           - recalculate only future scheduled sessions
+           - skip active bank holidays
+           - preserve completed / pending-reschedule / rescheduled sessions
+           - preserve ClassSession IDs and Attendance records
+           - synchronize end_date from the actual final ClassSession
+        4. If no ClassSessions exist yet:
+           - calculate the expected end_date from the timetable
+           - skip active bank holidays
+        5. Perform the final safe initial ClassSession generation attempt.
+        6. If generation occurred, synchronize end_date from the actual
+           final ClassSession.
 
-        The model guard prevents regeneration once ClassSessions exist.
+        Existing ClassSessions are never deleted or regenerated here.
         """
+
         super().save_related(
             request,
             form,
             formsets,
-            change
+            change,
         )
 
         course = form.instance
 
-        # Keep automatically calculated duration synchronized after all
-        # timetable inline rows have been saved.
+        # -------------------------------------------------------------
+        # 1. SYNCHRONIZE AUTOMATIC CLASS DURATION
+        # -------------------------------------------------------------
+        #
+        # Django Admin saves timetable inline rows before save_related()
+        # finishes, so the timetable is now available for calculating
+        # automatic class duration.
+        # -------------------------------------------------------------
         if (
             course.timetable_slots.exists()
             and course.class_duration_source == "auto"
         ):
             course.update_class_duration_from_timetable()
 
-        # Final safe generation attempt.
+            # Refresh values written by
+            # update_class_duration_from_timetable().
+            course.refresh_from_db()
+
+        # -------------------------------------------------------------
+        # 2. SYNCHRONIZE EXISTING COURSE SCHEDULE
+        # -------------------------------------------------------------
         #
-        # This only generates when:
+        # If ClassSessions already exist, they must NOT be regenerated.
+        #
+        # Instead, synchronize_future_scheduled_sessions() updates only:
+        #
+        #     future + status="scheduled"
+        #
+        # It deliberately leaves untouched:
+        #
+        #     completed
+        #     pending_reschedule
+        #     rescheduled
+        #     past sessions
+        #
+        # This allows newly added/changed BankHoliday records and timetable
+        # changes to be reflected safely without breaking:
+        #
+        # - ClassSession IDs
+        # - class_number
+        # - Attendance records
+        # - completed history
+        # - manual rescheduling
+        # -------------------------------------------------------------
+        if course.class_sessions.exists():
+
+            course.synchronize_future_scheduled_sessions()
+
+            # Existing ClassSessions are the operational source of truth
+            # for the Course end date.
+            course.sync_end_date_from_sessions()
+
+        else:
+
+            # ---------------------------------------------------------
+            # 3. CALCULATE EXPECTED END DATE BEFORE INITIAL GENERATION
+            # ---------------------------------------------------------
+            #
+            # No ClassSessions exist yet, so calculate the expected
+            # end_date directly from:
+            #
+            # - start_date
+            # - timetable slots
+            # - number_of_classes
+            # - active BankHoliday records
+            #
+            # calculate_course_end_date() uses the same centralized
+            # scheduling rules as ClassSession generation.
+            # ---------------------------------------------------------
+            if (
+                course.start_date
+                and course.number_of_classes
+                and course.timetable_slots.exists()
+            ):
+                calculated_end_date = calculate_course_end_date(
+                    course
+                )
+
+                if calculated_end_date != course.end_date:
+                    Course.objects.filter(
+                        pk=course.pk
+                    ).update(
+                        end_date=calculated_end_date
+                    )
+
+                    course.end_date = calculated_end_date
+
+        # -------------------------------------------------------------
+        # 4. FINAL SAFE INITIAL CLASS SESSION GENERATION ATTEMPT
+        # -------------------------------------------------------------
+        #
+        # try_generate_class_sessions() generates only when:
+        #
         # - no ClassSessions exist yet
         # - start_date exists
         # - number_of_classes is available
         # - timetable slots exist
         # - at least one active enrollment exists
+        #
+        # The model guard prevents regeneration of an existing schedule.
+        # -------------------------------------------------------------
         course.try_generate_class_sessions()
+
+        # -------------------------------------------------------------
+        # 5. FINAL END-DATE SYNCHRONIZATION
+        # -------------------------------------------------------------
+        #
+        # If ClassSessions were generated above, their real final date
+        # becomes authoritative immediately.
+        #
+        # This also keeps end_date correct if the final lesson has been
+        # shortened or if active BankHoliday records extended the course.
+        # -------------------------------------------------------------
+        if course.class_sessions.exists():
+            course.sync_end_date_from_sessions()
 
     inlines = (
         CourseTimetableSlotInline,
         CourseEnrollmentInline,
     )
-
 
 
 class CourseEnrollmentCourseFilter(admin.SimpleListFilter):
@@ -299,13 +410,13 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         Use the enrollment status
         (paused/completed/cancelled)
         instead of deleting the enrollment record.
-         - only superuser can alter
+
+        Only superuser can alter.
         """
         if request.user.is_superuser:
             return True
 
         return False
-
 
 
 # -------------------------------------------------------------------------
@@ -345,9 +456,6 @@ class AttendanceInline(admin.TabularInline):
             return True
 
         return False
-
-
-
 
 
 class ClassSessionCourseFilter(admin.SimpleListFilter):
@@ -534,7 +642,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
     list_filter = (
         "status",
-        AttendanceCourseFilter,  # CHANGED
+        AttendanceCourseFilter,
         "recorded_at",
     )
 
@@ -577,7 +685,9 @@ class AttendanceAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         """
         Attendance rows are created automatically from CourseEnrollment /
-        Course generation logic - only superuser can alter.
+        Course generation logic.
+
+        Only superuser can alter.
         """
         if request.user.is_superuser:
             return True
@@ -587,7 +697,9 @@ class AttendanceAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """
         Preserve attendance history and the one-record-per-student/session
-        invariant - only superuser can alter.
+        invariant.
+
+        Only superuser can alter.
         """
         if request.user.is_superuser:
             return True

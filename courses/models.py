@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from math import ceil
 
+from courses.utils.course_dates import calculate_course_schedule
+
 
 class CourseType(models.Model):
     """
@@ -179,6 +181,33 @@ class Course(models.Model):
         if is_new:
             self.try_generate_class_sessions()
 
+        else:
+            # Existing courses may need their future scheduled lessons
+            # synchronized when:
+            # - a BankHoliday has been added/changed since course creation
+            # - start_date / total_hours / class_duration has changed
+            # - the Course is simply opened and saved again in Django Admin
+            #
+            # Avoid doing this for narrow internal saves such as:
+            #     self.save(update_fields=["status"])
+            # when the course is being marked completed.
+            update_fields = kwargs.get("update_fields")
+
+            should_sync_schedule = (
+                update_fields is None
+                or bool(
+                    {
+                        "start_date",
+                        "total_hours",
+                        "class_duration",
+                    }
+                    & set(update_fields)
+                )
+            )
+
+            if should_sync_schedule:
+                self.synchronize_future_scheduled_sessions()
+
 
     def can_generate_class_sessions(self):
         """
@@ -193,10 +222,15 @@ class Course(models.Model):
         - at least one timetable slot exists
         - at least one active enrollment exists
 
+        Bank-holiday handling does NOT happen here.
+        It is applied later by calculate_course_schedule()
+        inside generate_class_sessions().
+
         This guard makes automatic generation safe to call from several
         points in the model lifecycle without ever regenerating a course
         that already has ClassSessions.
         """
+
         if not self.pk:
             return False
 
@@ -223,18 +257,213 @@ class Course(models.Model):
         Automatically generate the Course's complete ClassSession schedule
         and initial Attendance records as soon as all prerequisites exist.
 
-        Returns the generate_class_sessions() result when generation occurs.
-        Returns None when the Course is not ready or sessions already exist.
+        The actual teaching dates are calculated by
+        calculate_course_schedule(), which takes into account:
+
+        - course start_date
+        - weekly timetable slots
+        - number_of_classes
+        - active BankHoliday records
+
+        Therefore, ClassSessions are not generated on active bank holidays.
+
+        Returns:
+            generate_class_sessions() result when generation occurs.
+
+            None when:
+            - the Course is not ready
+            - ClassSessions already exist
 
         IMPORTANT:
         This method never regenerates an existing course schedule.
+
         New learners enrolled later are handled separately by
         CourseEnrollment.create_future_attendance_records().
         """
+
         if not self.can_generate_class_sessions():
             return None
 
         return self.generate_class_sessions()
+
+
+    def sync_end_date_from_sessions(self):
+        """
+        Synchronize Course.end_date with the actual final ClassSession.
+
+        Once ClassSessions exist, they are the source of truth for the
+        operational end date because individual lessons may later be
+        rescheduled.
+
+        QuerySet.update() is used deliberately to avoid re-entering
+        Course.save() and triggering schedule synchronization recursively.
+        """
+
+        if not self.pk:
+            return None
+
+        final_session = (
+            self.class_sessions
+            .order_by("-start_time")
+            .first()
+        )
+
+        if not final_session:
+            return None
+
+        calculated_end_date = timezone.localtime(
+            final_session.start_time
+        ).date()
+
+        if self.end_date != calculated_end_date:
+            Course.objects.filter(
+                pk=self.pk
+            ).update(
+                end_date=calculated_end_date
+            )
+
+            self.end_date = calculated_end_date
+
+        return calculated_end_date
+
+
+    def synchronize_future_scheduled_sessions(self):
+        """
+        Recalculate future ClassSessions that are still status="scheduled"
+        from the Course's canonical timetable.
+
+        This is used to keep existing courses consistent when:
+        - BankHoliday records are added or changed later
+        - the course start date / duration data changes
+        - a timetable slot changes
+
+        Safety rules:
+        - Completed sessions are NEVER moved.
+        - pending_reschedule sessions are NEVER moved.
+        - rescheduled sessions are NEVER moved.
+        - Past sessions are NEVER moved.
+        - Existing ClassSession IDs and class_numbers are preserved.
+        - Attendance rows remain attached to the same ClassSession.
+        - The final short lesson keeps its correct shortened duration.
+        - end_date is synchronized from the actual final ClassSession.
+
+        Returns the number of ClassSessions whose date/time changed.
+        """
+
+        if not self.pk:
+            return 0
+
+        if not self.start_date:
+            return 0
+
+        if not self.number_of_classes:
+            return 0
+
+        if not self.timetable_slots.exists():
+            return 0
+
+        if not self.class_sessions.exists():
+            return 0
+
+        schedule = calculate_course_schedule(self)
+
+        if not schedule:
+            return 0
+
+        schedule_by_class_number = {
+            item["class_number"]: item
+            for item in schedule
+        }
+
+        now = timezone.now()
+        current_timezone = timezone.get_current_timezone()
+
+        future_scheduled_sessions = (
+            self.class_sessions
+            .filter(
+                start_time__gte=now,
+                status=ClassSession.STATUS_SCHEDULED,
+            )
+            .order_by("class_number")
+        )
+
+        sessions_updated = 0
+
+        for session in future_scheduled_sessions:
+            schedule_item = schedule_by_class_number.get(
+                session.class_number
+            )
+
+            if not schedule_item:
+                continue
+
+            target_date = schedule_item["date"]
+            slot = schedule_item["slot"]
+
+            naive_start = datetime.combine(
+                target_date,
+                slot.start_time
+            )
+
+            target_start = timezone.make_aware(
+                naive_start,
+                current_timezone
+            )
+
+            # Never move a currently-future session backwards into the past.
+            # This mainly protects established courses if their structural
+            # settings are edited after teaching has already begun.
+            if target_start < now:
+                continue
+
+            is_final_class = (
+                session.class_number
+                == self.number_of_classes
+            )
+
+            if (
+                is_final_class
+                and self.has_short_final_class
+            ):
+                target_end = target_start + timedelta(
+                    seconds=float(
+                        self.final_class_duration
+                        * Decimal("3600")
+                    )
+                )
+
+            else:
+                naive_end = datetime.combine(
+                    target_date,
+                    slot.end_time
+                )
+
+                target_end = timezone.make_aware(
+                    naive_end,
+                    current_timezone
+                )
+
+            if (
+                session.start_time == target_start
+                and session.end_time == target_end
+            ):
+                continue
+
+            session.start_time = target_start
+            session.end_time = target_end
+
+            session.save(
+                update_fields=[
+                    "start_time",
+                    "end_time",
+                ]
+            )
+
+            sessions_updated += 1
+
+        self.sync_end_date_from_sessions()
+
+        return sessions_updated
 
 
     def format_duration(self, duration):
@@ -394,22 +623,29 @@ class Course(models.Model):
     def generate_class_sessions(self):
         """
         Generate the complete set of ClassSession objects for this course
-        from its start date and weekly timetable, then create Attendance
-        records for every learner who is already actively enrolled.
+        using the centralized course schedule calculator.
 
-        This method is invoked automatically once the Course has all required
-        setup data. Course.try_generate_class_sessions() guards against running
-        it again once ClassSessions already exist.
+        The schedule takes into account:
+        - course start date
+        - weekly timetable
+        - number of classes
+        - active bank holidays
 
-        It is still defensive/idempotent:
+        Bank holidays are skipped automatically.
+
+        After the ClassSessions are generated, Attendance records are
+        created for every learner who is already actively enrolled.
+
+        This method remains defensive/idempotent:
         - a lesson is identified by course + class_number
         - an existing lesson is never duplicated
         - an existing lesson's date/time/status are never overwritten
         - missing Attendance records are created with get_or_create()
 
         IMPORTANT:
-        Rescheduling never creates a replacement ClassSession. The existing
-        ClassSession is updated and must eventually reach status="completed".
+        Rescheduling never creates a replacement ClassSession.
+        The existing ClassSession is updated and must eventually
+        reach status="completed".
         """
 
         if not self.start_date:
@@ -422,12 +658,7 @@ class Course(models.Model):
                 "This course needs total hours and class duration before sessions can be generated."
             )
 
-        timetable_slots = self.timetable_slots.all().order_by(
-            "day_of_week",
-            "start_time"
-        )
-
-        if not timetable_slots.exists():
+        if not self.timetable_slots.exists():
             raise ValidationError(
                 "This course needs at least one timetable slot."
             )
@@ -448,69 +679,124 @@ class Course(models.Model):
                 "This course has no active enrolled students."
             )
 
-        sessions_created = 0
-        attendances_created = 0
-        scheduled_class_count = 0
+        # ---------------------------------------------------------
+        # BUILD THE COURSE SCHEDULE
+        # ---------------------------------------------------------
+        #
+        # This is now the single source of truth for lesson dates.
+        #
+        # It takes into account:
+        # - start_date
+        # - timetable slots
+        # - number_of_classes
+        # - active BankHoliday records
+        #
+        # Therefore, lessons are NOT generated on bank holidays.
+        # ---------------------------------------------------------
 
-        current_date = self.start_date
-        selected_sessions = []
+        schedule = calculate_course_schedule(self)
 
-        while scheduled_class_count < self.number_of_classes:
-            # CourseTimetableSlot uses ISO weekday numbering:
-            # Monday=1 ... Sunday=7.
-            weekday = current_date.isoweekday()
-
-            slots_for_day = timetable_slots.filter(
-                day_of_week=weekday
+        if not schedule:
+            raise ValidationError(
+                "A class schedule could not be generated for this course."
             )
 
-            for slot in slots_for_day:
-                if scheduled_class_count >= self.number_of_classes:
-                    break
 
-                class_number = scheduled_class_count + 1
+        # ---------------------------------------------------------
+        # SYNCHRONIZE COURSE END DATE
+        # ---------------------------------------------------------
+        #
+        # The final scheduled lesson is the authoritative end date.
+        # Because this uses the SAME schedule as ClassSession
+        # generation, the two can never disagree.
+        # ---------------------------------------------------------
 
-                naive_start = datetime.combine(
-                    current_date,
-                    slot.start_time
+        calculated_end_date = schedule[-1]["date"]
+
+        if self.end_date != calculated_end_date:
+            Course.objects.filter(
+                pk=self.pk
+            ).update(
+                end_date=calculated_end_date
+            )
+
+            self.end_date = calculated_end_date
+
+        sessions_created = 0
+        attendances_created = 0
+        selected_sessions = []
+
+
+        # ---------------------------------------------------------
+        # CREATE CLASS SESSIONS
+        # ---------------------------------------------------------
+
+        for schedule_item in schedule:
+
+            current_date = schedule_item["date"]
+            slot = schedule_item["slot"]
+            class_number = schedule_item["class_number"]
+
+            naive_start = datetime.combine(
+                current_date,
+                slot.start_time
+            )
+
+            aware_start = timezone.make_aware(
+                naive_start,
+                timezone.get_current_timezone()
+            )
+
+            # -----------------------------------------------------
+            # CALCULATE CLASS END TIME
+            # -----------------------------------------------------
+            #
+            # The final lesson may be shorter when total_hours
+            # is not perfectly divisible by standard class duration.
+            # -----------------------------------------------------
+
+            is_final_class = (
+                class_number == self.number_of_classes
+            )
+
+            if (
+                is_final_class
+                and self.has_short_final_class
+            ):
+                aware_end = aware_start + timedelta(
+                    seconds=float(
+                        self.final_class_duration
+                        * Decimal("3600")
+                    )
                 )
 
-                aware_start = timezone.make_aware(
-                    naive_start,
+            else:
+                naive_end = datetime.combine(
+                    current_date,
+                    slot.end_time
+                )
+
+                aware_end = timezone.make_aware(
+                    naive_end,
                     timezone.get_current_timezone()
                 )
 
-                # The final lesson may be shorter when total_hours is not
-                # perfectly divisible by the standard class duration.
-                is_final_class = (
-                    class_number == self.number_of_classes
-                )
+            expected_title = (
+                f"{self.name} - Lesson {class_number}"
+            )
 
-                if is_final_class and self.has_short_final_class:
-                    aware_end = aware_start + timedelta(
-                        seconds=float(
-                            self.final_class_duration * Decimal("3600")
-                        )
-                    )
-                else:
-                    naive_end = datetime.combine(
-                        current_date,
-                        slot.end_time
-                    )
+            # -----------------------------------------------------
+            # CREATE OR RETRIEVE CLASS SESSION
+            # -----------------------------------------------------
+            #
+            # class_number is the stable identity of the lesson.
+            #
+            # start_time is deliberately NOT used because lessons
+            # may later be rescheduled.
+            # -----------------------------------------------------
 
-                    aware_end = timezone.make_aware(
-                        naive_end,
-                        timezone.get_current_timezone()
-                    )
-
-                expected_title = (
-                    f"{self.name} - Lesson {class_number}"
-                )
-
-                # class_number is the stable identity of a lesson within
-                # the course. start_time is deliberately NOT used here
-                # because a lesson can later be rescheduled.
-                class_session, created = ClassSession.objects.get_or_create(
+            class_session, created = (
+                ClassSession.objects.get_or_create(
                     course=self,
                     class_number=class_number,
                     defaults={
@@ -522,45 +808,63 @@ class Course(models.Model):
                         "status": ClassSession.STATUS_SCHEDULED,
                     }
                 )
+            )
 
-                if created:
-                    sessions_created += 1
-                else:
-                    # Do not overwrite start_time, end_time or status on an
-                    # existing ClassSession. It may have been rescheduled.
-                    if class_session.title != expected_title:
-                        class_session.title = expected_title
-                        class_session.save(
-                            update_fields=["title"]
-                        )
+            if created:
+                sessions_created += 1
 
-                selected_sessions.append(class_session)
-                scheduled_class_count += 1
+            else:
+                # Do not overwrite start_time, end_time or status.
+                #
+                # An existing ClassSession may have been rescheduled.
+                if class_session.title != expected_title:
+                    class_session.title = expected_title
 
-            current_date += timedelta(days=1)
+                    class_session.save(
+                        update_fields=[
+                            "title",
+                        ]
+                    )
 
-        # Create missing Attendance records for learners who were already
-        # actively enrolled when the course sessions were generated.
+            selected_sessions.append(
+                class_session
+            )
+
+        # ---------------------------------------------------------
+        # CREATE ATTENDANCE RECORDS
+        # ---------------------------------------------------------
+        #
+        # Create missing Attendance rows for learners who are
+        # actively enrolled when the initial schedule is generated.
+        # ---------------------------------------------------------
+
         for class_session in selected_sessions:
+
             for student in enrolled_students:
-                _, attendance_created = Attendance.objects.get_or_create(
-                    class_session=class_session,
-                    student=student,
-                    defaults={
-                        "status": Attendance.STATUS_SCHEDULED,
-                    }
+
+                _, attendance_created = (
+                    Attendance.objects.get_or_create(
+                        class_session=class_session,
+                        student=student,
+                        defaults={
+                            "status": Attendance.STATUS_SCHEDULED,
+                        }
+                    )
                 )
 
                 if attendance_created:
                     attendances_created += 1
 
+        # ClassSessions now exist, so use the actual final session as the
+        # authoritative operational end date.
+        self.sync_end_date_from_sessions()
+
         return {
             "sessions_created": sessions_created,
             "attendances_created": attendances_created,
             "students_count": len(enrolled_students),
-            "total_scheduled_classes": scheduled_class_count,
+            "total_scheduled_classes": len(schedule),
         }
-
 
     @property
     def total_sessions(self):
@@ -769,49 +1073,20 @@ class CourseTimetableSlot(models.Model):
         # this safely creates the complete ClassSession schedule exactly once.
         self.course.try_generate_class_sessions()
 
-    def update_future_class_sessions(self, old_slot):
-        now = timezone.now()
-        current_timezone = timezone.get_current_timezone()
+    def update_future_class_sessions(self, old_slot=None):
+        """
+        Synchronize the Course's complete future scheduled timetable.
 
-        future_sessions = self.course.class_sessions.filter(
-            start_time__gte=now,
-            status=ClassSession.STATUS_SCHEDULED,
-        ).order_by("start_time")
+        This delegates to Course.synchronize_future_scheduled_sessions()
+        so timetable edits and BankHoliday changes use the SAME canonical
+        scheduling logic as initial ClassSession generation.
 
-        for session in future_sessions:
-            old_local_start = timezone.localtime(session.start_time)
-            old_local_end = timezone.localtime(session.end_time)
+        old_slot is retained as an optional argument for backwards
+        compatibility with existing callers, but is no longer needed.
+        """
 
-            belongs_to_old_slot = (
-                old_local_start.isoweekday() == old_slot.day_of_week and
-                old_local_start.time() == old_slot.start_time and
-                old_local_end.time() == old_slot.end_time
-            )
+        return self.course.synchronize_future_scheduled_sessions()
 
-            if not belongs_to_old_slot:
-                continue
-
-            old_session_date = old_local_start.date()
-
-            day_difference = self.day_of_week - old_slot.day_of_week
-            new_session_date = old_session_date + timedelta(days=day_difference)
-
-            new_start = timezone.make_aware(
-                datetime.combine(new_session_date, self.start_time),
-                current_timezone
-            )
-
-            new_end = timezone.make_aware(
-                datetime.combine(new_session_date, self.end_time),
-                current_timezone
-            )
-
-            if new_start < now:
-                continue
-
-            session.start_time = new_start
-            session.end_time = new_end
-            session.save(update_fields=["start_time", "end_time"])
 
     def __str__(self):
         return (
