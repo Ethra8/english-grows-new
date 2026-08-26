@@ -46,7 +46,7 @@
             <button type="button" class="classes-status-tab" data-status-tab="completed" aria-selected="false">
                 <i class="fa-solid fa-clock-rotate-left mr-2"></i>
                 <span>Past Classes</span>
-                <strong>{{ class_filter_counts.completed.all }}</strong>
+                <strong>{{ class_filter_counts.past.all }}</strong>
             </button>
 
         </nav>
@@ -118,22 +118,22 @@
 
                 <button type="button" class="classes-filter-btn active" data-filter="today">
                     <span> Today</span>
-                    <strong>{{ class_filter_counts.completed.today }}</strong>
+                    <strong>{{ class_filter_counts.past.today }}</strong>
                 </button>
 
                 <button type="button" class="classes-filter-btn" data-filter="weekly">
                     <span>This Week</span>
-                    <strong>{{ class_filter_counts.completed.weekly }}</strong>
+                    <strong>{{ class_filter_counts.past.weekly }}</strong>
                 </button>
 
                 <button type="button" class="classes-filter-btn" data-filter="monthly">
                     <span>This Month</span>
-                    <strong>{{ class_filter_counts.completed.monthly }}</strong>
+                    <strong>{{ class_filter_counts.past.monthly }}</strong>
                 </button>
 
                 <button type="button" class="classes-filter-btn" data-filter="all">
                     <span>All</span>
-                    <strong>{{ class_filter_counts.completed.all }}</strong>
+                    <strong>{{ class_filter_counts.past.all }}</strong>
                 </button>
 
             </div>
@@ -141,22 +141,22 @@
             <!-- Mobile filter -->
             <select class="mobile-filter-select classes-panel-select" aria-label="Filter past classes">
                 <option value="today">
-                    Today: {{ class_filter_counts.completed.today }}</option>
+                    Today: {{ class_filter_counts.past.today }}</option>
 
                 <option value="weekly">
-                    This Week: {{ class_filter_counts.completed.weekly }}</option>
+                    This Week: {{ class_filter_counts.past.weekly }}</option>
 
                 <option value="monthly">
-                    This Month: {{ class_filter_counts.completed.monthly }}</option>
+                    This Month: {{ class_filter_counts.past.monthly }}</option>
 
                 <option value="all">
-                    All: {{ class_filter_counts.completed.all }}</option>
+                    All: {{ class_filter_counts.past.all }}</option>
             </select>
 
             <!-- Past list -->
             <div class="teacher-assigned-classes-list">
                 {% for session in sessions %}
-                    {% if session.class_status_group == "completed" %}
+                    {% if session.class_status_group == "past" %}
 
                         {% include "profiles/includes/teacher/class_session_row.html" %}
 

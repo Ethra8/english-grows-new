@@ -82,6 +82,7 @@ def login_redirect(request):
 
 
 
+
 # Common login to profile... THEN custom role profile
 @login_required
 def profile(request):
@@ -2075,7 +2076,7 @@ def teacher_classes_list(request):
             "monthly": 0,
             "all": 0,
         },
-        "completed": {
+        "past": {
             "today": 0,
             "weekly": 0,
             "monthly": 0,
@@ -2086,37 +2087,53 @@ def teacher_classes_list(request):
     for session in sessions:
         session_date = timezone.localdate(session.start_time)
 
-        session.is_upcoming = (
-            session.status in [
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_RESCHEDULED,
-            ]
-            and session.start_time > now
-        )
+        # --------------------------------------------------
+        # TIME-BASED CLASSIFICATION
+        # --------------------------------------------------
+
+        is_upcoming = session.start_time > now
+        is_past = session.start_time <= now
+
+        # Keep these only if the template uses them
+        session.is_upcoming = is_upcoming
+
+        # --------------------------------------------------
+        # WORKFLOW STATUS
+        # --------------------------------------------------
 
         session.is_completed = (
             session.status == ClassSession.STATUS_COMPLETED
         )
 
+        # --------------------------------------------------
+        # DATE FILTERS
+        # --------------------------------------------------
+
         session.is_today = session_date == today
-        session.is_this_week = start_of_week <= session_date <= end_of_week
+
+        session.is_this_week = (
+            start_of_week <= session_date <= end_of_week
+        )
+
         session.is_this_month = (
             session_date.year == today.year
             and session_date.month == today.month
         )
 
-        if session.status == ClassSession.STATUS_PENDING_RESCHEDULE:
-            session.class_status_group = "pending_reschedule"
-        elif session.is_completed:
-            session.class_status_group = "completed"
-        elif session.is_upcoming:
-            session.class_status_group = "upcoming"
-        else:
-            # Scheduled/rescheduled but not future and not completed:
-            # still outstanding until explicitly completed.
-            session.class_status_group = "in_progress"
+        # --------------------------------------------------
+        # FRONT-END STATUS GROUP
+        # --------------------------------------------------
 
-        if session.is_upcoming:
+        if is_past:
+            session.class_status_group = "past"
+        else:
+            session.class_status_group = "upcoming"
+
+        # --------------------------------------------------
+        # UPCOMING COUNTS
+        # --------------------------------------------------
+
+        if is_upcoming:
             class_filter_counts["upcoming"]["all"] += 1
 
             if session.is_today:
@@ -2128,17 +2145,22 @@ def teacher_classes_list(request):
             if session.is_this_month:
                 class_filter_counts["upcoming"]["monthly"] += 1
 
-        if session.is_completed:
-            class_filter_counts["completed"]["all"] += 1
+        # --------------------------------------------------
+        # PAST COUNTS
+        # --------------------------------------------------
+
+        if is_past:
+            class_filter_counts["past"]["all"] += 1
 
             if session.is_today:
-                class_filter_counts["completed"]["today"] += 1
+                class_filter_counts["past"]["today"] += 1
 
             if session.is_this_week:
-                class_filter_counts["completed"]["weekly"] += 1
+                class_filter_counts["past"]["weekly"] += 1
 
             if session.is_this_month:
-                class_filter_counts["completed"]["monthly"] += 1
+                class_filter_counts["past"]["monthly"] += 1
+
 
     context = {
         "sessions": sessions,
@@ -2146,7 +2168,11 @@ def teacher_classes_list(request):
         "class_filter_counts": class_filter_counts,
     }
 
-    return render(request, "profiles/teacher/teacher_classes_list.html", context)
+    return render(
+        request,
+        "profiles/teacher/teacher_classes_list.html",
+        context,
+    )
 
 
 

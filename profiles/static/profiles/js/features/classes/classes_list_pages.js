@@ -124,17 +124,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* Remember filter separately for each panel */
+        /* Remember each panel's own active filter */
         panel.dataset.activeFilter = filter;
 
 
-        /* Actually filter rows */
-        applyFilter(panel, filter);
+        /* Filter the rows */
+        applyFilter(
+            panel,
+            filter
+        );
     }
 
 
     /* ---------------------------------------------------------
-       INITIALISE FILTER CONTROLS FOR EACH PANEL
+       INITIALISE EACH STATUS PANEL
     --------------------------------------------------------- */
 
     statusPanels.forEach(panel => {
@@ -153,13 +156,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 "click",
                 function () {
 
-                    const filter =
-                        this.dataset.filter;
-
                     setPanelFilter(
                         panel,
-                        filter
+                        this.dataset.filter
                     );
+
                 }
             );
 
@@ -177,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         panel,
                         this.value
                     );
+
                 }
             );
 
@@ -184,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /*
-         * Default filter for BOTH panels.
+         * Default filter:
          *
          * Upcoming -> Today
          * Past     -> Today
@@ -203,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showStatusPanel(status) {
 
+        /* Status tabs */
         statusTabs.forEach(tab => {
 
             const isActive =
@@ -221,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
 
+        /* Status panels */
         statusPanels.forEach(panel => {
 
             const isActive =
@@ -235,8 +239,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             /*
-             * Reapply this panel's own filter when it
-             * becomes visible.
+             * Reapply this panel's own filter whenever
+             * the panel becomes visible.
              */
             if (isActive) {
 
@@ -253,6 +257,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+
+    /* ---------------------------------------------------------
+       STATUS TAB EVENTS
+    --------------------------------------------------------- */
 
     statusTabs.forEach(tab => {
 
@@ -272,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ---------------------------------------------------------
        DEFAULT VIEW
-       Upcoming Classes
+       Upcoming Classes -> Today
     --------------------------------------------------------- */
 
     showStatusPanel("upcoming");
