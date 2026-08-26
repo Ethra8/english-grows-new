@@ -526,10 +526,7 @@ def my_calendar_events(request):
                 "class_number":
                     session.class_number,
 
-                "meeting_link":
-                    get_calendar_meeting_link(
-                        session
-                    ),
+                "meeting_link": get_calendar_meeting_link(session),
 
                 # This becomes the Group Details fallback
                 # in calendar.js when no meeting link exists.
@@ -3861,10 +3858,7 @@ def teacher_calendar_events(request):
                 "class_number":
                     session.class_number,
 
-                "meeting_link":
-                    get_calendar_meeting_link(
-                        session
-                    ),
+                "meeting_link": get_calendar_meeting_link(session),
 
                 "group_details_url":
                     reverse(

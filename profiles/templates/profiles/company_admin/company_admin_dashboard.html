@@ -91,7 +91,7 @@
                 {% if todays_sessions %}
                 <div class="today-sessions-list">
                     {% for session in todays_sessions %}
-                    <div class="today-class-info">
+                    <div class="today-class-row">
                         <div class="today-time">
                             {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                         </div>

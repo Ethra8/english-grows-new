@@ -184,7 +184,7 @@
 }
 
 /* TODAY CLASS INFO LIST */
-.today-class-info {
+.today-class-row {
     display: grid;
     grid-template-columns: 150px minmax(280px, 1fr) 60px minmax(120px, 1fr);
     align-items: center;
@@ -193,6 +193,11 @@
     border-radius: 8px;
     overflow: hidden;
     padding: 0.25rem 1rem 0.25rem 0.25rem;
+}
+
+/* if class_session has already past */
+#teacher .today-class-row.today-class-row-past {
+    background: rgba(var(--color-whitesmoke-rgb), 0.6);
 }
 
 .today-time {
@@ -221,7 +226,6 @@
     flex-direction: column;
     padding-left: 0.5rem;
 }
-
 
 .today-action {
     display: flex;
@@ -538,7 +542,7 @@ a.btn-class-today img {
         min-width: 0;
     }
 
-    #teacher .today-class-info {
+    #teacher .today-class-row {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-areas:
@@ -723,7 +727,7 @@ a.btn-class-today img {
 
 @media (max-width: 576px) {
     
-    .today-class-info {
+    .today-class-row {
             padding: 0.5rem 0.5rem 0.15rem 0.5rem;
     }
 

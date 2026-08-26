@@ -30,7 +30,7 @@
             data-django-language="{{ LANGUAGE_CODE }}"
             translate="no"
             data-events-url="{% url 'profiles:my_calendar_events' %}"
-            data-role="company_admin"
+            data-role="{{ request.user.profile.role }}"
 
             data-today-label="{% trans 'Today' %}"
             data-week-label="{% trans 'Week' %}"

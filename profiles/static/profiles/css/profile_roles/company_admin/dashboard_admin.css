@@ -32,7 +32,7 @@
     font-size: 0.9rem;
 }
 
-#company_admin .today-class-info {
+#company_admin .today-class-row {
     grid-template-columns: 140px minmax(320px, 1fr) 60px;
 }
 
@@ -156,7 +156,7 @@
 
 
 @media (max-width: 600px) {
-    #company_admin .today-class-info {
+    #company_admin .today-class-row {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-areas:

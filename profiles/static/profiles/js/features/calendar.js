@@ -334,9 +334,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
+            ============================================================
             COMPANY ADMIN
+            ============================================================
 
-            Never joins the class.
+            Company Admin always gets Group Details,
+            even when the class has already passed.
         */
 
         if (
@@ -365,9 +368,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         /*
-            ALL OTHER ROLES
+            ============================================================
+            PAST SESSION
+            ============================================================
 
-            Prefer meeting link.
+            Teacher / Employee / Individual:
+
+            If the class has already finished,
+            do not show any action button.
+        */
+
+        if (
+            event.end
+            &&
+            event.end < new Date()
+        ) {
+            return null;
+        }
+
+
+        /*
+            ============================================================
+            FUTURE / CURRENT SESSION
+            ============================================================
+
+            All non-admin roles:
+
+            meeting link exists
+                -> Join class
+
+            otherwise
+                -> Group details
         */
 
         if (meetingLink) {
@@ -387,12 +418,6 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         }
 
-
-        /*
-            FALLBACK
-
-            No meeting link -> Group details.
-        */
 
         if (groupDetailsUrl) {
 
@@ -414,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return null;
     }
-
 
     /*
         ============================================================

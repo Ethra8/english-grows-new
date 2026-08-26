@@ -57,7 +57,7 @@
                     <div class="meta-text">
                         <strong>All Courses
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12" height="18" class="ml-2"></strong>
-                        <span>{{ active_courses|default:"0" }}</span>
+                        <span>{{ active_courses|default:"0" }} <small>Active</small></span>
                     </div>
                 </div>
             </a>
@@ -106,7 +106,7 @@
             <div class="today-sessions-list">
                 {% if todays_sessions %}
                     {% for session in todays_sessions %}
-                        <div class="today-class-info">
+                        <div class="today-class-row{% if session.is_past %} today-class-row-past{% endif %}">
 
                             <!-- TIME -->
                             <div class="today-time">
@@ -131,6 +131,7 @@
 
                             <!-- ACTION -->
                             <div class="today-action">
+                            {% if not session.is_past %}
                             {% if session.meeting_link %}
                             <button type="button" class="js-open-reschedule-modal btn-course-details"
                                 data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
@@ -148,6 +149,7 @@
                             <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn" aria-label="check calendar">
                                 Calendar
                                 <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
+                            {% endif %}
                             {% endif %}
                             </div>
                         </div>
