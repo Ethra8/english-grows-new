@@ -14,6 +14,67 @@
 {% block extra_title %}| Dashboard{% endblock %}
 
 {% block top_nav_actions %}
+<form
+    action="{% url 'set_language' %}"
+    method="post"
+    class="nav-language-selector notranslate"
+    translate="no"
+>
+    {% csrf_token %}
+
+    <input
+        type="hidden"
+        name="next"
+        value="{{ request.get_full_path }}"
+    >
+
+    <button
+        type="submit"
+        name="language"
+        value="en"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to English' %}"
+    >
+        EN
+    </button>
+
+    <span class="nav-language-divider" aria-hidden="true">·</span>
+
+    <button
+        type="submit"
+        name="language"
+        value="es"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to Spanish' %}"
+    >
+        ES
+    </button>
+
+    <span class="nav-language-divider" aria-hidden="true">·</span>
+
+    <button
+        type="submit"
+        name="language"
+        value="ca"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'ca' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to Catalan' %}"
+    >
+        CA
+    </button>
+
+    <span class="nav-language-divider" aria-hidden="true">·</span>
+
+    <!-- <button
+        type="submit"
+        name="language"
+        value="fr"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'fr' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to French' %}"
+    >
+        FR
+    </button> -->
+
+</form>
 {% endblock %}
 
 
@@ -29,6 +90,67 @@
             alt="English Grows logo"
         >
     </a>
+              <form
+                  action="{% url 'set_language' %}"
+                  method="post"
+                  class="nav-language-selector notranslate"
+                  translate="no"
+              >
+                  {% csrf_token %}
+
+                  <input
+                      type="hidden"
+                      name="next"
+                      value="{{ request.get_full_path }}"
+                  >
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="en"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to English' %}"
+                  >
+                      EN
+                  </button>
+
+                  <span class="nav-language-divider" aria-hidden="true">·</span>
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="es"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to Spanish' %}"
+                  >
+                      ES
+                  </button>
+
+                  <!-- <span class="nav-language-divider" aria-hidden="true">·</span>
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="ca"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'ca' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to Catalan' %}"
+                  >
+                      CA
+                  </button> -->
+
+                  <!-- <span class="nav-language-divider" aria-hidden="true">·</span> -->
+
+                  <!-- <button
+                      type="submit"
+                      name="language"
+                      value="fr"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'fr' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to French' %}"
+                  >
+                      FR
+                  </button> -->
+
+              </form>            
 
     <button
         class="navbar-toggler d-lg-none ml-auto mr-3"
@@ -64,12 +186,8 @@
             {% endif %} 
         {% endblock %}
 
-        <div
-            id="sidebarBackdrop"
-            class="sidebar-backdrop"
-            aria-hidden="true"
-        ></div>
-
+        <!-- sidebar appears on the left side on smaller devs -->
+        <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
 
         <main class="profile-main">
             {% block profile_content %}

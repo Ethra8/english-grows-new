@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <!-- Mobile logo -->
 <a href="{% url 'home' %}"
@@ -12,10 +13,71 @@
     >
 </a>
 
+<form
+    action="{% url 'set_language' %}"
+    method="post"
+    class="nav-language-selector notranslate"
+    translate="no"
+>
+    {% csrf_token %}
+
+    <input
+        type="hidden"
+        name="next"
+        value="{{ request.get_full_path }}"
+    >
+
+    <button
+        type="submit"
+        name="language"
+        value="en"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to English' %}"
+    >
+        EN
+    </button>
+
+    <span class="nav-language-divider" aria-hidden="true">·</span>
+
+    <button
+        type="submit"
+        name="language"
+        value="es"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to Spanish' %}"
+    >
+        ES
+    </button>
+
+    <!-- <span class="nav-language-divider" aria-hidden="true">·</span>
+
+    <button
+        type="submit"
+        name="language"
+        value="ca"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'ca' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to Catalan' %}"
+    >
+        CA
+    </button> -->
+
+    <!-- <span class="nav-language-divider" aria-hidden="true">·</span> -->
+
+    <!-- <button
+        type="submit"
+        name="language"
+        value="fr"
+        class="nav-language-btn {% if LANGUAGE_CODE == 'fr' %}active{% endif %}"
+        aria-label="{% trans 'Switch language to French' %}"
+    >
+        FR
+    </button> -->
+
+</form>            
 
 <!-- Mobile burger button -->
 <button
-    class="navbar-toggler d-block d-lg-none ml-auto mr-3"
+    class="navbar-toggler d-block d-lg-none ml-5 mr-3"
     type="button"
     data-toggle="collapse"
     data-target="#mobileNavbar"
@@ -25,7 +87,6 @@
 >
     <span class="navbar-toggler-icon"></span>
 </button>
-
 
 <!-- Mobile collapsible menu -->
 <div class="collapse navbar-collapse d-lg-none" id="mobileNavbar">

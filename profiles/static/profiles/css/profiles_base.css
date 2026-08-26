@@ -400,6 +400,10 @@ div:has(> .student-action-btn) {
    DESKTOP SIDEBAR
 ========================================================= */
 
+.profile-sidebar .btn-navbar {
+    width: fit-content !important;
+    margin: 0 0.3rem;
+}
 
 .profile-sidebar {
     width: 270px;
@@ -1265,7 +1269,7 @@ div:has(> .student-action-btn) {
         bottom: 0;
         left: 0;
 
-        width: min(85vw, 300px);
+        width: min(85vw, 280px);
         max-width: none;
         min-height: 100vh;
         flex: none;

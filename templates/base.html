@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!-- {% url 'profiles:profile' as profile %}
 {% url 'home:subscribe_form' as subscribe_form %} -->
 
@@ -85,6 +86,67 @@
         <div class="col-9 my-auto py-1 py-lg-0">
 
           <ul class="list-inline list-unstyled text-right my-0">
+              <form
+                  action="{% url 'set_language' %}"
+                  method="post"
+                  class="nav-language-selector notranslate"
+                  translate="no"
+              >
+                  {% csrf_token %}
+
+                  <input
+                      type="hidden"
+                      name="next"
+                      value="{{ request.get_full_path }}"
+                  >
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="en"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to English' %}"
+                  >
+                      EN
+                  </button>
+
+                  <span class="nav-language-divider" aria-hidden="true">·</span>
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="es"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to Spanish' %}"
+                  >
+                      ES
+                  </button>
+
+                  <!-- <span class="nav-language-divider" aria-hidden="true">·</span>
+
+                  <button
+                      type="submit"
+                      name="language"
+                      value="ca"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'ca' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to Catalan' %}"
+                  >
+                      CA
+                  </button> -->
+
+                  <!-- <span class="nav-language-divider" aria-hidden="true">·</span> -->
+
+                  <!-- <button
+                      type="submit"
+                      name="language"
+                      value="fr"
+                      class="nav-language-btn {% if LANGUAGE_CODE == 'fr' %}active{% endif %}"
+                      aria-label="{% trans 'Switch language to French' %}"
+                  >
+                      FR
+                  </button> -->
+
+              </form>            
 
             {% block top_nav_actions %}
 
@@ -110,7 +172,7 @@
                          aria-label="{% trans 'Dashboard' %}">
 
                         <i class="fa-regular fa-user"></i>
-                        {% trans "Dashboard" %}
+                        {% trans "My Profile" %}
                       </a>
 
                     {% elif request.user.profile.role == "company_admin" %}
@@ -160,6 +222,7 @@
                 </li>
 
               {% endif %}
+
 
             {% endblock %}
 

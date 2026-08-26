@@ -14,6 +14,9 @@ msgstr "English Grows"
 msgid "Profile navigation"
 msgstr "Barra de navegación del perfil"
 
+msgid "My Profile"
+msgstr "Mi Perfil"
+
 
 msgid "Learner"
 msgstr "Estudiante"
@@ -96,7 +99,7 @@ msgid "B1.1 - Pre-Intermediate"
 msgstr "B1.1 - Preintermedio"
 
 msgid "B1.2 - Lower Intermediate"
-msgstr "B1.2 - Intermedio inicial"
+msgstr "B1.2 - Intermedio bajo"
 
 msgid "B2.1 - Intermediate"
 msgstr "B2.1 - Intermedio"

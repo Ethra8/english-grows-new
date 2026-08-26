@@ -819,6 +819,10 @@
         padding-right: 0%;
     }
 
+    #calendar {
+        padding: 20px 6px 12px;
+    }
+
     #my_calendar_page h1 {
         padding: 0 1rem;
         text-align: center;
