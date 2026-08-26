@@ -1,6 +1,7 @@
 <aside id="profileSidebar" class="profile-sidebar">
 
-    <div class="sidebar-user">
+    <div class="sidebar-user notranslate" translate="no">
+
         {% if request.user.profile.profile_photo %}
             <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="profile-photo">
         {% else %}
@@ -11,13 +12,12 @@
 
         <h2>{{ request.user.first_name|default:request.user.username }}</h2>
 
-        <!-- badge user role & company -->
-        
-            <span class="text-center mt-2">
-                <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
-                {{ request.user.profile.get_role_display }}
-                <br>
-            </span>
+        <!-- badge user role & company -->        
+        <span class="text-center mt-2">
+            <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
+            {{ request.user.profile.get_role_display }}
+            <br>
+        </span>
         {% if request.user.profile.company %}
             <p class="text-center"><i class="fa-regular fa-building mr-2 mt-4"></i><strong>{{ request.user.profile.company.name }}</strong></p>
         {% endif %}
@@ -25,47 +25,48 @@
     </div>
     <hr class="mt-5">
  
-    <nav class="sidebar-nav mt-3" aria-label="Profile navigation">
+    <nav class="sidebar-nav notranslate" translate="no" aria-label="{% trans 'Profile navigation' %}">
 
-        <a href="{% url 'profiles:company_admin_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_dashboard' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_dashboard' %}active{% endif %}" aria-label="{% trans 'Dashboard' %}">
             <i class="fa-solid fa-house"></i>
-            <span>Dashboard</span>
+            <span>{% trans "Dashboard" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_courses' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_courses' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_courses' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_courses' %}active{% endif %}" aria-label="{% trans 'Courses' %}">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Courses</span>
+            <span>{% trans "Courses" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_classes_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_classes_list' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_classes_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_classes_list' %}active{% endif %}" aria-label="{% trans 'Class Sessions' %}">
             <i class="fa-solid fa-chalkboard-user"></i>
-            <span>Class Sessions</span>
+            <span>{% trans "Class Sessions" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_calendar' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_calendar' %}active{% endif %}" aria-label="{% trans 'Calendar' %}">
             <i class="fa-regular fa-calendar-days"></i>
-            <span>Class Calendar</span>
+            <span>{% trans "Calendar" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_employees_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_employees_list' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_employees_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_employees_list' %}active{% endif %}" aria-label="{% trans 'Performance' %}">
             <i class="fa-solid fa-chart-line"></i>
-            <span>Performance</span>
+            <span>{% trans "Performance" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}" aria-label="{% trans 'Attendance' %}">
             <i class="fa-solid fa-list-check"></i>
-            <span>Attendance</span>
+            <span>{% trans "Attendance" %}<</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_profile_settings' %}active{% endif %}">
+        <a href="{% url 'profiles:company_admin_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_profile_settings' %}active{% endif %}" aria-label="{% trans 'Account Setting' %}">
             <i class="fa-solid fa-user-gear"></i>
-            <span>Account Settings</span>
+            <span>{% trans "Account Settings" %}</span>
         </a>
     </nav>
     <hr>
-    <a href="{% url 'account_logout' %}" class="btn-navbar" aria-label="Logout">
+
+    <a href="{% url 'account_logout' %}" class="btn-navbar mb-5 notranslate" aria-label="Logout">
         <i class="fa-solid fa-arrow-right-from-bracket mr-2 mt-1"></i>
-        Logout
+        {% trans "Logout" %}
     </a>
 
 </aside>
