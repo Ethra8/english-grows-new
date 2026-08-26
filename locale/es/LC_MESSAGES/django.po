@@ -24,6 +24,10 @@ msgstr "Estudiante"
 msgid "Company Admin"
 msgstr "Admin. Empresa"
 
+msgid "Employee"
+msgstr "Empleado/a"
+
+
 msgid "Profile photo"
 msgstr "Foto de Perfil"
 
@@ -33,7 +37,10 @@ msgid "Dashboard"
 msgstr "Tablero"
 
 msgid "Course Info"
-msgstr "Info del curso"
+msgstr "Curso"
+
+msgid "Courses"
+msgstr "Cursos"
 
 msgid "Calendar"
 msgstr "Calendario"
@@ -54,13 +61,19 @@ msgid "Logout"
 msgstr "Salir"
 
 
+msgid "Level"
+msgstr "Nivel"
+
+msgid "Next Class"
+msgstr "Próxima Clase"
+
+msgid "Join Class"
+msgstr "Unirse"
+
 
 
 msgid "Class Calendar"
 msgstr "Calendario"
-
-msgid "Join class"
-msgstr "Unirse"
 
 msgid "All-day"
 msgstr "Festivo"

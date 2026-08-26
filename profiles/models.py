@@ -109,15 +109,15 @@ class UserProfile(models.Model):
 
     LEVEL_CHOICES = [
         (LEVEL_UNKNOWN, _("Pending")),
-        (LEVEL_A1, "A1 - Beginner"),
-        (LEVEL_A2, "A2 - Elementary"),
-        (LEVEL_B1_1, "B1.1 - Pre-Intermediate"),
-        (LEVEL_B1_2, "B1.2 - Lower Intermediate"),
-        (LEVEL_B2_1, "B2.1 - Intermediate"),
-        (LEVEL_B2_2, "B2.2 - Higher Intermediate"),
-        (LEVEL_C1_1, "C1.1 - Lower Advanced"),
-        (LEVEL_C1_2, "C1.2 - Higher Advanced"),
-        (LEVEL_C2, "C2 Proficiency"),
+        (LEVEL_A1, _("A1 - Beginner")),
+        (LEVEL_A2, _("A2 - Elementary")),
+        (LEVEL_B1_1, _("B1.1 - Pre-Intermediate")),
+        (LEVEL_B1_2, _("B1.2 - Lower Intermediate")),
+        (LEVEL_B2_1, _("B2.1 - Intermediate")),
+        (LEVEL_B2_2, _("B2.2 - Higher Intermediate")),
+        (LEVEL_C1_1, _("C1.1 - Lower Advanced")),
+        (LEVEL_C1_2, _("C1.2 - Higher Advanced")),
+        (LEVEL_C2, _("C2 Proficiency")),
     ]
 
     NATIVE_LANGUAGE_CHOICES = [

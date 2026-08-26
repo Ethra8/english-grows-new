@@ -1,5 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
+
 {% load date_extras %}
 {% load course_extras %}
 
@@ -26,8 +28,8 @@
     </header>
 
     <div class="mb-5">
-        <div class="level-pill">
-            <span class="current-level-label">My Level</span>
+        <div class="level-pill notranslate" translate="no">
+            <span class="current-level-label">{% trans "Level" %}</span>
             <span class="current-level-value">
             {% if request.user.profile.current_level %}    
                 {{ request.user.profile.get_current_level_display }}
@@ -42,12 +44,21 @@
         <div class="next-class-card">
             <div class="circle-panel1">
                 <!-- <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div> -->
-                <h2>Next Class</h2>
+                <h2 class="notranslate" translate="no">{% trans "Next Class" %}</h2>
             </div>
             <div class="circle-panel2"></div>
             <div class="info">
                 {% if next_class %}
-                    <p><i class="fa-solid fa-calendar-day mr-2"></i> {{ next_class.start_time|ordinal_sup|safe }}</p>
+                    {% get_current_language as LANGUAGE_CODE %}
+                    <p class="notranslate" translate="no">
+                        <i class="fa-solid fa-calendar-day mr-2"></i>
+
+                        {% if LANGUAGE_CODE == "en" or LANGUAGE_CODE == "en-us" %}
+                            {{ next_class.start_time|ordinal_sup|safe }}
+                        {% else %}
+                            {{ next_class.start_time|date:"l, j F" }}
+                        {% endif %}
+                    </p>
                     <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
                     <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
                         <!-- <div class="class-session-next-class">
@@ -64,7 +75,7 @@
                     {% if next_class.meeting_link %}
                         <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
                             <i class="fa-solid fa-video mr-2"></i>
-                            Join Class <i class="fa-solid fa-chevron-right ml-5 float-right"></i>
+                            {% trans "Join Class" %} <i class="fa-solid fa-chevron-right ml-5 float-right"></i>
                         </a>
                     {% endif %}
                 {% else %}
