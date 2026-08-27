@@ -8,7 +8,8 @@ h2 {
 
 
 /* MODAL: Confirm Reschedule Action on Class List */
-.reschedule-modal-overlay {
+.reschedule-modal-overlay,
+.reschedule-page-modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -19,11 +20,13 @@ h2 {
     padding: 1rem;
 }
 
-.reschedule-modal-overlay.is-visible {
+.reschedule-modal-overlay.is-visible,
+.reschedule-page-modal-overlay.is-visible {
     display: flex;
 }
 
-.reschedule-modal-box {
+.reschedule-modal-box,
+.reschedule-page-modal {
     max-width: 520px;
     width: 100%;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
@@ -33,7 +36,8 @@ h2 {
     background: var(--color-whitesmoke);
 }
 
-.reschedule-modal-class-name {
+.reschedule-modal-class-name,
+.reschedule-page-modal-class-name {
     color: var(--color-teal);
     font-weight: 600;
     font-size: 1.2rem;
@@ -41,7 +45,8 @@ h2 {
     border-bottom: 1px solid lightgrey;
 }
 
-.reschedule-modal-actions {
+.reschedule-modal-actions,
+.reschedule-page-modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
@@ -49,19 +54,23 @@ h2 {
 }
 
 .reschedule-modal-cancel,
-.reschedule-modal-confirm {
+.reschedule-modal-confirm,
+.reschedule-page-modal-cancel,
+.reschedule-page-modal-confirm {
     border: none;
     border-radius: 8px;
     padding: 0.75rem 1.4rem;
     cursor: pointer;
 }
 
-.reschedule-modal-cancel {
+.reschedule-modal-cancel,
+.reschedule-page-modal-cancel {
     background: rgb(191, 48, 48);
     color: var(--color-whitesmoke);
 }
 
-.reschedule-modal-confirm {
+.reschedule-modal-confirm,
+.reschedule-page-modal-confirm {
     background: var(--color-teal);
     color: var(--color-whitesmoke);
     font-weight: 700;
@@ -79,7 +88,8 @@ h2 {
     gap: 3rem;
 }
 
-.assigned-classes-filter-header {
+.assigned-classes-filter-header,
+.reschedule-page-panel-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -395,7 +405,8 @@ h2 {
 }
 
 .course-status-filter-header,
-.assigned-classes-filter-header {
+.assigned-classes-filter-header,
+.reschedule-page-panel-header {
     width: 100%;
     padding: 0.5rem;
 }
@@ -407,9 +418,10 @@ h2 {
     margin: 0 auto;
 }
 
-.assigned-classes-filter-header h3 {
+.assigned-classes-filter-header h3,
+.reschedule-page-panel-header h2 {
     color: var(--color-whitesmoke);
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-family: "Big Shoulders Display", sans-serif;
 }
 
@@ -871,6 +883,373 @@ h2 {
 /* RESCHEDULE Pages *********************************** */
 /******************************************************/
 
+/* =====================================================
+   RESCHEDULE PAGE
+   Shared layout for Teacher / Employee / Learner
+   Unique class names prevent Classes-page JS conflicts.
+===================================================== */
+
+.teacher-reschedule-page,
+.learner-reschedule-page,
+.employee-reschedule-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+
+/* =====================================================
+   MAIN TABS
+   Pending Reschedule / Rescheduled
+===================================================== */
+
+.reschedule-page-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0.25rem;
+    margin-bottom: 0;
+}
+
+.reschedule-page-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-width: 210px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.55);
+    border-radius: 8px 8px 0 0;
+    background: rgba(var(--color-navy-rgb), 0.12);
+    color: var(--color-navy);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.reschedule-page-tab strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 38px;
+    padding: 0 0.75rem;
+    border-radius: 999px;
+    background: rgba(var(--color-teal-rgb), 0.35);
+    color: var(--color-whitesmoke);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.reschedule-page-tab:hover {
+    background: rgba(var(--color-teal-rgb), 0.12);
+}
+
+.reschedule-page-tab.active {
+    background: var(--color-teal);
+    color: var(--color-whitesmoke);
+    border-color: var(--color-teal);
+    box-shadow: 0 4px 10px rgba(var(--color-shadow-rgba));
+}
+
+.reschedule-page-tab.active strong {
+    background: rgba(var(--color-turquoise-rgb), 0.22);
+    color: var(--color-whitesmoke);
+}
+
+
+/* =====================================================
+   PANELS
+   Visually aligned with .assigned-classes-panel
+===================================================== */
+
+.reschedule-page-panels,
+.reschedule-page-panel,
+.reschedule-page-list {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.reschedule-page-panel {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    background: rgba(var(--color-navy-rgb), 0.9);
+    border: 1px solid rgba(80, 230, 220, 0.85);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
+}
+
+.reschedule-page-panel[hidden] {
+    display: none !important;
+}
+
+
+/* =====================================================
+   PANEL HEADER
+   Shares declarations above with
+   .assigned-classes-filter-header
+===================================================== */
+
+.reschedule-page-panel-header {
+    position: relative;
+    z-index: 5;
+}
+
+.reschedule-page-panel-header h2 {
+    margin: 0;
+    font-weight: 400;
+}
+
+.reschedule-page-panel-header i {
+    color: var(--color-whitesmoke);
+}
+
+
+/* =====================================================
+   RESCHEDULED FILTERS
+   Upcoming / Past / All
+===================================================== */
+
+.reschedule-page-filter-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+    padding: 0.5rem;
+    background: rgba(var(--color-navy-rgb), 0.7);
+}
+
+.reschedule-page-filter-btn {
+    padding: 0.65rem 1rem;
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border-radius: 6px;
+    background: rgba(var(--color-navy-rgb), 0.45);
+    color: var(--color-whitesmoke);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.reschedule-page-filter-btn:hover {
+    background: rgba(var(--color-teal-rgb), 0.35);
+}
+
+.reschedule-page-filter-btn.active {
+    background: var(--color-teal);
+    border-color: var(--color-turquoise);
+    color: var(--color-whitesmoke);
+}
+
+
+/* =====================================================
+   LIST
+   Visually aligned with .assigned-classes-list
+===================================================== */
+
+.reschedule-page-list {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: var(--color-whitesmoke);
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
+}
+
+
+/* =====================================================
+   ROW
+   Two columns only:
+   session information | action
+===================================================== */
+
+.reschedule-page-row {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(60px, 0.25fr) minmax(100px, 0.5fr) minmax(150px, 0.75fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.3rem;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
+    min-width: 960px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.reschedule-page-row:hover {
+    background: rgba(var(--color-icy-rgb), 0.3);
+}
+
+.reschedule-page-list > .reschedule-page-row:last-of-type:not(.reschedule-page-row-hidden) {
+    border-bottom: none !important;
+}
+
+
+/* =====================================================
+   MAIN CLASS INFORMATION
+===================================================== */
+
+.reschedule-page-main-info {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+    min-width: 0;
+}
+
+.reschedule-page-level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+.reschedule-page-row .level {
+    width: 50px;
+}
+
+.reschedule-page-class-info {
+    min-width: 0;
+}
+
+.reschedule-page-class-info h3 {
+    margin: 0 0 0.35rem;
+    color: var(--color-navy);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    transition: all 0.2s ease;
+}
+
+.reschedule-page-class-info h3:hover {
+    font-weight: 600;
+}
+
+.reschedule-page-class-info h3 .text-white {
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.reschedule-page-class-info p {
+    margin-bottom: 0;
+    color: var(--color-steel);
+}
+
+
+/* =====================================================
+   STATUS BADGES
+===================================================== */
+
+.reschedule-page-row .status-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    font-weight: 500;
+}
+
+.reschedule-page-row .status-badge.rescheduled {
+    background: var(--color-teal);
+    color: var(--color-whitesmoke);
+}
+
+.reschedule-page-row .status-badge.pending-reschedule {
+    background: var(--color-steel);
+    color: var(--color-whitesmoke);
+}
+
+
+/* =====================================================
+   ACTION
+   Visually aligned with .btn-course-details
+===================================================== */
+
+.reschedule-page-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.reschedule-page-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: fit-content;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--color-turquoise);
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.2);
+    color: var(--color-teal);
+    font-family: inherit;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.reschedule-page-action-btn:hover {
+    background: rgba(var(--color-turquoise-rgb), 0.15);
+    color: var(--color-navy);
+    text-decoration: none;
+}
+
+
+/* =====================================================
+   EMPTY STATES
+===================================================== */
+
+.reschedule-page-empty,
+.reschedule-page-filter-empty {
+    width: 100%;
+    margin: 0;
+    color: var(--color-steel);
+}
+
+.reschedule-page-filter-empty[hidden] {
+    display: none !important;
+}
+
+
+/* =====================================================
+   RESCHEDULE PAGE MODAL EXTRA
+   Core modal declarations are shared with the
+   existing .reschedule-modal-* classes above.
+===================================================== */
+
+.reschedule-page-modal-time {
+    color: var(--color-steel);
+    margin-bottom: 1rem;
+}
+
+
+/* =====================================================
+   DETAIL PAGE
+===================================================== */
+
 .teacher-reschedule-detail-page form {
     background-color: var(--color-navy);
     padding: 1rem;
@@ -895,7 +1274,8 @@ h2 {
 @media (max-width: 1367px) {
 
     /* .assigned-course-row, */
-    .assigned-class-row {
+    .assigned-class-row,
+    .reschedule-page-row {
         /* grid-template-columns: minmax(0, 1fr) 70px 170px auto; */
         gap: 1rem;
         padding: 1.5rem 1rem 1rem;
@@ -1007,6 +1387,15 @@ h2 {
 
 @media (max-width: 991.99px) {
 
+    /* RESCHEDULE Page */
+    .reschedule-page-tabs {
+        flex-wrap: wrap;
+    }
+
+    .reschedule-page-tab {
+        flex: 1 1 220px;
+    }
+
 
     /*****************************************************|
     |*** ALL ATTENDANCE Pages ****************************|
@@ -1108,8 +1497,143 @@ h2 {
 
 @media (max-width: 767.99px) {
 
+    /******************************************************/
+    /* RESCHEDULE Page *********************************** */
+    /******************************************************/
+
+    /*
+     * Compact card layout on devices below 768px:
+     *
+     * ┌─────────────────────────────────────┐
+     * │ new date + time               level │
+     * │ course / lesson                     │
+     * │ status                              │
+     * │ action                              │
+     * └─────────────────────────────────────┘
+     */
+
+    .reschedule-page-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "datetime level"
+            "course course"
+            "status status"
+            "action action";
+        gap: 0.5rem 1rem;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 1rem;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /*
+     * On desktop .reschedule-page-main-info is a flex wrapper.
+     * On mobile its children participate directly in the row grid.
+     */
+    .reschedule-page-main-info {
+        display: contents;
+    }
+
+    /* NEW DATE + TIME */
+    .reschedule-page-datetime {
+        grid-area: datetime;
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        max-width: 100%;
+        padding: 0.45rem 0.8rem;
+        border-radius: 8px;
+        background: var(--color-navy);
+        color: var(--color-turquoise);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .reschedule-page-datetime i {
+        color: var(--color-turquoise);
+    }
+
+    /* LEVEL */
+    .reschedule-page-level {
+        grid-area: level;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: auto;
+    }
+
+    .reschedule-page-row .level {
+        width: auto;
+        min-width: 50px;
+    }
+
+    /* COURSE + LESSON */
+    .reschedule-page-class-info {
+        grid-area: course;
+        width: 100%;
+        min-width: 0;
+        padding-top: 0.25rem;
+    }
+
+    .reschedule-page-class-info h3 {
+        margin-bottom: 0.25rem;
+    }
+
+    /*
+     * Date/time is displayed in the dedicated top pill on mobile,
+     * so the desktop date/time paragraph is hidden.
+     */
+    .reschedule-page-class-info p {
+        display: none;
+    }
+
+    /* STATUS */
+    .reschedule-page-status {
+        grid-area: status;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    /* ACTION */
+    .reschedule-page-action {
+        grid-area: action;
+        display: flex;
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .reschedule-page-action-btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    /* FILTERS */
+    .reschedule-page-filter-tabs {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* MODAL */
+    .reschedule-page-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .reschedule-page-modal-cancel,
+    .reschedule-page-modal-confirm,
+    .reschedule-page-modal-actions form {
+        width: 100%;
+    }
+
+
     /* *** BUTTONS **************************************** */
     .btn-course-details,
+    .reschedule-page-action-btn,
     .btn-email-all,
     .edit-attendance-btn,
     .btn-to-student-detail  {
@@ -1383,13 +1907,20 @@ h2 {
 /* .classes-list .all-assigned-classes, */
 .wrapper-assigned-classes-panel,
 .assigned-classes-panel,
-.classes-panel-collapse {
+.classes-panel-collapse,
+.teacher-reschedule-page,
+.learner-reschedule-page,
+.employee-reschedule-page,
+.reschedule-page-panels,
+.reschedule-page-panel,
+.reschedule-page-list {
     width: 100%;
     max-width: 100%;
     min-width: 0;
 }
 
 /* MUST STAY AT THE END OF CSS FILE */
-.assigned-class-row.class-hidden {
+.assigned-class-row.class-hidden,
+.reschedule-page-row.reschedule-page-row-hidden {
     display: none !important;
 }    

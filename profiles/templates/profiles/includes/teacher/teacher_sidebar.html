@@ -66,7 +66,7 @@
             <span>{% trans "Materials" %}</span>
         </a>
 
-        <a href="{% url 'profiles:teacher_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_profile_settings' %}active{% endif %}" aria-label="{% trans 'Account Setting' %}>
+        <a href="{% url 'profiles:teacher_profile_settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'teacher_profile_settings' %}active{% endif %}" aria-label="{% trans 'Account Setting' %}">
             <i class="fa-solid fa-user-gear"></i>
             <span>{% trans "Account Settings" %}</span>
         </a>

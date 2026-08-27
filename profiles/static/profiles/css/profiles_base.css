@@ -323,12 +323,6 @@ div:has(> .student-action-btn) {
     font-size: 1.2rem;
 }
 
-/* .assigned-classes-filter-header strong {
-    font-size: 1.8rem;
-    margin-left: 1.5rem;
-    text-align: center !important;
-} */
-
 .course-status-btn.active,
 .course-status-btn:hover {
     background: rgba(var(--color-cyan-rgb), 0.25);

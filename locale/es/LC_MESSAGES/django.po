@@ -42,6 +42,9 @@ msgstr "Curso"
 msgid "Courses"
 msgstr "Cursos"
 
+msgid "Class List"
+msgstr "Clases"
+
 msgid "Calendar"
 msgstr "Calendario"
 
@@ -52,7 +55,13 @@ msgid "Materials"
 msgstr "Materiales"
 
 msgid "My Attendance"
-msgstr "Mi asistencia"
+msgstr "Mi Asistencia"
+
+msgid "Reschedule"
+msgstr "Reagendar"
+
+msgid "Evaluations"
+msgstr "Evaluaciones"
 
 msgid "Account Settings"
 msgstr "Configuración"

@@ -560,7 +560,6 @@ a.btn-class-today img {
     /* Time */
     #teacher .today-time {
         grid-area: time;
-        width: fit-content;
         min-width: 0;
         justify-self: start;
         margin: 0;

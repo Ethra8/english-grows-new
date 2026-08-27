@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const statusPanels =
         document.querySelectorAll(".classes-status-panel");
 
-
     /* ---------------------------------------------------------
        HELPERS
     --------------------------------------------------------- */
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
             value === "1"
         );
     }
-
 
     /* ---------------------------------------------------------
        APPLY FILTER TO ONE STATUS PANEL
@@ -90,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
     /* ---------------------------------------------------------
        SET FILTER FOR ONE PANEL
     --------------------------------------------------------- */
@@ -134,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function () {
             filter
         );
     }
-
 
     /* ---------------------------------------------------------
        INITIALISE EACH STATUS PANEL
@@ -184,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         /*
          * Default filter:
          *
@@ -197,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
     });
-
 
     /* ---------------------------------------------------------
        UPCOMING / PAST STATUS NAVIGATION
@@ -257,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     /* ---------------------------------------------------------
        STATUS TAB EVENTS
     --------------------------------------------------------- */
@@ -276,7 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
     });
-
 
     /* ---------------------------------------------------------
        DEFAULT VIEW

@@ -4229,6 +4229,8 @@ def mark_class_pending_reschedule(request, session_id):
 
 @login_required
 def teacher_reschedule_classes(request):
+    now = timezone.now()
+
     pending_sessions = (
         ClassSession.objects
         .filter(
@@ -4243,11 +4245,30 @@ def teacher_reschedule_classes(request):
         .order_by("start_time")
     )
 
+    rescheduled_sessions = (
+        ClassSession.objects
+        .filter(
+            course__teacher=request.user,
+            status=ClassSession.STATUS_RESCHEDULED,
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+        )
+        .order_by("start_time")
+    )
+
+    for session in rescheduled_sessions:
+        session.is_rescheduled_past = session.start_time < now
+        session.is_rescheduled_upcoming = session.start_time >= now
+
     return render(
         request,
         "profiles/teacher/teacher_reschedule_classes.html",
         {
             "pending_sessions": pending_sessions,
+            "rescheduled_sessions": rescheduled_sessions,
         }
     )
 
