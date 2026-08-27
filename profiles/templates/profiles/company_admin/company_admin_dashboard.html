@@ -37,10 +37,10 @@
             <a href="{% url 'profiles:company_admin_courses' %}">
                 <div class="meta-card meta-courses">
                     <div class="meta-text">
-                        <strong>Active Courses
+                        <strong>All Courses
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                         </strong>
-                        <span>{{ active_courses|default:"0" }}</span>
+                        <span>{{ active_courses|default:"0" }} <small>Active</small></span>
                     </div>
                 </div>
             </a>

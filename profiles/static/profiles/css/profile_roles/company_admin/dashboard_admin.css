@@ -33,7 +33,7 @@
 }
 
 #company_admin .today-class-row {
-    grid-template-columns: 140px minmax(320px, 1fr) 60px;
+    grid-template-columns: 160px minmax(320px, 1fr) 60px;
 }
 
 /* ********************** */
@@ -184,7 +184,6 @@
     /* Time */
     #company_admin .today-time {
         grid-area: time;
-        width: fit-content;
         min-width: 0;
         justify-self: start;
         margin: 0;

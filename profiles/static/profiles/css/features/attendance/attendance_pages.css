@@ -114,6 +114,7 @@
     overflow: hidden;
     display: flex;
     border-radius: 8px;
+    padding: .75rem 0;
     background-color: var(--color-whitesmoke);
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
@@ -234,6 +235,7 @@
     padding: 0.5rem 1rem;
     border-radius: 8px;
     border: solid 1px var(--color-navy);
+    margin: 1rem 0;
 }
 
 .attendance-warning .fa-solid {
