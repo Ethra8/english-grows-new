@@ -122,7 +122,7 @@
 .attendance-progress-card .circle-panel1 {
     position: absolute;
     top: -320px;
-    left: -130px;
+    left: -108px;
     width: 500px;
     height: 501px;
     border-radius: 50%;
@@ -138,24 +138,23 @@
     content: "\f46c";
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
-    font-size: 4.5rem;
+    font-size: 7.5rem;
     color: rgba(var(--color-turquoise-rgb), 0.1);
     position: absolute;
-    top: 323px;
-    right: 310px;
+    top: 300px;
+    right: 56px;
     rotate: calc(-12deg);
 }
 
 .attendance-progress-card .circle-panel1 h2 {
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    margin: 16rem 2rem 0 1.3rem;
+    margin: 17rem 0 0;
     font-size: 1.8rem;
     font-weight: 500;
     line-height: 1.1;
     color: var(--color-whitesmoke);
     max-height: 50px;
-    /* sits on top of ::after icon */
     position: relative;
     z-index: 999;
 }
@@ -163,7 +162,7 @@
 .attendance-progress-card .circle-panel2 {
     position: absolute;
     top: -320px;
-    left: -148px;
+    left: -128px;
     width: 520px;
     height: 520px;
     border-radius: 50%;

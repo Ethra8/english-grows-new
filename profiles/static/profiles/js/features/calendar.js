@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
             lesson: 'Clase',
 
             courseUnavailable:
-                'Información del curso no disponible'
+                'Información no disponible'
         },
 
         ca: {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
             lesson: 'Classe',
 
             courseUnavailable:
-                'Informació del curs no disponible'
+                'Informació no disponible'
         },
 
         fr: {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             lesson: 'Cours',
 
             courseUnavailable:
-                'Informations du cours indisponibles'
+                'Informations indisponibles'
         }
     };
 
@@ -177,13 +177,13 @@ document.addEventListener('DOMContentLoaded', function () {
         ],
 
         es: [
-            'DO',
-            'LU',
-            'MA',
-            'MI',
-            'JU',
-            'VI',
-            'SA'
+            'Do',
+            'Lu',
+            'Ma',
+            'Mi',
+            'Ju',
+            'Vi',
+            'Sa'
         ],
 
         ca: [
