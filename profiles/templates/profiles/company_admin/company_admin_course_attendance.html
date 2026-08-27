@@ -1,5 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
+
 {% load date_extras %}
 
 {% block extra_title %}| Attendance Record {% endblock %}
@@ -43,7 +45,7 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
+                <span class="current-level-label">Level</span>
                 <span class="current-level-value">
                     {{ course.course_level|default:"Level Pending" }}
                 </span>

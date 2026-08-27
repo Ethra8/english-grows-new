@@ -231,7 +231,6 @@
     }
 
     .course-header-meta-row,
-    .course-header-meta-row,
     .dashboard-meta-cards .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }

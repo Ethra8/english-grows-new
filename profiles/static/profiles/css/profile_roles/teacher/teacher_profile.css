@@ -1658,11 +1658,6 @@ h2 {
         grid-template-columns: 1fr;
     }
 
-    .teacher-course-details-page .course-header-meta-row,
-    .teacher-course-students-list .course-header-meta-row {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
     .teacher-course-details-page .course-meta-card,
     .teacher-course-students-list .course-meta-card {
         padding: 0.15rem 1rem 0.15rem 0.25rem;

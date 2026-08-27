@@ -1,4 +1,17 @@
 
+.no-course-assigned {
+    padding: 1rem 2rem 1rem 18rem;
+    width: 100%;
+}
+
+.no-course-assigned h2 {
+    color:var(--color-navy);
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-size: 1.8rem;
+    margin-left: 0%;
+    padding-left: 0%;
+}
 
 /* *** BUTTONS *********************************************/
 
@@ -105,9 +118,61 @@
 }
 /* ******************************************************* */
 
+
+/* LEANER ATTENDANCE SubPages (Inside Performance/Progress) ***************************************/
 .wrapper-attendance-progress-card {
     margin: 2.5rem auto;
 }
+
+.attendance-progress-card .item,
+.detailed-attendance-card .item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
+}
+
+.attendance-progress-card .item-icon,
+.detailed-attendance-card .item-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: outset 1px var(--color-turquoise);
+    background-color: #F4FFFE;
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
+    color: var(--color-teal);
+}
+
+.attendance-progress-card .item-text,
+.detailed-attendance-card .item-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.attendance-progress-card .item-text > strong:first-of-type,
+.detailed-attendance-card .item-text > strong:first-of-type {
+    color: var(--color-teal);
+    font-weight: 700;
+}
+
+.attendance-progress-card .item-text strong,
+.detailed-attendance-card .item-text strong {
+    color: var(--color-steel);
+    font-weight: 550;
+}
+
+.attendance-progress-card .item-text span,
+.detailed-attendance-card .item-text span {
+    color: var(--color-steel);
+}
+/* END LEANER ATTENDANCE SubPages (Inside Performance/Progress) *************************************************/
+
 
 .attendance-progress-card {
     position: relative;
@@ -700,32 +765,44 @@
 |***** & STUDENT DETAILS page ***********************************|
 |****  : Summary BUTTONS Wrapper & Cards*************************/
 .wrapper-attendance-course-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
     border-radius: 8px;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    background-color: rgba(var(--color-steel-rgb), 0.05);
     padding: 1rem 2rem;
     align-items: center;
     align-content: center;
-    width: 80%;
+    width: 100%;
     margin: 0 0 1rem;
 }
 
-.wrapper-attendance-course-info > div:last-child {
-    border-left: 1px #008b87 solid;
-    padding-left: 1rem;
+.wrapper-attendance-course-info > div:first-child {
+    border-bottom: 1px rgba(var(--color-teal-rgb), 0.3) solid;
+    margin-bottom: 0.5rem;
+    padding: 1rem 0;
 }
 
 .wrapper-attendance-course-info p {
     padding: 0%;
     margin: 0%;
     line-height: 2;
+    color: var(--color-slate);
 }
 
-.wrapper-attendance-course-info strong {
+.wrapper-attendance-course-info i {
     font-size: 1.2rem;
 }
+
+.wrapper-attendance-course-info > div:last-child {
+    background-color: rgba(var(--color-steel-rgb), 0.1);
+    padding: 0.25rem .75rem;
+    border-radius: 8px;
+}
+
+/* .wrapper-attendance-course-info > div:last-child span {
+    background-color: rgba(var(--color-steel-rgb), 0.1);
+    padding: 0.25rem .75rem;
+    border-radius: 8px;
+} */
 
 /* Wrapper of attendace-summary-cards */
 .wrapper-attendance-summary-card {
@@ -1352,10 +1429,10 @@
 }
 
 @media (max-width: 1199.98px) {
-    .wrapper-attendance-course-info,
+    /* .wrapper-attendance-course-info,
     .attendance-detail-card {
         width: 100%;
-    }
+    } */
 
 }
 
@@ -1506,7 +1583,7 @@
     |*** TAKE ATTENDANCE Page  ***************************|
     |*****************************************************/
         
-    .wrapper-attendance-course-info {
+    /* .wrapper-attendance-course-info {
         grid-template-columns: 1fr;
     }
 
@@ -1514,7 +1591,7 @@
         border-left: none;
         padding-left: 0%;
     }
-
+ */
     .wrapper-attendance-summary-card,
     .wrapper-attendance-summary-card {
         display: grid;

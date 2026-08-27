@@ -5120,18 +5120,50 @@ def company_admin_course_details(request, course_id):
 
 
     # ---------------------------------------------------------
+    # AVAILABLE COURSES FOR SELECTOR
+    #
+    # Show ALL company courses regardless of status.
+    # Order:
+    # active -> confirmed -> paused -> completed -> cancelled
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(
+            company=company,
+        )
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
+    )
+
+
+    # ---------------------------------------------------------
     # COURSE
     #
     # Course remains accessible regardless of status:
     # active, confirmed, paused, completed or cancelled.
     # ---------------------------------------------------------
     course = get_object_or_404(
-        Course,
+        available_courses,
         id=course_id,
-        company=company,
     )
-
-
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
     #
@@ -5257,7 +5289,9 @@ def company_admin_course_details(request, course_id):
         "profile": profile,
         "company": company,
         "course": course,
-
+        # All company courses for selector
+        "available_courses": available_courses,
+        # Enrollments belonging to selected course
         "enrollments": enrollments,
         "sessions": sessions,
 

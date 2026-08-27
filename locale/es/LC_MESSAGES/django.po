@@ -17,7 +17,6 @@ msgstr "Barra de navegación del perfil"
 msgid "My Profile"
 msgstr "Mi Perfil"
 
-
 msgid "Learner"
 msgstr "Estudiante"
 
@@ -44,6 +43,10 @@ msgstr "Cursos"
 
 msgid "Class List"
 msgstr "Clases"
+
+msgid "Class Sessions"
+msgstr "Clases"
+
 
 msgid "Calendar"
 msgstr "Calendario"
@@ -103,8 +106,10 @@ msgid "Year"
 msgstr "Año"
 
 msgid "Lesson"
-msgstr "Clase"
+msgstr "Sesión"
 
+msgid "Session"
+msgstr "Sesión"
 
 
 
@@ -137,3 +142,9 @@ msgstr "C1.2 - Avanzado alto"
 
 msgid "C2 Proficiency"
 msgstr "C2 - Maestría"
+
+msgid "Registered Attendance"
+msgstr "Registro de Asistencia"
+
+
+

@@ -1,5 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
+
 {% load date_extras %}
 {% load course_extras %}
 
@@ -35,9 +37,9 @@
         <div>
             <!-- <i class="fa-solid fa-chalkboard-user mr-3"></i> -->
             <div>
-                <h1>{{ course.name|default:"Course Name" }}</h1>
+                <h1 class="notranslate" translate="no">{{ course.name|default:"Course Name" }}</h1>
                 <h2>
-                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
+                    <span class="notranslate" translate="no""><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
                     <span>|</span>
                     <span class="text-muted"><i class="fa-regular fa-clock mr-3"></i>{{ course.total_hours|clean_decimal }} h.</spa>
                 </h2>
@@ -46,9 +48,9 @@
         </div>
         <div>
             <div class="col-12 level-pill">
-                <span class="current-level-label"><i class="fa-solid fa-chart-simple mr-3"></i>Level</span>
+                <span class="current-level-label">Level</span>
                 <span class="current-level-value">
-                    {{ course.course_level|default:"Level Pending" }}
+                    {{ course.course_level|default:"Pending" }}
                 </span>
             </div>
             <span class="status-badge status-course">
@@ -72,29 +74,36 @@
     <hr>    
 
 
-    <div class="wrapper-attendance-course-info">
-        <div>
-            <p class="text-white"><strong><i class="fa-solid fa-chalkboard mr-3"></i>
-                {{ class_session.course.name }}</strong></p>
-            <p class="text-white"><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
-                Lesson {{ class_session.class_number }}</p>
-        </div>
-        <div>   
-            <p class="text-white"><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
-                {{ class_session.start_time|date:"D, d M Y" }}</p>
-            <p class="text-white"><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
-                {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
-        </div>     
-    </div>
+    <!-- <div class="wrapper-attendance-course-info">
+        <p class="text-white notranslate" translate="no"><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
+            {% trans 'Lesson' %} {{ class_session.class_number }}</p>
+        <p class="text-white"><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
+            {{ class_session.start_time|date:"D, d M Y" }}</p>
+        <p class="text-white"><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
+            {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+    </div> -->
 
     <div class="attendance-detail-card">
 
         <div class="attendance-detail-card-header">
             <div>
-                <h3><i class="fa-solid fa-clipboard-list"></i>Registered Attendance</h3>
-                <p>{{ total_count }} employee record{{ total_count|pluralize }} saved for this class session.</p>
+                <h3 class="notranslate" translate="no"><i class="fa-solid fa-clipboard-list"></i>{% trans 'Registered Attendance' %}</h3>
             </div>
         </div>
+
+    <div class="wrapper-attendance-course-info">
+        <div>
+            <p class="notranslate" translate="no"><strong><i class="fa-solid fa-chalkboard-user mr-2"></i> 
+                {% trans 'Lesson' %} {{ class_session.class_number }}</strong></p>
+            <p><i class="fa-regular fa-calendar mr-3"></i>
+                {{ class_session.start_time|date:"D, d M Y" }}</p>
+            <p><i class="fa-regular fa-clock mr-3"></i>
+                {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+        </div>    
+        <div>
+            <strong>{{ total_count }} employee record{{ total_count|pluralize }}</strong> saved for this class session.
+        </div>
+    </div>
 
         <div class="wrapper-attendance-summary-card">
 

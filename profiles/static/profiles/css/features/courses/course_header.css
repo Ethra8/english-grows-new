@@ -13,9 +13,6 @@
 
 .my-course header h1 {
     color: var(--color-navy);
-    /* font-family: "Big Shoulders Display", sans-serif;
-    font-size: clamp(2rem, 3vw, 3.2rem);
-    letter-spacing: 0.03em; */
     margin-left: 0;
     margin-bottom: 0;
     padding-left: 0;
@@ -28,6 +25,16 @@
     align-content: center;
     margin: 1.75rem 0 2rem;
 }    
+
+/*  */
+/* .course-details-page header > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}*/
+/*  */
 
 .my-course header h2 {
     color: var(--color-navy);
@@ -65,9 +72,15 @@
         gap: 2.5rem;    
         }
 
+    .my-course header > div:nth-child(1) {
+        gap: 0.75rem;
+        flex-direction: column;
+    }
+
     .my-course header h1 {
         text-align: left;
         font-weight: 700;
+        padding-left: 0;
     }
 
     .my-course header h2 {
@@ -78,9 +91,11 @@
 
     .my-course header h2 span:nth-of-type(2) {
         display: none;
+        visibility: hidden;
     }
 
 }
+
 
 
 @media (max-width: 576px) {
@@ -93,6 +108,22 @@
 
     .my-course header h1 {
         padding: 0;
+    }
+
+}
+
+
+
+@media (max-width: 419.98px) {
+    .my-course header > div:nth-child(2) {
+        flex-direction: column;
+        gap: 1rem;
+        justify-self: flex-start;
+    }
+
+
+    .my-course header > div:nth-child(2) .status-badge.status-course {
+        margin-right: auto;
     }
 
 }
