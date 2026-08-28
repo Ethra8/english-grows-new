@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
+from django.utils.translation import gettext_lazy as _
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 from math import ceil
@@ -66,11 +68,11 @@ class Course(models.Model):
     """
 
     STATUS_CHOICES = [
-        ("confirmed", "Confirmed"),
-        ("active", "Active"),
-        ("paused", "Paused"),
-        ("completed", "Completed"),
-        ("cancelled", "Cancelled"),
+        ("confirmed", _("Confirmed")),
+        ("active", _("Active")),
+        ("paused", _("Paused")),
+        ("completed", _("Completed")),
+        ("cancelled", _("Cancelled")),
     ]
 
     course_type = models.ForeignKey(

@@ -77,6 +77,22 @@ msgid "Logout"
 msgstr "Salir"
 
 
+msgid "Confirmed"
+msgstr "Confirmado"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Paused"
+msgstr "Pausado"
+
+msgid "Completed"
+msgstr "Completado"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+
 msgid "Level"
 msgstr "Nivel"
 
@@ -85,6 +101,9 @@ msgstr "Próxima Clase"
 
 msgid "Join Class"
 msgstr "Unirse"
+
+msgid "Select Course"
+msgstr "Curso"
 
 
 
@@ -170,3 +189,24 @@ msgid "Assessment"
 msgstr "Evaluaciones"
 
 
+msgid "Timetable"
+msgstr "Horarios"
+
+msgid "Dates"
+msgstr "Fechas"
+
+msgid "Dates & Timetable"
+msgstr "Fechas y Horarios"
+
+msgid "Completed Hours"
+msgstr "Horas Completadas"
+
+msgid "Completed Lessons"
+msgstr "Clases Completadas"
+
+
+msgid "Lessons Attended"
+msgstr "Clases Asistidas"
+
+msgid "Hours Attended"
+msgstr "Horas Asistidas"

@@ -8,8 +8,8 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
+    
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">    
 {% endblock %}
@@ -69,7 +69,7 @@
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
                         {% else %}
-                            Pending
+                            {% trans 'Pending' %}
                         {% endif %}    
                         </span>
                     </div>
@@ -79,7 +79,7 @@
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
                         {% else %}
-                            Pending
+                            {% trans 'Pending' %}
                         {% endif %}    
                         </span>
                     </div>
@@ -89,14 +89,14 @@
     </header>
 
     {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs">
+        <form method="get" class="course-selector-form smaller-devs notranslate" translate="no">
 
             <div class="course-selector-label">
                 <img
                     src="{% static 'icons/one_to_one_course_icon.png' %}"
                     alt="icon"
                 >
-                <span>Select Course</span>
+                <span>{% trans 'Select Course' %}</span>
             </div>
 
 
@@ -121,7 +121,7 @@
                                 - {{ course.get_status_display }}
                             </span>
                         {% else %}
-                            <span>Select Course</span>
+                            <span>{% trans 'Select Course' %}</span>
                         {% endif %}
 
                     </span>
@@ -173,13 +173,13 @@
         <nav class="student-detail-tabs">
 
             {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form">    
+            <form method="get" class="course-selector-form notranslate" translate="no">    
                 <div class="course-selector-label">
                     <img
                         src="{% static 'icons/one_to_one_course_icon.png' %}"
                         alt="icon"
                     >
-                    <span>Select Course</span>
+                    <span>{% trans 'Select Course' %}</span>
                 </div>
 
                 <div class="course-select-wrapper course-dropdown">
@@ -274,7 +274,8 @@
                 <div class="skills-chart-card">
                     <div class="skills-chart-header">
                         <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}">
-                            <h2 class="notranslate" translate="no"><span>Progress
+                            <h2 class="notranslate" translate="no"><span>
+                                {% trans 'Progress' %}
                                 {% if overall_average_score %}
                                 <span class="header-score">{{ overall_average_score }} / 10</span>
                                 {% else %}
@@ -298,9 +299,9 @@
                 <div>
                     <div class="course-info-detail-card">
                         <a href="{% url 'profiles:company_admin_course_details' course.id %}">
-                            <h2>
+                            <h2 class="notranslate" translate="no">
                                 {% if enrollments|length > 1 %}
-                                    Course Info
+                                    {% trans 'Course Info' %}
                                 {% elif enrollments|length <= 1 %}
                                     {{ course.name }}
                                 {% endif %}
@@ -323,24 +324,24 @@
                         </span>
                     </div>
                 </div>    
-                <div class="current-course-block">
+                <div class="current-course-block notranslate" translate="no">
                     <div class="d-flex flex-column">
                         <div class="student-ring-layout">
 
                             <div class="progress-ring"
                                 style="--percentage: {{ completion_percentage }};">
-                                <div class="progress-ring-inner">
+                                <div class="progress-ring-inner notranslate" translate="no">
                                     <strong>{{ completion_percentage }}%</strong>
-                                    <span>Completed</span>
+                                    <span>{% trans 'Completed' %}</span>
                                 </div>
                             </div>
                             <div class="student-stat-list">
                                 <div class="detail-row">
                                     {% if course.status == "completed" or course.status == "confirmed" %}
-                                        <strong>Dates</strong>
+                                        <strong>{% trans 'Dates' %}</strong>
                                         <span>{{ course.start_date|date:"j M"|default:"?" }} - {{ course.end_date|date:"j M 'y"|default:"?" }}</span>
                                     {% elif course.status == "active" %}
-                                        <strong>Timetable</strong>
+                                        <strong>{% trans 'Timetable' %}</strong>
                                         <span>
                                             {% if formatted_timetable %}
                                                 {% for timetable in formatted_timetable %}
@@ -353,13 +354,13 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             {% else %}
-                                                Not assigned
+                                                {% trans 'Pending' %}
                                             {% endif %}
                                         </span>
                                     {% endif %}                                
                                 </div>
                                 <div class="detail-row">
-                                    <strong>Completed Hours:</strong>
+                                    <strong>{% trans 'Completed Hours' %}:</strong>
                                     <span>{{ completed_hours_display }} / {{ total_hours_display }}</span>
                                 </div>
 
@@ -370,12 +371,12 @@
                 </div>
             </article>
 
-            <article class="student-detail-card">
+            <article class="student-detail-card notranslate" translate="no">
                 <div class="student-detail-card-attendance">
 
                         <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}">
                             <h2>
-                                Attendance
+                                {% trans 'Attendance' %}
                             <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="icon" width="52px">
                             </h2>
                         </a>
@@ -386,17 +387,17 @@
                             style="--percentage: {{ attendance_percentage }};">
                             <div class="progress-ring-inner">
                                 <strong>{{ attendance_percentage }}%</strong>
-                                <span>Attendance</span>
+                                <span>{% trans 'Attendance' %}</span>
                             </div>
                         </div>
 
                         <div class="student-stat-list">
                             <div class="detail-row">
-                                <strong>Lessons Attended:</strong>
+                                <strong>{% trans 'Lessons Attended' %}:</strong>
                                 <span>{{ attended_count }} / {{ total_attendance_records }}</span>
                             </div>
                             <div class="detail-row">
-                                <strong>Hours Attended:</strong>
+                                <strong>{% trans 'Hours Attended' %}:</strong>
                                 <span>{{ attended_hours_display }} / {{ completed_hours_display }}</span>
                             </div>
                         </div>

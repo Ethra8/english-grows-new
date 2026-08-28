@@ -277,13 +277,27 @@ header .student-main-info a:hover {
         0 6px 16px rgba(var(--color-navy-rgb), 0.22);
 }
 
-.course-dropdown-selected {
+/* .course-dropdown-selected {
     display: flex;
     align-items: center;
     flex: 1 1 auto;
     width: auto;
     max-width: 100%;
     min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+} */
+
+.course-dropdown-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
     overflow: hidden;
     white-space: nowrap;
 }
@@ -634,27 +648,6 @@ header .student-main-info a:hover {
     border-radius: 8px;
     box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
-
-.student-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 220px;
-    padding: 2rem 4rem;
-    width: 100%;
-    max-width: 100%;
-    /* min-width: 0; */
-    box-sizing: border-box;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85));
-    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
-    border-radius: 8px;
-    box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
-}
-
-/* .student-detail-card hr:first-of-type {
-    border: 1px solid rgba(var(--color-cyan-rgb), 0.35);
-    margin: 0.25rem 0 1rem;
-} */
 
 .student-detail-card h2,
 .recent-attendance-card h2,
@@ -1427,7 +1420,7 @@ header .student-main-info a:hover {
 
     .student-detail-page .level-pill.smaller-devs {
         display: inline-flex;
-        min-width: 100%;
+        /* min-width: 100%; */
     }
 
     .student-detail-page .level-pill .current-level-label {

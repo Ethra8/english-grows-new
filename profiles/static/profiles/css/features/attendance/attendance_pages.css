@@ -600,7 +600,7 @@
 
 /* ** ATTENDANCE STATUS PILL *************************** */
 .status-pill {
-    display: inline-block;
+    /* display: inline-block; */
     width: max-content;
     padding: 0.4rem 0.8rem;
     border-radius: 999px;
@@ -613,7 +613,7 @@
 } */
 
 .student-detail-page .status-pill {
-    display: inline-flex;
+    /* display: inline-flex; */
     /* width: max-content; */
     padding: 0.5rem;
     /* border-radius: 999px; */
@@ -1045,6 +1045,7 @@
     justify-self: end;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
     border-radius: 999px;
+    height: fit-content;
 }
 
 .attendance-radio-group {

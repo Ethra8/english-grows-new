@@ -19,26 +19,19 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="mb-4">
-        <a href="#" class="js-back-link notranslate" translate="no">
-            <i class="fa-solid fa-arrow-left-long mr-3"></i>
-            Go Back
-        </a>
-    </div>
-
     <header>
 
         <div class="student-main-info">
             <div>
+                <div class="student-avatar-large {% if student_is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
 
-                <div class="student-avatar-large">
                     {% if student_profile.profile_photo %}
-                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
+                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
                     {% else %}
                         {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                            <i class="fa-solid fa-user-tie"></i>
+                        <i class="fa-solid fa-user-tie"></i>
                         {% else %}
-                            <i class="fa-regular fa-user"></i>
+                        <i class="fa-regular fa-user"></i>
                         {% endif %}
                     {% endif %}
                     <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
@@ -256,10 +249,10 @@
             {% endif %}
             
             <div class="wrapper-links-inner-nav">
-                                <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="active" aria-label="{% trans 'Overview' %}">
+                <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" aria-label="{% trans 'Overview' %}">
                     {% trans 'Overview' %}</a>
 
-                <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" aria-label="{% trans 'Skills' %}">
+                <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active" aria-label="{% trans 'Skills' %}">
                     {% trans 'Skills' %}</a>
 
                 <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" aria-label="{% trans 'Attendance' %}">

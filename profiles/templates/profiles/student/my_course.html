@@ -249,7 +249,7 @@
                                 <i class="fa-regular fa-clock"></i>
                             </div>
                             <div class="item-text">
-                                <strong>Timetable</strong>
+                                <strong class="notranslate" translate="no">{% trans 'Timetable' %}</strong>
                                 {% if enrollment.course.timetable_slots %}
                                     {% for slot in timetable_slots %}                    
                                     <span> <strong>{{ slot.get_day_of_week_display|slice:":3" }}. </strong>

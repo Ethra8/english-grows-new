@@ -3018,6 +3018,12 @@ def teacher_student_detail(request, course_id, enrollment_id):
     student = original_enrollment.student
     student_profile = student.profile
 
+    # Explicit learner account status.
+    #
+    # This is User.is_active and is completely independent
+    # from CourseEnrollment.status and Course.status.
+    student_is_active = student.is_active
+
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
@@ -3441,11 +3447,6 @@ def teacher_student_detail(request, course_id, enrollment_id):
     # COURSE TIMETABLE
     #
     # Groups slots sharing the same start/end time.
-    #
-    # Example:
-    #
-    # Mon & Wed
-    # 09h00 - 10h00
     # ---------------------------------------------------------
     timetable_groups = defaultdict(list)
 
@@ -3480,6 +3481,9 @@ def teacher_student_detail(request, course_id, enrollment_id):
         # Student
         "student": student,
         "student_profile": student_profile,
+
+        # Explicit Django User.is_active value
+        "student_is_active": student_is_active,
 
         # Course selector
         "enrollments": enrollments,
@@ -3534,6 +3538,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "profiles/teacher/teacher_student_detail.html",
         context,
     )
+
 
 
 @login_required
@@ -3672,6 +3677,8 @@ def student_attendance_record(request, course_id, enrollment_id):
     student = original_enrollment.student
     student_profile = student.profile
 
+    # Django User account status
+    student_is_active = student.is_active
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
@@ -4162,6 +4169,11 @@ def student_attendance_record(request, course_id, enrollment_id):
             UserProfile.LEVEL_CHOICES
         ),
 
+        # Explicit learner account status.
+        #
+        # This is User.is_active and is completely independent
+        # from CourseEnrollment.status and Course.status.
+        "student_is_active": student_is_active,
 
         # -----------------------------------------------------
         # COURSE SELECTOR
@@ -4381,6 +4393,8 @@ def student_skills_overview(request, course_id, enrollment_id):
     student = original_enrollment.student
     student_profile = student.profile
 
+    # Django User account status
+    student_is_active = student.is_active
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
@@ -4728,6 +4742,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "student": student,
         "student_profile": student_profile,
 
+        "student_is_active": student_is_active,
         # Course selector
         "enrollments": enrollments,
 
@@ -4990,6 +5005,9 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
     student = enrollment.student
     student_profile = student.profile
 
+    # Django User account status
+    student_is_active = student.is_active
+
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -5019,6 +5037,9 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
 
     context = {
         "profile": profile,
+        # Django User account status
+        "student_is_active": student_is_active,
+
         "course": course,
         "enrollment": enrollment,
         "student": student,

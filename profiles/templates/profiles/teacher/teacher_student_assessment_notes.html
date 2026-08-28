@@ -17,29 +17,24 @@
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
-    <div class="mb-4">
-        <a href="#" class="js-back-link notranslate" translate="no">
-            <i class="fa-solid fa-arrow-left-long mr-3"></i>
-            Go Back
-        </a>    
-    </div>
-
-    <div class="student-detail-header">
+    <header>
 
         <div class="student-main-info">
 
-            <div class="student-avatar-large">
-                {% if student_profile.profile_photo %}
+            <div>
+                <div class="student-avatar-large {% if student_is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
+
+                    {% if student_profile.profile_photo %}
                     <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                {% else %}
-                    {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                    {% elif student_profile.role == "individual" %}
-                        <i class="fa-regular fa-user"></i>
                     {% else %}
+                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
+                        <i class="fa-solid fa-user-tie"></i>
+                        {% else %}
                         <i class="fa-regular fa-user"></i>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
+                </div>
             </div>
 
             <div>
@@ -112,7 +107,7 @@
 
         </div>
 
-    </div>
+    </header>
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
