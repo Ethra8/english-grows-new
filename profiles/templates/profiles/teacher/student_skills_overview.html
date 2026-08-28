@@ -13,7 +13,7 @@
 
 {% block profile_content %}
 
-<section class="profile-page teacher-student-skills-page">
+<section class="student-detail-page profile-page teacher-student-skills-page">
 
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
@@ -25,7 +25,7 @@
         </a>
     </div>
 
-    <div class="student-detail-header">
+    <header class="student-detail-header">
 
         <div class="student-main-info">
 
@@ -35,20 +35,19 @@
                 {% else %}
                     {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
                         <i class="fa-solid fa-user-tie"></i>
-                    {% elif student_profile.role == "individual" %}
-                        <i class="fa-regular fa-user"></i>
                     {% else %}
                         <i class="fa-regular fa-user"></i>
                     {% endif %}
                 {% endif %}
+                <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
             </div>
 
             <div>
-                <h1>
+                <h1 class="notranslate" translate="no">
                     {{ student.get_full_name|default:student.username }}
                 </h1>
 
-                <p>{{ student.email }}</p>
+                <p class="notranslate" translate="no">{{ student.email }}</p>
 
                 <div class="student-meta-line">
                     <span>
@@ -66,87 +65,229 @@
                     </div>
                 {% endif %}
 
-                <div class="student-meta-line mt-3">
-                    {% if student.is_active %}
-                        <span class="status-badge active">Active</span>
-                    {% else %}
-                        <span class="status-badge inactive">Inactive</span>
-                    {% endif %}
+                <div class="header-level">      
+
+                    <div class="level-pill larger-devs">
+                        <span class="current-level-label">Level</span>
+                        <span class="current-level-value">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.get_current_level_display }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
+                    <div class="level-pill smaller-devs">
+                        <span class="current-level-label">Level</span>
+                        <span class="current-level-value">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.current_level }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
                 </div>
+
             </div>
 
         </div>
 
-        <!-- <div class="student-header-actions">
-            <div>
-                <a href="mailto:{{ student.email }}" class="student-action-btn">
-                    <i class="fa-regular fa-envelope mr-3"></i>
-                    Message
-                </a>
+    </header>
 
-                <a href="{% url 'profiles:student_academic_profile_settings' course.id enrollment.id %}"
-                   class="student-action-btn">
-                    <i class="fa-solid fa-graduation-cap mr-3"></i>
-                    Edit Academic Profile
-                </a>
+    {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form smaller-devs">
+
+            <div class="course-selector-label">
+                <img
+                    src="{% static 'icons/one_to_one_course_icon.png' %}"
+                    alt="icon"
+                >
+                <span>Select Course</span>
             </div>
 
-            <div class="student-level-area">
-                <small>Current Level</small>
 
-                <button type="button"
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2"
-                        onclick="toggleLevelForm('{{ enrollment.id }}')">
-                    {{ student_profile.current_level|default:"?" }}
+            <div class="course-select-wrapper course-dropdown">
+
+                <!-- CURRENTLY SELECTED COURSE -->
+                <button
+                    type="button"
+                    id="course-select-small"
+                    class="course-select course-dropdown-toggle"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    <span class="course-dropdown-selected">
+
+                        {% if course %}
+                            <span class="course-dropdown-course-name notranslate" translate="no">
+                                · {{ course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ course.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span>Select Course</span>
+                        {% endif %}
+
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
                 </button>
 
-                <form method="POST"
-                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
-                      class="d-none student-level-form"
-                      id="level-form-{{ enrollment.id }}">
 
-                    {% csrf_token %}
+                <!-- DROPDOWN OPTIONS -->
+                <div
+                    class="course-dropdown-menu"
+                    role="menu"
+                    hidden
+                >
 
-                    <select name="current_level">
-                        {% for value, label in level_choices %}
-                            <option value="{{ value }}"
-                                {% if student_profile.current_level == value %}selected{% endif %}>
-                                {{ label }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    {% for item in enrollments %}
 
-                    <button type="submit">Save</button>
-                </form>
+                        <button
+                            type="submit"
+                            name="course"
+                            value="{{ item.course.id }}"
+                            class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                            role="menuitem"
+                        >
+
+                            <span
+                                class="course-dropdown-course-name notranslate"
+                                translate="no"
+                            >
+                                · {{ item.course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ item.course.get_status_display }}
+                            </span>
+
+                        </button>
+
+                    {% endfor %}
+
+                </div>
+
             </div>
 
-        </div> -->
-
-    </div>
+        </form>
+    {% endif %}
 
     <!-- Inside navbar -->
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
-                Overview
-            </a>
 
-            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
-                Attendance
-            </a>
+            {% if enrollments|length > 1 %}
+            <form method="get" class="course-selector-form">    
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
 
-            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active">
-                Skills
-            </a>
+                <div class="course-select-wrapper course-dropdown">
 
-            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
-                Assessment
-            </a>
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select-large"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
 
-            <!-- <a href="#">
-                History
-            </a> -->
-        </nav>
+                            {% if course %}
+                                <span class="notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </form>    
+            {% endif %}
+            
+            <div class="wrapper-links-inner-nav">
+                                <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}" class="active" aria-label="{% trans 'Overview' %}">
+                    {% trans 'Overview' %}</a>
+
+                <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" aria-label="{% trans 'Skills' %}">
+                    {% trans 'Skills' %}</a>
+
+                <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" aria-label="{% trans 'Attendance' %}">
+                    {% trans 'Attendance' %}</a>
+
+                <!-- <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}" aria-label="{% trans 'Assessment' %}">
+                    {% trans 'Assessment' %}</a> -->
+
+                <!-- <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
+                    {% trans 'Overview' %}
+                </a>
+
+                <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
+                    Attendance
+                </a>
+
+                <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}" class="active">
+                    Skills
+                </a>
+
+                <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+                    Assessment
+                </a> -->
+            </div>    
+        </nav>    
     </div>
 
     <!-- SKILLS -->

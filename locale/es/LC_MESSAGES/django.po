@@ -166,5 +166,7 @@ msgstr "Evaluación pendiente"
 msgid "Progress"
 msgstr "Progreso"
 
+msgid "Assessment"
+msgstr "Evaluaciones"
 
 

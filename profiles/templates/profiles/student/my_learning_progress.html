@@ -51,7 +51,7 @@
             </div>
             
             <div>
-                <h1>{{ student.get_full_name|default:student.username }}</h1>
+                <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
 
                 <!-- <div class="profile-user-role">
                     <span><i class="fa-regular fa-user mr-2"></i>
@@ -61,7 +61,7 @@
                 <div class="header-level mt-4">  
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">Level</span>
-                        <span class="current-level-value">
+                        <span class="current-level-value notranslate" translate="no">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
                         {% else %}
@@ -71,7 +71,7 @@
                     </div>
                     <div class="level-pill smaller-devs">
                         <span class="current-level-label">Level</span>
-                        <span class="current-level-value">
+                        <span class="current-level-value notranslate" translate="no">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
                         {% else %}
@@ -246,10 +246,14 @@
             </form>    
             {% endif %}
 
-            <div class="wrapper-links-inner-nav">
-                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active">Overview</a>
-                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">Skills</a>
-                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">Attendance</a>
+            <div class="wrapper-links-inner-nav notranslate" translate="no">
+                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active" aria-label="{% trans 'Overview' %}">{% trans 'Overview' %}</a>
+                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" aria-label="{% trans 'Skills' %}">{% trans 'Skills' %}</a>
+                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" aria-label="{% trans 'Attendance' %}">{% trans 'Attendance' %}</a>
+            <!-- <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}" aria-label="{% trans 'Assessment' %}">
+                {% trans 'Assessment' %}</a> -->
+            <!-- <a href="#">
+                History</a> -->
             </div>
         </nav>
     </div>
