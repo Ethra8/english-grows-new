@@ -1,9 +1,12 @@
-    // COURSE SELECTOR FORM - Dropdown element
-    
-    document.addEventListener("DOMContentLoaded", function () {
+/* =========================================================
+   COURSE SELECTOR FORM — CUSTOM DROPDOWN
+========================================================= */
+
+function initCourseDropdowns() {
 
     const dropdowns =
         document.querySelectorAll(".course-dropdown");
+
 
     dropdowns.forEach(function (dropdown) {
 
@@ -13,28 +16,80 @@
         const menu =
             dropdown.querySelector(".course-dropdown-menu");
 
+
         if (!toggle || !menu) {
             return;
         }
 
 
-        /* =============================================
-           OPEN / CLOSE DROPDOWN
-        ============================================= */
+        /* ---------------------------------------------------------
+           OPEN / CLOSE
+        --------------------------------------------------------- */
 
         toggle.addEventListener("click", function (event) {
 
+            event.preventDefault();
             event.stopPropagation();
+
 
             const isOpen =
                 toggle.getAttribute("aria-expanded") === "true";
+
+
+            /*
+                Close every other dropdown first.
+            */
+
+            dropdowns.forEach(function (otherDropdown) {
+
+                if (otherDropdown === dropdown) {
+                    return;
+                }
+
+
+                const otherToggle =
+                    otherDropdown.querySelector(
+                        ".course-dropdown-toggle"
+                    );
+
+                const otherMenu =
+                    otherDropdown.querySelector(
+                        ".course-dropdown-menu"
+                    );
+
+
+                if (otherToggle) {
+                    otherToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+
+
+                if (otherMenu) {
+                    otherMenu.hidden = true;
+                }
+
+
+                otherDropdown.classList.remove(
+                    "open"
+                );
+            });
+
+
+            /*
+                Toggle current dropdown.
+            */
 
             toggle.setAttribute(
                 "aria-expanded",
                 isOpen ? "false" : "true"
             );
 
-            menu.hidden = isOpen;
+
+            menu.hidden =
+                isOpen;
+
 
             dropdown.classList.toggle(
                 "open",
@@ -44,51 +99,155 @@
         });
 
 
-        /* =============================================
-           CLOSE WHEN CLICKING OUTSIDE
-        ============================================= */
+        /* ---------------------------------------------------------
+           COURSE OPTION CLICK
 
-        document.addEventListener("click", function (event) {
+           The button is already type="submit", therefore the
+           browser submits:
 
-            if (!dropdown.contains(event.target)) {
+               ?course=<button value>
 
-                toggle.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
+           We DO NOT preventDefault() here.
+        --------------------------------------------------------- */
 
-                menu.hidden = true;
+        const options =
+            dropdown.querySelectorAll(
+                ".course-dropdown-option"
+            );
 
-                dropdown.classList.remove("open");
 
-            }
+        options.forEach(function (option) {
+
+            option.addEventListener(
+                "click",
+                function () {
+
+                    /*
+                        Do NOT use preventDefault here.
+
+                        Allow normal form submission.
+                    */
+
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    dropdown.classList.remove(
+                        "open"
+                    );
+
+                }
+            );
 
         });
 
 
-        /* =============================================
-           ESCAPE KEY
-        ============================================= */
+        /* ---------------------------------------------------------
+           ESCAPE
+        --------------------------------------------------------- */
 
-        toggle.addEventListener("keydown", function (event) {
+        toggle.addEventListener(
+            "keydown",
+            function (event) {
 
-            if (event.key === "Escape") {
+                if (event.key !== "Escape") {
+                    return;
+                }
+
+
+                menu.hidden = true;
+
 
                 toggle.setAttribute(
                     "aria-expanded",
                     "false"
                 );
 
-                menu.hidden = true;
 
-                dropdown.classList.remove("open");
+                dropdown.classList.remove(
+                    "open"
+                );
+
 
                 toggle.focus();
 
             }
-
-        });
+        );
 
     });
 
-});
+
+    /* ---------------------------------------------------------
+       CLICK OUTSIDE — CLOSE ALL
+    --------------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            dropdowns.forEach(function (dropdown) {
+
+                if (dropdown.contains(event.target)) {
+                    return;
+                }
+
+
+                const toggle =
+                    dropdown.querySelector(
+                        ".course-dropdown-toggle"
+                    );
+
+
+                const menu =
+                    dropdown.querySelector(
+                        ".course-dropdown-menu"
+                    );
+
+
+                if (toggle) {
+
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+
+
+                if (menu) {
+
+                    menu.hidden = true;
+
+                }
+
+
+                dropdown.classList.remove(
+                    "open"
+                );
+
+            });
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initCourseDropdowns
+    );
+
+} else {
+
+    initCourseDropdowns();
+
+}
