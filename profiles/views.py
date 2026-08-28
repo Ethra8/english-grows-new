@@ -4343,31 +4343,142 @@ def update_student_attendance_status(request, course_id, enrollment_id, attendan
 def student_skills_overview(request, course_id, enrollment_id):
 
     # ---------------------------------------------------------
-    # COURSE
-    # Security: course must belong to logged-in teacher
+    # ORIGINAL COURSE / ENROLLMENT
+    #
+    # These establish:
+    # - which learner is being viewed
+    # - that the logged-in teacher owns the original course
+    #
+    # The selector can then switch course using:
+    #
+    #     ?course=<course_id>
     # ---------------------------------------------------------
-    course = get_object_or_404(
+    original_course = get_object_or_404(
         Course,
         id=course_id,
         teacher=request.user,
     )
 
 
-    # ---------------------------------------------------------
-    # ENROLLMENT / STUDENT
-    # ---------------------------------------------------------
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
+    original_enrollment = get_object_or_404(
+        CourseEnrollment.objects
+        .select_related(
             "student",
             "student__profile",
             "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
         ),
         id=enrollment_id,
-        course=course,
+        course=original_course,
     )
 
-    student = enrollment.student
+
+    # ---------------------------------------------------------
+    # STUDENT
+    # ---------------------------------------------------------
+    student = original_enrollment.student
     student_profile = student.profile
+
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    # ---------------------------------------------------------
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            course__teacher=request.user,
+        )
+        .select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE FROM QUERY STRING
+    #
+    # Example:
+    #
+    # ?course=8
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get(
+        "course"
+    )
+
+
+    if selected_course_id:
+
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=selected_course_id,
+        )
+
+    else:
+
+        enrollment = original_enrollment
+
+
+    # ---------------------------------------------------------
+    # CURRENTLY SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
 
 
     # ---------------------------------------------------------
@@ -4391,8 +4502,10 @@ def student_skills_overview(request, course_id, enrollment_id):
     for skill_value, skill_label in (
         StudentSkillAssessment.SKILL_AREA_CHOICES
     ):
+
         skill_assessment, created = (
-            StudentSkillAssessment.objects.get_or_create(
+            StudentSkillAssessment.objects
+            .get_or_create(
                 student=student,
                 course=course,
                 skill=skill_value,
@@ -4403,6 +4516,7 @@ def student_skills_overview(request, course_id, enrollment_id):
             skill_value,
             [],
         ):
+
             StudentSubSkillAssessment.objects.get_or_create(
                 skill_assessment=skill_assessment,
                 subskill=subskill_value,
@@ -4421,15 +4535,64 @@ def student_skills_overview(request, course_id, enrollment_id):
         .prefetch_related(
             "subskill_assessments",
         )
-        .order_by("skill")
+        .order_by(
+            "skill"
+        )
     )
+
+
+    # ---------------------------------------------------------
+    # CURRENT OVERALL SKILLS AVERAGE
+    #
+    # Each StudentSkillAssessment.average_score already gives
+    # the current score for that skill on the /10 scale.
+    #
+    # Only show an overall score once all four skills have
+    # a valid current assessment.
+    # ---------------------------------------------------------
+    current_skill_scores = []
+
+    for skill_assessment in skill_assessments:
+
+        score = (
+            skill_assessment.average_score
+        )
+
+        if score is not None:
+
+            current_skill_scores.append(
+                score
+            )
+
+
+    expected_skill_count = len(
+        StudentSkillAssessment.SKILL_AREA_CHOICES
+    )
+
+
+    if (
+        len(current_skill_scores)
+        == expected_skill_count
+    ):
+
+        overall_average_score = round(
+            sum(current_skill_scores)
+            / expected_skill_count,
+            1,
+        )
+
+    else:
+
+        overall_average_score = None
 
 
     # ---------------------------------------------------------
     # DISPLAY-FRIENDLY SKILL NOTE DATA
     # ---------------------------------------------------------
     skill_note_display = [
-        build_skill_note_display(skill_assessment)
+        build_skill_note_display(
+            skill_assessment
+        )
         for skill_assessment in skill_assessments
     ]
 
@@ -4444,16 +4607,23 @@ def student_skills_overview(request, course_id, enrollment_id):
 
     for assessment in skill_assessments:
 
-        note_display = build_skill_note_display(
-            assessment
+        note_display = (
+            build_skill_note_display(
+                assessment
+            )
         )
 
         # Only genuinely assessed subskills.
         assessed_subskills = (
             assessment.subskill_assessments
-            .exclude(rating__isnull=True)
-            .exclude(rating="")
+            .exclude(
+                rating__isnull=True
+            )
+            .exclude(
+                rating=""
+            )
         )
+
 
         skills.append({
             "assessment": assessment,
@@ -4462,7 +4632,10 @@ def student_skills_overview(request, course_id, enrollment_id):
             "assessment_id": assessment.id,
 
             "skill_value": assessment.skill,
-            "name": assessment.get_skill_display(),
+
+            "name": (
+                assessment.get_skill_display()
+            ),
 
             "icon": skill_icons.get(
                 assessment.skill,
@@ -4472,17 +4645,19 @@ def student_skills_overview(request, course_id, enrollment_id):
             # Overall assessment /10
             "score": assessment.average_score,
 
-            "teacher_notes": assessment.teacher_notes,
+            "teacher_notes": (
+                assessment.teacher_notes
+            ),
 
             # Use only genuinely assessed subskills
-            # so "{{ skill.subskills|length }} assessed"
-            # is accurate.
             "subskills": assessed_subskills,
 
             # Grouped assessment categories
             "strengths": note_display["strengths"],
             "confident": note_display["confident"],
-            "required_standard": note_display["required_standard"],
+            "required_standard": (
+                note_display["required_standard"]
+            ),
             "developing": note_display["developing"],
             "needs_work": note_display["needs_work"],
         })
@@ -4500,7 +4675,9 @@ def student_skills_overview(request, course_id, enrollment_id):
         .exclude(
             teacher_notes=""
         )
-        .order_by("skill")
+        .order_by(
+            "skill"
+        )
     )
 
 
@@ -4520,9 +4697,25 @@ def student_skills_overview(request, course_id, enrollment_id):
     # Uses StudentSkillAssessmentSnapshot history.
     # Same graph as learner Skills page.
     # ---------------------------------------------------------
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
+    chart_data = (
+        build_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # OVERALL SKILLS PROGRESS GRAPH
+    #
+    # Useful if this teacher skills template also includes
+    # the overall-progress card/header.
+    # ---------------------------------------------------------
+    overall_skill_chart_data = (
+        build_overall_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
     )
 
 
@@ -4530,21 +4723,35 @@ def student_skills_overview(request, course_id, enrollment_id):
     # CONTEXT
     # ---------------------------------------------------------
     context = {
-        "course": course,
-        "enrollment": enrollment,
+
+        # Student
         "student": student,
         "student_profile": student_profile,
 
+        # Course selector
+        "enrollments": enrollments,
+
+        # Current selected course / enrollment
+        "course": course,
+        "enrollment": enrollment,
+
+        # Skills
         "skills": skills,
-        "academic_profile": academic_profile,
-
-        # Pass normal Python object.
-        # Template should serialize with json_script.
-        "chart_data": chart_data,
-
+        "skill_assessments": skill_assessments,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
 
+        # Overall current score
+        "overall_average_score": overall_average_score,
+
+        # Graphs
+        "chart_data": chart_data,
+        "overall_skill_chart_data": overall_skill_chart_data,
+
+        # Academic profile
+        "academic_profile": academic_profile,
+
+        # Level choices
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
