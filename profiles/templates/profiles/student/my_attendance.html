@@ -78,7 +78,7 @@
                     src="{% static 'icons/one_to_one_course_icon.png' %}"
                     alt="icon"
                 >
-                <span>{% trans 'Select Course' %}</span>
+                <span>{% trans 'Course' %}</span>
             </div>
 
 
@@ -88,7 +88,7 @@
                 <button
                     type="button"
                     id="course-select-small"
-                    class="course-select course-dropdown-toggle"
+                    class="course-Course-dropdown-toggle"
                     aria-haspopup="true"
                     aria-expanded="false"
                 >
@@ -103,7 +103,7 @@
                                 - {{ course.get_status_display }}
                             </span>
                         {% else %}
-                            <span>{% trans 'Select Course' %}</span>
+                            <span>{% trans 'Course' %}</span>
                         {% endif %}
 
                     </span>
@@ -161,7 +161,7 @@
                         src="{% static 'icons/one_to_one_course_icon.png' %}"
                         alt="icon"
                     >
-                    <span>{% trans 'Select Course' %}</span>
+                    <span>{% trans 'Course' %}</span>
                 </div>
 
                 <div class="course-select-wrapper course-dropdown">
@@ -185,7 +185,7 @@
                                     - {{ course.get_status_display }}
                                 </span>
                             {% else %}
-                                <span>Select Course</span>
+                                <span>Course</span>
                             {% endif %}
 
                         </span>

@@ -102,7 +102,7 @@ msgstr "Próxima Clase"
 msgid "Join Class"
 msgstr "Unirse"
 
-msgid "Select Course"
+msgid "Course"
 msgstr "Curso"
 
 
