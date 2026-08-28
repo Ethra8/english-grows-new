@@ -1,5 +1,6 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
@@ -139,8 +140,8 @@
             </div>
             {% endif %}
             <div class="wrapper-links-inner-nav">
-                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}">Overview</a>
-                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active">Skills</a>
+                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="notranslate" translate="no" >{% trans 'Overview' %}</a>
+                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active notranslate" translate="no">{% trans 'Skills' %}</a>
                 <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">Attendance</a>
             </div>
         </nav>
@@ -155,7 +156,7 @@
                 <div class="skills-chart-card">
 
                     <div class="skills-chart-header">
-                        <h2>Skills Progress Over Time</h2>
+                        <h2>My Skills Progress</h2>
                         {% if not skills %}
                             <p class="skills-assessment-pending">
                                 First assessment pending

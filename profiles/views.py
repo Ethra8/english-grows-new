@@ -281,7 +281,7 @@ def my_course(request):
     # GET SELECTED COURSE FROM URL
     #
     # Example:
-    # /profiles/student/my-course/?course=4
+    # /profiles/student/course-details-page/?course=4
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 

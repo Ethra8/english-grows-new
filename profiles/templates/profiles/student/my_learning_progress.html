@@ -1,5 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
+
 {% load date_extras %}
 {% load course_extras %}
 
@@ -8,7 +10,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
@@ -83,69 +84,168 @@
         </div>
     </header>
 
-    {% if enrollments|length > 1 %}
-    <form method="get" class="course-selector-form smaller-devs">
 
-        <label for="course-select" class="course-selector-label">
-            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-            <span>Select Course</span>
-        </label>
+            {% if enrollments|length > 1 %}
+            <form method="get" class="course-selector-form smaller-devs">
 
-        <div class="course-select-wrapper">
-            <select
-                id="course-select"
-                name="course"
-                class="course-select"
-                onchange="this.form.submit()">
-                {% for item in enrollments %}
-                    <option
-                        value="{{ item.course.id }}"
-                        {% if course and item.course.id == course.id %}selected{% endif %}>
-                        · {{ item.course.name }} - {{ item.course.get_status_display }}
-                    </option>
-                {% endfor %}
-            </select>
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
 
-            <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-        </div>
 
-    </form>
-    {% endif %}
+                <div class="course-select-wrapper course-dropdown">
+
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select-small"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
+
+                            {% if course %}
+                                <span class="course-dropdown-course-name notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </form>
+        {% endif %}
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
             {% if enrollments|length > 1 %}
-            <div class="wrapper-course-selector-form">
+            <form method="get" class="course-selector-form">    
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
 
-                <form method="get" class="course-selector-form">
+                <div class="course-select-wrapper course-dropdown">
 
-                    <label for="course-select" class="course-selector-label">
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                        <span>Select Course</span>
-                    </label>
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select-large"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
 
-                    <div class="course-select-wrapper">
-                        <select
-                            id="course-select"
-                            name="course"
-                            class="course-select"
-                            onchange="this.form.submit()">
-                            {% for item in enrollments %}
-                                <option
-                                    value="{{ item.course.id }}"
-                                    {% if course and item.course.id == course.id %}selected{% endif %}>
-                                    · {{ item.course.name }} - {{ item.course.get_status_display }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                            {% if course %}
+                                <span class="notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
 
                         <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
                     </div>
 
-                </form>
-                
-            </div>
+                </div>
+            </form>    
             {% endif %}
+
             <div class="wrapper-links-inner-nav">
                 <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" class="active">Overview</a>
                 <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">Skills</a>
@@ -161,7 +261,7 @@
                 <div class="skills-chart-card">
                     <div class="skills-chart-header">
                         <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
-                            <h2>My Progress Along the Course
+                            <h2>My Progress
                                 <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="icon" width="52px">
                             </h2>
                         </a>    
@@ -259,7 +359,7 @@
                 <div class="student-detail-card-attendance">
                     <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}">
                         <h2>
-                            Attendance
+                            My Attendance
                             <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="icon" width="52px">
                         </h2>
                     </a>
@@ -304,5 +404,6 @@
 {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/learner_performance/learner_performance_pages.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
 {% endblock %}

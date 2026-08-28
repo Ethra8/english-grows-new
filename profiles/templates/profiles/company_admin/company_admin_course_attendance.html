@@ -1,6 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load i18n %}
+{% load i18n %}
 
 {% load date_extras %}
 
@@ -8,20 +9,21 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="course-attendance my-course profile-page">
+<section class="course-attendance course-details-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
-                <a href="#" class="text-white js-back-link">
+                <a href="#" class="js-back-link notranslate" translate="no">
                     <i class="fa-solid fa-arrow-left-long mr-3"></i>
                     Go Back
                 </a>
@@ -34,7 +36,7 @@
         <div>
             <!-- <i class="fa-solid fa-chalkboard-user mr-3"></i> -->
             <div>
-                <h1>{{ course.name|default:"Course Name" }}</h1>
+                <h1 class="notranslate" translate="no">{{ course.name|default:"Course Name" }}</h1>
                 <h2>
                     <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
                     <span>|</span>

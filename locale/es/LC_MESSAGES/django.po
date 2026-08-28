@@ -10,6 +10,10 @@ msgstr ""
 msgid "English Grows"
 msgstr "English Grows"
 
+msgid "Go Back"
+msgstr "Volver"
+
+
 
 msgid "Profile navigation"
 msgstr "Barra de navegación del perfil"
@@ -147,4 +151,6 @@ msgid "Registered Attendance"
 msgstr "Registro de Asistencia"
 
 
+msgid "Overview"
+msgstr "General"
 

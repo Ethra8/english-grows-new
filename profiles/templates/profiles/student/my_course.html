@@ -10,31 +10,191 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta-cards.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/student/student_profile.css' %}">
 {% endblock %}
 
 
 {% block profile_content %}
 
-<section class="my-course">    
+<section class="course-details-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
   
 
     <header>
+        {% if enrollments|length > 1 %}
         <div>
-            <div>
-                <h1>{{ enrollment.course.name|default:"Course Name" }}</h1>
-                <h2>
-                    <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ enrollment.course.course_type.name }}</span>
-                    <span>|</span>
-                    <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ enrollment.course.total_hours|clean_decimal }} h.</span>
-                </h2>
+            <form method="get" class="course-selector-form">    
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
 
-            </div>
+                <div class="course-select-wrapper course-dropdown">
+
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
+
+                            {% if course %}
+                                <span class="notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </form>    
+            {% endif %}
+
+            {% if enrollments|length > 1 %}
+            <form method="get" class="course-selector-form smaller-devs">
+
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
+
+
+                <div class="course-select-wrapper course-dropdown">
+
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
+
+                            {% if course %}
+                                <span class="notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+        {% endif %}
+
+        <div>
+            <h1 class="notranslate" translate="no">{{ enrollment.course.name|default:"Course Name" }}</h1>
+            <h2 class="notranslate" translate="no">
+                <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ enrollment.course.course_type.name }}</span>
+                <span>|</span>
+                <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ enrollment.course.total_hours|clean_decimal }} h.</span>
+            </h2>
+
         </div>
 
         <div>
@@ -60,78 +220,13 @@
             </span>
         </div>
 
-        {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>Select course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-
-                <select
-                    id="course-select"
-                    name="course"
-                    class="course-select"
-                    onchange="this.form.submit()"
-                >
-
-                    {% for item in enrollments %}
-                        <option
-                            value="{{ item.course.id }}"
-                            {% if enrollment and item.id == enrollment.id %}
-                                selected
-                            {% endif %}
-                        >
-                           · {{ item.course.name }} - {{ item.course.get_status_display }}
-                        </option>
-                    {% endfor %}
-
-                </select>
-
-                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-
-            </div>
-
-        </form>
-        {% endif %}
-        {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>Select Course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-                <select
-                    id="course-select"
-                    name="course"
-                    class="course-select"
-                    onchange="this.form.submit()">
-                    {% for item in enrollments %}
-                        <option
-                            value="{{ item.course.id }}"
-                            {% if course and item.course.id == course.id %}selected{% endif %}>
-                            · {{ item.course.name }} - {{ item.course.get_status_display }}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-            </div>
-
-        </form>
-        {% endif %}
-
     </header> 
     <hr>
 
         
-        <div class="wrapper-course-card w-100">
+        <div class="wrapper-my-course-card w-100">
 
-            <div class="course-card">
+            <div class="my-course-card">
 
                 <div class="circle-panel1">
                     <h2>General Info</h2>
@@ -146,7 +241,7 @@
                 </div>
                 {% endif %}
 
-                <div class="info row d-flex align-items-center justify-content-between">
+                <div class="info row">
                     <!-- div:first-of-type -->
                     <div class="col col-12">
                         <div class="item col col-12 col-md-6 timetable-info">
@@ -176,7 +271,7 @@
                             <div class="item-text">
                                 <strong>Next Class</strong>
                                 {% if next_class %}
-                                <span> {{ next_class.start_time|ordinal_sup_short }}</span>
+                                <span><strong> {{ next_class.start_time|ordinal_sup_short }}</strong></span>
                                 <span>{{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</span>
                                 {% else %}    
                                 <span>Pending</span>
@@ -282,5 +377,6 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/features/learner_performance/learner_performance_pages.js' %}"></script>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
@@ -8,7 +9,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}"> -->
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
@@ -16,14 +16,14 @@
 
 {% block profile_content %}
 
-<section class="course-details-page my-course profile-page">
+<section class="course-details-page course-details-page profile-page">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
-                <a href="#" class="text-white js-back-link">
+                <a href="#" class="js-back-link notranslate" translate="no">
                     <i class="fa-solid fa-arrow-left-long mr-3"></i>
                     Go Back
                 </a>

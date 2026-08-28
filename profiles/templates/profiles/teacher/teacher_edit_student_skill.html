@@ -1,5 +1,6 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block extra_title %}| Edit Skill Assessment{% endblock %}
@@ -16,7 +17,7 @@
     <div class="overlay-azure-mist"></div>
 
     <div class="mb-4">
-        <a href="#" class="js-back-link">
+        <a href="#" class="js-back-link notranslate" translate="no">
             <i class="fa-solid fa-arrow-left-long mr-3"></i>
             Go Back
         </a>
