@@ -229,7 +229,8 @@ header .student-main-info a:hover {
     display: block;
     flex: 1 1 auto;
     width: auto;
-    max-width: 100%;
+    /* max-width: 100%; */
+    max-width: 600px;
     min-width: 0;
     box-sizing: border-box;
 }
@@ -415,17 +416,17 @@ header .student-main-info a:hover {
     font-weight: 600;
 }
 
-.smaller-devs .course-dropdown-toggle {
+/* .smaller-devs .course-dropdown-toggle {
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.85);
-}
+} */
 
-.course-details-page .course-selector-form {
+/* .course-details-page .course-selector-form {
     background: rgba(var(--color-teal-rgb), 0.75);
-}
+} */
 
 /* END OF COURSE SELECTOR FORM *****************************/
 
-
+/* 
 .course-details-page header h1 {
     color: var(--color-navy);
     margin-left: 0;
@@ -449,11 +450,12 @@ header .student-main-info a:hover {
     text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
 }
 
-/* horizontal line separating course type | total_hours */
 .course-details-page header h2 > span:nth-child(2) {
     padding: 0 .8rem;
     color: var(--color-teal);
-}
+} */
+
+
 /* INSIDE PROFILE DETAILS NAV ******************************/
 .student-detail-tabs-wrapper {
     display: block;

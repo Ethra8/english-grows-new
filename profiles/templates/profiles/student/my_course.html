@@ -20,7 +20,7 @@
 
 {% block profile_content %}
 
-<section class="course-details-page">    
+<section id="my-course" class="course-details-page">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
   
@@ -190,9 +190,9 @@
         <div>
             <h1 class="notranslate" translate="no">{{ enrollment.course.name|default:"Course Name" }}</h1>
             <h2 class="notranslate" translate="no">
-                <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ enrollment.course.course_type.name }}</span>
+                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ enrollment.course.course_type.name }}</span>
                 <span>|</span>
-                <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ enrollment.course.total_hours|clean_decimal }} h.</span>
+                <span><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ enrollment.course.total_hours|clean_decimal }} h.</span>
             </h2>
 
         </div>
@@ -377,6 +377,6 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
-<script type="text/javascript" src="{% static 'profiles/js/features/learner_performance/learner_performance_pages.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
 {% endblock %}

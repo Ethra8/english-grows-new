@@ -257,7 +257,7 @@
                         <h2>My Skills Progress</h2>
                         {% if not skills %}
                             <p class="skills-assessment-pending">
-                                First assessment pending
+                                Pending assessment
                             </p>
                         {% endif %}
                     </div>
@@ -424,7 +424,7 @@
 {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js/features/learner_performance/learner_performance_pages.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
 <script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
 <script src="{% static 'profiles/js/components/skill_cards.js' %}"></script>

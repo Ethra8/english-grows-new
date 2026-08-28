@@ -714,11 +714,14 @@ def my_learning_progress(request):
                 "enrollment": None,
                 "course": None,
 
+                # Skills
                 "overall_skill_chart_data": {
                     "labels": [],
                     "datasets": [],
                 },
+                "overall_average_score": None,
 
+                # Attendance
                 "attended_count": 0,
                 "missed_count": 0,
                 "excused_count": 0,
@@ -726,6 +729,7 @@ def my_learning_progress(request):
                 "attendance_percentage": 0,
                 "recent_attendance": [],
 
+                # Progress
                 "completed_classes": 0,
                 "remaining_classes": 0,
                 "total_classes": 0,
@@ -742,6 +746,8 @@ def my_learning_progress(request):
 
     # ---------------------------------------------------------
     # SKILLS PROGRESS GRAPH
+    #
+    # Historical overall-skill development.
     # ---------------------------------------------------------
     overall_skill_chart_data = (
         build_overall_skill_progress_chart_data(
@@ -749,6 +755,75 @@ def my_learning_progress(request):
             course=course,
         )
     )
+
+
+    # ---------------------------------------------------------
+    # CURRENT OVERALL SKILLS AVERAGE
+    #
+    # Calculate the learner's CURRENT overall skill score
+    # for the selected course.
+    #
+    # Each StudentSkillAssessment already exposes:
+    #
+    #     assessment.average_score
+    #
+    # on a 0-10 scale.
+    #
+    # The overall score is therefore:
+    #
+    #     Speaking
+    #   + Reading
+    #   + Writing
+    #   + Listening
+    #   ----------------
+    #          4
+    #
+    # IMPORTANT:
+    # Only display an overall score when all four skills have
+    # a valid current score. This avoids presenting a misleading
+    # "overall" average based on only one, two or three skills.
+    # ---------------------------------------------------------
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            student=student,
+            course=course,
+        )
+        .prefetch_related(
+            "subskill_assessments",
+        )
+    )
+
+
+    current_skill_scores = []
+
+    for assessment in skill_assessments:
+
+        score = assessment.average_score
+
+        if score is not None:
+            current_skill_scores.append(
+                score
+            )
+
+
+    expected_skill_count = len(
+        StudentSkillAssessment.SKILL_AREA_CHOICES
+    )
+
+
+    if (
+        len(current_skill_scores)
+        == expected_skill_count
+    ):
+        overall_average_score = round(
+            sum(current_skill_scores)
+            / expected_skill_count,
+            1,
+        )
+
+    else:
+        overall_average_score = None
 
 
     # ---------------------------------------------------------
@@ -799,6 +874,7 @@ def my_learning_progress(request):
         + missed_count
         + excused_count
     )
+
 
     # ---------------------------------------------------------
     # ATTENDED HOURS
@@ -854,7 +930,6 @@ def my_learning_progress(request):
     # Total duration of all COMPLETED class sessions for the
     # selected course, regardless of this learner's attendance.
     # ---------------------------------------------------------
-
     completed_course_sessions = (
         course.class_sessions
         .filter(
@@ -879,11 +954,11 @@ def my_learning_progress(request):
             )
 
 
-    # Numeric version if needed elsewhere
+    # Numeric version if needed elsewhere.
     completed_hours = completed_minutes / 60
 
 
-    # Human-friendly display
+    # Human-friendly display.
     completed_whole_hours, completed_remaining_minutes = divmod(
         completed_minutes,
         60,
@@ -898,7 +973,8 @@ def my_learning_progress(request):
         completed_hours_display = (
             f"{completed_whole_hours}h"
         )
-    
+
+
     # ---------------------------------------------------------
     # TOTAL COURSE HOURS
     # ---------------------------------------------------------
@@ -922,6 +998,7 @@ def my_learning_progress(request):
         total_hours_display = (
             f"{total_whole_hours}h"
         )
+
 
     # ---------------------------------------------------------
     # ATTENDANCE %
@@ -979,6 +1056,7 @@ def my_learning_progress(request):
         )[:5]
     )
 
+
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
@@ -1003,6 +1081,7 @@ def my_learning_progress(request):
             "end": end,
         })
 
+
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
@@ -1019,6 +1098,7 @@ def my_learning_progress(request):
 
         # Timetable
         "formatted_timetable": formatted_timetable,
+
         # Attendance
         "attended_count": attended_count,
         "missed_count": missed_count,
@@ -1026,6 +1106,7 @@ def my_learning_progress(request):
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
         "recent_attendance": recent_attendance,
+
         # Attendance hours
         "attended_minutes": attended_minutes,
         "attended_hours": attended_hours,
@@ -1037,14 +1118,16 @@ def my_learning_progress(request):
         "completed_minutes": completed_minutes,
         "completed_hours": completed_hours,
         "completed_hours_display": completed_hours_display,
+
         # Progress
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
 
-        # Skills graph
+        # Skills
         "overall_skill_chart_data": overall_skill_chart_data,
+        "overall_average_score": overall_average_score,
     }
 
     return render(
@@ -1052,6 +1135,7 @@ def my_learning_progress(request):
         "profiles/student/my_learning_progress.html",
         context,
     )
+
 
 
 # STUDENT ATTENDANCE PAGE
@@ -5750,6 +5834,7 @@ def company_admin_student_detail(request, student_id):
     if not company:
         return redirect("home")
 
+
     # ---------------------------------------------------------
     # GET EMPLOYEE
     #
@@ -5767,9 +5852,14 @@ def company_admin_student_detail(request, student_id):
 
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
-    # - courses belonging to this company
+    #
+    # Course lifecycle order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
     # ---------------------------------------------------------
-
     enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -5786,11 +5876,26 @@ def company_admin_student_detail(request, student_id):
         )
         .annotate(
             status_order=Case(
-                When(course__status="active", then=Value(1)),
-                When(course__status="confirmed", then=Value(2)),
-                When(course__status="paused", then=Value(3)),
-                When(course__status="completed", then=Value(4)),
-                When(course__status="cancelled", then=Value(5)),
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
                 default=Value(99),
                 output_field=IntegerField(),
             ),
@@ -5811,15 +5916,13 @@ def company_admin_student_detail(request, student_id):
         )
     )
 
+
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
     #
     # Example:
     #
     # /profiles/company-admin/employees/3/?course=5
-    #
-    # If no course is provided, we use the first active
-    # enrollment.
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
@@ -5832,15 +5935,16 @@ def company_admin_student_detail(request, student_id):
             enrollments,
             course_id=selected_course_id,
         )
+
     else:
         enrollment = enrollments.first()
 
 
     # ---------------------------------------------------------
-    # EMPLOYEE HAS NO ACTIVE ENROLLMENTS
+    # EMPLOYEE HAS NO ENROLLMENTS
     #
-    # We keep the employee profile page available, but there
-    # will be no course-specific progress information.
+    # Keep the employee profile accessible, but without
+    # course-specific progress data.
     # ---------------------------------------------------------
     if not enrollment:
         context = {
@@ -5856,17 +5960,20 @@ def company_admin_student_detail(request, student_id):
 
             "level_choices": UserProfile.LEVEL_CHOICES,
 
+            # Attendance
             "attended_count": 0,
             "missed_count": 0,
             "excused_count": 0,
             "total_attendance_records": 0,
             "attendance_percentage": 0,
 
+            # Progress
             "completed_classes": 0,
             "remaining_classes": 0,
             "total_classes": 0,
             "completion_percentage": 0,
 
+            # Hours
             "total_hours_display": format_hours_duration(
                 Decimal("0")
             ),
@@ -5877,6 +5984,14 @@ def company_admin_student_detail(request, student_id):
                 Decimal("0")
             ),
 
+            # Skills
+            "overall_average_score": None,
+            "overall_skill_chart_data": {
+                "labels": [],
+                "datasets": [],
+            },
+
+            # Additional data
             "recent_attendance": [],
             "chart_data": None,
             "skill_note_display": [],
@@ -5913,28 +6028,50 @@ def company_admin_student_detail(request, student_id):
             student=student,
             class_session__course=course,
             status__in=[
-                "attended",
-                "missed",
-                "excused",
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
             ],
         )
-        .select_related("class_session")
-        .order_by("-class_session__start_time")
+        .select_related(
+            "class_session"
+        )
+        .order_by(
+            "-class_session__start_time"
+        )
     )
 
-    total_attendance_records = attendances.count()
 
-    attended_count = attendances.filter(
-        status="attended"
-    ).count()
+    # ---------------------------------------------------------
+    # ATTENDANCE COUNTS
+    # ---------------------------------------------------------
+    total_attendance_records = (
+        attendances.count()
+    )
 
-    missed_count = attendances.filter(
-        status="missed"
-    ).count()
+    attended_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_ATTENDED
+        )
+        .count()
+    )
 
-    excused_count = attendances.filter(
-        status="excused"
-    ).count()
+    missed_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_MISSED
+        )
+        .count()
+    )
+
+    excused_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_EXCUSED
+        )
+        .count()
+    )
 
 
     # ---------------------------------------------------------
@@ -5942,24 +6079,27 @@ def company_admin_student_detail(request, student_id):
     #
     # Progress is based on the ClassSessions actually assigned
     # to this enrollment.
-    #
-    # A completed class means:
-    # status == ClassSession.STATUS_COMPLETED
     # ---------------------------------------------------------
-    completed_classes = enrollment.total_completed_classes
-    total_classes = enrollment.total_assigned_classes
-    remaining_classes = enrollment.upcoming_classes
+    completed_classes = (
+        enrollment.total_completed_classes
+    )
+
+    total_classes = (
+        enrollment.total_assigned_classes
+    )
+
+    remaining_classes = (
+        enrollment.upcoming_classes
+    )
+
 
     # ---------------------------------------------------------
     # ATTENDED HOURS
-    #
-    # Calculate the actual duration of every class the learner
-    # attended. This correctly supports sessions with different
-    # durations, including a shorter final class.
     # ---------------------------------------------------------
     attended_minutes = 0
 
     for attendance in attendances:
+
         if (
             attendance.status == Attendance.STATUS_ATTENDED
             and attendance.class_session.start_time
@@ -5971,17 +6111,16 @@ def company_admin_student_detail(request, student_id):
             )
 
             attended_minutes += round(
-                session_duration.total_seconds() / 60
+                session_duration.total_seconds()
+                / 60
             )
 
 
-    # Decimal version, useful if you ever need calculations.
-    attended_hours = attended_minutes / 60
+    attended_hours = (
+        attended_minutes / 60
+    )
 
 
-    # Human-friendly display:
-    # 90 minutes  -> 1h30
-    # 120 minutes -> 2h
     attended_whole_hours, attended_remaining_minutes = divmod(
         attended_minutes,
         60,
@@ -5992,18 +6131,19 @@ def company_admin_student_detail(request, student_id):
             f"{attended_whole_hours}h"
             f"{attended_remaining_minutes:02d}"
         )
+
     else:
         attended_hours_display = (
             f"{attended_whole_hours}h"
         )
 
+
     # ---------------------------------------------------------
     # COMPLETED COURSE HOURS
     #
-    # Total duration of all COMPLETED class sessions for the
-    # selected course, regardless of this learner's attendance.
+    # Total duration of all completed sessions in the course,
+    # regardless of this employee's attendance.
     # ---------------------------------------------------------
-
     completed_course_sessions = (
         course.class_sessions
         .filter(
@@ -6014,6 +6154,7 @@ def company_admin_student_detail(request, student_id):
     completed_minutes = 0
 
     for class_session in completed_course_sessions:
+
         if (
             class_session.start_time
             and class_session.end_time
@@ -6024,56 +6165,68 @@ def company_admin_student_detail(request, student_id):
             )
 
             completed_minutes += round(
-                session_duration.total_seconds() / 60
+                session_duration.total_seconds()
+                / 60
             )
 
 
-    # Numeric version if needed elsewhere
-    completed_hours = completed_minutes / 60
+    completed_hours_numeric = (
+        completed_minutes / 60
+    )
 
 
-    # Human-friendly display
     completed_whole_hours, completed_remaining_minutes = divmod(
         completed_minutes,
         60,
     )
 
     if completed_remaining_minutes:
-        completed_hours_display = (
+        completed_course_hours_display = (
             f"{completed_whole_hours}h"
             f"{completed_remaining_minutes:02d}"
         )
+
     else:
-        completed_hours_display = (
+        completed_course_hours_display = (
             f"{completed_whole_hours}h"
         )
 
-    # ---------------------------------------------------------
-    # TOTAL COURSE HOURS
-    # ---------------------------------------------------------
-    total_hours = course.total_hours or 0
 
-    total_minutes = round(
-        float(total_hours) * 60
+    # ---------------------------------------------------------
+    # COURSE TOTAL HOURS
+    #
+    # Original Course.total_hours value.
+    # ---------------------------------------------------------
+    course_total_hours = (
+        course.total_hours or 0
     )
 
-    total_whole_hours, total_remaining_minutes = divmod(
-        total_minutes,
+    course_total_minutes = round(
+        float(course_total_hours) * 60
+    )
+
+    course_total_whole_hours, course_total_remaining_minutes = divmod(
+        course_total_minutes,
         60,
     )
 
-    if total_remaining_minutes:
-        total_hours_display = (
-            f"{total_whole_hours}h"
-            f"{total_remaining_minutes:02d}"
-        )
-    else:
-        total_hours_display = (
-            f"{total_whole_hours}h"
+    if course_total_remaining_minutes:
+        course_total_hours_display = (
+            f"{course_total_whole_hours}h"
+            f"{course_total_remaining_minutes:02d}"
         )
 
+    else:
+        course_total_hours_display = (
+            f"{course_total_whole_hours}h"
+        )
+
+
     # ---------------------------------------------------------
-    # COMPLETED HOURS
+    # COMPLETED ASSIGNED HOURS
+    #
+    # Based specifically on sessions eligible for this
+    # employee/enrollment.
     # ---------------------------------------------------------
     completed_session_list = list(
         enrollment.eligible_sessions.filter(
@@ -6090,7 +6243,9 @@ def company_admin_student_detail(request, student_id):
                         - session.start_time
                     ).total_seconds()
                 )
-            ) / Decimal("3600")
+            )
+            / Decimal("3600")
+
             for session in completed_session_list
         ),
         Decimal("0"),
@@ -6113,7 +6268,9 @@ def company_admin_student_detail(request, student_id):
                         - session.start_time
                     ).total_seconds()
                 )
-            ) / Decimal("3600")
+            )
+            / Decimal("3600")
+
             for session in assigned_session_list
         ),
         Decimal("0"),
@@ -6130,18 +6287,24 @@ def company_admin_student_detail(request, student_id):
 
 
     # ---------------------------------------------------------
-    # FORMAT HOURS FOR DISPLAY
+    # FORMAT ASSIGNED HOURS FOR DISPLAY
     # ---------------------------------------------------------
-    completed_hours_display = format_hours_duration(
-        completed_hours
+    completed_hours_display = (
+        format_hours_duration(
+            completed_hours
+        )
     )
 
-    remaining_hours_display = format_hours_duration(
-        remaining_hours
+    remaining_hours_display = (
+        format_hours_duration(
+            remaining_hours
+        )
     )
 
-    total_hours_display = format_hours_duration(
-        total_hours
+    total_hours_display = (
+        format_hours_duration(
+            total_hours
+        )
     )
 
 
@@ -6158,7 +6321,11 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     completion_percentage = (
         round(
-            (completed_classes / total_classes) * 100
+            (
+                completed_classes
+                / total_classes
+            )
+            * 100
         )
         if total_classes > 0
         else 0
@@ -6168,11 +6335,16 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     # RECENT ATTENDANCE
     # ---------------------------------------------------------
-    recent_attendance = attendances[:5]
+    recent_attendance = (
+        attendances[:5]
+    )
 
 
     # ---------------------------------------------------------
     # SKILL ASSESSMENTS
+    #
+    # These are the CURRENT skill assessments for this
+    # employee + selected course.
     # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
@@ -6183,15 +6355,69 @@ def company_admin_student_detail(request, student_id):
         .prefetch_related(
             "subskill_assessments"
         )
-        .order_by("skill")
+        .order_by(
+            "skill"
+        )
     )
 
+
+    # ---------------------------------------------------------
+    # CURRENT OVERALL SKILLS AVERAGE
+    #
+    # Each StudentSkillAssessment.average_score already
+    # provides the current score for that skill on a 0-10
+    # scale.
+    #
+    # An overall score is only shown once all four skills
+    # have a valid score.
+    # ---------------------------------------------------------
+    current_skill_scores = []
+
+    for skill_assessment in skill_assessments:
+
+        score = (
+            skill_assessment.average_score
+        )
+
+        if score is not None:
+            current_skill_scores.append(
+                score
+            )
+
+
+    expected_skill_count = len(
+        StudentSkillAssessment.SKILL_AREA_CHOICES
+    )
+
+
+    if (
+        len(current_skill_scores)
+        == expected_skill_count
+    ):
+        overall_average_score = round(
+            sum(current_skill_scores)
+            / expected_skill_count,
+            1,
+        )
+
+    else:
+        overall_average_score = None
+
+
+    # ---------------------------------------------------------
+    # SKILL NOTES
+    # ---------------------------------------------------------
     skill_note_display = [
-        build_skill_note_display(skill_assessment)
+        build_skill_note_display(
+            skill_assessment
+        )
         for skill_assessment in skill_assessments
     ]
 
+
+    # ---------------------------------------------------------
     # OVERALL SKILLS PROGRESS GRAPH
+    # ---------------------------------------------------------
     overall_skill_chart_data = (
         build_overall_skill_progress_chart_data(
             student=student,
@@ -6199,12 +6425,14 @@ def company_admin_student_detail(request, student_id):
         )
     )
 
+
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
+
         key = (
             slot.start_time.strftime("%Hh%M"),
             slot.end_time.strftime("%Hh%M"),
@@ -6214,9 +6442,11 @@ def company_admin_student_detail(request, student_id):
             slot.get_day_of_week_display()[:3]
         )
 
+
     formatted_timetable = []
 
     for (start, end), days in timetable_groups.items():
+
         formatted_timetable.append({
             "days": " & ".join(days),
             "start": start,
@@ -6224,6 +6454,9 @@ def company_admin_student_detail(request, student_id):
         })
 
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
@@ -6255,12 +6488,15 @@ def company_admin_student_detail(request, student_id):
         "attended_minutes": attended_minutes,
         "attended_hours": attended_hours,
         "attended_hours_display": attended_hours_display,
-        "total_hours": total_hours,
-        "total_hours_display": total_hours_display,
-        # Completed course hours
+
+        # Original course-hour information
+        "course_total_hours": course_total_hours,
+        "course_total_hours_display": course_total_hours_display,
+
+        # Completed course session hours
         "completed_minutes": completed_minutes,
-        "completed_hours": completed_hours,
-        "completed_hours_display": completed_hours_display,
+        "completed_hours_numeric": completed_hours_numeric,
+        "completed_course_hours_display": completed_course_hours_display,
 
         # Progress
         "completed_classes": completed_classes,
@@ -6268,18 +6504,24 @@ def company_admin_student_detail(request, student_id):
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
 
-        # Hours
+        # Assigned enrollment hours
+        "total_hours": total_hours,
         "total_hours_display": total_hours_display,
+        "completed_hours": completed_hours,
         "completed_hours_display": completed_hours_display,
+        "remaining_hours": remaining_hours,
         "remaining_hours_display": remaining_hours_display,
 
-        # Additional data
+        # Attendance history
         "recent_attendance": recent_attendance,
+
+        # Skills
         "chart_data": chart_data,
         "skill_note_display": skill_note_display,
-
         "overall_skill_chart_data": overall_skill_chart_data,
+        "overall_average_score": overall_average_score,
     }
+
 
     return render(
         request,

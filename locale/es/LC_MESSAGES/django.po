@@ -147,10 +147,24 @@ msgstr "C1.2 - Avanzado alto"
 msgid "C2 Proficiency"
 msgstr "C2 - Maestría"
 
+msgid "Attendance"
+msgstr "Asistencia"
+
 msgid "Registered Attendance"
 msgstr "Registro de Asistencia"
 
 
 msgid "Overview"
 msgstr "General"
+
+msgid "Skills Progress"
+msgstr "Progreso por Skills"
+
+msgid "Pending assessment"
+msgstr "Evaluación pendiente"
+
+msgid "Progress"
+msgstr "Progreso"
+
+
 

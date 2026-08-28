@@ -261,7 +261,13 @@
                 <div class="skills-chart-card">
                     <div class="skills-chart-header">
                         <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
-                            <h2>My Progress
+                            <h2><span>My Progress 
+                                {% if overall_average_score %}
+                                <span class="header-score">{{ overall_average_score }}/ 10</span>
+                                {% else %}
+                                <span class="header-score">-/10</span>
+                                {% endif %}
+                                </span>
                                 <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="icon" width="52px">
                             </h2>
                         </a>    
@@ -404,6 +410,6 @@
 {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js/features/learner_performance/learner_performance_pages.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 <script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
 {% endblock %}

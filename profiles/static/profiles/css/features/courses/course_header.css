@@ -26,6 +26,11 @@
     padding: 0 4%;
 }
 
+/* MY-COURSE  Header */
+#my-course .course-details-page header {
+    max-width: 1200px;
+}
+
 
 /* =========================================================
    COURSE SELECTOR
@@ -33,16 +38,21 @@
 
 .course-selector-form {
     display: flex;
-    align-content: center;
+    /* align-content: center; */
     flex-direction: row;
     gap: 1rem;
     width: 100%;
     max-width: 100%;
-    min-width: 0;    
-    background: rgba(var(--color-cyan-rgb), 0.45);
+    min-width: 0;   
+    height: fit-content; 
+    background: rgba(var(--color-teal-rgb), 0.85);
     padding: 0.75rem 0.15rem 0.75rem 1.2rem;
     border-radius: 8px 8px 0 0;
     border: outset 1px rgba(var(--color-turquoise-rgb), 0.95);
+}
+
+.course-details-page .course-selector-form {
+    padding: 0.75rem 0.75rem 0.75rem 1.2rem;
 }
 
 .course-selector-form img {
@@ -82,6 +92,17 @@
     max-width: 100%;
     min-width: 0;
     height: fit-content
+}
+
+.course-select-wrapper.course-dropdown {
+    position: relative;
+    z-index: 101;
+    display: block;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 600px;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .course-select {
@@ -135,7 +156,7 @@
     padding: 0.15rem 0.5rem;    
     /* background: rgba(var(--color-teal-rgb), 0.2); */
     border: outset 1px rgba(var(--color-teal-rgb), 0.3);
-    border-radius: 0;
+    border-radius: 8px 8px 0 0;
 }
 
 .smaller-devs .course-selector-label {
@@ -248,17 +269,9 @@
     padding-left: 0;
 }
 
-.course-details-page header > div:nth-child(3) {
-    gap: 1.95rem;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    margin: 1rem 0 1.5rem;
-}    
-
 .course-details-page header h2 {
-    color: var(--color-navy);
-    font-size: 1.5rem;
+    color: var(--color-slate);
+    font-size: 1.4rem;
     margin-top: 0;
     padding-top: 0;
     text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
@@ -270,9 +283,14 @@
     color: var(--color-teal);
 }
 
-.course-details-page .course-selector-form {
-    background: rgba(var(--color-teal-rgb), 0.75);
-}
+/* LEVEL & Course_STATUS BADGES */
+.course-details-page header > div:nth-child(3) {
+    gap: 1.95rem;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    margin: 1rem 0 1.5rem;
+}    
 
 
 

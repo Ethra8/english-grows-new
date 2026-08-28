@@ -1,9 +1,17 @@
 /* DASHBOARD */
-.wrapper-next-class-card,
+
 .wrapper-my-course-card,
 .wrapper-attendance-progress-card,
-/* .wrapper-attendance-details, */
 .wrapper-absence-details {
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: rgba(var(--color-turquoise-rgb), 0.2);
+    min-width: fit-content;
+    max-width: 1200px;
+}
+
+.wrapper-next-class-card {
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
@@ -12,7 +20,6 @@
     max-width: fit-content;
 }
 
-/* .wrapper-attendance-details, */
 .wrapper-attendance-progress-card,
 .wrapper-absence-details {
     width: 100%;
