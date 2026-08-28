@@ -232,3 +232,54 @@ msgstr "En desarrollo"
 
 msgid "Focus areas"
 msgstr "Areas por desarrollar"
+
+
+
+msgid "Rate"
+msgstr "Porcentaje"
+
+msgid "Attendance is below the recommended level of 75%!"
+msgstr "Asistencia por debajo del nivel recomendado de 75%!"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Enrollment date"
+msgstr "Fecha de inscripción"
+
+msgid "Lessons before enrollment"
+msgstr "Clases anteriores a inscripción"
+
+msgid "Completed lessons since enrollment"
+msgstr "Clases incluidas desde inscripción"
+
+msgid "Absence"
+msgstr "Ausencia"
+
+msgid "Total Absences"
+msgstr "Total Ausencias"
+
+msgid "Lessons Missed"
+msgstr "Sin justificar"
+
+msgid "Excused Absences"
+msgstr "Justificadas"
+
+msgid "Absence Record"
+msgstr "Historial Ausencias"
+
+msgid "Missed"
+msgstr "Ausente"
+
+msgid "Excused"
+msgstr "Justificada"
+
+msgid "No absences recorded yet"
+msgstr "No se encontraron ausencias registradas"
+
+msgid "No courses assigned yet"
+msgstr "No hay ninguna inscripción a un curso todavía"
+
+msgid "Your course information will appear here once you are enrolled in a course"
+msgstr "Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
+

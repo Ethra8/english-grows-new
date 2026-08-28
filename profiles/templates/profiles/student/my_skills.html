@@ -42,15 +42,7 @@
             
             <div>
                 <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
-
-                <p><a href="mailto:{{ student.email }}" class="notranslate" translate="no">
-                    {{ student.email }}</a></p>
-
-                <div class="profile-user-role">
-                    <span><i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Learner" }}</span>
-                </div> 
-
+                
                 <div class="header-level">      
 
                     <div class="level-pill larger-devs">
