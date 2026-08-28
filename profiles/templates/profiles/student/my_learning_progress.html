@@ -85,86 +85,86 @@
     </header>
 
 
-            {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form smaller-devs">
+    {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form smaller-devs">
 
-                <div class="course-selector-label">
-                    <img
-                        src="{% static 'icons/one_to_one_course_icon.png' %}"
-                        alt="icon"
-                    >
-                    <span>Select Course</span>
-                </div>
-
-
-                <div class="course-select-wrapper course-dropdown">
-
-                    <!-- CURRENTLY SELECTED COURSE -->
-                    <button
-                        type="button"
-                        id="course-select-small"
-                        class="course-select course-dropdown-toggle"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                    >
-                        <span class="course-dropdown-selected">
-
-                            {% if course %}
-                                <span class="course-dropdown-course-name notranslate" translate="no">
-                                    · {{ course.name }}
-                                </span>
-
-                                <span class="course-dropdown-status">
-                                    - {{ course.get_status_display }}
-                                </span>
-                            {% else %}
-                                <span>Select Course</span>
-                            {% endif %}
-
-                        </span>
-
-                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
-                    </button>
+            <div class="course-selector-label">
+                <img
+                    src="{% static 'icons/one_to_one_course_icon.png' %}"
+                    alt="icon"
+                >
+                <span>Select Course</span>
+            </div>
 
 
-                    <!-- DROPDOWN OPTIONS -->
-                    <div
-                        class="course-dropdown-menu"
-                        role="menu"
-                        hidden
-                    >
+            <div class="course-select-wrapper course-dropdown">
 
-                        {% for item in enrollments %}
+                <!-- CURRENTLY SELECTED COURSE -->
+                <button
+                    type="button"
+                    id="course-select-small"
+                    class="course-select course-dropdown-toggle"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    <span class="course-dropdown-selected">
 
-                            <button
-                                type="submit"
-                                name="course"
-                                value="{{ item.course.id }}"
-                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
-                                role="menuitem"
+                        {% if course %}
+                            <span class="course-dropdown-course-name notranslate" translate="no">
+                                · {{ course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ course.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span>Select Course</span>
+                        {% endif %}
+
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                </button>
+
+
+                <!-- DROPDOWN OPTIONS -->
+                <div
+                    class="course-dropdown-menu"
+                    role="menu"
+                    hidden
+                >
+
+                    {% for item in enrollments %}
+
+                        <button
+                            type="submit"
+                            name="course"
+                            value="{{ item.course.id }}"
+                            class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                            role="menuitem"
+                        >
+
+                            <span
+                                class="course-dropdown-course-name notranslate"
+                                translate="no"
                             >
+                                · {{ item.course.name }}
+                            </span>
 
-                                <span
-                                    class="course-dropdown-course-name notranslate"
-                                    translate="no"
-                                >
-                                    · {{ item.course.name }}
-                                </span>
+                            <span class="course-dropdown-status">
+                                - {{ item.course.get_status_display }}
+                            </span>
 
-                                <span class="course-dropdown-status">
-                                    - {{ item.course.get_status_display }}
-                                </span>
+                        </button>
 
-                            </button>
-
-                        {% endfor %}
-
-                    </div>
+                    {% endfor %}
 
                 </div>
 
-            </form>
-        {% endif %}
+            </div>
+
+        </form>
+    {% endif %}
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
