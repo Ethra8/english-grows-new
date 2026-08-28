@@ -16,75 +16,77 @@
 
 {% block profile_content %}
 
-<section class="student-detail-page profile-page">
+<section class="student-detail-page profile-page notranslate" translate="no">
 
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <header>
-        <div class="student-main-info">
 
+        <div class="student-main-info">
             <div>
                 <div class="student-avatar-large {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
+
                     {% if student_profile.profile_photo %}
-                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
+                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
                     {% else %}
                         {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                            <i class="fa-solid fa-user-tie"></i>
+                        <i class="fa-solid fa-user-tie"></i>
                         {% else %}
-                            <i class="fa-regular fa-user"></i>
+                        <i class="fa-regular fa-user"></i>
                         {% endif %}
                     {% endif %}
-
-                    <span class="avatar-status-dot"
-                        aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"
-                        title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}">
-                    </span>
+                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
                 </div>
             </div>
-
+            
             <div>
                 <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
 
-                <div class="mt-4">
+                <p><a href="mailto:{{ student.email }}" class="notranslate" translate="no">
+                    {{ student.email }}</a></p>
+
+                <div class="profile-user-role">
+                    <span><i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Learner" }}</span>
+                </div> 
+
+                <div class="header-level">      
 
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">Level</span>
                         <span class="current-level-value notranslate" translate="no">
-                            {% if student_profile.current_level %}
-                                {{ student_profile.get_current_level_display }}
-                            {% else %}
-                                Pending
-                            {% endif %}
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.get_current_level_display }}
+                        {% else %}
+                            {% trans 'Pending' %}
+                        {% endif %}    
                         </span>
                     </div>
-
                     <div class="level-pill smaller-devs">
                         <span class="current-level-label">Level</span>
                         <span class="current-level-value notranslate" translate="no">
-                            {% if student_profile.current_level %}
-                                {{ student_profile.current_level }}
-                            {% else %}
-                                Pending
-                            {% endif %}
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.current_level }}
+                        {% else %}
+                            {% trans 'Pending' %}
+                        {% endif %}    
                         </span>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </header>
 
     {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs">
+        <form method="get" class="course-selector-form smaller-devs notranslate" translate="no">
 
             <div class="course-selector-label">
                 <img
                     src="{% static 'icons/one_to_one_course_icon.png' %}"
                     alt="icon"
                 >
-                <span>Select Course</span>
+                <span>{% trans 'Select Course' %}</span>
             </div>
 
 
@@ -109,7 +111,7 @@
                                 - {{ course.get_status_display }}
                             </span>
                         {% else %}
-                            <span>Select Course</span>
+                            <span>{% trans 'Select Course' %}</span>
                         {% endif %}
 
                     </span>
@@ -159,14 +161,15 @@
 
     <div class="student-detail-tabs-wrapper">
         <nav class="student-detail-tabs">
+
             {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form">    
+            <form method="get" class="course-selector-form notranslate" translate="no">    
                 <div class="course-selector-label">
                     <img
                         src="{% static 'icons/one_to_one_course_icon.png' %}"
                         alt="icon"
                     >
-                    <span>Select Course</span>
+                    <span>{% trans 'Select Course' %}</span>
                 </div>
 
                 <div class="course-select-wrapper course-dropdown">
@@ -258,10 +261,10 @@
                 <div class="skills-chart-card">
 
                     <div class="skills-chart-header">
-                        <h2>My Skills Progress</h2>
+                        <h2>{% trans 'Skills Progress' %}</h2>
                         {% if not skills %}
                             <p class="skills-assessment-pending">
-                                Pending assessment
+                                {% trans 'Pending assessment' %}
                             </p>
                         {% endif %}
                     </div>
@@ -317,10 +320,10 @@
                                                 {{ skill.subskills|length }} {{ skill.name }}
                                                 subskill{{ skill.subskills|length|pluralize }}
                                             </strong>
-                                            assessed
+                                            {% trans 'assessed' %}
                                         {% else %}
                                             <strong>0 {{ skill.name }} subskills</strong>
-                                            assessed yet
+                                            {% trans 'assessed yet' %}
                                         {% endif %}
                                     </span>
                                     <img src="{% static 'icons/chevron_down_teal.png' %}" alt="" class="skill-chevron">
@@ -352,7 +355,7 @@
 
                                 {% if skill.confident %}
                                     <div class="subskill-group">
-                                        <p><strong>Confident in</strong></p>
+                                        <p><strong>{% trans 'Confident in' %}</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.confident %}
@@ -365,7 +368,7 @@
 
                                 {% if skill.required_standard %}
                                     <div class="subskill-group">
-                                        <p><strong>Required standard achieved</strong></p>
+                                        <p><strong>{% trans 'Required standard achieved' %}</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.required_standard %}
@@ -378,7 +381,7 @@
 
                                 {% if skill.developing %}
                                     <div class="subskill-group">
-                                        <p><strong>Developing areas</strong></p>
+                                        <p><strong>{% trans 'Developing areas' %}</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.developing %}
@@ -391,7 +394,7 @@
 
                                 {% if skill.needs_work %}
                                     <div class="subskill-group">
-                                        <p><strong>Focus areas</strong></p>
+                                        <p><strong>{% trans 'Focus areas' %}</strong></p>
 
                                         <ul>
                                             {% for subskill in skill.needs_work %}
@@ -430,7 +433,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
-<script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
-<script src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
 
 {% endblock %}

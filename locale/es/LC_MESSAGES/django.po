@@ -210,3 +210,25 @@ msgstr "Clases Asistidas"
 
 msgid "Hours Attended"
 msgstr "Horas Asistidas"
+
+
+msgid "assessed"
+msgstr "evaluadas"
+
+msgid "assessed yet"
+msgstr "evaluadas"
+
+msgid "Key strengths"
+msgstr "Puntos fuertes"
+
+msgid "Confident in"
+msgstr "Competente en"
+
+msgid "Required standard achieved"
+msgstr "Mínimo standard"
+
+msgid "Developing areas"
+msgstr "En desarrollo"
+
+msgid "Focus areas"
+msgstr "Areas por desarrollar"
