@@ -143,15 +143,13 @@ header .student-main-info a:hover {
     width: 100%;
 } */
 
-.student-meta-line,
+/* .student-meta-line,
 .student-meta-line span {
-    /* 4 rules to prevent text 
-    from overflowing container */
     min-width: 0;
     max-width: 100%;
     overflow-wrap: anywhere;
     word-break: break-word;
-}
+} */
 
 /* LEVEL PILL ***********************/
 

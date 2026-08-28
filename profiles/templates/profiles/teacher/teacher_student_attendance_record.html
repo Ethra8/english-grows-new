@@ -29,20 +29,27 @@
     </div>
 
     <!-- Header -->
-    <div class="student-detail-header">
+    <header>
 
         <div class="student-main-info">
+            <div>
 
-            <div class="student-avatar-large">
-                {% if student_profile.profile_photo %}
-                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                {% else %}
-                    {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                    {% elif student_profile.role == "individual" %}
-                        <i class="fa-regular fa-user"></i>
+                <div class="student-avatar-large">
+                    {% if student_profile.profile_photo %}
+                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
+                    {% else %}
+                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
+                            <i class="fa-solid fa-user-tie"></i>
+                        {% elif student_profile.role == "individual" %}
+                            <i class="fa-regular fa-user"></i>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                    <span
+                        class="avatar-status-dot"
+                        aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"
+                        title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}">
+                    </span>
+                </div>
             </div>
 
             <div>
@@ -52,23 +59,37 @@
 
                 <p class="notranslate" translate="no">{{ student.email }}</p>
 
-                <div class="student-meta-line">
-                    <span>
-                        <i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Student" }}
-                    </span>
-                </div>
-                <div class="student-meta-line mt-3">
-                    {% if student.is_active %}
-                        <span class="status-badge active">Active</span>
-                    {% else %}
-                        <span class="status-badge inactive">Inactive</span>
-                    {% endif %}
+                <div class="profile-user-role">
+                    <span><i class="fa-regular fa-user mr-2"></i>
+                        {{ student_profile.get_role_display|default:"Learner" }}</span>
+                </div> 
+
+                <div class="mt-4">  
+                    <div class="level-pill larger-devs">
+                        <span class="current-level-label">Level</span>
+                        <span class="current-level-value notranslate" translate="no">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.get_current_level_display }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
+                    <div class="level-pill smaller-devs">
+                        <span class="current-level-label">Level</span>
+                        <span class="current-level-value notranslate" translate="no">
+                        {% if student_profile.current_level %}    
+                            {{ student_profile.current_level }}
+                        {% else %}
+                            Pending
+                        {% endif %}    
+                        </span>
+                    </div>
                 </div>
             </div>
-
         </div>
-
+    </header>
+<!-- 
         <div class="student-header-actions">
             <div>
                 <a href="mailto:{{ student.email }}" class="student-action-btn">
@@ -105,171 +126,424 @@
                 </form>
             </div>
 
-        </div>
+        </div> -->
 
-    </div>
+    {% if enrollments|length > 1 %}
+        <form method="get" class="course-selector-form smaller-devs">
+
+            <div class="course-selector-label">
+                <img
+                    src="{% static 'icons/one_to_one_course_icon.png' %}"
+                    alt="icon"
+                >
+                <span>Select Course</span>
+            </div>
+
+
+            <div class="course-select-wrapper course-dropdown">
+
+                <!-- CURRENTLY SELECTED COURSE -->
+                <button
+                    type="button"
+                    id="course-select-small"
+                    class="course-select course-dropdown-toggle"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    <span class="course-dropdown-selected">
+
+                        {% if course %}
+                            <span class="course-dropdown-course-name notranslate" translate="no">
+                                · {{ course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ course.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span>Select Course</span>
+                        {% endif %}
+
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                </button>
+
+
+                <!-- DROPDOWN OPTIONS -->
+                <div
+                    class="course-dropdown-menu"
+                    role="menu"
+                    hidden
+                >
+
+                    {% for item in enrollments %}
+
+                        <button
+                            type="submit"
+                            name="course"
+                            value="{{ item.course.id }}"
+                            class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                            role="menuitem"
+                        >
+
+                            <span
+                                class="course-dropdown-course-name notranslate"
+                                translate="no"
+                            >
+                                · {{ item.course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ item.course.get_status_display }}
+                            </span>
+
+                        </button>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </form>
+    {% endif %}
 
     <!-- Inside navbar -->
     <div class="student-detail-tabs-wrapper">
-
         <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
-                Overview
-            </a>
+            {% if enrollments|length > 1 %}
+            <form method="get" class="course-selector-form">    
+                <div class="course-selector-label">
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt="icon"
+                    >
+                    <span>Select Course</span>
+                </div>
 
-            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="active">
-                Attendance
-            </a>
+                <div class="course-select-wrapper course-dropdown">
 
-            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
-                Skills
-            </a>
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select-large"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span class="course-dropdown-selected">
 
-            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
-                Assessment
-            </a>
+                            {% if course %}
+                                <span class="notranslate" translate="no">
+                                    · {{ course.name }}
+                                </span>
 
-            <!-- <a href="#">
-                History
-            </a> -->
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span>Select Course</span>
+                            {% endif %}
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span
+                                    class="course-dropdown-course-name notranslate"
+                                    translate="no"
+                                >
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </form>    
+            {% endif %}
+
+            <div class="wrapper-links-inner-nav">
+                <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
+                    Overview
+                </a>
+
+                <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}" class="active">
+                    Attendance
+                </a>
+
+                <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
+                    Skills
+                </a>
+
+                <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}">
+                    Assessment
+                </a>
+
+                <!-- <a href="#">
+                    History
+                </a> -->
+            </div>    
         </nav>
     </div>
     
-    <div class="student-overview-grid mt-4">
-
-        <article class="recent-attendance-card">
-            <div class="recent-attendance-card-header">
-                <h2>
-                    <i class="fa-solid fa-list-check mr-2"></i>
-                    Attendance Records
-                </h2>
-                <div class="mb-3">
-                    <strong>Past Classes:</strong>
-                    <span>{{ completed_classes }}</span>
-                </div>
-
-                <button type="button" id="editAttendanceBtn" class="student-edit-attendance-btn mb-3">
-                    <i class="fa-regular fa-pen-to-square mr-2"></i>
-                    Edit
-                </button>
+    <div class="wrapper-attendance-progress-card">
+        <div class="attendance-progress-card">
+            <div class="circle-panel1">
+                <!-- <div class="icon-circle-bg"><i class="fa-solid fa-percent"></i></div> -->
+                <h2>Attendance <small>Rate</small></h2>
             </div>
+            <div class="circle-panel2"></div>
+        {% if enrollment %}                
+            <div class="info">
+                <div class="attendance-percentage-card">
+                    <div>
+                        <p>{{ enrollment.attendance_percentage|default:"0" }}%</p>
+                    </div>
 
-            <hr>
-            
-        <div class="wrapper-attendance-summary-card">
+                    <progress
+                        class="attendance-progress"
+                        value="{{ enrollment.attendance_percentage }}"
+                        max="100">
+                        {{ enrollment.attendance_percentage|default:"0" }}%
+                    </progress>
+                </div>                            
 
-            <div class="attendance-summary-card success">
-                <div class="status-pill completed">
-                    <i class="fa-solid fa-user-check"></i>
-                    <strong>{{ attended_count }}</strong>
+                {% if enrollment.has_low_attendance_warning %}
+                <div class="attendance-warning">                
+                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>Attendance is below the recommended level of 75%!</p>
                 </div>
-                <div>
-                    <span>Attended</span>
-                </div>
+                {% endif %}
+                
             </div>
-
-            <div class="attendance-summary-card missed">
-                <div class="status-pill missed">
-                    <i class="fa-solid fa-user-xmark"></i>
-                    <strong>{{ missed_count }}</strong>
-                </div>
-                <div>
-                    <span>Missed</span>
-                </div>
-            </div>
-
-            <div class="attendance-summary-card pending">
-                <div class="status-pill pending">
-                    <i class="fa-solid fa-user-minus"></i>
-                    <strong>{{ excused_count }}</strong>
-                </div>
-                <div>
-                    <span>Excused</span>
-                </div>
-            </div>
-
         </div>
 
-            <div class="recent-attendance-list">
-                {% for attendance in recent_attendance %}
-                    <div class="recent-attendance-row">
+    </div>
+        
+    <div class="attendance-cards-grid">
+            <div class="wrapper-attendance-details">
+                <div class="detailed-attendance-card">
+                    <div class="circle-panel1">
+                        <h2>Attendance <small>Details</small></h2>
+                    </div>
+                    <div class="circle-panel2"></div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="attendance-status">
+                                <span class="status-pill attended">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </span>
+                            </div>
+                            <div class="item-text">
+                                <strong>Lessons Attended</strong>
+                                <span>{{ enrollment.classes_attended|default:"0" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="18px">
+                            </div>
 
-                        <div class="recent-attendance-info">
-                            <small>{{ attendance.class_session.start_time|date:"j M Y" }}</small><br>
-                            <span>
-                               {{ course.name }}<br>
-                                ·  Lesson {{ attendance.class_session.class_number }} 
-                            </span>
+                            <div class="item-text">
+                                <strong>Completed Lessons</strong>
+                                <span>{{ enrollment.total_completed_classes|default:"0" }}</span>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <i class="fa-solid fa-calendar"></i>
+                            </div>
+
+                            <div class="item-text">
+                                <strong>Enrollment date:</strong>
+                                <span>{{ enrollment.enrolled_at|date:"j M 'y" }}</span>
+                            </div>
+                        </div>                    
+                    </div>
+                    {% if show_enrollment_context %}
+
+                        <div class="detail-row">
+                            <strong>Lessons before enrollment:</strong>
+                            <span>{{ lessons_before_enrollment }}</span>
                         </div>
 
-                    <div class="attendance-status">
-                        {% if attendance.status == "attended" %}
-                            <span class="status-pill attended"><i class="fa-solid fa-user-check"></i></span>
-                        {% elif attendance.status == "missed" %}
-                            <span class="status-pill missed"><i class="fa-solid fa-user-xmark"></i></span>
-                        {% elif attendance.status == "excused" %}
-                            <span class="status-pill pending"><i class="fa-solid fa-user-minus"></i></span>
-                        {% else %}
-                            <span class="status-pill pending">{{ attendance.status|title }}</span>
-                        {% endif %}
-                    </div>
-
-                    <form class="attendance-edit-form d-none"
-                        method="POST"
-                        action="{% url 'profiles:update_student_attendance_status' course.id enrollment.id attendance.id %}">
-                        {% csrf_token %}
-
-                        <button type="submit" name="status" value="attended" class="status-pill attended">
-                            <i class="fa-solid fa-user-check"></i>
-                        </button>
-
-                        <button type="submit" name="status" value="missed" class="status-pill missed">
-                            <i class="fa-solid fa-user-xmark"></i>
-                        </button>
-
-                        <button type="submit" name="status" value="excused" class="status-pill pending">
-                            <i class="fa-solid fa-user-minus"></i>
-                        </button>
-                    </form>
-
-
-                    </div>
-                {% empty %}
-                    <p class="text-white-50">No completed attendance records yet.</p>
-                {% endfor %}
+                        <div class="detail-row">
+                            <strong>Completed lessons since enrollment:</strong>
+                            <span>{{ completed_classes }}</span>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
+            <div class="wrapper-absence-details">
+                <div class="detailed-attendance-card absence-details-card mx-auto">
+                    <div class="circle-panel1">
+                        <h2>Absence <small>Details</small></h2>
+                    </div>
+                    <div class="circle-panel2"></div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="attendance-status">
+                                <span class="status-pill missed">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                </span>
+                            </div>    
+                            <div class="item-text">
+                                <strong>Total Absences</strong>
+                                <span>{{ enrollment.total_absences|default:"0" }}</span>
+                            </div>
+                        </div>            
+                    </div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </div>
 
-        </article>
+                            <div class="item-text">
+                                <strong>Lessons Missed</strong>
+                                <span>{{ enrollment.classes_missed|default:"0" }}</span>
+                            </div>
+                        </div>            
+                    </div>
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <i class="fa-solid fa-user-minus"></i>
+                            </div>
 
+                            <div class="item-text">
+                                <strong>Excused Absences</strong>
+                            <span> {{ enrollment.classes_excused|default:"0" }} </span>
+                            </div>
+                        </div> 
+                    </div>
+                    
+                    <div class="col-12 wrapper-attendance-accordion mt-4">
+                        <!-- PARENT ACCORDION -->
+                        <div id="parentAbsenceAccordion" role="tablist">
+                            <div>
+                                <!-- PARENT HEADER -->
+                                <div class="header" role="tab" id="parentAbsenceHeading">
+                                    <div class="mb-0 w-100 px-4">
+                                        <a class="collapsed d-flex align-items-center justify-content-between w-100"
+                                        data-toggle="collapse"
+                                        href="#parentAbsenceCollapse"
+                                        aria-expanded="false"
+                                        aria-controls="parentAbsenceCollapse">
+                                            
+                                            <div class="d-flex align-items-center">
+                                                <!-- <div class="attendance-history-icon mr-2">
+                                                    <i class="fa-solid fa-user-xmark"></i>
+                                                </div>
+ -->
+                                                <strong>Absence Record</strong>
+                                            </div>
+
+                                            <i class="fa-solid fa-chevron-down ml-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- PARENT COLLAPSE -->
+                                <div id="parentAbsenceCollapse"
+                                    class="collapse"
+                                    role="tabpanel"
+                                    aria-labelledby="parentAbsenceHeading"
+                                    data-parent="#parentAbsenceAccordion">
+
+                                    <div class="card-body">
+
+                                        <!-- CHILD ACCORDION -->
+                                        <div id="absence_accordion" role="tablist">
+                                        {% if recent_absences %}
+
+                                            {% for absence in recent_absences %}
+                                                <div class="recent-attendance-row">
+
+                                                    <span>{{ absence.class_session.start_time|date:"j M Y" }}</span> 
+
+                                                    <small>Lesson {{ absence.class_session.class_number }}</small>
+
+                                                    <div class="absence-status">
+                                                        {% if absence.status == "missed" %}
+                                                            <span class="status-dot missed"></span>
+                                                            Missed
+                                                        {% elif absence.status == "excused" %}
+                                                            <span class="status-dot excused"></span>
+                                                            Excused
+                                                        {% else %}
+                                                            <span class="status-dot pending"></span>
+                                                            {{ absence.status|title }}
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p class="text-dark p-2">No absence recorded yet.</p>
+                                        {% endif %}
+
+                                        </div>
+                                        <!-- END CHILD ACCORDION -->
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>                
+                
+                </div>    
+            </div>
     </div>
-
+{% else %}
+        <div class="no-course-assigned">
+            <h2>No active course assigned yet</h2>
+            <p>Course information will appear here once the employee is enrolled in a course.</p>
+        </div>
+    </div> 
+{% endif %}
+  
 </section>
 
 {% endblock %}
 
+
 {% block postloadjs %}
 {{ block.super }}
-<script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const editBtn = document.getElementById("editAttendanceBtn");
+<script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
-        if (!editBtn) {
-            return;
-        }
-
-        editBtn.addEventListener("click", function () {
-            document.querySelectorAll(".attendance-current-status").forEach(function (item) {
-                item.classList.toggle("d-none");
-            });
-
-            document.querySelectorAll(".attendance-edit-form").forEach(function (form) {
-                form.classList.toggle("d-none");
-            });
-
-            editBtn.classList.toggle("active");
-        });
-    });
-</script>
 {% endblock %}

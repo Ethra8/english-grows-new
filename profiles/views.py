@@ -3629,16 +3629,31 @@ def update_student_level(request, course_id, enrollment_id):
 
 
 
+@login_required
 def student_attendance_record(request, course_id, enrollment_id):
 
-    course = get_object_or_404(
+    # ---------------------------------------------------------
+    # ORIGINAL COURSE / ENROLLMENT
+    #
+    # These establish:
+    # - which learner is being viewed
+    # - that the logged-in teacher owns the original course
+    #
+    # Once that relationship is established, the course
+    # selector may switch to another enrollment belonging to
+    # the same learner and teacher through:
+    #
+    #     ?course=<course_id>
+    # ---------------------------------------------------------
+    original_course = get_object_or_404(
         Course,
         id=course_id,
-        teacher=request.user
+        teacher=request.user,
     )
 
-    enrollment = get_object_or_404(
-        CourseEnrollment.objects.select_related(
+    original_enrollment = get_object_or_404(
+        CourseEnrollment.objects
+        .select_related(
             "student",
             "student__profile",
             "course",
@@ -3647,84 +3662,643 @@ def student_attendance_record(request, course_id, enrollment_id):
             "course__company",
         ),
         id=enrollment_id,
-        course=course,
+        course=original_course,
     )
 
-    student = enrollment.student
+
+    # ---------------------------------------------------------
+    # STUDENT
+    # ---------------------------------------------------------
+    student = original_enrollment.student
     student_profile = student.profile
 
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
+    #
+    # Historical courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # A teacher may only switch between courses that:
+    # - belong to this learner
+    # - are assigned to the logged-in teacher
+    # ---------------------------------------------------------
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            course__teacher=request.user,
+        )
+        .select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+        .annotate(
+            status_order=Case(
+                When(
+                    course__status="active",
+                    then=Value(1),
+                ),
+                When(
+                    course__status="confirmed",
+                    then=Value(2),
+                ),
+                When(
+                    course__status="paused",
+                    then=Value(3),
+                ),
+                When(
+                    course__status="completed",
+                    then=Value(4),
+                ),
+                When(
+                    course__status="cancelled",
+                    then=Value(5),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            ),
+
+            completed_date_order=Case(
+                When(
+                    course__status="completed",
+                    then=F("course__end_date"),
+                ),
+                default=Value(None),
+                output_field=DateField(),
+            ),
+        )
+        .order_by(
+            "status_order",
+            "course__name",
+            "-completed_date_order",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # COURSE SELECTOR
+    #
+    # Example:
+    #
+    # ?course=8
+    # ---------------------------------------------------------
+    selected_course_id = request.GET.get(
+        "course"
+    )
+
+
+    if selected_course_id:
+
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=selected_course_id,
+        )
+
+    else:
+
+        enrollment = original_enrollment
+
+
+    # ---------------------------------------------------------
+    # CURRENTLY SELECTED COURSE
+    # ---------------------------------------------------------
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # ATTENDANCE RECORDS
+    #
+    # All attendance records for this learner + selected course.
+    # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
             student=student,
-            class_session__course=course
+            class_session__course=course,
         )
-        .select_related("class_session")
-        .order_by("-class_session__start_time")
+        .select_related(
+            "class_session",
+            "class_session__course",
+        )
+        .order_by(
+            "-class_session__start_time"
+        )
     )
 
-    total_attendance_records = attendances.count()
-    attended_count = attendances.filter(status="attended").count()
-    missed_count = attendances.filter(status="missed").count()
-    excused_count = attendances.filter(status="excused").count()
-   
-    # Progress is based on the learner's actually assigned sessions.
-    # A ClassSession counts as completed ONLY when status="completed".
-    completed_classes = enrollment.total_completed_classes
-    total_classes = enrollment.total_assigned_classes
-    remaining_classes = enrollment.upcoming_classes
 
-    if completed_classes > 0:
-        attendance_percentage = round(
-            (attended_count / completed_classes) * 100
+    # ---------------------------------------------------------
+    # ATTENDANCE COUNTS
+    # ---------------------------------------------------------
+    total_attendance_records = (
+        attendances
+        .filter(
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ]
         )
-    else:
-        attendance_percentage = 0
+        .count()
+    )
 
+
+    attended_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_ATTENDED
+        )
+        .count()
+    )
+
+
+    missed_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_MISSED
+        )
+        .count()
+    )
+
+
+    excused_count = (
+        attendances
+        .filter(
+            status=Attendance.STATUS_EXCUSED
+        )
+        .count()
+    )
+
+
+    # ---------------------------------------------------------
+    # COURSE PROGRESS
+    #
+    # These are based on the CURRENT selected enrollment.
+    # ---------------------------------------------------------
+    completed_classes = (
+        enrollment.total_completed_classes
+    )
+
+    total_classes = (
+        enrollment.total_assigned_classes
+    )
+
+    remaining_classes = (
+        enrollment.upcoming_classes
+    )
+
+
+    # ---------------------------------------------------------
+    # ATTENDANCE %
+    #
+    # The model already contains the canonical attendance
+    # calculation, so use it here as well.
+    #
+    # This keeps the percentage shown in the view consistent
+    # with:
+    #
+    #     enrollment.attendance_percentage
+    #
+    # which your template already uses directly.
+    # ---------------------------------------------------------
+    attendance_percentage = (
+        enrollment.attendance_percentage
+    )
+
+
+    # ---------------------------------------------------------
+    # COMPLETION %
+    # ---------------------------------------------------------
     completion_percentage = (
-        round((completed_classes / total_classes) * 100)
+        round(
+            (
+                completed_classes
+                / total_classes
+            )
+            * 100
+        )
         if total_classes > 0
         else 0
     )
 
+
+    # ---------------------------------------------------------
+    # ATTENDANCE HISTORY
+    #
+    # Completed/submitted attendance outcomes only.
+    # ---------------------------------------------------------
     recent_attendance = (
-        Attendance.objects
+        attendances
         .filter(
-            student=student,
-            class_session__course=course,
-            status__in=["attended", "missed", "excused"],
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
         )
-        .select_related("class_session")
-        .order_by("-class_session__start_time")
+        .order_by(
+            "-class_session__start_time"
+        )
     )
 
+
+    # ---------------------------------------------------------
+    # ABSENCE HISTORY
+    #
+    # Required by:
+    #
+    #     {% if recent_absences %}
+    #
+    # in teacher_student_attendance_record.html
+    #
+    # Includes both:
+    # - missed
+    # - excused
+    # ---------------------------------------------------------
+    recent_absences = (
+        attendances
+        .filter(
+            status__in=[
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
+        )
+        .order_by(
+            "-class_session__start_time"
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # ENROLLMENT CONTEXT
+    #
+    # This handles a learner who joined a course after some
+    # classes had already been completed.
+    #
+    # The HTML uses:
+    #
+    #     show_enrollment_context
+    #     lessons_before_enrollment
+    #     completed_classes
+    #
+    # ---------------------------------------------------------
+    lessons_before_enrollment = 0
+
+    if enrollment.enrolled_at:
+
+        lessons_before_enrollment = (
+            course.class_sessions
+            .filter(
+                status=ClassSession.STATUS_COMPLETED,
+                start_time__lt=enrollment.enrolled_at,
+            )
+            .count()
+        )
+
+
+    show_enrollment_context = (
+        lessons_before_enrollment > 0
+    )
+
+
+    # ---------------------------------------------------------
+    # ATTENDED HOURS
+    #
+    # Actual duration of sessions marked attended.
+    # ---------------------------------------------------------
+    attended_minutes = 0
+
+    for attendance in attendances:
+
+        if (
+            attendance.status == Attendance.STATUS_ATTENDED
+            and attendance.class_session.start_time
+            and attendance.class_session.end_time
+        ):
+
+            session_duration = (
+                attendance.class_session.end_time
+                - attendance.class_session.start_time
+            )
+
+            attended_minutes += round(
+                session_duration.total_seconds()
+                / 60
+            )
+
+
+    attended_hours = (
+        attended_minutes / 60
+    )
+
+
+    attended_whole_hours, attended_remaining_minutes = divmod(
+        attended_minutes,
+        60,
+    )
+
+
+    if attended_remaining_minutes:
+
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+            f"{attended_remaining_minutes:02d}"
+        )
+
+    else:
+
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+        )
+
+
+    # ---------------------------------------------------------
+    # COMPLETED COURSE HOURS
+    #
+    # Total duration of completed ClassSessions for the course,
+    # regardless of whether this learner attended.
+    # ---------------------------------------------------------
+    completed_course_sessions = (
+        course.class_sessions
+        .filter(
+            status=ClassSession.STATUS_COMPLETED,
+        )
+    )
+
+
+    completed_minutes = 0
+
+    for class_session in completed_course_sessions:
+
+        if (
+            class_session.start_time
+            and class_session.end_time
+        ):
+
+            session_duration = (
+                class_session.end_time
+                - class_session.start_time
+            )
+
+            completed_minutes += round(
+                session_duration.total_seconds()
+                / 60
+            )
+
+
+    completed_hours = (
+        completed_minutes / 60
+    )
+
+
+    completed_whole_hours, completed_remaining_minutes = divmod(
+        completed_minutes,
+        60,
+    )
+
+
+    if completed_remaining_minutes:
+
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+            f"{completed_remaining_minutes:02d}"
+        )
+
+    else:
+
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+        )
+
+
+    # ---------------------------------------------------------
+    # TOTAL COURSE HOURS
+    # ---------------------------------------------------------
+    total_hours = (
+        course.total_hours or 0
+    )
+
+
+    total_minutes = round(
+        float(total_hours)
+        * 60
+    )
+
+
+    total_whole_hours, total_remaining_minutes = divmod(
+        total_minutes,
+        60,
+    )
+
+
+    if total_remaining_minutes:
+
+        total_hours_display = (
+            f"{total_whole_hours}h"
+            f"{total_remaining_minutes:02d}"
+        )
+
+    else:
+
+        total_hours_display = (
+            f"{total_whole_hours}h"
+        )
+
+
+    # ---------------------------------------------------------
+    # COURSE TIMETABLE
+    #
+    # Not currently displayed in the attendance body you
+    # supplied, but kept available because the learner header /
+    # shared course components may use it.
+    # ---------------------------------------------------------
+    timetable_groups = defaultdict(list)
+
+    for slot in course.timetable_slots.all():
+
+        key = (
+            slot.start_time.strftime("%Hh%M"),
+            slot.end_time.strftime("%Hh%M"),
+        )
+
+        timetable_groups[key].append(
+            slot.get_day_of_week_display()[:3]
+        )
+
+
+    formatted_timetable = []
+
+    for (start, end), days in timetable_groups.items():
+
+        formatted_timetable.append({
+            "days": " & ".join(days),
+            "start": start,
+            "end": end,
+        })
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
-        "course": course,
-        "enrollment": enrollment,
+
+        # -----------------------------------------------------
+        # STUDENT
+        # -----------------------------------------------------
         "student": student,
         "student_profile": student_profile,
-        "level_choices": UserProfile.LEVEL_CHOICES,
 
-        "attended_count": attended_count,
-        "missed_count": missed_count,
-        "excused_count": excused_count,
-        "total_attendance_records": total_attendance_records,
-        "attendance_percentage": attendance_percentage,
+        "level_choices": (
+            UserProfile.LEVEL_CHOICES
+        ),
 
-        "completed_classes": completed_classes,
-        "remaining_classes": remaining_classes,
-        "total_classes": total_classes,
-        "completion_percentage": completion_percentage,
 
-        "recent_attendance": recent_attendance,
-        # "active_tab": "overview",
+        # -----------------------------------------------------
+        # COURSE SELECTOR
+        # -----------------------------------------------------
+        "enrollments": enrollments,
+
+        "course": course,
+        "enrollment": enrollment,
+
+
+        # -----------------------------------------------------
+        # COURSE / TIMETABLE
+        # -----------------------------------------------------
+        "formatted_timetable": (
+            formatted_timetable
+        ),
+
+
+        # -----------------------------------------------------
+        # ATTENDANCE
+        # -----------------------------------------------------
+        "attended_count": (
+            attended_count
+        ),
+
+        "missed_count": (
+            missed_count
+        ),
+
+        "excused_count": (
+            excused_count
+        ),
+
+        "total_attendance_records": (
+            total_attendance_records
+        ),
+
+        "attendance_percentage": (
+            attendance_percentage
+        ),
+
+
+        # -----------------------------------------------------
+        # ATTENDANCE HISTORY
+        # -----------------------------------------------------
+        "recent_attendance": (
+            recent_attendance
+        ),
+
+        "recent_absences": (
+            recent_absences
+        ),
+
+
+        # -----------------------------------------------------
+        # ENROLLMENT CONTEXT
+        # -----------------------------------------------------
+        "show_enrollment_context": (
+            show_enrollment_context
+        ),
+
+        "lessons_before_enrollment": (
+            lessons_before_enrollment
+        ),
+
+
+        # -----------------------------------------------------
+        # ATTENDANCE HOURS
+        # -----------------------------------------------------
+        "attended_minutes": (
+            attended_minutes
+        ),
+
+        "attended_hours": (
+            attended_hours
+        ),
+
+        "attended_hours_display": (
+            attended_hours_display
+        ),
+
+
+        # -----------------------------------------------------
+        # COMPLETED COURSE HOURS
+        # -----------------------------------------------------
+        "completed_minutes": (
+            completed_minutes
+        ),
+
+        "completed_hours": (
+            completed_hours
+        ),
+
+        "completed_hours_display": (
+            completed_hours_display
+        ),
+
+
+        # -----------------------------------------------------
+        # TOTAL COURSE HOURS
+        # -----------------------------------------------------
+        "total_hours": (
+            total_hours
+        ),
+
+        "total_hours_display": (
+            total_hours_display
+        ),
+
+
+        # -----------------------------------------------------
+        # COURSE PROGRESS
+        # -----------------------------------------------------
+        "completed_classes": (
+            completed_classes
+        ),
+
+        "remaining_classes": (
+            remaining_classes
+        ),
+
+        "total_classes": (
+            total_classes
+        ),
+
+        "completion_percentage": (
+            completion_percentage
+        ),
     }
+
 
     return render(
         request,
         "profiles/teacher/teacher_student_attendance_record.html",
-        context
+        context,
     )
+
 
 
 # FROM STUDENT DETAIL Page --> ATTENDANCE RECORD Page
