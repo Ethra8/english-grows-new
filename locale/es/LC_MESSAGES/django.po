@@ -205,8 +205,8 @@ msgid "Completed Lessons"
 msgstr "Clases Completadas"
 
 
-msgid "Attended Classes"
-msgstr "Clases Asistidas"
+msgid "Total Attendance"
+msgstr "Total Asistencias"
 
 msgid "Hours Attended"
 msgstr "Horas Asistidas"
@@ -251,19 +251,22 @@ msgid "Lessons before enrollment"
 msgstr "Clases anteriores a inscripción"
 
 msgid "Completed lessons since enrollment"
-msgstr "Clases incluidas desde inscripción"
+msgstr "Clases desde inscripción"
 
 msgid "Absence"
 msgstr "Ausencia"
 
-msgid "Absent Classes"
-msgstr "Clases Ausente"
+msgid "Total Absences"
+msgstr "Total Ausencias"
+
+msgid "classes"
+msgstr "clases"
 
 msgid "Lessons Missed"
 msgstr "Sin justificar"
 
 msgid "Excused Absences"
-msgstr "Justificadas"
+msgstr "Ausencias Justificadas"
 
 msgid "Absence Record"
 msgstr "Historial Ausencias"

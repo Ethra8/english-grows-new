@@ -185,7 +185,7 @@
                                     - {{ course.get_status_display }}
                                 </span>
                             {% else %}
-                                <span>Course</span>
+                                <span>{% trans 'Course' %}</span>
                             {% endif %}
 
                         </span>
@@ -299,7 +299,7 @@
                             </span>
                         </div>
                         <div class="item-text">
-                            <strong>{% trans 'Attended Classes' %}</strong>
+                            <strong>{% trans 'Total Attendance' %}</strong>
                             <span>{{ enrollment.classes_attended|default:"0" }}</span>
                         </div>
                     </div>
@@ -330,7 +330,7 @@
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
-                                <i class="fa-solid fa-calendar"></i>
+                                <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="23">
                             </div>
 
                             <div class="item-text">
@@ -358,44 +358,29 @@
                         <h2>{% trans 'Absence' %} <small>{% trans 'Details' %}</small></h2>
                     </div>
                     <div class="circle-panel2"></div>
-                    <div class="col-12">
-                        <div class="item">
-                            <div class="attendance-status">
-                                <span class="status-pill missed">
-                                    <i class="fa-solid fa-user-xmark"></i>
-                                </span>
-                            </div>    
-                            <div class="item-text">
-                                <strong>{% trans 'Absent Classes' %}</strong>
-                                <span>{{ enrollment.total_absences|default:"0" }}</span>
-                            </div>
-                        </div>            
-                    </div>
-                    <div class="col-12">
-                        <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </div>
 
-                            <div class="item-text">
-                                <strong>{% trans 'Lessons Missed' %}</strong>
-                                <span>{{ enrollment.classes_missed|default:"0" }}</span>
-                            </div>
-                        </div>            
+                    <div class="item">
+                        <div class="attendance-status">
+                            <span class="status-pill missed">
+                                <img src="{% static 'icons/clipboard_missed_attendance_icon.png' %}" alt="" aria-hidden="true" width="20">
+                            </span>
+                        </div>    
+                        <div class="item-text">
+                            <strong>{% trans 'Total Absences' %}</strong>
+                            <span>{{ enrollment.total_absences|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-user-minus"></i>
-                            </div>
 
-                            <div class="item-text">
-                                <strong>{% trans 'Excused Absences' %}</strong>
-                            <span> {{ enrollment.classes_excused|default:"0" }} </span>
-                            </div>
-                        </div> 
-                    </div>
-                    
+                    <div class="item">
+                        <div class="item-icon">
+                            <i class="fa-solid fa-user-minus"></i>
+                        </div>
+                        <div class="item-text">
+                            <strong>{% trans 'Excused Absences' %}</strong>
+                            <span>{{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}</span>
+                        </div>
+                    </div> 
+                        
                     <div class="col-12 wrapper-attendance-accordion mt-4">
                         <!-- PARENT ACCORDION -->
                         <div id="parentAbsenceAccordion" role="tablist">
