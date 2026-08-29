@@ -706,21 +706,16 @@ header .student-main-info a:hover {
 /* .recent-attendance-card h2::after, */
 .student-detail-card-attendance h2::after {
     content: "";
-
     position: absolute;
-    top: 48%;
-    left: 0;
-
-    width: 60px;
-    height: 60px;
-
+    top: 62%;
+    left: -1%;
+    width: 70px;
+    height: 70px;
     transform: translateY(-50%) rotate(-15deg);
-
-    background-image: url("/static/icons/metacard_clipboard_check_turquoise_transparent_icon.png");
+    background-image: url(/static/icons/metacard_clipboard_check_turquoise_transparent_icon.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-
     /* opacity: 0.3; */
 }
 

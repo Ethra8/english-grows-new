@@ -120,59 +120,11 @@
 
 
 /* LEANER ATTENDANCE SubPages (Inside Performance/Progress) ***************************************/
+
+/*** ATTENDANCE RATE card *****************************************/
 .wrapper-attendance-progress-card {
     margin: 2.5rem auto;
 }
-
-.attendance-progress-card .item,
-.detailed-attendance-card .item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
-}
-
-.attendance-progress-card .item-icon,
-.detailed-attendance-card .item-icon {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: outset 1px var(--color-turquoise);
-    background-color: #F4FFFE;
-    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
-    color: var(--color-teal);
-}
-
-.attendance-progress-card .item-text,
-.detailed-attendance-card .item-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.25;
-}
-
-.attendance-progress-card .item-text > strong:first-of-type,
-.detailed-attendance-card .item-text > strong:first-of-type {
-    color: var(--color-teal);
-    font-weight: 700;
-}
-
-.attendance-progress-card .item-text strong,
-.detailed-attendance-card .item-text strong {
-    color: var(--color-steel);
-    font-weight: 550;
-}
-
-.attendance-progress-card .item-text span,
-.detailed-attendance-card .item-text span {
-    color: var(--color-steel);
-}
-/* END LEANER ATTENDANCE SubPages (Inside Performance/Progress) *************************************************/
-
 
 .attendance-progress-card {
     position: relative;
@@ -202,9 +154,7 @@
 .attendance-progress-card .circle-panel1::after {
     content: "";
     position: absolute;
-    top: 78%
-390.766px
-;
+    top: 78%;
     right: 7%;
     width: 120px;
     height: 120px;
@@ -311,9 +261,10 @@
 .attendance-warning img {
     margin-right: 1rem;
 }
+/* END ATTENDANCE RATE card ****************************************/
 
 
-/*** Detailed Attendance **********/
+/*** Detailed Attendance ********************************************/
 .attendance-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -322,26 +273,23 @@
     align-items: stretch;
 }
 
-.detailed-attendance-card,
-.absence-details-card {
+/* ** CARDS ATTENDANCE / ABSENCE DETAILS ************************** */
+.detailed-attendance-card {
     position: relative;
     overflow: hidden;
-
     width: 100%;
     max-width: 100%;
     min-width: 0;
     height: 100%;
     box-sizing: border-box;
-
     border-radius: 8px;
-    padding: 100px 20px 20px;
+    padding: 100px 2rem 2rem;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     background: rgba(255, 255, 255, 0.9);
     z-index: 2;
 }
 
-.detailed-attendance-card .circle-panel1,
-.absence-details-card .circle-panel1 {
+.detailed-attendance-card .circle-panel1 {
     position: absolute;
     top: -430px;
     left: -130px;
@@ -349,12 +297,11 @@
     height: 500px;
     border-radius: 50%;
     background: linear-gradient(251deg,rgba(4, 72, 140, 1) 0%, rgba(var(--color-navy-rgb), 1) 87%, rgba(0, 45, 89, 1) 100%);
-   color: var(--color-whitesmoke);
+    color: var(--color-whitesmoke);
     z-index: 2;
 }
 
-.detailed-attendance-card h2,
-.absence-details-card h2 {
+.detailed-attendance-card h2 {
     font-family: "Big Shoulders Display", sans-serif;    
     letter-spacing: 0.03em;
     color: var(--color-whitesmoke);
@@ -363,8 +310,7 @@
     line-height: 1.1;
 }
 
-.detailed-attendance-card .circle-panel2,
-.absence-details-card .circle-panel2 {
+.detailed-attendance-card .circle-panel2 {
     position: absolute;
     top: -400px;
     left: -110px;
@@ -376,15 +322,61 @@
     padding-left: 205px;
     padding-top: 90px;
     z-index: 1;
-    /* border: solid 1px var(--color-whitesmoke); */
     box-shadow: 2px 2px 6px rgba(var(--color-shadow-rgb), .25);
 }
 
-/* ******* ACCORDION: My Attendance/Absence Records ********************* */
+.detailed-attendance-card .item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
+}
 
+.detailed-attendance-card .item:last-of-type,
+.wrapper-absence-details > div > div:nth-child(4) {
+    border-bottom: none !important;
+}
+
+.detailed-attendance-card .item-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: outset 1px var(--color-turquoise);
+    background-color: #F4FFFE;
+    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
+    color: var(--color-teal);
+}
+
+.detailed-attendance-card .item-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.detailed-attendance-card .item-text > strong:first-of-type {
+    color: var(--color-teal);
+    font-weight: 700;
+}
+
+.detailed-attendance-card .item-text strong {
+    color: var(--color-steel);
+    font-weight: 550;
+}
+
+.detailed-attendance-card .item-text span {
+    color: var(--color-steel);
+}
+/* END CARDS ATTENDANCE / ABSENCE DETAILS ************************** */
+
+
+/* ******* ACCORDION: Absence Records ********************* */
 .wrapper-attendance-accordion {
     width: 100%;
-    /* padding-right: 0%; */
 }
 
 #parentAbsenceHeading {
@@ -406,16 +398,12 @@
     color: var(--color-teal);
 }
 
-#parentAbsenceHeading .fa-solid {
+#parentAbsenceHeading img {
     position: relative;
     top: 1px;
     left: 1px;
     font-size: 1.2rem;
     color: var(--color-navy);
-}
-
-#parentAbsenceHeading .fa-solid.fa-chevron-down {
-    color: var(--color-teal);
 }
 
 #parentAbsenceHeading.header {
@@ -430,21 +418,13 @@
     text-align: left;
 }
 
-.absence-details-card .card-body {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
 #absence_accordion  {
     width: 100%;
     max-width: 100%;
     min-width: 0;
 
     height: 100%;
-    max-height: 100%; /* height of profile form + submit button */
+    max-height: 100%;
     border-radius: 8px;
     background-color: var(--color-whitesmoke);
     margin: 0%;
@@ -476,7 +456,7 @@
 }
 
 
-/**** ATTENDANCE Page ************************************ */
+/**** COMPANY ADMIN FILTER ATTENDANCE Page ************************************ */
 #attendanceDateFilter {
     color-scheme: light;
     cursor: pointer;
@@ -489,7 +469,7 @@
     cursor: pointer;
 }
 
-
+/* ATTENDANCE LIST ***************************************************************/
 /* Main list card */
 .attendance-list-card {
     min-height: fit-content;
@@ -617,16 +597,25 @@
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
 } */
 
+.attendance-status {
+    display: flex;
+    align-items: center;
+    /* padding: 0rem; */
+    border-radius: 999px;
+    /* font-weight: 600; */
+    /* font-size: 0.85rem; */
+    /* padding: 0.35rem 0rem; */
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75)); */
+    padding: 0;
+}
+
 .student-detail-page .status-pill {
-    /* display: inline-flex; */
-    /* width: max-content; */
-    padding: 0.5rem;
-    /* border-radius: 999px; */
-    /* font-size: 1rem;
-    font-weight: 500; */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     height: 36px;
     width: 36px;
-    background: rgba(var(--color-teal-rgb), 0.75);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
 }
 
 .status-pill.excused {
@@ -1447,8 +1436,7 @@
 @media (max-width: 991.98px) {
     
 
-    .detailed-attendance-card,
-    .absence-details-card {
+    .detailed-attendance-card {
         width: 100%;
         max-width: 100%;
         padding-right: 3%;
@@ -1536,8 +1524,7 @@
         line-height: 1.1;
     }
 
-    .detailed-attendance-card h2, 
-    .absence-details-card h2 {
+    .detailed-attendance-card h2 {
         margin: 450px 2rem 1rem 10.3rem;
     }
 
