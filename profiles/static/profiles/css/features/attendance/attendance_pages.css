@@ -299,11 +299,11 @@
     padding: 0.5rem 1rem;
     border-radius: 8px;
     border: solid 1px var(--color-navy);
-    margin: 1rem 0;
+    margin: 1rem 0 0;
+    width: 100%;
 }
 
-.attendance-warning .fa-solid {
-    font-size: 1.7rem;
+.attendance-warning img {
     margin-right: 1rem;
 }
 

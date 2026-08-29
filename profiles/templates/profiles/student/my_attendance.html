@@ -270,8 +270,11 @@
                 </div>                            
 
                 {% if enrollment.has_low_attendance_warning %}
-                <div class="attendance-warning ml-4 mr-3">                
-                    <p class="mb-0"><i class="fa-solid fa-triangle-exclamation"></i>{% trans 'Attendance is below the recommended level of 75%!' %}</p>
+                <div class="attendance-warning">                
+                    <p class="mb-0">
+                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="18px">
+                        {% trans 'Attendance is below the recommended level of 75%!' %}</p>
+                    </p>
                 </div>
                 {% endif %}
                 
@@ -325,17 +328,30 @@
                             </div>
                         </div>                    
                     </div>
-                    {% if show_enrollment_context %}
 
-                        <div class="detail-row">
+                    {% if show_enrollment_context %}
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <i class="fa-solid fa-calendar"></i>
+                            </div>
+
+                            <div class="item-text">
                             <strong>{% trans 'Lessons before enrollment' %}:</strong>
                             <span>{{ lessons_before_enrollment }}</span>
                         </div>
+                    </div>    
+                    <div class="col-12">
+                        <div class="item">
+                            <div class="item-icon">
+                                <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="18px">
+                            </div>
 
-                        <div class="detail-row">
+                            <div class="item-text">
                             <strong>{% trans 'Completed lessons since enrollment' %}:</strong>
                             <span>{{ completed_classes }}</span>
                         </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
