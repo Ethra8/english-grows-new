@@ -106,7 +106,7 @@
 
                     </span>
 
-                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="icon" width="36px">
                 </button>
 
 
@@ -153,12 +153,9 @@
         <nav class="student-detail-tabs">
 
             {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form notranslate" translate="no">    
+            <form method="get" class="course-selector-form">    
                 <div class="course-selector-label">
-                    <img
-                        src="{% static 'icons/one_to_one_course_icon.png' %}"
-                        alt="icon"
-                    >
+                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                     <span>{% trans 'Course' %}</span>
                 </div>
 
@@ -176,19 +173,16 @@
 
                             {% if course %}
                                 <span class="notranslate" translate="no">
-                                    · {{ course.name }}
-                                </span>
-
+                                    · {{ course.name }}</span>
                                 <span class="course-dropdown-status">
-                                    - {{ course.get_status_display }}
-                                </span>
+                                    - {{ course.get_status_display }}</span>
                             {% else %}
-                                <span>Course</span>
+                                <span>{% trans 'Course' %}</span>
                             {% endif %}
 
                         </span>
-
-                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                            <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
+                        <!-- <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true"> -->
                     </button>
 
 
@@ -299,7 +293,7 @@
                                 </span>
                             </div>
                             <div class="item-text">
-                                <strong>{% trans 'Lessons Attended' %}</strong>
+                                <strong>{% trans 'Attended Classes' %}</strong>
                                 <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
                         </div>
@@ -311,8 +305,8 @@
                             </div>
 
                             <div class="item-text">
-                                <strong>{% trans 'Completed Lessons' %}</strong>
-                                <span>{{ enrollment.total_completed_classes|default:"0" }}</span>
+                                <strong>{% trans 'Hours Attended' %}:</strong>
+                                <span>{{ attended_hours_display|default:"0" }} / {{ completed_hours_display|default:"0" }}</span>
                             </div>
                         </div>                    
                     </div>
@@ -356,12 +350,12 @@
                                 </span>
                             </div>    
                             <div class="item-text">
-                                <strong>{% trans 'Total Absences' %}</strong>
-                                <span>{{ enrollment.total_absences|default:"0" }}</span>
+                                <strong>{% trans 'Absent Classes' %}</strong>
+                                <span>{{ enrollment.total_absences|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }}</span>
                             </div>
                         </div>            
                     </div>
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
                                 <i class="fa-solid fa-user-xmark"></i>
@@ -372,7 +366,7 @@
                                 <span>{{ enrollment.classes_missed|default:"0" }}</span>
                             </div>
                         </div>            
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <div class="item">
                             <div class="item-icon">
@@ -381,7 +375,7 @@
 
                             <div class="item-text">
                                 <strong>{% trans 'Excused Absences' %}</strong>
-                            <span> {{ enrollment.classes_excused|default:"0" }} </span>
+                            <span> {{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}</span>
                             </div>
                         </div> 
                     </div>

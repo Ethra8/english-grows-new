@@ -200,15 +200,20 @@
 }
 
 .attendance-progress-card .circle-panel1::after {
-    content: "\f46c";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 7.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.1);
+    content: "";
     position: absolute;
-    top: 300px;
-    right: 56px;
-    rotate: calc(-12deg);
+    top: 78%
+390.766px
+;
+    right: 7%;
+    width: 120px;
+    height: 120px;
+    transform: translateY(-50%) rotate(-12deg);
+    background-image: url(/static/icons/metacard_clipboard_check_turquoise_transparent_icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    /* opacity: 0.3; */
 }
 
 .attendance-progress-card .circle-panel1 h2 {
@@ -1801,8 +1806,8 @@
 
 @media (max-width: 370px) {
 
-    .recent-attendance-card h2 {
+    /* .recent-attendance-card h2 {
         font-size: 1.5rem;
-    }
+    } */
 
 }

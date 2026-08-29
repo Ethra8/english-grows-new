@@ -159,7 +159,7 @@
 
                     </span>
 
-                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
                 </button>
 
 
@@ -241,7 +241,7 @@
 
                         </span>
 
-                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                        <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
                     </button>
 
 
@@ -351,7 +351,7 @@
                                 </span>
                             </div>
                             <div class="item-text">
-                                <strong>Lessons Attended</strong>
+                                <strong>Attended Classes</strong>
                                 <span>{{ enrollment.classes_attended|default:"0" }}</span>
                             </div>
                         </div>
@@ -408,7 +408,7 @@
                                 </span>
                             </div>    
                             <div class="item-text">
-                                <strong>Total Absences</strong>
+                                <strong>Absent Classes</strong>
                                 <span>{{ enrollment.total_absences|default:"0" }}</span>
                             </div>
                         </div>            

@@ -19,14 +19,14 @@
 
 {% block profile_content %}
 
-<section class="course-details-page course-details-page profile-page">    
+<section class="course-details-page course-details-page profile-page notranslate" translate="no">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
     <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
-                <a href="#" class="js-back-link notranslate" translate="no">
+                <a href="#" class="js-back-link">
                     <i class="fa-solid fa-arrow-left-long mr-3"></i>
                     Go Back
                 </a>
@@ -47,14 +47,8 @@
                 <div class="course-selector-form">
 
                     <div class="course-selector-label">
-
-                        <img
-                            src="{% static 'icons/one_to_one_course_icon.png' %}"
-                            alt="icon"
-                        >
-
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                         <span>Course</span>
-
                     </div>
 
 
@@ -92,12 +86,7 @@
                                 {% endif %}
 
                             </span>
-
-
-                            <i
-                                class="fa-solid fa-chevron-down course-select-arrow"
-                                aria-hidden="true"
-                            ></i>
+                            <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
 
                         </button>
 
@@ -147,21 +136,13 @@
                 <div class="course-selector-form smaller-devs">
 
                     <div class="course-selector-label">
-
-                        <img
-                            src="{% static 'icons/one_to_one_course_icon.png' %}"
-                            alt="icon"
-                        >
-
-                        <span>Course</span>
-
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        <span>{% trans 'Course' %}</span>
                     </div>
-
 
                     <div class="course-select-wrapper course-dropdown">
 
                         <!-- CURRENTLY SELECTED COURSE -->
-
                         <button
                             type="button"
                             id="course-select-small"
@@ -173,9 +154,7 @@
                             <span class="course-dropdown-selected">
 
                                 {% if course %}
-
-                                    <span
-                                        class="course-dropdown-course-name notranslate"
+                                    <span class="course-dropdown-course-name notranslate"
                                         translate="no"
                                     >
                                         · {{ course.name }}
@@ -193,56 +172,37 @@
 
                             </span>
 
-
-                            <i
-                                class="fa-solid fa-chevron-down course-select-arrow"
-                                aria-hidden="true"
-                            ></i>
+                            <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
 
                         </button>
 
 
                         <!-- DROPDOWN OPTIONS -->
 
-                        <div
-                            class="course-dropdown-menu"
+                        <div class="course-dropdown-menu"
                             role="menu"
-                            hidden
-                        >
+                            hidden>
 
                             {% for item in available_courses %}
 
-                                <a
-                                    href="{% url 'profiles:company_admin_course_details' item.id %}"
+                                <a href="{% url 'profiles:company_admin_course_details' item.id %}"
                                     class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
-                                    role="menuitem"
-                                >
+                                    role="menuitem">
 
-                                    <span
-                                        class="course-dropdown-course-name notranslate"
-                                        translate="no"
-                                    >
-                                        · {{ item.name }}
-                                    </span>
-
+                                    <span class="course-dropdown-course-name">
+                                        · {{ item.name }}</span>
                                     <span class="course-dropdown-status">
-                                        - {{ item.get_status_display }}
-                                    </span>
-
+                                        - {{ item.get_status_display }}</span>
                                 </a>
 
                             {% endfor %}
-
                         </div>
 
                     </div>
-
                 </div>
-
             </div>
 
         {% endif %}
-
 
         <!-- =================================================
             COURSE NAME / TYPE / HOURS
@@ -250,28 +210,18 @@
 
         <div>
 
-            <h1>
-                {{ course.name|default:"Course Name" }}
-            </h1>
+            <h1>{{ course.name|default:"Course Name" }}</h1>
 
             <h2>
 
                 <span class="text-muted">
-
                     <i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>
-
                     {{ course.course_type.name|default:"Course Type" }}
-
                 </span>
-
                 <span>|</span>
-
                 <span class="text-muted">
-
                     <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>
-
                     {{ course.total_hours|clean_decimal }} h.
-
                 </span>
 
             </h2>
@@ -286,40 +236,24 @@
         <div>
 
             <div class="col-12 level-pill">
-
                 <span class="current-level-label">
-                    Level
-                </span>
-
+                    Level</span>
                 <span class="current-level-value">
-                    {{ course.course_level|default:"Level Pending" }}
-                </span>
-
+                    {{ course.course_level|default:"Level Pending" }}</span>
             </div>
-
 
             <span class="status-badge status-course">
 
                 {% if course.status == 'confirmed' %}
-
                     <i class="fa-regular fa-circle-check mr-2"></i>
-
                 {% elif course.status == 'active' %}
-
                     <i class="fa-regular fa-circle-play mr-2"></i>
-
                 {% elif course.status == 'completed' %}
-
                     <i class="fa-solid fa-hourglass-end mr-2"></i>
-
                 {% elif course.status == 'paused' %}
-
                     <i class="fa-regular fa-circle-pause mr-2"></i>
-
                 {% elif course.status == 'cancelled' %}
-
                     <i class="fa-regular fa-circle-xmark mr-2"></i>
-
                 {% endif %}
 
                 {{ course.get_status_display|default:"In progress" }}

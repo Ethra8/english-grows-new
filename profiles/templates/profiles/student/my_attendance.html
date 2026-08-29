@@ -41,13 +41,13 @@
             </div>
             
             <div>
-                <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
+                <h1>{{ student.get_full_name|default:student.username }}</h1>
                 
                 <div class="header-level">      
 
                     <div class="level-pill larger-devs">
                         <span class="current-level-label">Level</span>
-                        <span class="current-level-value notranslate" translate="no">
+                        <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
                         {% else %}
@@ -57,7 +57,7 @@
                     </div>
                     <div class="level-pill smaller-devs">
                         <span class="current-level-label">Level</span>
-                        <span class="current-level-value notranslate" translate="no">
+                        <span class="current-level-value">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}
                         {% else %}
@@ -71,7 +71,7 @@
     </header>
 
     {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs notranslate" translate="no">
+        <form method="get" class="course-selector-form smaller-devs">
 
             <div class="course-selector-label">
                 <img
@@ -95,7 +95,7 @@
                     <span class="course-dropdown-selected">
 
                         {% if course %}
-                            <span class="course-dropdown-course-name notranslate" translate="no">
+                            <span class="course-dropdown-course-name">
                                 · {{ course.name }}
                             </span>
 
@@ -108,7 +108,7 @@
 
                     </span>
 
-                    <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                    <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
                 </button>
 
 
@@ -190,7 +190,7 @@
 
                         </span>
 
-                        <i class="fa-solid fa-chevron-down course-select-arrow"></i>
+                        <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
                     </button>
 
 
@@ -299,7 +299,7 @@
                                 </span>
                             </div>
                             <div class="item-text">
-                                <strong>{% trans 'Lessons Attended' %}</strong>
+                                <strong>{% trans 'Attended Classes' %}</strong>
                                 <span>{{ enrollment.classes_attended|default:"0" }}</span>
                             </div>
                         </div>
@@ -369,7 +369,7 @@
                                 </span>
                             </div>    
                             <div class="item-text">
-                                <strong>{% trans 'Total Absences' %}</strong>
+                                <strong>{% trans 'Absent Classes' %}</strong>
                                 <span>{{ enrollment.total_absences|default:"0" }}</span>
                             </div>
                         </div>            

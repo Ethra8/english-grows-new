@@ -186,7 +186,7 @@ header .student-main-info a:hover {
     border-radius: 8px;
 }
 
-.course-selector-form img {
+.course-selector-label img {
     display: block;
     flex: 0 0 38px;
     width: 38px;
@@ -321,7 +321,7 @@ header .student-main-info a:hover {
     text-overflow: ellipsis;
 }
 
-.course-select-arrow {
+/* .course-select-arrow {
     position: static;
     flex: 0 0 auto;
     margin-left: 0.75rem;
@@ -330,7 +330,7 @@ header .student-main-info a:hover {
     pointer-events: none;
     transform: rotate(0deg);
     transition: transform 0.2s ease;
-}
+} */
 
 .course-dropdown.open .course-select-arrow {
     transform: rotate(180deg);
@@ -650,7 +650,7 @@ header .student-main-info a:hover {
 }
 
 .student-detail-card h2,
-.recent-attendance-card h2,
+/* .recent-attendance-card h2, */
 .skills-chart-header h2 {
     position: relative;
     display: flex;
@@ -703,21 +703,25 @@ header .student-main-info a:hover {
     justify-content: space-between;
 }
 
-.recent-attendance-card h2::after,
+/* .recent-attendance-card h2::after, */
 .student-detail-card-attendance h2::after {
-    content: "\f46c"; /* fa-clipboard-check */
-    font-family: "Font Awesome 6 Free";
+    content: "";
+
     position: absolute;
-    top: 0;
-    left: 2%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-weight: 900;
-    font-size: 3.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.3);
-    rotate: calc(-15deg);
+    top: 48%;
+    left: 0;
+
+    width: 60px;
+    height: 60px;
+
+    transform: translateY(-50%) rotate(-15deg);
+
+    background-image: url("/static/icons/metacard_clipboard_check_turquoise_transparent_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    /* opacity: 0.3; */
 }
 
 .course-info-detail-card h2::after {
@@ -846,9 +850,9 @@ header .student-main-info a:hover {
     color: var(--color-navy);
     font-weight: 700;
 }
- 
-.student-detail-card h3, 
-.recent-attendance-card h3 {
+
+/* .recent-attendance-card h3 */
+.student-detail-card h3 {
     /* border-bottom: 1px solid rgba(255, 255, 255, 0.08); */
     padding: 0 0.5rem 0;
     font-size: 1.5rem;
@@ -952,7 +956,7 @@ header .student-main-info a:hover {
     margin-top: 2.5rem;
 }
 
-.recent-attendance-card {
+/* .recent-attendance-card {
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
@@ -963,15 +967,12 @@ header .student-main-info a:hover {
     background: var(--color-whitesmoke);
     gap: 1rem; 
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
-    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85)); */
 }
 
 .recent-attendance-card-header {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: space-between;
-    /* padding: 1rem; */
     background-color: var(--color-whitesmoke);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -1011,7 +1012,7 @@ header .student-main-info a:hover {
 
 .recent-attendance-info small {
     font-weight: 600;
-}
+} */
 
 .attendance-edit-form button {
     border-width: 1px;

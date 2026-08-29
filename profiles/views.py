@@ -8077,6 +8077,111 @@ def company_admin_student_attendance_record(request, student_id):
 
 
     # ---------------------------------------------------------
+    # ATTENDED HOURS
+    #
+    # Actual duration of the sessions this employee attended.
+    # ---------------------------------------------------------
+    attended_minutes = 0
+
+    for attendance in attendances:
+
+        if (
+            attendance.status == Attendance.STATUS_ATTENDED
+            and attendance.class_session.start_time
+            and attendance.class_session.end_time
+        ):
+            session_duration = (
+                attendance.class_session.end_time
+                - attendance.class_session.start_time
+            )
+
+            attended_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    attended_hours = (
+        attended_minutes / 60
+    )
+
+
+    attended_whole_hours, attended_remaining_minutes = divmod(
+        attended_minutes,
+        60,
+    )
+
+
+    if attended_remaining_minutes:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+            f"{attended_remaining_minutes:02d}"
+        )
+    else:
+        attended_hours_display = (
+            f"{attended_whole_hours}h"
+        )
+
+
+    # ---------------------------------------------------------
+    # COMPLETED HOURS SINCE ENROLLMENT
+    #
+    # Total duration of completed sessions that belong to this
+    # employee's enrollment context.
+    #
+    # This excludes lessons completed before the employee joined,
+    # so the denominator matches the attendance context shown
+    # elsewhere in the card.
+    # ---------------------------------------------------------
+    completed_minutes = 0
+
+    completed_attendance_records = (
+        attendances
+        .filter(
+            class_session__status=ClassSession.STATUS_COMPLETED,
+        )
+    )
+
+
+    for attendance in completed_attendance_records:
+
+        class_session = attendance.class_session
+
+        if (
+            class_session.start_time
+            and class_session.end_time
+        ):
+            session_duration = (
+                class_session.end_time
+                - class_session.start_time
+            )
+
+            completed_minutes += round(
+                session_duration.total_seconds() / 60
+            )
+
+
+    completed_hours = (
+        completed_minutes / 60
+    )
+
+
+    completed_whole_hours, completed_remaining_minutes = divmod(
+        completed_minutes,
+        60,
+    )
+
+
+    if completed_remaining_minutes:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+            f"{completed_remaining_minutes:02d}"
+        )
+    else:
+        completed_hours_display = (
+            f"{completed_whole_hours}h"
+        )
+
+    # ---------------------------------------------------------
     # FULL ATTENDANCE HISTORY
     # ---------------------------------------------------------
     recent_attendance = attendances
@@ -8102,13 +8207,17 @@ def company_admin_student_attendance_record(request, student_id):
 
         "level_choices": UserProfile.LEVEL_CHOICES,
 
-        # Attendance
+        # Attendance - Classes
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_absences": total_absences,
         "total_attendance_records": total_attendance_records,
         "attendance_percentage": attendance_percentage,
+
+        # Attended Hours
+        "attended_hours_display": attended_hours_display,
+        "completed_hours_display": completed_hours_display,
 
         # Progress
         "completed_classes": completed_classes,

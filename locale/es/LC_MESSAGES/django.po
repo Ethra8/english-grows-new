@@ -205,7 +205,7 @@ msgid "Completed Lessons"
 msgstr "Clases Completadas"
 
 
-msgid "Lessons Attended"
+msgid "Attended Classes"
 msgstr "Clases Asistidas"
 
 msgid "Hours Attended"
@@ -256,8 +256,8 @@ msgstr "Clases incluidas desde inscripción"
 msgid "Absence"
 msgstr "Ausencia"
 
-msgid "Total Absences"
-msgstr "Total Ausencias"
+msgid "Absent Classes"
+msgstr "Clases Ausente"
 
 msgid "Lessons Missed"
 msgstr "Sin justificar"
