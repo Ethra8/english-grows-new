@@ -136,7 +136,7 @@
         0 6px 16px rgba(var(--color-navy-rgb), 0.22);
 }
 
-.course-select-arrow {
+/* .course-select-arrow {
     position: absolute;
     right: 1rem;
     top: 30%;
@@ -144,7 +144,7 @@
     font-size: 1rem;
     pointer-events: none;
     transition: transform 0.2s ease;
-}
+} */
 
 .course-select-wrapper:focus-within .course-select-arrow {
     transform: rotate(180deg);
