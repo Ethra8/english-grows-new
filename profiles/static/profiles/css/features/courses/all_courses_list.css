@@ -107,7 +107,7 @@
 }
 
 .course-status-btn strong {
-    background: rgba(var(--color-turquoise-rgb), 0.18);
+    background: rgba(var(--color-teal-rgb), 0.8);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
     color: var(--color-whitesmoke);
@@ -117,6 +117,10 @@
     font-weight: 500;
     height: 35px;
     width: 35px;
+}
+
+.course-status-btn.active strong {
+    background: rgba(var(--color-turquoise-rgb), 0.3);
 }
 
 .assigned-courses-list {

@@ -188,7 +188,6 @@ div:has(> .student-action-btn) {
     /* padding: 0.2rem 0.8rem; */
 }
 
-.course-status-btn,
 .attendance-filter-btn {
     position: relative;
     display: flex;
@@ -200,6 +199,27 @@ div:has(> .student-action-btn) {
     border-radius: 8px;
     background: rgba(var(--color-navy-rgb), 0.45);
     color: var(--color-whitesmoke);
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.course-status-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 70px;
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border-radius: 8px;
+    background: rgba(var(--color-mist-rgb), 0.95);
+    color: var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 400;
