@@ -1,6 +1,5 @@
 {% load static %}
 {% load i18n %}
-{% load i18n %}
 
 <!-- Mobile logo -->
 <a href="{% url 'home' %}"
@@ -90,7 +89,7 @@
 </button>
 
 <!-- Mobile collapsible menu -->
-<div class="collapse navbar-collapse d-lg-none" id="mobileNavbar">
+<div class="collapse navbar-collapse d-lg-none notranslate" id="mobileNavbar" translate="no">
 
     <ul class="navbar-nav w-100 mt-3">
 
@@ -105,7 +104,7 @@
                        aria-label="Go to my teacher dashboard">
 
                         <i class="fa-regular fa-user mr-2"></i>
-                        Dashboard
+                        {% trans 'Dashboard' %}
                     </a>
 
                 {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
@@ -114,8 +113,8 @@
                        class="btn-navbar"
                        aria-label="Go to my student dashboard">
 
-                        <i class="fa-regular fa-user mr-2"></i>
-                        Dashboard
+                        <img src="{% static 'icons/nav_user_icon.png' %}" alt="" aria-hidden="true" width="22px">
+                        {% trans 'Dashboard' %}
                     </a>
 
                 {% elif request.user.profile.role == "company_admin" %}
@@ -124,8 +123,8 @@
                        class="btn-navbar"
                        aria-label="Go to company admin dashboard">
 
-                        <i class="fa-regular fa-user mr-2"></i>
-                        Dashboard
+                        <img src="{% static 'icons/nav_user_icon.png' %}" alt="" aria-hidden="true" width="22px">
+                        {% trans 'Dashboard' %}
                     </a>
 
                 {% else %}
@@ -134,7 +133,7 @@
                        class="btn-navbar"
                        aria-label="Go to my profile page">
 
-                        <i class="fa-regular fa-user mr-2"></i>
+                        <img src="{% static 'icons/nav_user_icon.png' %}" alt="" aria-hidden="true" width="22px">
                         Dashboard
                     </a>
 
@@ -157,7 +156,7 @@
               <li>
                 <a href="{% url 'account_login' %}" class="btn-navbar">
                     Login
-                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                    <img src="{% static 'icons/chevron_right_white_icon.png'%}" alt="icon" width="9px">
                 </a>
               </li>
 
