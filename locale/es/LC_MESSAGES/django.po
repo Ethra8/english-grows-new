@@ -255,10 +255,10 @@ msgstr "Detalles"
 msgid "Enrollment date"
 msgstr "Fecha de inscripción"
 
-msgid "Lessons before enrollment"
+msgid "Classes held prior to enrollment"
 msgstr "Clases anteriores a inscripción"
 
-msgid "Completed lessons since enrollment"
+msgid "Classes held since enrollment"
 msgstr "Clases desde inscripción"
 
 msgid "Absence"
@@ -311,6 +311,10 @@ msgstr "Email a todos"
 
 
 
+msgid "Post-commencement enrollment"
+msgstr "Inscripción posterior al inicio del curso"
+
+
 msgid "Completion"
 msgstr "Completado"
 
@@ -344,6 +348,10 @@ msgstr "Total Clases"
 msgid "Completed Classes"
 msgstr "Clases Completadas"
 
+
+
+
+
 msgctxt "attendance singular"
 msgid "Attended"
 msgstr "Asistencia"
@@ -367,3 +375,4 @@ msgstr "Justificada"
 msgctxt "excused plural"
 msgid "Excused"
 msgstr "Justificadas"
+
