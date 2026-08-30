@@ -162,8 +162,8 @@
                          class="btn-navbar d-none d-lg-inline"
                          aria-label="{% trans 'Dashboard' %}">
 
-                        <i class="fa-regular fa-user mr-2"></i>
-                        Dashboard
+                        <img src="{% static 'icons/nav_user_icon.png' %}" alt="" aria-hidden="true" width="22px">
+                        {% trans "Dashboard" %}
                       </a>
 
                     {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
