@@ -1,6 +1,6 @@
 {% load static %}
 {% load i18n %}
-{% load i18n %}
+
 {% get_current_language as LANGUAGE_CODE %}
 <!-- {% url 'profiles:profile' as profile %}
 {% url 'home:subscribe_form' as subscribe_form %} -->
@@ -65,10 +65,12 @@
   </head>
   
  <body class="d-flex flex-column min-vh-100">
-
+  <a class="skip-link" href="#main-content">
+      {% trans "Skip to main content" %}
+  </a>
     <header class="container-fluid fixed-top w-100 p-0">
 
-      <div id="topnav" class="row d-none d-lg-flex m-0 notranslate"
+      <nav id="topnav" class="row d-none d-lg-flex m-0 notranslate"
         translate="no">
 
         <div class="col-3 my-auto py-lg-0 text-center text-lg-left">
@@ -76,17 +78,14 @@
              class="nav-link"
              aria-label="{% trans 'Go to the home page' %}">
 
-            <img
-              src="{% static 'images/logo_englishgrows.png' %}"
-              alt="logo"
-              class="logo"
-            >
+            <img src="{% static 'images/logo_englishgrows.png' %}" alt="" aria-hidden="true" class="logo">
           </a>
         </div>
 
         <div class="col-9 my-auto py-1 py-lg-0">
 
           <ul class="list-inline list-unstyled text-right my-0">
+            <li>
               <form
                   action="{% url 'set_language' %}"
                   method="post"
@@ -107,6 +106,9 @@
                       value="en"
                       class="nav-language-btn {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}active{% endif %}"
                       aria-label="{% trans 'Switch language to English' %}"
+                      {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'en-us' %}
+                        aria-current="true"
+                      {% endif %}
                   >
                       EN
                   </button>
@@ -119,6 +121,9 @@
                       value="es"
                       class="nav-language-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}"
                       aria-label="{% trans 'Switch language to Spanish' %}"
+                      {% if LANGUAGE_CODE == 'es' %}
+                        aria-current="true"
+                      {% endif %}
                   >
                       ES
                   </button>
@@ -131,6 +136,9 @@
                       value="ca"
                       class="nav-language-btn {% if LANGUAGE_CODE == 'ca' %}active{% endif %}"
                       aria-label="{% trans 'Switch language to Catalan' %}"
+                      {% if LANGUAGE_CODE == 'ca' %}
+                        aria-current="true"
+                      {% endif %}
                   >
                       CA
                   </button> -->
@@ -143,12 +151,15 @@
                       value="fr"
                       class="nav-language-btn {% if LANGUAGE_CODE == 'fr' %}active{% endif %}"
                       aria-label="{% trans 'Switch language to French' %}"
+                      {% if LANGUAGE_CODE == 'fr' %}
+                        aria-current="true"
+                      {% endif %}
                   >
                       FR
                   </button> -->
 
-              </form>            
-
+                </form>            
+              </li>
             {% block top_nav_actions %}
 
               {% if request.user.is_authenticated %}
@@ -159,45 +170,41 @@
                     {% if request.user.profile.role == "teacher" %}
 
                       <a href="{% url 'profiles:teacher_dashboard' %}"
-                         class="btn-navbar d-none d-lg-inline"
-                         aria-label="{% trans 'My Platform' %}">
+                         class="btn-navbar d-none d-lg-inline-flex">
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="28" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                       </a>
 
                     {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
 
                       <a href="{% url 'profiles:profile' %}"
-                         class="btn-navbar d-none d-lg-inline"
-                         aria-label="{% trans 'My Platform' %}">
+                         class="btn-navbar d-none d-lg-inline-flex">
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="28" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                       </a>
 
                     {% elif request.user.profile.role == "company_admin" %}
 
                       <a href="{% url 'profiles:company_admin_dashboard' %}"
-                         class="btn-navbar d-none d-lg-inline"
-                         aria-label="{% trans 'My Platform' %}">
+                         class="btn-navbar d-none d-lg-inline-flex">
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="28" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                       </a>
 
                     {% else %}
 
                       <a href="{% url 'profiles:profile' %}"
-                         class="btn-navbar d-none d-lg-inline"
-                         aria-label="{% trans 'My Platform' %}">
+                         class="btn-navbar d-none d-lg-inline-flex">
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="28" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                       </a>
 
                     {% endif %}
@@ -207,10 +214,9 @@
 
                 <li>
                   <a href="{% url 'account_logout' %}"
-                     class="btn-navbar d-none d-lg-inline"
-                     aria-label="{% trans 'Logout' %}">
-                    <img src="{% static 'icons/nav_logout_icon.png' %}" alt="" aria-hidden="true" width="20" class="mb-1 mr-2">
+                     class="btn-navbar d-none d-lg-inline-flex">
                     {% trans "Logout" %}
+                    <img src="{% static 'icons/nav_logout_icon.png' %}" alt="" aria-hidden="true" width="20" class="mb-1 ml-2">
                   </a>
                 </li>
 
@@ -218,10 +224,9 @@
 
                 <li>
                   <a href="{% url 'account_login' %}"
-                     class="btn-navbar d-none d-lg-inline"
-                     aria-label="{% trans 'Login' %}">
+                     class="btn-navbar d-none d-lg-inline-flex">
                     {% trans 'Login' %}
-                    <img src="{% static 'icons/chevron_right_white_icon.png'%}" alt="icon" width="9px" class="ml-2">
+                    <img src="{% static 'icons/chevron_right_white_icon.png'%}" alt="" aria-hidden="true" width="9" class="ml-2">
                   </a>
                 </li>
 
@@ -258,7 +263,7 @@
 
           </ul>
         </div>
-      </div>
+      </nav>
 
 
       {% block nav %}
@@ -295,7 +300,7 @@
             <button type="button"
                     class="close"
                     data-dismiss="alert"
-                    aria-label="Close">
+                    aria-label="{% trans 'Close' %}">
 
               <span aria-hidden="true">&times;</span>
             </button>
@@ -316,7 +321,7 @@
     <!-- <div class="main-bg"> -->
     <!-- <div class="d-flex flex-column min-vh-100"> -->
 
-    <main class="d-flex flex-grow-1">
+    <main id="main-content" class="d-flex flex-grow-1">
 
       {% block content %}
       {% endblock %}
@@ -331,24 +336,21 @@
       <p class="topage-links mt-3 text-center text-white">
 
         <a href=""
-           class="topage-link ml-2 mr-2"
-           aria-label="{% trans 'Companies' %}">
+           class="topage-link ml-2 mr-2">
           {% trans 'Companies' %}
         </a>
 
-        <span> | </span>
+        <span aria-hidden="true"> | </span>
 
         <a href=""
-           class="topage-link ml-2 mr-2"
-           aria-label="{% trans 'Professionals' %}">
+           class="topage-link ml-2 mr-2">
           {% trans 'Professionals' %}
         </a>
 
-        <span> | </span>
+        <span aria-hidden="true"> | </span>
 
         <a href=""
-           class="topage-link ml-2 mr-2"
-           aria-label="{% trans 'Exam Candidates' %}">
+           class="topage-link ml-2 mr-2">
           {% trans 'Exam Candidates' %}
         </a>
 
@@ -359,17 +361,15 @@
       <p class="topage-links text-center text-white">
 
         <a href=""
-           class="topage-link ml-2 mr-2"
-           aria-label="{% trans 'About' %}">
+           class="topage-link ml-2 mr-2">
           {% trans 'About' %}
         </a>
 
-        <span> | </span>
+        <span aria-hidden="true"> | </span>
 
         <a href=""
-           class="topage-link ml-2"
-           aria-label="go to the contact page">
-          Contact
+           class="topage-link ml-2">
+          {% trans 'Contact' %}
         </a>
 
       </p>
@@ -379,17 +379,15 @@
       <p class="topage-links text-center text-white">
 
         <a href=""
-           class="topage-link ml-2 mr-2"
-           aria-label="go to provacy policy page">
-          Privacy Policy
+           class="topage-link ml-2 mr-2">
+          {% trans 'Privacy Policy' %}
         </a>
 
-        <span> | </span>
+        <span aria-hidden="true"> | </span>
 
         <a href=""
-           class="topage-link ml-2"
-           aria-label="go to terms and conditions page">
-          Terms & Cons
+           class="topage-link ml-2">
+          {% trans 'Terms & Cons' %}
         </a>
 
       </p>
@@ -431,11 +429,11 @@
       -->
 
       <p class="mt-3 text-center text-white">
-        © English Grows 2026 - All rights reserved
+        © English Grows 2026 - {% trans 'All rights reserved' %}
       </p>
 
       <p class="mt-3 text-center text-muted">
-        Software designed & developed by Edna T.M.
+        {% trans 'Developed & designed by Edna T.M.' %}
       </p>
 
     </footer>

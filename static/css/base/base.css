@@ -149,6 +149,17 @@ a.js-back-link:hover {
     font-weight: 600;
 }
 
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 9999;
+}
+
+.skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+}
 
 /* **** BUTTONS *************************************************************** */
 .btn {
@@ -163,7 +174,6 @@ a.js-back-link:hover {
     border-radius: 999px;
     text-decoration: none;
     font-weight: 400;
-    width: 200px !important;
     margin: 0 0.3rem;
     transition: all 0.2s ease;
     background: rgba(255, 255, 255, 0.06);
@@ -349,14 +359,20 @@ a.js-back-link:hover {
     padding: 0 2%;
 }
 
-#topnav .fa-user, 
+#topnav ul {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* #topnav .fa-user,  */
 #topnav .fa-arrow-right-from-bracket {
     color: var(--color-whitesmoke) !important;
     margin-bottom: 0;
     font-size: 1.1rem;
 }
 
-#topnav .fa-user:hover,
+/* #topnav .fa-user:hover, */
 #topnav .fa-arrow-right-from-bracket:hover {
     color: var(--color-icy) !important;
 }

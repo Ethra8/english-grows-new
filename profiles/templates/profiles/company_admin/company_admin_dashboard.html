@@ -43,7 +43,15 @@
                         <strong>{% trans 'Courses' %}
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
                         </strong>
-                        <span>{{ active_courses|default:"0" }} <small>{% trans 'Active' %}</small></span>
+                        <span>{{ active_courses|default:"0" }} 
+                            <small>
+                            {% if active_courses == 1 %}
+                                {% trans 'Active' context 'admin dashboard courses meta singular' %}
+                            {% elif active_courses < 1 or active_courses > 1 %}
+                                {% trans 'Active' context 'admin dashboard courses meta plural' %}
+                            {% endif %}    
+                            </small>
+                        </span>
                     </div>
                 </div>
             </a>
@@ -54,7 +62,15 @@
                         <strong>{% trans 'Employees List' %}
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
                         </strong>
-                        <span>{{ total_students|default:"0" }} <small>{% trans 'Enrolled' %}</small></span>
+                        <span>{{ total_students|default:"0" }} 
+                            <small>
+                            {% if total_students == 1 %}
+                                {% trans 'Enrolled' context 'admin dashboard employees meta singular' %}
+                            {% elif total_students < 1 or total_students > 1 %}
+                                {% trans 'Enrolled' context 'admin dashboard employees meta plural' %}
+                            {% endif %}    
+                            </small>
+                        </span>
                     </div>
                 </div>
             </a>

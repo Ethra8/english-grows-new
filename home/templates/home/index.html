@@ -9,19 +9,18 @@
 <!-- =========================================================
      MAINTENANCE BANNER
 ========================================================== -->
-<div class="maintenance-banner">
+<div class="maintenance-banner notranslate" translate="no">
     <div class="text-center">
         <div style="background-color:#5ff5cf; width:48px;height:48px;border-radius:999px;border:1px solid #006b7d;margin:1rem;box-shadow: 0 8px 12px rgba(var(--color-shadow-rgba));">
             <i class="fa-solid fa-screwdriver-wrench mr-3" style="color:#006b7d;font-size:3.1rem;"></i></div>
 
         <p class="text-center mb-2">
-            <strong>PLATFORM CURRENTLY UNDER DEVELOPMENT</strong>
+            <strong>{% trans 'PLATFORM CURRENTLY UNDER DEVELOPMENT' %}</strong>
         </p>
 
         <p class="text-center">
             <span  class="text-center">
-                Thank you for your patience while new features are being
-                built and refined.
+                {% trans 'Thank you for your patience while new features are being built and refined' %}.
             </span>
         </p>
     </div>
@@ -54,7 +53,7 @@
 <!-- =========================================================
      LANDING-PAGE HERO
 ========================================================== -->
-<div id="index" class="container-fluid w-100">
+<div id="index" class="container-fluid w-100 notranslate" translate="no">
 
     <div class="row index-hero-row align-items-center">
 
@@ -77,10 +76,10 @@
                 <img src="{% static 'images/hero_title_transparent.png' %}" alt="Your English grows with Edna" class="hero-title-image">
                 <img src="{% static 'images/title_landingpage_mobile.png' %}" alt="Your English grows with Edna" class="hero-title-image-mobile">
 
-                <h2>Online professional <br> <span>English training</span></h2>
+                <h2>{% trans 'Online professional' %} <br> <span>{% trans 'English training' %}</span></h2>
 
-                <p class="mb-0">Communicate confidently and improve your performance.</p>
-                <p class="mt-2">Take the best from different methodologies.</p>
+                <p class="mb-0">{% trans 'Communicate confidently and improve your performance' %}.</p>
+                <p class="mt-2">{% trans 'Take the best from different methodologies' %}.</p>
 
             </header>
 
@@ -91,7 +90,7 @@
 
             <section class="platform-showcase" aria-label="English Grows live online lesson preview">
                 <div class="platform-laptop">
-                    <img src="{% static 'images/laptop_screen_me_popout.png' %}" alt="Edna delivering a live online English lesson" class="platform-laptop-static-image">
+                    <img src="{% static 'images/laptop_screen_me_popout.png' %}" alt="Teacher delivering a live online English lesson" class="platform-laptop-static-image">
                 </div>
             </section>
 
@@ -123,7 +122,7 @@
 <!-- =========================================================
      PLATFORM SLIDESHOW
 ========================================================== -->
-<script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         const laptop = document.getElementById("platform-laptop");
         const slides = Array.from(
@@ -269,5 +268,5 @@
         displaySlide(0);
         startSlideshow();
     });
-</script>
+</script> -->
 {% endblock %}

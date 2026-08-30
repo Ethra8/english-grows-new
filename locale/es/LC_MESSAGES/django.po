@@ -6,6 +6,54 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "PLATFORM CURRENTLY UNDER DEVELOPMENT"
+msgstr "PLATAFORMA ACTUALMENTE EN DESARROLLO"
+
+msgid "Thank you for your patience while new features are being built and refined"
+msgstr "Nuevas funcionalidades están siendo implementadas. Gracias por su paciencia"
+
+msgid "Online professional"
+msgstr "Formación de Inglés Online"
+
+msgid "English training"
+msgstr "De profesional a profesional"
+
+msgid "Communicate confidently and improve your performance"
+msgstr "Comunícate con confianza y mejora tu rendimiento"
+
+msgid "Take the best from different methodologies"
+msgstr "Llévate lo mejor de dos metodologías"
+
+msgid "Switch language to English"
+msgstr "Cambiar idioma al inglés"
+
+msgid "Switch language to Spanish"
+msgstr "Cambiar idioma al español"
+
+msgid "Switch language to Catalan"
+msgstr "Cambiar idioma al Catalán"
+
+msgid "Switch language to French"
+msgstr "Cambiar idioma al francés"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Developed & designed by Edna T.M."
+msgstr "Desarrollado y diseñado por Edna T.M."
+
+msgid "All rights reserved"
+msgstr "Reservados todos los derechos"
+
+msgid "Terms & Cons"
+msgstr "Términos y Condiciones"
+
+msgid "Privacy Policy"
+msgstr "Política de Privacidad"
+
+msgid "Contact"
+msgstr "Contacto"
+
 
 msgid "English Grows"
 msgstr "English Grows"
@@ -447,6 +495,26 @@ msgstr "Revise y filtre todas las sesiones de clase pasadas y futuras"
 msgid "Class Sessions List"
 msgstr "Lista de Clases"
 
+msgid "Employees List"
+msgstr "Lista de Empleados"
+
+
+
+msgctxt "admin dashboard courses meta singular"
+msgid "Active"
+msgstr "Activo"
+
+msgctxt "admin dashboard courses meta plural"
+msgid "Active"
+msgstr "Activos"
+
+msgctxt "admin dashboard employees meta singular"
+msgid "Enrolled"
+msgstr "Inscrito"
+
+msgctxt "admin dashboard employees meta plural"
+msgid "Enrolled"
+msgstr "Inscritos"
 
 
 msgctxt "attendance singular"
