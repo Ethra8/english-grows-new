@@ -338,7 +338,8 @@
                         <strong>{% trans 'Lessons before enrollment' %}:</strong>
                         <span>{{ lessons_before_enrollment }}</span>
                     </div>
-                </div>        
+                </div> 
+       
                 <div class="item">
                     <div class="item-icon">
                         <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="18px">
@@ -349,10 +350,10 @@
                         <span>{{ completed_classes }}</span>
                     </div>
                 </div>    
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-
+    
         <div class="wrapper-absence-details">
             <div class="detailed-attendance-card mx-auto">
                 <div class="circle-panel1">
