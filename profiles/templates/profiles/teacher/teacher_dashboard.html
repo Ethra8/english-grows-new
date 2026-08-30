@@ -52,23 +52,23 @@
         <div class="meta-row">
 
             <!-- ACTIVE COURSES -->
-            <a href="{% url 'profiles:teacher_courses' %}">
+            <a href="{% url 'profiles:teacher_courses' %}" aria-label="{% trans 'View all courses' %}">
 
                 <div class="meta-card meta-courses">
                     <div class="meta-text">
                         <strong>All Courses
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12" height="18" class="ml-2"></strong>
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2"></strong>
                         <span>{{ active_courses|default:"0" }} <small>Active</small></span>
                     </div>
                 </div>
             </a>
 
             <!-- ACTIVE STUDENTS -->
-            <a href="">
+            <a href="" aria-label="{% trans 'View learners list' %}">
                 <div class="meta-card meta-students">
                     <div class="meta-text">
                         <strong>Learners
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12" height="18" class="ml-2"></strong>
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2"></strong>
                         <span>{{ total_students|default:"0" }} <small>Active</small></span>
                     </div>
                 </div>
@@ -76,11 +76,11 @@
 
 
             <!-- TOTAL ATTENDANCE -->
-            <a href="">
+            <a href="" aria-label="{% trans 'View global attendance' %}">
                 <div class="meta-card meta-attendance">
                     <div class="meta-text">
                         <strong>Attendance Rate
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12" height="18" class="ml-2"></strong>
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2"></strong>
                         <span>{{ total_attendance_rate|default:"0" }}%</span>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                     <i class="fa-solid fa-calendar-day"></i>
                 </div>
                 <div class="title">
-                    <h3>Today's Classes</h3>
+                    <h2>Today's Classes</h2>
                     <span>{{ today|ordinal_sup|safe }}</span>
                 </div>
             </div>

@@ -79,6 +79,55 @@ msgid "Logout"
 msgstr "Salir"
 
 
+
+msgid "View all courses"
+msgstr "Ver todos los cursos"
+
+msgid "View employees list"
+msgstr "Ver lista de empleados"
+
+msgid "View global attendance"
+msgstr "Ver asistencia global"
+
+
+msgid "View learners list"
+msgstr "Ver lista de estudiantes"
+
+msgid "Today's Classes"
+msgstr "Clases Hoy"
+
+msgid "No classes scheduled for today"
+msgstr "No hay clases agendadas para hoy"
+
+
+msgid "Training Overview"
+msgstr "Vista Formación"
+
+msgid "Weekly & monthly performance"
+msgstr "Rendimiento semanal y mensual"
+
+msgid "Total Classes"
+msgstr "Total Clases"
+
+msgid "Completed Classes"
+msgstr "Clases Completadas"
+
+msgid "Upcoming Classes"
+msgstr "Clases Pendientes"
+
+msgid "Attendance Rate"
+msgstr "Asistencia"
+
+msgid "This Week"
+msgstr "Esta Semana"
+
+msgid "This Month"
+msgstr "Este Mes"
+
+msgid "Monthly attendance"
+msgstr "Asistencia mensual"
+
+
 msgid "Confirmed"
 msgstr "Confirmado"
 
@@ -341,15 +390,6 @@ msgstr "Profesor/a"
 
 msgid "Total Hours"
 msgstr "Total Horas"
-
-msgid "Total Classes"
-msgstr "Total Clases"
-
-msgid "Completed Classes"
-msgstr "Clases Completadas"
-
-
-
 
 
 msgctxt "attendance singular"

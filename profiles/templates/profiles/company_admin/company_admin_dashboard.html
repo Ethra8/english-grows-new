@@ -37,33 +37,33 @@
     <div class="dashboard-meta-cards">
         <div class="meta-row">
 
-            <a href="{% url 'profiles:company_admin_courses' %}">
+            <a href="{% url 'profiles:company_admin_courses' %}" aria-label="{% trans 'View all courses' %}">
                 <div class="meta-card meta-courses">
                     <div class="meta-text">
-                        <strong>All Courses
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
+                        <strong>{% trans 'Courses' %}
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
                         </strong>
-                        <span>{{ active_courses|default:"0" }} <small>Active</small></span>
+                        <span>{{ active_courses|default:"0" }} <small>{% trans 'Active' %}</small></span>
                     </div>
                 </div>
             </a>
 
-            <a href="{% url 'profiles:company_admin_employees_list' %}">
+            <a href="{% url 'profiles:company_admin_employees_list' %}" aria-label="{% trans 'View employees list' %}">
                 <div class="meta-card meta-students">
                     <div class="meta-text">
-                        <strong>Active Employees
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
+                        <strong>{% trans 'Employees List' %}
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
                         </strong>
-                        <span>{{ total_students|default:"0" }} <small>Enrolled</small></span>
+                        <span>{{ total_students|default:"0" }} <small>{% trans 'Enrolled' %}</small></span>
                     </div>
                 </div>
             </a>
 
-            <a href="{% url 'profiles:company_admin_all_courses_attendance' %}">
+            <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" aria-label="{% trans 'View global attendance' %}">
                 <div class="meta-card meta-attendance">
                     <div class="meta-text">
-                        <strong>Attendance Rate
-                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
+                        <strong>{% trans 'Attendance Rate' %}
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
                         </strong>
                         <span>
                             {{ total_attendance_rate|default:"0" }}%
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="title">
-                        <h3>Today's Classes</h3>
+                        <h2>{% trans 'Today's Classes' %}</h2>
                         <span>{{ today|ordinal_sup|safe }}</span>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                 </div>
                 {% else %}
                 <div class="empty-message">
-                    <p>No classes scheduled for today.</p>
+                    <p>{% trans 'No classes scheduled for today' %}.</p>
                 </div>
 
                 {% endif %}
@@ -140,8 +140,8 @@
                     </div>
 
                     <div class="title">
-                        <h3>Training Overview</h3>
-                        <span>Weekly & monthly performance</span>
+                        <h2>{% trans 'Training Overview' %}</h2>
+                        <span>{% trans 'Weekly & monthly performance' %}</span>
                     </div>
 
                 </div>
@@ -153,19 +153,19 @@
                     <div class="overview-grid-header overview-period-header"></div>
 
                     <div class="overview-grid-header">
-                        Total Classes
+                        {% trans 'Total Classes' %}
                     </div>
 
                     <div class="overview-grid-header">
-                        Completed Classes
+                        {% trans 'Completed Classes' %}
                     </div>
 
                     <div class="overview-grid-header">
-                        Upcoming Classes
+                        {% trans 'Upcoming Classes' %}
                     </div>
 
                     <div class="overview-grid-header">
-                        Attendance Rate
+                        {% trans 'Attendance Rate' %}
                     </div> 
 
                     <!-- === THIS WEEK ROW === -->
@@ -175,19 +175,19 @@
                         </div>
 
                         <div>
-                            <strong>This Week</strong>
+                            <strong>{% trans 'This Week' %}</strong>
                         </div>
                     </div>
 
                     <!-- TOTAL CLASSES -->
                     <div class="overview-metric overview-total">
-                        <span class="overview-mobile-label">Total Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Total Classes' %}</span>
                         <span class="overview-number">{{ total_weekly_sessions|default:"0" }}</span>
                     </div>
 
                     <!-- COMPLETED CLASSES -->
                     <div class="overview-metric overview-completed">
-                        <span class="overview-mobile-label">Completed Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Completed Classes' %}</span>
 
                         <div class="overview-completion">
                             <div class="completion-ring" style="--completion: {{ completed_weekly_percentage|default:'0' }};">
@@ -199,13 +199,13 @@
 
                     <!-- UPCOMING CLASSES -->
                     <div class="overview-metric overview-upcoming">
-                        <span class="overview-mobile-label">Upcoming Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Upcoming Classes' %}</span>
                         <span class="overview-number">{{ upcoming_weekly_sessions|default:"0" }}</span>
                     </div>
 
                     <!-- ATTENDANCE -->
                     <div class="overview-metric overview-attendance">
-                        <span class="overview-mobile-label">Attendance Rate</span>
+                        <span class="overview-mobile-label">{% trans 'Attendance Rate' %}</span>
                         <div class="attendance-progress">
                             <span class="attendance-value">{{ weekly_attendance_rate|default:"0" }}%</span>
 
@@ -233,20 +233,20 @@
                         </div>
 
                         <div>
-                            <strong>This Month</strong>
+                            <strong>{% trans 'This Month' %}</strong>
                         </div>
                     </div>
 
                     <!-- TOTAL CLASSES -->
                     <div class="overview-metric overview-total">
-                        <span class="overview-mobile-label">Total Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Total Classes' %}</span>
                         <span class="overview-number">{{ total_monthly_sessions|default:"0" }}</span>
                     </div>
 
                     <!-- COMPLETED CLASSES -->
                     <div class="overview-metric overview-completed">
                         
-                        <span class="overview-mobile-label">Completed Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Completed Classes' %}</span>
                         
                         <div class="overview-completion">
                             <div class="completion-ring" style="--completion: {{ total_monthly_completed_percentage|default:'0' }};">
@@ -259,20 +259,20 @@
 
                     <!-- UPCOMING CLASSES -->
                     <div class="overview-metric overview-upcoming">
-                        <span class="overview-mobile-label">Upcoming Classes</span>
+                        <span class="overview-mobile-label">{% trans 'Upcoming Classes' %}</span>
                         <span class="overview-number">{{ total_monthly_upcoming_sessions|default:"0" }}</span>
                     </div>
 
                     <!-- ATTENDANCE -->
                     <div class="overview-metric overview-attendance">
-                        <span class="overview-mobile-label">Attendance Rate</span>
+                        <span class="overview-mobile-label">{% trans 'Attendance Rate' %}</span>
 
                         <div class="attendance-progress">
                             <span class="attendance-value">{{ monthly_attendance_rate|default:"0" }}%</span>
 
                             <div class="training-attendance-bar"
                                 role="progressbar"
-                                aria-label="Monthly attendance"
+                                aria-label="{% trans 'Monthly attendance' %}"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
                                 aria-valuenow="{{ monthly_attendance_rate|default:'0' }}">

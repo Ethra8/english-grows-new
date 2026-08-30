@@ -267,7 +267,7 @@
                 {% if enrollment.has_low_attendance_warning %}
                 <div class="attendance-warning">                
                     <p class="mb-0">
-                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="18px">
+                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="26" aria-hidden="true">
                         {% trans 'Attendance is below the recommended level of 75%!' %}</p>
                 </div>
                 {% endif %}
@@ -322,7 +322,7 @@
                 
                 {% if show_enrollment_context %}
                 <div class="item">
-                    <div class="item-icon">
+                    <div>
                         <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="23">
                     </div>
 
@@ -333,7 +333,7 @@
 
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/previous_classes_teal_icon.png' %}" alt="icon" width="23">
+                        <img src="{% static 'icons/previous_classes_teal_icon.png' %}" alt="icon" width="26">
                     </div>
 
                     <div class="item-text">
@@ -344,7 +344,7 @@
 
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/classes_completed_icon.png' %}" alt="icon" width="23">
+                        <img src="{% static 'icons/classes_completed_icons.png' %}" alt="icon" width="23">
                     </div>
 
                     <div class="item-text">

@@ -104,7 +104,7 @@
     margin: 0 0 0 1rem;
 }
 
-.dashboard-card .title h3 {
+.dashboard-card .title h2 {
     /* margin: 0; */
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
@@ -162,8 +162,8 @@
     min-width: 300px;
 }
 
-.today-classes-card .header h3,
-.training-overview .header h3 {
+.today-classes-card .header h2,
+.training-overview .header h2 {
     margin-bottom: 0.15rem;
 }
 
