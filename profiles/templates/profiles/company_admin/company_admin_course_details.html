@@ -27,8 +27,8 @@
         <div class="col-12 mb-2">
             <p class="go-back-link">
                 <a href="#" class="js-back-link">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
+                    <img src="{% static 'icons/go_back_teal_icon.png' %}" alt="" width="56" aria-hidden="true">
+                    {% trans 'Go Back' %}
                 </a>
             </p>
         </div>
@@ -47,7 +47,7 @@
                 <div class="course-selector-form">
 
                     <div class="course-selector-label">
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
+                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
                         <span>{% trans 'Course' %}</span>
                     </div>
 
@@ -456,7 +456,7 @@
 
 {% block postloadjs %}
 {{ block.super }}
-<script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
+<script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
 <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
 {% endblock %}

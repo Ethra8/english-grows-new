@@ -23,10 +23,10 @@
     <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
-                <a href="#" class="js-back-link notranslate" translate="no">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
-                </a>    
+                <a href="#" class="js-back-link">
+                    <img src="{% static 'icons/go_back_teal_icon.png' %}" alt="" width="56" aria-hidden="true">
+                    {% trans 'Go Back' %}
+                </a>
             </p>
         </div>
     </div>    
@@ -422,6 +422,9 @@
 {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 <script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
 {% endblock %}

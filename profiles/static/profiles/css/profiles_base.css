@@ -4,7 +4,7 @@ h1 {
     letter-spacing: 0.02em;
     margin-left: 0%;
     padding-left: 0%;
-    font-size: clamp(2.5rem, 2.25vw, 2.8rem);
+    font-size: clamp(2.2rem, 2.25vw, 2.8rem);
     font-weight: 600;
 }
 
@@ -22,7 +22,7 @@ h3 {
 .go-back-link a,
 .back-to-attendance,
 .back-to-attendance a {
-    color: #008F8F !important;
+    color: var(--color-teal) !important;
     font-size: 1.1rem;
     font-weight: 400;
     margin: 0;
@@ -34,7 +34,7 @@ h3 {
 }
 
 .go-back-link a:hover {
-    color: #008F8F !important;
+    color: var(--color-teal) !important;
     font-weight: 600;
     transform: translateY(-1px);
 }

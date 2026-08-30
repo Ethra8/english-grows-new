@@ -587,10 +587,14 @@
 .status-pill {
     /* display: inline-block; */
     width: max-content;
-    padding: 0.4rem 0.8rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.8rem;
     border-radius: 999px;
     font-size: 1rem;
     font-weight: 500;
+}
+
+.attendance-detail-row .status-pill {
+    padding: 0.4rem 0.5rem;
 }
 
 /* .attendance-status {
@@ -761,7 +765,7 @@
 .wrapper-attendance-course-info {
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
     border-radius: 8px;
-    background-color: rgba(var(--color-steel-rgb), 0.05);
+    background-color: rgba(var(--color-teal-rgb), 0.15);
     padding: 1rem 2rem;
     align-items: center;
     align-content: center;
@@ -782,12 +786,20 @@
     color: var(--color-slate);
 }
 
+.wrapper-attendance-course-info > div > p:first-child > strong:first-of-type {
+    padding: 0%;
+    margin: 0%;
+    line-height: 2;
+    color: var(--color-teal);
+}
+
+
 .wrapper-attendance-course-info i {
     font-size: 1.2rem;
 }
 
 .wrapper-attendance-course-info > div:last-child {
-    background-color: rgba(var(--color-steel-rgb), 0.1);
+    background-color: rgba(var(--color-whitesmoke-rgb), 1);
     padding: 0.25rem .75rem;
     border-radius: 8px;
 }
@@ -854,6 +866,7 @@
 }
 
 .attendance-summary-card span {
+    align-content: center;
     order: 1;
     margin: 0;
     font-size: 1.05rem;
@@ -864,9 +877,9 @@
 /* Attendance Detail page : SUMMARY CARDS */
 .wrapper-attendance-summary-card {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     margin: 1.5rem auto;
-    width: fit-content;
+    /* width: fit-content; */
 }
 
 /* Take Attendance page: SUMMARY CARDS *****/
@@ -905,7 +918,7 @@
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-radius: 8px;
     padding: 1.6rem;
-    max-width: 688px;
+    max-width: 750px;
     margin: 0;
 }
 

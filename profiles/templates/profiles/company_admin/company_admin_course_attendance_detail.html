@@ -14,11 +14,12 @@
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="profile-page course-details-page notranslate" translate="no">
+<section class="course-attendance-details profile-page notranslate" translate="no">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -26,35 +27,50 @@
         <div class="col-12 mb-2">
             <p class="go-back-link">
                 <a href="#" class="text-white js-back-link">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
+                    <img src="{% static 'icons/go_back_teal_icon.png' %}" alt="" width="56" aria-hidden="true">
+                    {% trans 'Go Back' %}
                 </a>
             </p>
         </div>
     </div>    
         
     <header>
-        <!-- 1st Child -->
         <div>
-            <!-- <i class="fa-solid fa-chalkboard-user mr-3"></i> -->
-            <div>
-                <h1 class="notranslate" translate="no">{{ course.name|default:"Course Name" }}</h1>
-                <h2>
-                    <span class="notranslate" translate="no""><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ course.course_type.name|default:"Course Type" }}</span>
-                    <span>|</span>
-                    <span class="text-muted"><i class="fa-regular fa-clock mr-3"></i>{{ course.total_hours|clean_decimal }} h.</spa>
-                </h2>
 
-            </div>
-        </div>
-        <div>
-            <div class="col-12 level-pill">
-                <span class="current-level-label">{% trans 'Level' %}</span>
-                <span class="current-level-value">
-                    {{ course.course_level|default:"Pending" }}
+            <h1>{{ course.name|default:"Course Name" }}</h1>
+
+            <h2>
+
+                <span class="text-muted">
+                    <i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>
+                    {{ course.course_type.name|default:"Course Type" }}
                 </span>
+                <span>|</span>
+                <span class="text-muted">
+                    <img src="{% static 'icons/course_total_hours_slate_icon.png' %}" alt="" width="32" aria-hidden="true" class="mr-2 mb-1">
+                    {{ course.total_hours|clean_decimal }} h.
+                </span>
+
+            </h2>
+
+        </div>
+
+
+        <!-- =================================================
+            LEVEL / STATUS
+        ================================================== -->
+
+        <div>
+
+            <div class="col-12 level-pill">
+                <span class="current-level-label">
+                    {% trans 'Level' %}</span>
+                <span class="current-level-value">
+                    {{ course.course_level|default:"Pending" }}</span>
             </div>
+
             <span class="status-badge status-course">
+
                 {% if course.status == 'confirmed' %}
                     <img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'active' %}
@@ -66,13 +82,13 @@
                 {% elif course.status == 'cancelled' %}
                     <i class="fa-regular fa-circle-xmark mr-2"></i>
                 {% endif %}
-                    {{ course.get_status_display|default:"In progress" }}
+
+                {{ course.get_status_display|default:"In progress" }}
+
             </span>
 
         </div>
-        
-    </header> 
-    <hr>    
+    </header>
 
 
     <!-- <div class="wrapper-attendance-course-info">
@@ -113,9 +129,13 @@
                     <i class="fa-solid fa-user-check"></i>
                     <strong>{{ attended_count }}</strong>
                 </div>
-                <div>
-                    <span>Attended</span>
-                </div>
+                <span>
+                    {% if attended_count == 1 %}
+                        {% translate "Attended" context "attendance singular" %}
+                    {% elif attended_count > 1 or not attended_count %}
+                        {% translate "Attended" context "attendance plural" %}
+                    {% endif %}
+                </span>
             </div>
 
             <div class="attendance-summary-card missed">
@@ -123,9 +143,13 @@
                     <i class="fa-solid fa-user-xmark"></i>
                     <strong>{{ missed_count }}</strong>
                 </div>
-                <div>
-                    <span>Missed</span>
-                </div>
+                <span>
+                    {% if missed_count == 1 %}
+                        {% translate "Missed" context "absence singular" %}
+                    {% elif missed_count > 1 or not missed_count %}
+                        {% translate "Missed" context "absence plural" %}
+                    {% endif %}
+                </span>
             </div>
 
             <div class="attendance-summary-card pending">
@@ -133,9 +157,13 @@
                     <i class="fa-solid fa-user-minus"></i>
                     <strong>{{ excused_count }}</strong>
                 </div>
-                <div>
-                    <span>Excused</span>
-                </div>
+                <span>
+                    {% if excused_count == 1 %}
+                        {% translate "Excused" context "excused singular" %}
+                    {% elif excused_count > 1 or not excused_count %}
+                        {% translate "Excused" context "excused plural" %}
+                    {% endif %}
+                </span>            
             </div>
 
         </div>
@@ -195,5 +223,7 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
+
     <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 {% endblock %}

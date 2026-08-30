@@ -102,12 +102,16 @@ function initCourseDropdowns() {
         /* ---------------------------------------------------------
            COURSE OPTION CLICK
 
-           The button is already type="submit", therefore the
-           browser submits:
+           Supports BOTH:
 
-               ?course=<button value>
+           - <button type="submit">
+           - <a href="...">
 
-           We DO NOT preventDefault() here.
+           We do NOT use preventDefault() here.
+
+           Therefore:
+           - submit buttons submit normally
+           - links navigate normally
         --------------------------------------------------------- */
 
         const options =
@@ -122,16 +126,13 @@ function initCourseDropdowns() {
                 "click",
                 function () {
 
-                    /*
-                        Do NOT use preventDefault here.
-
-                        Allow normal form submission.
-                    */
-
                     toggle.setAttribute(
                         "aria-expanded",
                         "false"
                     );
+
+
+                    menu.hidden = true;
 
 
                     dropdown.classList.remove(
@@ -236,18 +237,256 @@ function initCourseDropdowns() {
 
 
 /* =========================================================
+   COURSE ATTENDANCE FILTERS
+
+   Used on the Company Admin course attendance page.
+
+   Filters submitted attendance rows by:
+
+   - class date
+   - employee name / username / email
+
+   Both filters can be used together.
+========================================================= */
+
+function initCourseAttendanceFilters() {
+
+    const attendanceList =
+        document.querySelector(".attendance-list");
+
+    const dateFilter =
+        document.getElementById("attendanceDateFilter");
+
+    const searchInput =
+        document.getElementById("attendanceSearchInput");
+
+
+    /*
+        This JS file is shared across pages.
+
+        If the current page does not contain an attendance
+        list, simply stop here.
+    */
+
+    if (!attendanceList) {
+        return;
+    }
+
+
+    const attendanceRows =
+        Array.from(
+            attendanceList.querySelectorAll(
+                ".attendance-row"
+            )
+        );
+
+
+    if (!attendanceRows.length) {
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       EMPTY FILTER RESULT MESSAGE
+
+       This is separate from Django's {% empty %} message.
+
+       Django's message means:
+           there are no attendance records at all.
+
+       This JS message means:
+           records exist, but none match the current filters.
+    --------------------------------------------------------- */
+
+    let filterEmptyMessage =
+        attendanceList.querySelector(
+            ".attendance-filter-empty-message"
+        );
+
+
+    if (!filterEmptyMessage) {
+
+        filterEmptyMessage =
+            document.createElement("p");
+
+        filterEmptyMessage.className =
+            "attendance-empty-message attendance-filter-empty-message";
+
+        filterEmptyMessage.textContent =
+            "No attendance records match the selected filters.";
+
+        filterEmptyMessage.hidden = true;
+
+        attendanceList.appendChild(
+            filterEmptyMessage
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       NORMALIZE TEXT
+    --------------------------------------------------------- */
+
+    function normalizeText(value) {
+
+        return (value || "")
+            .toLowerCase()
+            .trim();
+
+    }
+
+
+    /* ---------------------------------------------------------
+       APPLY FILTERS
+    --------------------------------------------------------- */
+
+    function applyAttendanceFilters() {
+
+        const selectedDate =
+            dateFilter
+                ? dateFilter.value
+                : "";
+
+
+        const searchTerm =
+            searchInput
+                ? normalizeText(searchInput.value)
+                : "";
+
+
+        let visibleRows = 0;
+
+
+        attendanceRows.forEach(function (row) {
+
+            const rowDate =
+                row.dataset.date || "";
+
+
+            const rowSearch =
+                normalizeText(
+                    row.dataset.search
+                );
+
+
+            /* ---------------------------------------------
+               DATE MATCH
+            --------------------------------------------- */
+
+            const matchesDate =
+                !selectedDate
+                || rowDate === selectedDate;
+
+
+            /* ---------------------------------------------
+               EMPLOYEE SEARCH MATCH
+
+               data-search already contains:
+               - full name
+               - username
+               - email
+
+               for all attendance records assigned to
+               that ClassSession.
+            --------------------------------------------- */
+
+            const matchesSearch =
+                !searchTerm
+                || rowSearch.includes(searchTerm);
+
+
+            /* ---------------------------------------------
+               FINAL RESULT
+            --------------------------------------------- */
+
+            const shouldShow =
+                matchesDate
+                && matchesSearch;
+
+
+            row.hidden =
+                !shouldShow;
+
+
+            if (shouldShow) {
+                visibleRows += 1;
+            }
+
+        });
+
+
+        /* ---------------------------------------------
+           NO RESULTS MESSAGE
+        --------------------------------------------- */
+
+        filterEmptyMessage.hidden =
+            visibleRows !== 0;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       DATE FILTER
+    --------------------------------------------------------- */
+
+    if (dateFilter) {
+
+        dateFilter.addEventListener(
+            "change",
+            applyAttendanceFilters
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       EMPLOYEE SEARCH
+
+       "input" updates immediately while typing.
+    --------------------------------------------------------- */
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            applyAttendanceFilters
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       INITIAL STATE
+    --------------------------------------------------------- */
+
+    applyAttendanceFilters();
+
+}
+
+
+/* =========================================================
    INITIALIZE
 ========================================================= */
+
+function initCourseComponents() {
+
+    initCourseDropdowns();
+
+    initCourseAttendanceFilters();
+
+}
+
 
 if (document.readyState === "loading") {
 
     document.addEventListener(
         "DOMContentLoaded",
-        initCourseDropdowns
+        initCourseComponents
     );
 
 } else {
 
-    initCourseDropdowns();
+    initCourseComponents();
 
 }

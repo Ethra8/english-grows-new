@@ -280,7 +280,7 @@ msgid "Absence Record"
 msgstr "Historial Ausencias"
 
 msgid "Missed"
-msgstr "Ausente"
+msgstr "Ausencia"
 
 msgid "Excused"
 msgstr "Justificada"
@@ -344,5 +344,26 @@ msgstr "Total Clases"
 msgid "Completed Classes"
 msgstr "Clases Completadas"
 
-msgid "Remaining Classes"
-msgstr "inscritos"
+msgctxt "attendance singular"
+msgid "Attended"
+msgstr "Asistencia"
+
+msgctxt "attendance plural"
+msgid "Attended"
+msgstr "Asistencias"
+
+msgctxt "absence singular"
+msgid "Missed"
+msgstr "Ausencia"
+
+msgctxt "absence plural"
+msgid "Missed"
+msgstr "Ausencias"
+
+msgctxt "excused singular"
+msgid "Excused"
+msgstr "Justificada"
+
+msgctxt "excused plural"
+msgid "Excused"
+msgstr "Justificadas"

@@ -25,8 +25,8 @@
         <div class="col-12 mb-2">
             <p class="go-back-link">
                 <a href="#" class="text-white js-back-link notranslate" translate="no">
-                    <i class="fa-solid fa-arrow-left-long mr-3"></i>
-                    Go Back
+                    <img src="{% static 'icons/go_back_teal_icon.png' %}" alt="" width="56" aria-hidden="true">
+                    {% trans 'Go Back' %}
                 </a>
             </p>
         </div>
@@ -106,7 +106,7 @@
                             <i class="fa-solid fa-user-check"></i>
                         </div>
                         <div>
-                            <span>Attended</span>
+                            {% trans 'Attended' %}
                         </div>
                     </div>
 
@@ -115,7 +115,7 @@
                             <i class="fa-solid fa-user-xmark"></i>
                         </div>
                         <div>
-                            <span>Missed</span>
+                            {% trans 'Missed' %}
                         </div>
                     </div>
 
@@ -124,7 +124,7 @@
                             <i class="fa-solid fa-user-minus"></i>
                         </div>
                         <div>
-                            <span>Excused</span>
+                            {% trans 'Excused' %}
                         </div>
                     </div>
 
