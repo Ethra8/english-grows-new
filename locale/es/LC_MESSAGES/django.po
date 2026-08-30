@@ -39,7 +39,7 @@ msgstr "Empresa"
 
 
 msgid "Dashboard"
-msgstr "Tablero"
+msgstr "Panel"
 
 msgid "Course Info"
 msgstr "Curso"
