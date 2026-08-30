@@ -1,6 +1,7 @@
 ## 📑 Table of Contents
 
 - [Site Structure](#site-structure)
+  - [User Roles](#user-roles)
   - [Home App](#home-app)
   - [Profiles App](#profiles-app)
     - [User Profile & Role Management](#user-profile--role-management)
