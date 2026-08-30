@@ -13,7 +13,8 @@ msgstr "English Grows"
 msgid "Go Back"
 msgstr "Volver"
 
-
+msgid "My Platform"
+msgstr "Mi Plataforma"
 
 msgid "Profile navigation"
 msgstr "Barra de navegación del perfil"
@@ -39,7 +40,7 @@ msgstr "Empresa"
 
 
 msgid "Dashboard"
-msgstr "Panel"
+msgstr "Inicio"
 
 msgid "Course Info"
 msgstr "Curso"
@@ -48,10 +49,7 @@ msgid "Courses"
 msgstr "Cursos"
 
 msgid "Class List"
-msgstr "Clases"
-
-msgid "Class Sessions"
-msgstr "Clases"
+msgstr "Lista Clases"
 
 
 msgid "Calendar"
@@ -101,7 +99,7 @@ msgstr "No hay clases agendadas para hoy"
 
 
 msgid "Training Overview"
-msgstr "Vista Formación"
+msgstr "Vista General"
 
 msgid "Weekly & monthly performance"
 msgstr "Rendimiento semanal y mensual"
@@ -112,11 +110,8 @@ msgstr "Total Clases"
 msgid "Completed Classes"
 msgstr "Clases Completadas"
 
-msgid "Upcoming Classes"
-msgstr "Clases Pendientes"
-
 msgid "Attendance Rate"
-msgstr "Asistencia"
+msgstr "Tasa de Asistencia"
 
 msgid "This Week"
 msgstr "Esta Semana"
@@ -390,6 +385,68 @@ msgstr "Profesor/a"
 
 msgid "Total Hours"
 msgstr "Total Horas"
+
+
+
+msgid "Attendance Submitted"
+msgstr "Registros de Asistencia"
+
+msgid "past classes"
+msgstr "clases dadas"
+
+msgid "Filter Attendance"
+msgstr "Filtrar Asistencias"
+
+msgid "Attended"
+msgstr "Asistido"
+
+msgid "Register"
+msgstr "Registro"
+
+msgid "No submitted attendance records found"
+msgstr "Todavía no hay registros de asistencia disponibles para este grupo"
+
+msgid "employee record"
+msgstr "empleado"
+
+msgid "saved for this class session"
+msgstr "registrados para esta sesión"
+
+
+msgid "All Company Courses"
+msgstr "Cursos de mi Empresa"
+
+msgid "All Status"
+msgstr "Todos"
+
+msgid "No courses assigned yet to your company"
+msgstr "Su empresa todavía no tiene grupos asignados"
+
+msgid "No courses to show for this filter"
+msgstr "No se encontraron cursos en este filtro"
+
+msgid "Review all courses by their current status below"
+msgstr "Revise todos los cursos filtrados por su actual estado"
+
+
+msgid "No past classes apply to the selected filter"
+msgstr "El filtro no aplica a ninguna clase pasada"
+
+msgid "No upcoming classes apply to the selected filter"
+msgstr "El filtro no aplica a ninguna clase futura"
+
+msgid "Past Classes"
+msgstr "Clases Pasadas"
+
+msgid "Upcoming Classes"
+msgstr "Clases Futuras"
+
+msgid "Review upcoming and past class sessions"
+msgstr "Revise y filtre todas las sesiones de clase pasadas y futuras"
+
+msgid "Class Sessions List"
+msgstr "Lista de Clases"
+
 
 
 msgctxt "attendance singular"

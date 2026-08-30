@@ -779,8 +779,8 @@
 
 .wrapper-attendance-course-info > div:first-child {
     border-bottom: 1px rgba(var(--color-teal-rgb), 0.3) solid;
-    margin-bottom: 0.5rem;
-    padding: 1rem 0;
+    margin-bottom: 0.95rem;
+    padding: 0 0 0.5rem;
 }
 
 .wrapper-attendance-course-info p {
@@ -902,11 +902,12 @@
 
 /* *** TAKE ATTENDANCE Page ************************/
 /* Empty messages */
-/* .attendance-empty-message {
+.attendance-empty-message {
     text-align: left;
-    color: gray;
+    padding : 1.5rem;
     font-size: 1rem;
-} */
+    color: var(--color-slate);
+}
 
 .wrapper-buttons-take-attendance-info-card {
     display: flex;
@@ -940,7 +941,7 @@
 
 .attendance-list-header-filter h3 {
     color: var(--color-teal);
-    margin: 0 0 2rem;
+    margin: 0;
     font-size: 1.8rem;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
@@ -1438,13 +1439,13 @@
         min-width: 500px;
     }
 
+    .attendance-list-header-filter {
+        justify-content: space-between;
+    }
+
 }
 
 @media (max-width: 1199.98px) {
-    /* .wrapper-attendance-course-info,
-    .attendance-detail-card {
-        width: 100%;
-    } */
 
 }
 

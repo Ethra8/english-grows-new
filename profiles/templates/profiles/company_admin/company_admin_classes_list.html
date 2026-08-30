@@ -13,20 +13,20 @@
 
 {% block profile_content %}
 
-<section class="classes-list profile-page notranslate" translate="no">    
+<section class="classes-list-page profile-page notranslate" translate="no">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
     <header>
         <div class="row">        
             <div class="col-12 ml-0 pl-0">
-                <h1>Class Sessions</h1>
+                <h1>{% trans 'Class Sessions List' %}</h1>
             </div>
         </div>
         <hr>
     </header>
 
-    <p class="text-dark">Review upcoming and past class sessions.</p>
+    <p class="text-dark">{% trans 'Review upcoming and past class sessions' %}.</p>
 
     <div class="all-assigned-classes mt-5">
 
@@ -39,10 +39,11 @@
                 class="classes-status-tab active"
                 data-status-tab="upcoming"
                 aria-selected="true"
+                aria-label="{% trans 'Upcoming Classes' %}"
             >
                 <i class="fa-solid fa-clock mr-2"></i>
 
-                <span>Upcoming Classes</span>
+                <span>{% trans 'Upcoming Classes' %}</span>
 
                 <strong>
                     {{ class_filter_counts.upcoming.all }}
@@ -54,10 +55,11 @@
                 class="classes-status-tab"
                 data-status-tab="completed"
                 aria-selected="false"
+                aria-label="{% trans 'Past Classes' %}"
             >
                 <i class="fa-solid fa-clock-rotate-left mr-2"></i>
 
-                <span>Past Classes</span>
+                <span>{% trans 'Past Classes' %}</span>
 
                 <strong>
                     {{ class_filter_counts.completed.all }}
@@ -80,7 +82,7 @@
                     class="classes-filter-btn active"
                     data-filter="today"
                 >
-                    <span>Today</span>
+                    <span>{% trans 'Today' %}</span>
                     <strong>{{ class_filter_counts.upcoming.today }}</strong>
                 </button>
 
@@ -89,7 +91,7 @@
                     class="classes-filter-btn"
                     data-filter="weekly"
                 >
-                    <span>This Week</span>
+                    <span>{% trans 'This Week' %}</span>
                     <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
                 </button>
 
@@ -98,7 +100,7 @@
                     class="classes-filter-btn"
                     data-filter="monthly"
                 >
-                    <span>This Month</span>
+                    <span>{% trans 'This Month' %}</span>
                     <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
                 </button>
 
@@ -107,7 +109,7 @@
                     class="classes-filter-btn"
                     data-filter="all"
                 >
-                    <span>All</span>
+                    <span>{% trans 'All' %}</span>
                     <strong>{{ class_filter_counts.upcoming.all }}</strong>
                 </button>
 
@@ -119,19 +121,19 @@
                 aria-label="Filter upcoming classes"
             >
                 <option value="today">
-                    Today: {{ class_filter_counts.upcoming.today }}
+                    {% trans 'Today' %}: {{ class_filter_counts.upcoming.today }}
                 </option>
 
                 <option value="weekly">
-                    This Week: {{ class_filter_counts.upcoming.weekly }}
+                    {% trans 'This Week' %}: {{ class_filter_counts.upcoming.weekly }}
                 </option>
 
                 <option value="monthly">
-                    This Month: {{ class_filter_counts.upcoming.monthly }}
+                    {% trans 'This Month' %}: {{ class_filter_counts.upcoming.monthly }}
                 </option>
 
                 <option value="all">
-                    All: {{ class_filter_counts.upcoming.all }}
+                    {% trans 'All' %}: {{ class_filter_counts.upcoming.all }}
                 </option>
             </select>
 
@@ -149,7 +151,7 @@
                 {% endfor %}
 
                 <p class="no-classes-message text-grey p-3" hidden>
-                    No upcoming classes apply to the selected filter.
+                    {% trans 'No upcoming classes apply to the selected filter' %}.
                 </p>
 
             </div>
@@ -171,7 +173,7 @@
                     class="classes-filter-btn active"
                     data-filter="today"
                 >
-                    <span>Today</span>
+                    <span>{% trans 'Today' %}</span>
                     <strong>{{ class_filter_counts.completed.today }}</strong>
                 </button>
 
@@ -180,7 +182,7 @@
                     class="classes-filter-btn"
                     data-filter="weekly"
                 >
-                    <span>This Week</span>
+                    <span>{% trans 'This Week' %}</span>
                     <strong>{{ class_filter_counts.completed.weekly }}</strong>
                 </button>
 
@@ -189,7 +191,7 @@
                     class="classes-filter-btn"
                     data-filter="monthly"
                 >
-                    <span>This Month</span>
+                    <span>{% trans 'This Month' %}</span>
                     <strong>{{ class_filter_counts.completed.monthly }}</strong>
                 </button>
 
@@ -198,7 +200,7 @@
                     class="classes-filter-btn"
                     data-filter="all"
                 >
-                    <span>All</span>
+                    <span>{% trans 'All' %}</span>
                     <strong>{{ class_filter_counts.completed.all }}</strong>
                 </button>
 
@@ -210,19 +212,19 @@
                 aria-label="Filter past classes"
             >
                 <option value="today">
-                    Today: {{ class_filter_counts.completed.today }}
+                    {% trans 'Today' %}: {{ class_filter_counts.completed.today }}
                 </option>
 
                 <option value="weekly">
-                    This Week: {{ class_filter_counts.completed.weekly }}
+                    {% trans 'This Week' %}: {{ class_filter_counts.completed.weekly }}
                 </option>
 
                 <option value="monthly">
-                    This Month: {{ class_filter_counts.completed.monthly }}
+                    {% trans 'This Month' %}: {{ class_filter_counts.completed.monthly }}
                 </option>
 
                 <option value="all">
-                    All: {{ class_filter_counts.completed.all }}
+                    {% trans 'All' %}: {{ class_filter_counts.completed.all }}
                 </option>
             </select>
 
@@ -240,7 +242,7 @@
                 {% endfor %}
 
                 <p class="no-classes-message text-grey p-3" hidden>
-                    No past classes apply to the selected filter.
+                    {% trans '' %}No past classes apply to the selected filter.
                 </p>
 
             </div>

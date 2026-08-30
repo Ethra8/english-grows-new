@@ -228,10 +228,12 @@ div:has(> .student-action-btn) {
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 0;
     white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .course-status-btn.active::after,
-.attendance-filter-btn.active::after {
+.attendance-filter-btn.active::after,
+.classes-filter-btn.active::after {
     content: "";
     position: absolute;
     left: 50%;
@@ -269,18 +271,15 @@ div:has(> .student-action-btn) {
     font-size: 1.2rem;
 }
 
-.course-status-btn.active,
-.course-status-btn:hover {
+.course-status-btn.active {
     background: rgba(var(--color-cyan-rgb), 0.25);
     border-color: var(--color-turquoise);
     color: var(--color-whitesmoke);
 }
 
-.attendance-filter-btn.active,
-.attendance-filter-btn:hover {
-    background: rgba(var(--color-cyan-rgb), 0.25);
+.course-status-btn:hover {
+    background: rgba(var(--color-icy-rgb), 0.75);
     border-color: var(--color-turquoise);
-    /* color: var(--color-whitesmoke); */
 }
 
 .btn-join-class {
@@ -319,6 +318,14 @@ div:has(> .student-action-btn) {
 /* =========================================================
    DESKTOP SIDEBAR
 ========================================================= */
+
+.profile-sidebar hr:first-of-type {
+    margin: 2rem 0 0;
+}
+
+.profile-sidebar hr:last-of-type {
+    margin: 0 0 2.5rem;
+}
 
 .profile-sidebar .btn-navbar {
     width: fit-content !important;

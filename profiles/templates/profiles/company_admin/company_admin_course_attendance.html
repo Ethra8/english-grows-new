@@ -265,14 +265,14 @@
 
         <div class="meta-card meta-attendance">
             <div class="meta-text">
-                <strong>Attendance Submitted:</strong>
-                <span>{{ completed_count }} / {{ total_classes }} <small>total classes</small></span>
+                <strong>{% trans 'Attendance Submitted' %}:</strong>
+                <span>{{ submitted_class_sessions_count }} / <small>{{ completed_classes }} {% trans 'past classes' %}</small></span>
             </div>
         </div>
 
         <div class="meta-card meta-percentage">
             <div class="meta-text">
-                <strong>Attendance Rate:</strong>
+                <strong>{% trans 'Attendance Rate' %}:</strong>
                 <span>
                     {{ average_attendance }} %
                 </span>
@@ -288,7 +288,7 @@
 
                 <div class="attendance-list-header-filter">
                     <!-- <h3 id="attendanceListTitle"></h3> -->
-                    <h3>Filter Attendance</h3>
+                    <h3>{% trans 'Filter Attendance' %}</h3>
                     <div class="attendance-tools">
                         <input type="date" id="attendanceDateFilter">
 
@@ -302,11 +302,11 @@
 
                 <div class="attendance-list">
 
-                    {% for class_session in class_sessions %}
+                    {% for submitted_class_session in submitted_class_sessions %}
                         <div class="attendance-row"
                             data-status="completed"
-                            data-date="{{ class_session.start_time|date:'Y-m-d' }}"
-                            data-search="{{ class_session.employee_search_text|lower }}">                            
+                            data-date="{{ submitted_class_session.start_time|date:'Y-m-d' }}"
+                            data-search="{{ submitted_class_session.employee_search_text|lower }}">                            
                             
                             <div>
                                 {% if course.enrollment_count == 1 %}
@@ -316,7 +316,7 @@
                                 {% endif %}
 
                                 <div class="attendance-class-info">
-                                    <strong>Lesson {{ class_session.class_number }}</strong>
+                                    <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>
                                 </div>
                             </div>
                             <div class="class-list-date">
@@ -324,8 +324,8 @@
                                     <i class="fa-solid fa-calendar-day"></i>
                                 </div>
                                 <div>
-                                    <strong>{{ class_session.start_time|date:"D, d M" }}</strong>
-                                    <span>{{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</span>
+                                    <strong>{{ submitted_class_session.start_time|date:"D, d M" }}</strong>
+                                    <span>{{ submitted_class_session.start_time|time:"H:i" }} - {{ submitted_class_session.end_time|time:"H:i" }}</span>
                                 </div>
                             </div>
 
@@ -334,8 +334,8 @@
                                     <i class="fa-solid fa-clipboard-check"></i>
                                 </div>
                                 <div>
-                                    <strong>Attendance</strong><br>
-                                    <span> {{ class_session.attendance_percentage }}%</span>
+                                    <strong>{% trans 'Attendance' %}</strong><br>
+                                    <span> {{ submitted_class_session.attendance_percentage }}%</span>
                                 </div>
                             </div>
 
@@ -344,22 +344,22 @@
                                     <i class="fa-solid fa-users"></i>
                                 </div>
                                 <div>
-                                    <strong>Attended</strong>
-                                    <span>{{ class_session.attended_count }}/{{ class_session.registered_count }}</span>
+                                    <strong>{% trans 'Attended' %}</strong>
+                                    <span>{{ submitted_class_session.attended_count }}/{{ submitted_class_session.registered_count }}</span>
                                 </div>
                             </div>
 
                             <div class="attendance-action">
-                                <a href="{% url 'profiles:company_admin_course_attendance_detail' class_session.id %}" 
+                                <a href="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}" 
                                    class="btn-attendance-details">
-                                    Review
+                                    {% trans 'Register' %}
                                     <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                                 </a>
                             </div>
 
                         </div>
                     {% empty %}
-                        <p class="attendance-empty-message">No submitted attendance records found.</p>
+                        <p class="attendance-empty-message">{% trans 'No submitted attendance records found' %}.</p>
                     {% endfor %}
 
                 </div>

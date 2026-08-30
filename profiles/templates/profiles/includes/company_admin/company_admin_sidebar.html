@@ -26,7 +26,7 @@
         {% endif %}
 
     </div>
-    <hr class="mt-5">
+    <hr>
  
     <nav class="sidebar-nav notranslate" translate="no" aria-label="{% trans 'Profile navigation' %}">
 
@@ -40,9 +40,9 @@
             <span>{% trans "Courses" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_classes_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_classes_list' %}active{% endif %}" aria-label="{% trans 'Class Sessions' %}">
+        <a href="{% url 'profiles:company_admin_classes_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_classes_list' %}active{% endif %}" aria-label="{% trans 'Class List' %}">
             <i class="fa-solid fa-chalkboard-user"></i>
-            <span>{% trans "Class Sessions" %}</span>
+            <span>{% trans "Class List" %}</span>
         </a>
 
         <a href="{% url 'profiles:company_admin_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_calendar' %}active{% endif %}" aria-label="{% trans 'Calendar' %}">

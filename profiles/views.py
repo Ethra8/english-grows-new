@@ -7188,9 +7188,9 @@ def company_admin_course_attendance(request, course_id):
         # All company courses for selector
         "available_courses": available_courses,
 
-        "class_sessions": submitted_class_sessions,
+        "submitted_class_sessions": submitted_class_sessions,
 
-        "completed_count": len(
+        "submitted_class_sessions_count": len(
             submitted_class_sessions
         ),
 

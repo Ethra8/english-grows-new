@@ -6,277 +6,13 @@
     background: rgba(var(--color-turquoise-rgb), 0.2);
 }
 
-
-/****  CLASS STATUS NAV **********************************************/
-.classes-status-nav {
-    position: relative;
-    z-index: 5;
-    display: flex;
-    align-items: stretch;
-    gap: .25rem;
-    width: 100%;
-    padding: 0.5rem;
-    /* background: rgba(var(--color-teal-rgb), 0.2);
-    border: 1px solid rgba(var(--color-teal-rgb), 0.22); */
-    border-radius: 8px;
-}
-
-/* Individual tab */
-.classes-status-tab {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    flex: 1;
-    min-height: 58px;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    background: rgba(var(--color-navy-rgb), 0.25);
-    color: var(--color-navy);
-    border: 2px solid rgba(var(--color-teal-rgb), 0.25);
-    /* background-color: var(--color-navy); */
-    /* color: whitesmoke; */
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.4rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-/* Icon */
-.classes-status-tab i {
-    color: var(--color-teal);
-    font-size: 1.7rem;
-}
-
-/* Count */
-.classes-status-tab strong {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    height: 40px;
-    padding: 0 0.55rem;
-    border-radius: 999px;
-    background: rgba(var(--color-teal-rgb), 0.4);
-    color: var(--color-whitesmoke);
-    font-family: inherit;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-/* Hover */
-.classes-status-tab:hover {
-    background: rgba(var(--color-icy-rgb), 0.45);
-    color: var(--color-navy);
-}
-
-/* Active */
-.classes-status-tab.active {
-    background: rgba(var(--color-teal-rgb), 1);
-    color: var(--color-whitesmoke);
-    box-shadow:
-        0 4px 12px rgba(var(--color-navy-rgb), 0.15);
-}
-
-.classes-status-tab.active i {
-    color: var(--color-turquoise);
-}
-
-.classes-status-tab.active strong,
-.classes-filter-btn.active strong {
-    background: rgba(var(--color-turquoise-rgb), 0.16);
-    color: var(--color-turquoise);
-}
-
-/* Small active indicator */
-.classes-status-tab.active::after,
-.classes-filter-btn.active::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -2px;
-    width: 80%;
-    height: 4px;
-    transform: translateX(-50%);
-    border: none;
-    border-radius: 999px;
-    background: var(--color-turquoise);
-    filter: none;
-}/* END CLASS STATUS NAV *********************************************/
-
-
-/* ***  CLASS STATUS PANELS *************************************** */
-.classes-status-panel {
-    width: 100%;
-    min-width: 0;
-    padding: 0 0.25rem 0.25rem;
-    /* border: 1px solid rgba(var(--color-teal-rgb), 0.18); */
-    border-top: none;
-    border-radius: 8px;
-    /* background: rgba(var(--color-teal-rgb), 0.2);
-    box-shadow:
-        0 8px 20px rgba(var(--color-shadow-rgba)); */
-}
-
-/* *************************************************************** */
-
-
-/* ****  CLASS FILTER BTN **************************************** */
-.classes-filter-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.25rem;
-    padding: 0.5rem 0.25rem;
-    margin-bottom: 1rem;
-}
-
-/* Mobile filter */
-.classes-status-panel .mobile-filter-select {
-    margin-bottom: 1rem;
-    display: none;
-}
-
-.classes-filter-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    min-height: 60px;
-    border: 2px solid rgba(var(--color-teal-rgb), 0.25);
-    border-radius: 8px;
-    background: rgba(var(--color-navy-rgb), 0.25);
-    color: var(--color-navy);
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.02em;
-    font-weight: 500;
-    font-size: 1.4rem;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    min-width: 0;
-    white-space: nowrap;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-/* .classes-filter-btn i {
-    font-size: 1.3rem;
-    color: var(--color-turquoise);
-} */
-
-.classes-filter-btn strong {
-    font-size: 1.2rem;
-    background: rgba(var(--color-teal-rgb), 0.4);
-    border-radius: 999px;
-    padding: 0.25rem 0.65rem;
-    color: var(--color-whitesmoke);
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-    height: 35px;
-    width: 40px;
-}
-
-.classes-filter-btn:hover {
-    background: rgba(var(--color-icy-rgb), 0.45);
-    border-color: rgba(var(--color-teal-rgb), 0.45);
-
-    color: var(--color-navy);
-}
-
-.classes-filter-btn.active {
-    background: rgba(var(--color-teal-rgb), 0.95);
-    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
-    color: var(--color-whitesmoke);
-}
-
-/* ******************************************************************** */
-/* ONLY teacher_reschedule_classes.html *********************************/
-.assigned-classes-filter-header strong {
-    background: rgba(var(--color-turquoise-rgb), 0.18);
-    border-radius: 999px;
-    padding: 0.25rem 0.65rem;
-    color: var(--color-whitesmoke);
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-    height: 35px;
-    width: 35px;
-    font-size: 1.8rem;
-    margin-left: 1.5rem;
-    text-align: center !important;
-}
-
-
-/* SELECT SMALLER DEVICES **********************************/
-select {
-    display: none;
-    width: 98% !important;
-    margin: 0 auto .25rem;
-    /* max-width: 320px; */
-    padding: 0.75rem 1rem;
-    padding-right: 3rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    border: outset 1px var(--color-teal);
-    border-radius: 8px;
-    background-color: var(--color-teal);
-    color: var(--color-whitesmoke);
-    /* color-scheme: ; */
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-    transition: all 0.2s ease;
-}
-
-select option {
-    background: var(--color-whitesmoke);
-    color: var(--color-navy);
-    font-weight: 500;
-    border-radius: 8px;
-}
-
-select:focus {
-    border: 1px outset #05ffcd !important;
-    outline: none;
-}
-
-.mobile-filter-select {
-    /* Remove browser arrow */
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    /* Leave room for w3.org chevron */
-    padding-right: 3rem !important;
-    /* Custom light chevron */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F5FFFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 1rem center !important;
-    background-size: 36px !important;
-    cursor: pointer !important;
-}
-
 /* page grid to keep Upcoming/Past Classes selector cards in place */
 .all-assigned-classes {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-whitesmoke-rgb), 0.8);
+    background: rgba(var(--color-navy-rgb), 0.8);
     border: outset 2px rgba(var(--color-teal-rgb), 0.2);
     border-radius: 8px;
 }
@@ -517,6 +253,205 @@ select:focus {
     display: block;
 }
 
+/****  CLASS STATUS NAV **********************************************/
+.classes-status-nav {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: stretch;
+    gap: .25rem;
+    width: 100%;
+    padding: 0.5rem;
+    /* background: rgba(var(--color-teal-rgb), 0.2);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.22); */
+    border-radius: 8px;
+}
+
+/* Individual tab */
+.classes-status-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    flex: 1;
+    min-height: 58px;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: rgba(var(--color-mist-rgb), 0.95);
+    color: var(--color-navy);
+    border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
+    /* background-color: var(--color-navy); */
+    /* color: whitesmoke; */
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Icon */
+.classes-status-tab i {
+    color: var(--color-teal);
+    font-size: 1.7rem;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.classes-status-tab.active i {
+    opacity: 1;
+
+}
+
+/* Count */
+.classes-status-tab strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 40px;
+    padding: 0 0.55rem;
+    border-radius: 999px;
+    background: rgba(var(--color-teal-rgb), 0.55);
+    color: var(--color-whitesmoke);
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Hover */
+.classes-status-tab:hover {
+    background: rgba(var(--color-icy-rgb), 0.75);
+    border-color: rgba(var(--color-teal-rgb), 0.45);
+
+    color: var(--color-navy);
+}
+
+/* Active */
+.classes-status-tab.active {
+    background: rgba(var(--color-cyan-rgb), 0.25);
+    color: var(--color-whitesmoke);
+    box-shadow: 0 4px 12px rgba(var(--color-shadow-rgb), 0.15);
+    border: 1px outset var(--color-turquoise);
+}
+
+.classes-status-tab.active i {
+    color: var(--color-turquoise);
+}
+
+.classes-status-tab.active strong,
+.classes-filter-btn.active strong {
+    background: rgba(var(--color-turquoise-rgb), 0.46);
+    /* color: var(--color-turquoise); */
+}
+
+/* Small active indicator */
+.classes-status-tab.active::after,
+.classes-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 80%;
+    height: 4px;
+    transform: translateX(-50%);
+    border: none;
+    border-radius: 999px;
+    background: var(--color-turquoise);
+    filter: none;
+}/* END CLASS STATUS NAV *********************************************/
+
+
+/* ***  CLASS STATUS PANELS *************************************** */
+.classes-status-panel {
+    width: 100%;
+    min-width: 0;
+    padding: 0 0.25rem 0.25rem;
+    /* border: 1px solid rgba(var(--color-teal-rgb), 0.18); */
+    border-top: none;
+    border-radius: 8px;
+    /* background: rgba(var(--color-teal-rgb), 0.2);
+    box-shadow:
+        0 8px 20px rgba(var(--color-shadow-rgba)); */
+}
+
+/* *************************************************************** */
+
+
+/* ****  CLASS FILTER BTN **************************************** */
+.classes-filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Mobile filter */
+.classes-status-panel .mobile-filter-select {
+    margin-bottom: 1rem;
+    display: none;
+}
+
+.classes-filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 60px;
+    border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
+    border-radius: 8px;
+    background: rgba(var(--color-mist-rgb), 0.95);
+    color: var(--color-navy);
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    min-width: 0;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* .classes-filter-btn i {
+    font-size: 1.3rem;
+    color: var(--color-turquoise);
+} */
+
+.classes-filter-btn strong {
+    font-size: 1.2rem;
+    background: rgba(var(--color-teal-rgb), 0.55);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: var(--color-whitesmoke);
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    height: 35px;
+    width: 40px;
+}
+
+.classes-filter-btn:hover {
+    background: rgba(var(--color-icy-rgb), 0.75);
+    border-color: rgba(var(--color-teal-rgb), 0.45);
+
+    color: var(--color-navy);
+}
+
+.classes-filter-btn.active {
+    background: rgba(var(--color-cyan-rgb), 0.25);
+    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    color: var(--color-whitesmoke);
+}
+
+
 /* ROW DATA: COURSE STATISTICS */
 /* For COURSE & CLASS List */
 .course-stat {
@@ -611,6 +546,82 @@ select:focus {
     width: 28px;
     margin-left: 0;
 }
+
+
+/* ******************************************************************** */
+/* ONLY teacher_reschedule_classes.html *********************************/
+.assigned-classes-filter-header strong {
+    background: rgba(var(--color-turquoise-rgb), 0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: var(--color-whitesmoke);
+    font-family: "Big Shoulders Display", sans-serif;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    height: 35px;
+    width: 35px;
+    font-size: 1.8rem;
+    margin-left: 1.5rem;
+    text-align: center !important;
+}
+
+
+/* SELECT SMALLER DEVICES **********************************/
+select {
+    display: none;
+    width: 98% !important;
+    margin: 0 auto .25rem;
+    /* max-width: 320px; */
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: outset 1px var(--color-teal);
+    border-radius: 8px;
+    background-color: var(--color-teal);
+    color: var(--color-whitesmoke);
+    /* color-scheme: ; */
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+select option {
+    background: var(--color-whitesmoke);
+    color: var(--color-navy);
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+select:focus {
+    border: 1px outset #05ffcd !important;
+    outline: none;
+}
+
+.mobile-filter-select {
+    /* Remove browser arrow */
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    /* Leave room for w3.org chevron */
+    padding-right: 3rem !important;
+    /* Custom light chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F5FFFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 36px !important;
+    cursor: pointer !important;
+}
+
 
 
 
@@ -733,8 +744,8 @@ select:focus {
    Keep this at the end of the CSS file
 ======================================================= */
 
-.classes-list,
-/* .classes-list .all-assigned-classes, */
+.classes-list-page ,
+/* .classes-list-page  .all-assigned-classes, */
 .wrapper-assigned-classes-panel,
 .assigned-classes-panel,
 .classes-panel-collapse {
@@ -750,24 +761,24 @@ select:focus {
 
 /* Chrome, Edge and Safari */
 
-.classes-list .assigned-courses-list::-webkit-scrollbar {
+.classes-list-page .assigned-courses-list::-webkit-scrollbar {
     width: auto;
     height: 14px;
 }
 
-.classes-list .assigned-courses-list::-webkit-scrollbar-track {
+.classes-list-page .assigned-courses-list::-webkit-scrollbar-track {
     background: var(--color-navy);
     border-radius: 999px;
 }
 
-.classes-list .assigned-courses-list::-webkit-scrollbar-thumb {
+.classes-list-page .assigned-courses-list::-webkit-scrollbar-thumb {
     min-width: 60px;
     background: var(--color-turquoise);
     border: 3px solid var(--color-navy);
     border-radius: 999px;
 }
 
-.classes-list .assigned-courses-list::-webkit-scrollbar-thumb:hover {
+.classes-list-page .assigned-courses-list::-webkit-scrollbar-thumb:hover {
     background: var(--color-icy);
 }
 

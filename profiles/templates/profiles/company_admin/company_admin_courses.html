@@ -21,37 +21,37 @@
     <header>
         <div class="row" >        
             <div class="col-12 ml-0 pl-0">
-                <h1>All Courses</h1>
+                <h1>{% trans 'All Company Courses' %}</h1>
             </div>
         </div>
         <hr>
     </header>
 
-    <p class="text-dark mb-5">Review all courses by their current status below.</p>
+    <p class="text-dark mb-5">{% trans 'Review all courses by their current status below' %}.</p>
 
     <div class="wrapper-assigned-courses-small-cards">
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Active</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Active' %}</span></div>
             <div class="card-body">{{ active_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Confirmed</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Confirmed' %}</span></div>
             <div class="card-body">{{ confirmed_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Paused</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Paused' %}</span></div>
             <div class="card-body">{{ paused_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>Cancelled</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>{% trans 'Cancelled' %}</span></div>
             <div class="card-body">{{ cancelled_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-solid fa-check-to-slot mr-2"></i>Completed</span></div>
+            <div class="card-header"><span><i class="fa-solid fa-check-to-slot mr-2"></i>{% trans 'Completed' %}</span></div>
             <div class="card-body">{{ completed_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>All Courses</span></div>
+            <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>{% trans 'All Status' %}</span></div>
             <div class="card-body">{{ courses|length }}</div>
         </div>
     </div>
@@ -66,124 +66,124 @@
 
                         <button type="button" class="course-status-btn active" data-status="active">
                             <!-- <i class="fa-regular fa-circle-play"></i> -->
-                            <span>Active</span>
+                            <span>{% trans 'Active' %}</span>
                             <strong>{{ active_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="confirmed">
                             <!-- <i class="fa-regular fa-circle-check"></i> -->
-                            <span>Confirmed</span>
+                            <span>{% trans 'Confirmed' %}</span>
                             <strong>{{ confirmed_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="paused">
                             <!-- <i class="fa-regular fa-circle-pause"></i> -->
-                            <span>Paused</span>
+                            <span>{% trans 'Paused' %}</span>
                             <strong>{{ paused_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="cancelled">
                             <!-- <i class="fa-regular fa-circle-xmark"></i> -->
-                            <span>Cancelled</span>
+                            <span>{% trans 'Cancelled' %}</span>
                             <strong>{{ cancelled_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="completed">
                             <!-- <i class="fa-regular fa-circle-xmark"></i> -->
-                            <span>Completed</span>
+                            <span>{% trans 'Completed' %}</span>
                             <strong>{{ completed_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="all">
                             <!-- <i class="fa-solid fa-border-all"></i> -->
-                            <span>All</span>
+                            <span>{% trans 'All Status' %}</span>
                             <strong>{{ courses|length }}</strong>
                         </button>
 
                     </div>
   
                     <select id="courseStatusFilter" class="course-status-select">
-                        <option value="active" selected>Active</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="paused">Paused</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="completed">Completed</option>
-                        <option value="all">All Status</option>
+                        <option value="active" selected>{% trans 'Active' %}</option>
+                        <option value="confirmed">{% trans 'Confirmed' %}</option>
+                        <option value="paused">{% trans 'Paused' %}</option>
+                        <option value="cancelled">{% trans 'Cancelled' %}</option>
+                        <option value="completed">{% trans 'Completed' %}</option>
+                        <option value="all">{% trans 'All Status' %}</option>
                     </select>
                 </div>            
             </div>
                 {% if courses|length == 0 %}
-                    <p class="p-3">No courses assigned yet.</p>
+                    <p class="p-3">{% trans 'No courses assigned yet to your company' %}.</p>
                 {% endif %}    
             <!-- COURSE & CLASS LIST -->
             <div class="assigned-courses-list">
     
                 {% for course in courses %}
                 <a href="{% url 'profiles:company_admin_course_details' course.id %}">
-                <!-- COURSE & CLASS ROW -->
-                <div class="assigned-course-row" data-status="{{ course.status }}">
+                    <!-- COURSE & CLASS ROW -->
+                    <div class="assigned-course-row" data-status="{{ course.status }}">
 
-                    <div class="course-main-info">
-                        {% if course.enrollment_count == 1 %}
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                        {% else %}
-                        <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
-                        {% endif %}
-                        <div>
-                            <h3>{{ course.name }}</h3>
-                            <span>{{ course.course_type }}</span> 
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                            {{ course.course_level|default:"Pending" }}</span>
-                    </div>
-
-                    <div class="course-list-status">
-                        <span class="status-dot status-{{ course.status }}"></span>
-                        <span class="status-text">
-                            {{ course.get_status_display }}
-                        </span>
-                    </div>
-
-                    <div class="course-list-date">
-                        <div class="icon">
-                            <i class="fa-solid fa-calendar-day"></i>
-                        </div>
-                        <div>
-                            <strong>{{ course.timetable_days_display }}</strong>
-                            <span>{{ course.timetable_times_display }}</span>
-                        </div>
-                    </div>
-
-                    <div class="course-list-student-num">
-                        <div class="icon">
-                            {% if course.enrollments.count == 1 %}
-                                <i class="fa-solid fa-user"></i>
-                            {% elif course.enrollments.count == 2 %}
-                                <i class="fa-solid fa-people-arrows"></i>
+                        <div class="course-main-info">
+                            {% if course.enrollment_count == 1 %}
+                            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
                             {% else %}
-                                <i class="fa-solid fa-users-line"></i>
+                            <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
                             {% endif %}
+                            <div>
+                                <h3>{{ course.name }}</h3>
+                                <span>{{ course.course_type }}</span> 
+                            </div>
                         </div>
-                        <strong>{{ course.enrollments.count }}</strong>   
-                    </div>
+                        
+                        <div>
+                            <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                                {{ course.course_level|default:"Pending" }}</span>
+                        </div>
 
-                    <div class="course-stat">
-                        <div
-                            class="completion-ring"
-                            style="--completion: {{ course.completion_percentage }};"
-                        >
-                            <span>{{ course.completion_percentage }}%</span>
+                        <div class="course-list-status">
+                            <span class="status-dot status-{{ course.status }}"></span>
+                            <span class="status-text">
+                                {{ course.get_status_display }}
+                            </span>
                         </div>
-                        <span>{% trans 'Completion' %}</span>
+
+                        <div class="course-list-date">
+                            <div class="icon">
+                                <i class="fa-solid fa-calendar-day"></i>
+                            </div>
+                            <div>
+                                <strong>{{ course.timetable_days_display }}</strong>
+                                <span>{{ course.timetable_times_display }}</span>
+                            </div>
+                        </div>
+
+                        <div class="course-list-student-num">
+                            <div class="icon">
+                                {% if course.enrollments.count == 1 %}
+                                    <i class="fa-solid fa-user"></i>
+                                {% elif course.enrollments.count == 2 %}
+                                    <i class="fa-solid fa-people-arrows"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-users-line"></i>
+                                {% endif %}
+                            </div>
+                            <strong>{{ course.enrollments.count }}</strong>   
+                        </div>
+
+                        <div class="course-stat">
+                            <div
+                                class="completion-ring"
+                                style="--completion: {{ course.completion_percentage }};"
+                            >
+                                <span>{{ course.completion_percentage }}%</span>
+                            </div>
+                            <span>{% trans 'Completion' %}</span>
+                        </div>
                     </div>
-                </div>
                 </a>
                 {% endfor %}
                 <p id="noCoursesFilterMessage" class="text-grey p-3 course-hidden" hidden>
-                    No courses to show for this filter.
+                    {% trans 'No courses to show for this filter' %}.
                 </p>
             </div>
         </div>

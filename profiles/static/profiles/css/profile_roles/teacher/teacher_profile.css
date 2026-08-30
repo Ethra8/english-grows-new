@@ -441,6 +441,13 @@ h2 {
     gap: 0.25rem;
 }
 
+.attendance-filter-btn.active,
+.attendance-filter-btn:hover {
+    background: rgba(var(--color-cyan-rgb), 0.25);
+    border-color: var(--color-turquoise);
+    /* color: var(--color-whitesmoke); */
+}
+
 .assigned-courses-header select {
     display: none;
     width: 100% !important;
@@ -1882,8 +1889,8 @@ h2 {
    Keep this at the end of the CSS file
 ======================================================= */
 
-.classes-list,
-/* .classes-list .all-assigned-classes, */
+.classes-list-page ,
+/* .classes-list-page  .all-assigned-classes, */
 .wrapper-assigned-classes-panel,
 .assigned-classes-panel,
 .classes-panel-collapse,

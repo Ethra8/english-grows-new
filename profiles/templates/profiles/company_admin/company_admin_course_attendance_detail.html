@@ -118,7 +118,7 @@
                 {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
         </div>    
         <div>
-            <strong>{{ total_count }} employee record{{ total_count|pluralize }}</strong> saved for this class session.
+            <strong>{{ total_count }} {% trans 'employee record' %}{{ total_count|pluralize }}</strong> {% trans 'saved for this class session' %}.
         </div>
     </div>
 
@@ -210,7 +210,7 @@
 
                 </div>
             {% empty %}
-                <p class="attendance-empty-message">No attendance has been registered for this class session yet.</p>
+                <p class="attendance-empty-message">{% trans 'No submitted attendance records found' %}.</p>
             {% endfor %}
 
         </div>
