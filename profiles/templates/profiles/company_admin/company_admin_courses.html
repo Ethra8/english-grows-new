@@ -14,7 +14,7 @@
 
 {% block profile_content %}
 
-<section class="assigned-courses-page profile-page company-admin-courses">    
+<section class="assigned-courses-page profile-page company-admin-courses notranslate" translate="no">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
@@ -31,15 +31,15 @@
 
     <div class="wrapper-assigned-courses-small-cards">
         <div class="card">
-            <div class="card-header"><span><i class="fa-regular fa-circle-play mr-2"></i>Active</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Active</span></div>
             <div class="card-body">{{ active_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-regular fa-circle-check mr-2"></i>Confirmed</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Confirmed</span></div>
             <div class="card-body">{{ confirmed_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-regular fa-circle-pause mr-2"></i>Paused</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Paused</span></div>
             <div class="card-body">{{ paused_courses }}</div>
         </div>
         <div class="card">
@@ -177,7 +177,7 @@
                         >
                             <span>{{ course.completion_percentage }}%</span>
                         </div>
-                        <span>Completion</span>
+                        <span>{% trans 'Completion' %}</span>
                     </div>
                 </div>
                 </a>

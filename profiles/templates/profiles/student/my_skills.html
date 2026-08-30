@@ -33,7 +33,7 @@
                         {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
                         <i class="fa-solid fa-user-tie"></i>
                         {% else %}
-                        <i class="fa-regular fa-user"></i>
+                        <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
                         {% endif %}
                     {% endif %}
                     <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
@@ -46,7 +46,7 @@
                 <div class="header-level">      
 
                     <div class="level-pill larger-devs">
-                        <span class="current-level-label">Level</span>
+                        <span class="current-level-label">{% trans 'Level' %}</span>
                         <span class="current-level-value notranslate" translate="no">
                         {% if student_profile.current_level %}    
                             {{ student_profile.get_current_level_display }}
@@ -56,7 +56,7 @@
                         </span>
                     </div>
                     <div class="level-pill smaller-devs">
-                        <span class="current-level-label">Level</span>
+                        <span class="current-level-label">{% trans 'Level' %}</span>
                         <span class="current-level-value notranslate" translate="no">
                         {% if student_profile.current_level %}    
                             {{ student_profile.current_level }}

@@ -12,7 +12,7 @@
 
 {% block profile_content %}
 
-<section class="company-admin-attendance-page profile-page all-course-attendance">
+<section class="company-admin-attendance-page profile-page all-course-attendance notranslate" translate="no">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -53,7 +53,7 @@
             </div>
 
             <div>
-                <span>Employees Enrolled</span>
+                <span>{% trans 'Employees' %}</span>
                 <strong>{{ total_employees }}</strong>
             </div>
         </div>
@@ -264,7 +264,7 @@
                                 <strong>{{ course.name }}</strong>
                                 <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-1"></i>{{ course.course_type.name|default:"Course type pending" }}</span>
                                 <!-- <small>
-                                    <i class="fa-solid fa-chalkboard-user mr-2"></i>
+                                    <img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
                                     {% if course.teacher %}
                                         {{ course.teacher.get_full_name|default:course.teacher.email }}
                                     {% else %}

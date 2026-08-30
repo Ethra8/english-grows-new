@@ -19,7 +19,7 @@
 
 {% block profile_content %}
 
-<section class="course-details-page course-details-page profile-page notranslate" translate="no">    
+<section class="course-details-page profile-page notranslate" translate="no">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -48,7 +48,7 @@
 
                     <div class="course-selector-label">
                         <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                        <span>Course</span>
+                        <span>{% trans 'Course' %}</span>
                     </div>
 
 
@@ -81,7 +81,7 @@
 
                                 {% else %}
 
-                                    <span>Course</span>
+                                    <span>{% trans 'Course' %}</span>
 
                                 {% endif %}
 
@@ -166,7 +166,7 @@
 
                                 {% else %}
 
-                                    <span>Course</span>
+                                    <span>{% trans 'Course' %}</span>
 
                                 {% endif %}
 
@@ -220,7 +220,7 @@
                 </span>
                 <span>|</span>
                 <span class="text-muted">
-                    <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>
+                    <img src="{% static 'icons/course_total_hours_slate_icon.png' %}" alt="" width="32" aria-hidden="true" class="mr-2 mb-1">
                     {{ course.total_hours|clean_decimal }} h.
                 </span>
 
@@ -237,21 +237,21 @@
 
             <div class="col-12 level-pill">
                 <span class="current-level-label">
-                    Level</span>
+                    {% trans 'Level' %}</span>
                 <span class="current-level-value">
-                    {{ course.course_level|default:"Level Pending" }}</span>
+                    {{ course.course_level|default:"Pending" }}</span>
             </div>
 
             <span class="status-badge status-course">
 
                 {% if course.status == 'confirmed' %}
-                    <i class="fa-regular fa-circle-check mr-2"></i>
+                    <img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'active' %}
-                    <i class="fa-regular fa-circle-play mr-2"></i>
+                    <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'completed' %}
-                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                    <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'paused' %}
-                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                    <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'cancelled' %}
                     <i class="fa-regular fa-circle-xmark mr-2"></i>
                 {% endif %}
@@ -263,7 +263,7 @@
         </div>
     </header>
         
-    <hr>
+    <!-- <hr> -->
 
     <div class="course-header-meta-row">
 
@@ -278,10 +278,10 @@
                 {% endif %}        
             </div>
             <div class="course-meta-text">
-                <strong>Employees Enrolled
+                <strong>{% trans 'Registrations' %}
                     <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                 </strong>
-                <span>{{ enrollments|length }}</span>
+                <span>{{ enrollments|length }} <small>{% trans 'enrolled' %}</small></span>
             </div>
         </a>
 
@@ -289,10 +289,10 @@
             <div class="metric-icon completion-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
-                <i class="fa-solid fa-clipboard-check"></i>
+                <img src="{% static 'icons/clipboard_check_turquoise_icon.png' %}" alt="" width="18" aria-hidden="true">
             </div>
             <div class="course-meta-text">
-                <strong>Attendance
+                <strong>{% trans 'Attendance' %}
                     <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="icon" width="12px" height="18px" class="ml-2">
                 </strong>
                 <span>{{ average_attendance }} %</span>
@@ -306,8 +306,8 @@
                 <i class="fa-solid fa-chalkboard"></i>
             </div>
             <div class="course-meta-text">
-                <strong>Completion</strong>
-                <span>{{ completion_percentage }} %</span>
+                <strong>{% trans 'Progress' %}</strong>
+                <span>{{ completion_percentage }} % <small>{% trans 'completed' %}</small></span>
             </div>
         </div>
 
@@ -321,13 +321,13 @@
    
                 <div class="course-details-card">
                     
-                    <h3><i class="fa-regular fa-calendar-days mr-3 "></i>Dates & Timetable</h3>
+                    <h3>{% trans 'Dates & Timetable' %}</h3>
                     
                     <div class="course-detail-grid">          
                         <div class="course-detail-item">
 
                             <div class="detail-row">
-                                <span class="notranslate" translate="no">
+                                <span>
                                     <i class="fa-regular fa-clock mr-2"></i>
                                     {% trans 'Timetable' %}:
                                 </span>
@@ -339,14 +339,15 @@
                                             {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
                                         {% endfor %}
                                     {% else %}
-                                        Not assigned
+                                        {% trans 'Pending' %}
                                     {% endif %}
                                 </span>
                             </div>
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-regular fa-calendar-check mr-2"></i>
-                                    Start Date:
+                                    <!-- <i class="fa-regular fa-calendar-check mr-2"></i> -->
+                                    <img src="{% static 'icons/start_date_teal_icon.png' %}" alt="" width="16" aria-hidden="true" class="mr-2 mb-1">
+                                    {% trans 'Start Date' %}:
                                 </span>
                                 <span>
                                     {{ course.start_date|date:"D, j M 'y"|default:"Pending" }}
@@ -354,8 +355,8 @@
                             </div>
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-regular fa-calendar-xmark mr-2"></i>
-                                    End Date:
+                                    <img src="{% static 'icons/end_date_teal_icon.png' %}" alt="" width="16" aria-hidden="true" class="mr-2 mb-1">
+                                    {% trans 'End Date' %}:
                                 </span>
                                 <span>
                                     {{ course.end_date|date:"D, j M 'y"|default:"Pending" }}
@@ -363,17 +364,17 @@
                             </div>
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-regular fa-hourglass mr-2"></i>
-                                    Class Duration:
+                                    <img src="{% static 'icons/class_duration_teal_icon.png' %}" alt="" width="16" aria-hidden="true" class="mr-2 mb-1">
+                                    {% trans 'Class Duration' %}:
                                 </span>
                                 <span>{{ course.class_duration_display|default:"Not assigned" }}</span>
                             </div>
 
                             {% if course.has_short_final_class %}
-                                <div class="detail-row">
+                                <div id="short-final-class" class="detail-row">
                                     <span>
-                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                                        Last Class Duration:
+                                    <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                        {% trans 'Last Class Duration' %}:
                                     </span>
                                     <span>{{ course.final_class_duration_display }}</span>
                                 </div>
@@ -390,14 +391,14 @@
 
                 <div class="course-info-card">
                     
-                    <h3><i class="fa-solid fa-circle-info mr-3"></i>General Info</h3>
+                    <h3>{% trans 'General Info' %}</h3>
                     <div class="course-detail-grid">
                         <div class="course-detail-item">
 
                             <div class="detail-row">
                                 <span>
                                     <i class="fa-solid fa-user-graduate mr-2"></i>
-                                    Teacher:
+                                    {% trans 'Teacher' %}:
                                 </span>
                                 <span><strong>{{ course.teacher.first_name|default:"Not assigned yet" }} {{ course.teacher.last_name }}</strong>
                                     <br><a href="mailto:{{ course.teacher.email }}">{{ course.teacher.email }}</a>
@@ -405,35 +406,40 @@
                             </div>
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-arrows-rotate mr-2"></i>
-                                    Total Hours:
+                                    <!-- <i class="fa-solid fa-arrows-rotate mr-2"></i> -->
+                                    <img src="{% static 'icons/course_total_hours_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                    {% trans 'Total Hours' %}:
                                 </span>
                                 <span>{{ course.total_hours|clean_decimal }} h.</span>
                             </div>
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-chalkboard-user mr-2"></i>
-                                    Total Classes:
+                                    <img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                    {% trans 'Total Classes' %}:
                                 </span>
+                                {% if course.number_of_classes %}
                                 <span>{{ course.number_of_classes }}</span>
+                                {% else %}
+                                {% trans 'Pending' %}
+                                {% endif %}
                             </div>
 
                             <div class="detail-row">
                                 <span>
-                                    <i class="fa-solid fa-rotate-left mr-2"></i>
-                                    Completed Classes:
+                                    <img src="{% static 'icons/classes_completed_icons.png' %}" alt="" width="32" aria-hidden="true" class="mb-1">
+                                    {% trans 'Completed Classes' %}:
                                 </span>
-                                <span>{{ completed_classes|default:"0" }}</span>
+                                <span>{{ completed_classes|default:"0" }} / {{ course.number_of_classes }}</span>
                             </div>
 
-                            <div class="detail-row">
+                            <!-- <div class="detail-row">
                                 <span>
                                     <i class="fa-solid fa-rotate-right mr-2"></i>
-                                    Remaining Classes:
+                                    {% trans 'Remaining Classes' %}:
                                 </span>
                                 <span>{{ remaining_classes|default:"0" }}</span>
-                            </div>
+                            </div> -->
 
                         </div>                
                     </div>

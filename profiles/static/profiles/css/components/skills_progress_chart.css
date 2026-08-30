@@ -66,7 +66,7 @@
 }
 
 .skills-chart-header h2::after {
-    content: "\e098"; /* fa-arrow-trend-up */
+    /* content: "\e098";
     font-family: "Font Awesome 6 Free";
     position: absolute;
     top: 5px;
@@ -78,7 +78,20 @@
     font-weight: 900;
     font-size: 2.5rem;
     color: rgba(var(--color-turquoise-rgb), 0.3);
-    rotate: calc(0deg);
+    rotate: calc(0deg); */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1%;
+    width: 52px;
+    height: 52px;
+    transform: rotate(-12deg);
+    background-image: url(/static/icons/progress_chart_icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.3;
+
 }
 
 .skills-chart-header .header-score {

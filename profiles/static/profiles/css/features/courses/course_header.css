@@ -1,7 +1,7 @@
 .course-details-page header {
     width: 100%;
     margin-top: 2rem;
-    border: 1px solid rgba(var(--color-teal-rgb), 0.1);
+    border: 2px solid rgba(var(--color-teal-rgb), 0.3);
     background-color: rgba(var(--color-teal-rgb), 0.15);
     border-radius: 8px;
     padding: 0;
@@ -19,12 +19,18 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0 4%;
+    padding: 0 26px;
 }
 
+/* Course Level in header */
 .course-details-page header > div:nth-child(3) {
-    padding: 0 4%;
-}
+    gap: 1.95rem;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    margin: 1rem 0 1.5rem;
+    padding: 0 26px;
+}    
 
 /* MY-COURSE  Header */
 #my-course .course-details-page header {
@@ -55,7 +61,7 @@
     padding: 0.75rem 0.75rem 0.75rem 1.2rem;
 }
 
-.course-selector-form img {
+.course-selector-label img {
     display: flex;
     align-items: center;
     align-self: center;
@@ -76,11 +82,6 @@
     font-weight: 500;
     width: 250px;
     max-width: 100%;
-}
-
-.course-selector-label i {
-    color: var(--color-teal);
-    font-size: 1rem;
 }
 
 .course-select-wrapper {
@@ -112,7 +113,7 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    padding: 0.45rem 3rem 0.45rem 1.1rem;
+    padding: 0.45rem 0.75rem 0.45rem 1.1rem;
     color: var(--color-navy);
     border: 1px solid var(--color-turquoise);
     border-radius: 8px;
@@ -136,17 +137,17 @@
         0 6px 16px rgba(var(--color-navy-rgb), 0.22);
 }
 
-/* .course-select-arrow {
+.course-select-arrow {
     position: absolute;
     right: 1rem;
     top: 30%;
-    color: var(--color-teal);
+    /* color: var(--color-teal);
     font-size: 1rem;
-    pointer-events: none;
+    pointer-events: none; */
     transition: transform 0.2s ease;
-} */
+}
 
-.course-select-wrapper:focus-within .course-select-arrow {
+.course-dropdown.open .course-select-arrow  {
     transform: rotate(180deg);
 }
 
@@ -191,12 +192,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     flex: 1 1 auto;
     width: 100%;
     max-width: 100%;
     min-width: 0;
-
+    margin-right: 0.5rem;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -300,13 +300,6 @@
 }
 
 /* LEVEL & Course_STATUS BADGES */
-.course-details-page header > div:nth-child(3) {
-    gap: 1.95rem;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    margin: 1rem 0 1.5rem;
-}    
 
 
 
@@ -352,6 +345,10 @@
     .course-details-page header h2 span:nth-of-type(2) {
         display: none;
         visibility: hidden;
+    }
+
+    .course-select-wrapper.course-dropdown {
+        max-width: 100%;
     }
 
 }

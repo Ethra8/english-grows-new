@@ -34,6 +34,8 @@ msgstr "Empleado/a"
 msgid "Profile photo"
 msgstr "Foto de Perfil"
 
+msgid "Company"
+msgstr "Empresa"
 
 
 msgid "Dashboard"
@@ -185,18 +187,22 @@ msgstr "Evaluación pendiente"
 msgid "Progress"
 msgstr "Progreso"
 
+msgid "completed"
+msgstr "completado"
+
+
 msgid "Assessment"
 msgstr "Evaluaciones"
 
 
 msgid "Timetable"
-msgstr "Horarios"
+msgstr "Horario"
 
 msgid "Dates"
 msgstr "Fechas"
 
 msgid "Dates & Timetable"
-msgstr "Fechas y Horarios"
+msgstr "Fechas y Horario"
 
 msgid "Completed Hours"
 msgstr "Horas Completadas"
@@ -234,6 +240,8 @@ msgid "Focus areas"
 msgstr "Areas por desarrollar"
 
 
+msgid "Registrations"
+msgstr "Inscripciones"
 
 msgid "Rate"
 msgstr "Porcentaje"
@@ -286,3 +294,55 @@ msgstr "No hay ninguna inscripción a un curso todavía"
 msgid "Your course information will appear here once you are enrolled in a course"
 msgstr "Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
 
+msgid "General Info"
+msgstr "Info General"
+
+msgid "Employees"
+msgstr "Empleados"
+
+msgid "Sort by"
+msgstr "Ordenar por"
+
+msgid "Name A-Z"
+msgstr "Nombre A-Z"
+
+msgid "Email all"
+msgstr "Email a todos"
+
+
+
+msgid "Completion"
+msgstr "Completado"
+
+msgid "Learners"
+msgstr "Estudiantes"
+
+msgid "enrolled"
+msgstr "inscritos"
+
+msgid "Start Date"
+msgstr "Fecha Inicio"
+
+msgid "End Date"
+msgstr "Fecha Finalización"
+
+msgid "Class Duration"
+msgstr "Duración Clase"
+
+msgid "Last Class Duration"
+msgstr "Última Clase"
+
+msgid "Teacher"
+msgstr "Profesor/a"
+
+msgid "Total Hours"
+msgstr "Total Horas"
+
+msgid "Total Classes"
+msgstr "Total Clases"
+
+msgid "Completed Classes"
+msgstr "Clases Completadas"
+
+msgid "Remaining Classes"
+msgstr "inscritos"

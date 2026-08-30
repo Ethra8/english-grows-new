@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    margin: 3rem 0;
+    margin: 5rem 0 3rem;
 }
 
 .meta-card,
@@ -20,9 +20,9 @@
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
-.course-meta-card {
+/* .course-meta-card {
     padding: 0.35rem 0.35rem 0.35rem 2rem;
-}
+} */
 
 
 .meta-card::after,
@@ -150,7 +150,8 @@
     background: #043f68;
 }
 
-.metric-icon i {
+.metric-icon i,
+.metric-icon img {
     position: relative;
     z-index: 2;
     color: var(--color-turquoise);

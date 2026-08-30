@@ -58,6 +58,7 @@
     padding: 0.5rem 1rem;
     border: 1px solid #dfe5e4;
     box-shadow: 0 1px 2px rgba(var(--color-shadow-rgba));
+    margin: 0 0 1rem;
 }
 
 .course-detail-item span {
@@ -82,10 +83,17 @@
     display: grid;
     grid-template-columns: minmax(190px, 0.75fr) minmax(220px, 0.75fr);
     align-items: center;
+    align-content: center;
     width: 100%;
     gap: 0;
     padding: 0.75rem 0;
     border-bottom: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+}
+
+#short-final-class {
+    background-color: rgba(var(--color-steel-rgb), 0.1);
+    border-radius: 8px;
+    padding: 0.5rem;
 }
 
 .course-details-card,
@@ -110,16 +118,48 @@
 
 .course-details-card h3,
 .course-info-card h3 {
+    position: relative;
     display: flex;
     align-items: center;
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
-    padding: 0.25rem 1.5rem;
-    background: linear-gradient(214deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    padding: 0.25rem 1.5rem 0.25rem 4.5rem;    
+    background: linear-gradient(214deg, rgba(var(--color-teal-rgb), 0.85), rgba(var(--color-navy-rgb), 0.95));
     border-radius: 999px;
     height: 52px;
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
+    overflow: hidden;
+}
+
+.course-info-card h3::after {
+    content: "";
+    position: absolute;
+    top: 62%;
+    left: -1%;
+    width: 70px;
+    height: 70px;
+    transform: translateY(-50%) rotate(-15deg);
+    background-image: url(/static/icons/metacard_info_turquoise_icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.3;
+}
+
+.course-details-card h3::after {
+    content: "";
+    position: absolute;
+    top: 58%;
+    left: 0;
+    width: 55px;
+    height: 55px;
+    transform: translateY(-50%) rotate(-15deg);
+    background-image: url(/static/icons/metacard_calendar_turquoise_icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.3;
 }
 
 .course-details-page .student-row-parent {

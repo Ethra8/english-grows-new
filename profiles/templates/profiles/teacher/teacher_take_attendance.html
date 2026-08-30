@@ -17,7 +17,7 @@
 
 {% block profile_content %}
 
-<section class="course-details-page course-details-page take-attendance-page profile-page">
+<section class="course-details-page take-attendance-page profile-page notranslate" translate="no">
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
 
@@ -40,7 +40,7 @@
                 <h2>
                     <span class="text-muted"><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3"></i>{{ class_session.course.course_type.name|default:"Course Type" }}</span>
                     <span>|</span>
-                    <span class="text-muted"><i class="fa-solid fa-clock-rotate-left fa-flip-horizontal mr-3"></i>{{ class_session.course.total_hours|clean_decimal }} h.</span>
+                    <span class="text-muted"><img src="{% static 'icons/course_total_hours_slate_icon.png' %}" alt="" width="32" aria-hidden="true" class="mr-2 mb-1">{{ class_session.course.total_hours|clean_decimal }} h.</span>
                 </h2>
 
             </div>
@@ -54,13 +54,13 @@
             </div>
             <span class="status-badge status-course">
                 {% if class_session.course.status == 'confirmed' %}
-                    <i class="fa-regular fa-circle-check mr-2"></i>
+                    <img src="{% static 'icons/course_status_confirmed_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif class_session.course.status == 'active' %}
-                    <i class="fa-regular fa-circle-play mr-2"></i>
+                    <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif class_session.course.status == 'completed' %}
-                    <i class="fa-solid fa-hourglass-end mr-2"></i>
+                    <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2">
                 {% elif class_session.course.status == 'paused' %}
-                    <i class="fa-regular fa-circle-pause mr-2"></i>
+                    <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif class_session.course.status == 'cancelled' %}
                     <i class="fa-regular fa-circle-xmark mr-2"></i>
                 {% endif %}

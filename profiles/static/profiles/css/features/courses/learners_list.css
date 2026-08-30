@@ -257,6 +257,10 @@ h3 > div {
 }
 
 
+/* Override for correct layout chevron-down from form */
+.course-select {
+    padding: 0.45rem 3.75rem 0.45rem 1.1rem;
+}
 
 @media (max-width: 1250px) {
 

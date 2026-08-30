@@ -16,7 +16,7 @@
 
 {% block profile_content %}
 
-<section class="company-admin-employees-list-page profile-page">    
+<section class="company-admin-employees-list-page profile-page notranslate" translate="no">    
     <div class="overlay-birds"></div>
     <div class="overlay-azure-mist"></div>
         
@@ -36,7 +36,7 @@
                 <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
             </div>
             <div class="meta-text">
-                <strong>Employees Enrolled</strong>
+                <strong>{% trans 'Employees' %}</strong>
                 <span>{{ total_employees|default:"0" }}</span>
             </div>
         </div>
@@ -58,7 +58,7 @@
 
                 <a href="?sort=level"
                 class="sort-option {% if sort_by == 'level' %}active{% endif %}">
-                    Level
+                    {% trans 'Level' %}
                 </a>
             </div>
 

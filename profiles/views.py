@@ -6664,14 +6664,67 @@ def company_admin_course_students_list(request, course_id):
     if not company:
         return redirect("home")
 
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        company=company,
+
+    # ---------------------------------------------------------
+    # AVAILABLE COURSES FOR SELECTOR
+    #
+    # Show ALL company courses regardless of status.
+    #
+    # Order:
+    # active
+    # confirmed
+    # paused
+    # completed
+    # cancelled
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(
+            company=company,
+        )
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
+
+
+    # ---------------------------------------------------------
+    # CURRENT COURSE
+    #
+    # The requested course must:
+    # - belong to the company admin's company
+    # - exist in the available course queryset
+    #
+    # Course remains accessible regardless of status.
+    # ---------------------------------------------------------
+    course = get_object_or_404(
+        available_courses,
+        id=course_id,
+    )
+
 
     # ---------------------------------------------------------
     # ENROLLMENTS
+    #
+    # All enrollments belonging to the currently selected
+    # course are displayed, regardless of enrollment status.
     # ---------------------------------------------------------
     enrollments = (
         course.enrollments
@@ -6682,16 +6735,24 @@ def company_admin_course_students_list(request, course_id):
         .annotate(
             sort_name=Lower(
                 Coalesce(
-                    NullIf("student__first_name", Value("")),
+                    NullIf(
+                        "student__first_name",
+                        Value(""),
+                    ),
                     "student__username",
                 )
             )
         )
     )
+
+
     # ---------------------------------------------------------
     # SORTING
     # ---------------------------------------------------------
-    sort_by = request.GET.get("sort", "name")
+    sort_by = request.GET.get(
+        "sort",
+        "name",
+    )
 
     if sort_by == "level":
         enrollments = enrollments.order_by(
@@ -6708,6 +6769,8 @@ def company_admin_course_students_list(request, course_id):
             "sort_name",
             "student__last_name",
         )
+
+
     # ---------------------------------------------------------
     # COURSE SESSIONS
     # ---------------------------------------------------------
@@ -6717,13 +6780,18 @@ def company_admin_course_students_list(request, course_id):
         .order_by("start_time")
     )
 
+
     # ---------------------------------------------------------
     # COURSE PROGRESS
+    #
+    # Uses the status-based Course properties established
+    # in the new business logic.
     # ---------------------------------------------------------
     total_classes = course.total_sessions
     completed_classes = course.completed_sessions
     remaining_classes = course.remaining_sessions
     completion_percentage = course.completion_percentage
+
 
     # ---------------------------------------------------------
     # AVERAGE ATTENDANCE
@@ -6751,6 +6819,7 @@ def company_admin_course_students_list(request, course_id):
             / len(attendance_percentages)
         )
 
+
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
@@ -6775,6 +6844,7 @@ def company_admin_course_students_list(request, course_id):
             "end": end,
         })
 
+
     # ---------------------------------------------------------
     # EMAIL ALL STUDENTS
     # ---------------------------------------------------------
@@ -6788,13 +6858,21 @@ def company_admin_course_students_list(request, course_id):
         student_emails
     )
 
+
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
+
+        # Current selected course
         "course": course,
+
+        # All company courses for course selector
+        "available_courses": available_courses,
+
+        # Current course data
         "enrollments": enrollments,
         "sessions": sessions,
         "sort_by": sort_by,

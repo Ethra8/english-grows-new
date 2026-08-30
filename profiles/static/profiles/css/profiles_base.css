@@ -469,6 +469,7 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.status-course {
+    position: relative;
     display:flex;
     align-content: center;
     align-items: center;
@@ -479,9 +480,11 @@ div:has(> .student-action-btn) {
     border-radius: 999px;
     height: 38px;
     max-height: 38px;
+    padding: .2rem .75rem 0.2rem 0.5rem;
 }
 
-.status-badge.status-course i {
+.status-badge.status-course i
+.status-badge.status-course img {
     color: var(--color-navy);
     font-size: 1.2rem;
 }

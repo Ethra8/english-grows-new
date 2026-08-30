@@ -615,7 +615,7 @@ footer .topage-link:hover {
 
 /* custom fonts */
 .text-muted {
-    color: var(--color-steel);
+    color: var(--color-slate) !important;
 }
 
 .text-grey {
