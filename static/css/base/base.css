@@ -1355,7 +1355,7 @@ span.vertical-line {
     }
 
     .nav-language-selector {
-        margin-left: auto;
+        margin: 0 0 0 auto;
     }
 
     #index {
