@@ -90,7 +90,8 @@
 /* Company admin (no reschedule btn) */
 .assigned-class-row {
     display: grid;
-    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr);    
+    grid-template-columns: minmax(200px, 1fr) minmax(50px, 0.2fr) minmax(100px, 0.75fr) minmax(100px, 0.5fr);    
+    /* grid-template-columns: minmax(420px, 1fr) minmax(200px, 1fr) minmax(150px, 0.75fr);     */
     align-items: center;
     gap: 1rem;
     padding: 0.5rem 1.3rem;
@@ -122,22 +123,45 @@
 /* For CLASS List */
 .class-list-course {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: center;
+    align-self: center;
+    gap: 0.75rem;
+}
+
+.class-list-course  {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
     align-items: center;
-    gap: 1.3rem;
+}
+
+.class-list-course div {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Group-name */
-.class-list-course h3 {
+.assigned-classes-list a strong {
     font-weight: 500;
     color: var(--color-navy);
     margin: 0;
     font-family: "Big Shoulders Display", sans-serif;
     transition: all 0.2s ease;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
-.class-list-course h3:hover {
+.class-list-course a strong:hover {
     font-weight: 600;
+}
+
+.class-list-course .level {
+    padding: 0.15rem 0.25rem;
+    color: var(--color-navy);
+    width: 46px;
+    height: 22px;
+    margin-top: 15%;
 }
 
 /* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
@@ -149,7 +173,6 @@
 
 /* ROW DATA: BUTTON at the end */
 .course-list-group-name > div:first-of-type,
-.class-list-course > div:first-of-type,
 .attendance-list .attendance-row > div:first-of-type {
     display: flex;
     flex-direction: row;
@@ -160,7 +183,7 @@
     gap: 0.5rem;
 }
 
-.class-list-course > div:first-of-type img,
+/* .class-list-course > div img, */
 .course-list-group-name > div:first-of-type img,
 .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
@@ -175,10 +198,11 @@
     justify-content: center;
 }
 
-.class-list-course > div:first-of-type span,
+.class-list-course span,
 .course-list-group-name > div:first-of-type span,
 .attendance-list .attendance-row > div:first-of-type span {
     color: var(--color-steel);
+    font-size: 1rem;
 }
 
 /* LEVEL CELL in DATA ROW */
@@ -192,9 +216,9 @@
     justify-content: center;
     }
 
-.assigned-class-row .level {
+/* .assigned-class-row .level {
     width: 46px;
-}
+} */
 
 /* DATES in ROW */
 .class-list-date {

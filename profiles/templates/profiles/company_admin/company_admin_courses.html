@@ -164,7 +164,7 @@
                                 {% elif course.enrollments.count == 2 %}
                                     <i class="fa-solid fa-people-arrows"></i>
                                 {% else %}
-                                    <i class="fa-solid fa-users-line"></i>
+                                    <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
                                 {% endif %}
                             </div>
                             <strong>{{ course.enrollments.count }}</strong>   

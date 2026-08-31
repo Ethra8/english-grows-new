@@ -1,7 +1,6 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load i18n %}
-{% load i18n %}
 
 {% load date_extras %}
 {% load course_extras %}
@@ -90,37 +89,26 @@
         </div>
     </header>
 
-
-    <!-- <div class="wrapper-attendance-course-info">
-        <p class="text-white notranslate" translate="no"><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
-            {% trans 'Lesson' %} {{ class_session.class_number }}</p>
-        <p class="text-white"><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
-            {{ class_session.start_time|date:"D, d M Y" }}</p>
-        <p class="text-white"><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
-            {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
-    </div> -->
-
     <div class="attendance-detail-card">
 
         <div class="attendance-detail-card-header">
-            <div>
-                <h3 class="notranslate" translate="no"><i class="fa-solid fa-clipboard-list"></i>{% trans 'Registered Attendance' %}</h3>
-            </div>
+            <h3>{% trans 'Registered Attendance' %}</h3>
         </div>
 
-    <div class="wrapper-attendance-course-info">
-        <div>
-            <p class="notranslate" translate="no"><strong><img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1"> 
-                {% trans 'Lesson' %} {{ class_session.class_number }}</strong></p>
-            <p><i class="fa-regular fa-calendar mr-3"></i>
-                {{ class_session.start_time|date:"D, d M Y" }}</p>
-            <p><i class="fa-regular fa-clock mr-3"></i>
-                {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
-        </div>    
-        <div>
-            <strong>{{ total_count }} {% trans 'employee record' %}{{ total_count|pluralize }}</strong> {% trans 'saved for this class session' %}.
+        <div class="wrapper-attendance-course-info">
+            <div>
+                <p><strong><img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1"> 
+                    {% trans 'Lesson' %} {{ class_session.class_number }}</strong></p>
+                <!-- <p><i class="fa-regular fa-calendar mr-3"></i> -->
+                    <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-2 mb-1">
+                    {{ class_session.start_time|date:"D, d M Y" }}</p>
+                <p><i class="fa-regular fa-clock mr-3"></i>
+                    {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+            </div>    
+            <div>
+                <strong>{{ total_count }} {% trans 'employee record' %}{{ total_count|pluralize }}</strong> {% trans 'saved for this class session' %}.
+            </div>
         </div>
-    </div>
 
         <div class="wrapper-attendance-summary-card">
 

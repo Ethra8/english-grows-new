@@ -172,7 +172,7 @@ h2 {
     gap: 1.3rem;
 }
 
-.class-list-course h3 {
+.class-list-course strong {
     font-weight: 500;
     color: var(--color-navy);
     margin: 0 0 .35rem;
@@ -181,7 +181,7 @@ h2 {
     transition: all 0.2s ease;
 }
 
-.class-list-course h3:hover {
+.class-list-course strong:hover {
     font-weight: 600;
 }
 

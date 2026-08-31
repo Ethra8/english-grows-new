@@ -941,41 +941,40 @@
 }
 
 .attendance-detail-card-header {
-    /* display: flex; */
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
+    position:relative;
+    overflow: hidden !important;
+}
+
+/* takes main styling from learners_list.css */
+.attendance-detail-card h3 {
+    position: relative;
     margin-bottom: 1.5rem;
+    padding: 0.75rem 1.1rem 0.75rem 3.5rem;
+    overflow: hidden;
+    isolation: isolate;
 }
 
-.attendance-detail-card-header h3 {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem 1.1rem 0.75rem 0.25rem;
+.attendance-detail-card h3::after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/icons/meta_register_attendance_record.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 10%;
+    left: -1%;
+    transform: rotate(12deg);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
 }
 
-.attendance-detail-card-header i {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-cyan-rgb), 0.8) 80%, rgba(var(--color-turquoise-rgb), 1) 100%);
-    border: 1px outset rgba(var(--color-turquoise-rgb), 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-whitesmoke);
-    font-size: 1.4rem;
-    flex-shrink: 0;
-}
-
+/* TAKE ATTENDANCE FORM ************************************** */
 .take-attendance-form .take-attendance-card-header p {
     margin: 0;
     color: var(--color-steel);
-}
-
-.attendance-detail-card-header p {
-    margin: 0;
-    color: var(--color-steel);
-    margin-bottom: 1rem;
 }
 
 .take-attendance-form .take-attendance-card-header span {
@@ -1610,8 +1609,7 @@
         width: 100%;
     }
 
-    .take-attendance-form .take-attendance-card-header p:first-child,
-    .attendance-detail-card-header p:first-child {
+    .take-attendance-form .take-attendance-card-header p:first-child {
         padding: 1rem;
     }
 
@@ -1634,10 +1632,10 @@
     |*** ATTENDANCE DETAIL Page  *************************|
     |*****************************************************/
     
-    .attendance-detail-card-header {
+    /* .attendance-detail-card-header {
         flex-direction: column;
         padding: 1rem;
-    }
+    } */
 
     .edit-attendance-btn {
         padding: 0.75rem;
@@ -1800,7 +1798,7 @@
 
     .take-attendance-card,
     .attendance-detail-card {
-        padding: 0.4rem;
+        padding: 1.6rem 0.4rem;
     }
 
 

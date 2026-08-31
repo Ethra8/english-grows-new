@@ -11,30 +11,11 @@
 >
 
     <div class="class-list-course">
-
-        <div class="class-list-course">
+            <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="46">
             <div>
-
-                {% if session.course.enrollments.count == 1 %}
-                    <img
-                        src="{% static 'icons/one_to_one_course_icon.png' %}"
-                        alt="icon"
-                    >
-                {% else %}
-                    <img
-                        src="{% static 'icons/group_course_icon.png' %}"
-                        alt="icon"
-                    >
-                {% endif %}
-
-                <div>
-                    <h3>{{ session.course.name }}</h3>
-                    <span>Lesson {{ session.class_number }}</span>
-                </div>
-
+                <strong>{{ session.course.name }}</strong>
+                <span>Lesson {{ session.class_number }}</span>
             </div>
-        </div>
-
     </div>
 
 
@@ -48,7 +29,8 @@
     <div class="class-list-date">
 
         <div class="icon">
-            <i class="fa-solid fa-calendar-day"></i>
+            <!-- <i class="fa-solid fa-calendar-day"></i> -->
+             <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22">
         </div>
 
         <div>
@@ -69,21 +51,8 @@
     <div class="class-list-student-num">
 
         <div class="icon">
-
-            {% if session.course.enrollments.count == 1 %}
-
-                <i class="fa-solid fa-user"></i>
-
-            {% elif session.course.enrollments.count == 2 %}
-
-                <i class="fa-solid fa-people-arrows"></i>
-
-            {% else %}
-
-                <i class="fa-solid fa-users-line"></i>
-
-            {% endif %}
-
+            <!-- <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26"> -->
+             <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
         </div>
 
         <strong>

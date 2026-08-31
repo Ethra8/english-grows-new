@@ -19,7 +19,7 @@
 
             <a href="{% url 'profiles:teacher_course_details' session.course.id %}">
                 <div>
-                    <h3>{{ session.course.name }}</h3>
+                    <strong>{{ session.course.name }}</strong>
                     <span>Lesson {{ session.class_number }}</span>
                 </div>
             </a>
@@ -57,7 +57,7 @@
             {% elif session.course.enrollments.count == 2 %}
                 <i class="fa-solid fa-people-arrows"></i>
             {% else %}
-                <i class="fa-solid fa-users-line"></i>
+                <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
             {% endif %}
         </div>
         <strong>{{ session.course.enrollments.count }}</strong>
