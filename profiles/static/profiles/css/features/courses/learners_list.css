@@ -171,8 +171,7 @@ h3 > div {
     box-shadow: 0 3px 3px rgba(var(--color-shadow-rgba));
 }
 
-.small-avatar,
-.small-avatar img {
+.small-avatar {
     width: 60px;
     height: 60px;
 }

@@ -59,8 +59,8 @@
     right: 15px;
 }
 
-.dashboard-meta-cards .meta-card.meta-attendance::after {
-    content: "\f46c"; /* fa-clipboard-check */
+/* .dashboard-meta-cards .meta-card.meta-attendance::after {
+    content: "\f46c"; 
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 5.5rem;
@@ -69,7 +69,7 @@
     top: 25px;
     right: -5px;
     rotate: calc(-15deg);
-}
+} */
 
 
 /* TODAY & TRAINING OVERVIEW Cards ***********/

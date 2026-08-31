@@ -156,9 +156,9 @@
                         <div class="student-main-info">
                             <div class="small-avatar">
                                 {% if enrollment.student.profile.profile_photo %}
-                                    <img src="{{ enrollment.student.profile.profile_photo.url }}" alt="{{ enrollment.student.get_full_name }}">
+                                    <img src="{{ enrollment.student.profile.profile_photo.url }}" alt="" aria-hidden="true" width="60">
                                 {% else %}
-                                    <i class="fa-solid fa-user"></i>
+                                    <img src="{% static 'icons/sidebar_no_photo_user_icon.png' %}" alt="" aria-hidden="true" width="60">
                                 {% endif %}
                             </div>
 

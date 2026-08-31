@@ -259,11 +259,7 @@
                             data-search="{{ submitted_class_session.employee_search_text|lower }}"
                         >
                             <div>
-                                {% if course.enrollment_count == 1 %}
-                                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
-                                {% else %}
-                                    <img src="{% static 'icons/group_course_icon.png' %}" alt="" aria-hidden="true">
-                                {% endif %}
+                                <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="46">
 
                                 <div class="attendance-class-info">
                                     <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>
@@ -272,7 +268,8 @@
 
                             <div class="class-list-date">
                                 <div class="icon">
-                                    <i class="fa-solid fa-calendar-day" aria-hidden="true"></i>
+                                    <!-- <i class="fa-solid fa-calendar-day" aria-hidden="true"></i> -->
+                                     <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22">
                                 </div>
                                 <div>
                                     <strong>{{ submitted_class_session.start_time|date:"D, d M" }}</strong>
@@ -282,7 +279,8 @@
 
                             <div class="class-list-attendance-rate">
                                 <div class="icon">
-                                    <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                    <!-- <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> -->
+                                     <img src="{% static 'icons/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16">
                                 </div>
                                 <div>
                                     <strong>{% trans 'Attendance' %}</strong><br>
@@ -292,7 +290,8 @@
 
                             <div class="class-list-student-num">
                                 <div class="icon">
-                                    <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                    <!-- <i class="fa-solid fa-users" aria-hidden="true"></i> -->
+                                    <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="24">
                                 </div>
                                 <div>
                                     <strong>{% trans 'Attended' context "attended class list" %}</strong>

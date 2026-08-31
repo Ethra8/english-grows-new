@@ -166,7 +166,7 @@ msgid "Completed Classes"
 msgstr "Clases Completadas"
 
 msgid "Attendance Rate"
-msgstr "Tasa de Asistencia"
+msgstr "Tasa Asistencia"
 
 msgid "This Week"
 msgstr "Esta Semana"
@@ -269,6 +269,11 @@ msgstr "C2 - Maestría"
 
 msgid "Attendance"
 msgstr "Asistencia"
+
+msgctxt "dashboard metacard"
+msgid "Attendance"
+msgstr "Asistencia"
+
 
 msgid "Registered Attendance"
 msgstr "Registro de Asistencia"
@@ -500,10 +505,10 @@ msgid "Review upcoming and past class sessions"
 msgstr "Revise y filtre todas las sesiones de clase pasadas y futuras"
 
 msgid "Class Sessions List"
-msgstr "Lista de Clases"
+msgstr "Lista Clases"
 
 msgid "Employees List"
-msgstr "Lista de Empleados"
+msgstr "Lista Empleados"
 
 msgid "No employees enrolled yet"
 msgstr "No hay ninguna inscripción activa en este momento"

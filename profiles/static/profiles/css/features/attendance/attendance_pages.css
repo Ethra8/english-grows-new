@@ -1387,7 +1387,7 @@
     align-items: flex-start;
 }
 
-.attendance-list .attendance-row > div:first-of-type img {
+/* .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
     height: 46px;
     background: var(--color-icy);
@@ -1398,7 +1398,7 @@
     align-items: center;
     align-self: center;
     justify-content: center;
-}
+} */
 
 .attendance-list .attendance-row > div:first-of-type span {
     color: var(--color-steel);

@@ -55,15 +55,19 @@
 }
 
 .meta-attendance::after {
-    content: "\f46c"; /* fa-clipboard-check */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.1);
+    content: "";
     position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
+    width: 110px;
+    height: 110px;
+    background-image: url("/static/icons/clipboard_check_turquoise_icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: -10%;
+    right: 1%;
+    transform: rotate(12deg);
+    opacity: 0.1;
+    pointer-events: none;
 }
 
 .meta-icon,
