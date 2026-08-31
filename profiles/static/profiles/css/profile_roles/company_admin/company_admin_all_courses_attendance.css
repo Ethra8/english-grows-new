@@ -7,7 +7,7 @@
     min-height: 100vh;
 }
 
-.company-admin-attendance-page > *:not(.overlay-birds):not(.overlay-azure-mist) {
+.company-admin-attendance-page > *:not(.overlay-globe):not(.overlay-mist) {
     position: relative;
     z-index: 2;
 }

@@ -106,6 +106,13 @@ msgstr "Calendario"
 msgid "My Performance"
 msgstr "Mi Progreso"
 
+msgid "Employee Performance"
+msgstr "Rendimiento de Empleados"
+
+msgid "Review all employees' individual performance across different areas"
+msgstr "Revise el rendimiento y progreso individual de cada empleado"
+
+
 msgid "Materials"
 msgstr "Materiales"
 
@@ -153,7 +160,7 @@ msgid "Weekly & monthly performance"
 msgstr "Rendimiento semanal y mensual"
 
 msgid "Total Classes"
-msgstr "Total Clases"
+msgstr "Clases Totales"
 
 msgid "Completed Classes"
 msgstr "Clases Completadas"
@@ -498,23 +505,30 @@ msgstr "Lista de Clases"
 msgid "Employees List"
 msgstr "Lista de Empleados"
 
+msgid "No employees enrolled yet"
+msgstr "No hay ninguna inscripción activa en este momento"
 
 
 msgctxt "admin dashboard courses meta singular"
-msgid "Active"
-msgstr "Activo"
+msgid "active"
+msgstr "activo"
 
 msgctxt "admin dashboard courses meta plural"
-msgid "Active"
-msgstr "Activos"
+msgid "active"
+msgstr "activos"
 
-msgctxt "admin dashboard employees meta singular"
-msgid "Enrolled"
-msgstr "Inscrito"
+msgctxt "employees meta singular"
+msgid "enrolled"
+msgstr "inscrito"
 
-msgctxt "admin dashboard employees meta plural"
-msgid "Enrolled"
-msgstr "Inscritos"
+msgctxt "employees meta plural"
+msgid "enrolled"
+msgstr "inscritos"
+
+
+msgctxt "employees list"
+msgid "Review"
+msgstr "Revisar"
 
 
 msgctxt "attendance singular"

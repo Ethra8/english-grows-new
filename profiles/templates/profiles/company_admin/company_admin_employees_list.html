@@ -1,6 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load i18n %}
+
 {% load date_extras %}
 {% load course_extras %}
 
@@ -17,17 +18,17 @@
 {% block profile_content %}
 
 <section class="company-admin-employees-list-page profile-page notranslate" translate="no">    
-    <div class="overlay-birds"></div>
-    <div class="overlay-azure-mist"></div>
+    <div class="overlay-globe"></div>
+    <div class="overlay-mist"></div>
         
     <header class="mb-2">
             <div>
-                <h1>Employee Performance</h1>
+                <h1>{% trans 'Employee Performance' %}</h1>
             </div>
     </header>
     <hr>
 
-    <p class="text-dark">Review all employees' individual performance across different areas.</p>
+    <p class="text-dark">{% trans "Review all employees' individual performance across different areas" %}.</p>
     
     <!-- META CARD -->
     <div class="meta-row">
@@ -37,7 +38,15 @@
             </div>
             <div class="meta-text">
                 <strong>{% trans 'Employees' %}</strong>
-                <span>{{ total_employees|default:"0" }}</span>
+                <span>{{ total_employees|default:"0" }}
+                    <small>
+                        {% if total_employees == 1 %}
+                            {% trans 'enrolled' context 'employees meta singular' %}
+                        {% elif total_employees < 1 or total_employees > 1 %}
+                            {% trans 'enrolled' context 'employees meta plural' %}
+                        {% endif %}
+                    </small>
+                </span>
             </div>
         </div>
     </div>
@@ -47,13 +56,13 @@
 
             <span class="sort-label">
                 <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
-                Sort by
+                {% trans 'Sort by' %}
             </span>
 
             <div class="sort-options">
                 <a href="?sort=name"
                 class="sort-option {% if sort_by == 'name' %}active{% endif %}">
-                    Name A–Z
+                    {% trans 'Name A-Z' %}
                 </a>
 
                 <a href="?sort=level"
@@ -98,7 +107,7 @@
                                         <a href="{% url 'profiles:company_admin_student_detail' employee.student.id %}"
                                         class="btn-to-student-detail">
                                             <!-- <i class="fa-solid fa-chart-line mr-2"></i> -->
-                                                Review
+                                                {% trans 'Review' context 'employees list' %}
                                             <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                                         </a>
                                 </div>                               
@@ -106,7 +115,7 @@
                         {% endfor %}
 
                 {% else %}
-                    <p>No employees enrolled yet.</p>
+                    <p>{% trans 'No employees enrolled yet' %}.</p>
                 {% endif %}
             </div>
 

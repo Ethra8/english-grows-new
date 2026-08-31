@@ -121,6 +121,11 @@
     font-weight: 400;
 }
 
+
+.meta-card .meta-text small {
+    font-size: 1rem;
+}
+
 .metric-icon {
     position: relative;
     width: 56px;

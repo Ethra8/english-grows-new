@@ -55,7 +55,7 @@
             <span>{% trans "Performance" %}</span>
         </a>
 
-        <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_attendance' %}active{% endif %}" aria-label="{% trans 'Attendance' %}">
+        <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_all_courses_attendance' %}active{% endif %}" aria-label="{% trans 'Attendance' %}">
             <i class="fa-solid fa-list-check"></i>
             <span>{% trans "Attendance" %}</span>
         </a>

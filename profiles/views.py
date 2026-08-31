@@ -1863,13 +1863,17 @@ def my_learning_progress_assessment(request):
 def teacher_dashboard(request):
     profile = request.user.profile
 
-    if profile.role != "teacher":
+    if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
     today = timezone.localdate()
     now = timezone.now()
 
-    # Today range
+    # ---------------------------------------------------------
+    # DATE RANGES
+    # ---------------------------------------------------------
+
+    # Today
     start_of_day = timezone.make_aware(
         datetime.combine(today, time.min)
     )
@@ -1877,7 +1881,7 @@ def teacher_dashboard(request):
         datetime.combine(today, time.max)
     )
 
-    # Week range: Monday - Sunday
+    # Week: Monday - Sunday
     start_of_week_date = today - timedelta(days=today.weekday())
     end_of_week_date = start_of_week_date + timedelta(days=6)
 
@@ -1888,9 +1892,12 @@ def teacher_dashboard(request):
         datetime.combine(end_of_week_date, time.max)
     )
 
-    # Month range: first day - last day
+    # Month
     start_of_month_date = today.replace(day=1)
-    last_day_of_month = calendar.monthrange(today.year, today.month)[1]
+    last_day_of_month = calendar.monthrange(
+        today.year,
+        today.month,
+    )[1]
     end_of_month_date = today.replace(day=last_day_of_month)
 
     start_of_month = timezone.make_aware(
@@ -1899,6 +1906,11 @@ def teacher_dashboard(request):
     end_of_month = timezone.make_aware(
         datetime.combine(end_of_month_date, time.max)
     )
+
+
+    # ---------------------------------------------------------
+    # COURSES
+    # ---------------------------------------------------------
 
     courses = (
         Course.objects
@@ -1915,7 +1927,14 @@ def teacher_dashboard(request):
         .order_by("name")
     )
 
-    active_courses = courses.filter(status="active").count()
+    active_courses = courses.filter(
+        status="active"
+    ).count()
+
+
+    # ---------------------------------------------------------
+    # TODAY'S SESSIONS
+    # ---------------------------------------------------------
 
     todays_sessions = (
         ClassSession.objects
@@ -1930,10 +1949,21 @@ def teacher_dashboard(request):
             start_time__gte=start_of_day,
             start_time__lte=end_of_day,
         )
-        .select_related("course")
-        .prefetch_related("course__enrollments")
+        .select_related(
+            "course",
+            "course__company",
+        )
+        .prefetch_related(
+            "course__enrollments",
+            "course__enrollments__student",
+        )
         .order_by("start_time")
     )
+
+
+    # ---------------------------------------------------------
+    # WEEKLY / MONTHLY SESSIONS
+    # ---------------------------------------------------------
 
     weekly_sessions = (
         ClassSession.objects
@@ -1969,100 +1999,205 @@ def teacher_dashboard(request):
         .prefetch_related("attendance_records")
     )
 
-    # Weekly data
-    total_weekly_sessions = weekly_sessions.count()
 
-    completed_weekly_sessions = weekly_sessions.filter(
-        status=ClassSession.STATUS_COMPLETED
-    ).count()
+    # ---------------------------------------------------------
+    # HELPER
+    # ---------------------------------------------------------
 
-    upcoming_weekly_sessions = weekly_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_SCHEDULED,
-            ClassSession.STATUS_RESCHEDULED,
-        ],
-        start_time__gte=now,
-    ).count()
-
-    weekly_attendance_completed_sessions = (
-        weekly_sessions
-        .filter(attendance_records__status__in=["attended", "missed", "excused"])
-        .distinct()
-        .count()
-    )
-
-    # Monthly data
-    total_monthly_sessions = monthly_sessions.count()
-
-    total_monthly_completed_sessions = monthly_sessions.filter(
-        status=ClassSession.STATUS_COMPLETED
-    ).count()
-
-    total_monthly_upcoming_sessions = monthly_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_SCHEDULED,
-            ClassSession.STATUS_RESCHEDULED,
-        ],
-        start_time__gte=now,
-    ).count()
-
-    monthly_attendance_completed_sessions = (
-        monthly_sessions
-        .filter(attendance_records__status__in=["attended", "missed", "excused"])
-        .distinct()
-        .count()
-    )
-
-    # Calculate attendance Percentages
     def get_percentage(value, total):
         if total == 0:
             return 0
+
         return round((value / total) * 100)
 
-    completed_weekly_percentage = get_percentage(
-        completed_weekly_sessions,
-        total_weekly_sessions
+
+    # =========================================================
+    # WEEKLY DATA
+    # =========================================================
+
+    total_weekly_sessions = weekly_sessions.count()
+
+    # A class is considered HELD when its end time has passed.
+    held_weekly_sessions = weekly_sessions.filter(
+        end_time__lt=now,
+    ).count()
+
+    upcoming_weekly_sessions = weekly_sessions.filter(
+        start_time__gte=now,
+    ).count()
+
+    held_weekly_percentage = get_percentage(
+        held_weekly_sessions,
+        total_weekly_sessions,
     )
 
-    upcoming_weekly_percentage = get_percentage(
-        upcoming_weekly_sessions,
-        total_weekly_sessions
+
+    # ---------------------------------------------------------
+    # WEEKLY ATTENDANCE SUBMISSION
+    # ---------------------------------------------------------
+
+    weekly_held_sessions = weekly_sessions.filter(
+        end_time__lt=now,
     )
 
-    total_monthly_completed_percentage = get_percentage(
-        total_monthly_completed_sessions,
-        total_monthly_sessions
+    weekly_attendance_submitted_sessions = (
+        weekly_held_sessions
+        .filter(
+            attendance_records__status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ]
+        )
+        .distinct()
+        .count()
     )
 
-    total_monthly_upcoming_percentage = get_percentage(
-        total_monthly_upcoming_sessions,
-        total_monthly_sessions
+    weekly_attendance_pending_sessions = max(
+        held_weekly_sessions
+        - weekly_attendance_submitted_sessions,
+        0,
     )
 
-    weekly_attendance_completed_percentage = get_percentage(
-        weekly_attendance_completed_sessions,
-        total_weekly_sessions
+
+    # ---------------------------------------------------------
+    # WEEKLY ATTENDANCE RATE
+    # ---------------------------------------------------------
+
+    weekly_attendance_records = Attendance.objects.filter(
+        class_session__course__teacher=request.user,
+        class_session__course__status="active",
+        class_session__start_time__gte=start_of_week,
+        class_session__start_time__lte=end_of_week,
+        class_session__end_time__lt=now,
+        status__in=[
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        ],
     )
 
-    monthly_attendance_completed_percentage = get_percentage(
-        monthly_attendance_completed_sessions,
-        total_monthly_sessions
+    weekly_total_attendance_records = (
+        weekly_attendance_records.count()
     )
 
+    weekly_attended_records = (
+        weekly_attendance_records
+        .filter(status=Attendance.STATUS_ATTENDED)
+        .count()
+    )
+
+    weekly_attendance_rate = get_percentage(
+        weekly_attended_records,
+        weekly_total_attendance_records,
+    )
+
+
+    # =========================================================
+    # MONTHLY DATA
+    # =========================================================
+
+    total_monthly_sessions = monthly_sessions.count()
+
+    held_monthly_sessions = monthly_sessions.filter(
+        end_time__lt=now,
+    ).count()
+
+    upcoming_monthly_sessions = monthly_sessions.filter(
+        start_time__gte=now,
+    ).count()
+
+    held_monthly_percentage = get_percentage(
+        held_monthly_sessions,
+        total_monthly_sessions,
+    )
+
+
+    # ---------------------------------------------------------
+    # MONTHLY ATTENDANCE SUBMISSION
+    # ---------------------------------------------------------
+
+    monthly_held_sessions = monthly_sessions.filter(
+        end_time__lt=now,
+    )
+
+    monthly_attendance_submitted_sessions = (
+        monthly_held_sessions
+        .filter(
+            attendance_records__status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ]
+        )
+        .distinct()
+        .count()
+    )
+
+    monthly_attendance_pending_sessions = max(
+        held_monthly_sessions
+        - monthly_attendance_submitted_sessions,
+        0,
+    )
+
+
+    # ---------------------------------------------------------
+    # MONTHLY ATTENDANCE RATE
+    # ---------------------------------------------------------
+
+    monthly_attendance_records = Attendance.objects.filter(
+        class_session__course__teacher=request.user,
+        class_session__course__status="active",
+        class_session__start_time__gte=start_of_month,
+        class_session__start_time__lte=end_of_month,
+        class_session__end_time__lt=now,
+        status__in=[
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        ],
+    )
+
+    monthly_total_attendance_records = (
+        monthly_attendance_records.count()
+    )
+
+    monthly_attended_records = (
+        monthly_attendance_records
+        .filter(status=Attendance.STATUS_ATTENDED)
+        .count()
+    )
+
+    monthly_attendance_rate = get_percentage(
+        monthly_attended_records,
+        monthly_total_attendance_records,
+    )
+
+
+    # =========================================================
+    # GENERAL DATA
+    # =========================================================
 
     total_students = (
         courses
-        .filter(status="active")
-        .filter(enrollments__status="active")
+        .filter(
+            status="active",
+            enrollments__status="active",
+        )
         .values("enrollments__student")
         .distinct()
         .count()
     )
 
+
+    # ---------------------------------------------------------
+    # GENERAL ATTENDANCE RATE
+    # ---------------------------------------------------------
+
     attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
         class_session__course__status="active",
-        class_session__status=ClassSession.STATUS_COMPLETED,
+        class_session__end_time__lt=now,
         status__in=[
             Attendance.STATUS_ATTENDED,
             Attendance.STATUS_MISSED,
@@ -2073,50 +2208,66 @@ def teacher_dashboard(request):
     total_attendance_records = attendance_records.count()
 
     attended_records = attendance_records.filter(
-        status="attended"
+        status=Attendance.STATUS_ATTENDED,
     ).count()
 
-    if total_attendance_records > 0:
-        total_attendance_rate = round(
-            (attended_records / total_attendance_records) * 100
-        )
-    else:
-        total_attendance_rate = 0
+    total_attendance_rate = get_percentage(
+        attended_records,
+        total_attendance_records,
+    )
+
+
+    # =========================================================
+    # CONTEXT
+    # =========================================================
 
     context = {
         "profile": profile,
         "courses": courses,
         "todays_sessions": todays_sessions,
         "today": today,
+
+        # General
         "active_courses": active_courses,
-
-        # Students
         "total_students": total_students,
-
-        # Weekly data
-        "total_weekly_sessions": total_weekly_sessions,
-        "completed_weekly_sessions": completed_weekly_sessions,
-        "completed_weekly_percentage": completed_weekly_percentage,
-        "upcoming_weekly_sessions": upcoming_weekly_sessions,
-        "upcoming_weekly_percentage": upcoming_weekly_percentage,
-        "weekly_attendance_completed_sessions": weekly_attendance_completed_sessions,
-        "weekly_attendance_completed_percentage": weekly_attendance_completed_percentage,
-
-        # General attendance rate
         "total_attendance_rate": total_attendance_rate,
 
-        # Monthly data
+        # Weekly
+        "total_weekly_sessions": total_weekly_sessions,
+        "held_weekly_sessions": held_weekly_sessions,
+        "held_weekly_percentage": held_weekly_percentage,
+        "upcoming_weekly_sessions": upcoming_weekly_sessions,
+
+        "weekly_attendance_submitted_sessions":
+            weekly_attendance_submitted_sessions,
+
+        "weekly_attendance_pending_sessions":
+            weekly_attendance_pending_sessions,
+
+        "weekly_attendance_rate":
+            weekly_attendance_rate,
+
+        # Monthly
         "total_monthly_sessions": total_monthly_sessions,
-        "total_monthly_completed_sessions": total_monthly_completed_sessions,
-        "total_monthly_upcoming_sessions": total_monthly_upcoming_sessions,
-        "total_monthly_completed_percentage": total_monthly_completed_percentage,
-        "total_monthly_upcoming_percentage": total_monthly_upcoming_percentage,
-        "monthly_attendance_completed_sessions": monthly_attendance_completed_sessions,
-        "monthly_attendance_completed_percentage": monthly_attendance_completed_percentage,
+        "held_monthly_sessions": held_monthly_sessions,
+        "held_monthly_percentage": held_monthly_percentage,
+        "upcoming_monthly_sessions": upcoming_monthly_sessions,
+
+        "monthly_attendance_submitted_sessions":
+            monthly_attendance_submitted_sessions,
+
+        "monthly_attendance_pending_sessions":
+            monthly_attendance_pending_sessions,
+
+        "monthly_attendance_rate":
+            monthly_attendance_rate,
     }
 
-    return render(request, "profiles/teacher/teacher_dashboard.html", context)
-
+    return render(
+        request,
+        "profiles/teacher/teacher_dashboard.html",
+        context,
+    )
 
 
 @login_required
@@ -5740,10 +5891,17 @@ def company_admin_dashboard(request):
 
     company = profile.company
 
+    if not company:
+        return redirect("home")
+
     today = timezone.localdate()
     now = timezone.now()
 
-    # Today range
+    # ---------------------------------------------------------
+    # DATE RANGES
+    # ---------------------------------------------------------
+
+    # Today
     start_of_day = timezone.make_aware(
         datetime.combine(today, time.min)
     )
@@ -5751,7 +5909,7 @@ def company_admin_dashboard(request):
         datetime.combine(today, time.max)
     )
 
-    # Week range: Monday - Sunday
+    # Week: Monday - Sunday
     start_of_week_date = today - timedelta(days=today.weekday())
     end_of_week_date = start_of_week_date + timedelta(days=6)
 
@@ -5762,17 +5920,188 @@ def company_admin_dashboard(request):
         datetime.combine(end_of_week_date, time.max)
     )
 
-    # Month range
+    # Month
     start_of_month_date = today.replace(day=1)
-    last_day_of_month = calendar.monthrange(today.year, today.month)[1]
-    end_of_month_date = today.replace(day=last_day_of_month)
+
+    last_day_of_month = calendar.monthrange(
+        today.year,
+        today.month,
+    )[1]
+
+    end_of_month_date = today.replace(
+        day=last_day_of_month
+    )
 
     start_of_month = timezone.make_aware(
         datetime.combine(start_of_month_date, time.min)
     )
+
     end_of_month = timezone.make_aware(
         datetime.combine(end_of_month_date, time.max)
     )
+
+
+    # ---------------------------------------------------------
+    # HELPERS
+    # ---------------------------------------------------------
+
+    resolved_attendance_statuses = {
+        Attendance.STATUS_ATTENDED,
+        Attendance.STATUS_MISSED,
+        Attendance.STATUS_EXCUSED,
+    }
+
+    def get_percentage(value, total):
+        if total == 0:
+            return 0
+
+        return round(
+            (value / total) * 100
+        )
+
+
+    def get_period_metrics(sessions):
+        """
+        Dashboard reporting logic:
+
+        Held:
+            Session has actually finished.
+
+        Upcoming:
+            Session has not started yet.
+
+        Attendance submitted:
+            Session is already held AND every attendance
+            record attached to that session has been resolved.
+
+        Attendance rate:
+            Attended / all resolved attendance records.
+        """
+
+        session_list = list(sessions)
+
+        total_sessions = len(session_list)
+
+        held_sessions = []
+        upcoming_sessions = []
+
+        attendance_submitted_sessions = 0
+
+        total_resolved_attendance_records = 0
+        attended_records = 0
+
+
+        for session in session_list:
+
+            # -----------------------------
+            # CLASS CHRONOLOGY
+            # -----------------------------
+
+            if session.end_time < now:
+                held_sessions.append(session)
+
+            elif session.start_time >= now:
+                upcoming_sessions.append(session)
+
+
+            # Attendance submission only matters
+            # after the class has actually happened.
+            if session.end_time >= now:
+                continue
+
+
+            attendance_records = list(
+                session.attendance_records.all()
+            )
+
+            # No attendance rows means attendance
+            # cannot be considered submitted.
+            if not attendance_records:
+                continue
+
+
+            resolved_records = [
+                attendance
+                for attendance in attendance_records
+                if attendance.status in resolved_attendance_statuses
+            ]
+
+
+            # -----------------------------
+            # ATTENDANCE SUBMITTED
+            # -----------------------------
+
+            if len(resolved_records) == len(attendance_records):
+                attendance_submitted_sessions += 1
+
+
+            # -----------------------------
+            # ATTENDANCE RATE
+            # -----------------------------
+
+            total_resolved_attendance_records += len(
+                resolved_records
+            )
+
+            attended_records += sum(
+                1
+                for attendance in resolved_records
+                if attendance.status == Attendance.STATUS_ATTENDED
+            )
+
+
+        held_count = len(held_sessions)
+        upcoming_count = len(upcoming_sessions)
+
+        attendance_pending_sessions = max(
+            held_count - attendance_submitted_sessions,
+            0,
+        )
+
+        return {
+            "total_sessions": total_sessions,
+
+            "held_sessions": held_count,
+            "held_percentage": get_percentage(
+                held_count,
+                total_sessions,
+            ),
+
+            "upcoming_sessions": upcoming_count,
+            "upcoming_percentage": get_percentage(
+                upcoming_count,
+                total_sessions,
+            ),
+
+            "attendance_submitted_sessions":
+                attendance_submitted_sessions,
+
+            "attendance_pending_sessions":
+                attendance_pending_sessions,
+
+            "attendance_submitted_percentage":
+                get_percentage(
+                    attendance_submitted_sessions,
+                    held_count,
+                ),
+
+            "attendance_rate":
+                get_percentage(
+                    attended_records,
+                    total_resolved_attendance_records,
+                ),
+
+            "resolved_attendance_records":
+                total_resolved_attendance_records,
+
+            "attended_records":
+                attended_records,
+        }
+
+
+    # ---------------------------------------------------------
+    # COURSES
+    # ---------------------------------------------------------
 
     courses = (
         Course.objects
@@ -5789,7 +6118,14 @@ def company_admin_dashboard(request):
         .order_by("name")
     )
 
-    active_courses = courses.filter(status="active").count()
+    active_courses = courses.filter(
+        status="active"
+    ).count()
+
+
+    # ---------------------------------------------------------
+    # TODAY'S CLASSES
+    # ---------------------------------------------------------
 
     todays_sessions = (
         ClassSession.objects
@@ -5812,9 +6148,15 @@ def company_admin_dashboard(request):
         .prefetch_related(
             "course__enrollments",
             "course__enrollments__student",
+            "attendance_records",
         )
         .order_by("start_time")
     )
+
+
+    # ---------------------------------------------------------
+    # WEEKLY CLASSES
+    # ---------------------------------------------------------
 
     weekly_sessions = (
         ClassSession.objects
@@ -5829,9 +6171,19 @@ def company_admin_dashboard(request):
             start_time__gte=start_of_week,
             start_time__lte=end_of_week,
         )
-        .select_related("course")
-        .prefetch_related("attendance_records")
+        .select_related(
+            "course",
+        )
+        .prefetch_related(
+            "attendance_records",
+        )
+        .order_by("start_time")
     )
+
+
+    # ---------------------------------------------------------
+    # MONTHLY CLASSES
+    # ---------------------------------------------------------
 
     monthly_sessions = (
         ClassSession.objects
@@ -5846,136 +6198,89 @@ def company_admin_dashboard(request):
             start_time__gte=start_of_month,
             start_time__lte=end_of_month,
         )
-        .select_related("course")
-        .prefetch_related("attendance_records")
+        .select_related(
+            "course",
+        )
+        .prefetch_related(
+            "attendance_records",
+        )
+        .order_by("start_time")
     )
 
-    def get_percentage(value, total):
-        if total == 0:
-            return 0
-        return round((value / total) * 100)
 
-    # Weekly data
-    total_weekly_sessions = weekly_sessions.count()
+    # ---------------------------------------------------------
+    # PERIOD METRICS
+    # ---------------------------------------------------------
 
-    completed_weekly_sessions = weekly_sessions.filter(
-        status=ClassSession.STATUS_COMPLETED
-    ).count()
-
-    upcoming_weekly_sessions = weekly_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_SCHEDULED,
-            ClassSession.STATUS_RESCHEDULED,
-        ],
-        start_time__gte=now,
-    ).count()
-
-    completed_weekly_percentage = get_percentage(
-        completed_weekly_sessions,
-        total_weekly_sessions
+    weekly_metrics = get_period_metrics(
+        weekly_sessions
     )
 
-    upcoming_weekly_percentage = get_percentage(
-        upcoming_weekly_sessions,
-        total_weekly_sessions
+    monthly_metrics = get_period_metrics(
+        monthly_sessions
     )
 
-    # Monthly data
-    total_monthly_sessions = monthly_sessions.count()
 
-    total_monthly_completed_sessions = monthly_sessions.filter(
-        status=ClassSession.STATUS_COMPLETED
-    ).count()
+    # ---------------------------------------------------------
+    # ACTIVE EMPLOYEES
+    # ---------------------------------------------------------
 
-    total_monthly_upcoming_sessions = monthly_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_SCHEDULED,
-            ClassSession.STATUS_RESCHEDULED,
-        ],
-        start_time__gte=now,
-    ).count()
-
-    total_monthly_completed_percentage = get_percentage(
-        total_monthly_completed_sessions,
-        total_monthly_sessions
-    )
-
-    total_monthly_upcoming_percentage = get_percentage(
-        total_monthly_upcoming_sessions,
-        total_monthly_sessions
-    )
-
-    # Total active students in this company’s active courses
     total_students = (
         courses
-        .filter(status="active")
-        .filter(enrollments__status="active")
-        .values("enrollments__student")
+        .filter(
+            status="active",
+            enrollments__status="active",
+        )
+        .values(
+            "enrollments__student"
+        )
         .distinct()
         .count()
     )
 
-    attendance_records = Attendance.objects.filter(
-        class_session__course__company=company,
-        class_session__course__status="active",
-        class_session__status=ClassSession.STATUS_COMPLETED,
-        status__in=[
-            Attendance.STATUS_ATTENDED,
-            Attendance.STATUS_MISSED,
-            Attendance.STATUS_EXCUSED,
-        ],
+
+    # ---------------------------------------------------------
+    # OVERALL ATTENDANCE RATE
+    #
+    # Only resolved records belonging to classes that
+    # have actually finished are included.
+    # ---------------------------------------------------------
+
+    attendance_records = (
+        Attendance.objects
+        .filter(
+            class_session__course__company=company,
+            class_session__course__status="active",
+            class_session__end_time__lt=now,
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
+        )
     )
 
-    total_attendance_records = attendance_records.count()
+    total_attendance_records = (
+        attendance_records.count()
+    )
 
-    attended_records = attendance_records.filter(
-        status="attended"
-    ).count()
+    attended_records = (
+        attendance_records
+        .filter(
+            status=Attendance.STATUS_ATTENDED
+        )
+        .count()
+    )
 
     total_attendance_rate = get_percentage(
         attended_records,
-        total_attendance_records
+        total_attendance_records,
     )
 
-    weekly_attendance_records = Attendance.objects.filter(
-        class_session__course__company=company,
-        class_session__course__status="active",
-        class_session__status=ClassSession.STATUS_COMPLETED,
-        class_session__start_time__gte=start_of_week,
-        class_session__start_time__lte=end_of_week,
-        status__in=["attended", "missed", "excused"],
-    )
 
-    weekly_total_attendance_records = weekly_attendance_records.count()
-
-    weekly_attended_records = weekly_attendance_records.filter(
-        status="attended"
-    ).count()
-
-    weekly_attendance_rate = get_percentage(
-        weekly_attended_records,
-        weekly_total_attendance_records,
-    )
-
-    monthly_attendance_records = Attendance.objects.filter(
-        class_session__course__company=company,
-        class_session__course__status="active",
-        class_session__status=ClassSession.STATUS_COMPLETED,
-        class_session__start_time__gte=start_of_month,
-        class_session__start_time__lte=end_of_month,
-        status__in=["attended", "missed", "excused"],
-    )
-
-    monthly_total_attendance_records = monthly_attendance_records.count()
-
-    monthly_attended_records = monthly_attendance_records.filter(
-        status="attended"
-    ).count()
-
-    monthly_attendance_rate = get_percentage(
-        monthly_attended_records,
-        monthly_total_attendance_records
-    )
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
 
     context = {
         "profile": profile,
@@ -5983,32 +6288,81 @@ def company_admin_dashboard(request):
         "courses": courses,
         "todays_sessions": todays_sessions,
         "today": today,
+
+        # General
         "active_courses": active_courses,
-
         "total_students": total_students,
-
-        "total_weekly_sessions": total_weekly_sessions,
-        "completed_weekly_sessions": completed_weekly_sessions,
-        "completed_weekly_percentage": completed_weekly_percentage,
-        "upcoming_weekly_sessions": upcoming_weekly_sessions,
-        "upcoming_weekly_percentage": upcoming_weekly_percentage,
-
         "total_attendance_rate": total_attendance_rate,
 
-        "total_monthly_sessions": total_monthly_sessions,
-        "total_monthly_completed_sessions": total_monthly_completed_sessions,
-        "total_monthly_upcoming_sessions": total_monthly_upcoming_sessions,
-        "total_monthly_completed_percentage": total_monthly_completed_percentage,
-        "total_monthly_upcoming_percentage": total_monthly_upcoming_percentage,
 
-        "weekly_attendance_rate": weekly_attendance_rate,
-        "monthly_attendance_rate": monthly_attendance_rate,
+        # -------------------------
+        # WEEKLY
+        # -------------------------
+
+        "total_weekly_sessions":
+            weekly_metrics["total_sessions"],
+
+        "held_weekly_sessions":
+            weekly_metrics["held_sessions"],
+
+        "held_weekly_percentage":
+            weekly_metrics["held_percentage"],
+
+        "upcoming_weekly_sessions":
+            weekly_metrics["upcoming_sessions"],
+
+        "upcoming_weekly_percentage":
+            weekly_metrics["upcoming_percentage"],
+
+        "weekly_attendance_submitted_sessions":
+            weekly_metrics["attendance_submitted_sessions"],
+
+        "weekly_attendance_pending_sessions":
+            weekly_metrics["attendance_pending_sessions"],
+
+        "weekly_attendance_submitted_percentage":
+            weekly_metrics["attendance_submitted_percentage"],
+
+        "weekly_attendance_rate":
+            weekly_metrics["attendance_rate"],
+
+
+        # -------------------------
+        # MONTHLY
+        # -------------------------
+
+        "total_monthly_sessions":
+            monthly_metrics["total_sessions"],
+
+        "held_monthly_sessions":
+            monthly_metrics["held_sessions"],
+
+        "held_monthly_percentage":
+            monthly_metrics["held_percentage"],
+
+        "upcoming_monthly_sessions":
+            monthly_metrics["upcoming_sessions"],
+
+        "upcoming_monthly_percentage":
+            monthly_metrics["upcoming_percentage"],
+
+        "monthly_attendance_submitted_sessions":
+            monthly_metrics["attendance_submitted_sessions"],
+
+        "monthly_attendance_pending_sessions":
+            monthly_metrics["attendance_pending_sessions"],
+
+        "monthly_attendance_submitted_percentage":
+            monthly_metrics["attendance_submitted_percentage"],
+
+        "monthly_attendance_rate":
+            monthly_metrics["attendance_rate"],
     }
 
     return render(
         request,
         "profiles/company_admin/company_admin_dashboard.html",
-        context
+        context,
     )
 
 

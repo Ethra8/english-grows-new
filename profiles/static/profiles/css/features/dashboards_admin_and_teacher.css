@@ -71,9 +71,6 @@
     rotate: calc(-15deg);
 }
 
-.meta-card .meta-text small {
-    font-size: 1rem;
-}
 
 /* TODAY & TRAINING OVERVIEW Cards ***********/
 
@@ -105,7 +102,7 @@
 }
 
 .dashboard-card .title h2 {
-    /* margin: 0; */
+    margin-bottom: 0;
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.02em;
@@ -162,10 +159,10 @@
     min-width: 300px;
 }
 
-.today-classes-card .header h2,
+/* .today-classes-card .header h2,
 .training-overview .header h2 {
     margin-bottom: 0.15rem;
-}
+} */
 
 /* TODAY'S CLASSES Card *******/
 .today-sessions-list {
@@ -467,6 +464,41 @@ a.btn-class-today img {
     background: var(--color-cyan);
     transition: width 0.45s ease;
 }
+
+/* ATTENDACE STATUS BADGE ****/
+.attendance-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    width: max-content;
+    padding: 0.35rem 0.7rem;
+
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.attendance-status-badge.complete {
+    color: #008f78;
+    background: rgba(94, 234, 212, 0.12);
+    border: 1px solid rgba(0, 143, 120, 0.3);
+}
+
+.attendance-status-badge.pending {
+    color: #b96d00;
+    background: rgba(255, 176, 0, 0.10);
+    border: 1px solid rgba(255, 176, 0, 0.4);
+}
+
+.attendance-status-badge.neutral {
+    color: var(--color-slate);
+    background: rgba(var(--color-steel-rgb), 0.2);
+    border: 1px solid rgba(var(--color-steel-rgb), 0.4);
+}
+
 
 /* ==== REMOVE FINAL ROW BORDER ====== */
 .training-overview-grid > :nth-last-child(-n + 5) {
