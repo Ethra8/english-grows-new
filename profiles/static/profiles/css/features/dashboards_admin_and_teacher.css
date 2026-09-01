@@ -1,3 +1,20 @@
+.profile-dashboard img {
+    opacity: 0.72;
+}
+
+.profile-dashboard .dashboard-meta-cards strong img,
+.profile-dashboard .training-overview .overview-period img {
+    opacity: 1;
+}
+
+.profile-dashboard .today-calendar-icon img {
+    opacity: 0.9;
+}
+
+.profile-dashboard .training-overview .header img {
+    opacity: 0.85;
+}
+
 .dashboard-cards-grid {
     display: flex;
     flex-direction: row;
@@ -31,7 +48,7 @@
     margin: 2rem 0 1rem;}
 
 .dashboard-meta-cards .meta-card {
-    padding: 0.25rem 1.5rem 0.25rem 3rem;
+    padding: 0.25rem 1.5rem 0.25rem 0.25rem;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
 }
 
@@ -51,7 +68,7 @@
     content: "\f500"; /* fa-user-group */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
-    font-size: 5.5rem;
+    font-size: 4.5rem;
     /* color: rgba(var(--color-turquoise-rgb), 0.3); */
     color: rgba(var(--color-turquoise-rgb), 0.1);
     position: absolute;
@@ -97,9 +114,9 @@
     flex-shrink: 0;
 }
 
-.dashboard-card .title {
+/* .dashboard-card .title {
     margin: 0 0 0 1rem;
-}
+} */
 
 .dashboard-card .title h2 {
     margin-bottom: 0;
@@ -114,6 +131,7 @@
 }
 
 .today-classes-card.dashboard-card {
+    position: relative;
     flex-direction: row;
     align-items: stretch;
     gap: 3rem;
@@ -121,6 +139,84 @@
     width: 100%;
     padding: 1rem 0.5rem 0.5rem;
 }
+
+/* .today-classes-card.dashboard-card::after {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background-image: url("/static/icons/today_icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: -10%;
+    right: 1%;
+    transform: rotate(0);
+    opacity: 0.4;
+    pointer-events: none;
+} */
+
+/* TODAY CALENDAR ICON **************** */
+.today-calendar-icon {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+    opacity: 0.95;
+}
+
+.today-calendar-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin-top: 0.2rem;
+}
+
+
+/* MONTH + DAY CONTAINER */
+.today-calendar-date {
+    position: absolute;
+
+    /* Center horizontally */
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* Adjust this to fit the writable area of your icon */
+    top: 35%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+.today-calendar-month,
+.today-calendar-day {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: var(--color-whitesmoke);
+}
+
+.today-calendar-month {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.today-calendar-day {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+/* END TODAY CALENDAR ICON **************** */
+
 
 .training-overview.dashboard-card {
     flex-direction: column;
@@ -135,34 +231,17 @@
 
 .today-classes-card .header,
 .training-overview .header {
-    padding: 0 0 0.5rem 0.9rem;
-    margin-bottom: 0;
-}
-
-.today-time,
-.today-course {
-    border: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 300px;
+    padding: 0 0.9rem;
+    margin-bottom: 0.5rem;
 }
 
 .overview-grid-header {
     font-size: 0.9rem;
 }
-
-
-
-/* DASHBOARD CARD HEADERS *****/
-.today-classes-card .header,
-.training-overview .header {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    min-width: 300px;
-}
-
-/* .today-classes-card .header h2,
-.training-overview .header h2 {
-    margin-bottom: 0.15rem;
-} */
 
 /* TODAY'S CLASSES Card *******/
 .today-sessions-list {
@@ -197,6 +276,11 @@
     background: rgba(var(--color-whitesmoke-rgb), 0.6);
 }
 
+/* .today-time,
+.today-course {
+    border: 0;
+} */
+
 .today-time {
     display: flex;
     align-items: center;
@@ -222,6 +306,10 @@
     display: flex;
     flex-direction: column;
     padding-left: 0.5rem;
+}
+
+.today-course span.class-number {
+    color: var(--color-slate);
 }
 
 .today-action {
@@ -322,11 +410,15 @@ a.btn-class-today img {
 .overview-period {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.5rem;
     min-width: 0;
-    min-height: 125px;
-    padding: 1rem;
     border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
+    grid-column: 1 / -1;
+    padding: 1rem .5rem 1rem 1.3rem;
+    background: rgba(var(--color-teal-rgb), 0.2);
+    max-height: 56px !important;
+    min-height: 56px !important;
+    border-radius: 8px 8px 0 0;
 }
 
 .overview-period-icon {
@@ -343,6 +435,40 @@ a.btn-class-today img {
 .overview-period strong {
     font-size: 1.1rem;
     color: var(--color-navy);
+    font-weight: 600;
+}
+
+/* .overview-period .total-classes {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+
+    margin-left: 1.5rem;
+
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-blue-slate);
+} */
+
+.overview-period .overview-period-total a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    opacity: 0.8;
+    transition: color .15s ease-in-out
+}
+
+.overview-period  .overview-period-total a strong:hover {
+    color: var(--color-teal);
+}
+
+.overview-period  .overview-period-total a img {
+    transition: color .15s ease-in-out;
+    margin-left: .25rem;
+}
+
+.overview-period  .overview-period-total a img:hover {
+    width: 28px;
 }
 
 /* === METRIC CELLS ================ */
@@ -352,16 +478,29 @@ a.btn-class-today img {
     justify-content: center;
     min-width: 0;
     min-height: 125px;
-    padding: 1rem;
-    /* border-left: 1px solid rgba(var(--color-navy-rgb), 0.08); */
-    border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
-}
+    border-right: 1px solid rgba(var(--color-navy-rgb), 0.08);
+    /* border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10); */
+    min-height: 120px;
+    flex-direction: column;
+    gap: 0.7rem;
+    border-left: 0;
+    margin: 2rem 0;
+    border-radius: 0 0 8px 8px;}
 
 .overview-number {
     font-size: 1.3rem;
     line-height: 1;
     font-weight: 600;
     color: var(--color-navy);
+}
+
+.overview-total .overview-number {
+    font-size: 1.2rem;
+}
+
+.overview-metric.overview-upcoming span:nth-of-type(2) {
+    line-height: 3.3rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Mobile labels hidden on desktop */
@@ -374,7 +513,8 @@ a.btn-class-today img {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .completion-ring {
@@ -427,19 +567,19 @@ a.btn-class-today img {
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 60%;
     max-width: 60%;
+    border-radius: 50px;
     box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
     height: 10px;
-    /* overflow: visible; */
+    margin-bottom: 2.5rem;
 }
 
 .attendance-value {
     position: absolute;
-    font-size: 1rem;
-    /* padding-left: 8rem; */
-    /* margin-bottom: .25rem; */
-    top: -25px;
+    font-size: 1.1rem;
+    top: -30px;
     font-weight: 600;
     color: var(--color-navy);
     z-index: 2;
@@ -470,10 +610,9 @@ a.btn-class-today img {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-
     width: max-content;
     padding: 0.35rem 0.7rem;
-
+    margin-bottom: 1.2rem;
     border-radius: 999px;
     font-size: 0.78rem;
     font-weight: 600;
@@ -517,11 +656,11 @@ a.btn-class-today img {
         padding: 1rem 0.5rem 0.5rem;
     }
 
-    .today-classes-card .header,
+    /* .today-classes-card .header,
     .training-overview .header {
         padding: 0 0 0.5rem 0.9rem;
         margin-bottom: 0;
-    }
+    } */
 
     .today-time,
     .today-course {
@@ -533,6 +672,13 @@ a.btn-class-today img {
     }
 
 
+}
+
+
+@media (min-width: 1360px) and (max-width: 1599.98px) {
+    .overview-metric {
+        margin: 0;
+    }
 }
 
 
@@ -672,7 +818,7 @@ a.btn-class-today img {
 
     .overview-period {
         grid-column: 1 / -1;
-        padding: 1rem .5rem 1rem 1.7rem;
+        padding: 1rem 0.3rem 1rem .5rem;
         background: rgba(var(--color-turquoise-rgb), 0.1);
         max-height: 56px !important;
         min-height: 56px !important;
@@ -744,9 +890,9 @@ a.btn-class-today img {
         --ring-width: 6px;
     }
 
-    /* .attendance-progress {
-        max-width: 135px;
-    } */
+    .overview-metric {
+        margin: 0;
+    }
 
     .training-attendance-bar {
         height: 7px;
@@ -765,6 +911,19 @@ a.btn-class-today img {
 }
 
 
+@media (max-width: 436.98px) {
+    .today-classes-card .header, .training-overview .header {
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .overview-period strong {
+    font-size: 1rem;
+    color: var(--color-navy);
+    font-weight: 500;
+    }
+}
+
 
 @media (max-width: 370px) {
 
@@ -776,9 +935,9 @@ a.btn-class-today img {
         font-size: 1.5rem;
     }
 
-    .today-classes-card .header,
+    /* .today-classes-card .header,
     .training-overview .header {
         gap: 0;
-    }
+    } */
 
 }

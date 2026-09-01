@@ -124,13 +124,9 @@
                     <div class="assigned-course-row" data-status="{{ course.status }}">
 
                         <div class="course-main-info">
-                            {% if course.enrollment_count == 1 %}
-                            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                            {% else %}
-                            <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
-                            {% endif %}
+                            <img src="{% static 'icons/course_icon.png' %}" alt="" aria-hidden="true" width="46">
                             <div>
-                                <h3>{{ course.name }}</h3>
+                                <strong>{{ course.name }}</strong>
                                 <span>{{ course.course_type }}</span> 
                             </div>
                         </div>
@@ -149,7 +145,7 @@
 
                         <div class="course-list-date">
                             <div class="icon">
-                                <i class="fa-solid fa-calendar-day"></i>
+                                <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22">
                             </div>
                             <div>
                                 <strong>{{ course.timetable_days_display }}</strong>
@@ -159,13 +155,7 @@
 
                         <div class="course-list-student-num">
                             <div class="icon">
-                                {% if course.enrollments.count == 1 %}
-                                    <i class="fa-solid fa-user"></i>
-                                {% elif course.enrollments.count == 2 %}
-                                    <i class="fa-solid fa-people-arrows"></i>
-                                {% else %}
-                                    <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
-                                {% endif %}
+                                <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
                             </div>
                             <strong>{{ course.enrollments.count }}</strong>   
                         </div>

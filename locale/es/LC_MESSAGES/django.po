@@ -160,7 +160,7 @@ msgid "Weekly & monthly performance"
 msgstr "Rendimiento semanal y mensual"
 
 msgid "Total Classes"
-msgstr "Clases Totales"
+msgstr "Total Clases"
 
 msgid "Completed Classes"
 msgstr "Clases Completadas"
@@ -173,6 +173,13 @@ msgstr "Esta Semana"
 
 msgid "This Month"
 msgstr "Este Mes"
+
+msgid "View this week classes"
+msgstr "Ver clases de esta semana"
+
+msgid "View this month classes"
+msgstr "Ver clases de este mes"
+
 
 msgid "Monthly attendance"
 msgstr "Asistencia mensual"
@@ -564,3 +571,8 @@ msgstr "Justificadas"
 msgctxt "attended class list"
 msgid "Attended"
 msgstr "Asistentes"
+
+msgid "class"
+msgid_plural "classes"
+msgstr[0] ""
+msgstr[1] ""

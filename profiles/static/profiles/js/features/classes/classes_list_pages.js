@@ -11,6 +11,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const statusPanels =
         document.querySelectorAll(".classes-status-panel");
 
+
+    /* ---------------------------------------------------------
+       URL FILTER
+    --------------------------------------------------------- */
+
+    const urlParams =
+        new URLSearchParams(window.location.search);
+
+    const requestedFilter =
+        urlParams.get("filter");
+
+    const allowedFilters = [
+        "today",
+        "weekly",
+        "monthly",
+        "all",
+    ];
+
+    const initialFilter =
+        allowedFilters.includes(requestedFilter)
+            ? requestedFilter
+            : "today";
+
+
     /* ---------------------------------------------------------
        HELPERS
     --------------------------------------------------------- */
@@ -22,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             value === "1"
         );
     }
+
 
     /* ---------------------------------------------------------
        APPLY FILTER TO ONE STATUS PANEL
@@ -88,11 +113,38 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+
+    /* ---------------------------------------------------------
+       UPDATE URL FILTER
+    --------------------------------------------------------- */
+
+    function updateUrlFilter(filter) {
+
+        const url =
+            new URL(window.location.href);
+
+        url.searchParams.set(
+            "filter",
+            filter
+        );
+
+        window.history.replaceState(
+            {},
+            "",
+            url
+        );
+    }
+
+
     /* ---------------------------------------------------------
        SET FILTER FOR ONE PANEL
     --------------------------------------------------------- */
 
-    function setPanelFilter(panel, filter) {
+    function setPanelFilter(
+        panel,
+        filter,
+        updateUrl = false
+    ) {
 
         const buttons =
             panel.querySelectorAll(".classes-filter-btn");
@@ -110,6 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
             button.classList.toggle(
                 "active",
                 isActive
+            );
+
+            button.setAttribute(
+                "aria-selected",
+                isActive ? "true" : "false"
             );
 
         });
@@ -130,7 +187,14 @@ document.addEventListener("DOMContentLoaded", function () {
             panel,
             filter
         );
+
+
+        /* Update URL only after a user action */
+        if (updateUrl) {
+            updateUrlFilter(filter);
+        }
     }
+
 
     /* ---------------------------------------------------------
        INITIALISE EACH STATUS PANEL
@@ -154,7 +218,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     setPanelFilter(
                         panel,
-                        this.dataset.filter
+                        this.dataset.filter,
+                        true
                     );
 
                 }
@@ -172,7 +237,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     setPanelFilter(
                         panel,
-                        this.value
+                        this.value,
+                        true
                     );
 
                 }
@@ -180,18 +246,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
+
         /*
-         * Default filter:
+         * Initial filter:
          *
-         * Upcoming -> Today
-         * Past     -> Today
+         * If URL contains:
+         * ?filter=weekly
+         * ?filter=monthly
+         * ?filter=all
+         * ?filter=today
+         *
+         * use that filter.
+         *
+         * Otherwise default to Today.
          */
         setPanelFilter(
             panel,
-            "today"
+            initialFilter
         );
 
     });
+
 
     /* ---------------------------------------------------------
        UPCOMING / PAST STATUS NAVIGATION
@@ -251,6 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+
     /* ---------------------------------------------------------
        STATUS TAB EVENTS
     --------------------------------------------------------- */
@@ -270,9 +346,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+
     /* ---------------------------------------------------------
        DEFAULT VIEW
-       Upcoming Classes -> Today
+       Upcoming Classes
     --------------------------------------------------------- */
 
     showStatusPanel("upcoming");
