@@ -35,8 +35,6 @@
     /* background: rgba(var(--color-turquoise-rgb), 0.2); */
     background: linear-gradient(107deg,rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.95), rgba(var(--color-turquoise-rgb), 0.65));
     margin: 0 auto 60px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
 }
 
 /* Calendar view background */
@@ -47,7 +45,7 @@
 }
 
 .fc-view-harness-passive {
-    border-radius: 5px !important;
+    border-radius: 8px !important;
 }
 
 .fc-timegrid-body {
@@ -112,7 +110,7 @@
     text-transform: capitalize;
     font-weight: 600;
     font-size: 1rem;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 /* Title itself: week/month/day date */
@@ -121,7 +119,7 @@
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-size: 2rem;
-    border-radius: 5px;
+    border-radius: 8px;
     max-width: 100%;
     min-width: 50%;
     padding: 0.5rem 120px;
@@ -142,7 +140,7 @@
     /* display: inline-flex !important; */
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
     transform: translateY(-50%);
     z-index: 5;
     background-color: var(--color-navy) !important;
@@ -494,7 +492,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.35rem 0.75rem;
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: var(--color-navy);
     color: var(--color-whitesmoke) !important;
     font-size: 0.8rem;
@@ -515,7 +513,7 @@
 ========================================================= */
 
 .calendar-session-modal {
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
     overflow: hidden;
 }
@@ -534,7 +532,7 @@
     background-color: var(--color-navy);
     color: var(--color-whitesmoke) !important;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .calendar-modal-join-btn:hover {
