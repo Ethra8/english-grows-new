@@ -9686,20 +9686,41 @@ def company_admin_employees_list(request):
     # ---------------------------------------------------------
     # SORT OPTION
     # ---------------------------------------------------------
-    sort_by = request.GET.get("sort", "name")
+    sort_by = request.GET.get("sort", "status")
 
-    if sort_by not in ["name", "level"]:
-        sort_by = "name"
-
+    if sort_by not in ["status", "name", "level"]:
+        sort_by = "status"
 
     # ---------------------------------------------------------
-    # ACTIVE ENROLLMENTS
+    # ALL COMPANY EMPLOYEES
+    #
+    # Employees are now retrieved independently from their
+    # course enrollments, so they remain visible even when
+    # courses are completed / paused / cancelled.
+    # ---------------------------------------------------------
+    employee_profiles = (
+        UserProfile.objects
+        .filter(
+            company=company,
+            role=UserProfile.ROLE_EMPLOYEE,
+        )
+        .select_related("user")
+        .order_by(
+            "user__first_name",
+            "user__last_name",
+            "user__email",
+        )
+    )
+
+    # ---------------------------------------------------------
+    # ALL COMPANY ENROLLMENTS
     # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
         .filter(
             course__company=company,
-            status="active",
+            student__profile__company=company,
+            student__profile__role=UserProfile.ROLE_EMPLOYEE,
         )
         .select_related(
             "student",
@@ -9717,30 +9738,74 @@ def company_admin_employees_list(request):
         )
     )
 
-
     # ---------------------------------------------------------
     # GROUP ENROLLMENTS BY EMPLOYEE
     # ---------------------------------------------------------
-    employees_by_id = {}
+    enrollments_by_student = {}
 
     for enrollment in enrollments:
-        student = enrollment.student
+        student_id = enrollment.student_id
 
-        if student.id not in employees_by_id:
-            employees_by_id[student.id] = {
-                "student": student,
-                "profile": student.profile,
-                "enrollments": [],
-                "courses": [],
-            }
+        if student_id not in enrollments_by_student:
+            enrollments_by_student[student_id] = []
 
-        employees_by_id[student.id]["enrollments"].append(enrollment)
-        employees_by_id[student.id]["courses"].append(enrollment.course)
-
-    employees = list(employees_by_id.values())
+        enrollments_by_student[student_id].append(enrollment)
 
     # ---------------------------------------------------------
-    # SORT EMPLOYEES
+    # ENROLLMENT STATUS PRIORITY
+    #
+    # If an employee belongs to several courses, show the
+    # highest-priority current enrollment state.
+    # ---------------------------------------------------------
+    status_order = {
+        "active": 1,
+        "paused": 2,
+        "completed": 3,
+        "cancelled": 4,
+        "unenrolled": 5,
+    }
+
+    # ---------------------------------------------------------
+    # BUILD EMPLOYEE LIST
+    # ---------------------------------------------------------
+    employees = []
+
+    for employee_profile in employee_profiles:
+        student = employee_profile.user
+
+        employee_enrollments = enrollments_by_student.get(
+            student.id,
+            [],
+        )
+
+        courses = [
+            enrollment.course
+            for enrollment in employee_enrollments
+        ]
+
+        if employee_enrollments:
+            enrollment_status = min(
+                (
+                    enrollment.status
+                    for enrollment in employee_enrollments
+                ),
+                key=lambda status: status_order.get(status, 999),
+            )
+        else:
+            enrollment_status = "unenrolled"
+
+        employees.append(
+            {
+                "student": student,
+                "profile": employee_profile,
+                "enrollments": employee_enrollments,
+                "courses": courses,
+                "enrollment_status": enrollment_status,
+            }
+        )
+
+    # ---------------------------------------------------------
+    # HELPERS
     # ---------------------------------------------------------
     def employee_display_name(employee):
         student = employee["student"]
@@ -9752,7 +9817,9 @@ def company_admin_employees_list(request):
 
         return student.username.lower()
 
-
+    # ---------------------------------------------------------
+    # SORT EMPLOYEES
+    # ---------------------------------------------------------
     if sort_by == "level":
 
         level_order = {
@@ -9778,10 +9845,24 @@ def company_admin_employees_list(request):
             )
         )
 
-    else:
-        # Default: displayed employee name A-Z
+    elif sort_by == "name":
+
         employees.sort(
             key=employee_display_name
+        )
+
+    else:
+        # Default:
+        # active → paused → completed → cancelled → unenrolled
+        # then alphabetical within each status
+        employees.sort(
+            key=lambda employee: (
+                status_order.get(
+                    employee["enrollment_status"],
+                    999,
+                ),
+                employee_display_name(employee),
+            )
         )
 
     # ---------------------------------------------------------
@@ -9793,7 +9874,6 @@ def company_admin_employees_list(request):
         "employees": employees,
         "total_employees": len(employees),
         "level_choices": UserProfile.LEVEL_CHOICES,
-
         "sort_by": sort_by,
     }
 

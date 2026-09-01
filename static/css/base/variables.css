@@ -76,8 +76,17 @@
     /* USER ENROLLED STATUS dots ***************************/
     /* Active Enrollment*/
     --color-active-dot: #4dffb5;
+    /* Confirmed Enrollment */
+    --color-completed-dot: #006b7d;
+    /* Paused Enrollment */
+    --color-paused-dot: #ffb000;
+    /* Cancelled Enrollment */
+    --color-cancelled-dot: #ef4444;
+    /* Completed Enrollment */
+    --color-completed-dot: #7A949B;
     /* Inactive Enrollment */
     --color-inactive-dot: #7A949B;
+
 
 
     /**** COURSE STATUS dots **********************************/
@@ -91,6 +100,7 @@
     --color-course-status-cancelled: #ef4444;
     /* Completed */
     --color-course-status-completed: #7A949B;
+
 
 
     /* ATTENDANCE STATUS badges ****************************/

@@ -80,12 +80,13 @@
                         {% for employee in employees %}
                             <div class="employees-list-row">
 
-                                <div class="small-avatar">
+                                <div class="small-avatar status-{{ employee.enrollment_status }}">
                                     {% if employee.student.profile.profile_photo %}
                                         <img src="{{ employee.student.profile.profile_photo.url }}" alt="" aria-hidden="true" width="60">
                                     {% else %}
                                         <img src="{% static 'icons/sidebar_no_photo_user_icon.png' %}" alt="" aria-hidden="true" width="60">
                                     {% endif %}
+                                        <span class="small-avatar-status-dot" aria-label="{{ employee.enrollment_status }}" title="{{ employee.enrollment_status }}"></span>
                                 </div>
 
                                 <div class="main-info">

@@ -35,7 +35,7 @@
     flex-direction: row;
     gap: 1rem;
     /* min-height: 130px; */
-    padding: 0.25rem 1rem 0.25rem 0.25rem;;
+    /* padding: 0.25rem 1rem 0.25rem 0.25rem; */
     border: 1px solid rgba(var(--color-teal-rgb), 0.22);
     border-radius: 999px;
     background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));

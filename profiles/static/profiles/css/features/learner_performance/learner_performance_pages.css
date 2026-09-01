@@ -80,7 +80,8 @@ header .student-avatar-large i {
 }
 
 /* AVATAR STATUS DOT - PROFILE STATUS - My-Progress/Student details pages**********************/
-header .avatar-status-dot {
+header .avatar-status-dot,
+.employees-list-row .small-avatar-status-dot {
     position: absolute;
     right: 7%;
     bottom: 8%;

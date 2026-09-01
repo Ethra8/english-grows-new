@@ -45,10 +45,11 @@
 .dashboard-meta-cards .meta-row {
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin: 2rem 0 1rem;}
+    margin: 2rem 0 1rem;
+}
 
 .dashboard-meta-cards .meta-card {
-    padding: 0.25rem 1.5rem 0.25rem 0.25rem;
+    padding: 0.15rem 1.5rem 0.15rem 0.15rem;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
 }
 
@@ -76,17 +77,9 @@
     right: 15px;
 }
 
-/* .dashboard-meta-cards .meta-card.meta-attendance::after {
-    content: "\f46c"; 
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.1);
-    position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
-} */
+.dashboard-meta-cards .meta-text span {
+    margin-top: -0.1rem;
+}
 
 
 /* TODAY & TRAINING OVERVIEW Cards ***********/

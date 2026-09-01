@@ -26,15 +26,11 @@
                 <div class="student-avatar-large {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
 
                     {% if student_profile.profile_photo %}
-                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
+                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
                     {% else %}
-                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                        {% else %}
                         <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
-                        {% endif %}
                     {% endif %}
-                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
+                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}" title="{% if student.is_active %}{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}"></span>
                 </div>
             </div>
             

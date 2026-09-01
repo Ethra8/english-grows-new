@@ -106,8 +106,13 @@ msgstr "Calendario"
 msgid "My Performance"
 msgstr "Mi Progreso"
 
+msgctxt "admin sidebar"
+msgid "Performance"
+msgstr "Empleados"
+
+
 msgid "Employee Performance"
-msgstr "Rendimiento de Empleados"
+msgstr "Progreso de Empleados"
 
 msgid "Review all employees' individual performance across different areas"
 msgstr "Revise el rendimiento y progreso individual de cada empleado"
@@ -420,6 +425,11 @@ msgstr "Nombre A-Z"
 msgid "Email all"
 msgstr "Email a todos"
 
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "Enrolled"
+msgstr "inscrito"
 
 
 msgid "Post-commencement enrollment"
@@ -453,10 +463,11 @@ msgstr "Profesor/a"
 msgid "Total Hours"
 msgstr "Total Horas"
 
-
+msgid "Classes Held"
+msgstr "Clases Realizadas"
 
 msgid "Attendance Submitted"
-msgstr "Registros de Asistencia"
+msgstr "Asistencias Registradas"
 
 msgid "past classes"
 msgstr "clases pasadas"
@@ -506,7 +517,7 @@ msgid "Past Classes"
 msgstr "Clases Pasadas"
 
 msgid "Upcoming Classes"
-msgstr "Clases Futuras"
+msgstr "Próximas Clases"
 
 msgid "Review upcoming and past class sessions"
 msgstr "Revise y filtre todas las sesiones de clase pasadas y futuras"
@@ -576,3 +587,14 @@ msgid "class"
 msgid_plural "classes"
 msgstr[0] ""
 msgstr[1] ""
+
+
+msgctxt "learner enrollment status"
+msgid "Enrolled"
+msgstr "inscrito"
+
+msgctxt "learner enrollment status"
+msgid "Inactive"
+msgstr "Inactivo"
+
+ 
