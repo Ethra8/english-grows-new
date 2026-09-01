@@ -190,11 +190,12 @@ msgid "Monthly attendance"
 msgstr "Asistencia mensual"
 
 
-msgid "Confirmed"
-msgstr "Confirmado"
 
 msgid "Active"
 msgstr "Activo"
+
+msgid "Confirmed"
+msgstr "Confirmado"
 
 msgid "Paused"
 msgstr "Pausado"
@@ -204,6 +205,30 @@ msgstr "Completado"
 
 msgid "Cancelled"
 msgstr "Cancelado"
+
+
+msgctxt "assigned courses"
+msgid "Active"
+msgstr "Activos"
+
+msgctxt "assigned courses"
+msgid "Confirmed"
+msgstr "Confirmados"
+
+msgctxt "assigned courses"
+msgid "Paused"
+msgstr "Pausado"
+
+msgctxt "assigned courses"
+msgid "Completed"
+msgstr "Completados"
+
+msgctxt "assigned courses"
+msgid "Cancelled"
+msgstr "Cancelados"
+
+msgid "All Status"
+msgstr "Todos"
 
 
 msgid "Level"
@@ -501,27 +526,21 @@ msgid "saved for this class session"
 msgstr "registrados para esta sesión"
 
 
-msgid "All Company Courses"
-msgstr "Cursos de mi Empresa"
-
-msgid "All Status"
-msgstr "Todos"
-
 msgid "No courses assigned yet to your company"
 msgstr "Su empresa todavía no tiene grupos asignados"
 
 msgid "No courses to show for this filter"
 msgstr "No se encontraron cursos en este filtro"
 
-msgid "Review all courses by their current status below"
-msgstr "Revise todos los cursos filtrados por su actual estado"
+msgid "Review all your company's courses, organized by their current status"
+msgstr "Consulta todos los cursos de tu empresa, organizados según su estado actual"
 
 
-msgid "No past classes apply to the selected filter"
-msgstr "El filtro no aplica a ninguna clase pasada"
+msgid "No held classes apply to the selected filter"
+msgstr "El filtro no aplica a ninguna clase realizada"
 
 msgid "No upcoming classes apply to the selected filter"
-msgstr "El filtro no aplica a ninguna clase futura"
+msgstr "El filtro no aplica a ninguna próxima clase"
 
 msgctxt "classes list"
 msgid "Held"
@@ -530,6 +549,11 @@ msgstr "Realizadas"
 msgctxt "classes list"
 msgid "Upcoming"
 msgstr "Próximas"
+
+msgctxt "classes list"
+msgid "All"
+msgstr "Todas"
+
 
 msgid "Review and filter upcoming and past class sessions"
 msgstr "Revise y filtre todas las próximas sesiones de clase y las ya realizadas"

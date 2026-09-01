@@ -21,33 +21,33 @@
     <header>
         <div class="row" >        
             <div class="col-12 ml-0 pl-0">
-                <h1>{% trans 'All Company Courses' %}</h1>
+                <h1>{% trans 'Courses' %}</h1>
             </div>
         </div>
         <hr>
     </header>
 
-    <p class="text-dark mb-5">{% trans 'Review all courses by their current status below' %}.</p>
+    <p class="text-dark mb-5">{% trans "Review all your company's courses, organized by their current status" %}.</p>
 
     <div class="wrapper-assigned-courses-small-cards">
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Active' %}</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Active' context 'assigned courses' %}</span></div>
             <div class="card-body">{{ active_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Confirmed' %}</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Confirmed' context 'assigned courses' %}</span></div>
             <div class="card-body">{{ confirmed_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Paused' %}</span></div>
+            <div class="card-header"><span><img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">{% trans 'Paused' context 'assigned courses' %}</span></div>
             <div class="card-body">{{ paused_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>{% trans 'Cancelled' %}</span></div>
+            <div class="card-header"><span><i class="fa-regular fa-circle-xmark mr-2"></i>{% trans 'Cancelled' context 'assigned courses' %}</span></div>
             <div class="card-body">{{ cancelled_courses }}</div>
         </div>
         <div class="card">
-            <div class="card-header"><span><i class="fa-solid fa-check-to-slot mr-2"></i>{% trans 'Completed' %}</span></div>
+            <div class="card-header"><span><i class="fa-solid fa-check-to-slot mr-2"></i>{% trans 'Completed' context 'assigned courses' %}</span></div>
             <div class="card-body">{{ completed_courses }}</div>
         </div>
         <div class="card">
@@ -66,31 +66,31 @@
 
                         <button type="button" class="course-status-btn active" data-status="active">
                             <!-- <i class="fa-regular fa-circle-play"></i> -->
-                            <span>{% trans 'Active' %}</span>
+                            <span>{% trans 'Active' context 'assigned courses' %}</span>
                             <strong>{{ active_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="confirmed">
                             <!-- <i class="fa-regular fa-circle-check"></i> -->
-                            <span>{% trans 'Confirmed' %}</span>
+                            <span>{% trans 'Confirmed' context 'assigned courses' %}</span>
                             <strong>{{ confirmed_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="paused">
                             <!-- <i class="fa-regular fa-circle-pause"></i> -->
-                            <span>{% trans 'Paused' %}</span>
+                            <span>{% trans 'Paused' context 'assigned courses' %}</span>
                             <strong>{{ paused_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="cancelled">
                             <!-- <i class="fa-regular fa-circle-xmark"></i> -->
-                            <span>{% trans 'Cancelled' %}</span>
+                            <span>{% trans 'Cancelled' context 'assigned courses' %}</span>
                             <strong>{{ cancelled_courses }}</strong>
                         </button>
 
                         <button type="button" class="course-status-btn" data-status="completed">
                             <!-- <i class="fa-regular fa-circle-xmark"></i> -->
-                            <span>{% trans 'Completed' %}</span>
+                            <span>{% trans 'Completed' context 'assigned courses' %}</span>
                             <strong>{{ completed_courses }}</strong>
                         </button>
 
@@ -103,11 +103,11 @@
                     </div>
   
                     <select id="courseStatusFilter" class="course-status-select">
-                        <option value="active" selected>{% trans 'Active' %}</option>
-                        <option value="confirmed">{% trans 'Confirmed' %}</option>
-                        <option value="paused">{% trans 'Paused' %}</option>
-                        <option value="cancelled">{% trans 'Cancelled' %}</option>
-                        <option value="completed">{% trans 'Completed' %}</option>
+                        <option value="active" selected>{% trans 'Active' context 'assigned courses' %}</option>
+                        <option value="confirmed">{% trans 'Confirmed' context 'assigned courses' %}</option>
+                        <option value="paused">{% trans 'Paused' context 'assigned courses' %}</option>
+                        <option value="cancelled">{% trans 'Cancelled' context 'assigned courses' %}</option>
+                        <option value="completed">{% trans 'Completed' context 'assigned courses' %}</option>
                         <option value="all">{% trans 'All Status' %}</option>
                     </select>
                 </div>            

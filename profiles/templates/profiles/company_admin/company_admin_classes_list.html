@@ -109,7 +109,7 @@
                     class="classes-filter-btn"
                     data-filter="all"
                 >
-                    <span>{% trans 'All' %}</span>
+                    <span>{% trans 'All' context 'classes list' %}</span>
                     <strong>{{ class_filter_counts.upcoming.all }}</strong>
                 </button>
 
@@ -133,7 +133,7 @@
                 </option>
 
                 <option value="all">
-                    {% trans 'All' %}: {{ class_filter_counts.upcoming.all }}
+                    {% trans 'All' context 'classes list' %}: {{ class_filter_counts.upcoming.all }}
                 </option>
             </select>
 
@@ -200,7 +200,7 @@
                     class="classes-filter-btn"
                     data-filter="all"
                 >
-                    <span>{% trans 'All' %}</span>
+                    <span>{% trans 'All' context 'classes list' %}</span>
                     <strong>{{ class_filter_counts.completed.all }}</strong>
                 </button>
 
@@ -224,7 +224,7 @@
                 </option>
 
                 <option value="all">
-                    {% trans 'All' %}: {{ class_filter_counts.completed.all }}
+                    {% trans 'All' context 'classes list' %}: {{ class_filter_counts.completed.all }}
                 </option>
             </select>
 
@@ -242,7 +242,7 @@
                 {% endfor %}
 
                 <p class="no-classes-message text-grey p-3" hidden>
-                    {% trans '' %}No past classes apply to the selected filter.
+                    {% trans 'No held classes apply to the selected filter' %}.
                 </p>
 
             </div>
