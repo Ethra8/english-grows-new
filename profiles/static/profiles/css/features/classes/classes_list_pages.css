@@ -302,7 +302,7 @@
     border: none;
     border-radius: 6px;
     background: rgba(var(--color-mist-rgb), 0.35);
-    color: var(--color-navy);
+    color: rgba(var(--color-whitesmoke-rgb), 0.85);
     border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
     /* background-color: var(--color-navy); */
     /* color: whitesmoke; */
@@ -327,7 +327,6 @@
 
 .classes-status-tab.active i {
     opacity: 1;
-
 }
 
 /* Count */
@@ -348,10 +347,9 @@
 
 /* Hover */
 .classes-status-tab:hover {
-    background: rgba(var(--color-icy-rgb), 0.75);
-    border-color: rgba(var(--color-teal-rgb), 0.45);
-
-    color: var(--color-navy);
+    background: rgba(var(--color-cyan-rgb), 0.65);
+    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    color: rgba(var(--color-whitesmoke-rgb), 1);
 }
 
 /* Active */
@@ -359,7 +357,7 @@
     background: rgba(var(--color-cyan-rgb), 0.65);
     color: var(--color-whitesmoke);
     box-shadow: 0 4px 12px rgba(var(--color-shadow-rgb), 0.15);
-    border: 1px outset var(--color-turquoise);
+    border: 2px outset rgba(var(--color-cyan-rgb), 0.6);
 }
 
 .classes-status-tab.active i {
@@ -410,7 +408,8 @@
 
 /* Mobile filter */
 .classes-status-panel .mobile-filter-select {
-    margin-bottom: 1rem;
+    margin: 0.25rem 0.5rem;
+    max-width: stretch;    
     display: none;
 }
 
@@ -424,7 +423,7 @@
     border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
     border-radius: 8px;
     background: rgba(var(--color-mist-rgb), 0.35);
-    color: var(--color-navy);
+    color: rgba(var(--color-whitesmoke-rgb), 0.85);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.02em;
     font-weight: 500;
@@ -455,10 +454,9 @@
 }
 
 .classes-filter-btn:hover {
-    background: rgba(var(--color-icy-rgb), 0.75);
-    border-color: rgba(var(--color-teal-rgb), 0.45);
-
-    color: var(--color-navy);
+    background: rgba(var(--color-cyan-rgb), 0.65);
+    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    color: rgba(var(--color-whitesmoke-rgb), 1);
 }
 
 .classes-filter-btn.active {

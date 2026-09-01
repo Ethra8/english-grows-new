@@ -217,7 +217,7 @@ msgstr "Confirmados"
 
 msgctxt "assigned courses"
 msgid "Paused"
-msgstr "Pausado"
+msgstr "Pausados"
 
 msgctxt "assigned courses"
 msgid "Completed"
@@ -235,7 +235,7 @@ msgid "Level"
 msgstr "Nivel"
 
 msgid "Next Class"
-msgstr "Próxima Clase"
+msgstr "Siguiente Clase"
 
 msgid "Join Class"
 msgstr "Unirse"

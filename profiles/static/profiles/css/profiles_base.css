@@ -218,8 +218,8 @@ div:has(> .student-action-btn) {
     min-height: 70px;
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
     border-radius: 8px;
-    background: rgba(var(--color-mist-rgb), 0.95);
-    color: var(--color-navy);
+    background: rgba(var(--color-mist-rgb), 0.35);
+    color: rgba(var(--color-whitesmoke-rgb), 0.85);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 400;
@@ -272,13 +272,18 @@ div:has(> .student-action-btn) {
 }
 
 .course-status-btn.active {
-    background: rgba(var(--color-cyan-rgb), 0.25);
+    background: rgba(var(--color-cyan-rgb), 0.65);
     border-color: var(--color-turquoise);
     color: var(--color-whitesmoke);
 }
 
 .course-status-btn:hover {
-    background: rgba(var(--color-icy-rgb), 0.75);
+    background: rgba(var(--color-cyan-rgb), 0.65);
+    border-color: var(--color-turquoise);
+}
+
+.course-status-btn.active:hover {
+    background: rgba(var(--color-icy-rgb), 0.55);
     border-color: var(--color-turquoise);
 }
 
