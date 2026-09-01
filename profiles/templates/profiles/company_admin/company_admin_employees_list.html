@@ -32,13 +32,22 @@
     
     <!-- META CARD -->
     <div class="meta-row">
-        <div class="meta-card meta-students mt-5 mb-5">
-            <div class="meta-icon">
-                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+        <div class="meta-card meta-students">
+            <div>
+                <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
             </div>
             <div class="meta-text">
-                <strong>{% trans 'Employees' %}</strong>
-                <span>{{ total_employees|default:"0" }}
+                <strong>{% trans 'Total Employees' %}</strong>
+                <span>{{ total_employees|default:"0" }}</span>
+            </div>
+        </div>
+        <div class="meta-card meta-students">
+            <div>
+                <img src="{% static 'icons/employees_active_icon.png' %}" alt="" aria-hidden="true" width="55">
+            </div>
+            <div class="meta-text">
+                <strong>{% trans 'Active Employees' %}</strong>
+                <span>{{ active_employees|default:"0" }}
                     <small>
                         {% if total_employees == 1 %}
                             {% trans 'enrolled' context 'employees meta singular' %}
@@ -109,7 +118,7 @@
                                         class="btn-to-student-detail">
                                             <!-- <i class="fa-solid fa-chart-line mr-2"></i> -->
                                                 {% trans 'Review' context 'employees list' %}
-                                            <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
+                                            <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="" aria-hidden="true">
                                         </a>
                                 </div>                               
                             </div>

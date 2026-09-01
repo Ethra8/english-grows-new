@@ -414,6 +414,11 @@ a.btn-class-today img {
     border-radius: 8px 8px 0 0;
 }
 
+/* Month training overview header */
+.training-overview-grid > :nth-last-child(-n + 5){
+    border-radius: 0;
+}
+
 .overview-period-icon {
     width: 32px;
     height: 32px;
@@ -687,20 +692,12 @@ a.btn-class-today img {
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
     
-    .dashboard-meta-cards .meta-card {
-        padding-left: 2rem;
-        background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-    }
 
 }
 
 
 
 @media (max-width: 991.99px) {
-
-    .dashboard-meta-cards .meta-card {
-        padding: 0.25rem 1.5rem 0.25rem 2rem;
-    }
 
     #teacher .today-classes-card.dashboard-card {
         grid-template-columns: 1fr;
@@ -812,10 +809,6 @@ a.btn-class-today img {
     .overview-period {
         grid-column: 1 / -1;
         padding: 1rem 0.3rem 1rem .5rem;
-        background: rgba(var(--color-turquoise-rgb), 0.1);
-        max-height: 56px !important;
-        min-height: 56px !important;
-        border-radius: 8px 8px 0 0;
     }
 
     .overview-metric {
@@ -905,9 +898,9 @@ a.btn-class-today img {
 
 
 @media (max-width: 436.98px) {
+
     .today-classes-card .header, .training-overview .header {
         padding: 0;
-        margin-bottom: 0;
     }
 
     .overview-period strong {
@@ -915,6 +908,7 @@ a.btn-class-today img {
     color: var(--color-navy);
     font-weight: 500;
     }
+
 }
 
 
@@ -927,10 +921,5 @@ a.btn-class-today img {
     .student-detail-card h2 {
         font-size: 1.5rem;
     }
-
-    /* .today-classes-card .header,
-    .training-overview .header {
-        gap: 0;
-    } */
 
 }

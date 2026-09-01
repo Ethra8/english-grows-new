@@ -43,6 +43,19 @@ h3 > div {
     margin-bottom: 0.5rem;
 }
 
+.company-admin-employees-list-page .meta-row {
+    display: flex;
+    flex-direction: row;
+    margin: 3rem auto;
+}
+
+.company-admin-employees-list-page .meta-card {
+    width: 280px;
+}
+
+.company-admin-employees-list-page .meta-card img {
+    opacity: 0.75;
+}
 
 /************************************************|
 **** EMPLOYEES_LIST Page ************************|

@@ -54,9 +54,9 @@
                             {{ active_courses|default:"0" }}
                             <small>
                                 {% if active_courses == 1 %}
-                                    {% trans 'active' context 'admin dashboard courses meta singular' %}
+                                    {% trans 'active' context 'admin dashboard metacards singular' %}
                                 {% else %}
-                                    {% trans 'active' context 'admin dashboard courses meta plural' %}
+                                    {% trans 'active' context 'admin dashboard metacards singular' %}
                                 {% endif %}
                             </small>
                         </span>
@@ -72,16 +72,16 @@
                     </div>
                     <div class="meta-text">
                         <strong>
-                            {% trans 'Employees List' %}
+                            {% trans 'Employees' context 'dashboard metacards' %}
                             <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
                         </strong>
                         <span>
                             {{ total_students|default:"0" }}
                             <small>
                                 {% if total_students == 1 %}
-                                    {% trans 'enrolled' context 'employees meta singular' %}
+                                    {% trans 'enrolled' context 'dashboard metacards singular' %}
                                 {% else %}
-                                    {% trans 'enrolled' context 'employees meta plural' %}
+                                    {% trans 'enrolled' context 'dashboard metacards plural' %}
                                 {% endif %}
                             </small>
                         </span>
@@ -140,7 +140,7 @@
 
                     <div class="title">
                         <h2>{% trans "Today's Classes" %}</h2>
-                        <span>{{ today|ordinal_sup|safe }}</span>
+                        <span>{{ today|ordinal_sup_short|safe }}</span>
                     </div>
 
                 </div>
@@ -227,30 +227,6 @@
                 ================================================== -->
                 <div class="training-overview-grid">
 
-
-                    <!-- =============================================
-                         COLUMN HEADERS
-                    ============================================== -->
-
-                    <!-- <div class="overview-grid-header overview-period-header"></div>
-
-                    <div class="overview-grid-header">
-                        {% trans 'Total Classes' %}
-                    </div>
-
-                    <div class="overview-grid-header">
-                        {% trans 'Classes Held' %}
-                    </div>
-
-                    <div class="overview-grid-header">
-                        {% trans 'Upcoming Classes' %}
-                    </div>
-
-                    <div class="overview-grid-header">
-                        {% trans 'Attendance Rate' %}
-                    </div>
-
- -->
                     <!-- === THIS WEEK === -->
 
                     <div class="overview-period">
@@ -283,7 +259,7 @@
                     <div class="overview-metric overview-completed">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Classes Held' %}
+                            {% trans 'Classes Held' context 'dashboard training overview' %}
                         </span>
 
                         <div class="overview-completion">
@@ -315,7 +291,7 @@
                     <div class="overview-metric overview-upcoming">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Upcoming Classes' %}
+                            {% trans 'Upcoming Classes' context 'dashboard training overview' %}
                         </span>
 
                         <span class="overview-number">
@@ -328,7 +304,7 @@
                     <div class="overview-metric overview-total">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Attendance Submitted' %}
+                            {% trans 'Attendance Submitted' context 'dashboard training overview' %}
                         </span>
 
                         <span class="overview-number">

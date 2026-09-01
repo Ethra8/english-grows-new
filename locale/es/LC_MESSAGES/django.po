@@ -115,7 +115,7 @@ msgid "Employee Performance"
 msgstr "Progreso de Empleados"
 
 msgid "Review all employees' individual performance across different areas"
-msgstr "Revise el rendimiento y progreso individual de cada empleado"
+msgstr "Revise el progreso y rendimiento individual de cada empleado"
 
 
 msgid "Materials"
@@ -416,6 +416,14 @@ msgstr "Info General"
 msgid "Employees"
 msgstr "Empleados"
 
+msgid "Total Employees"
+msgstr "Empleados Totales"
+
+msgid "Active Employees"
+msgstr "Empleados Activos"
+
+
+
 msgid "Sort by"
 msgstr "Ordenar por"
 
@@ -463,14 +471,16 @@ msgstr "Profesor/a"
 msgid "Total Hours"
 msgstr "Total Horas"
 
+msgctxt "dashboard training overview"
 msgid "Classes Held"
 msgstr "Clases Realizadas"
 
+msgctxt "dashboard training overview"
 msgid "Attendance Submitted"
 msgstr "Asistencias Registradas"
 
 msgid "past classes"
-msgstr "clases pasadas"
+msgstr "clases realizadas"
 
 msgid "Filter Attendance"
 msgstr "Filtrar Asistencias"
@@ -513,40 +523,48 @@ msgstr "El filtro no aplica a ninguna clase pasada"
 msgid "No upcoming classes apply to the selected filter"
 msgstr "El filtro no aplica a ninguna clase futura"
 
-msgid "Past Classes"
-msgstr "Clases Pasadas"
+msgctxt "classes list"
+msgid "Held"
+msgstr "Realizadas"
 
-msgid "Upcoming Classes"
-msgstr "Próximas Clases"
+msgctxt "classes list"
+msgid "Upcoming"
+msgstr "Próximas"
 
-msgid "Review upcoming and past class sessions"
-msgstr "Revise y filtre todas las sesiones de clase pasadas y futuras"
+msgid "Review and filter upcoming and past class sessions"
+msgstr "Revise y filtre todas las próximas sesiones de clase y las ya realizadas"
 
 msgid "Class Sessions List"
-msgstr "Lista Clases"
+msgstr "Listado de Clases"
 
-msgid "Employees List"
-msgstr "Lista Empleados"
 
 msgid "No employees enrolled yet"
-msgstr "No hay ninguna inscripción activa en este momento"
+msgstr "No se ha encontrado ninguna inscripción en este momento"
 
 
-msgctxt "admin dashboard courses meta singular"
+msgctxt "dashboard metacards"
+msgid "Employees"
+msgstr "Plantilla"
+
+msgctxt "dashboard metacards singular"
 msgid "active"
 msgstr "activo"
 
-msgctxt "admin dashboard courses meta plural"
+msgctxt "dashboard metacards plural"
 msgid "active"
 msgstr "activos"
 
-msgctxt "employees meta singular"
+msgctxt "dashboard metacards singular"
 msgid "enrolled"
 msgstr "inscrito"
 
-msgctxt "employees meta plural"
+msgctxt "dashboard metacards plural"
 msgid "enrolled"
 msgstr "inscritos"
+
+msgctxt "dashboard training overview"
+msgid "Upcoming Classes"
+msgstr "Próximas Clases"
 
 
 msgctxt "employees list"
@@ -585,9 +603,8 @@ msgstr "Asistentes"
 
 msgid "class"
 msgid_plural "classes"
-msgstr[0] ""
-msgstr[1] ""
-
+msgstr[0] "clase"
+msgstr[1] "clases"
 
 msgctxt "learner enrollment status"
 msgid "Enrolled"

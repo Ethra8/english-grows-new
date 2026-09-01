@@ -268,18 +268,12 @@
     <div class="course-header-meta-row">
 
         <a href="{% url 'profiles:company_admin_course_students_list' course.id %}"  class="course-meta-card meta-students">
-            <div class="course-meta-icon">
-                {% if enrollments|length == 1 %}
-                <i class="fa-solid fa-user"></i>
-                {% elif enrollments|length >= 3 %}
-                <i class="fa-solid fa-users"></i>
-                {% else %}
-                <i class="fa-solid fa-user-group"></i>
-                {% endif %}        
+            <div>
+                <img src="{% static 'icons/employees_active_icon.png' %}" alt="" aria-hidden="true" width="55">
             </div>
             <div class="course-meta-text">
                 <strong>{% trans 'Registrations' %}
-                    <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" width="12" height="18" class="ml-2">
+                    <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
                 </strong>
                 <span>{{ enrollments|length }} <small>{% trans 'enrolled' %}</small></span>
             </div>

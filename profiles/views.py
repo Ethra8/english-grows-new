@@ -9804,6 +9804,13 @@ def company_admin_employees_list(request):
             }
         )
 
+
+    # CALCULATE EMPLOYEES BY STATUS
+    active_employees = sum(
+        1
+        for employee in employees
+        if employee["enrollment_status"] == "active"
+    )
     # ---------------------------------------------------------
     # HELPERS
     # ---------------------------------------------------------
@@ -9873,6 +9880,9 @@ def company_admin_employees_list(request):
         "company": company,
         "employees": employees,
         "total_employees": len(employees),
+
+        "active_employees": active_employees,    
+
         "level_choices": UserProfile.LEVEL_CHOICES,
         "sort_by": sort_by,
     }

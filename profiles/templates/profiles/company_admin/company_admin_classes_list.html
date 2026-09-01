@@ -26,7 +26,7 @@
         <hr>
     </header>
 
-    <p class="text-dark">{% trans 'Review upcoming and past class sessions' %}.</p>
+    <p class="text-dark">{% trans 'Review and filter upcoming and past class sessions' %}.</p>
 
     <div class="all-assigned-classes mt-5">
 
@@ -39,11 +39,11 @@
                 class="classes-status-tab active"
                 data-status-tab="upcoming"
                 aria-selected="true"
-                aria-label="{% trans 'Upcoming Classes' %}"
+                aria-label="{% trans 'Upcoming' context 'classes list' %}"
             >
                 <!-- <i class="fa-solid fa-clock mr-2"></i> -->
 
-                <span>{% trans 'Upcoming Classes' %}</span>
+                <span>{% trans 'Upcoming' context 'classes list' %}</span>
 
                 <strong>
                     {{ class_filter_counts.upcoming.all }}
@@ -59,7 +59,7 @@
             >
                 <!-- <i class="fa-solid fa-clock-rotate-left mr-2"></i> -->
 
-                <span>{% trans 'Past Classes' %}</span>
+                <span>{% trans 'Held' context 'classes list' %}</span>
 
                 <strong>
                     {{ class_filter_counts.completed.all }}

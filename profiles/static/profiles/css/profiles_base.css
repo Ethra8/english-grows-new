@@ -712,10 +712,10 @@ div:has(> .student-action-btn) {
     background: rgba(var(--color-mist-rgb), 0.9);
 }
 
-.meta-card .meta-icon img {
+/* .meta-card .meta-icon img {
     width: 42px;
     height: 42px;
-}
+} */
 
 .meta-text strong {
     display: block;
@@ -897,7 +897,7 @@ div:has(> .student-action-btn) {
 
     /* MAIN PROFILE ********************/
     .profile-page {
-        padding: 30px 4%;
+        padding: 30px 4% 70px;
     }
 
     .student-detail-page.profile-page {
