@@ -13,11 +13,12 @@
     align-items: center;
     gap: 1.2rem;
     min-height: fit-content;
-    padding: 0.25rem 2rem 0.15rem 0.25rem;
-    border: 1.5px solid rgba(var(--color-turquoise-rgb), 0.35);
+    padding: 0.15rem 1.5rem 0.15rem 0.15rem;
+    /* border: 1.5px solid rgba(var(--color-turquoise-rgb), 0.35); */
+    border: 1px solid rgba(199, 255, 249, 0.28);  
     border-radius: 50px;
-    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));    
+    box-shadow: 0 4px 8px rgba(var(--color-shadow-rgb), 0.14);
 }
 
 /* .course-meta-card {

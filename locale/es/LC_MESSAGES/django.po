@@ -590,6 +590,9 @@ msgctxt "dashboard training overview"
 msgid "Upcoming Classes"
 msgstr "Próximas Clases"
 
+msgctxt "dashboard training overview"
+msgid "Attendance Rate"
+msgstr "Tasa de Asistencia"
 
 msgctxt "employees list"
 msgid "Review"
@@ -642,6 +645,10 @@ msgctxt "company attendance summary"
 msgid "active"
 msgstr "activos"
 
+msgctxt "company attendance summary"
+msgid "Active Courses"
+msgstr "Cursos Activos"
+
 
 msgctxt "admin all course attendance search form"
 msgid "Date"
@@ -684,15 +691,15 @@ msgctxt "admin all course attendance table"
 msgid "Attendance rate"
 msgstr "Tasa de asistencia"
 
-msgctxt "admin all course attendance table"
+msgctxt "submitted attendance status badge"
 msgid "awaiting"
 msgstr "pendiente"
 
-msgctxt "admin all course attendance table"
+msgctxt "submitted attendance status badge"
 msgid "Up to date"
 msgstr "actualizado"
 
-msgctxt "admin all course attendance table"
+msgctxt "submitted attendance status badge"
 msgid "No past classes"
 msgstr "sin registros"
 

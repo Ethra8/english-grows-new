@@ -136,7 +136,8 @@
     padding: 1.5rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.18);
     /* background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
-    background-color: rgba(var(--color-mist-rgb), 0.95);
+    /* background-color: rgba(var(--color-mist-rgb), 0.95); */
+    background-color: rgba(var(--color-whitesmoke-rgb), 0.9);
 }
 
 .all-course-attendance .course-status-filter-header h3 {
@@ -180,17 +181,14 @@
 
 .all-course-attendance .attendance-tools input {
     width: 100%;
-    min-height: 48px;
-    padding: 0.75rem 0.9rem;
+    min-height: 42px;
+    padding: 0.5rem 0.9rem;
     color: #123f43;
     border: 1px solid rgba(var(--color-teal-rgb), 0.27);
-    border-radius: 9px;
+    border-radius: 8px;
     outline: none;
     background: rgba(255, 255, 255, 0.92);
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .all-course-attendance .attendance-tools input::placeholder {
@@ -210,13 +208,13 @@
     justify-content: center;
     /* justify-self: flex-end; */
     min-width: 100px;
-    min-height: 46px;
+    min-height: 42px;
     padding: 0.25rem 1rem;
     border-radius: 8px;
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     color: var(--color-whitesmoke);
     border: 1px outset var(--color-navy);
     /* background: linear-gradient(135deg, rgba(var(--color-cyan-rgb), 0.85), rgba(var(--color-navy-rgb), 0.85)); */
@@ -226,15 +224,13 @@
 }
 
 .all-course-attendance .btn-attendance-tools:hover {
-    border: 1px outset var(--color-teal);
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.85), rgba(var(--color-navy-rgb), 0.75));
-    box-shadow: 0 0 0 rgba(0, 122, 125, 0.24);
+    background-color: rgba(var(--color-navy-rgb), 0.8);
 }
 
 .all-course-attendance .attendance-tools .btn-course-details {
     margin: auto 0 0 0;
-    min-height: 46px;
+    height: 42px;
+    max-height: 42px;
 }
 
 .all-course-attendance #attendanceDateFilter::-webkit-calendar-picker-indicator {
@@ -253,13 +249,13 @@
     margin-top: 1rem;
     padding: .45rem 1.25rem;
     width: 34%;
-    border: 1px outset rgba(var(--color-teal-rgb), 0.45);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.45);
 }
 
 .filter-result p {
-    color: var(--color-teal);
-    font-size: 1.2rem;
-    font-weight: 500;
+    color: var(--color-slate);
+    font-size: 1.1rem;
+    font-weight: 400;    
     padding: 0;
     margin: 0;
 }
@@ -285,7 +281,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.25rem;
+    padding: 0.5rem 1.5rem;
 }
 
 .all-course-attendance .attendance-list-header-filter h2 {
@@ -326,23 +322,25 @@
         minmax(115px, 0.7fr)    /* Attendance rate */
         minmax(205px, 1fr);     /* Action */
 
+    width: 100%;
     min-width: 1180px;
+    box-sizing: border-box;
     overflow: hidden;
-    border: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    border-radius: 8px;
 }
 
 
 /* ==== HORIZONTAL SCROLL ON LIST ======================= */
 #globalCourseAttendanceList {
-    overflow-x: scroll !important;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    scrollbar-width: auto;
     width: 100%;
     max-width: 100%;
     min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: scroll;
+
+    max-height: 42rem; /* tune this to ~6 rows */
+
+    scrollbar-gutter: stable;
 }
 
 
@@ -380,6 +378,9 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.055em;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
 .all-course-attendance
@@ -819,10 +820,14 @@
     padding: 2rem 1.5rem;
 } */
 
-.all-course-attendance .course-status-filter-header h3 {
+.all-course-attendance .course-status-filter-header p {
     color: var(--color-navy);
     font-weight: 400;
-    font-size: 1.5rem;
+    font-size: 1rem;
+}
+
+.all-course-attendance .course-status-filter-header i {
+    font-size: 1.2rem;
 }
 
 

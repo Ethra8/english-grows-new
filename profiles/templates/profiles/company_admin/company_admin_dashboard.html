@@ -318,27 +318,23 @@
 
                             <span class="attendance-status-badge pending">
                                 <i class="fa-solid fa-clock" aria-hidden="true"></i>
-
-                                {% blocktrans count pending=weekly_attendance_pending_sessions %}
-                                    {{ pending }} awaiting
-                                {% plural %}
-                                    {{ pending }} awaiting
-                                {% endblocktrans %}
+                                {{ weekly_attendance_pending_sessions }}
+                                {% trans 'awaiting' context 'submitted attendance status badge' %}
                             </span>
 
-                            {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
+                        {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
 
-                                <span class="attendance-status-badge complete">
-                                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                    {% trans 'Up to date' %}
-                                </span>
-                            
-                            {% else %}    
-                                <span class="attendance-status-badge neutral">
-                                    {% trans 'No classes held' %}
-                                </span>    
+                            <span class="attendance-status-badge complete">
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                {% trans 'Up to date' context 'submitted attendance status badge' %}
+                            </span>
+                        
+                        {% else %}    
+                            <span class="attendance-status-badge neutral">
+                                {% trans 'No past classes' context 'submitted attendance status badge' %}
+                            </span>    
 
-                            {% endif %}
+                        {% endif %}
 
 
                     </div>
@@ -346,7 +342,7 @@
                     <div class="overview-metric overview-attendance">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Attendance Rate' %}
+                            {% trans 'Attendance Rate' context 'dashboard training overview' %}
                         </span>
 
                         <div class="attendance-progress">
@@ -404,26 +400,11 @@
 
                     </div>
 
-
-                    <!-- MONTH: TOTAL CLASSES -->
-                    <!-- <div class="overview-metric overview-total">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Total Classes' %}
-                        </span>
-
-                        <span class="overview-number">
-                            {{ total_monthly_sessions|default:"0" }}
-                        </span>
-
-                    </div> -->
-
-
                     <!-- MONTH: CLASSES HELD -->
                     <div class="overview-metric overview-completed">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Classes Held' %}
+                            {% trans 'Classes Held' context 'dashboard training overview' %}
                         </span>
 
                         <div class="overview-completion">
@@ -456,7 +437,7 @@
                     <div class="overview-metric overview-upcoming">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Upcoming Classes' %}
+                            {% trans 'Upcoming Classes' context 'dashboard training overview' %}
                         </span>
 
                         <span class="overview-number">
@@ -469,7 +450,7 @@
                     <div class="overview-metric overview-total">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Attendance Submitted' %}
+                            {% trans 'Attendance Submitted' context 'dashboard training overview' %}
                         </span>
 
                         <span class="overview-number">
@@ -493,12 +474,12 @@
 
                                 <span class="attendance-status-badge complete">
                                     <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                    {% trans 'Up to date' %}
+                                    {% trans 'Up to date' context 'dashboard training overview' %}
                                 </span>
                             
                             {% else %}    
                                 <span class="attendance-status-badge neutral">
-                                    {% trans 'No classes held' %}
+                                    {% trans 'No classes held' context 'dashboard training overview' %}
                                 </span>    
 
                             {% endif %}
@@ -510,7 +491,7 @@
                     <div class="overview-metric overview-attendance">
 
                         <span class="overview-mobile-label">
-                            {% trans 'Attendance Rate' %}
+                            {% trans 'Attendance Rate' context 'dashboard training overview' %}
                         </span>
 
                         <div class="attendance-progress">

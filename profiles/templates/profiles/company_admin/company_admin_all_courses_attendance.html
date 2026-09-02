@@ -44,24 +44,35 @@
                 </div>
                 <div class="meta-text">
                     <strong>
-                        {% trans 'Courses' %}
+                        {% trans 'Active Courses' %}
                         <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
                     </strong>
-                    <span>{{ total_courses_count }}</span>
+                    <span>{{active_courses_count}} / {{ total_courses_count }}</span>
                 </div>
             </div>
         </a>
 
-        <div class="attendance-summary-card">
-            <div class="status-pill completed">
-                <i class="fa-solid fa-users"></i>
+            <div class="meta-card meta-students">
+                <div>
+                    <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
+                </div>
+                <div class="meta-text">
+                    <strong>
+                        {% trans 'Employees' context 'dashboard metacards' %}
+                        <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                    </strong>
+                    <span>
+                        {{ total_active_employees|default:"0" }}
+                        <small>
+                            {% if total_active_employees == 1 %}
+                                {% trans 'enrolled' context 'metacards singular' %}
+                            {% else %}
+                                {% trans 'enrolled' context 'metacards plural' %}
+                            {% endif %}
+                        </small>
+                    </span>
+                </div>
             </div>
-
-            <div>
-                <span>{% trans 'Employees' %}</span>
-                <strong>{{ total_active_employees }} {% trans 'active' context 'company attendance summary' %}</strong>
-            </div>
-        </div>
 
         <div class="attendance-summary-card">
             <div class="status-pill completed">
@@ -120,10 +131,10 @@
                 <div class="assigned-courses-header">
                     <div class="course-status-filter-header">
 
-                        <h3>
+                        <p>
                             <i class="fa-solid fa-magnifying-glass mr-2"></i>
                             {% trans 'Search attendance by date, course or employee' context 'admin all course attendance search form' %}
-                        </h3>
+                        </p>
 
                         <div class="mt-3">
                             <form method="get" class="attendance-tools">
@@ -297,19 +308,19 @@
                                         <span class="submission-status awaiting">
                                             <i class="fa-solid fa-clock"></i>
                                             {{ course.pending_submission_count }}
-                                            {% trans 'awaiting' context 'admin all course attendance table' %}
+                                            {% trans 'awaiting' context 'submitted attendance status badge' %}
                                         </span>
 
                                     {% elif course.past_classes_count > 0 %}
                                         <span class="submission-status up-to-date">
                                             <i class="fa-solid fa-circle-check"></i>
-                                            {% trans 'Up to date' context 'admin all course attendance table' %}
+                                            {% trans 'Up to date' context 'submitted attendance status badge' %}
                                         </span>
 
                                     {% else %}
                                         <span class="submission-status no-classes">
                                             <i class="fa-regular fa-calendar"></i>
-                                            {% trans 'No past classes' context 'admin all course attendance table' %}
+                                            {% trans 'No past classes' context 'submitted attendance status badge' %}
                                         </span>
                                     {% endif %}
 
