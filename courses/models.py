@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
@@ -1541,6 +1541,74 @@ class CourseEnrollment(models.Model):
             return False
 
         return self.attendance_percentage < 75
+
+
+    # ---------------------------------------------------------
+    # SAFE ENROLLMENT DELETION
+    # ---------------------------------------------------------
+
+    @property
+    def can_be_deleted(self):
+        """
+        Return whether this enrollment can safely be permanently deleted.
+
+        Permanent deletion is intended only for enrollments created
+        by mistake.
+
+        Genuine attendance history consists of Attendance records
+        explicitly recorded as:
+
+        - attended
+        - missed
+        - excused
+
+        Other operational statuses do not, by themselves, prevent
+        deletion.
+        """
+
+        if not self.pk:
+            return True
+
+        return not Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
+        ).exists()
+
+
+    def delete(self, *args, **kwargs):
+        """
+        Permanently delete an erroneous enrollment.
+
+        Deletion is blocked when genuine attendance history exists.
+
+        When deletion is permitted:
+        - all Attendance records for this learner/course are removed
+        - the CourseEnrollment itself is removed
+        - both operations happen inside one database transaction
+
+        A legitimate enrollment that should remain part of the
+        historical record must be marked cancelled instead.
+        """
+
+        if not self.can_be_deleted:
+            raise ValidationError(
+                "This enrollment cannot be deleted because attendance "
+                "has already been recorded for this learner."
+            )
+
+        with transaction.atomic():
+
+            Attendance.objects.filter(
+                student=self.student,
+                class_session__course=self.course,
+            ).delete()
+
+            return super().delete(*args, **kwargs)
 
 
 

@@ -296,6 +296,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
         ============================================================
+        EVENT DISPLAY TITLE
+        ============================================================
+
+        IMPORTANT:
+
+        The visible calendar title must use the CURRENT course name.
+
+        ClassSession.title may contain the old course name if the
+        course/group was renamed after its sessions were generated.
+
+        extendedProps.course is therefore the source of truth.
+
+        event.title is kept only as a safe fallback.
+        ============================================================
+    */
+
+    function getEventDisplayTitle(event) {
+
+        const labels =
+            getLabels();
+
+        const props =
+            event.extendedProps || {};
+
+        const courseName =
+            props.course || '';
+
+        const classNumber =
+            props.class_number;
+
+
+        if (
+            courseName
+            &&
+            classNumber !== undefined
+            &&
+            classNumber !== null
+            &&
+            classNumber !== ''
+        ) {
+
+            return (
+                `${courseName} - ${labels.lesson} ${classNumber}`
+            );
+        }
+
+
+        if (courseName) {
+            return courseName;
+        }
+
+
+        return event.title || '';
+    }
+
+
+    /*
+        ============================================================
         EVENT ACTION
         ============================================================
 
@@ -439,6 +497,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return null;
     }
+
 
     /*
         ============================================================
@@ -1253,7 +1312,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     function (arg) {
 
                         const title =
-                            arg.event.title;
+                            getEventDisplayTitle(
+                                arg.event
+                            );
 
 
                         /*
@@ -1519,7 +1580,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         */
 
                         modalTitle.textContent =
-                            event.title;
+                            getEventDisplayTitle(
+                                event
+                            );
 
 
                         /*

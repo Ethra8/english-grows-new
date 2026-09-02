@@ -51,7 +51,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
 class CourseEnrollmentInline(admin.TabularInline):
     model = CourseEnrollment
     extra = 0
-    can_delete = False
+    can_delete = True
 
     autocomplete_fields = (
         "student",
