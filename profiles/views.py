@@ -1077,7 +1077,7 @@ def my_learning_progress(request):
 
     for (start, end), days in timetable_groups.items():
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -2588,7 +2588,7 @@ def teacher_course_details(request, course_id):
 
     for (start, end), days in timetable_groups.items():
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -2804,7 +2804,7 @@ def teacher_course_students_list(request, course_id):
 
     for (start, end), days in timetable_groups.items():
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -3619,7 +3619,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
     for (start, end), days in timetable_groups.items():
 
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -4300,7 +4300,7 @@ def student_attendance_record(request, course_id, enrollment_id):
     for (start, end), days in timetable_groups.items():
 
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -6367,7 +6367,6 @@ def company_admin_dashboard(request):
     )
 
 
-
 @login_required
 def company_admin_courses(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -6380,10 +6379,23 @@ def company_admin_courses(request):
     if not company:
         return redirect("home")
 
+    status_order = Case(
+        When(status="active", then=Value(1)),
+        When(status="confirmed", then=Value(2)),
+        When(status="paused", then=Value(3)),
+        When(status="completed", then=Value(4)),
+        When(status="cancelled", then=Value(5)),
+        default=Value(99),
+        output_field=IntegerField(),
+    )
+
     courses = (
         Course.objects
         .filter(company=company)
-        .annotate(enrollment_count=Count("enrollments"))
+        .annotate(
+            enrollment_count=Count("enrollments"),
+            status_order=status_order,
+        )
         .select_related(
             "course_type",
             "company",
@@ -6394,7 +6406,10 @@ def company_admin_courses(request):
             "class_sessions",
             "timetable_slots",
         )
-        .order_by("name")
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
 
     total_courses = courses.count()
@@ -6974,7 +6989,7 @@ def company_admin_course_details(request, course_id):
 
     for (start, end), days in timetable_groups.items():
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -7216,7 +7231,7 @@ def company_admin_course_students_list(request, course_id):
 
     for (start, end), days in timetable_groups.items():
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })
@@ -8266,7 +8281,7 @@ def company_admin_student_detail(request, student_id):
     for (start, end), days in timetable_groups.items():
 
         formatted_timetable.append({
-            "days": " & ".join(days),
+            "days": " / ".join(days),
             "start": start,
             "end": end,
         })

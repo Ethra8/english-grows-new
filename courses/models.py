@@ -586,7 +586,7 @@ class Course(models.Model):
         if not slots:
             return "Not assigned"
 
-        return " & ".join(
+        return "/ ".join(
             slot.get_day_of_week_display()[:3]
             for slot in slots
         )

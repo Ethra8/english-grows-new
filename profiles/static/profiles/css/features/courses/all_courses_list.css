@@ -29,23 +29,28 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.assigned-courses-page p:first-of-type {
+    margin-bottom: 2rem;
+}
 
 /* MAIN WRAPPER */
 .wrapper-assigned-courses-panel {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    box-shadow: 0 8px 20px rgba(11, 53, 95, 0.08);    
     background: rgba(var(--color-turquoise-rgb), 0.2);
 }
 /* ************ */
 
 .assigned-courses-panel {
     width: 100%;
-    background: rgba(var(--color-navy-rgb), 0.9);
-    border: 1px solid rgba(80, 230, 220, 0.85);
+    /* background: rgba(var(--color-navy-rgb), 0.9); */
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));     */
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.66), rgba(var(--color-teal-rgb), 0.6), rgba(var(--color-teal-rgb), 0.3));
+    /* border: 1px solid rgba(80, 230, 220, 0.85); */
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
+    /* box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5); */
 }
 
 .assigned-courses-header {
@@ -55,10 +60,250 @@
     margin: 0 auto;
 }
 
-.assigned-courses-header select {
+.course-status-filter-form {
+    display: none;
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+
+    .course-status-filter-form {
+        position: relative;
+        z-index: 30;
+        display: block;
+        width: 100%;
+        overflow: visible;
+    }
+
+
+    .course-status-dropdown {
+        position: relative;
+        width: 100%;
+        overflow: visible;
+    }
+
+
+    /* =====================================================
+       CLOSED / CURRENT VALUE
+    ===================================================== */
+
+    .course-status-dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        min-height: 48px;
+
+        margin: 0;
+        padding: 0.7rem 1rem;
+
+        border:
+            2px solid
+            rgba(var(--color-teal-rgb), 0.75);
+
+        border-radius: 8px;
+
+        background:
+            var(--color-whitesmoke);
+
+        color:
+            var(--color-navy);
+
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.2;
+
+        text-align: left;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 3px 8px
+            rgba(var(--color-navy-rgb), 0.08);
+
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
+    }
+
+
+    .course-status-dropdown-toggle:hover {
+        border-color:
+            rgba(var(--color-teal-rgb), 0.9);
+    }
+
+
+    .course-status-dropdown-toggle:focus-visible {
+        outline:
+            2px solid
+            rgba(var(--color-turquoise-rgb), 0.85);
+
+        outline-offset: 2px;
+    }
+
+
+    .course-status-dropdown-current {
+        min-width: 0;
+        overflow: hidden;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+
+    .course-status-dropdown-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+
+        flex: 0 0 auto;
+        margin-left: 1rem;
+    }
+
+
+    .course-status-dropdown-count {
+        color: var(--color-navy);
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+
+    /* =====================================================
+       CHEVRON
+    ===================================================== */
+
+    .course-status-dropdown-chevron {
+        flex: 0 0 auto;
+
+        margin-left: 1rem;
+
+        color:
+            var(--color-teal);
+
+        font-size: 0.9rem;
+
+        transition:
+            transform 0.18s ease;
+    }
+
+
+    .course-status-dropdown-toggle[aria-expanded="true"]
+    .course-status-dropdown-chevron {
+        transform: rotate(180deg);
+    }
+
+
+    /* =====================================================
+       OPEN MENU
+    ===================================================== */
+
+    .course-status-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+
+        z-index: 40;
+
+        width: 100%;
+
+        /* safety for short mobile screens */
+        max-height: min(320px, 55dvh);
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        background: var(--color-whitesmoke);
+
+        border: 1px solid rgba(var(--color-teal-rgb), 0.35);
+        border-radius: 7px;
+
+        box-shadow:
+            0 8px 20px rgba(var(--color-navy-rgb), 0.10);
+    }
+    /* =====================================================
+       OPTION ROW
+    ===================================================== */
+
+    .course-status-dropdown-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+
+        margin: 0;
+        padding: 0.72rem 1rem;
+
+        border: 0;
+        border-radius: 0;
+
+        background:
+            var(--color-whitesmoke);
+
+        color:
+            var(--color-navy);
+
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.25;
+
+        text-align: left;
+
+        cursor: pointer;
+
+        transition:
+            background-color 0.15s ease;
+    }
+
+
+    /* Selected option */
+    .course-status-dropdown-option.active {
+        background:
+            rgba(var(--color-turquoise-rgb), 0.15);
+        display: flex;
+        justify-content: space-between;    
+    }
+
+
+    /* Hover / keyboard */
+    .course-status-dropdown-option:hover,
+    .course-status-dropdown-option:focus-visible {
+        background:
+            rgba(var(--color-turquoise-rgb), 0.11);
+
+        outline: none;
+    }
+
+
+    .course-status-dropdown-option.active:hover,
+    .course-status-dropdown-option.active:focus-visible {
+        background:
+            rgba(var(--color-turquoise-rgb), 0.18);
+    }
+
+
+    /* Count on right */
+    .course-status-dropdown-option > span:last-child {
+        flex: 0 0 auto;
+
+        margin-left: 1rem;
+
+        color:
+            var(--color-blue-slate);
+
+        font-size: 0.9rem;
+    }
+}
+/* .assigned-courses-header select {
     display: none;
     width: 100% !important;
-    /* max-width: 320px; */
     padding: 0.75rem 1rem;
     padding-right: 3rem;
     font-size: 1.2rem;
@@ -88,11 +333,11 @@
 .assigned-courses-header select:focus {
     border: 3px inset #00fee1 !important;
     outline: none;
-}
+} */
 
 .course-status-filter-header {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.25rem;
 }
 
 .course-status-buttons {
@@ -101,13 +346,18 @@
     gap: 0.25rem;
 }
 
-.course-status-btn i {
+.assigned-courses-page .course-status-btn {
+    font-size: 1.4rem;
+    min-height: 52px;
+}
+
+.assigned-courses-page .course-status-btn i {
     font-size: 1.3rem;
     color: var(--color-turquoise);
 }
 
-.course-status-btn strong {
-    background: rgba(var(--color-teal-rgb), 0.8);
+.assigned-courses-page .course-status-btn strong {
+    background: rgba(var(--color-steel-rgb), 0.6);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
     color: var(--color-whitesmoke);
@@ -115,13 +365,20 @@
     letter-spacing: 0.03em;
     font-size: 1.2rem;
     font-weight: 500;
-    height: 35px;
-    width: 35px;
+    height: 28px;
+    width: 42px;
+    line-height: 1;
 }
 
-.course-status-btn.active strong {
+.assigned-courses-page .course-status-btn.active strong {
     background: rgba(var(--color-turquoise-rgb), 0.3);
 }
+
+.assigned-courses-page .course-status-btn:hover strong {
+        background: rgba(var(--color-turquoise-rgb), 0.3);
+
+}
+
 
 .assigned-courses-list {
     display: block;
@@ -133,28 +390,28 @@
     background: var(--color-whitesmoke);
     padding: 1rem;
     box-sizing: border-box;
-    overflow-x: scroll !important;
-    overflow-y: hidden;
+    /* overflow-x: scroll !important;
+    overflow-y: hidden; */
+    overflow-x: auto;
+    overflow-y: scroll;
+    max-height: 36rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable;
     scrollbar-width: auto;
 }
 
-.assigned-courses-list > .assigned-course-row:not(.class-hidden):not(:has(~ .assigned-course-row:not(.class-hidden))) {
-    border-bottom: none !important;
-}
-
 .assigned-course-row {
     display: grid;
-    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(140px, 0.5fr) minmax(180px, 1fr) minmax(90px, 0.5fr) minmax(130px, 1fr) ;
+    grid-template-columns: minmax(380px, 1fr) minmax(60px, 0.5fr) minmax(140px, 0.75fr) minmax(220px, 1.4fr) minmax(100px, 0.75fr) minmax(150px, 1.25fr);
     align-items: center;
     /* gap: 0.5rem; */
-    padding: 0.75rem 1.3rem;
+    padding: 0.75rem 0.75rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4) !important;
     min-width: 1300px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
 .assigned-courses-list .assigned-course-row:last-of-type {
@@ -162,7 +419,7 @@
 }
 
 .assigned-course-row:hover {
-    background: rgba(var(--color-icy-rgb), 0.3);
+    background: rgba(var(--color-teal-rgb), 0.1);
 }
 
 .assigned-course-row > div:nth-of-type(2) {
@@ -187,25 +444,33 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    align-content: center;
+    /* align-content: center; */
     align-self: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
+}
 
+.course-main-info img {
+    opacity: 0.7;
 }
 
 .course-main-info strong {
     display: block;
-    font-size: 1.4rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--color-navy);
     margin: 0;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.005em;
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 0.01em;
     transition: all 0.2s ease;
 }
 
-.course-main-info strong:hover {
-    font-weight: 600;
+.assigned-course-row .course-name img {
+    display: none;
+    transition: all 0.2s ease;
+}
+
+.assigned-course-row:hover .course-name img {
+    display: inline-block;
 }
 
 .course-main-info span.status-badge {
@@ -272,8 +537,8 @@
     height: 70%;
     min-width: 200px;
     gap: 0.75rem;
-    justify-content: flex-start;
-    padding-left: 3rem;
+    justify-content: center;    
+    /* padding-left: 3rem; */
 }
 
 .course-list-student-num {
@@ -293,6 +558,7 @@
 .course-list-date .icon,
 .course-list-student-num .icon {
     width: 36px;
+    min-width: 36px;
     height: 36px;
     border: 1px solid var(--color-teal);
     background: transparent;
@@ -310,6 +576,7 @@
     color: var(--color-teal);
     font-size: 1rem;
     margin-bottom: 0;
+    font-weight: 500;
 }
 
 .course-list-date span,
@@ -334,7 +601,7 @@
 }
 
 .course-stat .completion-ring {
-    --ring-size: 52px;
+    --ring-size: 46px;
     --ring-thickness: 1px;
     --ring-center: var(--color-whitesmoke);
 
@@ -359,7 +626,7 @@
             transparent calc(55% - var(--ring-thickness) + 1px)
         ),
         conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
+            var(--color-cyan) calc(var(--completion, 0) * 1%),
             rgba(148, 148, 148, 0.2) 0
         );
     border: 0.25px solid #a2b8bb;
@@ -394,6 +661,56 @@
 |*** MEDIA QUERIES ***********************************|
 |*****************************************************/
 
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+    .course-status-buttons {
+        display: flex;
+        gap: 4px;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        width: 100%;
+        max-width: 100%;
+        height: 85px;
+        padding-bottom: 2px;
+
+        scrollbar-width: auto;
+        scrollbar-color:
+            rgba(var(--color-teal-rgb), 0.70)
+            rgba(var(--color-teal-rgb), 0.12);
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .course-status-btn {
+        flex: 0 0 auto;
+        min-width: 145px;
+        height: 54px;
+        padding: 0 1rem;
+        white-space: nowrap;
+    }
+
+    .course-status-buttons::-webkit-scrollbar {
+        height: 9px;
+    }
+
+    .course-status-buttons::-webkit-scrollbar-track {
+        background: rgba(var(--color-teal-rgb), 0.12);
+    }
+
+    .course-status-buttons::-webkit-scrollbar-thumb {
+        background: rgba(var(--color-teal-rgb), 0.70);
+        border-radius: 999px;
+    }
+
+    .course-status-buttons::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--color-teal-rgb), 0.85);
+    }
+}
+
+
+
 @media (max-width: 991.98px) {
 
     .assigned-courses-header {
@@ -408,34 +725,71 @@
     /*****************************************************|
     |*** BOTH ADMIN & TEACHER  ***************************|
     |*****************************************************/
+
     .wrapper-assigned-courses-small-cards {
         display: flex;
     }
 
+    /*
+     * The outer panel must allow the absolute mobile dropdown
+     * to extend over the course list. The course list keeps its
+     * own X/Y scrolling below, so desktop/tablet behaviour is
+     * unaffected.
+     */
     .wrapper-assigned-courses-panel {
+        position: relative;
         margin: 1rem auto;
+        overflow: visible;
     }
 
-    .assigned-courses-header select {
-        display: block !important;
+    .assigned-courses-panel {
+        position: relative;
+        overflow: visible;
     }
 
+    .assigned-courses-header {
+        position: relative;
+        z-index: 20;
+        width: 100%;
+        justify-content: stretch;
+        overflow: visible;
+    }
+
+    .course-status-filter-form {
+        position: relative;
+        z-index: 30;
+        display: block;
+        width: 100%;
+        overflow: visible;
+    }
+
+    .course-status-dropdown {
+        position: relative;
+        width: 100%;
+        overflow: visible;
+    }
+
+    .course-status-dropdown-menu {
+        z-index: 40;
+    }
+
+    /*
+     * Keep the dataset itself independently scrollable.
+     * Do not move these overflow rules to the outer panel.
+     */
+    .assigned-courses-list {
+        position: relative;
+        z-index: 1;
+        overflow-x: auto;
+        overflow-y: scroll;
+    }
+
+    /* Desktop/tablet status buttons are replaced by the custom dropdown. */
     .course-status-buttons {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
         display: none;
     }
-
-    .course-status-buttons {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-    }
-
-    .course-status-buttons {
-        display: none;
-    }
-
 }
+
 
 
 @media (max-width: 576px) {
@@ -443,14 +797,10 @@
     /*****************************************************|
     |*** BOTH ADMIN & TEACHER  ***************************|
     |*****************************************************/
+
     .assigned-courses-page header .course-status-row .item {
-        /* phones: 1 per row */
         flex: 0 0 100%;
         max-width: 100%;
-    }
-
-    .assigned-courses-header select {
-        display: none;
     }
 
     .assigned-courses-header {
@@ -458,18 +808,12 @@
         align-items: stretch;
         gap: 1rem;
     }
-
-    .course-status-buttons {
-        grid-template-columns: repeat(1, 1fr);
-        gap: 0.75rem;
-    }
-
-
 }
+
 
 
 /* MUST STAY AT THE END OF CSS FILE */
 .assigned-course-row.course-hidden,
 .assigned-class-row.class-hidden {
     display: none !important;
-}    
+}

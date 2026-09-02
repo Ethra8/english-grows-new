@@ -468,9 +468,9 @@ msgstr "inscrito"
 msgid "Post-commencement enrollment"
 msgstr "Inscripción posterior al inicio del curso"
 
-
+msgctxt "courses list row"
 msgid "Completion"
-msgstr "Completado"
+msgstr "Progreso"
 
 msgid "Learners"
 msgstr "Estudiantes"
