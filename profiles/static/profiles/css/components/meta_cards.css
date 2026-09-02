@@ -97,9 +97,12 @@
 .meta-text,
 .course-meta-text {
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
-/* ONLY company_admin_all_courses_attendance 
- & company_admincourse_attendance */
+
+/* ONLY company_admin_course_attendance */
 .course-attendance .meta-text {
     padding-left: 3rem;
 }
@@ -119,10 +122,10 @@
 
 .meta-text span,
 .course-meta-text span {
-    /* color: var(--color-whitesmoke); */
     color: rgba(var(--color-turquoise-rgb), 0.9);
     font-size: 1.4rem;
     font-weight: 400;
+    margin-top: -0.2rem;
 }
 
 

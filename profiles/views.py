@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
 from django.db.models import Count, Q, Prefetch, Value, Case, When, Value, IntegerField, F, DateField
+
 from django.db.models.functions import Coalesce, NullIf, Lower
 
 from django.http import JsonResponse
@@ -6527,7 +6528,21 @@ def company_admin_all_courses_attendance(request):
                 to_attr="attendance_class_sessions",
             ),
         )
-        .order_by("name")
+        .annotate(
+            status_priority=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by(
+            "status_priority",
+            "name",
+        )
     )
 
     # Search by course name or course type.
@@ -6587,7 +6602,8 @@ def company_admin_all_courses_attendance(request):
             class_sessions__start_time__date=parsed_date,
         ).distinct()
 
-    course_attendance_rows = []
+    all_courses_list = []
+    active_courses_list = []
 
     global_employee_ids = set()
     global_past_classes = 0
@@ -6721,7 +6737,10 @@ def company_admin_all_courses_attendance(request):
         course.last_class = last_class
         course.next_class = next_class
 
-        course_attendance_rows.append(course)
+        all_courses_list.append(course)
+
+        if course.status == "active":
+            active_courses_list.append(course)
 
         global_past_classes += past_classes_count
         global_submitted_classes += submitted_classes_count
@@ -6763,11 +6782,15 @@ def company_admin_all_courses_attendance(request):
         "company": company,
 
         # One item per course.
-        "courses": course_attendance_rows,
+        "all_courses_list": all_courses_list,
+        "active_courses_list": active_courses_list,
 
         # Global summary.
-        "total_courses": len(course_attendance_rows),
-        "total_employees": len(global_employee_ids),
+        "total_courses_count": len(all_courses_list),
+        "active_courses_count": len(active_courses_list),
+
+        "total_active_employees": len(global_employee_ids),
+        
         "total_past_classes": global_past_classes,
         "total_submitted_classes": global_submitted_classes,
         "global_attended_count": global_attended_count,

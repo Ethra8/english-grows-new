@@ -125,13 +125,9 @@
                 <div class="assigned-course-row" data-status="{{ course.status }}">
 
                     <div class="course-main-info">
-                        {% if course.enrollment_count == 1 %}
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                        {% else %}
-                        <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
-                        {% endif %}
+                        <img src="{% static 'icons/course_icon.png' %}" alt="" aria-hidden="true" width="46">
                         <div>
-                            <h3>{{ course.name }}</h3>
+                            <strong>{{ course.name }}</strong>
                             <span>{{ course.course_type }}</span> 
                         </div>
                     </div>

@@ -50,9 +50,9 @@
                 <span>{{ active_employees|default:"0" }}
                     <small>
                         {% if total_employees == 1 %}
-                            {% trans 'enrolled' context 'employees meta singular' %}
+                            {% trans 'enrolled' context 'metacards singular' %}
                         {% elif total_employees < 1 or total_employees > 1 %}
-                            {% trans 'enrolled' context 'employees meta plural' %}
+                            {% trans 'enrolled' context 'metacards plural' %}
                         {% endif %}
                     </small>
                 </span>

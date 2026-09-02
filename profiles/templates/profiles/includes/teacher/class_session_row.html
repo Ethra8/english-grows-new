@@ -1,30 +1,21 @@
 {% load static %}
 {% load i18n %}
 
-<div class="assigned-class-row"
-     data-status-group="{{ session.class_status_group }}"
-     data-today="{{ session.is_today|yesno:'true,false' }}"
-     data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
-     data-monthly="{{ session.is_this_month|yesno:'true,false' }}">
-
+<a href="{% url 'profiles:teacher_course_details' session.course.id %}"
+    class="assigned-class-row"
+    data-status-group="{{ session.class_status_group }}"
+    data-today="{{ session.is_today|yesno:'true,false' }}"
+    data-weekly="{{ session.is_this_week|yesno:'true,false' }}"
+    data-monthly="{{ session.is_this_month|yesno:'true,false' }}"
+>
     <!-- COURSE / CLASS INFO -->
     <div class="class-list-course">
+        <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="46">
 
         <div>
-            {% if session.course.enrollments.count == 1 %}
-            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="One-to-one course">
-            {% else %}
-            <img src="{% static 'icons/group_course_icon.png' %}" alt="Group course">
-            {% endif %}
-
-            <a href="{% url 'profiles:teacher_course_details' session.course.id %}">
-                <div>
-                    <strong>{{ session.course.name }}</strong>
-                    <span>Lesson {{ session.class_number }}</span>
-                </div>
-            </a>
+            <strong>{{ session.course.name }}</strong>
+            <span>Lesson {{ session.class_number }}</span>
         </div>
-
     </div>
 
     <!-- LEVEL -->
@@ -88,4 +79,4 @@
 
     </div>
 
-</div>
+</a>

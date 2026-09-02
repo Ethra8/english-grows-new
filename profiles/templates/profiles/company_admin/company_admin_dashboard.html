@@ -54,9 +54,9 @@
                             {{ active_courses|default:"0" }}
                             <small>
                                 {% if active_courses == 1 %}
-                                    {% trans 'active' context 'admin dashboard metacards singular' %}
+                                    {% trans 'active' context 'metacards singular' %}
                                 {% else %}
-                                    {% trans 'active' context 'admin dashboard metacards singular' %}
+                                    {% trans 'active' context 'metacards plural' %}
                                 {% endif %}
                             </small>
                         </span>
@@ -79,9 +79,9 @@
                             {{ total_students|default:"0" }}
                             <small>
                                 {% if total_students == 1 %}
-                                    {% trans 'enrolled' context 'dashboard metacards singular' %}
+                                    {% trans 'enrolled' context 'metacards singular' %}
                                 {% else %}
-                                    {% trans 'enrolled' context 'dashboard metacards plural' %}
+                                    {% trans 'enrolled' context 'metacards plural' %}
                                 {% endif %}
                             </small>
                         </span>
@@ -242,7 +242,7 @@
                             <span class="overview-period-total">
                                 <a href="{% url 'profiles:company_admin_classes_list' %}?filter=weekly" class="overview-period-link" aria-label="{% trans 'View this week classes' %}">
                                     <strong>{{ total_weekly_sessions|default:"0" }}
-                                    {% blocktrans count total=total_weekly_sessions %}
+                                    {% blocktrans trimmed count total=total_weekly_sessions %}
                                         class
                                     {% plural %}
                                         classes
@@ -391,14 +391,13 @@
                             <span class="overview-period-total">
                                 <a href="{% url 'profiles:company_admin_classes_list' %}?filter=monthly" class="overview-period-link" aria-label="{% trans 'View this month classes' %}">
                                     <strong>{{ total_monthly_sessions|default:"0" }}
-                                        {% blocktrans count total=total_monthly_sessions %}
+                                        {% blocktrans trimmed count total=total_monthly_sessions %}
                                             class
                                         {% plural %}
                                             classes
                                         {% endblocktrans %}
                                     </strong>
                                     <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="" aria-hidden="true" width="26">
-
                                 </a>
                             </span>
                         </div>

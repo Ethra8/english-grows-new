@@ -7,6 +7,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_all_courses_attendance.css' %}">
 {% endblock %}
 
@@ -36,16 +37,20 @@
 
     <div class="company-attendance-summary mt-5">
 
-        <div class="attendance-summary-card">
-            <div class="status-pill completed">
-                <i class="fa-solid fa-book-open"></i>
+        <a href="{% url 'profiles:company_admin_courses' %}" aria-label="{% trans 'View all courses' %}">
+            <div class="meta-card meta-course">
+                <div>
+                    <img src="{% static 'icons/dashboard_meta_main_courses_icon.png' %}" alt="" aria-hidden="true" width="50">
+                </div>
+                <div class="meta-text">
+                    <strong>
+                        {% trans 'Courses' %}
+                        <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                    </strong>
+                    <span>{{ total_courses_count }}</span>
+                </div>
             </div>
-
-            <div>
-                <span>Active Courses</span>
-                <strong>{{ total_courses }}</strong>
-            </div>
-        </div>
+        </a>
 
         <div class="attendance-summary-card">
             <div class="status-pill completed">
@@ -54,7 +59,7 @@
 
             <div>
                 <span>{% trans 'Employees' %}</span>
-                <strong>{{ total_employees }}</strong>
+                <strong>{{ total_active_employees }} {% trans 'active' context 'company attendance summary' %}</strong>
             </div>
         </div>
 
@@ -109,7 +114,7 @@
 
                 <div class="attendance-list-header-filter">
                     <div>
-                        <h2>Attendance by Course</h2>
+                        <h2>{% trans 'Attendance by Course' context 'admin all course attendance search form' %}</h2>
                     </div>
                 </div>
                 <div class="assigned-courses-header">
@@ -117,7 +122,7 @@
 
                         <h3>
                             <i class="fa-solid fa-magnifying-glass mr-2"></i>
-                            Search attendance by date, course or employee
+                            {% trans 'Search attendance by date, course or employee' context 'admin all course attendance search form' %}
                         </h3>
 
                         <div class="mt-3">
@@ -125,7 +130,7 @@
 
                                 <div class="attendance-filter-field">
                                     <label for="attendanceDateFilter">
-                                        Class date
+                                        {% trans 'Date' context 'admin all course attendance search form' %}
                                     </label>
 
                                     <input
@@ -138,7 +143,7 @@
 
                                 <div class="attendance-filter-field">
                                     <label for="attendanceCourseSearchInput">
-                                        Course
+                                        {% trans 'Course' %}
                                     </label>
 
                                     <input
@@ -153,7 +158,7 @@
 
                                 <div class="attendance-filter-field">
                                     <label for="attendanceEmployeeSearchInput">
-                                        Employee
+                                        {% trans 'Employee' %}
                                     </label>
 
                                     <input
@@ -168,7 +173,7 @@
 
                                 <button type="submit" class="btn-attendance-tools">
                                     <i class="fa-solid fa-magnifying-glass mr-2"></i>
-                                    Search
+                                    {% trans 'Search' context 'admin all course attendance search form' %}
                                 </button>
 
                                 {% if selected_date or course_search or employee_search %}
@@ -177,7 +182,7 @@
                                         class="btn-course-details"
                                     >
                                         <i class="fa-solid fa-xmark mr-2"></i>
-                                        Clear
+                                        {% trans 'Clear' context 'admin all course attendance search form' %}
                                     </a>
                                 {% endif %}
 
@@ -186,8 +191,8 @@
 
                         <div class="filter-result">
                             <p>
-                                {{ total_courses }}
-                                course{{ total_courses|pluralize }}
+                                {{ total_courses_count }}
+                                course{{ total_courses_count|pluralize }}
                                 found.
                             </p>
                         </div>
@@ -204,160 +209,147 @@
                     {# COLUMN HEADINGS                                   #}
                     {# ================================================= #}
 
-                    {% if courses %}
-                        <div class="course-attendance-table-header">
+                    <div class="course-attendance-table-header">
 
-                            <div class="course-heading">
-                                Course
-                            </div>
-
-                            <div class="level-heading">
-                                Level
-                            </div>
-
-                            <div class="employees-heading">
-                                Employees
-                            </div>
-
-                            <div class="submitted-heading">
-                                Submitted
-                            </div>
-
-                            <div class="status-heading">
-                                Submission status
-                            </div>
-
-                            <!-- <div class="attended-heading">
-                                Attended
-                            </div>
-
-                            <div class="missed-heading">
-                                Missed
-                            </div>
-
-                            <div class="excused-heading">
-                                Excused
-                            </div> -->
-
-                            <div class="rate-heading">
-                                Attendance rate
-                            </div>
-
-                            <div class="action-heading">
-                                Action
-                            </div>
-
+                        <div class="course-heading">
+                            {% trans 'Course' %}
                         </div>
-                    {% endif %}
 
-                    {# ================================================= #}
-                    {# COURSE ROWS                                       #}
-                    {# ================================================= #}
+                        <div class="level-heading">
+                            {% trans 'Level' %}
+                        </div>
 
-                    {% for course in courses %}
+                        <div class="employees-heading">
+                            {% trans 'Employees' %}
+                        </div>
 
-                        <div class="attendance-row course-attendance-row">
+                        <div class="submitted-heading">
+                            {% trans 'Submitted' context 'admin all course attendance table' %}
+                        </div>
 
-                            <!-- Course information -->
+                        <div class="status-heading">
+                            {% trans 'Submission status' context 'admin all course attendance table' %}
+                        </div>
 
-                            <div class="attendance-class-info">
-                                <strong>{{ course.name }}</strong>
-                                <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-1"></i>{{ course.course_type.name|default:"Course type pending" }}</span>
-                                <!-- <small>
-                                    <img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
-                                    {% if course.teacher %}
-                                        {{ course.teacher.get_full_name|default:course.teacher.email }}
+                        <div class="rate-heading">
+                            {% trans 'Attendance rate' context 'admin all course attendance table' %}
+                        </div>
+
+                        <div class="action-heading">
+                            {% trans 'Details' context 'admin all course attendance table' %}
+                        </div>
+
+                    </div>
+
+
+                    <!-- COURSE ROWS ------->
+                    {% if all_courses_list  %}
+
+                        {% for course in all_courses_list  %}
+
+                            <div class="attendance-row course-attendance-row">
+
+                                <!-- Course information -->
+
+                                <div class="attendance-class-info">
+                                    <strong>{{ course.name }}</strong>
+                                    <span><i class="fa-solid fa-swatchbook fa-flip-horizontal mr-1"></i>{{ course.course_type.name|default:"Course type pending" }}</span>
+                                    <!-- <small>
+                                        <img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                        {% if course.teacher %}
+                                            {{ course.teacher.get_full_name|default:course.teacher.email }}
+                                        {% else %}
+                                            Teacher pending
+                                        {% endif %}</small> -->
+                                    <small class="course-list-status">
+                                        <span class="status-dot status-{{ course.status }}"></span>
+                                        <div class="status-text">{{ course.status }}</div>
+                                    </small>    
+                                </div>
+
+                                <!-- Course level -->
+                                <div class="assigned-course-level">
+                                    <span class="level level-{{ course.course_level|lower|cut:'.' }}">
+                                        {{ course.course_level|default:"Pending" }}
+                                    </span>
+                                </div>
+
+                                <!-- Employees -->
+
+                                <div class="course-attendance-cell employees-cell">
+                                    <i class="fa-solid fa-users"></i>
+                                    <strong>{{ course.employee_count }}</strong>
+                                </div>
+
+                                <!-- Attendance submitted -->
+
+                                <div class="course-attendance-cell submitted-cell">
+                                    <strong>{{ course.submitted_classes_count }} / {{ course.past_classes_count }}</strong>
+
+                                    <small>{{ course.submission_rate }}%</small>
+                                </div>
+
+                                <!-- Submission status -->
+
+                                <div class="course-attendance-cell submission-status-cell">
+
+                                    {% if course.pending_submission_count > 0 %}
+                                        <span class="submission-status awaiting">
+                                            <i class="fa-solid fa-clock"></i>
+                                            {{ course.pending_submission_count }}
+                                            {% trans 'awaiting' context 'admin all course attendance table' %}
+                                        </span>
+
+                                    {% elif course.past_classes_count > 0 %}
+                                        <span class="submission-status up-to-date">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            {% trans 'Up to date' context 'admin all course attendance table' %}
+                                        </span>
+
                                     {% else %}
-                                        Teacher pending
-                                    {% endif %}</small> -->
-                                <small class="course-list-status">
-                                    <span class="status-dot status-{{ course.status }}"></span>
-                                    <div class="status-text">{{ course.status }}</div>
-                                </small>    
-                            </div>
+                                        <span class="submission-status no-classes">
+                                            <i class="fa-regular fa-calendar"></i>
+                                            {% trans 'No past classes' context 'admin all course attendance table' %}
+                                        </span>
+                                    {% endif %}
 
-                            <!-- Course level -->
-                            <div class="assigned-course-level">
-                                <span class="level level-{{ course.course_level|lower|cut:'.' }}">
-                                    {{ course.course_level|default:"Pending" }}
-                                </span>
-                            </div>
+                                </div>
 
-                            <!-- Employees -->
+                                <!-- Attendance rate -->
 
-                            <div class="course-attendance-cell employees-cell">
-                                <i class="fa-solid fa-users"></i>
-                                <strong>{{ course.employee_count }}</strong>
-                            </div>
-
-                            <!-- Attendance submitted -->
-
-                            <div class="course-attendance-cell submitted-cell">
-                                <strong>{{ course.submitted_classes_count }} / {{ course.past_classes_count }}</strong>
-
-                                <small>{{ course.submission_rate }}%</small>
-                            </div>
-
-                            <!-- Submission status -->
-
-                            <div class="course-attendance-cell submission-status-cell">
-
-                                {% if course.pending_submission_count > 0 %}
-                                    <span class="submission-status awaiting">
-                                        <i class="fa-solid fa-clock"></i>
-                                        {{ course.pending_submission_count }}
-                                        awaiting
-                                    </span>
-
-                                {% elif course.past_classes_count > 0 %}
-                                    <span class="submission-status up-to-date">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Up to date
-                                    </span>
-
-                                {% else %}
-                                    <span class="submission-status no-classes">
-                                        <i class="fa-regular fa-calendar"></i>
-                                        No past classes
-                                    </span>
-                                {% endif %}
-
-                            </div>
-
-                            <!-- Attendance rate -->
-
-                            <div class="course-attendance-rate">
-                                <div>
-                                    <div class="completion-ring" style="--completion: {{ course.attendance_rate|default:'0' }};">
-                                        <span class="completion-ring-value">{{ course.attendance_rate|default:"0" }}%</span>
+                                <div class="course-attendance-rate">
+                                    <div>
+                                        <div class="completion-ring" style="--completion: {{ course.attendance_rate|default:'0' }};">
+                                            <span class="completion-ring-value">{{ course.attendance_rate|default:"0" }}%</span>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- Action -->
+
+                                <div class="attendance-action">
+                                    <a href="{% url 'profiles:company_admin_course_attendance' course.id %}" class="btn-course-details">
+                                        {% trans 'Details' context 'admin all course attendance table' %}
+                                        <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
+                                </div>
+
                             </div>
 
-                            <!-- Action -->
+                        {% empty %}
 
-                            <div class="attendance-action">
-                                <a href="{% url 'profiles:company_admin_course_attendance' course.id %}" class="btn-course-details">
-                                    Details
-                                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon"></a>
+                            <div class="attendance-empty-message">
+                                <i class="fa-solid fa-magnifying-glass mb-3"></i>
+
+                                <p>{% trans 'No courses matched the selected filters' context 'admin all course attendance search form' %}.</p>
+
+                                {% if selected_date or course_search or employee_search %}
+                                    <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="btn-course-details">
+                                        {% trans 'Clear Filters' context 'admin all course attendance search form' %}</a>
+                                {% endif %}
                             </div>
 
-                        </div>
-
-                    {% empty %}
-
-                        <div class="attendance-empty-message">
-                            <i class="fa-solid fa-magnifying-glass mb-3"></i>
-
-                            <p>No courses matched the selected filters.</p>
-
-                            {% if selected_date or course_search or employee_search %}
-                                <a href="{% url 'profiles:company_admin_all_courses_attendance' %}" class="btn-course-details">
-                                    Clear filters</a>
-                            {% endif %}
-                        </div>
-
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
 

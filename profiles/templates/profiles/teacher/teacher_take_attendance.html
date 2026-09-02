@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
 {% endblock %}
 
 
 {% block profile_content %}
 
-<section class="course-details-page take-attendance-page profile-page notranslate" translate="no">
+<section class="take-attendance-page course-attendance-details profile-page notranslate" translate="no">
     <div class="overlay-globe"></div>
     <div class="overlay-mist"></div>
 
@@ -72,22 +73,6 @@
     </header> 
     <hr>    
 
-    <div class="wrapper-attendance-course-info">
-        <div>
-            <p class="text-white"><strong><i class="fa-solid fa-clipboard-user mr-3"></i>
-                {{ class_session.course.name }}</strong></p>
-            <p class="text-white"><strong><i class="fa-solid fa-chalkboard-user mr-3"></i></strong> 
-                Lesson {{ class_session.class_number }}</p>
-        </div>
-        <div>   
-            <p class="text-white"><strong><i class="fa-regular fa-calendar mr-3"></i></strong> 
-                {{ class_session.start_time|date:"D, d M Y" }}</p>
-            <p class="text-white"><strong><i class="fa-regular fa-clock mr-3"></i></strong> 
-                {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
-        </div>     
-    </div>
-
-
     <form method="POST" class="take-attendance-form">
         {% csrf_token %}
 
@@ -96,6 +81,20 @@
             <div class="take-attendance-card-header">
             <div class="w-100">
                 <h3>Take Attendance</h3>
+
+                <div class="wrapper-attendance-course-info">
+                    <div>
+                        <p><strong><img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1"> 
+                            {% trans 'Lesson' %} {{ class_session.class_number }}</strong></p>
+                        <p><i class="fa-regular fa-calendar mr-3"></i>
+                            {{ class_session.start_time|date:"D, d M Y" }}</p>
+                        <p><i class="fa-regular fa-clock mr-3"></i>
+                            {{ class_session.start_time|time:"H:i" }} - {{ class_session.end_time|time:"H:i" }}</p>
+                    </div>    
+                    <div>
+                        <strong>{{ total_count }} {% trans 'employee record' %}{{ total_count|pluralize }}</strong> {% trans 'saved for this class session' %}.
+                    </div>
+                </div>
 
                 <p>Mark each student as:</p>
 

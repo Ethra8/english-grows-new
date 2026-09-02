@@ -301,6 +301,7 @@ h3 > div {
 .sort-option:hover {
     color: var(--color-turquoise);
     text-decoration: none;
+    background-color: rgba(var(--color-turquoise-rgb), 0.14);
 }
 
 .sort-option.active {
@@ -358,17 +359,15 @@ h3 > div {
 
 @media (max-width: 576px) {
 
-    /* .email-all {
+    .company-admin-employees-list-page .meta-row {
         flex-direction: column;
-        gap: 0;
-        align-items: baseline;
-        margin-bottom: 1.5rem;
+        gap: 1rem;
     }
 
-    .email-all a {
-        margin: 0 1.5rem 0.5rem; 
+    .company-admin-employees-list-page .meta-card {
+        width: 100%;
     }
- */
+
     .employees-list-toolbar {
         display: flex;
         flex-direction: column;

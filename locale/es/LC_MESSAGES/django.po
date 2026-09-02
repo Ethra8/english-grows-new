@@ -91,7 +91,7 @@ msgid "Dashboard"
 msgstr "Inicio"
 
 msgid "Course Info"
-msgstr "Curso"
+msgstr "Info Curso"
 
 msgid "Courses"
 msgstr "Cursos"
@@ -570,19 +570,19 @@ msgctxt "dashboard metacards"
 msgid "Employees"
 msgstr "Plantilla"
 
-msgctxt "dashboard metacards singular"
+msgctxt "metacards singular"
 msgid "active"
 msgstr "activo"
 
-msgctxt "dashboard metacards plural"
+msgctxt "metacards plural"
 msgid "active"
 msgstr "activos"
 
-msgctxt "dashboard metacards singular"
+msgctxt "metacards singular"
 msgid "enrolled"
 msgstr "inscrito"
 
-msgctxt "dashboard metacards plural"
+msgctxt "metacards plural"
 msgid "enrolled"
 msgstr "inscritos"
 
@@ -638,4 +638,61 @@ msgctxt "learner enrollment status"
 msgid "Inactive"
 msgstr "Inactivo"
 
- 
+msgctxt "company attendance summary"
+msgid "active"
+msgstr "activos"
+
+
+msgctxt "admin all course attendance search form"
+msgid "Date"
+msgstr "Fecha"
+
+msgctxt "admin all course attendance search form"
+msgid "Search attendance by date, course or employee"
+msgstr "Busca registros de asistencia por fecha, curso o empleado/a"
+
+
+msgctxt "admin all course attendance search form"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "admin all course attendance search form"
+msgid "Clear"
+msgstr "Limpiar"
+
+msgctxt "admin all course attendance search form"
+msgid "No courses matched the selected filters"
+msgstr "No se encontraron coincidencias con los filtros aplicados"
+
+msgctxt "admin all course attendance search form"
+msgid "Clear Filters"
+msgstr "Limpiar Filtros"
+
+msgctxt "admin all course attendance table"
+msgid "Details"
+msgstr "Detalles"
+
+msgctxt "admin all course attendance table"
+msgid "Submitted"
+msgstr "Registros"
+
+msgctxt "admin all course attendance table"
+msgid "Submission status"
+msgstr "Estado de registros"
+
+msgctxt "admin all course attendance table"
+msgid "Attendance rate"
+msgstr "Tasa de asistencia"
+
+msgctxt "admin all course attendance table"
+msgid "awaiting"
+msgstr "pendiente"
+
+msgctxt "admin all course attendance table"
+msgid "Up to date"
+msgstr "actualizado"
+
+msgctxt "admin all course attendance table"
+msgid "No past classes"
+msgstr "sin registros"
+
