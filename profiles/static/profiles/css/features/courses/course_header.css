@@ -2,15 +2,11 @@
 .course-attendance-details header {
     width: 100%;
     margin: 2rem 0;
-    border: 2px solid rgba(var(--color-teal-rgb), 0.3);
-    background-color: rgba(var(--color-teal-rgb), 0.15);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.3);
+    /* background-color: rgba(var(--color-teal-rgb), 0.15); */
     border-radius: 8px;
     padding: 0;
 }
-
-/* .course-attendance-details header {
-    margin-bottom: 2rem;
-} */
 
 /* Course selector inside header */
 .course-details-page header > div:nth-child(1) {
