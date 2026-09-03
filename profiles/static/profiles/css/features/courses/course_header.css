@@ -3,9 +3,9 @@
     width: 100%;
     margin: 2rem 0;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    /* background-color: rgba(var(--color-teal-rgb), 0.15); */
+    background-color: rgba(var(--color-aquamarine-rgb), 0.15);    
     border-radius: 8px;
-    padding: 0;
+    padding: 0 0 1rem;
 }
 
 /* Course selector inside header */
@@ -25,7 +25,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0 26px;
+    padding: 0 4%;
 }
 
 /* Course Level in header */
@@ -36,7 +36,7 @@
     align-items: center;
     align-content: center;
     margin: 1rem 0 1.5rem;
-    padding: 0 26px;
+    padding: 0 4%;
 }    
 
 /* MY-COURSE  Header */
@@ -87,8 +87,10 @@
     margin: 0;
     color: var(--color-whitesmoke);
     font-weight: 500;
-    width: 250px;
-    max-width: 100%;
+    width: 130px;
+    max-width: 130px;    
+    /* width: 250px;
+    max-width: 100%; */
 }
 
 .course-select-wrapper {
@@ -148,9 +150,6 @@
     position: absolute;
     right: 1rem;
     top: 30%;
-    /* color: var(--color-teal);
-    font-size: 1rem;
-    pointer-events: none; */
     transition: transform 0.2s ease;
 }
 
@@ -162,7 +161,6 @@
 .course-selector-form.smaller-devs {
     display: none;
     padding: 0.15rem 0.5rem;    
-    /* background: rgba(var(--color-teal-rgb), 0.2); */
     border: outset 1px rgba(var(--color-teal-rgb), 0.3);
     border-radius: 8px 8px 0 0;
 }
@@ -295,13 +293,16 @@
     padding-left: 0;
 }
 
-.course-details-page header h2,
+.course-details-page header h2, 
 .course-attendance-details header h2 {
-    color: var(--color-slate);
-    font-size: 1.4rem;
-    margin-top: 0;
-    padding-top: 0;
-    text-shadow: 0 0 24px rgba(var(--color-shadow-rgba));
+    color: rgba(var(--color-navy-rgb), 0.7);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0px;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    font-weight: 500 !important;
+    border-top: 1px solid var(--color-teal);
 }
 
 /* horizontal line separating course type | total_hours */

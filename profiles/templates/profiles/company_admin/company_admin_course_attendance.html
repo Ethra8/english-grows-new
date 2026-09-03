@@ -165,22 +165,18 @@
 
         <!-- === COURSE NAME / TYPE / HOURS === -->
         <div>
-            <h1 class="notranslate" translate="no">
-                {{ course.name|default:"Course Name" }}
-            </h1>
+            <h1>{{ course.name|default:"Course Name" }}</h1>
 
             <h2>
                 <span class="text-muted">
                     <i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3" aria-hidden="true"></i>
-                    {{ course.course_type.name|default:"Course Type" }}
-                </span>
+                    {{ course.course_type.name|default:"Course Type" }}</span>
 
                 <span aria-hidden="true">|</span>
 
                 <span class="text-muted">
                     <img src="{% static 'icons/course_total_hours_slate_icon.png' %}" alt="" width="32" aria-hidden="true" class="mr-2 mb-1">
-                    {{ course.total_hours|clean_decimal }} h.
-                </span>
+                    {{ course.total_hours|clean_decimal }} h.</span>
             </h2>
         </div>
 
@@ -211,6 +207,7 @@
 
     <div class="meta-row">
         <div class="meta-card meta-attendance">
+            <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="50">
             <div class="meta-text">
                 <strong>{% trans 'Attendance Submitted' %}:</strong>
                 <span>{{ submitted_class_sessions_count }} / <small>{{ completed_classes }} {% trans 'past classes' %}</small></span>
@@ -218,6 +215,7 @@
         </div>
 
         <div class="meta-card meta-percentage">
+            <img src="{% static 'icons/meta_clipboard_percentage_gradient_icon.png' %}" alt="" aria-hidden="true" width="50">
             <div class="meta-text">
                 <strong>{% trans 'Attendance Rate' %}:</strong>
                 <span>{{ average_attendance }} %</span>
@@ -259,7 +257,7 @@
                             data-search="{{ submitted_class_session.employee_search_text|lower }}"
                         >
                             <div>
-                                <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="46">
+                                <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="44">
 
                                 <div class="attendance-class-info">
                                     <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>

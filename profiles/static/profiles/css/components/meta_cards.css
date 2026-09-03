@@ -21,9 +21,9 @@
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgb), 0.14);
 }
 
-/* .course-meta-card {
-    padding: 0.35rem 0.35rem 0.35rem 2rem;
-} */
+.meta-card img {
+    opacity: 0.75;
+}
 
 .meta-card.meta-courses::after {
     content: "";
@@ -41,7 +41,7 @@
     pointer-events: none;
 }
 
-.meta-card.meta-students::after {
+.meta-students::after {
     content: "";
     position: absolute;
     width: 100px;
@@ -72,18 +72,6 @@
     opacity: 0.1;
     pointer-events: none;
 }
-
-/* .meta-card::after,
-.course-meta-card::after {
-    content: "";
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-} */
 
 .course-header-meta-row .completion-ring {
     width: 60px !important;
@@ -116,12 +104,6 @@
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
 }
 
-/* .meta-icon i,
-.course-meta-icon i {
-    color: rgba(var(--color-turquoise-rgb), 0.9);
-    font-size: 1.8rem;
-} */
-
 .course-meta-icon .completion-ring {
     margin-left: 0.5rem;
 }
@@ -132,11 +114,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-}
-
-/* ONLY company_admin_course_attendance */
-.course-attendance .meta-text {
-    padding-left: 3rem;
 }
 
 .meta-text strong,
@@ -157,7 +134,7 @@
     color: rgba(var(--color-turquoise-rgb), 0.9);
     font-size: 1.4rem;
     font-weight: 400;
-    margin-top: -0.2rem;
+    margin-top: -0.3rem;
 }
 
 
@@ -174,15 +151,27 @@
     justify-content: center;
 }
 
+.course-details-page .metric-icon {
+    width: 65px;
+    height: 65px;
+}
+
+
 /* SMALL ring: Attendance / Completion icons */
 .metric-icon .progress-ring {
     position: absolute;
     inset: 5px;
     border-radius: 50%;
+
     background:
         conic-gradient(
-            var(--color-turquoise) calc(var(--percentage) * 1%),
-            rgba(var(--color-turquoise-rgb), 0.18) 0
+            var(--color-cyan)
+                0
+                calc(var(--percentage) * 1%),
+
+            rgba(var(--color-turquoise-rgb), 0.32)
+                calc(var(--percentage) * 1%)
+                100%
         );
 }
 
@@ -194,12 +183,10 @@
     background: #043f68;
 }
 
-.metric-icon i,
 .metric-icon img {
     position: relative;
     z-index: 2;
-    color: var(--color-turquoise);
-    font-size: 1.2rem;
+    opacity: 0.8;
 }
 
 .course-meta-card .completion-ring {
@@ -211,24 +198,44 @@
 
 }
 
+.course-meta-card.meta-attendance::after {
+    width: 90px;
+    height: 90px;
+    top: -6%;
+    right: 2%;
+    opacity: 0.1;
+}
 
 /* Students background icon */
 .course-meta-card.meta-students::after {
-    content: "\f0c0"; /* fa-users */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.1);
-    position: absolute;
-    top: 35px;
-    right: -5px;
+    background-image: url("/static/icons/employees_active_icon.png");
+    width: 90px;
+    height: 90px;
+    top: -6%;
+    right: 2%;
+    opacity: 0.1;
 }
 
 /* Completion background icon */
 .course-meta-card.meta-completion::after {
     content: "";
     position: absolute;
-    top: 55px;
+    width: 90px;
+    height: 90px;
+    top: -6%;
+    right: 2%;
+    background-image: url("/static/icons/meta_overall_assessment_turquoise_icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(12deg);
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* .course-meta-card.meta-completion::after {
+    content: "";
+    position: absolute;
     right: -5px;
     width: 90px;
     height: 90px;
@@ -240,7 +247,7 @@
         );
     opacity: 1;
     pointer-events: none;
-}
+} */
 
 
 

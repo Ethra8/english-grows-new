@@ -1,6 +1,7 @@
 {% extends "profiles/profile_base.html" %}
 {% load static %}
 {% load i18n %}
+
 {% load date_extras %}
 
 
@@ -30,7 +31,7 @@
                     {% else %}
                         <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
                     {% endif %}
-                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}" title="{% if student.is_active %}{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}"></span>
+                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}" title="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}"></span>
                 </div>
             </div>
             

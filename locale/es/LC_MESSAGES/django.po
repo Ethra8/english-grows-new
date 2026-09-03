@@ -165,13 +165,13 @@ msgid "Weekly & monthly performance"
 msgstr "Rendimiento semanal y mensual"
 
 msgid "Total Classes"
-msgstr "Total Clases"
+msgstr "Total de Clases"
 
 msgid "Completed Classes"
 msgstr "Clases Completadas"
 
 msgid "Attendance Rate"
-msgstr "Tasa Asistencia"
+msgstr "Tasa de Asistencia"
 
 msgid "This Week"
 msgstr "Esta Semana"
@@ -185,9 +185,14 @@ msgstr "Ver clases de esta semana"
 msgid "View this month classes"
 msgstr "Ver clases de este mes"
 
+msgid "Not assessed yet"
+msgstr "Evaluación pendiente"
 
 msgid "Monthly attendance"
 msgstr "Asistencia mensual"
+
+msgid "Group Average Score"
+msgstr "Evaluación Grupal"
 
 
 
@@ -343,7 +348,14 @@ msgid "Dates"
 msgstr "Fechas"
 
 msgid "Dates & Timetable"
-msgstr "Fechas y Horario"
+msgstr "Fechas y Horarios"
+
+msgid "Hours Done"
+msgstr "Horas Realizadas"
+
+msgid "Class Sessions Held"
+msgstr "Clases Realizadas"
+
 
 msgid "Completed Hours"
 msgstr "Horas Completadas"
@@ -478,14 +490,11 @@ msgstr "Estudiantes"
 msgid "enrolled"
 msgstr "inscritos"
 
-msgid "Start Date"
-msgstr "Fecha Inicio"
-
-msgid "End Date"
-msgstr "Fecha Finalización"
+msgid "Start & End Dates"
+msgstr "Fechas de Inicio y Finalización"
 
 msgid "Class Duration"
-msgstr "Duración Clase"
+msgstr "Duración de cada Clase"
 
 msgid "Last Class Duration"
 msgstr "Última Clase"
@@ -494,15 +503,14 @@ msgid "Teacher"
 msgstr "Profesor/a"
 
 msgid "Total Hours"
-msgstr "Total Horas"
+msgstr "Total de Horas"
 
 msgctxt "dashboard training overview"
 msgid "Classes Held"
 msgstr "Clases Realizadas"
 
-msgctxt "dashboard training overview"
 msgid "Attendance Submitted"
-msgstr "Asistencias Registradas"
+msgstr "Registros de Asistencia"
 
 msgid "past classes"
 msgstr "clases realizadas"

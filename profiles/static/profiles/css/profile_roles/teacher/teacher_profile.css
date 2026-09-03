@@ -77,6 +77,23 @@ h2 {
 }
 
 
+/* COURSE STUDENTS LIST **************************************/
+
+.course-details-page .student-row-parent {
+    background: var(--color-whitesmoke);
+    padding: 0 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+}
+
+.student-row hr {
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+    border-radius: 0;
+    margin: 0.5rem auto;
+}
+
 
 /* ***********************************************************|
 |***  CLASSES LIST Page **************************************|
@@ -1677,6 +1694,13 @@ h2 {
         align-items: baseline;
     }
 
+    .course-details-page .student-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+
     /* *** COURSES Page ************************************/
     /* *** CLASSES LIST Page *******************************/
     /* .assigned-course-row {
@@ -1819,6 +1843,18 @@ h2 {
         padding: 1rem;
         /* flex-grow: 10; */
     }
+
+    /* *** COURSE STUDENT LIST page **********************************/
+    .course-details-page .student-row-parent,
+    .teacher-course-details-page .student-row-parent {
+        padding: 0;
+    }
+
+    .course-details-page .student-row,
+    .teacher-course-details-page .student-row {
+        padding: 0.25rem 0.25rem 0.75rem;
+    }
+
 
 }
 

@@ -78,7 +78,7 @@
              class="nav-link"
              aria-label="{% trans 'Go to the home page' %}">
 
-            <img src="{% static 'images/logo_englishgrows.png' %}" alt="" aria-hidden="true" class="logo">
+            <img src="{% static 'images/logo_noBg_512x512.png' %}" alt="" aria-hidden="true" class="logo">
           </a>
         </div>
 
@@ -174,7 +174,7 @@
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_thin_turquoise_icon.png' %}" alt="" aria-hidden="true" width="36" class="ml-2">
                       </a>
 
                     {% elif request.user.profile.role == "individual" or request.user.profile.role == "employee" %}
@@ -184,7 +184,7 @@
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_thin_turquoise_icon.png' %}" alt="" aria-hidden="true" width="36" class="ml-2">
                       </a>
 
                     {% elif request.user.profile.role == "company_admin" %}
@@ -194,7 +194,7 @@
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_thin_turquoise_icon.png' %}" alt="" aria-hidden="true" width="36" class="ml-2">
                       </a>
 
                     {% else %}
@@ -204,7 +204,7 @@
 
                         <!-- <img src="{% static 'icons/platform_whitesmoke_icon.png' %}" alt="" aria-hidden="true" width="16" class="mb-1 mr-2"> -->
                         {% trans "My Platform" %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_thin_turquoise_icon.png' %}" alt="" aria-hidden="true" width="36" class="ml-2">
                       </a>
 
                     {% endif %}

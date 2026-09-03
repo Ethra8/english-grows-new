@@ -1,8 +1,11 @@
 :root {
     /*** BRAND COLOURS **************************************/
     /* Oxford Blue */
-    --color-navy: #0b355f;
-    --color-navy-rgb: 11, 53, 95;
+    /* --color-navy: #0b355f;
+    --color-navy-rgb: 11, 53, 95; */
+    --color-navy: #002D5A;
+    --color-navy-rgb: 0, 45, 90;
+
     /* Stormy Teal */
     --color-teal: #006b7d;
     --color-teal-rgb: 0, 107, 125;
@@ -15,6 +18,9 @@
     /* Electric aqua */
     --color-aqua: #5FF5FC;
     --color-aqua-rgb: 95, 245, 252;
+    /* Aquamarine */
+    --color-aquamarine: #B5F9DE;
+    --color-aquamarine-rgb: 181, 249, 222;
     /* Icy Aqua */
     --color-icy: #C7fff9;
     --color-icy-rgb: 199, 255, 249;

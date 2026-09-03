@@ -6938,10 +6938,74 @@ def company_admin_course_details(request, course_id):
     # COURSE PROGRESS
     # ---------------------------------------------------------
     total_classes = course.total_sessions
+
+    # Completed classes refers to manually take attendance
+    # and mark class as complete
     completed_classes = course.completed_sessions
+
     remaining_classes = course.remaining_sessions
+
+    now = timezone.now()
+
     completion_percentage = course.completion_percentage
 
+    # CLASSES IN THE PAST, 
+    # regardless if attendance has been submitted or not
+    held_classes = (
+        course.class_sessions
+        .filter(
+            end_time__lt=now,
+        )
+        .exclude(
+            status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        )
+    )
+
+    past_held_classes = held_classes.count()
+
+
+    # ---------------------------------------------------------
+    # COMPLETED HOURS
+    #
+    # IMPORTANT:
+    # For this Company Admin overview, completed hours are
+    # schedule/time-based rather than Attendance-based.
+    #
+    # A lesson counts toward completed hours when:
+    # - its current end_time is in the past
+    # - it is NOT pending reschedule
+    #
+    # Attendance records are deliberately NOT used here.
+    #
+    # Using the actual session start/end times also means a
+    # shorter final lesson is counted correctly.
+    # ---------------------------------------------------------
+
+    past_completed_hour_sessions = (
+        course.class_sessions
+        .filter(
+            end_time__lt=now,
+        )
+        .exclude(
+            status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        )
+    )
+
+    past_held_hours = Decimal("0.00")
+
+    for session in past_completed_hour_sessions:
+        duration = session.end_time - session.start_time
+
+        duration_hours = (
+            Decimal(str(duration.total_seconds()))
+            / Decimal("3600")
+        )
+
+        past_held_hours += duration_hours
+
+    past_held_hours = past_held_hours.quantize(
+        Decimal("0.01")
+    )
 
     # ---------------------------------------------------------
     # AVERAGE COURSE ATTENDANCE
@@ -7008,7 +7072,71 @@ def company_admin_course_details(request, course_id):
         student_emails
     )
 
+    # ---------------------------------------------------------
+    # AVERAGE GROUP SKILL ASSESSMENT
+    #
+    # Calculate the average score across all assessed
+    # StudentSkillAssessment records belonging to learners
+    # enrolled in this course.
+    #
+    # Important:
+    # - only learners enrolled in this course are included
+    # - only skill assessments with at least one subskill
+    #   assessment are considered
+    # - scores are based on StudentSkillAssessment.average_score
+    #   which is on a 0–10 scale
+    # ---------------------------------------------------------
 
+    enrolled_student_ids = list(
+        enrollments.values_list(
+            "student_id",
+            flat=True,
+        )
+    )
+
+    skill_assessments = (
+        StudentSkillAssessment.objects
+        .filter(
+            course=course,
+            student_id__in=enrolled_student_ids,
+        )
+        .prefetch_related(
+            "subskill_assessments",
+        )
+    )
+
+    assessed_skill_scores = []
+
+    for skill_assessment in skill_assessments:
+
+        subskills = list(
+            skill_assessment.subskill_assessments.all()
+        )
+
+        if not subskills:
+            continue
+
+        assessed_skill_scores.append(
+            skill_assessment.average_score
+        )
+
+
+    if assessed_skill_scores:
+        average_group_assessment_score = round(
+            sum(assessed_skill_scores)
+            / len(assessed_skill_scores),
+            1,
+        )
+    else:
+        average_group_assessment_score = None
+
+
+    if average_group_assessment_score is not None:
+        average_group_assessment_percentage = round(
+            (average_group_assessment_score / 10) * 100
+        )
+    else:
+        average_group_assessment_percentage = 0
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
@@ -7023,12 +7151,20 @@ def company_admin_course_details(request, course_id):
         "sessions": sessions,
 
         "total_classes": total_classes,
+
+        "past_held_classes": past_held_classes,     
+        # manually set attendance and class as status='complete'
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
+
+        "average_group_assessment_score": average_group_assessment_score,
+        "past_held_hours": past_held_hours,
         "completion_percentage": completion_percentage,
 
         "average_attendance": average_attendance,
 
+        "average_group_assessment_percentage": average_group_assessment_percentage, 
+        
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
     }

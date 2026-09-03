@@ -741,31 +741,19 @@ div:has(> .student-action-btn) {
 }
 /* END META CARD ***************************************/
 
-/* *** ::after META CARDS ******************************/
-/* .meta-attendance::after {
-    content: "\f46c"; 
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.1);
-    position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
-} */
 
 .meta-percentage::after {
     content: "";
     position: absolute;
-    width: 110px;
-    height: 110px;
-    background-image: url("/static/icons/percentage_turquoise_icon.png");
+    width: 100px;
+    height: 100px;
+    background-image: url("/static/icons/meta_clipboard_percentage_gradient_icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    top: -5px;
-    right: 25px;
-    transform: rotate(0deg);
+    top: -10%;
+    right: 1%;
+    transform: rotate(15deg);
     opacity: 0.1;
     pointer-events: none;
 }

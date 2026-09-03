@@ -745,6 +745,10 @@
    background-color: var(--color-whitesmoke);
 }
 
+.attendance-row img:first-of-type {
+    opacity: 0.8;
+}
+
 .attendance-row.course-hidden {
     display: none;
 }
@@ -1195,7 +1199,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: var(--color-steel);
+    color: var(--color-slate);
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 200px;
@@ -1227,6 +1231,7 @@
     color: var(--color-teal);
     font-size: 1rem;
     margin-bottom: 0;
+    font-weight: 600;
 }
 
 /* Keep span elements in separate lines */
@@ -1250,9 +1255,8 @@
 .course-attendance .attendance-class-info strong {
     margin: 0 0 0.25rem;
     color: var(--color-navy);
-    font-size: 1.4rem;
-    font-weight: 500;
-    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
 }
 
 .course-attendance .attendance-action {
