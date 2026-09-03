@@ -200,7 +200,7 @@ content: "";
     width: 85px;
     height: 85px;
     transform: translateY(-50%) rotate(-12deg);
-    background-image: url(/static/icons/meta_overall_assessment_teal_icon.png);
+    background-image: url(/static/icons/meta_courses_teal_icon.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

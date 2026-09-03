@@ -228,7 +228,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    transform: rotate(12deg);
+    transform: rotate(6deg);
     opacity: 0.1;
     pointer-events: none;
 }
