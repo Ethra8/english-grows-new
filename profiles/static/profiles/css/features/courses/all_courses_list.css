@@ -1,56 +1,25 @@
-.wrapper-assigned-courses-small-cards {
-    display: none;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    width: 100%;
-    justify-content: center;
-}
-
-.wrapper-assigned-courses-small-cards .card {
-    min-width: 48%;
-    border-radius: 8px;
-    max-width: 97%;
-}
-
-.wrapper-assigned-courses-small-cards .card-header,
-.wrapper-assigned-courses-small-cards .card-body {
-    height: 32px;
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-}
-
-.wrapper-assigned-courses-small-cards .card-header {
-    color:var(--color-whitesmoke);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-    box-shadow: 0 10px 24px rgba(0, 64, 70, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
 
 .assigned-courses-page p:first-of-type {
     margin-bottom: 2rem;
 }
 
-/* MAIN WRAPPER */
+
+/* =========================================================
+   MAIN COURSES PANEL
+========================================================= */
+
 .wrapper-assigned-courses-panel {
     border-radius: 8px;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(11, 53, 95, 0.08);    
+    box-shadow: 0 8px 20px rgba(11, 53, 95, 0.08);
     background: rgba(var(--color-turquoise-rgb), 0.2);
 }
-/* ************ */
 
 .assigned-courses-panel {
     width: 100%;
-    /* background: rgba(var(--color-navy-rgb), 0.9); */
-    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));     */
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.66), rgba(var(--color-teal-rgb), 0.6), rgba(var(--color-teal-rgb), 0.3));
-    /* border: 1px solid rgba(80, 230, 220, 0.85); */
     border-radius: 8px;
     overflow: hidden;
-    /* box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5); */
 }
 
 .assigned-courses-header {
@@ -64,277 +33,10 @@
     display: none;
 }
 
-/* ---------------------------------------------------------
-   MOBILE
---------------------------------------------------------- */
 
-@media (max-width: 767.98px) {
-
-    .course-status-filter-form {
-        position: relative;
-        z-index: 30;
-        display: block;
-        width: 100%;
-        overflow: visible;
-        border-radius: 8px;
-    }
-
-
-    .course-status-dropdown {
-        position: relative;
-        width: 100%;
-        overflow: visible;
-    }
-
-
-    /* =====================================================
-       CLOSED / CURRENT VALUE
-    ===================================================== */
-
-    .course-status-dropdown-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        width: 100%;
-        min-height: 42px;
-        height: 42px;
-
-        margin: 0;
-        padding: 0.45rem 1.1rem;
-
-        border: 1px solid var(--color-turquoise);
-        border-radius: 8px;
-
-        background: var(--color-whitesmoke);
-        color: var(--color-navy);
-
-        /* SAME DEPTH TREATMENT AS COURSE SELECTOR */
-        box-shadow:
-            0 5px 14px rgba(var(--color-navy-rgb), 0.18),
-            inset 0 3px 10px rgba(0, 0, 0, 0.25);
-
-        font-family: inherit;
-        font-size: 0.95rem;
-        font-weight: 500;
-        line-height: 1.2;
-
-        text-align: left;
-
-        cursor: pointer;
-        outline: none;
-
-        transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease,
-            transform 0.2s ease;
-    }
-
-    .course-status-dropdown-toggle:hover {
-        border-color: var(--color-turquoise);
-
-        box-shadow:
-            var(--inner-shadow-turquoise);
-    }
-
-
-    .course-status-dropdown-toggle:focus,
-    .course-status-dropdown-toggle:focus-visible {
-        border-color: var(--color-turquoise);
-
-        box-shadow:
-            0 0 0 3px rgba(var(--color-turquoise-rgb), 0.22),
-            0 6px 16px rgba(var(--color-navy-rgb), 0.22);
-    }
-
-
-    .course-status-dropdown-current {
-        min-width: 0;
-        overflow: hidden;
-
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-
-    .course-status-dropdown-meta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.8rem;
-
-        flex: 0 0 auto;
-        margin-left: 1rem;
-    }
-
-
-    .course-status-dropdown-count {
-        color: var(--color-navy);
-        font-size: 0.95rem;
-        font-weight: 500;
-        line-height: 1;
-    }
-
-
-    /* =====================================================
-       CHEVRON
-    ===================================================== */
-
-    .course-status-dropdown-chevron {
-        flex: 0 0 auto;
-
-        margin-left: 1rem;
-
-        color:
-            var(--color-teal);
-
-        font-size: 0.9rem;
-
-        transition:
-            transform 0.18s ease;
-    }
-
-
-    .course-status-dropdown-toggle[aria-expanded="true"]
-    .course-status-dropdown-chevron {
-        transform: rotate(180deg);
-    }
-
-
-    /* =====================================================
-       OPEN MENU
-    ===================================================== */
-
-    .course-status-dropdown-menu {
-        position: absolute;
-        top: calc(100% + 4px);
-        left: 0;
-        right: 0;
-
-        z-index: 40;
-
-        width: 100%;
-
-        /* safety for short mobile screens */
-        max-height: min(320px, 55dvh);
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        background: var(--color-whitesmoke);
-
-        border: 1px solid rgba(var(--color-teal-rgb), 0.35);
-        border-radius: 7px;
-
-        box-shadow:
-            0 8px 20px rgba(var(--color-navy-rgb), 0.10);
-    }
-    /* =====================================================
-       OPTION ROW
-    ===================================================== */
-
-    .course-status-dropdown-option {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        width: 100%;
-
-        margin: 0;
-        padding: 0.72rem 1rem;
-
-        border: 0;
-        border-radius: 0;
-
-        background:
-            var(--color-whitesmoke);
-
-        color:
-            var(--color-navy);
-
-        font-family: inherit;
-        font-size: 0.95rem;
-        font-weight: 400;
-        line-height: 1.25;
-
-        text-align: left;
-
-        cursor: pointer;
-
-        transition:
-            background-color 0.15s ease;
-    }
-
-
-    /* Selected option */
-    .course-status-dropdown-option.active {
-        background:
-            rgba(var(--color-turquoise-rgb), 0.15);
-        display: flex;
-        justify-content: space-between;    
-    }
-
-
-    /* Hover / keyboard */
-    .course-status-dropdown-option:hover,
-    .course-status-dropdown-option:focus-visible {
-        background:
-            rgba(var(--color-turquoise-rgb), 0.11);
-
-        outline: none;
-    }
-
-
-    .course-status-dropdown-option.active:hover,
-    .course-status-dropdown-option.active:focus-visible {
-        background:
-            rgba(var(--color-turquoise-rgb), 0.18);
-    }
-
-
-    /* Count on right */
-    .course-status-dropdown-option > span:last-child {
-        flex: 0 0 auto;
-
-        margin-left: 1rem;
-
-        color:
-            var(--color-blue-slate);
-
-        font-size: 0.9rem;
-    }
-}
-/* .assigned-courses-header select {
-    display: none;
-    width: 100% !important;
-    padding: 0.75rem 1rem;
-    padding-right: 3rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    border: inset 2px var(--color-turquoise);
-    background-color: var(--color-whitesmoke);
-    color: var(--color-navy);
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-    transition: all 0.2s ease;
-}
-
-.assigned-courses-header select option {
-    background: var(--color-whitesmoke);
-    color: var(--color-navy);
-}
-
-.assigned-courses-header select:focus {
-    border: 3px inset #00fee1 !important;
-    outline: none;
-} */
+/* =========================================================
+   DESKTOP STATUS FILTER
+========================================================= */
 
 .course-status-filter-header {
     width: 100%;
@@ -376,10 +78,13 @@
 }
 
 .assigned-courses-page .course-status-btn:hover strong {
-        background: rgba(var(--color-turquoise-rgb), 0.3);
-
+    background: rgba(var(--color-turquoise-rgb), 0.3);
 }
 
+
+/* =========================================================
+   COURSE LIST & ROW
+========================================================= */
 
 .assigned-courses-list {
     display: block;
@@ -391,8 +96,6 @@
     background: var(--color-whitesmoke);
     padding: 1rem;
     box-sizing: border-box;
-    /* overflow-x: scroll !important;
-    overflow-y: hidden; */
     overflow-x: auto;
     overflow-y: scroll;
     max-height: 36rem;
@@ -405,7 +108,6 @@
     display: grid;
     grid-template-columns: minmax(380px, 1fr) minmax(60px, 0.5fr) minmax(140px, 0.75fr) minmax(220px, 1.4fr) minmax(100px, 0.75fr) minmax(150px, 1.25fr);
     align-items: center;
-    /* gap: 0.5rem; */
     padding: 0.75rem 0.75rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4) !important;
     min-width: 1300px;
@@ -424,28 +126,22 @@
 }
 
 .assigned-course-row > div:nth-of-type(2) {
-    height: 100%; 
+    height: 100%;
     min-height: 80%;
     display: flex;
     align-items: center;
-    /* align-self: center;
-    align-content: center; */
     justify-content: center;
-    }
+}
 
 .assigned-course-row .level {
     width: 50px;
 }
 
-/* INSIDE ROW : ASSIGNED COURSE ROW */
-
-/*  MAIN INFO */
 .course-main-info {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    /* align-content: center; */
     align-self: center;
     gap: 0.8rem;
 }
@@ -487,7 +183,11 @@
     color: var(--color-slate);
 }
 
-/* COURSE STATUS Text & DOT in ROW */
+
+/* =========================================================
+   COURSE STATUS
+========================================================= */
+
 .course-list-status {
     display: flex;
     align-items: center;
@@ -496,7 +196,7 @@
     font-weight: 500;
     color: var(--color-steel);
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    height: 70%;    
+    height: 70%;
     justify-content: center;
 }
 
@@ -526,9 +226,12 @@
 .status-dot.status-completed {
     background: var(--color-course-status-completed);
 }
-/* ************ */
 
-/* ROW: DATES & STD NUM. */
+
+/* =========================================================
+   COURSE SCHEDULE & EMPLOYEE COUNT
+========================================================= */
+
 .course-list-date {
     display: flex;
     flex-direction: row;
@@ -538,8 +241,7 @@
     height: 70%;
     min-width: 200px;
     gap: 0.75rem;
-    justify-content: center;    
-    /* padding-left: 3rem; */
+    justify-content: center;
 }
 
 .course-list-student-num {
@@ -549,8 +251,8 @@
     align-self: center;
     align-items: center;
     color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);    
-    height: 70%;    
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
+    height: 70%;
     min-width: 100px;
     gap: 0.75rem;
     justify-content: center;
@@ -586,7 +288,10 @@
 }
 
 
-/* ROW: COURSE STAT : completion ring */
+/* =========================================================
+   COURSE PROGRESS
+========================================================= */
+
 .course-stat {
     display: flex;
     flex-direction: row;
@@ -605,22 +310,17 @@
     --ring-size: 46px;
     --ring-thickness: 1px;
     --ring-center: var(--color-whitesmoke);
-
     width: var(--ring-size);
     height: var(--ring-size);
     flex: 0 0 var(--ring-size);
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     position: relative;
     border-radius: 50%;
     margin-right: 0.5rem;
     vertical-align: middle;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             circle,
             var(--ring-center) 0,
             var(--ring-center) calc(55% - var(--ring-thickness)),
@@ -636,20 +336,19 @@
 .course-stat .completion-ring-value {
     position: relative;
     z-index: 1;
-
     color: var(--color-whitesmoke);
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1;
 }
 
-.completion-ring span{
-    position:relative;
-    z-index:2;
-    font-size:0.95rem;
-    font-weight:500;
-    color:var(--color-teal);
-    line-height:1;
+.completion-ring span {
+    position: relative;
+    z-index: 2;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-teal);
+    line-height: 1;
 }
 
 .course-stat span {
@@ -657,30 +356,25 @@
 }
 
 
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-/*****************************************************|
-|*** MEDIA QUERIES ***********************************|
-|*****************************************************/
 
 @media (min-width: 768px) and (max-width: 1199.98px) {
 
     .course-status-buttons {
         display: flex;
         gap: 4px;
-
         overflow-x: auto;
         overflow-y: hidden;
-
         width: 100%;
         max-width: 100%;
         height: 85px;
         padding-bottom: 2px;
-
         scrollbar-width: auto;
-        scrollbar-color:
-            rgba(var(--color-teal-rgb), 0.70)
+        scrollbar-color: rgba(var(--color-teal-rgb), 0.70)
             rgba(var(--color-teal-rgb), 0.12);
-
         -webkit-overflow-scrolling: touch;
     }
 
@@ -711,7 +405,6 @@
 }
 
 
-
 @media (max-width: 991.98px) {
 
     .assigned-courses-header {
@@ -720,23 +413,159 @@
 }
 
 
-
 @media (max-width: 767.98px) {
 
-    /*****************************************************|
-    |*** BOTH ADMIN & TEACHER  ***************************|
-    |*****************************************************/
+    .course-status-filter-form {
+        position: relative;
+        z-index: 30;
+        display: block;
+        width: 100%;
+        overflow: visible;
+        border-radius: 8px;
+    }
+
+    .course-status-dropdown {
+        position: relative;
+        width: 100%;
+        overflow: visible;
+    }
+
+    .course-status-dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 42px;
+        height: 42px;
+        margin: 0;
+        padding: 0.45rem 1.1rem;
+        border: 1px solid var(--color-turquoise);
+        border-radius: 8px;
+        background: var(--color-whitesmoke);
+        color: var(--color-navy);
+        box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18),
+            inset 0 3px 10px rgba(0, 0, 0, 0.25);
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.2;
+        text-align: left;
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .course-status-dropdown-toggle:hover {
+        border-color: var(--color-turquoise);
+        box-shadow: var(--inner-shadow-turquoise);
+    }
+
+    .course-status-dropdown-toggle:focus,
+    .course-status-dropdown-toggle:focus-visible {
+        border-color: var(--color-turquoise);
+        box-shadow: 0 0 0 3px rgba(var(--color-turquoise-rgb), 0.22),
+            0 6px 16px rgba(var(--color-navy-rgb), 0.22);
+    }
+
+    .course-status-dropdown-current {
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .course-status-dropdown-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex: 0 0 auto;
+        margin-left: 1rem;
+    }
+
+    .course-status-dropdown-count {
+        color: var(--color-navy);
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+    .course-status-dropdown-chevron {
+        flex: 0 0 auto;
+        margin-left: 1rem;
+        color: var(--color-teal);
+        font-size: 0.9rem;
+        transition: transform 0.18s ease;
+    }
+
+    .course-status-dropdown-toggle[aria-expanded="true"]
+    .course-status-dropdown-chevron {
+        transform: rotate(180deg);
+    }
+
+    .course-status-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        z-index: 40;
+        width: 100%;
+        max-height: min(320px, 55dvh);
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: var(--color-whitesmoke);
+        border: 1px solid rgba(var(--color-teal-rgb), 0.35);
+        border-radius: 7px;
+        box-shadow: 0 8px 20px rgba(var(--color-navy-rgb), 0.10);
+    }
+
+    .course-status-dropdown-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
+        padding: 0.72rem 1rem;
+        border: 0;
+        border-radius: 0;
+        background: var(--color-whitesmoke);
+        color: var(--color-navy);
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.25;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+
+    .course-status-dropdown-option.active {
+        background: rgba(var(--color-turquoise-rgb), 0.15);
+    }
+
+    .course-status-dropdown-option:hover,
+    .course-status-dropdown-option:focus-visible {
+        background: rgba(var(--color-turquoise-rgb), 0.11);
+        outline: none;
+    }
+
+    .course-status-dropdown-option.active:hover,
+    .course-status-dropdown-option.active:focus-visible {
+        background: rgba(var(--color-turquoise-rgb), 0.18);
+    }
+
+    .course-status-dropdown-option > span:last-child {
+        flex: 0 0 auto;
+        margin-left: 1rem;
+        color: var(--color-blue-slate);
+        font-size: 0.9rem;
+    }
 
     .wrapper-assigned-courses-small-cards {
         display: flex;
     }
 
-    /*
-     * The outer panel must allow the absolute mobile dropdown
-     * to extend over the course list. The course list keeps its
-     * own X/Y scrolling below, so desktop/tablet behaviour is
-     * unaffected.
-     */
     .wrapper-assigned-courses-panel {
         position: relative;
         margin: 1rem auto;
@@ -756,28 +585,6 @@
         overflow: visible;
     }
 
-    .course-status-filter-form {
-        position: relative;
-        z-index: 30;
-        display: block;
-        width: 100%;
-        overflow: visible;
-    }
-
-    .course-status-dropdown {
-        position: relative;
-        width: 100%;
-        overflow: visible;
-    }
-
-    .course-status-dropdown-menu {
-        z-index: 40;
-    }
-
-    /*
-     * Keep the dataset itself independently scrollable.
-     * Do not move these overflow rules to the outer panel.
-     */
     .assigned-courses-list {
         position: relative;
         z-index: 1;
@@ -785,19 +592,13 @@
         overflow-y: scroll;
     }
 
-    /* Desktop/tablet status buttons are replaced by the custom dropdown. */
     .course-status-buttons {
         display: none;
     }
 }
 
 
-
 @media (max-width: 576px) {
-
-    /*****************************************************|
-    |*** BOTH ADMIN & TEACHER  ***************************|
-    |*****************************************************/
 
     .assigned-courses-page header .course-status-row .item {
         flex: 0 0 100%;
@@ -812,8 +613,10 @@
 }
 
 
+/* =========================================================
+   VISIBILITY UTILITIES — KEEP AT END
+========================================================= */
 
-/* MUST STAY AT THE END OF CSS FILE */
 .assigned-course-row.course-hidden,
 .assigned-class-row.class-hidden {
     display: none !important;

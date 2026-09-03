@@ -133,4 +133,7 @@
         inset 0 4px 10px rgba(0, 0, 0, 0.25);
     
 
+
+    /* GRADIENT BUTTON META */
+    --bg-gradient-metacard: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
 }

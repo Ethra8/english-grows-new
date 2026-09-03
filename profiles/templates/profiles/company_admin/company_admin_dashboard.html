@@ -148,7 +148,7 @@
 
                 {% if todays_sessions %}
 
-                    <div class="today-sessions-list">
+                    <div class="today-classes-list" role="region" aria-labelledby="todayClassesHeading" tabindex="0">
 
                         {% for session in todays_sessions %}
                             <div class="today-class-row">
@@ -233,7 +233,6 @@
 
                         <div class="overview-period-icon">
                             <img src="{% static 'icons/dashboard_training_overview_week_icon.png' %}" alt="" aria-hidden="true" width="26">
-                            <!-- <i class="fa-solid fa-calendar-week"></i> -->
                         </div>
 
                         <div>
@@ -378,7 +377,6 @@
 
                         <div class="overview-period-icon">
                             <img src="{% static 'icons/dashboard_training_overview_month_icon.png' %}" alt="" aria-hidden="true" width="26">
-                            <!-- <i class="fa-regular fa-calendar-days"></i> -->
                         </div>
 
                         <div>

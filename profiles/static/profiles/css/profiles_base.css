@@ -231,9 +231,10 @@ div:has(> .student-action-btn) {
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     min-width: 0;
     white-space: nowrap;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
+/* SMALL TURQUOISE TRIANGLE POINTING DOWN when btn active */
 .course-status-btn.active::after,
 .attendance-filter-btn.active::after,
 .classes-filter-btn.active::after {
@@ -254,7 +255,6 @@ div:has(> .student-action-btn) {
 
 .attendance-filter-btn i {
     font-size: 1.3rem;
-    /* color: var(--color-turquoise); */
 }
 
 
@@ -274,21 +274,17 @@ div:has(> .student-action-btn) {
     font-size: 1.2rem;
 }
 
-.course-status-btn.active {
-    background: rgba(var(--color-teal-rgb), 0.6);
+.course-status-btn.active,
+.course-status-btn.active:hover {
+    background: var(--bg-gradient-metacard);
     border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
     color: var(--color-whitesmoke);
 }
 
 .course-status-btn:hover {
-    background: rgba(var(--color-teal-rgb), 0.7);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    background: var(--bg-gradient-metacard);
+    border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
     color: rgba(var(--color-whitesmoke-rgb), 1);
-}
-
-.course-status-btn.active:hover {
-    background: rgba(var(--color-teal-rgb), 0.7);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
 }
 
 .btn-join-class {
