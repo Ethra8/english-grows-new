@@ -5,7 +5,15 @@
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
     background-color: rgba(var(--color-aquamarine-rgb), 0.15);    
     border-radius: 8px;
+}
+
+.course-details-page header {
     padding: 0 0 1rem;
+}
+
+.course-attendance-details header {
+    padding: 1rem 0 ;
+    border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);
 }
 
 /* Course selector inside header */

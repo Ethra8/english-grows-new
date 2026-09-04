@@ -371,6 +371,8 @@
 
 .all-course-attendance .course-attendance-table-header {
     min-height: 58px;
+    justify-content: center;
+    text-align: center;
     color: #dedede;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.22);
     background: var(--color-navy);
@@ -392,57 +394,28 @@
     padding: 0.8rem 1rem;
 }
 
-/* Course and status headings stay left aligned */
-
-.all-course-attendance .course-attendance-table-header .course-heading,
-.all-course-attendance .course-attendance-table-header .status-heading,
-.all-course-attendance .course-attendance-table-header .level-heading,
-.all-course-attendance .course-attendance-table-header .employees-heading,
-.all-course-attendance .course-attendance-table-header .submitted-heading,
-.all-course-attendance .course-attendance-table-header .attended-heading,
-.all-course-attendance .course-attendance-table-header .missed-heading,
-.all-course-attendance .course-attendance-table-header .excused-heading,
-.all-course-attendance .course-attendance-table-header .rate-heading,
-.all-course-attendance .course-attendance-table-header .action-heading {
-    justify-content: center;
-    text-align: center;
-}
-
 
 /* =========================================================
    COURSE ROWS
    ========================================================= */
 
 .all-course-attendance .course-attendance-row {
-    min-height: 112px;
+    min-height: 100px;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.17);
-    /* background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
     background: var(--color-whitesmoke);
-    /* background: rgba(var(--color-icy-rgb), 0.8); */
     transition:
         background 0.2s ease,
         box-shadow 0.2s ease;
 }
 
-.all-course-attendance
-.course-attendance-row > div {
+.all-course-attendance .course-attendance-row > div {
     min-width: 0;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .all-course-attendance .course-attendance-row:last-child {
     border-bottom: 0;
 }
-
-/* .all-course-attendance .course-attendance-row:hover {
-    background:
-        linear-gradient(
-            90deg,
-            rgba(242, 255, 254, 1),
-            rgba(224, 249, 247, 0.9)
-        );
-    box-shadow: inset 4px 0 0 #00a7a5;
-} */
 
 
 /* =========================================================
@@ -453,6 +426,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     gap: 0;
     min-width: 0;
 }
@@ -599,21 +573,21 @@
 }
 
 .all-course-attendance .submission-status.up-to-date {
-    color: #008864;
-    border-color: rgba(0, 151, 110, 0.22);
-    background: rgba(0, 181, 133, 0.09);
+    color: var(--attendance-submission-status-complete);
+    border-color: rgba(var(--attendance-submission-status-complete-rgb), 0.22);
+    background: rgba(var(--attendance-submission-status-complete-rgb), 0.09);
 }
 
 .all-course-attendance .submission-status.awaiting {
-    color: #c47d00;
-    border-color: rgba(216, 150, 20, 0.25);
-    background: rgba(255, 183, 42, 0.1);
+    color: var(--attendance-submission-status-awaiting);
+    border-color: rgba(var(--attendance-submission-status-awaiting-rgb), 0.25);
+    background: rgba(var(--attendance-submission-status-awaiting-rgb), 0.1);
 }
 
 .all-course-attendance .submission-status.no-classes {
-    color: #708689;
-    border-color: rgba(112, 134, 137, 0.22);
-    background: rgba(112, 134, 137, 0.08);
+    color: var(--color-steel);
+    border-color: rgba(var(--color-steel-rgb), 0.22);
+    background: rgba(var(--color-steel-rgb), 0.08);
 }
 
 

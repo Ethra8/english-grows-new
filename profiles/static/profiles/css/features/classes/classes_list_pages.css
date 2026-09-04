@@ -1,23 +1,59 @@
-/**** WRAPPERS *******************************************************/
-.wrapper-assigned-classes-panel {
-    border-radius: 8px;
+/* ======================================================================
+   CLASSES LIST PAGES — SHARED
+   Used by Company Admin and Teacher class-list pages.
+
+   Visual hierarchy:
+   1. Primary navigation: Upcoming / Held
+   2. Secondary period filter: Today / This Week / This Month / All
+   3. Class-session rows
+
+   Role-specific HTML can add/remove row actions, but the visual system is
+   intentionally shared between roles.
+   ====================================================================== */
+
+
+/* =========================================================
+   PANEL SHELL
+========================================================= */
+
+.wrapper-assigned-classes-panel,
+.all-assigned-classes {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding: 4px;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-turquoise-rgb), 0.2);
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.15);
+    box-shadow: 0 8px 20px rgba(11, 53, 95, 0.08);
 }
 
-/* page grid to keep Upcoming/Past Classes selector cards in place */
 .all-assigned-classes {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-navy-rgb), 0.8);
-    border: outset 2px rgba(var(--color-teal-rgb), 0.2);
-    border-radius: 8px;
+    display: block;
+    border: 0;
 }
+
+.assigned-classes-panel {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 7px;
+    background: var(--color-whitesmoke);
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   LEGACY / RESCHEDULE HEADERS
+   Kept because teacher reschedule pages also use this CSS.
+========================================================= */
 
 .assigned-classes-filter-header {
+    position: relative;
+    z-index: 5;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -25,393 +61,196 @@
 }
 
 .assigned-classes-filter-header h2 {
-    padding: 0.25rem 2rem 0.25rem 0rem;
+    padding: 0.25rem 2rem 0.25rem 0;
     font-weight: 400;
 }
 
 .assigned-classes-filter-header i {
+    align-self: center;
+    padding: 0.25rem 0.5rem 0.25rem 0;
     color: var(--color-whitesmoke);
     font-size: 2rem;
-    padding: 0.25rem 0.5rem 0.25rem 0rem;
     cursor: pointer;
-    align-self: center;
 }
 
+.assigned-classes-filter-header strong {
+    width: 35px;
+    height: 35px;
+    margin-left: 1.5rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(var(--color-turquoise-rgb), 0.18);
+    color: var(--color-whitesmoke);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-align: center;
+}
 
 .classes-list-filter {
-    background-color: rgba(var(--color-navy-rgb), 0.6);
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    border: solid 2px var(--color-turquoise);
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    border: 1px solid var(--color-turquoise);
     border-radius: 8px;
-    padding: .6rem 2.5rem .6rem 1rem;
+    background: rgba(var(--color-navy-rgb), 0.60);
     color: var(--color-whitesmoke);
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
-}
-
-.assigned-classes-panel,
-.assigned-classes-filter-header {
-    position: relative;
-    z-index: 5;
-}
-
-.assigned-classes-panel {
-    width: 100%;
-    background: rgba(var(--color-navy-rgb), 0.9);
-    border: 1px solid rgba(80, 230, 220, 0.85);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
-}
-
-
-/* CLASS LIST *********************/
-.assigned-classes-list,
-.teacher-assigned-classes-list {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    border-top: 2px rgba(var(--color-teal-rgb), 0.6) solid;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background: var(--color-whitesmoke);
-    padding: 1rem;
-    box-sizing: border-box;
-    overflow-x: auto;
-    overflow-y: scroll;
-    max-height: 30rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    scrollbar-width: auto;
-}
-
-
-/* CLASS ROW ********************* */
-/* Company admin (no reschedule btn) */
-.assigned-class-row {
-    display: grid;
-    grid-template-columns: minmax(200px, 1fr) minmax(50px, 0.2fr) minmax(100px, 0.75fr) minmax(100px, 0.5fr);    
-    /* grid-template-columns: minmax(420px, 1fr) minmax(200px, 1fr) minmax(150px, 0.75fr);     */
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 1.3rem;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
-    min-width: 960px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.teacher-assigned-classes-list .assigned-class-row {
-    display: grid;
-    grid-template-columns: minmax(400px, 1fr) minmax(60px, 0.25fr) minmax(200px, 1fr) minmax(150px, 0.75fr) minmax(150px, 1fr);    
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 1.3rem;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
-    min-width: 1300px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.assigned-class-row:hover {
-    background: rgba(var(--color-icy-rgb), 0.3);
-}
-
-/* CLASS MAIN INFO */
-/* For CLASS List */
-.class-list-course {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-content: center;
-    align-self: center;
-    gap: 0.75rem;
-}
-
-.class-list-course  {
-    display: flex;
-    flex-direction: row;
-    gap: 0.75rem;
-    align-items: center;
-}
-
-.class-list-course div {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Group-name */
-.assigned-classes-list a strong,
-.teacher-assigned-classes-list a strong {
-    font-weight: 600;
-    color: var(--color-navy);
-    margin: 0;
-    transition: all 0.2s ease;
-    font-size: 1.05rem;
-}
-
-.class-list-course a strong:hover {
+    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.30);
     font-weight: 600;
 }
 
-.class-list-course .level {
-    padding: 0.15rem 0.25rem;
-    color: var(--color-navy);
-    width: 46px;
-    height: 22px;
-    margin-top: 15%;
-}
 
-/* :last-of-type opmits the hidden rows (data false from selected filter; eg: 'upcoming' */
-.assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
-.attendance-row:last-child  {
-    border-bottom: none !important;
-}
+/* =========================================================
+   PRIMARY NAV — UPCOMING / HELD
+========================================================= */
 
-
-/* ROW DATA: BUTTON at the end */
-.course-list-group-name > div:first-of-type,
-.attendance-list .attendance-row > div:first-of-type {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    gap: 0.5rem;
-}
-
-/* .class-list-course > div img, */
-.course-list-group-name > div:first-of-type img,
-.attendance-list .attendance-row > div:first-of-type img {
-    width: 46px;
-    height: 46px;
-    background: var(--color-icy);
-    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
-    border-radius: 999px;
-    margin-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-}
-
-.class-list-course span,
-.course-list-group-name > div:first-of-type span,
-.attendance-list .attendance-row > div:first-of-type span {
-    color: var(--color-steel);
-    font-size: 1rem;
-}
-
-/* LEVEL CELL in DATA ROW */
-.assigned-class-row > div:nth-of-type(2) {
-    height: 100%; 
-    min-height: 80%;
-    display: flex;
-    align-items: center;
-    /* align-self: center;
-    align-content: center; */
-    justify-content: center;
-    }
-
-/* .assigned-class-row .level {
-    width: 46px;
-} */
-
-/* DATES in ROW */
-.class-list-date {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    height: 70%;    
-    min-width: 200px;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-.class-list-student-num {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);    
-    height: 70%;    
-    min-width: 100px;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-.class-list-date .icon,
-.class-list-student-num .icon {
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--color-teal);
-    background: transparent;
-    border-radius: 999px;
-    text-align: center !important;
-}
-
-.class-list-date i,
-.class-list-student-num i {
-    color: var(--color-teal);
-}
-
-.class-list-date strong,
-.class-list-student-num strong {
-    color: var(--color-teal);
-    font-size: 1rem;
-    margin-bottom: 0;
-}
-
-/* Keep span elements in separate lines */
-.class-list-date span,
-.class-list-student-num span {
-    display: block;
-}
-
-/****  CLASS STATUS NAV **********************************************/
 .classes-status-nav {
     position: relative;
-    z-index: 5;
-    display: flex;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
-    gap: .25rem;
+    gap: 4px;
     width: 100%;
-    padding: 0.5rem 0.5rem 0;    
-    border-radius: 8px;
+    margin: 0;
+    padding: 0.25rem;
+    border: 0;
+    background: transparent;
 }
 
-/* Individual tab */
 .classes-status-tab {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.65rem;
-    flex: 1;
-    min-height: 58px;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    background: rgba(var(--color-mist-rgb), 0.35);
-    color: rgba(var(--color-whitesmoke-rgb), 0.85);
-    border: 2px solid rgba(var(--color-tropical-teal-rgb), 0.45);
-    /* background-color: var(--color-navy); */
-    /* color: whitesmoke; */
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    max-height: none;
+    margin: 0;
+    padding: 0.55rem 1rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.52);
+    border-radius: 7px;
+    background: var(--color-grey-mist);
+    color: var(--color-slate);
+    box-shadow: none;
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.4rem;
     font-weight: 500;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    white-space: nowrap;
     cursor: pointer;
     transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
-/* Icon */
-.classes-status-tab i {
-    color: var(--color-teal);
-    font-size: 1.7rem;
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
-}
-
-.classes-status-tab.active i {
-    opacity: 1;
-}
-
-/* Count */
 .classes-status-tab strong {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 60px;
-    height: 40px;
-    padding: 0 0.55rem;
+    flex: 0 0 auto;
+    width: 42px;
+    min-width: 42px;
+    height: 28px;
+    margin: 0;
+    padding: 0.2rem 0.55rem;
     border-radius: 999px;
-    background: rgba(var(--color-teal-rgb), 0.55);
+    background: rgba(var(--color-steel-rgb), 0.60);
     color: var(--color-whitesmoke);
-    font-family: inherit;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1;
 }
 
-/* Hover */
 .classes-status-tab:hover {
-    background: rgba(var(--color-tropical-teal-rgb), 0.65);
-    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
-    color: rgba(var(--color-whitesmoke-rgb), 1);
+    border-color: rgba(var(--color-tropical-teal-rgb), 0.58);
+    background: rgba(var(--color-tropical-teal-rgb), 0.10);
+    color: var(--color-navy);
 }
 
-/* Active */
+.classes-status-tab:hover strong,
+.classes-status-tab.active strong {
+    background: rgba(var(--color-turquoise-rgb), 0.42);
+}
+
 .classes-status-tab.active {
-    background: rgba(var(--color-tropical-teal-rgb), 0.65);
+    border: 1px solid rgba(var(--color-tropical-teal-rgb), 0.78);
+    background: linear-gradient(
+        110deg,
+        rgba(var(--color-navy-rgb), 0.98) 0%,
+        rgba(var(--color-teal-rgb), 0.96) 48%,
+        rgba(var(--color-tropical-teal-rgb), 0.90) 100%
+    );
     color: var(--color-whitesmoke);
-    box-shadow: 0 4px 12px rgba(var(--color-shadow-rgb), 0.15);
-    border: 2px outset rgba(var(--color-tropical-teal-rgb), 0.6);
+    box-shadow: 0 4px 10px rgba(var(--color-navy-rgb), 0.12);
 }
 
-.classes-status-tab.active i {
-    color: var(--color-turquoise);
-}
-
-.classes-status-tab.active strong,
-.classes-filter-btn.active strong {
-    background: rgba(var(--color-turquoise-rgb), 0.46);
-    /* color: var(--color-turquoise); */
-}
-
-/* Small active indicator */
-.classes-status-tab.active::after,
-.classes-filter-btn.active::after {
+/* Primary active state: small downward marker, as on Courses. */
+.classes-status-tab.active::after {
     content: "";
     position: absolute;
     left: 50%;
-    bottom: -2px;
-    width: 80%;
-    height: 4px;
+    bottom: -10px;
+    z-index: 12;
+    width: 0;
+    height: 0;
     transform: translateX(-50%);
-    border: none;
-    border-radius: 999px;
-    background: var(--color-turquoise);
-    filter: none;
-}/* END CLASS STATUS NAV *********************************************/
+    border: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 10px solid var(--color-turquoise);
+    border-radius: 0;
+    background: transparent;
+    filter: drop-shadow(0 1px 1px rgba(var(--color-navy-rgb), 0.16));
+}
+
+.classes-status-tab:focus-visible {
+    outline: 3px solid rgba(var(--color-turquoise-rgb), 0.32);
+    outline-offset: 2px;
+}
 
 
-/* ***  CLASS STATUS PANELS *************************************** */
+/* =========================================================
+   STATUS PANEL
+========================================================= */
+
 .classes-status-panel {
     width: 100%;
     min-width: 0;
-    border-top: 1px solid rgba(var(--color-tropical-teal-rgb), 0.7);
+    margin: 0;
+    border: 0;
+    background: var(--color-whitesmoke);
 }
 
-/* *************************************************************** */
+.classes-status-panel[hidden] {
+    display: none !important;
+}
 
 
-/* ****  CLASS FILTER BTN **************************************** */
+/* =========================================================
+   SECONDARY FILTER — QUIET SUPPORTING NAVIGATION
+========================================================= */
+
 .classes-filter-buttons {
+    position: relative;
+    z-index: 5;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.25rem;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Mobile filter */
-.classes-status-panel .mobile-filter-select {
-    margin: 0.25rem 0.5rem;
-    max-width: stretch;    
-    display: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    width: calc(100% - 1rem);
+    margin: 0.5rem;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 7px;
+    background: rgba(var(--color-mist-rgb), 0.48);
+    box-shadow: none;
 }
 
 .classes-filter-btn {
@@ -419,70 +258,535 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    min-height: 60px;
-    border: 2px solid rgba(var(--color-tropical-teal-rgb), 0.45);
-    border-radius: 8px;
-    background: rgba(var(--color-mist-rgb), 0.35);
-    color: rgba(var(--color-whitesmoke-rgb), 0.85);
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.02em;
-    font-weight: 500;
-    font-size: 1.4rem;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
+    gap: 0.65rem;
+    width: 100%;
     min-width: 0;
+    min-height: 52px;
+    margin: 0;
+    padding: 0.55rem 0.75rem 0.72rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-slate);
+    box-shadow: none;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    line-height: 1;
     white-space: nowrap;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+    transition:
+        color 0.18s ease,
+        background-color 0.18s ease;
 }
 
-/* .classes-filter-btn i {
-    font-size: 1.3rem;
-    color: var(--color-turquoise);
-} */
+.classes-filter-btn:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 28%;
+    right: 0;
+    width: 1px;
+    height: 44%;
+    background: rgba(var(--color-teal-rgb), 0.24);
+}
 
 .classes-filter-btn strong {
-    font-size: 1.2rem;
-    background: rgba(var(--color-teal-rgb), 0.55);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 34px;
+    height: 27px;
+    margin: 0;
+    padding: 0.15rem 0.5rem;
     border-radius: 999px;
-    padding: 0.25rem 0.65rem;
+    background: rgba(var(--color-steel-rgb), 0.60);
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
+    font-size: 1rem;
     font-weight: 500;
-    height: 35px;
-    width: 40px;
+    letter-spacing: 0.03em;
+    line-height: 1;
 }
 
 .classes-filter-btn:hover {
-    background: rgba(var(--color-tropical-teal-rgb), 0.65);
-    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
-    color: rgba(var(--color-whitesmoke-rgb), 1);
+    border: 0;
+    background: rgba(var(--color-tropical-teal-rgb), 0.055);
+    color: var(--color-teal);
 }
 
 .classes-filter-btn.active {
-    background: rgba(var(--color-tropical-teal-rgb), 0.65);
-    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
-    color: var(--color-whitesmoke);
+    border: 0;
+    background: transparent;
+    color: var(--color-teal);
+    box-shadow: none;
+    font-weight: 600;
+}
+
+.classes-filter-btn:hover strong,
+.classes-filter-btn.active strong {
+    background: var(--color-tropical-teal);
+}
+
+/* Secondary active state: restrained underline only. */
+.classes-filter-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 58%;
+    height: 3px;
+    transform: translateX(-50%);
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-tropical-teal);
+}
+
+.classes-filter-btn:focus-visible {
+    outline: 2px solid rgba(var(--color-tropical-teal-rgb), 0.40);
+    outline-offset: -3px;
 }
 
 
-/* ROW DATA: COURSE STATISTICS */
-/* For COURSE & CLASS List */
+/* =========================================================
+   MOBILE PERIOD SELECT
+========================================================= */
+
+.classes-status-panel .mobile-filter-select,
+.classes-panel-select {
+    display: none;
+    width: calc(100% - 1rem) !important;
+    max-width: none;
+    min-height: 44px;
+    margin: 0.5rem;
+    padding: 0.65rem 3rem 0.65rem 1rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.34);
+    border-radius: 7px;
+    background-color: var(--color-whitesmoke);
+    color: var(--color-navy);
+    box-shadow: 0 4px 10px rgba(var(--color-navy-rgb), 0.08);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23006B7D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 18px !important;
+}
+
+.classes-status-panel .mobile-filter-select:focus,
+.classes-panel-select:focus {
+    border-color: var(--color-tropical-teal) !important;
+    outline: 3px solid rgba(var(--color-tropical-teal-rgb), 0.18);
+    outline-offset: 1px;
+}
+
+.classes-status-panel .mobile-filter-select option,
+.classes-panel-select option {
+    background: var(--color-whitesmoke);
+    color: var(--color-navy);
+}
+
+
+/* =========================================================
+   CLASS LIST
+========================================================= */
+
+.assigned-classes-list,
+.teacher-assigned-classes-list {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: 36rem;
+    margin: 0;
+    padding: 0 0.75rem 0.25rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 0;
+    border-top: 1px solid rgba(var(--color-teal-rgb), 0.08);
+    border-radius: 0 0 7px 7px;
+    background: var(--color-whitesmoke);
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-color:
+        rgba(var(--color-steel-rgb), 0.50)
+        rgba(var(--color-teal-rgb), 0.07);
+    scrollbar-width: auto;
+}
+
+.assigned-classes-list::-webkit-scrollbar,
+.teacher-assigned-classes-list::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+.assigned-classes-list::-webkit-scrollbar-track,
+.teacher-assigned-classes-list::-webkit-scrollbar-track {
+    background: rgba(var(--color-teal-rgb), 0.07);
+}
+
+.assigned-classes-list::-webkit-scrollbar-thumb,
+.teacher-assigned-classes-list::-webkit-scrollbar-thumb {
+    border: 2px solid var(--color-whitesmoke);
+    border-radius: 999px;
+    background: rgba(var(--color-steel-rgb), 0.50);
+}
+
+.assigned-classes-list::-webkit-scrollbar-thumb:hover,
+.teacher-assigned-classes-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color-steel-rgb), 0.70);
+}
+
+
+/* =========================================================
+   CLASS ROW — SHARED BASE
+========================================================= */
+
+.assigned-class-row {
+    display: grid;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 72px;
+    margin: 0;
+    padding: 0.65rem 0.6rem;
+    border: 0;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.34);
+    background: transparent;
+    box-sizing: border-box;
+    transition: background-color 0.18s ease;
+}
+
+/* Company-admin / generic upcoming row: no far-right action. */
+.assigned-class-row.class-row--upcoming {
+    grid-template-columns:
+        minmax(340px, 1.45fr)
+        minmax(76px, 0.30fr)
+        minmax(235px, 0.92fr)
+        minmax(125px, 0.45fr);
+    min-width: 880px;
+}
+
+/* Held row: attendance drill-down column. */
+.assigned-class-row.class-row--completed {
+    grid-template-columns:
+        minmax(340px, 1.45fr)
+        minmax(76px, 0.30fr)
+        minmax(235px, 0.92fr)
+        minmax(125px, 0.45fr)
+        46px;
+    min-width: 926px;
+}
+
+/* Existing teacher row structure retained until teacher HTML is migrated. */
+.teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--completed) {
+    grid-template-columns:
+        minmax(400px, 1fr)
+        minmax(60px, 0.25fr)
+        minmax(200px, 1fr)
+        minmax(150px, 0.75fr)
+        minmax(150px, 1fr);
+    gap: 1rem;
+    min-width: 1300px;
+}
+
+.assigned-class-row:hover {
+    background: rgba(var(--color-teal-rgb), 0.065);
+}
+
+.assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
+.teacher-assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
+.attendance-row:last-child {
+    border-bottom: 0 !important;
+}
+
+
+/* =========================================================
+   COURSE / LESSON CELL
+========================================================= */
+
+.class-list-course {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.8rem;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 0 1rem 0 0.5rem;
+    border: 0;
+}
+
+.class-list-course > div,
+.class-list-course-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.class-session-icon,
+.class-list-course > img {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    margin: 0;
+    object-fit: contain;
+    opacity: 0.76;
+}
+
+.class-course-link {
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.class-course-link-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 100%;
+}
+
+.class-course-link strong,
+.class-course-name,
+.class-list-course > div > strong {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
+    color: var(--color-navy);
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.18s ease;
+}
+
+.class-course-link strong:hover,
+.class-course-name:hover,
+.class-list-course > div > strong:hover {
+    color: var(--color-teal) !important;
+}
+
+.class-lesson-number,
+.class-list-course span:not(.level) {
+    margin-top: 0.12rem;
+    color: var(--color-slate);
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+
+/* Upcoming course-details affordance: hidden until hover/focus. */
+.course-link-arrow {
+    display: block;
+    flex: 0 0 auto;
+    width: 36px;
+    height: auto;
+    max-width: 0;
+    margin-left: 1rem;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-5px);
+    pointer-events: none;
+    transition:
+        max-width 0.18s ease,
+        margin-left 0.18s ease,
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.class-row--upcoming:hover .course-link-arrow,
+.class-course-link:hover .course-link-arrow,
+.class-course-link:focus-visible .course-link-arrow {
+    max-width: 36px;
+    margin-left: 0.45rem;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.class-course-link:hover strong,
+.class-course-link:focus-visible strong {
+    color: var(--color-navy);
+}
+
+.class-course-link:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid rgba(var(--color-tropical-teal-rgb), 0.50);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   LEVEL / DATE / EMPLOYEE CELLS
+========================================================= */
+
+.class-list-level-cell,
+.assigned-class-row > div:nth-of-type(2),
+.class-list-date,
+.class-list-student-num,
+.class-row-action {
+    min-height: 42px;
+}
+
+.class-list-level-cell,
+.assigned-class-row > div:nth-of-type(2) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 68%;
+    padding: 0 0.75rem;
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
+}
+
+.class-list-level-cell .level,
+.class-list-course .level {
+    width: auto;
+    min-width: 46px;
+    height: auto;
+    margin: 0;
+    padding: 0.15rem 0.45rem;
+}
+
+.class-list-date,
+.class-list-student-num {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 68%;
+    margin: 0;
+    padding: 0 1rem;
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    color: var(--color-slate);
+    gap: 0.75rem;
+}
+
+.class-list-date .icon,
+.class-list-student-num .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    margin: 0;
+    border: 1px solid var(--color-teal);
+    border-radius: 999px;
+    background: transparent;
+}
+
+.class-list-date .icon img,
+.class-list-student-num .icon img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.class-list-date-copy {
+    min-width: 0;
+}
+
+.class-list-date strong,
+.class-list-student-num strong {
+    display: block;
+    margin: 0;
+    color: var(--color-teal);
+    font-size: 1rem;
+    font-weight: 550;
+    line-height: 1.25;
+}
+
+.class-list-date span,
+.class-list-student-num span {
+    display: block;
+    margin-top: 0.08rem;
+    color: var(--color-slate);
+    font-size: 0.92rem;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   HELD ATTENDANCE CHEVRON
+========================================================= */
+
+.class-row-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 68%;
+    padding-left: 0.3rem;
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
+}
+
+.class-attendance-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-teal);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.class-row--completed:hover .class-attendance-link,
+.class-attendance-link:hover,
+.class-attendance-link:focus-visible {
+    background: rgba(var(--color-turquoise-rgb), 0.13);
+    color: var(--color-navy);
+    transform: translateX(2px);
+}
+
+.class-attendance-link:focus-visible {
+    outline: 2px solid rgba(var(--color-tropical-teal-rgb), 0.48);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   TEACHER-SPECIFIC ROW CONTENT
+   Shared file, role-specific column/actions retained here.
+========================================================= */
+
 .course-stat {
     display: flex;
     flex-direction: row;
-    align-content: center;
-    align-self: center;
     align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    height: 70%;
-    min-width: 100px;
-    gap: 0.75rem;
     justify-content: center;
+    align-self: center;
+    min-width: 100px;
+    height: 70%;
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.20);
+    color: var(--color-steel);
+    gap: 0.75rem;
 }
-
 
 .course-stat span {
     color: var(--color-steel);
@@ -491,15 +795,15 @@
 .course-action {
     display: flex;
     justify-content: flex-end;
-    gap: .7rem;
+    gap: 0.7rem;
 }
 
 .course-action button {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     width: fit-content;
     height: 34px;
-    align-items: center;
 }
 
 .course-action img {
@@ -513,97 +817,49 @@
 }
 
 
-/* ******************************************************************** */
-/* ONLY teacher_reschedule_classes.html *********************************/
-.assigned-classes-filter-header strong {
-    background: rgba(var(--color-turquoise-rgb), 0.18);
-    border-radius: 999px;
-    padding: 0.25rem 0.65rem;
-    color: var(--color-whitesmoke);
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-    height: 35px;
-    width: 35px;
-    font-size: 1.8rem;
-    margin-left: 1.5rem;
-    text-align: center !important;
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.no-classes-message {
+    min-height: 88px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.no-classes-message[hidden] {
+    display: none !important;
 }
 
 
-/* SELECT SMALLER DEVICES **********************************/
-select {
-    display: none;
-    width: 98% !important;
-    margin: 0 auto .25rem;
-    /* max-width: 320px; */
-    padding: 0.75rem 1rem;
-    padding-right: 3rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    border: outset 1px var(--color-teal);
-    border-radius: 8px;
-    background-color: rgba(var(--color-tropical-teal-rgb), 0.65);
-    color: var(--color-whitesmoke);
-    /* color-scheme: ; */
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300676C' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+@media (max-width: 1199.98px) {
 
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-    transition: all 0.2s ease;
+    .assigned-class-row.class-row--upcoming {
+        grid-template-columns:
+            minmax(310px, 1.35fr)
+            minmax(72px, 0.28fr)
+            minmax(220px, 0.90fr)
+            minmax(115px, 0.42fr);
+        min-width: 835px;
+    }
+
+    .assigned-class-row.class-row--completed {
+        grid-template-columns:
+            minmax(310px, 1.35fr)
+            minmax(72px, 0.28fr)
+            minmax(220px, 0.90fr)
+            minmax(115px, 0.42fr)
+            44px;
+        min-width: 879px;
+    }
 }
-
-select option {
-    background: var(--color-whitesmoke);
-    color: var(--color-navy);
-    font-weight: 500;
-    border-radius: 8px;
-}
-
-select:focus {
-    border: 1px outset #05ffcd !important;
-    outline: none;
-}
-
-.mobile-filter-select {
-    /* Remove browser arrow */
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    /* Leave room for w3.org chevron */
-    padding-right: 3rem !important;
-    /* Custom light chevron */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F5FFFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 1rem center !important;
-    background-size: 36px !important;
-    cursor: pointer !important;
-}
-
-
-
-/************************************************************************************/
-/*** MEDIA QUERIES **************************************************************** */
-/************************************************************************************/
-
-@media (max-width: 1250px) {
-
-    /******************************************************/
-    /* CLASSES LIST Page ******************************** */
-    /******************************************************/
-    .classes-filter-buttons {
-        grid-template-columns: repeat(4, 1fr);
-    } 
-
-}
-
 
 
 @media (max-width: 991.98px) {
@@ -614,33 +870,47 @@ select:focus {
 }
 
 
-
-@media (max-width: 767.99px) {
+@media (max-width: 767.98px) {
 
     .classes-filter-buttons {
-        display: none;
+        display: none !important;
     }
 
-    .mobile-filter-select {
+    .classes-status-panel .mobile-filter-select,
+    .classes-panel-select {
         display: block !important;
-        /* display: none; */
     }
 
-    .assigned-course-row {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
+    .assigned-classes-list,
+    .teacher-assigned-classes-list {
+        padding: 0 0.5rem 0.25rem;
+    }
+
+    .assigned-class-row.class-row--upcoming {
+        min-width: 820px;
+    }
+
+    .assigned-class-row.class-row--completed {
+        min-width: 864px;
+    }
+
+    /* Preserve the existing teacher/reschedule card treatment where the
+       row has not yet migrated to the new class-row--* structure. */
+    .teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--completed) {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
         gap: 1rem;
+        min-width: 0;
         padding: 1.5rem 1.4rem 1rem;
     }
 
-    .class-list-course {
-        border-left: none;
+    .teacher-assigned-classes-list .class-list-course {
         padding-left: 0;
         padding-bottom: 0.75rem;
+        border-left: 0;
     }
 }
-
 
 
 @media (max-width: 576px) {
@@ -650,20 +920,25 @@ select:focus {
     }
 
     .classes-status-tab {
-        min-height: 50px;
-        padding: 0.6rem 0.5rem;
-        gap: 0.4rem;
+        min-height: 48px;
+        padding: 0.5rem 0.55rem;
+        gap: 0.45rem;
         font-size: 1.1rem;
     }
 
     .classes-status-tab strong {
+        width: 36px;
         min-width: 36px;
-        height: 27px;
-        font-size: 0.85rem;
+        height: 26px;
+        padding: 0.15rem 0.4rem;
+        font-size: 0.9rem;
     }
 
-    .classes-status-tab i {
-        display: none;
+    .classes-status-tab.active::after {
+        bottom: -8px;
+        border-left-width: 7px;
+        border-right-width: 7px;
+        border-top-width: 8px;
     }
 
     .assigned-classes-header {
@@ -678,72 +953,21 @@ select:focus {
     }
 
     .assigned-classes-filter-header i {
-        font-size: 1.6rem;
         padding-left: 0.5rem;
+        font-size: 1.6rem;
     }
 
     .assigned-classes-filter-header strong {
-        font-size: 1.3rem;
         margin-left: 0.8rem;
+        font-size: 1.3rem;
     }
-
-    #upcomingClassesCollapse select,
-    #completedClassesCollapse select {
-        /* display: block !important; */
-        display: none;
-    }
-
-
 }
 
 
+/* =========================================================
+   VISIBILITY UTILITIES — KEEP AT END
+========================================================= */
 
-@media (max-width: 370px) {
-
-}
-
-
-
-/* =======================================================
-   CLASS LIST: HORIZONTAL SCROLL FIX
-   Keep this at the end of the CSS file
-======================================================= */
-
-.classes-list-page ,
-/* .classes-list-page  .all-assigned-classes, */
-.wrapper-assigned-classes-panel,
-.assigned-classes-panel,
-.classes-panel-collapse {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-}
-
-/* MUST STAY AT THE END OF CSS FILE */
 .assigned-class-row.class-hidden {
     display: none !important;
 }
-
-/* Chrome, Edge and Safari */
-
-.classes-list-page .assigned-courses-list::-webkit-scrollbar {
-    width: auto;
-    height: 14px;
-}
-
-.classes-list-page .assigned-courses-list::-webkit-scrollbar-track {
-    background: var(--color-navy);
-    border-radius: 999px;
-}
-
-.classes-list-page .assigned-courses-list::-webkit-scrollbar-thumb {
-    min-width: 60px;
-    background: var(--color-turquoise);
-    border: 3px solid var(--color-navy);
-    border-radius: 999px;
-}
-
-.classes-list-page .assigned-courses-list::-webkit-scrollbar-thumb:hover {
-    background: var(--color-icy);
-}
-

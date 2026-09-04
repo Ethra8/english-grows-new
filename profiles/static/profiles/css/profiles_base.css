@@ -558,8 +558,9 @@ div:has(> .student-action-btn) {
 
 /* LEVEL CARD SMALL *********************************************/
 .level {
-    width: 60px;
-    height: 26px;
+    width: 46px;
+    height: 22px;
+    font-size: 0.9rem;
     border-radius: 999px;
     display: flex;
     align-items: center;

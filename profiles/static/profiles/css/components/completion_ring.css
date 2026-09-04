@@ -1,274 +1,364 @@
-/* COMPLETION RING ************************************************/
+/* =========================================================
+   COMPLETION RING COMPONENT
+   =========================================================
+
+   IMPORTANT:
+   The ring geometry is defined ONLY ONCE here.
+
+   Individual pages/components should customise the ring
+   through CSS variables only:
+
+       --ring-size
+       --ring-width
+       --ring-color
+       --ring-track
+       --ring-center
+
+   This prevents slightly different ring implementations
+   appearing across different pages.
+========================================================= */
+
+
 .completion-ring {
-    --ring-size: 3.25rem;
+    /* DEFAULT VALUES */
+    --ring-size: 54px;
+    --ring-width: 7px;
+
     --ring-color: var(--color-tropical-teal);
+
+    --ring-track:
+        rgba(var(--color-navy-rgb), 0.12);
+
+    --ring-center:
+        var(--color-whitesmoke);
+
+
+    /* DIMENSIONS */
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    min-width: 0;
+
+
+    /* LAYOUT */
+    display: grid;
+    place-items: center;
+
+    position: relative;
+
+    margin-right: 0.5rem;
+
+    vertical-align: middle;
+
+
+    /* RING */
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            var(--ring-color)
+                calc(var(--completion, 0) * 1%),
+
+            var(--ring-track) 0
+        );
 }
+
+
+/* ---------------------------------------------------------
+   RING CENTRE
+
+   A smaller solid circle sits over the conic gradient,
+   creating the donut shape.
+
+   This is deliberately the ONLY technique used to create
+   the centre of the completion ring.
+--------------------------------------------------------- */
+
+.completion-ring::before {
+    content: "";
+
+    position: absolute;
+
+    inset: var(--ring-width);
+
+    border-radius: 50%;
+
+    background:
+        var(--ring-center);
+
+    z-index: 0;
+}
+
+
+/* ---------------------------------------------------------
+   VALUE
+--------------------------------------------------------- */
+
+.completion-ring-value {
+    position: relative;
+
+    z-index: 1;
+
+    color: var(--color-navy);
+
+    font-size: 0.9rem;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+/*
+Generic span support for completion rings whose template
+uses a <span> instead of .completion-ring-value.
+*/
+
+.completion-ring > span {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    color: var(--color-teal);
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   COMPLETION RING SIZE MODIFIERS
+========================================================= */
 
 .completion-ring--small {
     --ring-size: 6rem;
 }
 
+
 .completion-ring--large {
     --ring-size: 11rem;
 }
 
+
+/* =========================================================
+   COMPLETION RING COLOUR MODIFIERS
+========================================================= */
+
 .completion-ring--turquoise {
-    --ring-color: var(--color-turquoise);
+    --ring-color:
+        var(--color-turquoise);
 }
+
 
 .completion-ring--steel {
-    --ring-color: var(--color-blue-slate);
+    --ring-color:
+        var(--color-blue-slate);
 }
 
-.completion-ring {
-    /* --ring-size: 52px; */
-    --ring-thickness: 1px;
-    --ring-center: rgba(var(--color-navy-rgb), 0.95);
 
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
+/* =========================================================
+   META-CARDS COMPLETION RING
+========================================================= */
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.course-header-meta-row .completion-ring,
+.course-meta-card .completion-ring {
+    --ring-size: 60px;
+    --ring-width: 7px;
 
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
+    --ring-color:
+        var(--color-turquoise);
 
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(50% - var(--ring-thickness)),
-            transparent calc(50% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-}
+    --ring-track:
+        rgba(255, 255, 255, 0.30);
 
-.completion-ring-value {
-    position: relative;
-    z-index: 1;
+    --ring-center:
+        rgba(var(--color-navy-rgb), 0.95);
 
-    color: var(--color-whitesmoke);
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring::before,
-.completion-ring::after {
-    z-index: 1;
-}
-
-/* END COMPLETION RING *********************************************/
-
-
-/* META-CARDS COMPLETION RING *************************************/
-.course-header-meta-row .completion-ring {
-    width: 60px !important;
-    height: 60px !important;
     margin-right: 0;
 }
 
-.course-header-meta-row .completion-ring-value {
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color-whitesmoke);
+
+.course-header-meta-row .completion-ring-value,
+.course-meta-card .completion-ring-value {
+    position: relative;
+
+    z-index: 1;
+
+    color:
+        var(--color-whitesmoke);
+
     font-size: 1rem;
     font-weight: 300;
-}
 
-.course-meta-card .completion-ring {
-    background:
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion) * 1%),
-            rgba(255, 255, 255, 0.3) 0
-        );
+    line-height: 1;
 }
 
 
-/* DASHBOARD Admin & Teacher ******************************************************/
-.completion-ring {
+/* =========================================================
+   DASHBOARD — ADMIN & TEACHER
+========================================================= */
+
+/*
+Dashboard uses the default ring implementation.
+
+Only its component-specific variables are defined here.
+*/
+
+#company_admin .completion-ring,
+#teacher .completion-ring {
     --ring-size: 54px;
     --ring-width: 7px;
-    --ring-center: var(--color-whitesmoke);
 
-    position: relative;
-    width: var(--ring-size);
-    height: var(--ring-size);
+    --ring-color:
+        var(--color-tropical-teal);
 
-    display: grid;
-    place-items: center;
+    --ring-track:
+        rgba(var(--color-navy-rgb), 0.12);
 
-    border-radius: 50%;
-
-    background:
-        conic-gradient(
-            var(--color-tropical-teal) calc(var(--completion) * 1%),
-            rgba(var(--color-navy-rgb), 0.12) 0
-        );
+    --ring-center:
+        var(--color-whitesmoke);
 }
 
-/* Creates transparent / light centre */
-.completion-ring::before {
-    content: "";
-    position: absolute;
-    inset: var(--ring-width);
-    border-radius: 50%;
-    background: var(--color-whitesmoke);
-}
 
-.completion-ring-value {
-    position: relative;
-    z-index: 1;
+#company_admin .completion-ring-value,
+#teacher .completion-ring-value {
+    color:
+        var(--color-navy);
+
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--color-navy);
 }
+
 
 .completion-count {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--color-navy);
+
+    color:
+        var(--color-navy);
 }
 
-#company_admin .training-overview-grid .completion-count {
+
+#company_admin
+.training-overview-grid
+.completion-count {
     font-size: 1.1rem;
 }
 
 
-/* CLASSES LIST Pages **********************************************/
+/* =========================================================
+   ALL COURSES LIST
+========================================================= */
+
 /*
-The previous .course-stat .completion-ring and
-.course-stat .completion-ring-value declarations were removed here.
+Previously this component recreated the completion ring
+using radial-gradient() + conic-gradient().
 
-They used exactly the same selectors as the declarations below under
-ALL COURSES LIST, which occur later in the cascade and therefore
-completely superseded them.
+That implementation has been removed.
 
-Removing them does not change the effective CSS.
+The component now only changes the variables required for
+its own dimensions and visual treatment.
 */
 
-
-/* ALL COURSES LIST Pages ***********************************************/
 .course-stat .completion-ring {
     --ring-size: 46px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
+    --ring-width: 5px;
 
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
+    --ring-color:
+        var(--color-tropical-teal);
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    --ring-track:
+        rgba(148, 148, 148, 0.20);
 
-    position: relative;
-    border-radius: 50%;
+    --ring-center:
+        var(--color-whitesmoke);
+
     margin-right: 0.5rem;
-    vertical-align: middle;
 
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
-            rgba(148, 148, 148, 0.2) 0
-        );
-
-    border: 0.25px solid #a2b8bb;
+    border:
+        0.25px solid #a2b8bb;
 }
+
 
 .course-stat .completion-ring-value {
-    position: relative;
-    z-index: 1;
+    color:
+        var(--color-navy);
 
-    color: var(--color-whitesmoke);
     font-size: 0.78rem;
     font-weight: 500;
-    line-height: 1;
-}
 
-.completion-ring span {
-    position: relative;
-    z-index: 2;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--color-teal);
     line-height: 1;
 }
 
 
-/* ADMIN - ALL COURSES ATTENDANCE Page **************************************/
-.all-course-attendance .course-attendance-rate .completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 0.5px;
-    --ring-center: var(--color-whitesmoke);
+/* =========================================================
+   ADMIN — ALL COURSES ATTENDANCE PAGE
+========================================================= */
 
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
+/*
+IMPORTANT:
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+The previous implementation used BOTH:
 
-    position: relative;
-    border-radius: 50%;
+    radial-gradient()
+    +
+    the global ::before centre disc
+
+This produced two competing centre masks and was the main
+reason these rings looked different from the Dashboard.
+
+The Attendance page now uses exactly the same ring renderer
+as every other page.
+*/
+
+.all-course-attendance
+.course-attendance-rate
+.completion-ring {
+    --ring-size: 44px;
+    --ring-width: 5px;
+
+    --ring-color:
+        var(--color-tropical-teal);
+
+    --ring-track:
+        rgba(var(--color-navy-rgb), 0.12);
+
+    --ring-center:
+        var(--color-whitesmoke);
+
     margin-right: 0.5rem;
-    vertical-align: middle;
 
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 4px)
-        ),
-        conic-gradient(
-            var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
-            rgba(148, 148, 148, 0.2) 0
-        );
-
-    border: 0.25px solid rgba(148, 148, 148, 0.08);
+    border: none;
 }
 
-.all-course-attendance .course-attendance-rate .completion-ring-value {
-    position: relative;
-    z-index: 1;
 
-    color: var(--color-navy);
-    font-size: 0.9rem;
+.all-course-attendance
+.course-attendance-rate
+.completion-ring-value {
+    color:
+        var(--color-navy);
+
+    font-size: 0.8rem;
     font-weight: 500;
+
     line-height: 1;
 }
 
-.progress-ring::after {
-    content: "";
-    position: absolute;
-    inset: 14px;
-    border-radius: 50%;
-    background: var(--color-white);
-}
 
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-@media (min-width: 1360px) and (max-width: 1599.98px) {
+@media (
+    min-width: 1360px
+) and (
+    max-width: 1599.98px
+) {
 
-    /* DASHBOARD ADMIN ********************************/
+    /* DASHBOARD ADMIN */
+
     #company_admin .completion-ring {
         --ring-size: 48px;
         --ring-width: 6px;

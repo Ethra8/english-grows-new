@@ -73,6 +73,7 @@
     line-height: 1;
 }
 
+/* rounded pill with course num value */
 .assigned-courses-page .course-status-btn.active strong {
     background: rgba(var(--color-turquoise-rgb), 0.3);
 }
@@ -133,10 +134,6 @@
     justify-content: center;
 }
 
-.assigned-course-row .level {
-    width: 50px;
-}
-
 .course-main-info {
     display: flex;
     flex-direction: row;
@@ -194,7 +191,7 @@
     gap: .6rem;
     font-size: 1rem;
     font-weight: 500;
-    color: var(--color-steel);
+    color: var(--color-slate);
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     justify-content: center;
@@ -236,7 +233,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: var(--color-steel);
+    color: var(--color-slate);
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 200px;
@@ -298,7 +295,7 @@
     align-content: center;
     align-self: center;
     align-items: center;
-    color: var(--color-steel);
+    color: var(--color-slate);
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
     height: 70%;
     min-width: 100px;
@@ -307,7 +304,7 @@
 }
 
 .course-stat span {
-    color: var(--color-steel);
+    color: var(--color-slate);
 }
 
 
