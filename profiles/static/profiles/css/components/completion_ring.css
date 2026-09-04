@@ -93,7 +93,6 @@
             var(--color-turquoise) calc(var(--completion) * 1%),
             rgba(255, 255, 255, 0.3) 0
         );
-
 }
 
 
@@ -102,12 +101,16 @@
     --ring-size: 54px;
     --ring-width: 7px;
     --ring-center: var(--color-whitesmoke);
+
     position: relative;
     width: var(--ring-size);
     height: var(--ring-size);
+
     display: grid;
     place-items: center;
+
     border-radius: 50%;
+
     background:
         conic-gradient(
             var(--color-tropical-teal) calc(var(--completion) * 1%),
@@ -143,10 +146,22 @@
 }
 
 
-
 /* CLASSES LIST Pages **********************************************/
+/*
+The previous .course-stat .completion-ring and
+.course-stat .completion-ring-value declarations were removed here.
+
+They used exactly the same selectors as the declarations below under
+ALL COURSES LIST, which occur later in the cascade and therefore
+completely superseded them.
+
+Removing them does not change the effective CSS.
+*/
+
+
+/* ALL COURSES LIST Pages ***********************************************/
 .course-stat .completion-ring {
-    --ring-size: 52px;
+    --ring-size: 46px;
     --ring-thickness: 1px;
     --ring-center: var(--color-whitesmoke);
 
@@ -171,63 +186,17 @@
             transparent calc(55% - var(--ring-thickness) + 1px)
         ),
         conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-    border: 0.25px solid #a2b8bb;
-}
-
-.course-stat .completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: var(--color-whitesmoke)fff;
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring span{
-    position:relative;
-    z-index:2;
-    font-size:0.95rem;
-    font-weight:500;
-    color:var(--color-teal);
-    line-height:1;
-}
-
-
-/* ALL COURSES LIST Pages ***********************************************/
-.course-stat .completion-ring {
-    --ring-size: 46px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-    background: radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
             var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
             rgba(148, 148, 148, 0.2) 0
         );
+
     border: 0.25px solid #a2b8bb;
 }
 
 .course-stat .completion-ring-value {
     position: relative;
     z-index: 1;
+
     color: var(--color-whitesmoke);
     font-size: 0.78rem;
     font-weight: 500;
@@ -274,6 +243,7 @@
             var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
             rgba(148, 148, 148, 0.2) 0
         );
+
     border: 0.25px solid rgba(148, 148, 148, 0.08);
 }
 
@@ -287,11 +257,6 @@
     line-height: 1;
 }
 
-.all-course-attendance .course-attendance-rate .completion-ring::before,
-.all-course-attendance .course-attendance-rate .completion-ring::after {
-    z-index: 1;
-}
-
 .progress-ring::after {
     content: "";
     position: absolute;
@@ -301,9 +266,8 @@
 }
 
 
-
-
 @media (min-width: 1360px) and (max-width: 1599.98px) {
+
     /* DASHBOARD ADMIN ********************************/
     #company_admin .completion-ring {
         --ring-size: 48px;
@@ -314,17 +278,10 @@
 
 
 @media (max-width: 600px) {
-    
+
     .completion-ring {
         --ring-size: 48px;
         --ring-width: 6px;
     }
-
-    /* DASHBOARD ADMIN ******************************* */
-    #company_admin .completion-ring {
-        --ring-size: 48px;
-        --ring-width: 6px;
-    }
-
 
 }

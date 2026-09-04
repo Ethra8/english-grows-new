@@ -9,9 +9,11 @@
     /* Stormy Teal */
     --color-teal: #006b7d;
     --color-teal-rgb: 0, 107, 125;
+
     /* Strong Cyan */
     /* --color-cyan: #07C0C7;
     --color-cyan-rgb: 7, 192, 199; */
+
     /* Tropical Teal */
     --color-tropical-teal: #16AFB5;
     --color-tropical-teal-rgb: 22, 175, 181;
@@ -19,9 +21,11 @@
     /* Turquoise */
     --color-turquoise: #5ff0df;
     --color-turquoise-rgb: 95, 240, 223;
+
     /* Electric aqua */
-    --color-aqua: #5FF5FC;
-    --color-aqua-rgb: 95, 245, 252;
+    /* --color-aqua: #5FF5FC;
+    --color-aqua-rgb: 95, 245, 252; */
+
     /* Aquamarine */
     --color-aquamarine: #B5F9DE;
     --color-aquamarine-rgb: 181, 249, 222;
@@ -37,7 +41,7 @@
     /* Cool Steel */
     --color-steel: #7A949B;
     --color-steel-rgb: 106, 127, 129;
-    /* VEry light grey */
+    /* Veery light grey */
     --color-grey-mist: #cfdcdc;
     /* White Smoke */
     --color-whitesmoke: #F5F5F5;

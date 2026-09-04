@@ -51,7 +51,6 @@
 
 .course-selector-form {
     display: flex;
-    /* align-content: center; */
     flex-direction: row;
     gap: 1rem;
     width: 100%;
@@ -89,15 +88,12 @@
     font-weight: 500;
     width: 130px;
     max-width: 130px;    
-    /* width: 250px;
-    max-width: 100%; */
 }
 
 .course-select-wrapper {
     position: relative;
     display: inline-flex;
     align-items: center;
-    /* min-width: 360px; */
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -175,10 +171,6 @@
     min-width: 200px;
 }
 
-/* .smaller-devs .course-select {
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.85);
-} */
-
 .course-dropdown {
     position: relative;
     width: 100%;
@@ -205,17 +197,6 @@
     overflow: hidden;
     white-space: nowrap;
 }
-
-/* .course-dropdown-selected {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-    overflow: hidden;
-} */
 
 /* Dropdown menu */
 .course-dropdown-menu {
@@ -312,9 +293,6 @@
     color: var(--color-teal);
 }
 
-/* LEVEL & Course_STATUS BADGES */
-
-
 
 @media (max-width: 767.98px) {
 
@@ -375,8 +353,6 @@
 
 
 @media (max-width: 576px) {
-
-    /* *** MY COURSE Page ******************************** */
 
     .course-details-page,
     .course-attendance-details {

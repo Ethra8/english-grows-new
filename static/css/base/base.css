@@ -1,19 +1,8 @@
 
 /*******************************************************************|
-|** COLOR PALETTE **************************************************|
+|****** COLOR PALETTE **********************************************|
 |*******************************************************************|
-
-LANDING PAGE bg (slightly darker than var(--color-teal)): #01596d; 
-
-|**** Oxford Navy : var(--color-navy); rgba(var(--color-navy-rgb), 1)/ 
-|**** Stormy Teal (Brand color - Landing page bg): var(--color-teal); / rgba(var(--color-teal-rgb),1)
-|**** Strong Cyan (light blue text accent): var(--color-tropical-teal); / rgba(var(--color-tropical-teal-rgb), 1);
-|**** Turquoise borders/ some hr: var(--color-turquoise) / rgba(95, 245, 252, 1)
-|**** Icy Acqua (lightest Accent): var(--color-icy) / rgba(199, 255, 249, 1) 
-|**** Azure Mist (light website bg): #F4FFFE / 
-
-|**** Slate Grey (text): #6a7f81; 
-|**** Cool Steel (lighter grey text): #96a0a1;   ***********************/
+|** --> Check all color vars in variables.css file *****************/
 
 
 .maintenance-banner {
@@ -69,7 +58,6 @@ LANDING PAGE bg (slightly darker than var(--color-teal)): #01596d;
 }
 
 
-
 @media (max-width: 768px) {
     .maintenance-banner {
         font-size: .85rem;
@@ -82,14 +70,11 @@ LANDING PAGE bg (slightly darker than var(--color-teal)): #01596d;
     }
 }
 
-
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    /* background: url('/static/images/bg_globe&birds.jpg') no-repeat center center fixed; */
-    /* background-size: cover; */
     color: var(--color-slate);
     font-family: "Montserrat", sans-serif;
     padding: 0 !important;
@@ -114,14 +99,11 @@ h2 {
 }
 
 hr {
-    /* border: outset 0.5px var(--color-teal); */
     margin: 2rem 0 1.25rem;
     border: 0;
     border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);    
     border-radius: 50%;
     width: 100%;
-    /* margin-top: 0;
-    margin-bottom: 2.1rem; */
 }
 
 p {
@@ -137,7 +119,6 @@ a {
 }
 
 a:hover {
-    /* font-weight: 600; */
     text-decoration: none;
 }
 
@@ -184,7 +165,7 @@ a.js-back-link:hover {
 }
 
 .btn-navbar:hover {
-    background: rgba(var(--color-turquoise-rgb), 0.15);  /*5ff0df*/
+    background: rgba(var(--color-turquoise-rgb), 0.15);
     color: var(--color-icy);
     text-decoration: none;
 }
@@ -201,7 +182,6 @@ a.js-back-link:hover {
 
 .btn-custom {
     width: 100%;
-    /* max-width: 320px;  */
     border-radius: 8px;
     font-size: 1.1rem;
     background: var(--color-navy);
@@ -216,7 +196,6 @@ a.js-back-link:hover {
 .btn-custom:hover {
     background: var(--color-teal);
     color: var(--color-whitesmoke);
-    /* font-weight: 600; */
 }
 
 #contact-form .btn-custom,
@@ -227,7 +206,6 @@ a.js-back-link:hover {
 
 .btn-custom-teal {
     width: 100%;
-    /* max-width: 320px; */
     background: var(--color-teal);
    color: var(--color-whitesmoke);
     text-transform: uppercase;
@@ -352,7 +330,6 @@ a.js-back-link:hover {
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    /* border: 1px solid var(--color-whitesmoke); */
     box-shadow: 0 2px 3px 0 rgba(var(--color-shadow-rgba));
 }
 
@@ -587,7 +564,6 @@ footer .topage-link:hover {
 }
 
 /* Searchbar */
-
 .fa-search {
     font-size: 1.5rem;
     color: var(--color-navy);
@@ -677,11 +653,6 @@ footer .topage-link:hover {
     padding-left: 50px;
 }
 
-/* .dropdown-menu {
-    background-color: var(--color-icy);
-    box-shadow: 0 1px 3px 0 #737577;    
-} */
-
 .btt-link {
     cursor: pointer;
     position: absolute;
@@ -722,7 +693,6 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
-    /* background: linear-gradient(260deg,rgba(var(--color-teal-rgb), 0.75) 17%, rgba(0, 136, 143, 0.80) 100%); */
     background: rgba(var(--color-mist-rgb), 0.9);
     z-index: -1;
 }
@@ -733,7 +703,6 @@ span.btt-link:hover {
     top: 0;
     left: 0;
     position: fixed;
-    /* background: linear-gradient(260deg, rgba(var(--color-teal-rgb), 0.75) 17%, rgba(0, 136, 143, 0.80) 100%); */
     background: rgba(255, 255, 255, 0.85);
     z-index: -1;
 }
@@ -760,33 +729,6 @@ span.btt-link:hover {
     z-index: -2;
 }
 
-/* .overlay-light {
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    background: rgba(255, 235, 235, 0.8);
-    background-size: cover;
-	z-index: -1;
-} */
-
-/* .clean-link {
-    color: var(--color-navy);
-    font-size: 1rem; 
-}
-
-.clean-link a:hover {
-    font-weight: 500;
-} */
-
-/* #sort-selector,
-.sort-select-wrapper {
-    border-radius: 50px !important;
-    height: 40px;
-    padding: 0 15px;
-} */
-
 
 /* *****************************************************|
 |****** Index Page *************************************|
@@ -810,7 +752,6 @@ span.btt-link:hover {
     height: 100vh;
     min-height: 100vh;
     object-fit: cover;
-    /* z-index: -1; */
     z-index: 99;
     pointer-events: none;
 }
@@ -863,12 +804,10 @@ span.btt-link:hover {
 
 #index .platform-laptop {
     position: relative;
-
     width: 100%;
     min-width: 0;
     max-width: 100%;
     height: auto;
-
     margin: 0 auto;
 }
 
@@ -919,9 +858,6 @@ span.btt-link:hover {
     width: 100%;
     max-width: none;
     margin: 0 auto;
-    /* transform: translateX(-26%); */
-    /* transform: translateY(0); */
-    /* z-index: 20; */
 }
 
 /*
@@ -992,8 +928,6 @@ stacks every slide in precisely the same screen position.
 .platform-slide {
     position: absolute;
     inset: 0;
-    /* left: 1.5%;
-    top: 1.5%; */
     width: 97%;
     height: 100%;
     margin: 0;
@@ -1011,9 +945,7 @@ stacks every slide in precisely the same screen position.
     top: 0;
     width: 100%;
     height: 100%;
-
     margin: 0 auto;
-
     /* object-fit: contain;
     object-position: top center; */
     /*
@@ -1022,7 +954,6 @@ stacks every slide in precisely the same screen position.
     */
     object-fit: contain;
     object-position: top top;
-    /* image-rendering: auto; */
 }
 
 .platform-slide.active {
@@ -1130,67 +1061,6 @@ stacks every slide in precisely the same screen position.
 }
 
 
-/* service card */
-/* #individual-services .card {
-    margin: 15px 30px;
-}
-
-#individual-services .card {
-    border-radius: 20px !important;
-    border: inset 3px var(--color-teal);
-}
-
-#individual-services .card-body {
-    border-radius: 0;
-    border-top: solid 2px var(--color-navy);
-    background-color: var(--color-navy);
-   color: var(--color-whitesmoke);
-    height: 100px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#individual-services .card-body h3 {
-    color: var(--color-whitesmoke);
-    font-family: "Big Shoulders Display" !important;
-    letter-spacing: 0.03em;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-#individual-services .card-body > p {
-    font-size: 1.2rem;
-    padding: 0.5rem 35px;
-}
-
-#individual-services .card-img-top {
-    border-top-left-radius: 17px;
-    border-top-right-radius: 17px;
-}
-
-span.vertical-line {
-    font-size: 2rem;
-}
-
-#individual-services .card-footer {
-    background-color: #cfd7df !important;
-    border-bottom-right-radius: 17px;
-    border-bottom-left-radius: 17px;
-    border: inset 3px teal;
-} */
-
-
-/* Companies */
-
-/* #companies h2,
-#subscribe-page h2 {
-    font-size: 1.5rem;
-    line-height: 1.5;
-    padding-left: 20px;
-} */
-
-
 /**** Django Messages *****************/
 
 .messages {
@@ -1208,59 +1078,10 @@ span.vertical-line {
     color: var(--color-teal);
     border-radius: 8px;
     padding: .75rem 1rem !important;
-    /* margin: 0 50px 0 0; */
     position: fixed;
     right: 20px;
 }
 
-
-/* Services & Details Pages */
-
-/* #pack-details,
-#individual-services {
-    padding: 0 7%;
-}
-
-.table-wrapper td,
-.table-wrapper th {
-    min-width: 100px !important;
-}
-
-.img-details {
-    border-radius: 25px !important;
-} */
-
-
-/**** BAG ************************************/
-
-.img-bag {
-    border-radius: 25px !important;
-}
-
-/* Keep table headers on BAG template visible on all screens */
-.table thead {
-    display: table-header-group;
-}
-
-/* not to get confused with .qty_input for JS */
-.qty-input {
-    min-width: 52px !important;
-    width: 52px !important;
-    max-width: 52px !important;
-    text-align: center;
-}
-
-#bag-grand-total {
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    color: var(--color-whitesmoke);
-    font-size: 2rem;
-}
-
-/* make update/delete icons display properly, avoid overlapping */
-#cart-update {
-    min-width: 120px !important;
-}
 
 
 /*** Stripe Styling **********************************/
@@ -1329,32 +1150,12 @@ span.vertical-line {
 @media (min-width: 992px) and (max-width: 1399.98px) {
 
     #index {
-        /* padding: 120px 6% 60px; */
         padding: 200px 6% 60px;
     }
 
 
 }
 
-
-
-
-@media (max-width: 1199.99px) {
-
-    /* #index .platform-showcase {
-        position: absolute;
-        left: 0;
-        top: 21%;
-        display: flex;
-        transform: translateX(27%);
-        transform: translateY(-28%);
-        width: 650px;
-        height: 650px;
-        z-index: 5;
-        margin: 0;
-    } */
-
-}
 
 
 /* =========================================================
@@ -1609,152 +1410,6 @@ span.vertical-line {
       font-size: 2.5rem;
     }
 }
-
-
-
-/* =========================================================
-   RESPONSIVE STATIC LAPTOP IMAGE — FINAL OVERRIDE
-========================================================= */
-
-/* #index .index-laptop-column {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 0;
-    min-height: 0;
-
-    padding-left: 15px;
-    padding-right: 15px;
-
-    overflow: visible;
-} */
-
-
-/* #index .platform-showcase {
-    position: relative;
-
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-
-    display: block;
-
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-
-    transform: none;
-
-    overflow: visible;
-} */
-
-
-/* #index .platform-laptop {
-    position: relative;
-
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-}
-
-
-#index .platform-laptop img,
-#index .platform-laptop-static-image {
-    position: static;
-
-    display: block;
-
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-
-    margin: 0 auto;
-
-    object-fit: contain;
-} */
-
-
-@media (max-width: 767.98px) {
-
-    /* #index .index-laptop-column {
-        width: 100%;
-        max-width: 100%;
-
-        padding-left: 0;
-        padding-right: 0;
-
-        margin-top: 2.5rem;
-    } */
-
-    /* #index .platform-showcase {
-        width: 100%;
-        max-width: 100%;
-    } */
-
-    /* #index .platform-laptop {
-        width: 100%;
-        max-width: 760px;
-    } */
-
-    /* #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-    } */
-}
-
-
-
-@media (max-width: 575.98px) {
-
-    /* body {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    #index {
-        padding-left: 15px;
-        padding-right: 15px;
-    } */
-
-    /* #index .hero-title-image {
-        display: none;
-    }
-
-    #index .hero-title-image-mobile {
-        display: block;
-    }
-
-    #index h2 {
-        line-height: 1.1;
-    }
-
-    #index .index-laptop-column {
-        padding-left: 0;
-        padding-right: 0;
-
-        overflow: visible;
-    }
-
-    #index .platform-showcase,
-    #index .platform-laptop,
-    #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
-    } */
-
-
-}
-
 
 
 @media (max-width: 329.98px) {

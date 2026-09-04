@@ -89,35 +89,6 @@
         max-height:674.94px;
     }
 
-    /* #company_admin .overview-period:first-of-type {
-        margin-top: 0;
-    } */
-
-    /* #company_admin .overview-metric {
-        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    } */
-
-    /* #company_admin .overview-metric.top-row {
-        position: relative;
-        border-bottom: none;
-        margin: 1.75rem 0 0;
-    } 
-
-    #company_admin .overview-metric.top-row::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 10%;
-        width: 80%;
-        height: 1px;
-        background: rgba(var(--color-navy-rgb), 0.08);
-    } */
-
-    /* #company_admin .overview-number {
-        font-size: 1.55rem;
-        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    } */
-
     #company_admin .training-attendance-bar {
         height: 7px;
     }
@@ -215,7 +186,6 @@
 }
 
 
-
 @media (max-width: 600px) {
     #company_admin .attendance-period-grid {
         --divider-color: rgba(var(--color-steel-rgb), 0.15);
@@ -250,11 +220,6 @@
             );
     }
 
-    /* #company_admin .attendance-period-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0;
-    } */
-
     #company_admin .overview-mobile-label {
         font-size: 0.75rem;
     }
@@ -263,18 +228,11 @@
         margin-top: 0;
     }
 
-    /* #company_admin .overview-metric {
-        min-height: 115px;
-        padding: 1rem 0.6rem;
-        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    } */
-
     #company_admin .training-attendance-bar {
         height: 7px;
     }
 
 }
-
 
 
 @media (max-width: 370px) {
