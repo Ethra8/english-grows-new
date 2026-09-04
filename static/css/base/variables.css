@@ -133,6 +133,15 @@
     --color-attendance-status-pending: #ffb000;
     --color-attendance-status-pending-rgb: 255, 176, 0;
 
+
+    /* ATTENDANCE SUBMISSION STATUS */
+    --attendance-submission-status-awaiting: #c47d00;
+    --attendance-submission-status-awaiting-rgb: 196, 125, 0;
+
+    --attendance-submission-status-complete: #008f78;
+    --attendance-submission-status-complete-rgb: 0, 143, 120;
+
+       
     /* SHADOWS */
     --inner-shadow-navy:
         0 5px 14px rgba(var(--color-navy-rgb), 0.18),
