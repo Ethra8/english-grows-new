@@ -94,301 +94,6 @@ h2 {
     margin: 0.5rem auto;
 }
 
-
-/* ***********************************************************|
-|***  CLASSES LIST Page **************************************|
-|*********************************************************** */
-
-/* .all-assigned-classes {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-}
-
-.assigned-classes-filter-header,
-.reschedule-page-panel-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.assigned-classes-filter-header h2 {
-    padding: 0.25rem 2rem;
-    font-weight: 400;
-}
-
-.assigned-classes-filter-header i {
-    color: var(--color-whitesmoke);
-    font-size: 2rem;
-    padding: 0.25rem 0.5rem 0.25rem 0rem;
-    cursor: pointer;
-    align-self: center;
-}
-
-.classes-filter-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.25rem;
-}
-
-.classes-list-filter {
-    background-color: rgba(var(--color-navy-rgb), 0.6);
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    border: solid 2px var(--color-turquoise);
-    border-radius: 8px;
-    padding: .6rem 2.5rem .6rem 1rem;
-    color: var(--color-whitesmoke);
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
-}
-
-.assigned-classes-panel,
-.assigned-classes-filter-header {
-    position: relative;
-    z-index: 5;
-}
-
-
-.assigned-classes-list {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background: var(--color-whitesmoke);
-    padding: 1rem;
-    box-sizing: border-box;
-    overflow-x: scroll !important;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    scrollbar-width: auto;
-}
-
-.assigned-class-row {
-    display: grid;
-    grid-template-columns: minmax(420px, 1.25fr) minmax(100px, 0.5fr) minmax(180px, 1fr) minmax(150px, 1fr);
-    align-items: center;
-    gap: 2rem;
-    padding: 0.75rem 1.3rem;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4);
-    min-width: 900px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.assigned-class-row:hover {
-    background: rgba(var(--color-icy-rgb), 0.3);
-}
-
-.class-list-course {
-    display: flex;
-    align-items: center;
-    gap: 1.3rem;
-}
-
-.class-list-course strong {
-    font-weight: 500;
-    color: var(--color-navy);
-    margin: 0 0 .35rem;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.005em;
-    transition: all 0.2s ease;
-}
-
-.class-list-course strong:hover {
-    font-weight: 600;
-}
-
-.assigned-class-level span.status-badge
-.class-list-course span.status-badge {
-    border-radius: 20px;
-    padding: 0.2rem 1rem !important;
-    font-weight: 700;
-    width: fit-content;
-    font-size: .75rem;
-    position: relative;
-}
-
-.assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
-.attendance-row:last-child  {
-    border-bottom: none !important;
-}
-
-.course-list-group-name > div:first-of-type,
-.class-list-course > div:first-of-type,
-.attendance-list .attendance-row > div:first-of-type {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    gap: 0.5rem;
-}
-
-.class-list-course > div:first-of-type img,
-.course-list-group-name > div:first-of-type img,
-.attendance-list .attendance-row > div:first-of-type img {
-    width: 46px;
-    height: 46px;
-    background: var(--color-icy);
-    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
-    border-radius: 999px;
-    margin-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-}
-
-.class-list-course > div:first-of-type span,
-.course-list-group-name > div:first-of-type span,
-.attendance-list .attendance-row > div:first-of-type span {
-    color: var(--color-steel);
-}
-
-.assigned-class-row > div:nth-of-type(2) {
-    height: 100%; 
-    min-height: 80%;
-    display: flex;
-    align-items: center;
-}
-
-.assigned-class-row .level {
-    width: 50px;
-}
-
-
-.class-list-date {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    height: 70%;    
-    min-width: 200px;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-.class-list-student-num {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);    
-    height: 70%;    
-    min-width: 100px;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-.class-list-date .icon,
-.class-list-student-num .icon {
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--color-teal);
-    background: transparent;
-    border-radius: 999px;
-    text-align: center !important;
-}
-
-.class-list-date i,
-.class-list-student-num i {
-    color: var(--color-teal);
-}
-
-.class-list-date strong,
-.class-list-student-num strong {
-    color: var(--color-teal);
-    font-size: 1rem;
-    margin-bottom: 0;
-}
-
-.class-list-date span,
-.class-list-student-num span {
-    display: block;
-}
-
-.course-stat {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-self: center;
-    align-items: center;
-    color: var(--color-steel);
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    height: 70%;
-    min-width: 100px;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-.course-stat .completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-    border: 0.25px solid #a2b8bb;
-}
-
-.course-stat .completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: var(--color-whitesmoke);
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring span{
-    position:relative;
-    z-index:2;
-    font-size:0.95rem;
-    font-weight:500;
-    color:var(--color-teal);
-    line-height:1;
-}
-
-.course-stat span {
-    color: var(--color-steel);
-} */
-
-/* ****** END OF CLASS & COURSE ROWS in LIST Pages *********** */
-
-
 .teacher-reschedule-page .course-list-group-name h3 {
     font-weight: 500;
 }
@@ -402,15 +107,6 @@ h2 {
 /*** Courses/Classes FILTER BY STATUS: **************************|
 - Courses: active/confirmed/paused/completed
 - Classes: Upcoming/Complete/ & today/weekly/monthly/all ******* */
-
-/* .assigned-classes-panel {
-    width: 100%;
-    background: rgba(var(--color-navy-rgb), 0.9);
-    border: 1px solid rgba(80, 230, 220, 0.85);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
-} */
 
 .assigned-courses-header {
     display: flex;
@@ -446,12 +142,6 @@ h2 {
     color: var(--color-whitesmoke);
 }
 
-/* .course-status-buttons {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.25rem;
-} */
-
 .attendance-filter-card.two-filters {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -460,15 +150,13 @@ h2 {
 
 .attendance-filter-btn.active,
 .attendance-filter-btn:hover {
-    background: rgba(var(--color-cyan-rgb), 0.25);
+    background: rgba(var(--color-tropical-teal-rgb), 0.25);
     border-color: var(--color-turquoise);
-    /* color: var(--color-whitesmoke); */
 }
 
 .assigned-courses-header select {
     display: none;
     width: 100% !important;
-    /* max-width: 320px; */
     padding: 0.75rem 1rem;
     padding-right: 3rem;
     font-size: 1.2rem;
@@ -564,7 +252,6 @@ h2 {
 /* PAGE GRID CONFIG */
 .course-details-two-col {
     width: 100%;
-    /* margin-top: 4rem; */
 }
 
 .course-details-masonry {
@@ -607,7 +294,6 @@ h2 {
 }
 
 .course-detail-item {
-    /* background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65)); */
     background: var(--color-mist);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -730,7 +416,6 @@ h2 {
 .teacher-group-attendance-page {
     max-width: calc(100vw - 300px);
     margin: 0 auto;
-    /* padding: 3rem 1rem; */
 }
 
 .attendance-header {
@@ -741,7 +426,6 @@ h2 {
 }
 
 .attendance-header h1 {
-    /* color: var(--color-whitesmoke)fff; */
     margin-bottom: 0.5rem;
 }
 
@@ -820,18 +504,10 @@ h2 {
     border-radius: 999px;
     font-weight: 600;
     font-size: 0.85rem;
-    /* padding: 0.35rem 0rem; */
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
     padding: 0;
 }
 
-
-/************************************************************|
-|**** ATTENDANCE Pages: 
-    - Teacher_attendance.html
-    - teacher_take_attendance.html
-    - teacher_attendance_detail.html
-|************************************************************/
 
 
 /************************************************|
@@ -1300,7 +976,6 @@ h2 {
     /* .assigned-course-row, */
     .assigned-class-row,
     .reschedule-page-row {
-        /* grid-template-columns: minmax(0, 1fr) 70px 170px auto; */
         gap: 1rem;
         padding: 1.5rem 1rem 1rem;
     }
@@ -1333,18 +1008,6 @@ h2 {
 
 
 @media (max-width: 1250px) {
-
-    /******************************************************/
-    /* CLASSES LIST Page ******************************** */
-    /******************************************************/
-    /* .classes-filter-buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.25rem;
-    }  */
-    
-
-
 
     /******************************************************/
     /* ATTENDACE Page ***************************** */

@@ -555,54 +555,6 @@ div:has(> .student-action-btn) {
 
 /* END of STATUS-BADGES *************/
 
-/* COMPLETION RING */
-.completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 1px;
-    --ring-center: rgba(var(--color-navy-rgb), 0.95);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(50% - var(--ring-thickness)),
-            transparent calc(50% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-}
-
-.completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: var(--color-whitesmoke);
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring::before,
-.completion-ring::after {
-    z-index: 1;
-}
-
-/* END COMPLETION RING */
 
 /* LEVEL CARD SMALL *********************************************/
 .level {

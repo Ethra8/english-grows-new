@@ -42,12 +42,12 @@
 .take-attendance-save-btn {
     color: var(--color-turquoise);
     border: 1px solid var(--color-turquoise);
-    background: rgba(var(--color-cyan-rgb), 0.35);
+    background: rgba(var(--color-tropical-teal-rgb), 0.35);
 }
 
 .take-attendance-save-btn:hover {
     color: var(--color-whitesmoke);
-    background: rgba(var(--color-cyan-rgb), 0.45);
+    background: rgba(var(--color-tropical-teal-rgb), 0.45);
     text-decoration: none;
 }
 
@@ -143,7 +143,7 @@
     width: 500px;
     height: 501px;
     border-radius: 50%;
-    background: linear-gradient(64deg, rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    background: linear-gradient(64deg, rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     box-shadow: 0 10px 25px rgba(0, 107, 125, .25), inset 0 1px rgba(var(--color-steel-rgb), .15);
     padding-left: 150px;
     padding-top: 90px;
@@ -1186,7 +1186,7 @@
     align-content: space-around;
     gap: 1.2rem;
     padding: 0.75rem 0.25rem;
-    border-bottom: 1px solid rgba(var(--color-cyan-rgb), 0.35);
+    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
     /* width: 900px; */
     min-width: 1230px;
     max-width: none;

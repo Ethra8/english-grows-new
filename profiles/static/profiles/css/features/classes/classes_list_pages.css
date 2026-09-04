@@ -304,7 +304,7 @@
     border-radius: 6px;
     background: rgba(var(--color-mist-rgb), 0.35);
     color: rgba(var(--color-whitesmoke-rgb), 0.85);
-    border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
+    border: 2px solid rgba(var(--color-tropical-teal-rgb), 0.45);
     /* background-color: var(--color-navy); */
     /* color: whitesmoke; */
     font-family: "Big Shoulders Display", sans-serif;
@@ -348,17 +348,17 @@
 
 /* Hover */
 .classes-status-tab:hover {
-    background: rgba(var(--color-cyan-rgb), 0.65);
-    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    background: rgba(var(--color-tropical-teal-rgb), 0.65);
+    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
     color: rgba(var(--color-whitesmoke-rgb), 1);
 }
 
 /* Active */
 .classes-status-tab.active {
-    background: rgba(var(--color-cyan-rgb), 0.65);
+    background: rgba(var(--color-tropical-teal-rgb), 0.65);
     color: var(--color-whitesmoke);
     box-shadow: 0 4px 12px rgba(var(--color-shadow-rgb), 0.15);
-    border: 2px outset rgba(var(--color-cyan-rgb), 0.6);
+    border: 2px outset rgba(var(--color-tropical-teal-rgb), 0.6);
 }
 
 .classes-status-tab.active i {
@@ -392,7 +392,7 @@
 .classes-status-panel {
     width: 100%;
     min-width: 0;
-    border-top: 1px solid rgba(var(--color-cyan-rgb), 0.7);
+    border-top: 1px solid rgba(var(--color-tropical-teal-rgb), 0.7);
 }
 
 /* *************************************************************** */
@@ -421,7 +421,7 @@
     justify-content: center;
     gap: 0.75rem;
     min-height: 60px;
-    border: 2px solid rgba(var(--color-cyan-rgb), 0.45);
+    border: 2px solid rgba(var(--color-tropical-teal-rgb), 0.45);
     border-radius: 8px;
     background: rgba(var(--color-mist-rgb), 0.35);
     color: rgba(var(--color-whitesmoke-rgb), 0.85);
@@ -455,14 +455,14 @@
 }
 
 .classes-filter-btn:hover {
-    background: rgba(var(--color-cyan-rgb), 0.65);
-    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    background: rgba(var(--color-tropical-teal-rgb), 0.65);
+    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
     color: rgba(var(--color-whitesmoke-rgb), 1);
 }
 
 .classes-filter-btn.active {
-    background: rgba(var(--color-cyan-rgb), 0.65);
-    border: 1px outset rgba(var(--color-cyan-rgb), 0.6);
+    background: rgba(var(--color-tropical-teal-rgb), 0.65);
+    border: 1px outset rgba(var(--color-tropical-teal-rgb), 0.6);
     color: var(--color-whitesmoke);
 }
 
@@ -483,56 +483,6 @@
     justify-content: center;
 }
 
-.course-stat .completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-    border: 0.25px solid #a2b8bb;
-}
-
-.course-stat .completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: var(--color-whitesmoke)fff;
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring span{
-    position:relative;
-    z-index:2;
-    font-size:0.95rem;
-    font-weight:500;
-    color:var(--color-teal);
-    line-height:1;
-}
 
 .course-stat span {
     color: var(--color-steel);
@@ -593,7 +543,7 @@ select {
     font-weight: 500;
     border: outset 1px var(--color-teal);
     border-radius: 8px;
-    background-color: rgba(var(--color-cyan-rgb), 0.65);
+    background-color: rgba(var(--color-tropical-teal-rgb), 0.65);
     color: var(--color-whitesmoke);
     /* color-scheme: ; */
     cursor: pointer;

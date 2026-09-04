@@ -217,7 +217,7 @@
     transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     color: var(--color-whitesmoke);
     border: 1px outset var(--color-navy);
-    /* background: linear-gradient(135deg, rgba(var(--color-cyan-rgb), 0.85), rgba(var(--color-navy-rgb), 0.85)); */
+    /* background: linear-gradient(135deg, rgba(var(--color-tropical-teal-rgb), 0.85), rgba(var(--color-navy-rgb), 0.85)); */
     background-color: var(--color-navy);
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
     margin: auto 0 0 0;
@@ -697,95 +697,6 @@
     align-items: center;
     justify-content: center;
 
-}
-
-.all-course-attendance .course-attendance-rate .completion-ring {
-    --ring-size: 52px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(148, 148, 148, 0.2) 0
-        );
-    border: 0.25px solid rgba(148, 148, 148, 0.08);
-}
-
-.all-course-attendance .course-attendance-rate .completion-ring-value {
-    position: relative;
-    z-index: 1;
-
-    color: var(--color-navy);
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-/* .all-course-attendance .course-attendance-rate .completion-ring {
-    --ring-size: 6px;
-    --ring-thickness: 1px;
-    --ring-center: rgba(var(--color-navy-rgb), 0.95);
-
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(50% - var(--ring-thickness)),
-            transparent calc(50% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion, 0) * 1%),
-            rgba(255, 255, 255, 0.2) 0
-        );
-} */
-
-/* .all-course-attendance .course-attendance-rate .completion-ring-value {
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color-whitesmoke);
-    font-size: 1rem;
-    font-weight: 300;
-} */
-
-.all-course-attendance .course-attendance-rate .completion-ring::before,
-.all-course-attendance .course-attendance-rate .completion-ring::after {
-    z-index: 1;
 }
 
 

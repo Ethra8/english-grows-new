@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/dashboards_admin_and_teacher.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/dashboard_admin.css' %}">
 {% endblock %}
@@ -255,119 +256,120 @@
                     </div>
 
                     <!-- WEEK: CLASSES HELD -->
-                    <div class="overview-metric overview-completed">
+                    <div class="attendance-period-grid">
+                        <div class="overview-metric overview-completed top-row">
 
-                        <span class="overview-mobile-label">
-                            {% trans 'Classes Held' context 'dashboard training overview' %}
-                        </span>
-
-                        <div class="overview-completion">
-
-                            <div
-                                class="completion-ring"
-                                style="--completion: {{ held_weekly_percentage|default:'0' }};"
-                                role="progressbar"
-                                aria-label="{% trans 'Classes held this week' %}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow="{{ held_weekly_percentage|default:'0' }}"
-                            >
-                                <span class="completion-ring-value">
-                                    {{ held_weekly_percentage|default:"0" }}%
-                                </span>
-                            </div>
-
-                            <div class="overview-completion-data">
-                                <span class="completion-count">
-                                    {{ held_weekly_sessions|default:"0" }}
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- WEEK: UPCOMING CLASSES -->
-                    <div class="overview-metric overview-upcoming">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Upcoming Classes' context 'dashboard training overview' %}
-                        </span>
-
-                        <span class="overview-number">
-                            {{ upcoming_weekly_sessions|default:"0" }}
-                        </span>
-
-                    </div>
-
-                    <!-- WEEK: ATTENDANCE SUBMITTED -->
-                    <div class="overview-metric overview-total">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Attendance Submitted' context 'dashboard training overview' %}
-                        </span>
-
-                        <span class="overview-number">
-                            {{ weekly_attendance_submitted_sessions|default:"0" }}
-                            /
-                            {{ held_weekly_sessions|default:"0" }}
-                        </span>
-
-
-                        {% if weekly_attendance_pending_sessions > 0 %}
-
-                            <span class="attendance-status-badge pending">
-                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
-                                {{ weekly_attendance_pending_sessions }}
-                                {% trans 'awaiting' context 'submitted attendance status badge' %}
+                            <span class="overview-mobile-label">
+                                {% trans 'Classes Held' context 'dashboard training overview' %}
                             </span>
 
-                        {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
+                            <div class="overview-completion">
 
-                            <span class="attendance-status-badge complete">
-                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                {% trans 'Up to date' context 'submitted attendance status badge' %}
-                            </span>
-                        
-                        {% else %}    
-                            <span class="attendance-status-badge neutral">
-                                {% trans 'No past classes' context 'submitted attendance status badge' %}
-                            </span>    
-
-                        {% endif %}
-
-
-                    </div>
-                    <!-- WEEK: ATTENDANCE RATE -->
-                    <div class="overview-metric overview-attendance">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Attendance Rate' context 'dashboard training overview' %}
-                        </span>
-
-                        <div class="attendance-progress">
-
-                            <span class="attendance-value">
-                                {{ weekly_attendance_rate|default:"0" }}%
-                            </span>
-
-                            <div
-                                class="training-attendance-bar"
-                                role="progressbar"
-                                aria-label="{% trans 'Weekly attendance rate' %}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow="{{ weekly_attendance_rate|default:'0' }}"
-                            >
                                 <div
-                                    class="training-attendance-bar-fill"
-                                    data-percentage="{{ weekly_attendance_rate|default:'0' }}"
-                                ></div>
+                                    class="completion-ring"
+                                    style="--completion: {{ held_weekly_percentage|default:'0' }};"
+                                    role="progressbar"
+                                    aria-label="{% trans 'Classes held this week' %}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="{{ held_weekly_percentage|default:'0' }}"
+                                >
+                                    <span class="completion-ring-value">
+                                        {{ held_weekly_percentage|default:"0" }}%
+                                    </span>
+                                </div>
+
+                                <div class="overview-completion-data">
+                                    <span class="completion-count">
+                                        {{ held_weekly_sessions|default:"0" }}
+                                    </span>
+                                </div>
+
                             </div>
+                        </div>
+
+                        <!-- WEEK: UPCOMING CLASSES -->
+                        <div class="overview-metric overview-upcoming top-row">
+
+                            <span class="overview-mobile-label">
+                                {% trans 'Upcoming Classes' context 'dashboard training overview' %}
+                            </span>
+
+                            <span class="overview-number">
+                                {{ upcoming_weekly_sessions|default:"0" }}
+                            </span>
 
                         </div>
 
-                    </div>
+                        <!-- WEEK: ATTENDANCE SUBMITTED -->
+                        <div class="overview-metric overview-total">
 
+                            <span class="overview-mobile-label">
+                                {% trans 'Attendance Submitted' %}
+                            </span>
+
+                            <span class="overview-number">
+                                {{ weekly_attendance_submitted_sessions|default:"0" }}
+                                /
+                                {{ held_weekly_sessions|default:"0" }}
+                            </span>
+
+
+                            {% if weekly_attendance_pending_sessions > 0 %}
+
+                                <span class="attendance-status-badge pending">
+                                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                    {{ weekly_attendance_pending_sessions }}
+                                    {% trans 'awaiting' context 'submitted attendance status badge' %}
+                                </span>
+
+                            {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
+
+                                <span class="attendance-status-badge complete">
+                                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                    {% trans 'Up to date' context 'submitted attendance status badge' %}
+                                </span>
+                            
+                            {% else %}    
+                                <span class="attendance-status-badge neutral">
+                                    {% trans 'No past classes' context 'submitted attendance status badge' %}
+                                </span>    
+
+                            {% endif %}
+
+
+                        </div>
+                        <!-- WEEK: ATTENDANCE RATE -->
+                        <div class="overview-metric overview-attendance">
+
+                            <span class="overview-mobile-label">
+                                {% trans 'Attendance Rate' context 'dashboard training overview' %}
+                            </span>
+
+                            <div class="attendance-progress">
+
+                                <span class="attendance-value">
+                                    {{ weekly_attendance_rate|default:"0" }}%
+                                </span>
+
+                                <div
+                                    class="training-attendance-bar"
+                                    role="progressbar"
+                                    aria-label="{% trans 'Weekly attendance rate' %}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="{{ weekly_attendance_rate|default:'0' }}"
+                                >
+                                    <div
+                                        class="training-attendance-bar-fill"
+                                        data-percentage="{{ weekly_attendance_rate|default:'0' }}"
+                                    ></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
 
                     <!-- =============================================
                          THIS MONTH
@@ -399,125 +401,126 @@
                     </div>
 
                     <!-- MONTH: CLASSES HELD -->
-                    <div class="overview-metric overview-completed">
+                    <div class="attendance-period-grid">
+                        <div class="overview-metric overview-completed top-row">
 
-                        <span class="overview-mobile-label">
-                            {% trans 'Classes Held' context 'dashboard training overview' %}
-                        </span>
-
-                        <div class="overview-completion">
-
-                            <div
-                                class="completion-ring"
-                                style="--completion: {{ held_monthly_percentage|default:'0' }};"
-                                role="progressbar"
-                                aria-label="{% trans 'Classes held this month' %}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow="{{ held_monthly_percentage|default:'0' }}"
-                            >
-                                <span class="completion-ring-value">
-                                    {{ held_monthly_percentage|default:"0" }}%
-                                </span>
-                            </div>
-
-                            <div class="overview-completion-data">
-                                <span class="completion-count">
-                                    {{ held_monthly_sessions|default:"0" }}
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <!-- MONTH: UPCOMING CLASSES -->
-                    <div class="overview-metric overview-upcoming">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Upcoming Classes' context 'dashboard training overview' %}
-                        </span>
-
-                        <span class="overview-number">
-                            {{ upcoming_monthly_sessions|default:"0" }}
-                        </span>
-
-                    </div>
-
-                    <!-- MONTH: ATTENDANCE SUBMITTED -->
-                    <div class="overview-metric overview-total">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Attendance Submitted' context 'dashboard training overview' %}
-                        </span>
-
-                        <span class="overview-number">
-                            {{ monthly_attendance_submitted_sessions|default:"0" }} / {{ held_monthly_sessions|default:"0" }}
-                        </span>
-
-                        <span>
-                        {% if monthly_attendance_pending_sessions > 0 %}
-
-                            <span class="attendance-status-badge pending">
-                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
-
-                                {% blocktrans count pending=monthly_attendance_pending_sessions %}
-                                    {{ pending }} awaiting
-                                {% plural %}
-                                    {{ pending }} awaiting
-                                {% endblocktrans %}
+                            <span class="overview-mobile-label">
+                                {% trans 'Classes Held' context 'dashboard training overview' %}
                             </span>
 
-                            {% elif held_monthly_sessions > 1 and monthly_attendance_pending_sessions == 0 %}
+                            <div class="overview-completion">
 
-                                <span class="attendance-status-badge complete">
-                                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                    {% trans 'Up to date' context 'dashboard training overview' %}
-                                </span>
-                            
-                            {% else %}    
-                                <span class="attendance-status-badge neutral">
-                                    {% trans 'No classes held' context 'dashboard training overview' %}
-                                </span>    
-
-                            {% endif %}
-                        </span>
-
-                    </div>
-
-                    <!-- MONTH: ATTENDANCE RATE -->
-                    <div class="overview-metric overview-attendance">
-
-                        <span class="overview-mobile-label">
-                            {% trans 'Attendance Rate' context 'dashboard training overview' %}
-                        </span>
-
-                        <div class="attendance-progress">
-
-                            <span class="attendance-value">
-                                {{ monthly_attendance_rate|default:"0" }}%
-                            </span>
-
-                            <div
-                                class="training-attendance-bar"
-                                role="progressbar"
-                                aria-label="{% trans 'Monthly attendance rate' %}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow="{{ monthly_attendance_rate|default:'0' }}"
-                            >
                                 <div
-                                    class="training-attendance-bar-fill"
-                                    data-percentage="{{ monthly_attendance_rate|default:'0' }}"
-                                ></div>
+                                    class="completion-ring"
+                                    style="--completion: {{ held_monthly_percentage|default:'0' }};"
+                                    role="progressbar"
+                                    aria-label="{% trans 'Classes held this month' %}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="{{ held_monthly_percentage|default:'0' }}"
+                                >
+                                    <span class="completion-ring-value">
+                                        {{ held_monthly_percentage|default:"0" }}%
+                                    </span>
+                                </div>
+
+                                <div class="overview-completion-data">
+                                    <span class="completion-count">
+                                        {{ held_monthly_sessions|default:"0" }}
+                                    </span>
+                                </div>
+
                             </div>
+                        </div>
 
 
+                        <!-- MONTH: UPCOMING CLASSES -->
+                        <div class="overview-metric overview-upcoming top-row">
+
+                            <span class="overview-mobile-label">
+                                {% trans 'Upcoming Classes' context 'dashboard training overview' %}
+                            </span>
+
+                            <span class="overview-number">
+                                {{ upcoming_monthly_sessions|default:"0" }}
+                            </span>
 
                         </div>
 
-                    </div>
+                        <!-- MONTH: ATTENDANCE SUBMITTED -->
+                        <div class="overview-metric overview-total">
 
+                            <span class="overview-mobile-label">
+                                {% trans 'Attendance Submitted' %}
+                            </span>
+
+                            <span class="overview-number">
+                                {{ monthly_attendance_submitted_sessions|default:"0" }} / {{ held_monthly_sessions|default:"0" }}
+                            </span>
+
+                            <span>
+                            {% if monthly_attendance_pending_sessions > 0 %}
+
+                                <span class="attendance-status-badge pending">
+                                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+
+                                    {% blocktrans count pending=monthly_attendance_pending_sessions %}
+                                        {{ pending }} awaiting
+                                    {% plural %}
+                                        {{ pending }} awaiting
+                                    {% endblocktrans %}
+                                </span>
+
+                                {% elif held_monthly_sessions > 1 and monthly_attendance_pending_sessions == 0 %}
+
+                                    <span class="attendance-status-badge complete">
+                                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                        {% trans 'Up to date' context 'dashboard training overview' %}
+                                    </span>
+                                
+                                {% else %}    
+                                    <span class="attendance-status-badge neutral">
+                                        {% trans 'No classes held' context 'dashboard training overview' %}
+                                    </span>    
+
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+                        <!-- MONTH: ATTENDANCE RATE -->
+                        <div class="overview-metric overview-attendance">
+
+                            <span class="overview-mobile-label">
+                                {% trans 'Attendance Rate' context 'dashboard training overview' %}
+                            </span>
+
+                            <div class="attendance-progress">
+
+                                <span class="attendance-value">
+                                    {{ monthly_attendance_rate|default:"0" }}%
+                                </span>
+
+                                <div
+                                    class="training-attendance-bar"
+                                    role="progressbar"
+                                    aria-label="{% trans 'Monthly attendance rate' %}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="{{ monthly_attendance_rate|default:'0' }}"
+                                >
+                                    <div
+                                        class="training-attendance-bar-fill"
+                                        data-percentage="{{ monthly_attendance_rate|default:'0' }}"
+                                    ></div>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
             </div>

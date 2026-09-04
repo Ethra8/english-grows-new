@@ -73,23 +73,6 @@
     pointer-events: none;
 }
 
-.course-header-meta-row .completion-ring {
-    width: 60px !important;
-    height: 60px !important;
-    margin-right: 0;
-}
-
-.course-header-meta-row .completion-ring-value {
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color-whitesmoke);
-    font-size: 1rem;
-    font-weight: 300;
-}
-
 .meta-icon,
 .course-meta-icon {
     z-index: 1;
@@ -165,7 +148,7 @@
 
     background:
         conic-gradient(
-            var(--color-cyan)
+            var(--color-tropical-teal)
                 0
                 calc(var(--percentage) * 1%),
 
@@ -187,15 +170,6 @@
     position: relative;
     z-index: 2;
     opacity: 0.8;
-}
-
-.course-meta-card .completion-ring {
-    background:
-        conic-gradient(
-            var(--color-turquoise) calc(var(--completion) * 1%),
-            rgba(255, 255, 255, 0.3) 0
-        );
-
 }
 
 .course-meta-card.meta-attendance::after {

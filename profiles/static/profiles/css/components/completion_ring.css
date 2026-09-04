@@ -1,0 +1,330 @@
+/* COMPLETION RING ************************************************/
+.completion-ring {
+    --ring-size: 3.25rem;
+    --ring-color: var(--color-tropical-teal);
+}
+
+.completion-ring--small {
+    --ring-size: 6rem;
+}
+
+.completion-ring--large {
+    --ring-size: 11rem;
+}
+
+.completion-ring--turquoise {
+    --ring-color: var(--color-turquoise);
+}
+
+.completion-ring--steel {
+    --ring-color: var(--color-blue-slate);
+}
+
+.completion-ring {
+    /* --ring-size: 52px; */
+    --ring-thickness: 1px;
+    --ring-center: rgba(var(--color-navy-rgb), 0.95);
+
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(50% - var(--ring-thickness)),
+            transparent calc(50% - var(--ring-thickness) + 1px)
+        ),
+        conic-gradient(
+            var(--color-turquoise) calc(var(--completion, 0) * 1%),
+            rgba(255, 255, 255, 0.2) 0
+        );
+}
+
+.completion-ring-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--color-whitesmoke);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.completion-ring::before,
+.completion-ring::after {
+    z-index: 1;
+}
+
+/* END COMPLETION RING *********************************************/
+
+
+/* META-CARDS COMPLETION RING *************************************/
+.course-header-meta-row .completion-ring {
+    width: 60px !important;
+    height: 60px !important;
+    margin-right: 0;
+}
+
+.course-header-meta-row .completion-ring-value {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-whitesmoke);
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.course-meta-card .completion-ring {
+    background:
+        conic-gradient(
+            var(--color-turquoise) calc(var(--completion) * 1%),
+            rgba(255, 255, 255, 0.3) 0
+        );
+
+}
+
+
+/* DASHBOARD Admin & Teacher ******************************************************/
+.completion-ring {
+    --ring-size: 54px;
+    --ring-width: 7px;
+    --ring-center: var(--color-whitesmoke);
+    position: relative;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            var(--color-tropical-teal) calc(var(--completion) * 1%),
+            rgba(var(--color-navy-rgb), 0.12) 0
+        );
+}
+
+/* Creates transparent / light centre */
+.completion-ring::before {
+    content: "";
+    position: absolute;
+    inset: var(--ring-width);
+    border-radius: 50%;
+    background: var(--color-whitesmoke);
+}
+
+.completion-ring-value {
+    position: relative;
+    z-index: 1;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+.completion-count {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+#company_admin .training-overview-grid .completion-count {
+    font-size: 1.1rem;
+}
+
+
+
+/* CLASSES LIST Pages **********************************************/
+.course-stat .completion-ring {
+    --ring-size: 52px;
+    --ring-thickness: 1px;
+    --ring-center: var(--color-whitesmoke);
+
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(55% - var(--ring-thickness)),
+            transparent calc(55% - var(--ring-thickness) + 1px)
+        ),
+        conic-gradient(
+            var(--color-turquoise) calc(var(--completion, 0) * 1%),
+            rgba(255, 255, 255, 0.2) 0
+        );
+    border: 0.25px solid #a2b8bb;
+}
+
+.course-stat .completion-ring-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--color-whitesmoke)fff;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.completion-ring span{
+    position:relative;
+    z-index:2;
+    font-size:0.95rem;
+    font-weight:500;
+    color:var(--color-teal);
+    line-height:1;
+}
+
+
+/* ALL COURSES LIST Pages ***********************************************/
+.course-stat .completion-ring {
+    --ring-size: 46px;
+    --ring-thickness: 1px;
+    --ring-center: var(--color-whitesmoke);
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    background: radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(55% - var(--ring-thickness)),
+            transparent calc(55% - var(--ring-thickness) + 1px)
+        ),
+        conic-gradient(
+            var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
+            rgba(148, 148, 148, 0.2) 0
+        );
+    border: 0.25px solid #a2b8bb;
+}
+
+.course-stat .completion-ring-value {
+    position: relative;
+    z-index: 1;
+    color: var(--color-whitesmoke);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.completion-ring span {
+    position: relative;
+    z-index: 2;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-teal);
+    line-height: 1;
+}
+
+
+/* ADMIN - ALL COURSES ATTENDANCE Page **************************************/
+.all-course-attendance .course-attendance-rate .completion-ring {
+    --ring-size: 52px;
+    --ring-thickness: 0.5px;
+    --ring-center: var(--color-whitesmoke);
+
+    width: var(--ring-size);
+    height: var(--ring-size);
+    flex: 0 0 var(--ring-size);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--ring-center) 0,
+            var(--ring-center) calc(55% - var(--ring-thickness)),
+            transparent calc(55% - var(--ring-thickness) + 4px)
+        ),
+        conic-gradient(
+            var(--color-tropical-teal) calc(var(--completion, 0) * 1%),
+            rgba(148, 148, 148, 0.2) 0
+        );
+    border: 0.25px solid rgba(148, 148, 148, 0.08);
+}
+
+.all-course-attendance .course-attendance-rate .completion-ring-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--color-navy);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.all-course-attendance .course-attendance-rate .completion-ring::before,
+.all-course-attendance .course-attendance-rate .completion-ring::after {
+    z-index: 1;
+}
+
+.progress-ring::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    background: var(--color-white);
+}
+
+
+
+
+@media (min-width: 1360px) and (max-width: 1599.98px) {
+    /* DASHBOARD ADMIN ********************************/
+    #company_admin .completion-ring {
+        --ring-size: 48px;
+        --ring-width: 6px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+    
+    .completion-ring {
+        --ring-size: 48px;
+        --ring-width: 6px;
+    }
+
+    /* DASHBOARD ADMIN ******************************* */
+    #company_admin .completion-ring {
+        --ring-size: 48px;
+        --ring-width: 6px;
+    }
+
+
+}

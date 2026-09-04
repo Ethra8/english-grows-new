@@ -7,7 +7,7 @@ LANDING PAGE bg (slightly darker than var(--color-teal)): #01596d;
 
 |**** Oxford Navy : var(--color-navy); rgba(var(--color-navy-rgb), 1)/ 
 |**** Stormy Teal (Brand color - Landing page bg): var(--color-teal); / rgba(var(--color-teal-rgb),1)
-|**** Strong Cyan (light blue text accent): var(--color-cyan); / rgba(var(--color-cyan-rgb), 1);
+|**** Strong Cyan (light blue text accent): var(--color-tropical-teal); / rgba(var(--color-tropical-teal-rgb), 1);
 |**** Turquoise borders/ some hr: var(--color-turquoise) / rgba(95, 245, 252, 1)
 |**** Icy Acqua (lightest Accent): var(--color-icy) / rgba(199, 255, 249, 1) 
 |**** Azure Mist (light website bg): #F4FFFE / 
@@ -850,7 +850,7 @@ span.btt-link:hover {
 }
 
 #index h2 span {
-    color: var(--color-cyan);
+    color: var(--color-tropical-teal);
 }
 
 #index header p {

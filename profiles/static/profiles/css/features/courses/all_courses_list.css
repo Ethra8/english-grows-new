@@ -306,51 +306,6 @@
     justify-content: center;
 }
 
-.course-stat .completion-ring {
-    --ring-size: 46px;
-    --ring-thickness: 1px;
-    --ring-center: var(--color-whitesmoke);
-    width: var(--ring-size);
-    height: var(--ring-size);
-    flex: 0 0 var(--ring-size);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-    background: radial-gradient(
-            circle,
-            var(--ring-center) 0,
-            var(--ring-center) calc(55% - var(--ring-thickness)),
-            transparent calc(55% - var(--ring-thickness) + 1px)
-        ),
-        conic-gradient(
-            var(--color-cyan) calc(var(--completion, 0) * 1%),
-            rgba(148, 148, 148, 0.2) 0
-        );
-    border: 0.25px solid #a2b8bb;
-}
-
-.course-stat .completion-ring-value {
-    position: relative;
-    z-index: 1;
-    color: var(--color-whitesmoke);
-    font-size: 0.78rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-.completion-ring span {
-    position: relative;
-    z-index: 2;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--color-teal);
-    line-height: 1;
-}
-
 .course-stat span {
     color: var(--color-steel);
 }

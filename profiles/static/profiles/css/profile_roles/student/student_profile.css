@@ -58,7 +58,7 @@
     height: 380px;
     border-radius: 50%;
     background: var(--color-navy);
-    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     box-shadow:
         0 10px 25px rgba(0,107,125,.25),
         inset 0 1px rgba(var(--color-steel-rgb),.15);
@@ -160,7 +160,7 @@
     height: 500px;
     border-radius: 50%;
     background: var(--color-navy);
-    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     box-shadow:
         0 10px 25px rgba(0,107,125,.25),
         inset 0 1px rgba(var(--color-steel-rgb),.15);
@@ -243,7 +243,7 @@
     border: outset 1px var(--color-turquoise);
     background-color: #F4FFFE;
     /* background: var(--color-icy);
-    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%); */
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%); */
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     color: var(--color-teal);
 }
@@ -277,7 +277,7 @@
 
 .my-course-card .info > div:first-of-type .item-icon {
     background: var(--color-icy);
-    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-cyan-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
     width: 46px;
     height: 46px;
     color: #edf9ed;

@@ -67,7 +67,7 @@
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-cyan-rgb), 0.8) 80%, rgba(var(--color-turquoise-rgb), 1) 100%);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-tropical-teal-rgb), 0.8) 80%, rgba(var(--color-turquoise-rgb), 1) 100%);
     border: 1px outset rgba(var(--color-turquoise-rgb), 0.5);
     display: flex;
     align-items: center;
@@ -241,7 +241,7 @@
     scrollbar-width: 8px;
     scrollbar-color:
         rgba(var(--color-navy-rgb), 0.6)
-        rgba(var(--color-cyan-rgb), 0.5);
+        rgba(var(--color-tropical-teal-rgb), 0.5);
     scroll-behavior: smooth;    
 }
 
@@ -343,7 +343,7 @@ a.btn-class-today {
     align-items: center;
     justify-content: space-between;
     /* background: rgba(var(--color-turquoise-rgb), 0.1); */
-    background: rgba(var(--color-cyan-rgb), 0.2);
+    background: rgba(var(--color-tropical-teal-rgb), 0.2);
     cursor: pointer;
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
@@ -386,7 +386,7 @@ a.btn-class-today img {
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
-    border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
+    /* border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10); */
     grid-column: 1 / -1;
     padding: 1rem .5rem 1rem 1.3rem;
     background: rgba(var(--color-teal-rgb), 0.2);
@@ -456,25 +456,24 @@ a.btn-class-today img {
     align-items: center;
     justify-content: center;
     min-width: 0;
-    min-height: 125px;
+    max-height: 125px;    
     border-right: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    /* border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10); */
-    min-height: 120px;
     flex-direction: column;
     gap: 1.1rem;    
     border-left: 0;
     margin: 1.25rem 0 0.75rem;
-    border-radius: 0 0 8px 8px;}
+    border-radius: 0;
+}
+
+/* .overview-metric.top-row {
+    margin: 1.75rem 0 0;
+} */
 
 .overview-number {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     line-height: 1;
     font-weight: 600;
     color: var(--color-navy);
-}
-
-.overview-total .overview-number {
-    font-size: 1.2rem;
 }
 
 .overview-metric.overview-upcoming span:nth-of-type(2) {
@@ -491,7 +490,7 @@ a.btn-class-today img {
     /* color: rgba(var(--color-navy-rgb), 0.72); */
     color: rgba(var(--color-slate-rgb), 1);    
     margin: 0 0 auto;
-    width: 50%;
+    width: 55%;
     line-height: 1.2;    
 }
 
@@ -505,45 +504,6 @@ a.btn-class-today img {
     margin-bottom: 1.5rem;
 }
 
-.completion-ring {
-    --ring-size: 54px;
-    --ring-width: 7px;
-    --ring-center: var(--color-whitesmoke);
-    position: relative;
-    width: var(--ring-size);
-    height: var(--ring-size);
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background:
-        conic-gradient(
-            var(--color-cyan) calc(var(--completion) * 1%),
-            rgba(var(--color-navy-rgb), 0.12) 0
-        );
-}
-
-/* Creates transparent / light centre */
-.completion-ring::before {
-    content: "";
-    position: absolute;
-    inset: var(--ring-width);
-    border-radius: 50%;
-    background: var(--color-whitesmoke);
-}
-
-.completion-ring-value {
-    position: relative;
-    z-index: 1;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--color-navy);
-}
-
-.completion-count {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--color-navy);
-}
 
 /* === ATTENDANCE =========== */
 .overview-attendance {
@@ -589,7 +549,7 @@ a.btn-class-today img {
     width: 0;
     height: 100%;
     border-radius: inherit;
-    background: var(--color-cyan);
+    background: var(--color-tropical-teal);
     transition: width 0.45s ease;
 }
 
@@ -628,7 +588,7 @@ a.btn-class-today img {
 
 
 /* ==== REMOVE FINAL ROW BORDER ====== */
-.training-overview-grid > :nth-last-child(-n + 5) {
+.attendance-period-grid > :nth-last-child(-n + 5) {
     border-bottom: 0;
 }
 
@@ -664,9 +624,9 @@ a.btn-class-today img {
 
 
 @media (min-width: 1360px) and (max-width: 1599.98px) {
-    .overview-metric {
+    /* .overview-metric {
         margin: 0;
-    }
+    } */
 }
 
 
@@ -776,7 +736,7 @@ a.btn-class-today img {
     }
 
     /* TRAINING OVERVIEW */
-    .training-overview-grid {
+    .attendance-period-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
@@ -788,6 +748,7 @@ a.btn-class-today img {
     /* Show tablet/mobile column headings(as labels) */
     .overview-mobile-label {
         display: block;
+        max-width: 40%;
     }
 
     .overview-period {
@@ -795,13 +756,13 @@ a.btn-class-today img {
         padding: 1rem 0.3rem 1rem .5rem;
     }
 
-    .overview-metric {
+    /* .overview-metric {
         min-height: 120px;
         flex-direction: column;
         gap: 0.7rem;
         border-left: 0;
         padding: 2rem 0;
-    }
+    } */
 
     .attendance-progress {
         align-items: center;
@@ -821,17 +782,24 @@ a.btn-class-today img {
         grid-template-columns: repeat(1, 1fr);
     }
 
-    .training-overview-grid > :nth-last-child(-n + 5) {
-        border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.10);
-    }
 
 }
 
+@media (max-width: 660.99px) {
+
+    .overview-mobile-label {
+        width: 70%;
+    }
+
+    .overview-completed .overview-mobile-label {
+        width: 50%;
+    }
+}
 
 
 @media (max-width: 600px) {
     
-    .training-overview-grid {
+    .attendance-period-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0;
     }
@@ -844,25 +812,20 @@ a.btn-class-today img {
         margin-top: 0;
     }
 
-    .overview-metric {
+    /* .overview-metric {
         min-height: 115px;
         padding: 1rem 0.6rem;
         border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    }
+    } */
 
-    .overview-number {
+    /* .overview-number {
         font-size: 1.55rem;
         border-bottom: 1px solid rgba(var(--color-navy-rgb), 0.08);
     }
 
-    .completion-ring {
-        --ring-size: 48px;
-        --ring-width: 6px;
-    }
-
     .overview-metric {
         margin: 0;
-    }
+    } */
 
     .training-attendance-bar {
         height: 7px;
@@ -888,9 +851,9 @@ a.btn-class-today img {
     }
 
     .overview-period strong {
-    font-size: 1rem;
-    color: var(--color-navy);
-    font-weight: 500;
+        font-size: 1rem;
+        color: var(--color-navy);
+        font-weight: 500;
     }
 
 }

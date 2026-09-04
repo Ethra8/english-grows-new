@@ -10,8 +10,12 @@
     --color-teal: #006b7d;
     --color-teal-rgb: 0, 107, 125;
     /* Strong Cyan */
-    --color-cyan: #07C0C7;
-    --color-cyan-rgb: 7, 192, 199;
+    /* --color-cyan: #07C0C7;
+    --color-cyan-rgb: 7, 192, 199; */
+    /* Tropical Teal */
+    --color-tropical-teal: #16AFB5;
+    --color-tropical-teal-rgb: 22, 175, 181;
+
     /* Turquoise */
     --color-turquoise: #5ff0df;
     --color-turquoise-rgb: 95, 240, 223;
