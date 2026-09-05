@@ -186,7 +186,7 @@ msgid "View this month classes"
 msgstr "Ver clases de este mes"
 
 msgid "Not assessed yet"
-msgstr "Evaluación pendiente"
+msgstr "Pendiente"
 
 msgid "Monthly attendance"
 msgstr "Asistencia mensual"

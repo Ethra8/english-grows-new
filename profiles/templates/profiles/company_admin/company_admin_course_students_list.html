@@ -265,9 +265,9 @@
 
     <!-- META CARD -->
     <div class="meta-row">
-        <div class="meta-card meta-students mt-5 mb-5">
-            <div class="meta-icon">
-                <img src="{% static 'icons/group_course_icon.png' %}" alt="icon">
+        <div class="meta-card meta-students mb-5">
+            <div>
+                <img src="{% static 'icons/employees_active_icon.png' %}" alt="" aria-hidden="true" width="60" >
             </div>
             <div class="meta-text">
                 <strong>{% trans 'Registrations' %}</strong>
@@ -353,5 +353,5 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
 {% endblock %}

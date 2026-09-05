@@ -1,7 +1,3 @@
-/************************************************|
-**** company_admin_course_details.html **********|
-*************************************************/
-
 .course-details-page {
     padding: 20px 5% 70px;
     width: 100%;
@@ -42,7 +38,6 @@
     max-width: 100%;
 }
 
-
 /*
 Each card must be allowed to shrink inside the 3-column grid.
 This is especially important for long text such as email
@@ -52,12 +47,10 @@ addresses.
     min-width: 0;
 }
 
-
 .course-detail-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.2rem;
-
     min-width: 0;
 }
 
@@ -68,54 +61,36 @@ addresses.
 
 .course-detail-item {
     background: var(--color-whitesmoke);
-
     border-top:
         1px solid rgba(var(--color-teal-rgb), 0.45);
-
     padding: 1.75rem 0.5rem;
     margin-top: 0.5rem;
-
     min-width: 0;
     box-sizing: border-box;
 }
 
 
-/*
-Highlighted first row.
-
-NOTE:
-The previous CSS contained this selector twice.
-It is now defined only once.
-*/
+/* Highlighted first row. */
 .course-detail-item > div:first-of-type {
     background-color:
         rgba(var(--color-teal-rgb), 0.05);
-
     border-radius: 8px;
-
     padding: 0.5rem 1rem;
-
     border:
         1px solid rgba(var(--color-teal-rgb), 0.1);
-
     box-shadow:
         0 4px 10px rgba(var(--color-shadow-rgb), 0.02);
-
     margin: 0 0 1rem;
-
     box-sizing: border-box;
 }
-
 
 .course-detail-item span {
     display: block;
 }
 
-
 .course-detail-item hr {
     border:
         1px solid rgba(var(--color-turquoise-rgb), 0.2);
-
     border-radius: 0;
     margin: 0.5rem auto;
 }
@@ -129,17 +104,12 @@ It is now defined only once.
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-
     width: 100%;
     min-width: 0;
-
     gap: 0.5rem;
-
     padding: 0.75rem 0;
-
     border-bottom:
         1px solid rgba(var(--color-teal-rgb), 0.1);
-
     box-sizing: border-box;
 }
 
@@ -147,36 +117,23 @@ It is now defined only once.
 /* =========================================================
    FEATURED / HIGHLIGHTED FIRST ROW
 ========================================================= */
-
-/*
-All three cards use exactly the same highlighted-row height.
-
+/* All three cards use exactly the same highlighted-row height.
 The row itself may shrink horizontally, but its children
-remain vertically centred.
-*/
+remain vertically centred.*/
 .course-detail-item > .detail-row:first-of-type {
     width: 100%;
-
     height: 5.5rem;
     min-height: 5.5rem;
-
     padding: 0.5rem 1rem;
-
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-
     gap: 0.75rem;
-
     min-width: 0;
     overflow: hidden;
-
     box-sizing: border-box;
 }
-
-
-
 
 
 /* =========================================================
@@ -187,28 +144,21 @@ remain vertically centred.
     padding: 0.75rem 1rem;
 }
 
-
 .detail-row:last-child {
     border-bottom: none;
 }
 
-
 .detail-row img {
     padding-top: 0.25rem;
-
-    /*
-    Prevent icons from being compressed when the text
-    beside them becomes long.
-    */
+    /* Prevent icons from being compressed
+    when the text beside them becomes long */
     flex-shrink: 0;
 }
-
 
 .detail-row div > strong {
     color: var(--color-teal);
     font-weight: 600 !important;
 }
-
 
 .detail-row strong {
     font-weight: 500;
@@ -230,10 +180,7 @@ remain vertically centred.
     font-weight: 600;
 }
 
-.course-info-card
-.course-detail-item
-> .detail-row:first-of-type
-> div:last-child {
+.course-info-card .course-detail-item > .detail-row:first-of-type > div:last-child {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
@@ -247,7 +194,6 @@ remain vertically centred.
 #short-final-class {
     background-color:
         rgba(var(--color-steel-rgb), 0.1);
-
     border-radius: 8px;
     padding: 0.5rem;
 }
@@ -262,22 +208,16 @@ remain vertically centred.
 .course-progress-card,
 .course-materials-card {
     border-radius: 8px;
-
     margin: 0;
     padding: 1rem 0.5rem 0.5rem;
-
     border:
         2px solid rgba(var(--color-teal-rgb), 0.25);
-
     width: 100%;
     min-width: 0;
-
     background-color:
         var(--color-whitesmoke);
-
     box-shadow:
         0 8px 20px rgba(var(--color-slate-rgb), 0.1);
-
     box-sizing: border-box;
 }
 
@@ -287,7 +227,6 @@ remain vertically centred.
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-
     padding: 1.5rem;
 }
 
@@ -301,22 +240,15 @@ remain vertically centred.
 .course-progress-card h3 {
     display: flex;
     align-items: center;
-
     height: 52px;
-
     background:
         rgba(var(--color-whitesmoke-rgb), 1);
-
     position: relative;
-
     color:
         var(--color-navy);
-
     font-weight: 600;
-
     padding: 0 1.5rem;
     margin-bottom: 0;
-
     overflow: hidden;
 }
 
@@ -324,25 +256,18 @@ remain vertically centred.
 /* Dates / timetable card */
 .course-details-card h3::after {
     content: "";
-
     position: absolute;
-
     top: 69%;
     right: 2%;
-
     width: 85px;
     height: 85px;
-
     transform:
         translateY(-50%) rotate(-12deg);
-
     background-image:
         url(/static/icons/meta_calendar_teal_icon.png);
-
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-
     opacity: 0.07;
 }
 
@@ -350,25 +275,18 @@ remain vertically centred.
 /* General information card */
 .course-info-card h3::after {
     content: "";
-
     position: absolute;
-
     top: 69%;
     right: 2%;
-
     width: 80px;
     height: 80px;
-
     transform:
         translateY(-50%) rotate(-12deg);
-
     background-image:
         url(/static/icons/metacard_info_teal_icon.png);
-
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-
     opacity: 0.07;
 }
 
@@ -376,45 +294,26 @@ remain vertically centred.
 /* Progress card */
 .course-progress-card h3::after {
     content: "";
-
     position: absolute;
-
     top: 69%;
     right: 2%;
-
     width: 85px;
     height: 85px;
-
     transform:
         translateY(-50%) rotate(-12deg);
-
     background-image:
         url(/static/icons/meta_courses_teal_icon.png);
-
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-
     opacity: 0.07;
 }
+
 
 
 /* *********************************************************************** */
 /* *** MEDIA QUERIES ***************************************************** */
 /* *********************************************************************** */
-
-
-/*
-The previous 1200–1439px rule used:
-
-    grid-template-columns: 1fr;
-
-on .detail-row.
-
-.detail-row is a FLEX container, so that rule had no effect
-and has therefore been removed.
-*/
-
 
 @media (max-width: 1199.98px) {
 
@@ -423,12 +322,10 @@ and has therefore been removed.
         grid-template-columns: 1fr;
     }
 
-
     .course-details-page
     .wrapper-course-detail-cards:nth-child(1) {
         width: 100%;
     }
-
 
     .course-materials-card {
         display: flex;
@@ -457,11 +354,9 @@ and has therefore been removed.
         padding: 1.5rem;
     }
 
-
     .course-details-masonry {
         grid-template-columns: 1fr;
     }
-
 
     .wrapper-course-detail-cards:nth-child(1),
     .wrapper-course-detail-cards:nth-child(2),
@@ -484,7 +379,6 @@ and has therefore been removed.
         margin: 1rem auto;
     }
 
-
     /*****************************************************|
     |*** COMPANY ADMIN COURSE DETAILS Page ***************/
 
@@ -493,12 +387,10 @@ and has therefore been removed.
         grid-template-columns: 1fr;
     }
 
-
     .course-details-page
     .course-header-meta-row {
         grid-template-columns: 1fr;
     }
-
 
     .course-details-page
     .course-meta-card {
@@ -506,15 +398,5 @@ and has therefore been removed.
             0.15rem 1rem
             0.15rem 0.25rem;
     }
-
-}
-
-
-
-@media (max-width: 600px) {
-
-    /*
-    No additional course-details overrides currently needed.
-    */
 
 }
