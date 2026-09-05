@@ -7116,9 +7116,10 @@ def company_admin_course_details(request, course_id):
         if not subskills:
             continue
 
-        assessed_skill_scores.append(
-            skill_assessment.average_score
-        )
+        score = skill_assessment.average_score
+
+        if score is not None:
+            assessed_skill_scores.append(score)
 
 
     if assessed_skill_scores:
@@ -7137,6 +7138,8 @@ def company_admin_course_details(request, course_id):
         )
     else:
         average_group_assessment_percentage = 0
+
+
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------

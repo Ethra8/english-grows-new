@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
 {% endblock %}
 
 
@@ -301,7 +302,7 @@
             <div class="course-meta-text">
                 <strong>{% trans 'Group Average Score' %}</strong>
                 {% if average_group_assessment_score %}
-                <span>{{ average_group_assessment_score }}</span>
+                <span>{{ average_group_assessment_score }} / 10</span>
                 {% else %}
                 <span><small>{% trans 'Not assessed yet' %}</small></span>
                 {% endif %}
