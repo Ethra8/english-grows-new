@@ -61,9 +61,8 @@ addresses.
 
 .course-detail-item {
     background: var(--color-whitesmoke);
-    border-top:
-        1px solid rgba(var(--color-teal-rgb), 0.45);
-    padding: 1.75rem 0.5rem;
+    border-top: 1px solid rgba(var(--color-teal-rgb), 0.45);
+    padding: 1.75rem 0.5rem 0.5rem;
     margin-top: 0.5rem;
     min-width: 0;
     box-sizing: border-box;

@@ -141,6 +141,8 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/profiles_base.js' %}"></script>
+
     <script src="{% static 'profiles/js/components/sidebar.js' %}"></script>
     <script type="text/javascript" src="{% static 'profiles/js/components/countryField.js' %}"></script>
 {% endblock %}

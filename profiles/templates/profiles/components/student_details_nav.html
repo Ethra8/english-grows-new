@@ -1,0 +1,141 @@
+
+{% load static i18n %}
+
+<div class="student-detail-tabs-wrapper notranslate" translate="no">
+
+    <nav
+        class="student-detail-tabs"
+        aria-label="{% trans 'Student details navigation' %}"
+    >
+
+        {% if enrollments|length > 1 %}
+
+            <form method="get" class="course-selector-form">
+
+                <div class="course-selector-label">
+
+                    <img
+                        src="{% static 'icons/one_to_one_course_icon.png' %}"
+                        alt=""
+                        aria-hidden="true"
+                    >
+
+                    <span>{% trans "Course" %}</span>
+
+                </div>
+
+
+                <div class="course-select-wrapper course-dropdown">
+
+                    <!-- CURRENTLY SELECTED COURSE -->
+                    <button
+                        type="button"
+                        id="course-select"
+                        class="course-select course-dropdown-toggle"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+
+                        <span class="course-dropdown-selected">
+
+                            {% if course %}
+
+                                <span class="course-dropdown-course-name">
+                                    · {{ course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ course.get_status_display }}
+                                </span>
+
+                            {% else %}
+
+                                <span>{% trans "Course" %}</span>
+
+                            {% endif %}
+
+                        </span>
+
+
+                        <img
+                            class="course-select-arrow"
+                            src="{% static 'icons/chevron_down_teal.png' %}"
+                            alt=""
+                            width="36"
+                            aria-hidden="true"
+                        >
+
+                    </button>
+
+
+                    <!-- DROPDOWN OPTIONS -->
+                    <div
+                        class="course-dropdown-menu"
+                        role="menu"
+                        hidden
+                    >
+
+                        {% for item in enrollments %}
+
+                            <button
+                                type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem"
+                            >
+
+                                <span class="course-dropdown-course-name">
+                                    · {{ item.course.name }}
+                                </span>
+
+                                <span class="course-dropdown-status">
+                                    - {{ item.course.get_status_display }}
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        {% endif %}
+
+
+        <div class="wrapper-links-inner-nav">
+
+            <a
+                href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}"
+                class="{% if active_section == 'general' %}active{% endif %}"
+                {% if active_section == "general" %}aria-current="page"{% endif %}
+            >
+                {% trans "General" %}
+            </a>
+
+
+            <a
+                href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}"
+                class="{% if active_section == 'skills' %}active{% endif %}"
+                {% if active_section == "skills" %}aria-current="page"{% endif %}
+            >
+                {% trans "Skills" %}
+            </a>
+
+
+            <a
+                href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}"
+                class="{% if active_section == 'attendance' %}active{% endif %}"
+                {% if active_section == "attendance" %}aria-current="page"{% endif %}
+            >
+                {% trans "Attendance" %}
+            </a>
+
+        </div>
+
+    </nav>
+
+</div>

@@ -574,6 +574,15 @@ msgid "No employees enrolled yet"
 msgstr "No se ha encontrado ninguna inscripción en este momento"
 
 
+msgid "Currently enrolled in an active course"
+msgstr "Actualment inscrito en curso activo"
+
+msgid "Not currently enrolled in an active course"
+msgstr "Actualmente no inscrito en ningún curso activo"
+
+msgid "Student details navigation"
+msgstr "Navegación de los detalles del estudiante"
+
 msgctxt "dashboard metacards"
 msgid "Employees"
 msgstr "Plantilla"

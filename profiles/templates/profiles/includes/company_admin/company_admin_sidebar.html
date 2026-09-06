@@ -2,9 +2,9 @@
 {% load static %}
 {% load i18n %}
 
-<aside id="profileSidebar" class="profile-sidebar">
+<aside id="profileSidebar" class="profile-sidebar notranslate" translate="no">
 
-    <div class="sidebar-user notranslate" translate="no">
+    <div class="sidebar-user">
 
         {% if request.user.profile.profile_photo %}
             <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile photo" class="profile-photo">
@@ -19,9 +19,8 @@
 
         <!-- badge user role & company -->        
         <span class="text-center mt-2">
-            <i class="fa-solid fa-user-tie mr-2 mr-2"></i> 
+                <img src="{% static 'icons/role_user_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2 mb-1">
             {{ request.user.profile.get_role_display }}
-            <br>
         </span>
         {% if request.user.profile.company %}
             <p class="text-center"><i class="fa-regular fa-building mr-2 mt-4"></i><strong>{{ request.user.profile.company.name }}</strong></p>
@@ -30,7 +29,7 @@
     </div>
     <hr>
  
-    <nav class="sidebar-nav notranslate" translate="no" aria-label="{% trans 'Profile navigation' %}">
+    <nav class="sidebar-nav" aria-label="{% trans 'Profile navigation' %}">
 
         <a href="{% url 'profiles:company_admin_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'company_admin_dashboard' %}active{% endif %}" aria-label="{% trans 'Dashboard' %}">
             <i class="fa-solid fa-house"></i>
@@ -69,7 +68,7 @@
     </nav>
     <hr>
 
-    <a href="{% url 'account_logout' %}" class="btn-navbar mb-5 notranslate" aria-label="Logout">
+    <a href="{% url 'account_logout' %}" class="btn-navbar mb-5" aria-label="Logout">
         <img src="{% static 'icons/nav_logout_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-3">
         {% trans "Logout" %}
     </a>

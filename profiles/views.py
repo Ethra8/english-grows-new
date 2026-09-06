@@ -7822,6 +7822,11 @@ def company_admin_student_detail(request, student_id):
     student_profile = student.profile
 
 
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
     #
@@ -8437,6 +8442,7 @@ def company_admin_student_detail(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # Course selector
         "enrollments": enrollments,
 

@@ -40,8 +40,8 @@
 
 
 /* HEADER STUDENT DETAILS **************
-** STUDENT-MAIN-INFO ******************/
-header .student-main-info {
+** student-details-header ******************/
+header .student-details-header {
     display: flex;
     align-items: center;
     gap: 4rem;
@@ -55,7 +55,7 @@ header .student-avatar-large {
     width: 135px;
     height: 135px;
     border-radius: 50%;
-    background: rgba(var(--color-turquoise-rgb), 0.16);
+    /* background: rgba(var(--color-turquoise-rgb), 0.16); */
     border: 2px outset rgba(84, 85, 85, 0.75);
     display: flex;
     align-items: center;
@@ -63,14 +63,14 @@ header .student-avatar-large {
     overflow: visible;
     color: var(--color-turquoise);
     margin: 0 auto;
-    border-right: 2px solid var(--color-teal);
+    /* border-right: 2px solid var(--color-teal); */
 }
 
 header .student-avatar-large img {
-    display: block;
+    /* display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; */
     border-radius: 50%;
 }
 
@@ -102,19 +102,19 @@ header .student-avatar-large.avatar-inactive .avatar-status-dot {
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
-header .student-main-info h1,
-header .student-main-info p {
+header .student-details-header h1,
+header .student-details-header p {
     min-width: 0;
     max-width: 100%;
 }
 
-header .student-main-info h1 {
+header .student-details-header h1 {
     color: var(--color-whitesmoke);
     margin-bottom: 0;
     font-size: clamp(2.2rem, 2.5vw, 2.8rem);
 }
 
-header .student-main-info a:hover {
+header .student-details-header a:hover {
     color: var(--color-tropical-teal);
 }
 
@@ -137,7 +137,7 @@ header .student-main-info a:hover {
 }
 
 /* Level & status */
-/* header .student-main-info > div:last-child {
+/* header .student-details-header > div:last-child {
     flex: 1;
     min-width: 0;
     max-width: 100%;
@@ -708,15 +708,15 @@ header .student-main-info a:hover {
     content: "";
     position: absolute;
     top: 62%;
-    left: -1%;
-    width: 70px;
-    height: 70px;
+    left: 0;
+    width: 60px;
+    height: 60px;
     transform: translateY(-50%) rotate(-12deg);
-    background-image: url(/static/icons/metacard_clipboard_check_turquoise_transparent_icon.png);
+    background-image: url(/static/icons/dashboard_meta_attendance_icon.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    /* opacity: 0.3; */
+    opacity: 0.3;
 }
 
 .course-info-detail-card h2::after {
@@ -762,14 +762,14 @@ header .student-main-info a:hover {
     font-size: 1.05rem;
 }
 
-.student-main-info span,
-.student-main-info a {
+.student-details-header span,
+.student-details-header a {
     color: var(--color-steel);
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-.student-main-info a span:hover {
+.student-details-header a span:hover {
     color: var(--color-teal);
     font-weight: 600;
 }
@@ -1097,25 +1097,20 @@ header .student-main-info a:hover {
         /* padding: 2rem 4rem; */
     }
 
-    header .student-main-info {
+    header .student-details-header {
         gap: 4rem;
     }
 
     /* COURSE SELECTOR FORM */
  
-    .wrapper-course-selector-form,
     .course-selector-form {
-        display: none;
-        /* visibility: hidden; */
-    }
-
-    .course-selector-form.smaller-devs {
         display: flex;
         flex-direction: row;
         gap: 1rem;
         width: 100%;
-        height: fit-content;
-        padding: 0.25rem 0.75rem;
+        min-width: 0;
+        max-height: fit-content;
+        padding: 0.25rem 0.25rem 0.25rem 0.75rem;
     }
     /* END Course Selector Form */
 
@@ -1139,7 +1134,8 @@ header .student-main-info a:hover {
 @media (max-width: 1199.98px) {
 
     .student-detail-tabs {
-        padding: 0 1.25rem;
+        flex-direction: column;
+        padding: 0.5rem;
     }
 
 
@@ -1173,7 +1169,7 @@ header .student-main-info a:hover {
     }
 
     /* FORM: COURSE SELECTOR */
-    .course-selector-form.smaller-devs {
+    .course-selector-form {
         flex-direction: row;
         align-items: center;
         gap: 0.75rem;
@@ -1182,14 +1178,14 @@ header .student-main-info a:hover {
         min-width: 0;
     }
 
-    .course-selector-form.smaller-devs .course-selector-label {
+    .course-selector-form .course-selector-label {
         flex: 0 0 190px;
         width: 190px;
         min-width: 0;
         padding-left: 0.25rem;
     }
 
-    .course-selector-form.smaller-devs .course-select-wrapper {
+    .course-selector-form .course-select-wrapper {
         flex: 1 1 auto;
         width: auto;
         max-width: 100%;
@@ -1197,7 +1193,7 @@ header .student-main-info a:hover {
         margin: 0;
     }
 
-    .course-selector-form.smaller-devs .course-dropdown-toggle {
+    .course-selector-form .course-dropdown-toggle {
         width: 100%;
         max-width: 100%;
         min-width: 0;
@@ -1225,7 +1221,7 @@ header .student-main-info a:hover {
         padding: 0;
     }
 
-    header .student-main-info {
+    header .student-details-header {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1241,22 +1237,22 @@ header .student-main-info a:hover {
         height: 200px;
     }
     
-    header .student-main-info > div:last-child {
+    header .student-details-header > div:last-child {
         padding: 0;
         min-width: fit-content;
         max-width: fit-content;
     }
 
-    /* .student-main-info h1 {
+    /* .student-details-header h1 {
         margin: 1rem auto 1rem;
     } */
 
-    header .student-main-info p a {
+    header .student-details-header p a {
         margin: 1rem auto 1rem;
         text-align: center;
     }
 
-    .course-selector-form.smaller-devs {
+    .course-selector-form {
         flex-direction: column;
         align-items: stretch;
         justify-content: flex-start;
@@ -1268,7 +1264,7 @@ header .student-main-info a:hover {
         padding: 0.4rem 0.75rem;
     }
 
-    .course-selector-form.smaller-devs .course-selector-label {
+    .course-selector-form .course-selector-label {
         flex: 0 0 auto;
         width: 100%;
         max-width: 100%;
@@ -1278,7 +1274,7 @@ header .student-main-info a:hover {
         padding: 0;
     }
 
-    .course-selector-form.smaller-devs .course-select-wrapper {
+    .course-selector-form .course-select-wrapper {
         flex: 0 0 auto;
         width: 100%;
         max-width: 100%;
@@ -1287,7 +1283,7 @@ header .student-main-info a:hover {
         padding: 0;
     }
 
-    .course-selector-form.smaller-devs .course-dropdown-toggle {
+    .course-selector-form .course-dropdown-toggle {
         width: 100%;
         max-width: 100%;
         min-width: 0;
@@ -1346,7 +1342,7 @@ header .student-main-info a:hover {
         grid-template-columns: 1fr;
     }
 
-    .student-main-info p a {
+    .student-details-header p a {
         font-size: 1rem;
     }
 
