@@ -1,6 +1,5 @@
-{% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
@@ -8,189 +7,104 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
 {% endblock %}
 
-{% block profile_content %}
+{% block details_page_background %}
+    <div class="overlay-globe" aria-hidden="true"></div>
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
 
-<section class="student-detail-page profile-page notranslate" translate="no">
-    <div class="overlay-globe"></div>
-    <div class="overlay-mist"></div>
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=True %}
 
-    <header>
-
-        <div class="student-details-header">
-
-            <div>
-                <div class="student-avatar-large {% if student_is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
-
-                    {% if student_profile.profile_photo %}
-                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                    {% else %}
-                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                        {% else %}
-                        <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
-                        {% endif %}
-                    {% endif %}
-                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
-                </div>
-            </div>
-
-            <div>
-                <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
-                <p class="notranslate" translate="no">{{ student.email }}</p>
-
-                <div class="student-meta-line">
-                    <span>
-                        <i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Student" }}
-                    </span>
-                </div>
-
-                {% if student_profile.company %}
-                    <div class="student-meta-line">
-                        <span>
-                            <i class="fa-regular fa-building mr-2"></i>
-                            {{ student_profile.company.name }}
-                        </span>
-                    </div>
-                {% endif %}
-
-                <div class="student-meta-line mt-3">
-                    {% if student.is_active %}
-                        <span class="status-badge active">Active</span>
-                    {% else %}
-                        <span class="status-badge inactive">Inactive</span>
-                    {% endif %}
-                </div>
-            </div>
-
+    <div class="student-header-actions">
+        <div>
+            <a href="mailto:{{ student.email }}" class="student-action-btn">
+                <i class="fa-regular fa-envelope mr-3" aria-hidden="true"></i> {% trans 'Message' %}
+            </a>
         </div>
 
-        <div class="student-header-actions">
-            <div>
-                <a href="mailto:{{ student.email }}" class="student-action-btn">
-                    <i class="fa-regular fa-envelope mr-3"></i>
-                    Message
-                </a>
-            </div>
+        <div class="student-level-area">
+            <small>{% trans 'Current Level' %}</small>
+            <button type="button" class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2" onclick="toggleLevelForm('{{ enrollment.id }}')">
+                {{ student_profile.current_level|default:"?" }}
+            </button>
 
-            <div class="student-level-area">
-                <small>Current Level</small>
-
-                <button type="button"
-                        class="level level-{{ student_profile.current_level|lower|cut:'.' }} mt-2"
-                        onclick="toggleLevelForm('{{ enrollment.id }}')">
-                    {{ student_profile.current_level|default:"?" }}
-                </button>
-
-                <form method="POST"
-                      action="{% url 'profiles:update_student_level' course.id enrollment.id %}"
-                      class="d-none student-level-form"
-                      id="level-form-{{ enrollment.id }}">
-
-                    {% csrf_token %}
-
-                    <select name="current_level">
-                        {% for value, label in level_choices %}
-                            <option value="{{ value }}"
-                                {% if student_profile.current_level == value %}selected{% endif %}>
-                                {{ label }}
-                            </option>
-                        {% endfor %}
-                    </select>
-
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-
+            <form method="POST" action="{% url 'profiles:update_student_level' course.id enrollment.id %}" class="d-none student-level-form" id="level-form-{{ enrollment.id }}">
+                {% csrf_token %}
+                <select name="current_level">
+                    {% for value, label in level_choices %}
+                        <option value="{{ value }}" {% if student_profile.current_level == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">{% trans 'Save' %}</button>
+            </form>
         </div>
+    </div>
+{% endblock %}
 
-    </header>
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" with active_section="assessment" nav_role="teacher" %}
+{% endblock %}
 
-    <div class="student-detail-tabs-wrapper">
-        <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:teacher_student_detail' course.id enrollment.id %}">
-                Overview
-            </a>
+{% block details_content %}
 
-            <a href="{% url 'profiles:student_attendance_record' course.id enrollment.id %}">
-                Attendance
-            </a>
+<article class="student-skills-notes-card notranslate" translate="no">
 
-            <a href="{% url 'profiles:student_skills_overview' course.id enrollment.id %}">
-                Skills
-            </a>
+    {% for note in skill_note_display %}
+    <div class="teacher-skill-note">
+        <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }} / 10</small></h4>
 
-            <a href="{% url 'profiles:teacher_student_assessment_notes' course.id enrollment.id %}" class="active">
-                Assessment
-            </a>
+        {% if note.strengths %}
+        <p>
+            <strong>{% trans 'Strengths' %}:</strong>
+            {% for subskill in note.strengths %}
+                <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
 
-            <!-- <a href="#">
-                History
-            </a> -->
-        </nav>
+        {% if note.required_standard %}
+        <p>
+            <strong>{% trans 'Meets minimum required standard' %}:</strong>
+            {% for subskill in note.required_standard %}
+                <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
+
+        {% if note.developing %}
+        <p>
+            <strong>{% trans 'Developing areas' %}:</strong>
+            {% for subskill in note.developing %}
+                <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
+
+        {% if note.needs_work %}
+        <p>
+            <strong>{% trans 'Needs work' %}:</strong>
+            {% for subskill in note.needs_work %}
+                <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
     </div>
 
-    <article class="student-skills-notes-card">
+    {% empty %}
+        <p class="text-white">{% trans 'No teacher notes yet.' %}</p>
+    {% endfor %}
 
-        {% for note in skill_note_display %}
-            <div class="teacher-skill-note">
-                <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }}/ 10</small>
-                </h4>
-
-                {% if note.strengths %}
-                    <p>
-                        <strong>Strengths:</strong>
-                        {% for subskill in note.strengths %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                {% if note.required_standard %}
-                    <p>
-                        <strong>Meets minimum required standard:</strong>
-                        {% for subskill in note.required_standard %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                {% if note.developing %}
-                    <p>
-                        <strong>Developing areas:</strong>
-                        {% for subskill in note.developing %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                {% if note.needs_work %}
-                    <p>
-                        <strong>Needs work:</strong>
-                        {% for subskill in note.needs_work %}
-                            <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-            </div>
-        {% empty %}
-            <p class="text-white">No teacher notes yet.</p>
-        {% endfor %}
-    </article>
-
-
-
-</section>
+</article>
 
 {% endblock %}
 
 {% block postloadjs %}
-{{ block.super }}
-
-<script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
-
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 {% endblock %}

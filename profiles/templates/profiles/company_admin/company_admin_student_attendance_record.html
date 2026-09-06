@@ -1,288 +1,70 @@
-{% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
-
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
 {% load date_extras %}
-
 
 {% block extra_title %}| Attendance{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
-{% block profile_content %}
+{% block details_page_background %}
+    <div class="overlay-globe" aria-hidden="true"></div>
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
 
-<section class="my-attendance profile-page student-detail-page notranslate" translate="no">
-    <div class="overlay-globe"></div>
-    <div class="overlay-mist"></div>
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=False %}
+{% endblock %}
 
-    <!-- Header -->
-    <header>
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" with active_section="attendance" %}
+{% endblock %}
 
-        <div class="student-details-header">
-            <div>
-                <div class="student-avatar-large {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
+{% block details_content %}
 
-                    {% if student_profile.profile_photo %}
-                        <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                    {% else %}
-                        <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
-                    {% endif %}
-                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}" title="{% if student.is_active %}{% trans 'Enrolled' context 'learner enrollment status' %}{% else %}{% trans 'Inactive' context 'learner enrollment status' %}{% endif %}"></span>
-                </div>
-            </div>
-            
-            <div>
-                <h1>{{ student.get_full_name|default:student.username }}</h1>
-                
-                <div class="header-level">      
-
-                    <div class="level-pill larger-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.get_current_level_display }}
-                        {% else %}
-                            {% trans 'Pending' %}
-                        {% endif %}    
-                        </span>
-                    </div>
-                    <div class="level-pill smaller-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.current_level }}
-                        {% else %}
-                            {% trans 'Pending' %}
-                        {% endif %}    
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs notranslate" translate="no">
-
-            <div class="course-selector-label">
-                <img
-                    src="{% static 'icons/one_to_one_course_icon.png' %}"
-                    alt="icon"
-                >
-                <span>{% trans 'Course' %}</span>
-            </div>
-
-
-            <div class="course-select-wrapper course-dropdown">
-
-                <!-- CURRENTLY SELECTED COURSE -->
-                <button
-                    type="button"
-                    id="course-select-small"
-                    class="course-select course-dropdown-toggle"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                >
-                    <span class="course-dropdown-selected">
-
-                        {% if course %}
-                            <span class="course-dropdown-course-name notranslate" translate="no">
-                                · {{ course.name }}
-                            </span>
-
-                            <span class="course-dropdown-status">
-                                - {{ course.get_status_display }}
-                            </span>
-                        {% else %}
-                            <span>{% trans 'Course' %}</span>
-                        {% endif %}
-
-                    </span>
-
-                    <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="icon" width="36px">
-                </button>
-
-
-                <!-- DROPDOWN OPTIONS -->
-                <div
-                    class="course-dropdown-menu"
-                    role="menu"
-                    hidden
-                >
-
-                    {% for item in enrollments %}
-
-                        <button
-                            type="submit"
-                            name="course"
-                            value="{{ item.course.id }}"
-                            class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
-                            role="menuitem"
-                        >
-
-                            <span
-                                class="course-dropdown-course-name notranslate"
-                                translate="no"
-                            >
-                                · {{ item.course.name }}
-                            </span>
-
-                            <span class="course-dropdown-status">
-                                - {{ item.course.get_status_display }}
-                            </span>
-
-                        </button>
-
-                    {% endfor %}
-
-                </div>
-
-            </div>
-
-        </form>
-    {% endif %}
-
-    <div class="student-detail-tabs-wrapper">
-        <nav class="student-detail-tabs">
-
-            {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form">    
-                <div class="course-selector-label">
-                    <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                    <span>{% trans 'Course' %}</span>
-                </div>
-
-                <div class="course-select-wrapper course-dropdown">
-
-                    <!-- CURRENTLY SELECTED COURSE -->
-                    <button
-                        type="button"
-                        id="course-select-large"
-                        class="course-select course-dropdown-toggle"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                    >
-                        <span class="course-dropdown-selected">
-
-                            {% if course %}
-                                <span class="notranslate" translate="no">
-                                    · {{ course.name }}</span>
-                                <span class="course-dropdown-status">
-                                    - {{ course.get_status_display }}</span>
-                            {% else %}
-                                <span>{% trans 'Course' %}</span>
-                            {% endif %}
-
-                        </span>
-                            <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
-                        <!-- <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true"> -->
-                    </button>
-
-
-                    <!-- DROPDOWN OPTIONS -->
-                    <div
-                        class="course-dropdown-menu"
-                        role="menu"
-                        hidden
-                    >
-
-                        {% for item in enrollments %}
-
-                            <button
-                                type="submit"
-                                name="course"
-                                value="{{ item.course.id }}"
-                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
-                                role="menuitem"
-                            >
-
-                                <span
-                                    class="course-dropdown-course-name notranslate"
-                                    translate="no"
-                                >
-                                    · {{ item.course.name }}
-                                </span>
-
-                                <span class="course-dropdown-status">
-                                    - {{ item.course.get_status_display }}
-                                </span>
-
-                            </button>
-
-                        {% endfor %}
-
-                    </div>
-
-                </div>
-            </form>    
-            {% endif %}
-
-            <div class="wrapper-links-inner-nav">
-                <a href="{% url 'profiles:company_admin_student_detail' student.id %}?course={{ course.id }}" aria-label="{% trans 'Overview' %}">
-                    {% trans 'Overview' %}</a>
-
-                <a href="{% url 'profiles:company_admin_student_skills_overview' student.id %}?course={{ course.id }}" aria-label="{% trans 'Skills' %}">
-                    {% trans 'Skills' %}</a>
-
-                <a href="{% url 'profiles:company_admin_student_attendance_record' student.id %}?course={{ course.id }}" class="active" aria-label="{% trans 'Attendance' %}">
-                    {% trans 'Attendance' %}</a>
-
-                <!-- <a href="{% url 'profiles:company_admin_student_teacher_notes' student.id %}?course={{ course.id }}" aria-label="{% trans 'Assessment' %}">
-                    {% trans 'Assessment' %}</a> -->
-            </div>
-        </nav>
-    </div>
+<div class="my-attendance notranslate" translate="no">
 
     <div class="wrapper-attendance-progress-card">
         <div class="attendance-progress-card">
+
             <div class="circle-panel1">
-                <h2>
-                    {% trans "Attendance" %}
-                    <small>{% trans "Rate" %}</small>
-                </h2>            
+                <h2>{% trans "Attendance" %} <small>{% trans "Rate" %}</small></h2>
             </div>
             <div class="circle-panel2"></div>
-        {% if enrollment %}                
+
+            {% if enrollment %}
             <div class="info">
                 <div class="attendance-percentage-card">
-                    <div>
-                        <p>{{ enrollment.attendance_percentage|default:"0" }}%</p>
-                    </div>
-
-                    <progress
-                        class="attendance-progress"
-                        value="{{ enrollment.attendance_percentage }}"
-                        max="100">
+                    <div><p>{{ enrollment.attendance_percentage|default:"0" }}%</p></div>
+                    <progress class="attendance-progress" value="{{ enrollment.attendance_percentage }}" max="100">
                         {{ enrollment.attendance_percentage|default:"0" }}%
                     </progress>
-                </div>                            
+                </div>
 
                 {% if enrollment.has_low_attendance_warning %}
-                <div class="attendance-warning">                
+                <div class="attendance-warning">
                     <p class="mb-0">
-                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="26" aria-hidden="true">
-                        {% trans 'Attendance is below the recommended level of 75%!' %}</p>
+                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="" width="26" aria-hidden="true">
+                        {% trans 'Attendance is below the recommended level of 75%!' %}
+                    </p>
                 </div>
                 {% endif %}
-                
             </div>
         </div>
-
     </div>
-        
+
     <div class="attendance-cards-grid">
+
         <div class="wrapper-attendance-details">
             <div class="detailed-attendance-card">
 
                 <div class="circle-panel1">
-                    <h2>{% trans 'Attendance' %} 
-                        <small>{% trans 'Details' %}</small></h2>
+                    <h2>{% trans 'Attendance' %} <small>{% trans 'Details' %}</small></h2>
                 </div>
-
                 <div class="circle-panel2"></div>
 
                 <div class="item">
@@ -296,60 +78,57 @@
                         <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
                     </div>
                 </div>
+
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/hours_attended_icon.png' %}" alt="icon" width="26">
+                        <img src="{% static 'icons/hours_attended_icon.png' %}" alt="" width="26" aria-hidden="true">
                     </div>
-
                     <div class="item-text">
                         <strong>{% trans 'Hours Attended' %}:</strong>
                         <span>{{ attended_hours_display|default:"0" }} / {{ completed_hours_display|default:"0" }}</span>
                     </div>
-                </div>                    
+                </div>
+
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="icon" width="23">
+                        <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
-
                     <div class="item-text">
                         <strong>{% trans 'Enrollment date' %}:</strong>
                         <span>{{ enrollment.enrolled_at|date:"j M 'y" }}</span>
                     </div>
                 </div>
-                
+
                 {% if show_enrollment_context %}
                 <div class="item">
                     <div>
-                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="icon" width="23">
+                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
-
                     <div class="item-text">
                         <span>{% trans 'Post-commencement enrollment' %}:</span>
                     </div>
-                </div>    
+                </div>
 
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/previous_classes_teal_icon.png' %}" alt="icon" width="26">
+                        <img src="{% static 'icons/previous_classes_teal_icon.png' %}" alt="" width="26" aria-hidden="true">
                     </div>
-
                     <div class="item-text">
                         <strong>{% trans 'Classes held prior to enrollment' %}:</strong>
                         <span>{{ lessons_before_enrollment }}</span>
                     </div>
-                </div>    
+                </div>
 
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/classes_completed_icons.png' %}" alt="icon" width="23">
+                        <img src="{% static 'icons/classes_completed_icons.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
-
                     <div class="item-text">
                         <strong>{% trans 'Classes since enrollment' %}:</strong>
                         <span>{{ completed_classes }} / {{ course.total_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
                     </div>
                 </div>
-                {% endif %}        
+                {% endif %}
 
             </div>
         </div>
@@ -360,7 +139,6 @@
                 <div class="circle-panel1">
                     <h2>{% trans 'Absence' %} <small>{% trans 'Details' %}</small></h2>
                 </div>
-
                 <div class="circle-panel2"></div>
 
                 <div class="item">
@@ -368,7 +146,7 @@
                         <span class="status-pill missed">
                             <img src="{% static 'icons/clipboard_missed_attendance_icon.png' %}" alt="" aria-hidden="true" width="20">
                         </span>
-                    </div>    
+                    </div>
                     <div class="item-text">
                         <strong>{% trans 'Total Absences' %}</strong>
                         <span>{{ enrollment.total_absences|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
@@ -376,28 +154,22 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon">
-                        <i class="fa-solid fa-user-minus"></i>
-                    </div>
+                    <div class="item-icon"><i class="fa-solid fa-user-minus" aria-hidden="true"></i></div>
                     <div class="item-text">
                         <strong>{% trans 'Excused Absences' %}</strong>
                         <span>{{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}</span>
                     </div>
-                </div> 
-                
+                </div>
+
                 <div class="wrapper-attendance-accordion mt-4">
-                    <!-- PARENT ACCORDION -->
                     <div id="parentAbsenceAccordion" role="tablist">
+
                         <div>
-                            <!-- PARENT HEADER -->
                             <div class="header" role="tab" id="parentAbsenceHeading">
                                 <div class="mb-0 w-100 px-4">
                                     <a class="collapsed d-flex align-items-center justify-content-between w-100"
-                                    data-toggle="collapse"
-                                    href="#parentAbsenceCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="parentAbsenceCollapse">
-                                        
+                                       data-toggle="collapse" href="#parentAbsenceCollapse"
+                                       aria-expanded="false" aria-controls="parentAbsenceCollapse">
                                         <div class="d-flex align-items-center">
                                             <strong>{% trans 'Absence Record' %}</strong>
                                         </div>
@@ -406,75 +178,55 @@
                                 </div>
                             </div>
 
-                            <!-- PARENT COLLAPSE -->
-                            <div id="parentAbsenceCollapse"
-                                class="collapse"
-                                role="tabpanel"
-                                aria-labelledby="parentAbsenceHeading"
-                                data-parent="#parentAbsenceAccordion">
-
+                            <div id="parentAbsenceCollapse" class="collapse" role="tabpanel"
+                                 aria-labelledby="parentAbsenceHeading" data-parent="#parentAbsenceAccordion">
                                 <div class="card-body">
-
-                                    <!-- CHILD ACCORDION -->
                                     <div id="absence_accordion" role="tablist">
-                                    {% if recent_absences %}
 
-                                        {% for absence in recent_absences %}
+                                        {% if recent_absences %}
+                                            {% for absence in recent_absences %}
                                             <div class="recent-attendance-row">
-
-                                                <span>{{ absence.class_session.start_time|date:"j M Y" }}</span> 
-
+                                                <span>{{ absence.class_session.start_time|date:"j M Y" }}</span>
                                                 <small>{% trans 'Lesson' %} {{ absence.class_session.class_number }}</small>
 
                                                 <div class="absence-status">
                                                     {% if absence.status == "missed" %}
-                                                        <span class="status-dot missed"></span>
-                                                        {% trans 'Missed' %}
+                                                        <span class="status-dot missed"></span> {% trans 'Missed' %}
                                                     {% elif absence.status == "excused" %}
-                                                        <span class="status-dot excused"></span>
-                                                        {% trans 'Excused' %}
+                                                        <span class="status-dot excused"></span> {% trans 'Excused' %}
                                                     {% else %}
-                                                        <span class="status-dot pending"></span>
-                                                        {{ absence.status|title }}
+                                                        <span class="status-dot pending"></span> {{ absence.status|title }}
                                                     {% endif %}
-
                                                 </div>
                                             </div>
-                                        {% endfor %}
-                                    {% else %}
-                                        <p class="text-dark p-2">{% trans 'No absences recorded yet' %}.</p>
-                                    {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <p class="text-dark p-2">{% trans 'No absences recorded yet' %}.</p>
+                                        {% endif %}
 
                                     </div>
-                                    <!-- END CHILD ACCORDION -->
-
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                </div>                
-            
-            </div>    
+                </div>
+
+            </div>
         </div>
+
     </div>
-{% else %}
-        <!-- <div class="no-course-assigned">
-            <h2>{% trans 'No courses assigned yet' %}</h2>
-            <p>{% trans 'Your course information will appear here once you are enrolled in a course' %}.</p>
-        </div> -->
-    </div> 
-{% endif %}
-  
-</section>
+
+    {% else %}
+        {# No enrollment selected/available #}
+    {% endif %}
+
+</div>
 
 {% endblock %}
 
-
 {% block postloadjs %}
-{{ block.super }}
-
-<script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>
-<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
-
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 {% endblock %}

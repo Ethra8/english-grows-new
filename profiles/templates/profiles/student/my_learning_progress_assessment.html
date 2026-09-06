@@ -1,12 +1,9 @@
-{% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
-
 {% block extra_title %}| My Assessment{% endblock %}
-
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
@@ -14,243 +11,86 @@
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
 {% endblock %}
 
+{% block details_page_background %}
+    <div class="overlay-globe" aria-hidden="true"></div>
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
 
-{% block profile_content %}
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
+{% endblock %}
 
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" with active_section="assessment" nav_role="student" enrollments=active_enrollments %}
+{% endblock %}
 
-<section class="student-detail-page profile-page notranslate" translate="no">
+{% block details_content %}
 
-    <div class="overlay-globe"></div>
-    <div class="overlay-mist"></div>
+<article class="student-skills-notes-card notranslate" translate="no">
 
+    {% for note in skill_note_display %}
+    <div class="teacher-skill-note">
 
-    <!-- Header -->
-    <header>
+        <h4>{{ note.skill }} : <small>{{ note.score|default:"0" }} / 10</small></h4>
 
-        <div class="student-details-header">
-            <div>
-                <div class="student-avatar-large
-                    {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
-
-                    {% if student_profile.profile_photo %}
-                        <img
-                            src="{{ student_profile.profile_photo.url }}"
-                            alt="{{ student.get_full_name }}"
-                        >
-                    {% else %}
-                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                            <i class="fa-solid fa-user-tie"></i>
-                        {% else %}
-                            <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
-                        {% endif %}
-                    {% endif %}
-
-                    <span
-                        class="avatar-status-dot"
-                        aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"
-                        title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}">
-                    </span>
-                </div>
-            </div>
-            
-            <div>
-                <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
-
-                <!-- <div class="profile-user-role">
-                    <span><i class="fa-regular fa-user mr-2"></i>
-                        {{ student_profile.get_role_display|default:"Learner" }}</span>
-                </div>  -->
-
-                <div class="mt-4">  
-                    <div class="level-pill larger-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.get_current_level_display }}
-                        {% else %}
-                            Pending
-                        {% endif %}    
-                        </span>
-                    </div>
-                    <div class="level-pill smaller-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.current_level }}
-                        {% else %}
-                            Pending
-                        {% endif %}    
-                        </span>
-                    </div>
-                </div>
-            </div>
+        {% if note.strengths %}
+        <div class="subskill-group">
+            <p><strong>{% trans 'Strengths' %}:</strong></p>
+            <ul>
+                {% for subskill in note.strengths %}
+                    <li><span class="teacher-subskill">{{ subskill }}</span></li>
+                {% endfor %}
+            </ul>
         </div>
-    </header>
+        {% endif %}
 
+        {% if note.required_standard %}
+        <div class="subskill-group">
+            <p><strong>{% trans 'Minimum level requirements' %}:</strong></p>
+            <ul>
+                {% for subskill in note.required_standard %}
+                    <li><span class="teacher-subskill">{{ subskill }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
-    <!-- INTERNAL NAV -->
-    <div class="student-detail-tabs-wrapper">
-        <nav class="student-detail-tabs">
-            <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" aria-label="{% trans 'Overview' %}">{% trans 'Overview' %}</a>
-            <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" aria-label="{% trans 'Skills' %}">{% trans 'Skills' %}</a>
-            <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" aria-label="{% trans 'Attendance' %}">{% trans 'Attendance' %}</a>
-            <!-- <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}" class="active" aria-label="{% trans 'Assessment' %}">
-                {% trans 'Assessment' %}</a> -->
-            <!-- <a href="#">
-                History</a> -->
-        </nav>
+        {% if note.developing %}
+        <div class="subskill-group">
+            <p><strong>{% trans 'Developing areas' %}:</strong></p>
+            <ul>
+                {% for subskill in note.developing %}
+                    <li><span class="teacher-subskill">{{ subskill }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if note.needs_work %}
+        <div class="subskill-group">
+            <p><strong>{% trans 'Needs work' %}:</strong></p>
+            <ul>
+                {% for subskill in note.needs_work %}
+                    <li><span class="teacher-subskill">{{ subskill }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
     </div>
 
+    {% empty %}
+    <div class="empty-assessment-state">
+        <h3>{% trans 'No assessment available yet' %}</h3>
+        <p>{% trans "Your teacher's notes will appear here once your progress has been assessed." %}</p>
+    </div>
+    {% endfor %}
 
-    {% if active_enrollments|length > 1 %}
-        <form method="get" class="course-selector-form">
-
-            <label for="course-select" class="course-selector-label">
-                <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="icon">
-                <span>My active course</span>
-            </label>
-
-            <div class="course-select-wrapper">
-                <select
-                    id="course-select"
-                    name="course"
-                    class="course-select"
-                    onchange="this.form.submit()"
-                >
-                    {% for item in active_enrollments %}
-                        <option
-                            value="{{ item.course.id }}"
-                            {% if course and item.course.id == course.id %}selected{% endif %}
-                        >
-                            {{ item.course.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
-            </div>
-
-        </form>
-    {% endif %}   
-
-    <!-- =====================================================
-         TEACHER ASSESSMENT
-         ===================================================== -->
-
-    <article class="student-skills-notes-card">
-
-        <!-- <div class="d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">
-                <i class="fa-regular fa-file-lines mr-2"></i>
-                My Assessment</h2>
-        </div>
-        <hr> -->
-
-        {% for note in skill_note_display %}
-
-            <div class="teacher-skill-note">
-
-                <h4>
-                    {{ note.skill }} : <small>{{ note.score|default:"0" }} / 10</small>
-                </h4>
-
-
-                {% if note.strengths %}
-                    <div class="subskill-group">
-                        <p>
-                            <strong>Strengths:</strong>
-                        </p>
-
-                        <ul>
-                            {% for subskill in note.strengths %}
-                                <li>
-                                    <span class="teacher-subskill">
-                                        {{ subskill }}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-
-                {% if note.required_standard %}
-                    <div class="subskill-group">
-                        <p>
-                            <strong>Minimum level requirements:</strong>
-                        </p>
-
-                        <ul>
-                            {% for subskill in note.required_standard %}
-                                <li>
-                                    <span class="teacher-subskill">
-                                        {{ subskill }}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-
-                {% if note.developing %}
-                    <div class="subskill-group">
-                        <p>
-                            <strong>Developing areas:</strong>
-                        </p>
-
-                        <ul>
-                            {% for subskill in note.developing %}
-                                <li>
-                                    <span class="teacher-subskill">
-                                        {{ subskill }}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-
-                {% if note.needs_work %}
-                    <div class="subskill-group">
-                        <p>
-                            <strong>Needs work:</strong>
-                        </p>
-
-                        <ul>
-                            {% for subskill in note.needs_work %}
-                                <li>
-                                    <span class="teacher-subskill">
-                                        {{ subskill }}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-            </div>
-
-        {% empty %}
-
-            <div class="empty-assessment-state">
-                <h3>No assessment available yet</h3>
-                <p>
-                    Your teacher's notes will appear here once
-                    your progress has been assessed.
-                </p>
-            </div>
-
-        {% endfor %}
-    </article>
-
-
-</section>
-
+</article>
 
 {% endblock %}
+
 {% block postloadjs %}
     {{ block.super }}
-
+    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 {% endblock %}
