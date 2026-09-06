@@ -94,7 +94,6 @@ stop stretching the two columns together.
 }
 
 .skill-chevron {
-    width: 14px;
     height: auto;
     flex-shrink: 0;
     transition: transform 0.25s ease;

@@ -1,271 +1,70 @@
-{% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
+
 {% block extra_title %}| My Skills{% endblock %}
+
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skill_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
-{% block profile_content %}
 
-<section class="student-detail-page profile-page notranslate" translate="no">
-
-    <div class="overlay-globe"></div>
-    <div class="overlay-mist"></div>
-
-    <header>
-
-        <div class="student-details-header">
-            <div>
-                <div class="student-avatar-large {% if student.is_active %}avatar-active{% else %}avatar-inactive{% endif %}">
-
-                    {% if student_profile.profile_photo %}
-                    <img src="{{ student_profile.profile_photo.url }}" alt="{{ student.get_full_name }}">
-                    {% else %}
-                        {% if student_profile.role == "employee" or student_profile.role == "company_admin" %}
-                        <i class="fa-solid fa-user-tie"></i>
-                        {% else %}
-                        <img src="{% static 'icons/profile_user_icon.png' %}" alt="" aria-hidden="true">
-                        {% endif %}
-                    {% endif %}
-                    <span class="avatar-status-dot" aria-label="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}" title="{% if student.is_active %}Enrolled{% else %}Inactive{% endif %}"></span>
-                </div>
-            </div>
-            
-            <div>
-                <h1 class="notranslate" translate="no">{{ student.get_full_name|default:student.username }}</h1>
-                
-                <div class="header-level">      
-
-                    <div class="level-pill larger-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.get_current_level_display }}
-                        {% else %}
-                            {% trans 'Pending' %}
-                        {% endif %}    
-                        </span>
-                    </div>
-                    <div class="level-pill smaller-devs">
-                        <span class="current-level-label">{% trans 'Level' %}</span>
-                        <span class="current-level-value notranslate" translate="no">
-                        {% if student_profile.current_level %}    
-                            {{ student_profile.current_level }}
-                        {% else %}
-                            {% trans 'Pending' %}
-                        {% endif %}    
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    {% if enrollments|length > 1 %}
-        <form method="get" class="course-selector-form smaller-devs notranslate" translate="no">
-
-            <div class="course-selector-label">
-                <img
-                    src="{% static 'icons/one_to_one_course_icon.png' %}"
-                    alt="icon"
-                >
-                <span>{% trans 'Course' %}</span>
-            </div>
+{% block details_page_background %}
+    <div class="overlay-globe" aria-hidden="true"></div>
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
 
 
-            <div class="course-select-wrapper course-dropdown">
+{% block details_header %}
 
-                <!-- CURRENTLY SELECTED COURSE -->
-                <button
-                    type="button"
-                    id="course-select-small"
-                    class="course-select course-dropdown-toggle"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                >
-                    <span class="course-dropdown-selected">
+    {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
 
-                        {% if course %}
-                            <span class="course-dropdown-course-name notranslate" translate="no">
-                                · {{ course.name }}
-                            </span>
-
-                            <span class="course-dropdown-status">
-                                - {{ course.get_status_display }}
-                            </span>
-                        {% else %}
-                            <span>{% trans 'Course' %}</span>
-                        {% endif %}
-
-                    </span>
-
-                    <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
-                </button>
+{% endblock %}
 
 
-                <!-- DROPDOWN OPTIONS -->
-                <div
-                    class="course-dropdown-menu"
-                    role="menu"
-                    hidden
-                >
+{% block details_nav %}
 
-                    {% for item in enrollments %}
+    {% include "profiles/components/student_details_nav.html" with active_section="skills" nav_role="student" %}
 
-                        <button
-                            type="submit"
-                            name="course"
-                            value="{{ item.course.id }}"
-                            class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
-                            role="menuitem"
-                        >
-
-                            <span
-                                class="course-dropdown-course-name notranslate"
-                                translate="no"
-                            >
-                                · {{ item.course.name }}
-                            </span>
-
-                            <span class="course-dropdown-status">
-                                - {{ item.course.get_status_display }}
-                            </span>
-
-                        </button>
-
-                    {% endfor %}
-
-                </div>
-
-            </div>
-
-        </form>
-    {% endif %}
-
-    <div class="student-detail-tabs-wrapper">
-        <nav class="student-detail-tabs">
-
-            {% if enrollments|length > 1 %}
-            <form method="get" class="course-selector-form notranslate" translate="no">    
-                <div class="course-selector-label">
-                    <img
-                        src="{% static 'icons/one_to_one_course_icon.png' %}"
-                        alt="icon"
-                    >
-                    <span>{% trans 'Course' %}</span>
-                </div>
-
-                <div class="course-select-wrapper course-dropdown">
-
-                    <!-- CURRENTLY SELECTED COURSE -->
-                    <button
-                        type="button"
-                        id="course-select-large"
-                        class="course-select course-dropdown-toggle"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                    >
-                        <span class="course-dropdown-selected">
-
-                            {% if course %}
-                                <span class="notranslate" translate="no">
-                                    · {{ course.name }}
-                                </span>
-
-                                <span class="course-dropdown-status">
-                                    - {{ course.get_status_display }}
-                                </span>
-                            {% else %}
-                                <span>Course</span>
-                            {% endif %}
-
-                        </span>
-
-                        <img class="course-select-arrow" src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="36" aria-hidden="true">
-                    </button>
+{% endblock %}
 
 
-                    <!-- DROPDOWN OPTIONS -->
-                    <div
-                        class="course-dropdown-menu"
-                        role="menu"
-                        hidden
-                    >
-
-                        {% for item in enrollments %}
-
-                            <button
-                                type="submit"
-                                name="course"
-                                value="{{ item.course.id }}"
-                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
-                                role="menuitem"
-                            >
-
-                                <span
-                                    class="course-dropdown-course-name notranslate"
-                                    translate="no"
-                                >
-                                    · {{ item.course.name }}
-                                </span>
-
-                                <span class="course-dropdown-status">
-                                    - {{ item.course.get_status_display }}
-                                </span>
-
-                            </button>
-
-                        {% endfor %}
-
-                    </div>
-
-                </div>
-            </form>    
-            {% endif %}
-
-            <div class="wrapper-links-inner-nav notranslate" translate="no">
-                <a href="{% url 'profiles:my_learning_progress' %}?course={{ course.id }}" aria-label="{% trans 'Overview' %}">{% trans 'Overview' %}</a>
-                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}" class="active" aria-label="{% trans 'Skills' %}">{% trans 'Skills' %}</a>
-                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}" aria-label="{% trans 'Attendance' %}">{% trans 'Attendance' %}</a>
-            <!-- <a href="{% url 'profiles:my_learning_progress_assessment' %}?course={{ course.id }}" aria-label="{% trans 'Assessment' %}">
-                {% trans 'Assessment' %}</a> -->
-            <!-- <a href="#">
-                History</a> -->
-            </div>
-        </nav>
-    </div>
+{% block details_content %}
 
     <div class="skills-grid">
 
-        <div id="employeeSkillsGraphOverview" class="student-details-skills-overview-grid">
+        <div
+            id="employeeSkillsGraphOverview"
+            class="student-details-skills-overview-grid"
+        >
 
             <article class="skills-progress-section">
 
                 <div class="skills-chart-card">
 
                     <div class="skills-chart-header">
-                        <h2>{% trans 'Skills Progress' %}</h2>
+
+                        <h2>
+                            {% trans 'Skills Progress' %}
+                        </h2>
+
                         {% if not skills %}
                             <p class="skills-assessment-pending">
                                 {% trans 'Pending assessment' %}
                             </p>
                         {% endif %}
+
                     </div>
 
+
                     <div class="skills-chart-canvas-wrap">
-
-
                         <canvas id="skillsProgressChart"></canvas>
-
                     </div>
 
                 </div>
@@ -286,39 +85,68 @@
                         <div class="skill-card-header">
 
                             <h2 class="{{ skill.name|lower }}">
+
                                 <span class="skill-heading">
-                                    <span class="skill-name">{{ skill.name }}</span>
+                                    <span class="skill-name">
+                                        {{ skill.name }}
+                                    </span>
                                 </span>
 
+
                                 <span class="skill-score">
+
                                     {% if skill.score is not None %}
                                         {{ skill.score|floatformat:"-1" }}/10
                                     {% else %}
                                         —/10
                                     {% endif %}
+
                                 </span>
+
                             </h2>
+
 
                             <h3 class="skill-subskills-heading">
 
-                                <button type="button"
+                                <button
+                                    type="button"
                                     class="skill-accordion-toggle"
                                     aria-expanded="false"
-                                    aria-controls="skill-body-{{ forloop.counter }}">
+                                    aria-controls="skill-body-{{ forloop.counter }}"
+                                >
 
                                     <span class="skill-subskills-count">
+
                                         {% if skill.subskills|length %}
+
                                             <strong>
-                                                {{ skill.subskills|length }} {{ skill.name }}
+                                                {{ skill.subskills|length }}
+                                                {{ skill.name }}
                                                 subskill{{ skill.subskills|length|pluralize }}
                                             </strong>
+
                                             {% trans 'assessed' %}
+
                                         {% else %}
-                                            <strong>0 {{ skill.name }} subskills</strong>
+
+                                            <strong>
+                                                0 {{ skill.name }} subskills
+                                            </strong>
+
                                             {% trans 'assessed yet' %}
+
                                         {% endif %}
+
                                     </span>
-                                    <img src="{% static 'icons/chevron_down_teal.png' %}" alt="" class="skill-chevron">
+
+
+                                    <img
+                                        src="{% static 'icons/chevron_down_teal.png' %}"
+                                        alt=""
+                                        width="14"
+                                        class="skill-chevron"
+                                        aria-hidden="true"
+                                    >
 
                                 </button>
 
@@ -326,74 +154,157 @@
 
                         </div>
 
-                        <div class="skill-card-body {{ skill.name|lower }}"
+
+                        <div
+                            class="skill-card-body {{ skill.name|lower }}"
                             id="skill-body-{{ forloop.counter }}"
-                            hidden>
+                            hidden
+                        >
 
                             <div class="skill-details">
 
                                 {% if skill.strengths %}
+
                                     <div class="subskill-group">
-                                        <p><strong>Key strengths</strong></p>
+
+                                        <p>
+                                            <strong>
+                                                {% trans 'Key strengths' %}
+                                            </strong>
+                                        </p>
 
                                         <ul>
+
                                             {% for subskill in skill.strengths %}
-                                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
+
+                                                <li>
+                                                    <span class="teacher-subskill">
+                                                        {{ subskill }}
+                                                    </span>
+                                                </li>
+
                                             {% endfor %}
+
                                         </ul>
+
                                     </div>
+
                                 {% endif %}
 
 
                                 {% if skill.confident %}
+
                                     <div class="subskill-group">
-                                        <p><strong>{% trans 'Confident in' %}</strong></p>
+
+                                        <p>
+                                            <strong>
+                                                {% trans 'Confident in' %}
+                                            </strong>
+                                        </p>
 
                                         <ul>
+
                                             {% for subskill in skill.confident %}
-                                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
+
+                                                <li>
+                                                    <span class="teacher-subskill">
+                                                        {{ subskill }}
+                                                    </span>
+                                                </li>
+
                                             {% endfor %}
+
                                         </ul>
+
                                     </div>
+
                                 {% endif %}
 
 
                                 {% if skill.required_standard %}
+
                                     <div class="subskill-group">
-                                        <p><strong>{% trans 'Required standard achieved' %}</strong></p>
+
+                                        <p>
+                                            <strong>
+                                                {% trans 'Required standard achieved' %}
+                                            </strong>
+                                        </p>
 
                                         <ul>
+
                                             {% for subskill in skill.required_standard %}
-                                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
+
+                                                <li>
+                                                    <span class="teacher-subskill">
+                                                        {{ subskill }}
+                                                    </span>
+                                                </li>
+
                                             {% endfor %}
+
                                         </ul>
+
                                     </div>
+
                                 {% endif %}
 
 
                                 {% if skill.developing %}
+
                                     <div class="subskill-group">
-                                        <p><strong>{% trans 'Developing areas' %}</strong></p>
+
+                                        <p>
+                                            <strong>
+                                                {% trans 'Developing areas' %}
+                                            </strong>
+                                        </p>
 
                                         <ul>
+
                                             {% for subskill in skill.developing %}
-                                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
+
+                                                <li>
+                                                    <span class="teacher-subskill">
+                                                        {{ subskill }}
+                                                    </span>
+                                                </li>
+
                                             {% endfor %}
+
                                         </ul>
+
                                     </div>
+
                                 {% endif %}
 
 
                                 {% if skill.needs_work %}
+
                                     <div class="subskill-group">
-                                        <p><strong>{% trans 'Focus areas' %}</strong></p>
+
+                                        <p>
+                                            <strong>
+                                                {% trans 'Focus areas' %}
+                                            </strong>
+                                        </p>
 
                                         <ul>
+
                                             {% for subskill in skill.needs_work %}
-                                                <li><span class="teacher-subskill">{{ subskill }}</span></li>
+
+                                                <li>
+                                                    <span class="teacher-subskill">
+                                                        {{ subskill }}
+                                                    </span>
+                                                </li>
+
                                             {% endfor %}
+
                                         </ul>
+
                                     </div>
+
                                 {% endif %}
 
                             </div>
@@ -410,22 +321,20 @@
 
     </div>
 
-</section>
-
 {% endblock %}
 
 
 {% block postloadjs %}
-{{ block.super }}
+    {{ block.super }}
 
-{% if chart_data %}
-    {{ chart_data|json_script:"skills-chart-data" }}
-{% endif %}
+    {% if chart_data %}
+        {{ chart_data|json_script:"skills-chart-data" }}
+    {% endif %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
-<script type="text/javascript" src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
 
 {% endblock %}
