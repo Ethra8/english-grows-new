@@ -587,6 +587,11 @@ def my_learning_progress(request):
     student = request.user
     student_profile = student.profile
 
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
@@ -708,6 +713,7 @@ def my_learning_progress(request):
                 "student": student,
                 "student_profile": student_profile,
 
+                "user_currently_enrolled": user_currently_enrolled,
                 # Full queryset for selector
                 "enrollments": enrollments,
 
@@ -1090,6 +1096,7 @@ def my_learning_progress(request):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # ALL enrollments -> selector
         "enrollments": enrollments,
 
@@ -1150,6 +1157,11 @@ def my_attendance(request):
     student = request.user
     student_profile = profile
 
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
@@ -1348,6 +1360,8 @@ def my_attendance(request):
         # Shared student header
         "student": student,
         "student_profile": student_profile,
+
+        "user_currently_enrolled": user_currently_enrolled,    
         "course": course,
 
         # ALL enrollments -> course selector
@@ -1376,6 +1390,12 @@ def my_skills(request):
         UserProfile,
         user=student,
     )
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # SECURITY
@@ -1684,6 +1704,7 @@ def my_skills(request):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # ALL enrollments -> course selector
         "enrollments": enrollments,
 
@@ -1730,7 +1751,11 @@ def my_learning_progress_assessment(request):
     student = request.user
     student_profile = profile
 
-
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
     # =========================================================
     # ALL ACTIVE ENROLLMENTS
     # Used by the course selector
@@ -1834,6 +1859,7 @@ def my_learning_progress_assessment(request):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # All active courses — for selector
         "active_enrollments": active_enrollments,
 
@@ -3176,6 +3202,11 @@ def teacher_student_detail(request, course_id, enrollment_id):
     # from CourseEnrollment.status and Course.status.
     student_is_active = student.is_active
 
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
@@ -3634,6 +3665,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # Explicit Django User.is_active value
         "student_is_active": student_is_active,
 
@@ -3831,6 +3863,12 @@ def student_attendance_record(request, course_id, enrollment_id):
 
     # Django User account status
     student_is_active = student.is_active
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
@@ -4321,6 +4359,7 @@ def student_attendance_record(request, course_id, enrollment_id):
             UserProfile.LEVEL_CHOICES
         ),
 
+        "user_currently_enrolled": user_currently_enrolled,
         # Explicit learner account status.
         #
         # This is User.is_active and is completely independent
@@ -4544,6 +4583,13 @@ def student_skills_overview(request, course_id, enrollment_id):
     # ---------------------------------------------------------
     student = original_enrollment.student
     student_profile = student.profile
+
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
     # Django User account status
     student_is_active = student.is_active
@@ -4894,6 +4940,7 @@ def student_skills_overview(request, course_id, enrollment_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         "student_is_active": student_is_active,
         # Course selector
         "enrollments": enrollments,
@@ -5157,6 +5204,12 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
     student = enrollment.student
     student_profile = student.profile
 
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
+
     # Django User account status
     student_is_active = student.is_active
 
@@ -5189,6 +5242,8 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
 
     context = {
         "profile": profile,
+
+        "user_currently_enrolled": user_currently_enrolled,
         # Django User account status
         "student_is_active": student_is_active,
 
@@ -8536,7 +8591,11 @@ def company_admin_student_attendance_record(request, student_id):
 
     student_profile = student.profile
 
-
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
     # ---------------------------------------------------------
@@ -8925,6 +8984,8 @@ def company_admin_student_attendance_record(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled, 
+
         # All enrollments -> course selector
         "enrollments": enrollments,
 
@@ -8998,6 +9059,12 @@ def company_admin_student_skills_overview(request, student_id):
     )
 
     student_profile = student.profile
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
 
     # ---------------------------------------------------------
@@ -9336,6 +9403,7 @@ def company_admin_student_skills_overview(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # Full enrollment list for selector
         "enrollments": enrollments,
 
@@ -9388,6 +9456,12 @@ def company_admin_student_teacher_notes(request, student_id):
     )
 
     student_profile = student.profile
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
 
 
     # ---------------------------------------------------------
@@ -9526,6 +9600,7 @@ def company_admin_student_teacher_notes(request, student_id):
         "student": student,
         "student_profile": student_profile,
 
+        "user_currently_enrolled": user_currently_enrolled,
         # Course selector
         "active_enrollments": active_enrollments,
 

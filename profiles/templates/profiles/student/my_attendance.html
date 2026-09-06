@@ -47,7 +47,7 @@
                 {% if enrollment.has_low_attendance_warning %}
                 <div class="attendance-warning">
                     <p class="mb-0">
-                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="" width="26" aria-hidden="true">
+                        <img src="{% static 'icons/warning_yellow_icon.png' %}" alt="" width="26" aria-hidden="true">
                         {% trans 'Attendance is below the recommended level of 75%!' %}
                     </p>
                 </div>
@@ -102,7 +102,7 @@
                 {% if show_enrollment_context %}
                 <div class="item">
                     <div class="item-icon">
-                        <img src="{% static 'icons/warning_solid_navy_icon.png' %}" alt="" width="23" aria-hidden="true">
+                        <img src="{% static 'icons/warning_yellow_icon.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
                     <div class="item-text">
                         <span>{% trans 'Post-commencement enrollment' %}:</span>
