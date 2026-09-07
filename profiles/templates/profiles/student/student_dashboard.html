@@ -1,7 +1,5 @@
 {% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
-{% load i18n %}
+{% load static i18n %}
 
 {% load date_extras %}
 {% load course_extras %}
@@ -14,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/student/student_profile.css' %}">
 
-    {% endblock %}
+{% endblock %}
 
 
 {% block profile_content %}
@@ -29,13 +27,13 @@
     </header>
 
     <div class="mb-5">
-        <div class="level-pill notranslate" translate="no">
+        <div class="level-pill">
             <span class="current-level-label">{% trans "Level" %}</span>
             <span class="current-level-value">
             {% if request.user.profile.current_level %}    
                 {{ request.user.profile.get_current_level_display }}
             {% else %}
-                Pending
+                {% trans "Pending" %}
             {% endif %}    
             </span>
         </div>
@@ -44,14 +42,13 @@
     <div class="wrapper-next-class-card">
         <div class="next-class-card">
             <div class="circle-panel1">
-                <!-- <div class="icon-circle-bg"><i class="fa-solid fa-desktop"></i></div> -->
-                <h2 class="notranslate" translate="no">{% trans "Next Class" %}</h2>
+                <h2>{% trans "Next Class" context 'student dashboard' %}</h2>
             </div>
             <div class="circle-panel2"></div>
             <div class="info">
                 {% if next_class %}
                     {% get_current_language as LANGUAGE_CODE %}
-                    <p class="notranslate" translate="no">
+                    <p>
                         <i class="fa-solid fa-calendar-day mr-2"></i>
 
                         {% if LANGUAGE_CODE == "en" or LANGUAGE_CODE == "en-us" %}
@@ -60,27 +57,22 @@
                             {{ next_class.start_time|date:"l, j F" }}
                         {% endif %}
                     </p>
-                    <p><i class="fa-regular fa-clock mr-2"></i> {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
+                    <p>
+                        <img src="{% static 'icons/dashboard_time_navy_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-2">
+                        {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
                     <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
-                        <!-- <div class="class-session-next-class">
-                            <img src="{% static 'icons/class_session_teacher.png' %}" alt="Teacher" class="ml-0 mr-1">
-                            <span>{{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</span>
-                        </div>
-                        <div class="class-session-next-class">
-                            <img src="{% static 'icons/class_session_topic.png' %}" alt="Topic" class="ml-0 mr-1">
-                            <span>{{ next_class.topic|default:"Not added" }}</span>
-                        </div> -->
                     {% if next_class.topic %}
                     <p><i class="fa-regular fa-bookmark"></i>{{ next_class.topic }}</p>
                     {% endif %}
                     {% if next_class.meeting_link %}
-                        <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener">
-                            <i class="fa-solid fa-video mr-2"></i>
-                            {% trans "Join Class" %} <i class="fa-solid fa-chevron-right ml-5 float-right"></i>
+                        <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener" aria-label="link to join class session">
+                            <i class="fa-solid fa-video mr-3"></i>
+                            {% trans "Join Class" context 'student dashboard' %}
+                            <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="8" class="ml-4">
                         </a>
                     {% endif %}
                 {% else %}
-                    <p>No upcoming class scheduled yet.</p>
+                    <p>{% trans 'No upcoming class scheduled yet' context 'student dashboard' %}.</p>
                 {% endif %}
 
             </div>

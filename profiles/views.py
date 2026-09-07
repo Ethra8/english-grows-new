@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
-from django.db.models import Count, Q, Prefetch, Value, Case, When, Value, IntegerField, F, DateField
+from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField
 
 from django.db.models.functions import Coalesce, NullIf, Lower
 
@@ -26,7 +26,7 @@ from decimal import Decimal
 
 from profiles.utils.time_formating import format_hours_duration
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
+from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
 from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
@@ -1381,7 +1381,6 @@ def my_attendance(request):
         context
     )
 
-
 @login_required
 def my_skills(request):
     student = request.user
@@ -1396,6 +1395,7 @@ def my_skills(request):
         status="active",
         course__status="active",
     ).exists()
+
 
     # ---------------------------------------------------------
     # SECURITY
@@ -1419,12 +1419,6 @@ def my_skills(request):
     # 3. Paused
     # 4. Completed
     # 5. Cancelled
-    #
-    # Within each status:
-    # - course name A-Z
-    #
-    # Completed courses additionally use end_date as a
-    # tie-breaker, newest first.
     # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
@@ -1503,19 +1497,8 @@ def my_skills(request):
     # NO COURSE SELECTED
     # ---------------------------------------------------------
     else:
-        # Because enrollments is already ordered by status
-        # priority, the default naturally prefers:
-        #
-        # active -> confirmed -> paused -> completed -> cancelled
         enrollment = enrollments.first()
 
-        # Make the selected/default course explicit in the URL.
-        #
-        # /my_skills/
-        #
-        # becomes:
-        #
-        # /my_skills/?course=4
         if enrollment:
             return redirect(
                 f"{request.path}?course={enrollment.course_id}"
@@ -1533,16 +1516,19 @@ def my_skills(request):
                 "student": student,
                 "student_profile": student_profile,
 
-                # Full queryset for selector
+                "user_currently_enrolled":
+                    user_currently_enrolled,
+
                 "enrollments": enrollments,
 
-                # No selected enrollment/course
                 "enrollment": None,
                 "course": None,
 
                 "skills": [],
+
                 "skill_notes": [],
                 "skill_note_display": [],
+
                 "academic_profile": None,
 
                 "chart_data": {
@@ -1550,7 +1536,8 @@ def my_skills(request):
                     "datasets": [],
                 },
 
-                "level_choices": UserProfile.LEVEL_CHOICES,
+                "level_choices":
+                    UserProfile.LEVEL_CHOICES,
             },
         )
 
@@ -1576,8 +1563,13 @@ def my_skills(request):
     # SKILL ASSESSMENTS
     #
     # IMPORTANT:
-    # Learner-facing views only READ existing assessments.
-    # They do not create or modify assessment records.
+    # Explicitly scoped to:
+    #
+    # - this learner
+    # - this selected course
+    #
+    # Therefore assessment information from another course
+    # cannot enter this queryset.
     # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
@@ -1586,30 +1578,27 @@ def my_skills(request):
             course=course,
         )
         .prefetch_related(
-            "subskill_assessments"
+            "subskill_assessments",
         )
         .order_by("skill")
     )
 
 
     # ---------------------------------------------------------
-    # SKILL NOTES DISPLAY
+    # EXISTING ASSESSMENTS INDEXED BY SKILL
     # ---------------------------------------------------------
-    skill_note_display = [
-        build_skill_note_display(skill_assessment)
-        for skill_assessment in skill_assessments
-    ]
-
-
-    # ---------------------------------------------------------
-    # BUILD ALL 4 SKILL CARDS
-    # ---------------------------------------------------------
-
     assessments_by_skill = {
         assessment.skill: assessment
         for assessment in skill_assessments
     }
 
+
+    # ---------------------------------------------------------
+    # ALL FOUR SKILL AREAS
+    #
+    # We deliberately build all four cards even when no
+    # assessment exists yet.
+    # ---------------------------------------------------------
     skill_areas = [
         ("listening", "Listening"),
         ("reading", "Reading"),
@@ -1617,47 +1606,250 @@ def my_skills(request):
         ("writing", "Writing"),
     ]
 
+
+    # ---------------------------------------------------------
+    # BUILD SKILL CARDS
+    #
+    # Each skill contains:
+    #
+    # - ALL canonical subskills from SUBSKILLS
+    # - existing assessment data where available
+    # - is_assessed flag
+    # - assessed count
+    # - total count
+    # ---------------------------------------------------------
     skills = []
 
     for skill_value, skill_name in skill_areas:
 
-        assessment = assessments_by_skill.get(skill_value)
+        assessment = assessments_by_skill.get(
+            skill_value
+        )
+
+
+        # -----------------------------------------------------
+        # CANONICAL SUBSKILLS
+        #
+        # Example:
+        #
+        # "speaking": [
+        #     ("fluency", "Fluency"),
+        #     ("accuracy_and_range", "Accuracy & Range"),
+        #     ...
+        # ]
+        # -----------------------------------------------------
+        expected_subskills = SUBSKILLS.get(
+            skill_value,
+            [],
+        )
+
+        total_subskills_count = len(
+            expected_subskills
+        )
+
+
+        # -----------------------------------------------------
+        # EXISTING SUBSKILL ROWS FOR THIS ASSESSMENT
+        # -----------------------------------------------------
+        existing_subskills = {}
 
         if assessment:
+            existing_subskills = {
+                subskill.subskill: subskill
+                for subskill
+                in assessment.subskill_assessments.all()
+            }
 
-            note_display = build_skill_note_display(assessment)
 
-            skills.append({
-                "assessment": assessment,
-                "assessment_id": assessment.id,
-                "skill_value": skill_value,
-                "name": skill_name,
-                "icon": skill_icons.get(skill_value),
-                "score": assessment.average_score,
-                "subskills": assessment.subskill_assessments.all(),
-                "strengths": note_display["strengths"],
-                "confident": note_display["confident"],
-                "required_standard": note_display["required_standard"],
-                "developing": note_display["developing"],
-                "needs_work": note_display["needs_work"],
+        # -----------------------------------------------------
+        # BUILD DISPLAY LIST
+        # -----------------------------------------------------
+        subskills_display = []
+
+        assessed_subskills_count = 0
+
+
+        for (
+            subskill_value,
+            subskill_label,
+        ) in expected_subskills:
+
+            subskill_assessment = (
+                existing_subskills.get(
+                    subskill_value
+                )
+            )
+
+
+            # -------------------------------------------------
+            # ASSESSED?
+            #
+            # A DB row existing is NOT enough.
+            #
+            # It counts as assessed only if it contains an
+            # actual rating.
+            # -------------------------------------------------
+            is_assessed = bool(
+                subskill_assessment
+                and subskill_assessment.rating
+            )
+
+
+            if is_assessed:
+                assessed_subskills_count += 1
+
+
+            subskills_display.append({
+                "value": subskill_value,
+                "name": subskill_label,
+
+                "assessment":
+                    subskill_assessment,
+
+                "is_assessed":
+                    is_assessed,
+
+                "rating": (
+                    subskill_assessment
+                    .get_rating_display()
+                    if is_assessed
+                    else None
+                ),
             })
 
+
+        # -----------------------------------------------------
+        # EXISTING PARENT SKILL ASSESSMENT
+        # -----------------------------------------------------
+        if assessment:
+
+            note_display = (
+                build_skill_note_display(
+                    assessment
+                )
+            )
+
+            # Do not display an overall score when no subskill
+            # has actually been assessed.
+            score = (
+                assessment.average_score
+                if assessed_subskills_count > 0
+                else None
+            )
+
+
+            skills.append({
+                "assessment":
+                    assessment,
+
+                "assessment_id":
+                    assessment.id,
+
+                "skill_value":
+                    skill_value,
+
+                "name":
+                    skill_name,
+
+                "icon":
+                    skill_icons.get(
+                        skill_value
+                    ),
+
+                "score":
+                    score,
+
+                # ALL canonical subskills
+                "subskills":
+                    subskills_display,
+
+                # Counts used by the card heading
+                "assessed_subskills_count":
+                    assessed_subskills_count,
+
+                "total_subskills_count":
+                    total_subskills_count,
+
+                # Existing grouped assessment display
+                "strengths":
+                    note_display["strengths"],
+
+                "confident":
+                    note_display["confident"],
+
+                "required_standard":
+                    note_display[
+                        "required_standard"
+                    ],
+
+                "developing":
+                    note_display["developing"],
+
+                "needs_work":
+                    note_display["needs_work"],
+            })
+
+
+        # -----------------------------------------------------
+        # NO PARENT ASSESSMENT YET
+        #
+        # Still return the full canonical subskill structure.
+        # -----------------------------------------------------
         else:
 
             skills.append({
-                "assessment": None,
-                "assessment_id": None,
-                "skill_value": skill_value,
-                "name": skill_name,
-                "icon": skill_icons.get(skill_value),
-                "score": None,
-                "subskills": [],
+                "assessment":
+                    None,
+
+                "assessment_id":
+                    None,
+
+                "skill_value":
+                    skill_value,
+
+                "name":
+                    skill_name,
+
+                "icon":
+                    skill_icons.get(
+                        skill_value
+                    ),
+
+                "score":
+                    None,
+
+                # All expected subskills still display,
+                # but each has is_assessed=False.
+                "subskills":
+                    subskills_display,
+
+                "assessed_subskills_count":
+                    0,
+
+                "total_subskills_count":
+                    total_subskills_count,
+
                 "strengths": [],
                 "confident": [],
                 "required_standard": [],
                 "developing": [],
                 "needs_work": [],
             })
+
+
+    # ---------------------------------------------------------
+    # SKILL NOTES DISPLAY
+    #
+    # Only existing parent assessments can have notes.
+    # ---------------------------------------------------------
+    skill_note_display = [
+        build_skill_note_display(
+            skill_assessment
+        )
+        for skill_assessment
+        in skill_assessments
+    ]
+
 
     # ---------------------------------------------------------
     # TEACHER NOTES
@@ -1681,7 +1873,7 @@ def my_skills(request):
     academic_profile = getattr(
         student,
         "academic_profile",
-        None
+        None,
     )
 
 
@@ -1691,9 +1883,11 @@ def my_skills(request):
     # Historical course status does not matter.
     # Data is explicitly scoped to selected student + course.
     # ---------------------------------------------------------
-    chart_data = build_skill_progress_chart_data(
-        student=student,
-        course=course,
+    chart_data = (
+        build_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
     )
 
 
@@ -1701,29 +1895,49 @@ def my_skills(request):
     # CONTEXT
     # ---------------------------------------------------------
     context = {
-        "student": student,
-        "student_profile": student_profile,
+        "student":
+            student,
 
-        "user_currently_enrolled": user_currently_enrolled,
+        "student_profile":
+            student_profile,
+
+        "user_currently_enrolled":
+            user_currently_enrolled,
+
         # ALL enrollments -> course selector
-        "enrollments": enrollments,
+        "enrollments":
+            enrollments,
 
-        # ONE selected enrollment -> current page
-        "enrollment": enrollment,
+        # ONE selected enrollment
+        "enrollment":
+            enrollment,
 
         # Selected course
-        "course": course,
+        "course":
+            course,
 
-        "skills": skills,
-        "academic_profile": academic_profile,
+        # Skill cards
+        "skills":
+            skills,
 
-        # Normal Python object because template uses json_script.
-        "chart_data": chart_data,
+        # Academic profile
+        "academic_profile":
+            academic_profile,
 
-        "skill_notes": skill_notes,
-        "skill_note_display": skill_note_display,
+        # Chart
+        "chart_data":
+            chart_data,
 
-        "level_choices": UserProfile.LEVEL_CHOICES,
+        # Notes
+        "skill_notes":
+            skill_notes,
+
+        "skill_note_display":
+            skill_note_display,
+
+        # Level choices
+        "level_choices":
+            UserProfile.LEVEL_CHOICES,
     }
 
 
@@ -1732,6 +1946,7 @@ def my_skills(request):
         "profiles/student/my_skills.html",
         context,
     )
+
 
 
 @login_required
@@ -2712,51 +2927,6 @@ def teacher_group_attendance(request, course_id):
     return render(
         request,
         "profiles/teacher/teacher_group_attendance.html",
-        context,
-    )
-
-
-
-@login_required
-def teacher_attendance_detail(request, session_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
-
-    if profile.role != UserProfile.ROLE_TEACHER:
-        return redirect("home")
-
-    session = get_object_or_404(
-        ClassSession.objects.select_related("course"),
-        id=session_id,
-        course__teacher=request.user,
-        start_time__lt=timezone.now(),
-        status__in=[
-            ClassSession.STATUS_SCHEDULED,
-            ClassSession.STATUS_RESCHEDULED,
-            ClassSession.STATUS_COMPLETED,
-        ],
-    )
-
-    attendance_records = (
-        session.attendance_records
-        .select_related(
-            "student",
-            "student__profile",
-        )
-        .order_by(
-            "student__first_name",
-            "student__last_name",
-        )
-    )
-
-    context = {
-        "session": session,
-        "course": session.course,
-        "attendance_records": attendance_records,
-    }
-
-    return render(
-        request,
-        "profiles/teacher/teacher_attendance_detail.html",
         context,
     )
 

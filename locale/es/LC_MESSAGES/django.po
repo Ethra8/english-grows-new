@@ -165,7 +165,7 @@ msgid "Weekly & monthly performance"
 msgstr "Rendimiento semanal y mensual"
 
 msgid "Total Classes"
-msgstr "Total de Clases"
+msgstr "Total clases"
 
 msgid "Completed Classes"
 msgstr "Clases Completadas"
@@ -194,7 +194,11 @@ msgstr "Asistencia mensual"
 msgid "Group Average Score"
 msgstr "Evaluación Grupal"
 
+msgid "Not confirmed yet"
+msgstr "Sin confirmar"
 
+msgid "Not assigned yet"
+msgstr "Sin confirmar"
 
 msgid "Active"
 msgstr "Activo"
@@ -239,14 +243,32 @@ msgstr "Todos"
 msgid "Level"
 msgstr "Nivel"
 
-msgid "Next Class"
-msgstr "Siguiente Clase"
+msgid "Next class"
+msgstr "Próxima clase"
 
+msgctxt "student dashboard"
+msgid "Next Class"
+msgstr "Próxima Clase"
+
+msgctxt "student dashboard"
 msgid "Join Class"
+msgstr "Unirse"
+
+msgctxt "student dashboard"
+msgid "No upcoming class scheduled yet"
+msgstr "Todavía no tiene clases agendadas próximamente"
+
+msgid "Join class"
 msgstr "Unirse"
 
 msgid "Course"
 msgstr "Curso"
+
+msgid "Course Name"
+msgstr "Nombre del Curso"
+
+msgid "Course Type"
+msgstr "Tipo de Curso"
 
 
 
@@ -281,6 +303,10 @@ msgstr "Sesión"
 
 msgid "Pending"
 msgstr "Pendiente"
+
+msgid "Pending Assessment"
+msgstr "Evaluación Pendiente"
+
 
 msgid "A1 - Beginner"
 msgstr "A1 - Principiante"
@@ -494,7 +520,7 @@ msgid "Start & End Dates"
 msgstr "Fechas de Inicio y Finalización"
 
 msgid "Class Duration"
-msgstr "Duración de cada Clase"
+msgstr "Duración de Clase"
 
 msgid "Last Class Duration"
 msgstr "Última Clase"
@@ -503,14 +529,14 @@ msgid "Teacher"
 msgstr "Profesor/a"
 
 msgid "Total Hours"
-msgstr "Total de Horas"
+msgstr "Total horas"
 
 msgctxt "dashboard training overview"
 msgid "Classes Held"
-msgstr "Clases Realizadas"
+msgstr "Clases realizadas"
 
 msgid "Attendance Submitted"
-msgstr "Registros de Asistencia"
+msgstr "Registros de asistencia"
 
 msgid "past classes"
 msgstr "clases realizadas"
@@ -528,7 +554,7 @@ msgid "No submitted attendance records found"
 msgstr "Todavía no hay registros de asistencia disponibles para este grupo"
 
 msgid "employee record"
-msgstr "empleado"
+msgstr "historial del empleado"
 
 msgid "saved for this class session"
 msgstr "registrados para esta sesión"
@@ -561,6 +587,11 @@ msgstr "Próximas"
 msgctxt "classes list"
 msgid "All"
 msgstr "Todas"
+
+msgctxt "my course"
+msgid "Upcoming"
+msgstr "Próxima"
+
 
 
 msgid "Review and filter upcoming and past class sessions"

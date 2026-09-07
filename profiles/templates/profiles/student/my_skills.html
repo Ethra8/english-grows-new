@@ -79,15 +79,9 @@
                                 aria-controls="skill-body-{{ forloop.counter }}">
 
                             <span class="skill-subskills-count">
-                                {% if skill.subskills|length %}
-                                    <strong>{{ skill.subskills|length }} {{ skill.name }} subskill{{ skill.subskills|length|pluralize }}</strong>
-                                    {% trans 'assessed' %}
-                                {% else %}
-                                    <strong>0 {{ skill.name }} subskills</strong>
-                                    {% trans 'assessed yet' %}
-                                {% endif %}
-                            </span>
-
+                                <strong>{{ skill.assessed_subskills_count }} /{{ skill.total_subskills_count }} {{ skill.name }} subskills</strong> 
+                                {% trans 'assessed' %}
+                            </span>                            
                             <img src="{% static 'icons/chevron_down_teal.png' %}" alt="" width="14" class="skill-chevron" aria-hidden="true">
                         </button>
                     </h3>
@@ -157,7 +151,21 @@
                         </div>
                         {% endif %}
 
-                    </div>
+
+                        {% if skill.assessed_subskills_count < skill.total_subskills_count %}
+                        <div class="subskill-group">
+                            <p><strong>{% trans 'Pending Assessment' %}</strong></p>
+                            <ul>
+                                {% for subskill in skill.subskills %}
+                                    {% if not subskill.is_assessed %}
+                                        <li><span class="teacher-subskill">{{ subskill.name }}</span></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                    </div>                
                 </div>
 
             </article>

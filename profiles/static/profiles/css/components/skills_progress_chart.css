@@ -66,27 +66,14 @@
 }
 
 .skills-chart-header h2::after {
-    /* content: "\e098";
-    font-family: "Font Awesome 6 Free";
-    position: absolute;
-    top: 5px;
-    left: 1%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-weight: 900;
-    font-size: 2.5rem;
-    color: rgba(var(--color-turquoise-rgb), 0.3);
-    rotate: calc(0deg); */
     content: "";
     position: absolute;
     top: 0;
-    left: 1%;
-    width: 52px;
-    height: 52px;
+    left: 0;
+    width: 60px;
+    height: 60px;
     transform: rotate(-12deg);
-    background-image: url(/static/icons/progress_chart_icon.png);
+    background-image: url(/static/icons/meta_chart_round_icon.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -122,16 +109,6 @@
 }
 
 
-@media (max-width: 1250px) {
-
-    /* .student-details-skills-overview-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        margin-top: 2rem;
-        gap: 1.5rem;
-    } */
-
-}
 
 @media (max-width: 575.98px) {
     .skills-chart-header .header-score {

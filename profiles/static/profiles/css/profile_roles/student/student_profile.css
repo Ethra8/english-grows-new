@@ -9,6 +9,7 @@
     background: rgba(var(--color-turquoise-rgb), 0.2);
     min-width: fit-content;
     max-width: 1200px;
+    margin-top: 5rem;
 }
 
 .wrapper-next-class-card {
@@ -142,16 +143,6 @@
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
-.my-course-card strong {
-    text-transform: capitalize;
-}
-
-/* .my-course-card img {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-} */
-
 .my-course-card .circle-panel1 {
     position: absolute;
     top: -130px;
@@ -211,7 +202,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2rem 2rem 2rem 16rem;
+    padding: 2rem 1.75rem 1.25rem 15rem;
     width: 100%;
     min-width: 300px;
 }
@@ -242,10 +233,12 @@
     justify-content: center;
     border: outset 1px var(--color-turquoise);
     background-color: #F4FFFE;
-    /* background: var(--color-icy);
-    background: linear-gradient(64deg,rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%); */
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     color: var(--color-teal);
+}
+
+.item .teacher img {
+    border-radius: 50%;
 }
 
 .my-course-card .item-text {
@@ -292,13 +285,13 @@
 .my-course-card .info > div:first-of-type .timetable-info {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    padding-left: 5%;
+    gap: 1.5rem;
+    padding-left: 1.5rem;
 }
 
 .my-course-card .info > div:first-of-type .next-class-info {
     position: relative;
-    padding-left: 2rem;
+    gap: 1.5rem;
     /* for ribbon */
     overflow: hidden;
 }
@@ -347,7 +340,7 @@
 @media (max-width: 1199.98px) {
 
     .my-course-card .info {
-        padding: 8.5rem 4% 2rem;
+        padding: 8rem 4% 0.75rem;
     }
 
     .my-course-card .info .col:first-child {
