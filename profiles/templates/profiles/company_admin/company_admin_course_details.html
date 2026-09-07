@@ -386,7 +386,11 @@
 
                         <div class="detail-row">
                             <div>
-                                <img src="{% static 'icons/teacher_teal_icon.png' %}" alt="" width="28" aria-hidden="true" class="mr-2 mb-1">                                   
+                                {% if active_enrollment.course.teacher.profile.profile_photo %} 
+                                    <img src="{{ enrollment.course.teacher.profile.profile_photo.url }}" alt="{{ enrollment.course.teacher.get_full_name }}">
+                                {% else %}
+                                    <img src="{% static 'icons/teacher_teal_icon.png' %}" alt="" width="28" aria-hidden="true" class="mr-2 mb-1">                                   
+                                {% endif %}
                             </div>
                             <div>
                                 <strong>{% trans 'Teacher' %}</strong>

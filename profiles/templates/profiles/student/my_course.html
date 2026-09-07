@@ -245,8 +245,8 @@
                     <!-- div:first-of-type -->
                     <div class="col col-12">
                         <div class="item col col-12 col-md-6 timetable-info">
-                            <div class="item-icon">
-                                <i class="fa-regular fa-clock"></i>
+                            <div>
+                                <img src="{% static 'icons/course_timetable_icon.png' %}" alt="" width="24" aria-hidden="true" class="mr-2 mb-1">
                             </div>
                             <div class="item-text">
                                 <strong class="notranslate" translate="no">{% trans 'Timetable' %}</strong>
@@ -282,8 +282,8 @@
 
                     <div class="col col-12 col-md-6">
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal"></i>
+                            <div>
+                                <img src="{% static 'icons/course_total_hours_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
                             </div>
 
                             <div class="item-text">
@@ -298,7 +298,7 @@
                             </div>
                         </div>                    
                         <div class="item">
-                            <div class="item-icon">
+                            <div>
                                 <img src="{% static 'icons/class_duration_teal_icon.png' %}" alt="" width="16" aria-hidden="true" class="mr-2 mb-1">
                             </div>
 
@@ -312,8 +312,8 @@
                             </div>
                         </div>                    
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-solid fa-list-ol"></i>
+                            <div>
+                                <img src="{% static 'icons/total_classes_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
                             </div>
 
                             <div class="item-text">
@@ -325,8 +325,8 @@
 
                     <div class="col col-12 col-md-6">
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-regular fa-calendar-check"></i>
+                            <div>
+                                <img src="{% static 'icons/start_date_teal_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2 mb-1">
                             </div>
 
                             <div class="item-text">
@@ -335,8 +335,8 @@
                             </div>
                         </div>
                         <div class="item">
-                            <div class="item-icon">
-                                <i class="fa-regular fa-calendar-xmark"></i>
+                            <div>
+                                <img src="{% static 'icons/end_date_teal_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2 mb-1">
                             </div>
 
                             <div class="item-text">
@@ -345,11 +345,11 @@
                             </div>
                         </div>
                         <div class="item">
-                            <div class="item-icon">
+                            <div>
                                 {% if active_enrollment.course.teacher.profile.profile_photo %} 
-                                <img src="{{ enrollment.course.teacher.profile.profile_photo.url }}" alt="{{ enrollment.course.teacher.get_full_name }}">
+                                    <img src="{{ enrollment.course.teacher.profile.profile_photo.url }}" alt="{{ enrollment.course.teacher.get_full_name }}">
                                 {% else %}
-                                <i class="fa-solid fa-graduation-cap"></i>
+                                    <img src="{% static 'icons/teacher_teal_icon.png' %}" alt="" width="28" aria-hidden="true" class="mr-2 mb-1">                                   
                                 {% endif %}
                             </div>
                             <div class="item-text">

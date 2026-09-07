@@ -146,11 +146,11 @@
     text-transform: capitalize;
 }
 
-.my-course-card img {
+/* .my-course-card img {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-}
+} */
 
 .my-course-card .circle-panel1 {
     position: absolute;
