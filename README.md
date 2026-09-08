@@ -867,8 +867,8 @@ Each skill is represented by a distinctive colour to make it easier to visually 
 
 | Skill | Colour | Hex |
 | :--- | :---: | :---: |
-| 🎙️ **Speaking** | 🟨 Sunflower Gold | `#F5BE58` |
 | 🎧 **Listening** | 🟪 Indigo Velvet | `#4E2496` |
+| 🎙️ **Speaking** | 🟨 Sunflower Gold | `#F5BE58` |
 | 📖 **Reading** | 🟧 Chocolate | `#E1752D` |
 | ✍️ **Writing** | 🟦 Pacific Blue | `#0EA5B7` |
 
@@ -1903,8 +1903,8 @@ COLOUR SYSTEM
 │
 ├── ASSESSMENT / DATA COLOURS
 │   │
-│   ├── #F5BE58  Speaking — Sunflower Gold
 │   ├── #4E2496  Listening — Indigo Velvet
+│   ├── #F5BE58  Speaking — Sunflower Gold
 │   ├── #E1752D  Reading — Chocolate
 │   └── #0EA5B7  Writing — Pacific Blue
 │
@@ -2152,8 +2152,8 @@ These colours are intentionally separate from the core brand palette because the
 
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
-| 🎙️ **Speaking** | ![#F5BE58](https://img.shields.io/badge/Sunflower_Gold-F5BE58?style=flat&labelColor=F5BE58&color=F5BE58) | Sunflower Gold | `#F5BE58` |
 | 🎧 **Listening** | ![#4E2496](https://img.shields.io/badge/Indigo_Velvet-4E2496?style=flat&labelColor=4E2496&color=4E2496) | Indigo Velvet | `#4E2496` |
+| 🎙️ **Speaking** | ![#F5BE58](https://img.shields.io/badge/Sunflower_Gold-F5BE58?style=flat&labelColor=F5BE58&color=F5BE58) | Sunflower Gold | `#F5BE58` |
 | 📖 **Reading** | ![#E1752D](https://img.shields.io/badge/Chocolate-E1752D?style=flat&labelColor=E1752D&color=E1752D) | Chocolate | `#E1752D` |
 | ✍️ **Writing** | ![#0EA5B7](https://img.shields.io/badge/Pacific_Blue-0EA5B7?style=flat&labelColor=0EA5B7&color=0EA5B7) | Pacific Blue | `#0EA5B7` |
 
@@ -2442,8 +2442,8 @@ Brighter colours are used selectively so that they retain visual prominence, whi
 Skill-specific data visualisation uses the dedicated **Assessment / Data palette**:
 
 ```text
-Speaking         → #F5BE58  Sunflower Gold
 Listening        → #4E2496  Indigo Velvet
+Speaking         → #F5BE58  Sunflower Gold
 Reading          → #E1752D  Chocolate
 Writing          → #0EA5B7  Pacific Blue
 ```
