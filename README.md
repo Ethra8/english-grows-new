@@ -1964,6 +1964,9 @@ Colour is always accompanied by text, labels, icons or other interface context r
 
 The current **English Grows** core brand/interface palette consists of seven chromatic colours:
 
+<img width="1600" height="1200" alt="Color Palette" src="https://github.com/user-attachments/assets/3ad753be-78b5-4f4b-bfec-ec1b0da14136" />
+
+
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
 | **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Very light aqua-tinted background and low-intensity surface differentiation |
@@ -2032,6 +2035,9 @@ The core brand palette is supported by a restrained four-colour neutral system u
 
 These neutrals are deliberately cool so that they remain visually compatible with the wider aqua–teal–navy brand system.
 
+<img width="1600" height="1200" alt="Neutral Palette" src="https://github.com/user-attachments/assets/b2c6d456-239f-4dd6-aeca-f283f177d2da" />
+
+
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
 | **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Principal neutral surface for main cards, lists, tables and data-heavy content areas |
@@ -2082,6 +2088,9 @@ The application uses a dedicated colour system to provide immediate visual ident
 The official **Common European Framework of Reference for Languages (CEFR)** defines six principal proficiency levels from **A1 to C2** through language-proficiency descriptors. It does **not prescribe a mandatory or universal colour scheme** for those levels.
 
 English Grows therefore uses its own consistent CEFR colour mapping as part of the application's design system.
+
+<img width="1600" height="1200" alt="CEFR Levels_Color palette" src="https://github.com/user-attachments/assets/fa2b4a12-e9fa-43a3-b801-3965e41d90fa" />
+
 
 | CEFR Level | Preview | Colour | Hex |
 | :---: | :---: | :--- | :---: |
@@ -2137,6 +2146,9 @@ As with the rest of the English Grows colour system, colour reinforces rather th
 The language assessment system uses a dedicated colour set for the four principal language skills.
 
 These colours are intentionally separate from the core brand palette because they carry a **persistent pedagogical meaning**, rather than a general interface function.
+
+<img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/87382759-bfb8-412d-93d2-8434d15cbf16" />
+
 
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
