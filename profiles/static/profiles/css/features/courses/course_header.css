@@ -2,32 +2,49 @@
 .course-attendance-details header {
     width: 100%;
     margin: 2rem 0 0;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    background-color: rgba(var(--color-frozen-water-rgb), 0.3);    
-    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    /* border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3); */
+    /* background-color: rgba(var(--color-tropical-teal-rgb), 0.07);     */
+    /* background: url('/static/images/globe_1920x1080.png') no-repeat center center fixed; */
+    /* background: url('/static/images/globe_teal_transparent.png') no-repeat right top 70px fixed; */
+    border-radius: 8px 8px 0 0;
 }
 
-.course-details-page header {
-    padding: 0 0 1rem;
+/* GLOBE BACKGROUND ONLY */
+.course-details-page header::before,
+.course-attendance-details header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url('/static/images/globe_tropical_teal_transparent.png');
+    background-repeat: no-repeat;
+    background-position: right -220px top 60px;
+    background-attachment: fixed;
+
+    opacity: 0.06; /* adjust only globe opacity */
+
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* .course-attendance-details header {
-    padding: 1rem 0 ;
-    border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);
-} */
+
+.course-details-page header > div {
+    display: flex;
+    flex-direction: column;
+    background: rgba(var(--color-teal-rgb), 0.25);
+    padding: 0 0 1.15rem;
+}
 
 /* Course selector inside header */
 .course-details-page header > .course-selector-wrapper {
     margin-bottom: 2rem;
 }
 
-/* .course-attendance-details header > div:nth-child(1) {
-    margin-top: 2rem;
-} */
-
 /* Course name in header */
 /* .course-attendance-details header > div:nth-child(1), */
-.course-details-page header > .course-header-info {
+.course-details-page header .course-header-info {
     gap: 0.35rem;
     display: flex;
     flex-direction: column;
@@ -38,12 +55,11 @@
 
 /* Course Level in header */
 /* .course-attendance-details header > div:nth-child(2), */
-.course-details-page header > .course-header-level {
+.course-details-page header .course-header-level {
     gap: 1.95rem;
     display: flex;
     align-items: center;
-    align-content: center;
-    margin: 1rem 0 1.5rem;
+    margin: 0.5rem 0 0.75rem;    
     padding: 0 4%;
 }    
 
@@ -66,10 +82,8 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 1.1rem;
     letter-spacing: 0px;
-    padding-top: 0.75rem;
-    margin-top: 0.75rem;
+    padding-top: 0.5rem;
     font-weight: 500 !important;
-    border-top: 1px solid var(--color-teal);
 }
 
 .course-type img {
@@ -84,7 +98,67 @@
 }
 
 
+@media (max-width: 1449.98px) {
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -300px top 60px;
+    }
+
+}
+
+
+@media (max-width: 1365.98px) {
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -410px top 20px;
+    }
+
+}
+
+
+@media (max-width: 1249.98px) {
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -500px top 20px;
+    }
+
+}
+
+
+@media (max-width: 1099.98px) {
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -550px top 20px;
+    }
+
+}
+
+
+@media (max-width: 976.98px) {
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -600px top 20px;
+    }
+
+    .course-details-page header .course-header-info,
+    .course-details-page header .course-header-level {
+        padding: 0 7%;
+    }
+}
+
+
 @media (max-width: 767.98px) {
+
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -650px top 0;
+    }
 
     .course-details-page,
     .course-attendance-details {
@@ -121,7 +195,6 @@
         visibility: hidden;
     }
 
-
 }
 
 
@@ -131,6 +204,12 @@
     .course-details-page,
     .course-attendance-details {
         padding: 0 3% 70px;
+    }
+
+    /* GLOBE BACKGROUND ONLY */
+    .course-details-page header::before,
+    .course-attendance-details header::before {
+        background-position: right -700px top -20px;
     }
 
     .course-details-page header h1,
@@ -150,7 +229,6 @@
         gap: 1rem;
         justify-self: flex-start;
     }
-
 
     .course-details-page header > .course-header-level .status-badge.status-course,
     .course-attendance-details > div:nth-child(2) .status-badge.status-course {

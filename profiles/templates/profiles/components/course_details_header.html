@@ -5,7 +5,7 @@
 {% block details_page_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
 {% endblock %}
-
+<div class="course-header-wrapper">
 <div class="course-selector-wrapper">
     {% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
         {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course %}
@@ -48,7 +48,7 @@
         {% elif course.status == 'active' %}
             <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
         {% elif course.status == 'completed' %}
-            <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2">
+            <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="14" aria-hidden="true" class="mr-2 ml-1">
         {% elif course.status == 'paused' %}
             <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
         {% elif course.status == 'cancelled' %}
@@ -58,4 +58,5 @@
         {{ course.get_status_display|default:"In progress" }}
 
     </span>
+</div>
 </div>

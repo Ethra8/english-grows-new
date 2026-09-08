@@ -1,4 +1,20 @@
-/* INSIDE PROFILE DETAILS NAV ******************************/
+
+.details-page__navigation {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+}
+
+.details-page__navigation::-webkit-scrollbar {
+    display: none;
+}
+
+/* NAV WRAPPER *********************************************/
 .details-nav-wrapper {
     display: block;
     width: 100%;
@@ -8,49 +24,63 @@
     box-sizing: border-box;
 }
 
+/* NAV *****************************************************/
 .details-page__navigation nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.15rem 1rem 0.15rem 0.5rem;
-    border-radius: 0 0 8px 8px;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
     width: max-content;
     min-width: 100%;
     max-width: none;
+    padding: 0.15rem 1rem 0.15rem 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
     box-sizing: border-box;
-
+    border-radius: 0 0 8px 8px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
 }
+
+.details-page__navigation nav > * {
+    flex: 0 0 auto;
+}
+
+/* STUDENT DETAIL NAV **************************************/
 .details-page__navigation nav.student-detail-tabs {
     border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
     background-color: var(--color-navy);
 }
 
+/* COURSE DETAIL NAV ***************************************/
 .details-page__navigation nav.course-detail-tabs {
-    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
-    height: 68px;
+    height: 62px;
+    border-bottom: 2px solid rgba(var(--color-teal-rgb), 0.35);
+    border-radius: 0;
+    background: transparent;
 }
 
-.details-page__navigation nav.student-detail-tabs.smaller-devs {
-    padding: 0 1.25rem;
-}
-
+/* NAV LINKS ***********************************************/
 .details-page__navigation nav.student-detail-tabs a,
 .details-page__navigation nav.course-detail-tabs a {
-    color: rgba(var(--color-whitesmoke-rgb), 0.85);
-    padding: 0.75rem 0;
-    text-decoration: none;
     position: relative;
     flex: 0 0 auto;
+    height: 62px;
+    padding: 1rem 1.5rem;
+    color: rgba(var(--color-navy-rgb), 0.85);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
     white-space: nowrap;
 }
 
-.details-page__navigation nav a.active, 
+.details-page__navigation nav a.active,
 .details-page__navigation nav a:hover {
-    color: var(--color-pearlaqua);
-    border-bottom: 2px solid var(--color-pearlaqua);
+    height: 56px;
+    color: var(--color-teal);
+    border-bottom: 3px solid var(--color-tropical-teal);
+    background-color: transparent;
 }
 
 .details-page__navigation nav a.active::after {
@@ -63,7 +93,7 @@
     border-radius: 999px;
 }
 
-/* INNER NAV - Larger devs */
+/* INNER NAV LINKS WRAPPER *********************************/
 .wrapper-links-inner-nav {
     display: flex;
     width: 100%;
@@ -71,65 +101,80 @@
 }
 
 
+/* LARGE / INTERMEDIATE DEVICES ****************************/
+
 @media (max-width: 1360.98px) {
 
     .details-page__navigation nav {
         flex-direction: column;
-        padding: 0.5rem;
-        align-items: normal;
     }
 
 }
 
 
-
+/* TABLET **************************************************/
 
 @media (max-width: 991.99px) {
-    
-    /*****************************************************|
-    |*** STUDENT DETAIL Page  ****************************|
-    |*****************************************************/
+
     .details-nav-wrapper {
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
-    .details-page__navigation nav a.active{
+    .details-page__navigation nav a.active {
         justify-content: flex-start;
-    }
-
-    .details-page__navigation nav a.active{
         padding-inline: 1rem;
     }
 
 }
 
 
+/* MOBILE **************************************************/
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
 
+    /*
+     * Horizontal scrolling belongs to this wrapper.
+     * Keep the page itself constrained to viewport width.
+     */
     .details-nav-wrapper {
         width: 100%;
         max-width: 100%;
         min-width: 0;
-
         overflow-x: auto;
         overflow-y: hidden;
-
+        padding-bottom: 0.45rem;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
         scrollbar-width: thin;
+        scrollbar-color:
+            rgba(var(--color-teal-rgb), 0.30)
+            transparent;
     }
 
-    .details-page__navigation {
-        flex-wrap: nowrap;
-        justify-content: space-evenly;
-        width: max-content;
-        min-width: 100%;
-        max-width: none;
-    }
-
-    .details-page__navigation nav a{
+    /* CHILD CONTENT MAY EXTEND HORIZONTALLY */
+    .details-page__navigation nav > * {
         flex: 0 0 auto;
+        min-width: 8.5rem;
         white-space: nowrap;
+    }
+
+    /* SCROLLBAR — CHROME / EDGE / SAFARI */
+    .details-nav-wrapper::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .details-nav-wrapper::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .details-nav-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(var(--color-teal-rgb), 0.30);
+        border-radius: 999px;
+    }
+
+    .details-nav-wrapper::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--color-teal-rgb), 0.50);
     }
 
 }

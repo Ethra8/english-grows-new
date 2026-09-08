@@ -9,18 +9,13 @@
 
 {% block extra_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
 {% endblock %}
 
 
 {% block details_page_shell_class %}course-details-page{% endblock %}
 
 {% block details_page_background %}
-    <div class="overlay-globe" aria-hidden="true"></div>
+    <!-- <div class="overlay-globe" aria-hidden="true"></div> -->
     <div class="overlay-mist" aria-hidden="true"></div>
 {% endblock %}
 
@@ -35,7 +30,7 @@
 
 {% block details_content %}
 
-    <div class="course-header-meta-row">
+    <!-- <div class="course-header-meta-row">
         <a href="{% url 'profiles:teacher_course_students_list' course.id %}"  class="course-meta-card meta-students">
             <div>
                 <img src="{% static 'icons/employees_active_icon.png' %}" alt="" aria-hidden="true" width="55">
@@ -82,7 +77,7 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 
     <div class="course-details-three-col">
         <!-- LEFT COLUMN -->
@@ -241,7 +236,7 @@
                     </div>                
                 </div>
             </div>
-            <div class="course-materials-card">
+            <!-- <div class="course-materials-card">
                 <h3><i class="fa-solid fa-folder-open mr-3"></i>
                     Course Materials</h3>
 
@@ -249,19 +244,11 @@
                     {% trans 'View' %}
                     <img src="{% static 'icons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
                 </a>
-            </div>
+            </div> -->
         </div>    
     </div>
 
 </section>
-
-{% endblock %}
-
-
-{% block postloadjs %}
-{{ block.super }}
-    <!-- <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script> -->
-    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 
 {% endblock %}
     

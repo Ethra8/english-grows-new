@@ -1,7 +1,3 @@
-/* =========================================================
-   COURSE SELECTOR
-========================================================= */
-
 .course-selector-form {
     display: flex;
     flex-direction: row;
@@ -14,12 +10,27 @@
     border: solid 1px rgba(var(--color-teal-rgb), 0.95);
 }
 
+.course-selector-label {
+display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--color-whitesmoke);
+    font-weight: 500;
+    width: 65px;
+    max-width: 65px;
+}
+
+
 /* COURSE DETAILS PAGES *************************************/
 .course-details-page .course-selector-form {
-    background: rgba(var(--color-teal-rgb), 0.45);
-    padding: 0.75rem 0.75rem 0.75rem 1.2rem;
-    border-radius: 8px 8px 0 0;
-    border: solid 1px rgba(var(--color-aquamarine-rgb), 0.95);
+    background: transparent;
+    padding: 0.75rem 4% 1.8rem 4%;
+    border: none;
+    justify-content: flex-start;
+}
+
+.course-details-page .course-selector-label {
+    color: var(--color-slate);
 }
 
 /* STUDENT DETAILS PAGES *************************************/
@@ -28,17 +39,6 @@
     padding: 0.15rem 0.15rem 0.15rem 1.2rem;
     border-radius: 8px;
     justify-content: space-between;
-}
-
-.student-detail-page .course-selector-label {
-    display: flex;
-    align-items: center;
-    padding-right: 2rem;
-    color: var(--color-whitesmoke);
-    font-weight: 500;
-    width: 100px;
-    max-width: 100px;
-    justify-content: flex-end;
 }
 
 .course-select-wrapper {
@@ -64,16 +64,17 @@
 
 .course-select {
     width: 100%;
-    min-height: 36px;
-    height: 36px;
+    min-height: 38px;
+    height: 38px;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     padding: 0.45rem 3.5rem 0.45rem 1.1rem;
+    margin-bottom: 0.45rem;
     color: var(--color-navy);
     border: 1px solid var(--color-pearlaqua);
     border-radius: 8px;
-    box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18), inset 0 3px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18), inset 0 3px 10px rgba(0, 0, 0, 0.05);
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
@@ -173,7 +174,6 @@
 /* Course name + status */
 .course-dropdown-course-name {
     min-width: 0;
-
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -182,11 +182,9 @@
 }
 
 /* Name inside each option */
-
 .course-dropdown-option .course-dropdown-course-name {
     flex: 1 1 auto;
     min-width: 0;
-
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -195,26 +193,6 @@
 .course-dropdown-status {
     flex-shrink: 0;
     margin-left: 0.25rem;
-}
-/* END OF COURSE SELECTOR FORM *****************************/
-
-
-/* =========================================================
-   COURSE SELECTOR
-========================================================= */
-
-.course-selector-label {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 250px;
-    width: 250px;
-    max-width: 100%;
-    min-width: 0;
-    gap: 0.65rem;
-    margin: 0;
-    color: var(--color-whitesmoke);
-    font-weight: 500;
-    white-space: nowrap;
 }
 
 .course-dropdown-toggle:hover,
@@ -337,19 +315,6 @@
 }
 
 
-/* @media (max-width: 1499.98px) {
- 
-    .course-selector-form {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        width: 100%;
-        min-width: 0;
-        max-height: fit-content;
-        padding: 0.25rem 0.25rem 0.25rem 0.75rem;
-    }
-
-} */
 
 
 @media (max-width: 1360.98px) {
@@ -358,10 +323,6 @@
         width: 100%;
         max-width: 100%;
         min-width: 0;
-    }
-
-    .student-detail-page .course-selector-label {
-        width: fit-content;
     }
 
 }
@@ -388,7 +349,6 @@
 
     .course-selector-label {
         flex: 1;
-        width: fit-content;
     }
 
     /* STUDENT DETAILS PAGES *************************/
@@ -405,15 +365,11 @@
         padding: 0.15rem;
     }
 
-    .student-detail-page .course-selector-label {
-        flex: 0 0 auto;
-        justify-content: flex-start;
+    .course-selector-label {
+        justify-content: flex-start !important;
         width: 100%;
         max-width: 100%;
-        min-width: 0;
-        height: auto;
-        margin: 0;
-        padding: 0.25rem 1rem;
+        padding: 0.25rem 0;
     }
 
     .student-detail-page .course-dropdown-toggle {
@@ -422,12 +378,8 @@
 
     .course-select-wrapper.course-dropdown {
         flex: 1 1 auto;
-        /* width: 100%; */
         max-width: 100%;
-        /* min-width: 100%; */
         margin: 0;
     }
-
-
 
 }

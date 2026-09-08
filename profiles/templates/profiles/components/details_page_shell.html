@@ -1,3 +1,4 @@
+<!-- SHELL -->
 {% extends "profiles/profile_base.html" %}
 {% load static i18n %}
 
@@ -5,6 +6,9 @@
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/components/course_selector.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
     {% block details_page_css %}{% endblock %}
 {% endblock %}
 
@@ -12,6 +16,7 @@
 {% block profile_content %}
 
 <section class="profile-page notranslate {% block details_page_shell_class %}{% endblock %}" translate="no" {% block details_page_attributes %}{% endblock %}>
+    {% block details_page_background %}{% endblock %}
     <div class="row mb-3">
         <div class="col-12 mb-2">
             <p class="go-back-link">
@@ -45,4 +50,9 @@
 
 </section>
 
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 {% endblock %}

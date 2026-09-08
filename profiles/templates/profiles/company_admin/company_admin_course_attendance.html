@@ -1,209 +1,35 @@
-{% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
 
 {% load date_extras %}
 {% load time_extras %}
 
-{% block extra_title %}| Attendance Record {% endblock %}
+
+{% block extra_title %}| Attendance Record  {% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
-{% block profile_content %}
 
-<section class="course-attendance course-details-page profile-page notranslate" translate="no">
-    <div class="overlay-globe"></div>
-    <div class="overlay-mist"></div>
+{% block details_page_shell_class %}course-attendance course-details-page{% endblock %}
 
-    <div class="row mb-3">
-        <div class="col-12 mb-2">
-            <p class="go-back-link">
-                <a href="#" class="js-back-link notranslate" translate="no">
-                    <img src="{% static 'icons/go_back_teal_icon.png' %}" alt="" width="56" aria-hidden="true">
-                    {% trans 'Go Back' %}
-                </a>
-            </p>
-        </div>
-    </div>
+{% block details_page_background %}
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
 
-    <header>
 
-        {% if available_courses|length > 1 %}
+{% block details_header %}
+    {% include "profiles/components/course_details_header.html" with course_selector_url="profiles:teacher_course_details" %}
+{% endblock %}
 
-            <div class="course-selector-wrapper">
+{% block details_nav %}
+    {% include "profiles/components/course_details_nav.html" %}
+{% endblock %}
 
-                <!-- === LARGE DEVICES COURSE SELECTOR === -->
-                <div class="course-selector-form">
-
-                    <div class="course-selector-label">
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
-                        <span>{% trans 'Course' %}</span>
-                    </div>
-
-                    <div class="course-select-wrapper course-dropdown">
-
-                        <button
-                            type="button"
-                            id="course-select-large"
-                            class="course-select course-dropdown-toggle"
-                            aria-expanded="false"
-                            aria-controls="course-menu-large"
-                        >
-                            <span class="course-dropdown-selected">
-                                {% if course %}
-                                    <span class="course-dropdown-course-name notranslate" translate="no">
-                                        · {{ course.name }}
-                                    </span>
-
-                                    <span class="course-dropdown-status">
-                                        - {{ course.get_status_display }}
-                                    </span>
-                                {% else %}
-                                    <span>{% trans 'Course' %}</span>
-                                {% endif %}
-                            </span>
-
-                            <img
-                                class="course-select-arrow"
-                                src="{% static 'icons/chevron_down_teal.png' %}"
-                                alt=""
-                                width="36"
-                                aria-hidden="true"
-                            >
-                        </button>
-
-                        <div id="course-menu-large" class="course-dropdown-menu" hidden>
-                            {% for item in available_courses %}
-                                <a
-                                    href="{% url 'profiles:company_admin_course_attendance' item.id %}"
-                                    class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
-                                    {% if course and item.id == course.id %}aria-current="page"{% endif %}
-                                >
-                                    <span class="course-dropdown-course-name notranslate" translate="no">
-                                        · {{ item.name }}
-                                    </span>
-
-                                    <span class="course-dropdown-status">
-                                        - {{ item.get_status_display }}
-                                    </span>
-                                </a>
-                            {% endfor %}
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- === SMALLER DEVICES COURSE SELECTOR === -->
-                <div class="course-selector-form smaller-devs">
-
-                    <div class="course-selector-label">
-                        <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
-                        <span>{% trans 'Course' %}</span>
-                    </div>
-
-                    <div class="course-select-wrapper course-dropdown">
-
-                        <button
-                            type="button"
-                            id="course-select-small"
-                            class="course-select course-dropdown-toggle"
-                            aria-expanded="false"
-                            aria-controls="course-menu-small"
-                        >
-                            <span class="course-dropdown-selected">
-                                {% if course %}
-                                    <span class="course-dropdown-course-name notranslate" translate="no">
-                                        · {{ course.name }}
-                                    </span>
-
-                                    <span class="course-dropdown-status">
-                                        - {{ course.get_status_display }}
-                                    </span>
-                                {% else %}
-                                    <span>{% trans 'Course' %}</span>
-                                {% endif %}
-                            </span>
-
-                            <img
-                                class="course-select-arrow"
-                                src="{% static 'icons/chevron_down_teal.png' %}"
-                                alt=""
-                                width="36"
-                                aria-hidden="true"
-                            >
-                        </button>
-
-                        <div id="course-menu-small" class="course-dropdown-menu" hidden>
-                            {% for item in available_courses %}
-                                <a
-                                    href="{% url 'profiles:company_admin_course_attendance' item.id %}"
-                                    class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
-                                    {% if course and item.id == course.id %}aria-current="page"{% endif %}
-                                >
-                                    <span class="course-dropdown-course-name notranslate" translate="no">
-                                        · {{ item.name }}
-                                    </span>
-
-                                    <span class="course-dropdown-status">
-                                        - {{ item.get_status_display }}
-                                    </span>
-                                </a>
-                            {% endfor %}
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-        {% endif %}
-
-        <!-- === COURSE NAME / TYPE / HOURS === -->
-        <div>
-            <h1>{{ course.name|default:"Course Name" }}</h1>
-
-            <h2>
-                <span class="text-muted">
-                    <i class="fa-solid fa-swatchbook fa-flip-horizontal mr-3" aria-hidden="true"></i>
-                    {{ course.course_type.name|default:"Course Type" }}</span>
-
-                <span aria-hidden="true">|</span>
-
-                <span class="text-muted">
-                    <img src="{% static 'icons/course_total_hours_slate_icon.png' %}" alt="" width="32" aria-hidden="true" class="mr-2 mb-1">
-                    {{ course.total_hours|clean_decimal }} h.</span>
-            </h2>
-        </div>
-
-        <!-- === LEVEL / STATUS === -->
-        <div>
-            <div class="col-12 level-pill">
-                <span class="current-level-label">{% trans 'Level' %}</span>
-                <span class="current-level-value">{{ course.course_level|default:"Pending" }}</span>
-            </div>
-
-            <span class="status-badge status-course">
-                {% if course.status == 'confirmed' %}
-                    <img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-                {% elif course.status == 'active' %}
-                    <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-                {% elif course.status == 'completed' %}
-                    <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2">
-                {% elif course.status == 'paused' %}
-                    <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-                {% elif course.status == 'cancelled' %}
-                    <i class="fa-regular fa-circle-xmark mr-2" aria-hidden="true"></i>
-                {% endif %}
-
-                {{ course.get_status_display|default:"In progress" }}
-            </span>
-        </div>
-    </header>
+{% block details_content %}
 
     <div class="meta-row">
         <div class="meta-card meta-attendance">
@@ -320,10 +146,4 @@
 
 </section>
 
-{% endblock %}
-
-{% block postloadjs %}
-    {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/company_admin.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 {% endblock %}

@@ -381,6 +381,8 @@ def my_course(request):
         # ONE selected enrollment/course -> page content
         "enrollment": enrollment,
         "course": course,
+        # component course detail nav (active tab)
+        "active_section": "overview",
 
         "enrollment_status": enrollment_status,
         "timetable_slots": timetable_slots,
@@ -1378,6 +1380,8 @@ def my_attendance(request):
 
         "user_currently_enrolled": user_currently_enrolled,    
         "course": course,
+        # component course detail nav (active tab)
+        "active_section": "attendance",
 
         # ALL enrollments -> course selector
         "enrollments": enrollments,
@@ -1918,6 +1922,8 @@ def my_skills(request):
 
         "user_currently_enrolled":
             user_currently_enrolled,
+        # component course detail nav (active tab)
+        "active_section": "skills",
 
         # ALL enrollments -> course selector
         "enrollments":
@@ -2967,11 +2973,14 @@ def teacher_course_details(request, course_id):
     )
 
 
+
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "profile": profile,
+        # component course details nav
+        "active_section": "overview",
 
         # Course selector
         "available_courses": available_courses,
@@ -3056,6 +3065,7 @@ def teacher_group_attendance(request, course_id):
     context = {
         "course": course,
         "class_sessions": class_sessions,
+        "active_section": "attendance",
     }
 
     return render(
@@ -3250,7 +3260,8 @@ def teacher_course_students_list(request, course_id):
         "enrollments": enrollments,
         "sort_by": sort_by,
         "sessions": sessions,
-
+        # component course detail nav (active tab)
+        "active_section": "enrollments",
         # Progress timeline data
         "total_classes": total_classes,
         "completed_classes": completed_classes,
@@ -7605,6 +7616,9 @@ def company_admin_course_details(request, course_id):
         "profile": profile,
         "company": company,
         "course": course,
+        # component course detail nav (active tab)
+        "active_section": "overview",
+
         # All company courses for selector
         "available_courses": available_courses,
         # Enrollments belonging to selected course
@@ -7857,6 +7871,8 @@ def company_admin_course_students_list(request, course_id):
 
         # Current selected course
         "course": course,
+        # component course detail nav (active tab)
+        "active_section": "enrollments",
 
         # All company courses for course selector
         "available_courses": available_courses,
@@ -8173,6 +8189,8 @@ def company_admin_course_attendance(request, course_id):
 
         # Currently selected course
         "course": course,
+        # component course detail nav (active tab)
+        "active_section": "attendance",
 
         # All company courses for selector
         "available_courses": available_courses,
