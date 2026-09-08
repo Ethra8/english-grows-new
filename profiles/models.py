@@ -83,7 +83,7 @@ class UserProfile(models.Model):
     """
 
     ROLE_TEACHER = "teacher"
-    ROLE_INDIVIDUAL = "learner"
+    ROLE_INDIVIDUAL_LEARNER = "learner"
     ROLE_COMPANY_ADMIN = "company_admin"
     ROLE_EMPLOYEE = "employee"
 
@@ -91,7 +91,7 @@ class UserProfile(models.Model):
     # _ allows translation
     ROLE_CHOICES = [
         (ROLE_TEACHER, _("Teacher")),
-        (ROLE_INDIVIDUAL, _("Learner")),
+        (ROLE_INDIVIDUAL_LEARNER, _("Learner")),
         (ROLE_COMPANY_ADMIN, _("Company Admin")),
         (ROLE_EMPLOYEE, _("Employee")),
     ]
@@ -148,7 +148,7 @@ class UserProfile(models.Model):
     role = models.CharField(
         max_length=30,
         choices=ROLE_CHOICES,
-        default=ROLE_INDIVIDUAL
+        default=ROLE_INDIVIDUAL_LEARNER
     )
 
     native_language = models.CharField(
@@ -194,7 +194,7 @@ class UserProfile(models.Model):
 
     @property
     def is_individual(self):
-        return self.role == self.ROLE_INDIVIDUAL
+        return self.role == self.ROLE_INDIVIDUAL_LEARNER
 
     def __str__(self):
         return self.user.username

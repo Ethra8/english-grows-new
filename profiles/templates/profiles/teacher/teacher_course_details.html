@@ -1,13 +1,14 @@
-{% extends "profiles/profile_base.html" %}
+{% extends "profiles/components/details_page_shell.html" %}
 {% load static i18n %}
 
 {% load date_extras %}
 {% load time_extras %}
 
 
-{% block extra_title %}| My Groups {% endblock %}
+{% block extra_title %}| Group Details {% endblock %}
 
 {% block extra_css %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
@@ -15,6 +16,18 @@
     <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
 {% endblock %}
 
+
+{% block details_page_shell_class %}course-details-page{% endblock %}
+
+{% block details_page_background %}
+    <div class="overlay-globe" aria-hidden="true"></div>
+    <div class="overlay-mist" aria-hidden="true"></div>
+{% endblock %}
+
+
+{% block details_header %}
+    {% include "profiles/components/course_details_header.html" with course=course only %}
+{% endblock %}
 
 {% block profile_content %}
 

@@ -235,7 +235,10 @@ class Course(models.Model):
 
         if not self.pk:
             return False
-
+        
+        if self.status not in ["confirmed", "active"]:
+            return False
+        
         if self.class_sessions.exists():
             return False
 
@@ -895,16 +898,16 @@ class Course(models.Model):
     @property
     def remaining_sessions(self):
         """
-        Any session that has not yet reached status="completed"
-        is still outstanding.
+        ClassSessions that still require teaching.
 
-        This includes scheduled/rescheduled/pending-reschedule
-        sessions.
+        Completed and cancelled sessions are not outstanding.
         """
-        return max(
-            self.total_sessions - self.completed_sessions,
-            0
-        )
+        return self.class_sessions.exclude(
+            status__in=[
+                ClassSession.STATUS_COMPLETED,
+                ClassSession.STATUS_CANCELLED,
+            ]
+        ).count()
 
 
     @property
@@ -966,6 +969,33 @@ class Course(models.Model):
         )
 
         return True
+
+    def cancel_future_sessions(self):
+
+        future_sessions = self.class_sessions.filter(
+            start_time__gte=timezone.now(),
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_PENDING_RESCHEDULE,
+                ClassSession.STATUS_RESCHEDULED,
+            ],
+        )
+
+        session_ids = list(
+            future_sessions.values_list("id", flat=True)
+        )
+
+        future_sessions.update(
+            status=ClassSession.STATUS_CANCELLED
+        )
+
+        Attendance.objects.filter(
+            class_session_id__in=session_ids,
+        ).exclude(
+            status=Attendance.STATUS_CANCELLED
+        ).update(
+            status=Attendance.STATUS_CANCELLED
+        )
 
 
 
@@ -1664,12 +1694,14 @@ class ClassSession(models.Model):
     STATUS_PENDING_RESCHEDULE = "pending_reschedule"
     STATUS_RESCHEDULED = "rescheduled"
     STATUS_COMPLETED = "completed"
+    STATUS_CANCELLED = "cancelled"
 
     STATUS_CHOICES = [
         (STATUS_SCHEDULED, "Scheduled"),
         (STATUS_PENDING_RESCHEDULE, "Pending reschedule"),
         (STATUS_RESCHEDULED, "Rescheduled"),
         (STATUS_COMPLETED, "Completed"),
+        (STATUS_CANCELLED, "Cancelled"),
     ]
 
 

@@ -312,6 +312,18 @@ class CourseAdmin(admin.ModelAdmin):
         if course.class_sessions.exists():
             course.sync_end_date_from_sessions()
 
+    def save_model(self, request, obj, form, change):
+        status_changed_to_cancelled = (
+            change
+            and "status" in form.changed_data
+            and obj.status == "cancelled"
+        )
+
+        super().save_model(request, obj, form, change)
+
+        if status_changed_to_cancelled:
+            obj.cancel_future_sessions()        
+
     inlines = (
         CourseTimetableSlotInline,
         CourseEnrollmentInline,

@@ -25,6 +25,7 @@ The application combines course management, automated lesson scheduling, attenda
     - [Class Session Generation](#class-session-generation)
     - [Class Session Lifecycle](#class-session-lifecycle)
     - [Rescheduling a Class Lesson](#rescheduling-a-class-lesson)
+    - [Course Cancellation](#course-cancellation)
     - [Attendance](#attendance)
     - [Attendance Reporting](#attendance-reporting)
   - [Learning Assessment & Progress](#learning-assessment--progress)
@@ -366,6 +367,8 @@ Completed
 Cancelled
 ```
 
+When a course is manually changed to `Cancelled` through the Django Admin, the application also cancels its applicable future `ClassSession` records and the corresponding future `Attendance` records. This keeps the operational lesson schedule consistent with the manually cancelled parent course while preserving past lesson and attendance history.
+
 Course duration and class-generation logic are linked. The application uses the total number of training hours and lesson duration to determine the number of lessons required.
 
 A course is not considered completed simply because its scheduled end date has passed.
@@ -627,6 +630,10 @@ scheduled
 completed
 ```
 
+A session can also reach `cancelled` when its parent `Course` is manually cancelled through the Django Admin and the session is still a future unresolved lesson.
+
+Course-level cancellation is distinct from lesson rescheduling: a cancelled lesson is no longer expected to take place, whereas a `pending_reschedule` or `rescheduled` lesson remains part of the course delivery plan.
+
 ---
 
 ### Rescheduling a Class Lesson
@@ -722,8 +729,77 @@ The distinction between the statuses is therefore:
 | `pending_reschedule` | A learner/employee or teacher has indicated that the lesson needs to be rescheduled and a new date/time is still to be agreed |
 | `rescheduled` | The teacher has updated the existing session with the newly agreed date/time |
 | `completed` | The lesson has taken place and has been completed |
+| `cancelled` | The lesson has been cancelled because its parent course was manually cancelled before that future session took place |
 
 This workflow allows rescheduling to be initiated by either side while keeping responsibility for modifying the official course schedule with the teacher.
+
+---
+
+### Course Cancellation
+
+Course cancellation is an **administrative course-level action** and is deliberately separate from the normal lesson-rescheduling workflow.
+
+The current rule is:
+
+> When a `Course` is manually changed to `Cancelled` in the Django Admin, applicable future class sessions are automatically moved to `cancelled`.
+
+The Django Admin detects a genuine status change through `CourseAdmin.save_model()`:
+
+```text
+Course edited in Django Admin
+        │
+        ▼
+Status field changed to Cancelled
+        │
+        ▼
+Course saved
+        │
+        ▼
+Course.cancel_future_sessions()
+```
+
+Only future sessions whose `start_time` has not yet passed are considered. Within that future set, the following session states are cancelled:
+
+```text
+scheduled
+pending_reschedule
+rescheduled
+        │
+        ▼
+cancelled
+```
+
+Completed and historical lesson records are preserved.
+
+Conceptually:
+
+```text
+Course manually set to Cancelled
+            │
+            ▼
+Future unresolved ClassSessions
+            │
+            ├── scheduled
+            ├── pending_reschedule
+            └── rescheduled
+            │
+            ▼
+        cancelled
+            │
+            ▼
+Corresponding Attendance records
+            │
+            ▼
+        cancelled
+```
+
+The cancellation operation updates the existing `ClassSession` records rather than deleting them or generating replacements. Their database identity, class number, course relationship, and historical references are therefore preserved.
+
+The corresponding `Attendance` records attached to those future cancelled sessions are also moved to `cancelled`, preventing those lessons from remaining as future scheduled attendance obligations after the course itself has been terminated.
+
+Past lesson and attendance history remains untouched. This preserves the training record that existed before cancellation while ensuring that no future lesson from the cancelled course continues to appear operationally scheduled.
+
+This automatic propagation is currently tied specifically to a **manual course-status change in the Django Admin**. It is not a generic side effect of every possible `Course.save()` operation elsewhere in the application.
 
 ---
 
@@ -784,6 +860,8 @@ Lesson 4
 Instead, the existing attendance record changes status.
 
 Attendance records initially act as scheduled placeholders and are subsequently updated when the teacher records the actual attendance outcome.
+
+When a course is manually cancelled through the Django Admin, attendance records belonging to the applicable future sessions cancelled by that course-level action are also moved to `cancelled`. Historical attendance records are preserved.
 
 ---
 
@@ -1235,6 +1313,8 @@ Course
 
 Generated class sessions are primarily intended to be **managed and updated rather than manually recreated**, helping protect the integrity of the automatically generated course structure.
 
+The Django Admin also owns the current manual course-cancellation workflow. When an administrator changes a `Course` status to `Cancelled` in the Admin interface, `CourseAdmin` detects that explicit status change and invokes the course cancellation helper. Applicable future `scheduled`, `pending_reschedule`, and `rescheduled` sessions are changed to `cancelled`, together with their corresponding attendance records, while completed and historical lesson data remains untouched.
+
 The Django Admin therefore complements the role-specific application interfaces while providing authorised access to lower-level database administration.
 
 ---
@@ -1503,6 +1583,8 @@ EnglishGrows implements database constraints and application-level business rule
 - Completed and individually rescheduled sessions are protected from routine timetable synchronisation.
 - Configured bank holidays are excluded from generated teaching dates.
 - A rescheduled lesson remains the same `ClassSession`.
+- A manually cancelled course causes applicable future `scheduled`, `pending_reschedule`, and `rescheduled` sessions to move to `cancelled`.
+- Past and completed lesson history is preserved when a course is cancelled.
 - A course only becomes completed when all of its sessions are completed.
 
 #### Attendance
@@ -1511,6 +1593,7 @@ EnglishGrows implements database constraints and application-level business rule
 - A learner can have only one attendance record per class session.
 - Attendance records are automatically created for active learners when applicable.
 - Learners joining an existing course receive attendance records only for unfinished sessions.
+- Attendance records belonging to future sessions cancelled through the course-cancellation workflow are also moved to `cancelled`.
 - Future `scheduled` attendance does not affect recorded attendance-rate calculations.
 
 #### Assessment
@@ -1690,6 +1773,7 @@ This separation is important because individual classes may later:
 - be completed;
 - be rescheduled;
 - become pending reschedule;
+- be cancelled when the parent course is manually cancelled;
 - receive a different date or time;
 - contain specific lesson information;
 - generate attendance records.

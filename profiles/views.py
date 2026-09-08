@@ -100,7 +100,7 @@ def profile(request):
 
     if user_profile.role in [
         UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
     ]:
         return redirect("profiles:student_dashboard")
 
@@ -116,7 +116,7 @@ def student_dashboard(request):
 
     if user_profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
     ]:
         return redirect("home")
 
@@ -217,29 +217,38 @@ def profile_settings(request):
 # STUDENT COURSE INFO PAGE
 @login_required
 def my_course(request):
+
     profile = get_object_or_404(
         UserProfile,
         user=request.user
     )
 
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
     #
-    # Historical courses remain accessible.
+    # Historical courses remain accessible regardless of
+    # CourseEnrollment status or Course status.
     #
-    # Order:
+    # Course status order:
     # 1. Active
     # 2. Confirmed
     # 3. Paused
     # 4. Completed
     # 5. Cancelled
     #
-    # Within each status:
-    # - course name A-Z
+    # Completed courses:
+    # - newest end date first
     #
-    # Completed courses additionally use end_date as a
-    # tie-breaker, newest first.
+    # Otherwise:
+    # - course name A-Z
     # ---------------------------------------------------------
+
     enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -273,8 +282,8 @@ def my_course(request):
         )
         .order_by(
             "status_order",
-            "course__name",
             "-completed_date_order",
+            "course__name",
         )
     )
 
@@ -331,15 +340,21 @@ def my_course(request):
     # ---------------------------------------------------------
     # NEXT CLASS
     #
-    # Must come from the SELECTED course.
+    # Only available when:
+    # - the learner's enrollment is active
+    # - the course is active or confirmed
+    # - the session is scheduled or rescheduled
     #
-    # For completed/cancelled courses this will naturally
-    # return None because there should be no future scheduled
-    # sessions.
+    # Historical, paused, completed or cancelled enrollments /
+    # courses must not expose a future "next class".
     # ---------------------------------------------------------
     next_class = None
 
-    if enrollment:
+    if (
+        enrollment
+        and enrollment.status == "active"
+        and course.status in ["active", "confirmed"]
+    ):
         next_class = (
             ClassSession.objects
             .filter(
@@ -430,7 +445,7 @@ def my_calendar_events(request):
 
     if profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
     ]:
         return JsonResponse(
             [],
@@ -1403,7 +1418,7 @@ def my_skills(request):
     # ---------------------------------------------------------
     if student_profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
     ]:
         return redirect("home")
 
@@ -1958,7 +1973,7 @@ def my_learning_progress_assessment(request):
 
     # Only learners can access this page
     if profile.role not in [
-        UserProfile.ROLE_INDIVIDUAL,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
         UserProfile.ROLE_EMPLOYEE,
     ]:
         return redirect("home")

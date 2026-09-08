@@ -1,0 +1,77 @@
+{% load i18n %}
+
+<div class="student-detail-tabs-wrapper course-detail-tabs-wrapper notranslate" translate="no">
+
+    <nav class="student-detail-tabs course-detail-tabs" aria-label="{% trans 'Course details navigation' %}">
+
+        <div class="wrapper-links-inner-nav">
+
+            {% if request.user.profile.role == "company_admin" %}
+
+                <a href="{% url 'profiles:company_admin_course_details' course.id %}"
+                   class="{% if active_section == 'general' %}active{% endif %}"
+                   {% if active_section == "general" %}aria-current="page"{% endif %}>
+                    {% trans "General" %}
+                </a>
+
+                <a href="{% url 'profiles:company_admin_course_students_list' course.id %}"
+                   class="{% if active_section == 'learners' %}active{% endif %}"
+                   {% if active_section == "learners" %}aria-current="page"{% endif %}>
+                    {% trans "Learners" %}
+                </a>
+
+                <a href="{% url 'profiles:company_admin_course_attendance' course.id %}"
+                   class="{% if active_section == 'attendance' %}active{% endif %}"
+                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                    {% trans "Attendance" %}
+                </a>
+
+
+            {% elif request.user.profile.role == "teacher" %}
+
+                <a href="{% url 'profiles:teacher_course_details' course.id %}"
+                   class="{% if active_section == 'general' %}active{% endif %}"
+                   {% if active_section == "general" %}aria-current="page"{% endif %}>
+                    {% trans "General" %}
+                </a>
+
+                <a href="{% url 'profiles:teacher_course_students_list' course.id %}"
+                   class="{% if active_section == 'learners' %}active{% endif %}"
+                   {% if active_section == "learners" %}aria-current="page"{% endif %}>
+                    {% trans "Learners" %}
+                </a>
+
+                <a href="{% url 'profiles:teacher_group_attendance' course.id %}"
+                   class="{% if active_section == 'attendance' %}active{% endif %}"
+                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                    {% trans "Attendance" %}
+                </a>
+
+
+            {% elif request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
+
+                <a href="{% url 'profiles:my_course' %}?course={{ course.id }}"
+                   class="{% if active_section == 'general' %}active{% endif %}"
+                   {% if active_section == "general" %}aria-current="page"{% endif %}>
+                    {% trans "General" %}
+                </a>
+
+                <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}"
+                   class="{% if active_section == 'skills' %}active{% endif %}"
+                   {% if active_section == "skills" %}aria-current="page"{% endif %}>
+                    {% trans "Skills" %}
+                </a>
+
+                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}"
+                   class="{% if active_section == 'attendance' %}active{% endif %}"
+                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                    {% trans "Attendance" %}
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+</div>

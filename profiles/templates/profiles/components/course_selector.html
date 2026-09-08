@@ -1,0 +1,91 @@
+{% load static i18n %}
+
+{% if selector_items|length > 1 %}
+
+    <form method="get" class="course-selector-form notranslate" translate="no">
+
+        <div class="course-selector-label">
+            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
+            <span>{% trans "Course" %}</span>
+        </div>
+
+        <div class="course-select-wrapper course-dropdown">
+
+            <!-- CURRENTLY SELECTED COURSE -->
+            <button type="button"
+                    class="course-select course-dropdown-toggle"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+
+                <span class="course-dropdown-selected">
+
+                    {% if course %}
+                        <span class="course-dropdown-course-name notranslate" translate="no">
+                            · {{ course.name }}
+                        </span>
+
+                        <span class="course-dropdown-status">
+                            - {{ course.get_status_display }}
+                        </span>
+                    {% else %}
+                        <span>{% trans "Course" %}</span>
+                    {% endif %}
+
+                </span>
+
+                <img class="course-select-arrow"
+                     src="{% static 'icons/chevron_down_teal.png' %}"
+                     alt=""
+                     width="36"
+                     aria-hidden="true">
+            </button>
+
+
+            <!-- DROPDOWN OPTIONS -->
+            <div class="course-dropdown-menu" role="menu" hidden>
+
+                {% for item in selector_items %}
+
+                    {% if selector_mode == "student" %}
+
+                        <button type="submit"
+                                name="course"
+                                value="{{ item.course.id }}"
+                                class="course-dropdown-option{% if course and item.course.id == course.id %} active{% endif %}"
+                                role="menuitem">
+
+                            <span class="course-dropdown-course-name notranslate" translate="no">
+                                · {{ item.course.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ item.course.get_status_display }}
+                            </span>
+                        </button>
+
+                    {% elif selector_mode == "course" %}
+
+                        <a href="{% url course_selector_url item.id %}"
+                           class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
+                           role="menuitem">
+
+                            <span class="course-dropdown-course-name notranslate" translate="no">
+                                · {{ item.name }}
+                            </span>
+
+                            <span class="course-dropdown-status">
+                                - {{ item.get_status_display }}
+                            </span>
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </form>
+
+{% endif %}
