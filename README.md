@@ -2118,7 +2118,7 @@ CEFR LEVEL COLOURS
 │
 ├── INDEPENDENT USER
 │   ├── B1  #436EFD  Electric Sapphire
-│   └── B2  #7B27A5  Indigo Bloom
+│   └── B2  #5C008A  Indigo
 │
 └── PROFICIENT USER
     ├── C1  #DBDF2B  Lemon Lime
