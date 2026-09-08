@@ -294,6 +294,10 @@
     border-top: 1px solid var(--color-teal);
 }
 
+.course-type img {
+    opacity: 0.8;
+}
+
 /* horizontal line separating course type | total_hours */
 .course-details-page header h2 > span:nth-child(2),
 .course-attendance-details header h2 > span:nth-child(2) {

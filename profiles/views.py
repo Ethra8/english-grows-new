@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 
 from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField
 
-from django.db.models.functions import Coalesce, NullIf, Lower
+from django.db.models.functions import Coalesce, Concat, Lower, NullIf, Trim
 
 from django.http import JsonResponse
 
@@ -2705,7 +2705,7 @@ def teacher_courses(request):
 def teacher_course_details(request, course_id):
     profile = get_object_or_404(
         UserProfile,
-        user=request.user
+        user=request.user,
     )
 
     if profile.role != UserProfile.ROLE_TEACHER:
@@ -2713,15 +2713,56 @@ def teacher_course_details(request, course_id):
 
 
     # ---------------------------------------------------------
-    # COURSE
+    # AVAILABLE COURSES FOR SELECTOR
+    #
+    # Show ALL courses belonging to this teacher, regardless
+    # of lifecycle status.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(
+            teacher=request.user,
+        )
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+            "teacher__profile",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # CURRENT COURSE
     #
     # Course remains accessible regardless of status,
     # provided it belongs to this teacher.
     # ---------------------------------------------------------
     course = get_object_or_404(
-        Course,
+        available_courses,
         id=course_id,
-        teacher=request.user,
     )
 
 
@@ -2786,12 +2827,74 @@ def teacher_course_details(request, course_id):
 
 
     # ---------------------------------------------------------
+    # HELD CLASSES
+    #
+    # Chronological definition:
+    #
+    # A class has been held when its end_time is in the past.
+    #
+    # Pending-reschedule lessons are excluded because they have
+    # not genuinely taken place at their currently stored slot.
+    # ---------------------------------------------------------
+    now = timezone.now()
+
+    held_classes = (
+        course.class_sessions
+        .filter(
+            end_time__lt=now,
+        )
+        .exclude(
+            status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        )
+    )
+
+    past_held_classes = held_classes.count()
+
+
+    # ---------------------------------------------------------
+    # HOURS HELD
+    #
+    # Calculate from actual ClassSession start/end times.
+    #
+    # This correctly handles:
+    # - different lesson durations
+    # - a shorter final class
+    # - rescheduled classes
+    # ---------------------------------------------------------
+    past_held_hours = Decimal("0.00")
+
+    for session in held_classes:
+        if session.start_time and session.end_time:
+            duration = (
+                session.end_time
+                - session.start_time
+            )
+
+            duration_hours = (
+                Decimal(
+                    str(
+                        duration.total_seconds()
+                    )
+                )
+                / Decimal("3600")
+            )
+
+            past_held_hours += duration_hours
+
+    past_held_hours = past_held_hours.quantize(
+        Decimal("0.01")
+    )
+
+
+    # ---------------------------------------------------------
     # AVERAGE COURSE ATTENDANCE
     # ---------------------------------------------------------
     attendance_percentages = []
 
     for enrollment in enrollments:
-        total_completed = enrollment.total_completed_classes
+        total_completed = (
+            enrollment.total_completed_classes
+        )
 
         if total_completed > 0:
             attendance_percentages.append(
@@ -2854,18 +2957,34 @@ def teacher_course_details(request, course_id):
     # ---------------------------------------------------------
     context = {
         "profile": profile,
+
+        # Course selector
+        "available_courses": available_courses,
+
+        # Current course
         "course": course,
+
+        # Course learners / sessions
         "enrollments": enrollments,
         "sessions": sessions,
 
-        # Progress timeline data
+        # Progress
         "total_classes": total_classes,
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "completion_percentage": completion_percentage,
 
+        # Chronological progress
+        "past_held_classes": past_held_classes,
+        "past_held_hours": past_held_hours,
+
+        # Attendance
         "average_attendance": average_attendance,
+
+        # Timetable
         "formatted_timetable": formatted_timetable,
+
+        # Group email
         "bcc_student_emails": bcc_student_emails,
     }
 
@@ -2939,17 +3058,110 @@ def teacher_course_students_list(request, course_id):
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # CURRENT COURSE
+    #
+    # Accessible regardless of status, provided it belongs
+    # to this teacher.
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
         teacher=request.user
     )
 
+    # ---------------------------------------------------------
+    # AVAILABLE COURSES
+    #
+    # Used by the course selector.
+    #
+    # Include ALL courses belonging to this teacher,
+    # regardless of status.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    #
+    # Then alphabetically by course name.
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(teacher=request.user)
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(6),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("status_order", "name")
+    )
+
+    # ---------------------------------------------------------
+    # ENROLLMENTS / SORTING
+    #
+    # Historical enrollments remain visible regardless of
+    # enrollment status.
+    #
+    # Name sorting uses:
+    # - first name + last name when available
+    # - username when no name has been provided
+    # ---------------------------------------------------------
+    sort_by = request.GET.get("sort", "name")
+
     enrollments = (
         course.enrollments
         .select_related("student", "student__profile")
-        .filter(status="active")
+        .annotate(
+            level_order=Case(
+                When(student__profile__current_level="A1", then=Value(1)),
+                When(student__profile__current_level="A2", then=Value(2)),
+                When(student__profile__current_level="B1.1", then=Value(3)),
+                When(student__profile__current_level="B1.2", then=Value(4)),
+                When(student__profile__current_level="B2.1", then=Value(5)),
+                When(student__profile__current_level="B2.2", then=Value(6)),
+                When(student__profile__current_level="C1.1", then=Value(7)),
+                When(student__profile__current_level="C1.2", then=Value(8)),
+                When(student__profile__current_level="C2", then=Value(9)),
+                default=Value(10),
+                output_field=IntegerField(),
+            ),
+            sort_name=Lower(
+                Coalesce(
+                    NullIf(
+                        Trim(
+                            Concat(
+                                F("student__first_name"),
+                                Value(" "),
+                                F("student__last_name"),
+                            )
+                        ),
+                        Value(""),
+                    ),
+                    F("student__username"),
+                )
+            ),
+        )
     )
+
+    if sort_by == "level":
+        enrollments = enrollments.order_by(
+            "level_order",
+            "sort_name",
+        )
+    else:
+        sort_by = "name"
+        enrollments = enrollments.order_by(
+            "sort_name",
+        )
+
 
     sessions = (
         course.class_sessions
@@ -2975,6 +3187,7 @@ def teacher_course_students_list(request, course_id):
             )
 
     average_attendance = 0
+
     if attendance_percentages:
         average_attendance = round(
             sum(attendance_percentages) / len(attendance_percentages)
@@ -2983,7 +3196,6 @@ def teacher_course_students_list(request, course_id):
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-
     timetable_groups = defaultdict(list)
 
     for slot in course.timetable_slots.all():
@@ -3005,7 +3217,9 @@ def teacher_course_students_list(request, course_id):
             "end": end,
         })
 
-    # create list of all ss emails to send groupal email
+    # ---------------------------------------------------------
+    # GROUP EMAIL
+    # ---------------------------------------------------------
     student_emails = [
         enrollment.student.email
         for enrollment in enrollments
@@ -3017,7 +3231,9 @@ def teacher_course_students_list(request, course_id):
     context = {
         "profile": profile,
         "course": course,
+        "available_courses": available_courses,
         "enrollments": enrollments,
+        "sort_by": sort_by,
         "sessions": sessions,
 
         # Progress timeline data
@@ -3026,6 +3242,7 @@ def teacher_course_students_list(request, course_id):
         "remaining_classes": remaining_classes,
         "completion_percentage": completion_percentage,
         "average_attendance": average_attendance,
+
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
         "level_choices": UserProfile.LEVEL_CHOICES,
@@ -3036,6 +3253,7 @@ def teacher_course_students_list(request, course_id):
         "profiles/teacher/teacher_course_students_list.html",
         context
     )
+
 
 
 # BUILD STD SKILLS GRAPH

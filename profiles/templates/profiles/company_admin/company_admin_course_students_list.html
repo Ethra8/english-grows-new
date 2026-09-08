@@ -1,15 +1,14 @@
 {% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
+
 {% load date_extras %}
 {% load course_extras %}
 
-{% block extra_title %}| Company Course Students {% endblock %}
+{% block extra_title %}| Learners List  {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}"> -->
-    <link rel="stylesheet" href="{% static 'profiles/studentfeatures/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/learners_list.css' %}">
@@ -20,7 +19,6 @@
 
 <section class="course-details-page profile-page company-admin-employees-list-page notranslate" translate="no">    
     <div class="overlay-globe"></div>
-
     <div class="overlay-mist"></div>
 
     <div class="row mb-3">
@@ -281,7 +279,7 @@
             <a href="mailto:?bcc={{ bcc_student_emails }}" class="btn-email-all">
                 <i class="fa-solid fa-envelope mr-2"></i>
                 {% trans 'Email all' %}
-                <i class="fa-solid fa-chevron-right ml-2"></i>
+                <img src="{% static 'icons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
             </a>
         </div>
     {% endif %}

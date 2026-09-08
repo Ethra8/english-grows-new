@@ -136,6 +136,8 @@ msgstr "Configuración"
 msgid "Logout"
 msgstr "Salir"
 
+msgid "View"
+msgstr "Ver"
 
 
 msgid "View all courses"
@@ -592,6 +594,8 @@ msgctxt "my course"
 msgid "Upcoming"
 msgstr "Próxima"
 
+msgid "view course materials"
+msgstr "ver materiales del curso"
 
 
 msgid "Review and filter upcoming and past class sessions"
@@ -751,3 +755,14 @@ msgctxt "submitted attendance status badge"
 msgid "No past classes"
 msgstr "sin registros"
 
+msgctxt "course details"
+msgid "Learners"
+msgstr "Estudiantes"
+
+msgctxt "course details singular"
+msgid "enrolled"
+msgstr "inscrito"
+
+msgctxt "course details plural"
+msgid "enrolled"
+msgstr "inscritos"

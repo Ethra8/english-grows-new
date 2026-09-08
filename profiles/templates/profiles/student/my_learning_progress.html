@@ -3,9 +3,7 @@
 {% load date_extras %}
 {% load course_extras %}
 
-
 {% block extra_title %}| {% trans "My Learning Progress" %}{% endblock %}
-
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
@@ -13,26 +11,20 @@
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
+{% block details_page_shell_class %}student-detail-page{% endblock %}
 
 {% block details_page_background %}
     <div class="overlay-birds" aria-hidden="true"></div>
     <div class="overlay-azure-mist" aria-hidden="true"></div>
 {% endblock %}
 
-
 {% block details_header %}
-
     {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
-
 {% endblock %}
-
 
 {% block details_nav %}
-
     {% include "profiles/components/student_details_nav.html" with active_section="general" nav_role="student" %}
-
 {% endblock %}
-
 
 {% block details_content %}
 

@@ -13,10 +13,14 @@
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
+{% block details_page_shell_class %}student-detail-page{% endblock %}
+
 {% block details_page_background %}
     <div class="overlay-globe" aria-hidden="true"></div>
     <div class="overlay-mist" aria-hidden="true"></div>
 {% endblock %}
+
+{% block details_page_class %}student-detail-page{% endblock %}
 
 {% block details_header %}
     {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=False %}
