@@ -154,7 +154,7 @@ Instead, role-based access is determined through the user's profile.
 
 ---
 
-Learners have access to a dedicated learning area containing information specific to their own active course enrolments.
+Learners have access to a dedicated learning area containing information specific to their own current and historical course enrolments.
 
 Principal functionality includes:
 
@@ -166,15 +166,26 @@ Principal functionality includes:
 - **Skill overview**
 - **Detailed skill progress graphs**
 - **Teacher assessment feedback**
-- **Course selector when enrolled in multiple active courses**
+- **My Course selector when more than one lifetime course enrolment exists**
 - **Upcoming-class information**
 - **Attendance and absence history**
 - **Course completion information**
 - **Account settings**
 
-Only enrolments that are currently active and belong to active courses are exposed through the learner-facing course selectors.
+The **My Course** page remains accessible across the learner's own course history rather than being limited to active training only.
 
-Learners therefore interact only with relevant current training data rather than historical, cancelled, or inactive courses.
+Its course selector is built from **all `CourseEnrollment` records belonging to the authenticated learner**, regardless of either:
+
+- the `CourseEnrollment.status`; or
+- the parent `Course.status`.
+
+The selector therefore supports active, paused, completed and cancelled historical enrolments, as well as courses in their corresponding lifecycle states.
+
+The selector is displayed only when the learner has **more than one lifetime enrolment**. If the learner has only one enrolment in total, the selector is omitted because there is no alternative course context to select.
+
+The selected course is passed through the `?course=<id>` query parameter and is resolved from the authenticated learner's own enrolment queryset. A learner therefore cannot use the query parameter to access a course in which they have never been enrolled.
+
+Operational information remains context-sensitive. For example, a historical course can still be reviewed through **My Course**, while upcoming-class information is only exposed when the selected enrolment and course are in an applicable current state.
 
 ---
 
@@ -205,6 +216,41 @@ Principal functionality includes:
 
 Teacher access is restricted to courses assigned to the authenticated teacher.
 
+Course-detail and course-learner views preserve access to the teacher's **historical course records regardless of course status**. Courses assigned to the teacher therefore remain accessible when they are:
+
+```text
+Active
+Confirmed
+Paused
+Completed
+Cancelled
+```
+
+Where a teacher-facing course selector is used, courses are ordered by lifecycle priority:
+
+```text
+Active
+    ↓
+Confirmed
+    ↓
+Paused
+    ↓
+Completed
+    ↓
+Cancelled
+```
+
+Within the same status, courses are ordered alphabetically by course name.
+
+Historical `CourseEnrollment` records are likewise preserved on course learner-list/detail pages rather than being restricted to active enrolments only.
+
+Teacher course learner lists support sorting by:
+
+- **Name A-Z**
+- **CEFR level**
+
+For alphabetical sorting, the displayed learner identity is used. The learner's full name is preferred when available; when first/last name information is absent, the learner's **username is used as the sorting fallback**. This prevents users without completed name fields from being incorrectly grouped under an empty value.
+
 The teacher dashboard provides operational summaries for current teaching activity, including active courses, students, upcoming/completed sessions, and attendance information.
 
 ---
@@ -233,7 +279,27 @@ Principal functionality includes:
 
 Company administrators can only access information associated with their own `Company`.
 
-This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, and learning outcomes.
+Within that company boundary, course-detail and course-learner views preserve **historical course and enrolment records regardless of status**. Company administrators can therefore continue to review courses after they become paused, completed, or cancelled rather than losing access once a course is no longer active.
+
+Where a company-admin course selector is used, company courses are ordered by lifecycle priority:
+
+```text
+Active
+    ↓
+Confirmed
+    ↓
+Paused
+    ↓
+Completed
+    ↓
+Cancelled
+```
+
+Within the same status, courses are ordered alphabetically by course name.
+
+Historical `CourseEnrollment` records also remain available on the relevant course learner/detail pages so that completed, paused, or cancelled participation remains visible for reporting and review.
+
+This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, learning outcomes, and historical training records.
 
 ---
 
@@ -249,16 +315,20 @@ The application therefore applies restrictions such as:
 Teacher
     ↓
 Only courses assigned to that teacher
+(current + historical where the page supports history)
 
 Company Administrator
     ↓
 Only courses and employees belonging to that company
+(current + historical where the page supports history)
 
 Learner / Employee
     ↓
 Only that learner's own enrolments,
 attendance and assessment data
 ```
+
+Historical visibility does not weaken role boundaries: status determines whether a record is current or historical, while teacher assignment, company ownership, and learner ownership continue to determine whether the authenticated user is authorised to access it.
 
 ---
 
@@ -442,6 +512,32 @@ When a learner becomes actively enrolled in a course that already contains gener
 Completed lessons are deliberately excluded.
 
 This prevents a learner who joins a course after it has started from receiving artificial attendance records for lessons that took place before their enrolment.
+
+Deleting a learner's `CourseEnrollment` also cleans up that learner's course-specific attendance relationships.
+
+The `ClassSession` records themselves are **not deleted or rewritten**, because they belong to the `Course` and represent the shared teaching schedule/history independently of any one learner.
+
+Instead, when the enrolment is deleted, all `Attendance` records that connect that learner to `ClassSession` records belonging to the same course are deleted.
+
+Conceptually:
+
+```text
+CourseEnrollment deleted
+        │
+        ▼
+Learner is no longer enrolled in the Course
+        │
+        ├── Course ClassSessions
+        │       └── preserved unchanged
+        │
+        └── Learner-specific Attendance records
+                for those Course ClassSessions
+                │
+                ▼
+              deleted
+```
+
+This ensures that removing a learner from a course also removes the learner from the course's attendance data, while preserving the shared lesson records required by the course and any remaining learners.
 
 ---
 
@@ -862,6 +958,10 @@ Instead, the existing attendance record changes status.
 Attendance records initially act as scheduled placeholders and are subsequently updated when the teacher records the actual attendance outcome.
 
 When a course is manually cancelled through the Django Admin, attendance records belonging to the applicable future sessions cancelled by that course-level action are also moved to `cancelled`. Historical attendance records are preserved.
+
+Attendance also participates in the `CourseEnrollment` deletion lifecycle. When a learner is removed from a course by deleting that learner's `CourseEnrollment`, the learner's `Attendance` records for that course's `ClassSession` records are deleted as well.
+
+The underlying `ClassSession` records remain intact because lesson/session identity belongs to the course, not to the individual enrolment.
 
 ---
 
@@ -1569,6 +1669,8 @@ EnglishGrows implements database constraints and application-level business rule
 - A learner cannot have duplicate enrolments for the same course.
 - Enrolment status is maintained independently from course status.
 - Completing a course automatically completes its active enrolments.
+- Historical `CourseEnrollment` records remain accessible on the relevant Teacher and Company Admin course-detail/learner pages regardless of course or enrolment status.
+- Deleting a `CourseEnrollment` removes that learner's `Attendance` records for the same course while preserving the course's shared `ClassSession` records.
 
 #### Timetable & Sessions
 
@@ -1594,6 +1696,7 @@ EnglishGrows implements database constraints and application-level business rule
 - Attendance records are automatically created for active learners when applicable.
 - Learners joining an existing course receive attendance records only for unfinished sessions.
 - Attendance records belonging to future sessions cancelled through the course-cancellation workflow are also moved to `cancelled`.
+- Deleting a learner's `CourseEnrollment` deletes that learner's attendance records for the course without deleting the shared `ClassSession` records.
 - Future `scheduled` attendance does not affect recorded attendance-rate calculations.
 
 #### Assessment
@@ -1673,6 +1776,26 @@ For example:
 This approach allows the platform to maintain a **single source of truth at database level** while presenting different views of that information depending on the user's role.
 
 Course activity also drives several dependent data flows automatically. When class sessions are generated, attendance records are created for enrolled students. When new students join a course already in progress, attendance records are generated only for the relevant unfinished sessions.
+
+The same relational structure also governs cleanup and historical access:
+
+```text
+CourseEnrollment deleted
+        │
+        ├── Course ClassSessions remain unchanged
+        └── learner-specific Attendance for that course is deleted
+
+Course manually set to Cancelled in Django Admin
+        │
+        ├── applicable future ClassSessions → cancelled
+        └── corresponding Attendance       → cancelled
+```
+
+Role-specific views then determine how current and historical data is exposed:
+
+- **Learner / Employee — My Course:** all lifetime enrolments belonging to the authenticated learner can provide course context; the selector appears only when more than one lifetime enrolment exists.
+- **Teacher:** assigned courses and their relevant historical enrolments remain accessible regardless of status on course-detail/learner pages.
+- **Company Administrator:** company courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary.
 
 Attendance, session completion and assessment data then contribute to the progress information displayed throughout the platform.
 
@@ -1812,6 +1935,10 @@ Student
 This is particularly important because the same student may participate in more than one course over time.
 
 Completed or previous enrolments can remain in the database without altering the student's account or creating duplicate user records.
+
+This historical separation also allows the learner/employee **My Course** page to use the authenticated learner's complete enrolment history as course context when more than one lifetime enrolment exists.
+
+When an enrolment is deliberately deleted rather than retained historically, only the learner-course relationship and that learner's course-specific `Attendance` records are removed. The shared `ClassSession` records remain part of the course's teaching history.
 
 The same architecture also supports employees who may undertake multiple company-sponsored courses during their time with an organisation.
 

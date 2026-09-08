@@ -2,6 +2,13 @@
 {% load static i18n %}
 
 
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/components/course_selector.css' %}">
+    {% block details_page_css %}{% endblock %}
+{% endblock %}
+
+
 {% block profile_content %}
 
 <section class="profile-page notranslate {% block details_page_shell_class %}{% endblock %}" translate="no" {% block details_page_attributes %}{% endblock %}>

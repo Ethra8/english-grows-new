@@ -4,7 +4,8 @@
 
 {% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
 
-    {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course only %}
+    {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course %}
+
 
 {% else %}
 
@@ -18,14 +19,14 @@
 
     <h2>
         <span class="course-type">
-            <img src="{% static 'icons/course_type_grey_icon.png' %}" alt="" aria-hidden="true" width="26">
+            <img src="{% static 'icons/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
             {{ course.course_type.name|default:"Course Type" }}
         </span>
 
         <span>|</span>
 
         <span class="course-type">
-            <img src="{% static 'icons/course_total_hours_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+            <img src="{% static 'icons/course_total_hours_navy_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
             {{ course.total_hours|clean_decimal }} h.
         </span>
     </h2>

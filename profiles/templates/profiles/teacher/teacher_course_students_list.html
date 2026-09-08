@@ -7,7 +7,7 @@
 {% block extra_title %}| Learners List  {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
@@ -100,7 +100,7 @@
                             {% for item in available_courses %}
 
                                 <a
-                                    href="{% url 'profiles:company_admin_course_details' item.id %}"
+                                    href="{% url 'profiles:teacher_course_details' item.id %}"
                                     class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
                                     role="menuitem"
                                 >
@@ -183,7 +183,7 @@
 
                             {% for item in available_courses %}
 
-                                <a href="{% url 'profiles:company_admin_course_details' item.id %}"
+                                <a href="{% url 'profiles:teacher_course_details' item.id %}"
                                     class="course-dropdown-option{% if course and item.id == course.id %} active{% endif %}"
                                     role="menuitem">
 
@@ -332,7 +332,7 @@
                         </div>
 
                         <div class="review">
-                            <a href="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}" class="btn-to-student-detail">
+                            <a href="{% url 'profiles:teacher_student_detail'  course.id enrollment.id %}" class="btn-to-student-detail">
                                 Review
                                 <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
                             </a>

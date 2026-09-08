@@ -4,8 +4,8 @@
 
 {% block extra_title %}| Attendance{% endblock %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+{% block details_page_css %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}

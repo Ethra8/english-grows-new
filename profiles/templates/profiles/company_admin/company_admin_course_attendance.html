@@ -8,7 +8,7 @@
 {% block extra_title %}| Attendance Record {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">

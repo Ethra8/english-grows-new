@@ -6,7 +6,7 @@
 {% block extra_title %}| Skills Overview{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skill_cards.css' %}">
@@ -21,11 +21,11 @@
 {% endblock %}
 
 {% block details_header %}
-    {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
+    {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=True %}
 {% endblock %}
 
 {% block details_nav %}
-    {% include "profiles/components/student_details_nav.html" with active_section="skills" nav_role="student" %}
+    {% include "profiles/components/student_details_nav.html" with active_section="skills" nav_role="teacher" %}
 {% endblock %}
 
 {% block details_content %}

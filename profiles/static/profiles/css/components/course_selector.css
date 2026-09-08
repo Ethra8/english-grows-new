@@ -1,0 +1,465 @@
+/* =========================================================
+   COURSE SELECTOR
+========================================================= */
+
+.course-selector-form {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;   
+    height: fit-content; 
+    background: rgba(var(--color-teal-rgb), 0.85);
+    padding: 0.75rem 0.15rem 0.75rem 1.2rem;
+    border-radius: 8px 8px 0 0;
+    border: outset 1px rgba(var(--color-frozen-water-rgb), 0.95);
+}
+
+.course-details-page .course-selector-form {
+    padding: 0.75rem 0.75rem 0.75rem 1.2rem;
+}
+
+.course-selector-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0;
+    color: var(--color-whitesmoke);
+    font-weight: 500;
+    width: 130px;
+    max-width: 130px;    
+}
+
+.course-selector-label img {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    /* width: 38px;
+    height: 38px; */
+    background: radial-gradient(circle, rgba(var(--color-frozen-water-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
+    border-radius: 999px;
+    margin-right: 0.5rem;
+}
+
+.course-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: fit-content;
+}
+
+.course-select-wrapper.course-dropdown {
+    position: relative;
+    z-index: 101;
+    display: block;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 600px;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.course-select {
+    width: 100%;
+    min-height: 36px;
+    height: 36px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0.45rem 3.5rem 0.45rem 1.1rem;
+    color: var(--color-navy);
+    border: 1px solid var(--color-pearlaqua);
+    border-radius: 8px;
+    box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18), inset 0 3px 10px rgba(0, 0, 0, 0.25);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.course-select:hover {
+    border-color: var(--color-pearlaqua);
+    box-shadow: var(--inner-shadow-turquoise);
+}
+
+.course-select:focus {
+    border-color: var(--color-pearlaqua);
+    box-shadow:
+        0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.22),
+        0 6px 16px rgba(var(--color-navy-rgb), 0.22);
+}
+
+.course-select-arrow {
+    position: absolute;
+    right: 1rem;
+    top: 30%;
+    transition: transform 0.2s ease;
+}
+
+.course-dropdown.open .course-select-arrow  {
+    transform: rotate(180deg);
+}
+
+.course-dropdown {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.course-dropdown-toggle {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* Selected text */
+.course-dropdown-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Dropdown menu */
+.course-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--color-whitesmoke);
+    border: 1px solid var(--color-pearlaqua);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.4rem 0.8rem rgba(var(--color-shadow-rgba));
+}
+
+/* Each course */
+.course-dropdown-option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    color: var(--color-navy);
+    box-sizing: border-box;
+    overflow: hidden;    
+    padding: 0.65rem 1rem;
+    border: 0;
+    background: var(--color-whitesmoke);
+    text-align: left;
+    cursor: pointer;
+}
+
+.course-dropdown-option:hover,
+.course-dropdown-option:focus {
+    background: rgba(var(--color-teal-rgb), 0.2);
+    outline: none;
+    color: var(--color-navy);
+    font-weight: 600;
+}
+
+/* Course name + status */
+.course-dropdown-course-name {
+    min-width: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Name inside each option */
+
+.course-dropdown-option .course-dropdown-course-name {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.course-dropdown-status {
+    flex-shrink: 0;
+    margin-left: 0.25rem;
+}
+/* END OF COURSE SELECTOR FORM *****************************/
+
+
+/* =========================================================
+   COURSE SELECTOR
+========================================================= */
+
+.course-selector-label {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 250px;
+    width: 250px;
+    max-width: 100%;
+    min-width: 0;
+    gap: 0.65rem;
+    margin: 0;
+    color: var(--color-whitesmoke);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.course-select-wrapper.course-dropdown {
+    position: relative;
+    z-index: 101;
+    display: block;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 600px;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.course-dropdown-toggle:hover,
+.course-dropdown-toggle:focus-visible {
+    border-color: var(--color-pearlaqua);
+    box-shadow: var(--inner-shadow-turquoise);
+}
+
+.course-dropdown-toggle:focus-visible {
+    box-shadow:
+        0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.22),
+        0 6px 16px rgba(var(--color-navy-rgb), 0.22);
+}
+
+.course-dropdown-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 0.5rem;
+}
+
+.course-dropdown-course-name {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.course-dropdown-status {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-left: 0.25rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.course-dropdown.open .course-select-arrow {
+    transform: rotate(180deg);
+}
+
+.course-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: var(--color-whitesmoke);
+    border: 1px solid var(--color-pearlaqua);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.4rem 0.8rem rgba(var(--color-shadow-rgba));
+}
+
+.course-dropdown-menu[hidden] {
+    display: none;
+}
+
+.course-dropdown-option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0.65rem 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 0;
+    border-bottom: 1px solid rgba(var(--color-steel-rgb), 0.15);
+    background: var(--color-whitesmoke);
+    color: var(--color-navy);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+}
+
+.course-dropdown-option:last-child {
+    border-bottom: 0;
+}
+
+.course-dropdown-option:hover,
+.course-dropdown-option:focus-visible {
+    background: rgba(var(--color-teal-rgb), 0.2);
+    outline: none;
+}
+
+.course-dropdown-option.active {
+    background: rgba(var(--color-pearlaqua-rgb), 0.16);
+}
+
+.course-dropdown-option .course-dropdown-course-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.course-dropdown-option .course-dropdown-status {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-left: 0.25rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+@media (max-width: 1499.98px) {
+ 
+    .course-selector-form {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        width: 100%;
+        min-width: 0;
+        max-height: fit-content;
+        padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+    }
+
+}
+
+
+@media (max-width: 991.99px) {
+    
+    .course-selector-form {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    .course-selector-label {
+        flex: 1;
+        width: fit-content;
+    }
+
+    .course-select-wrapper.course-dropdown {
+        flex: 1 1 auto;
+        width: 100%;
+        /* max-width: 100%; */
+        /* min-width: 100%; */
+        margin: 0;
+    }
+
+    .course-dropdown-toggle {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        font-size: 0.9rem;
+    }
+
+}
+
+
+
+@media (max-width: 767.98px) {
+
+    .course-select-wrapper.course-dropdown {
+        max-width: 100%;
+    }
+
+    .course-selector-form {
+        padding: 0.15rem 0.5rem;    
+        /* border: outset 1px rgba(var(--color-teal-rgb), 0.3); */
+        border-radius: 8px 8px 0 0;
+        /* flex-direction: column; */
+        padding: 0.75rem;
+    }
+
+    .course-selector-label {
+        align-items: center;
+        gap: 0.65rem;
+        margin: 0;
+        padding: .25rem 0.5rem 0.25rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        min-width: 200px;
+    }
+
+    .student-detail-page .course-selector-form {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0.4rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: auto;
+        padding: 0.4rem 0.75rem;
+    }
+
+    .student-detail-page .course-selector-label {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .student-detail-page .course-select-wrapper {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .student-detail-page .course-dropdown-toggle {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+    }
+
+}

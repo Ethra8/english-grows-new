@@ -1,11 +1,11 @@
 {% load static i18n %}
 
 {% if selector_items|length > 1 %}
-
+<div>
     <form method="get" class="course-selector-form notranslate" translate="no">
 
         <div class="course-selector-label">
-            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true">
+            <img src="{% static 'icons/one_to_one_course_icon.png' %}" alt="" aria-hidden="true" width="46">
             <span>{% trans "Course" %}</span>
         </div>
 
@@ -87,5 +87,5 @@
         </div>
 
     </form>
-
+</div>
 {% endif %}

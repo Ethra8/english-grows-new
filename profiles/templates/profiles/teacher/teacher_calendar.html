@@ -5,7 +5,7 @@
 
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+    {{ block.super }}
 <link rel="stylesheet" href="{% static 'profiles/css/features/calendar.css' %}">
 {% endblock %}
 

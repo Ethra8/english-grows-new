@@ -7,8 +7,8 @@
 {% block extra_title %}| Student Page {% endblock %}
 
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profiles_base.css' %}">
+{% block details_page_css %}
+    {{ block.super }}
     <!-- Currently shared with Company Admin student-details styling -->
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
 
