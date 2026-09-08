@@ -41,7 +41,7 @@
     background: linear-gradient(223deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
     box-shadow:
         0 10px 24px rgba(var(--color-teal-rgb), 0.08),
-        inset 0 0 10px rgba(var(--color-icy-rgb), 0.8);
+        inset 0 0 10px rgba(var(--color-frozen-water-rgb), 0.8);
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
@@ -72,7 +72,7 @@
 }
 
 .company-attendance-summary .attendance-summary-card strong {
-    color: var(--color-icy);
+    color: var(--color_frozen-water);
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 1;
@@ -96,7 +96,7 @@
 
 .company-attendance-summary .status-pill.completed {
     color: var(--color-whitesmoke);
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     background: rgba(0, 210, 155, 0.12);
 }
 
@@ -270,7 +270,7 @@
 .all-course-attendance .attendance-list-card {
     min-height: fit-content;
     background: linear-gradient(61deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-radius: 8px 8px 0 0;
     padding: 0;
     overflow-x: auto;

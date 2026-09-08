@@ -152,7 +152,7 @@ uses a <span> instead of .completion-ring-value.
 
 .completion-ring--turquoise {
     --ring-color:
-        var(--color-turquoise);
+        var(--color-pearlaqua);
 }
 
 
@@ -172,7 +172,7 @@ uses a <span> instead of .completion-ring-value.
     --ring-width: 7px;
 
     --ring-color:
-        var(--color-turquoise);
+        var(--color-tropical-teal);
 
     --ring-track:
         rgba(255, 255, 255, 0.30);

@@ -32,8 +32,8 @@
     border-radius: 8px;
     padding: 20px 12px 12px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    /* background: rgba(var(--color-turquoise-rgb), 0.2); */
-    background: linear-gradient(107deg,rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.95), rgba(var(--color-turquoise-rgb), 0.65));
+    /* background: rgba(var(--color-pearlaqua-rgb), 0.2); */
+    background: linear-gradient(107deg,rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.95), rgba(var(--color-pearlaqua-rgb), 0.65));
     margin: 0 auto 60px;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .fc th {
-    background-color: rgba(var(--color-turquoise-rgb), 0.3) /* #6afae1; */
+    background-color: rgba(var(--color-pearlaqua-rgb), 0.3) /* #6afae1; */
 }
 
 
@@ -105,7 +105,7 @@
 
 /* Right chunk: month/week/list/year */
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button {
-    background-color: var(--color-icy);
+    background-color: var(--color_frozen-water);
     color: rgb(59, 59, 59);
     text-transform: capitalize;
     font-weight: 600;

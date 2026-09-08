@@ -30,7 +30,7 @@ h3 > div {
 
 .student-list-header h3 span {
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     font-size: 1.2rem;
     font-weight: 500;
 }
@@ -175,7 +175,7 @@ h3 > div {
     position: relative;
     width: 60px;
     height: 60px;    border-radius: 50%;
-    background: rgba(var(--color-turquoise-rgb), 0.16);
+    background: rgba(var(--color-pearlaqua-rgb), 0.16);
     border: 1px outset rgba(170, 170, 170, 0.2);
     display: flex;
     align-items: center;
@@ -237,7 +237,7 @@ h3 > div {
     flex-direction: row;
     align-items: center;
     gap: 1rem;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.8);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.8);
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     margin: 0;
@@ -274,7 +274,7 @@ h3 > div {
 
     background-color: rgba(var(--color-navy-rgb), 0.8);
 
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     border-radius: 6px;
 }
 
@@ -299,14 +299,14 @@ h3 > div {
 }
 
 .sort-option:hover {
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     text-decoration: none;
-    background-color: rgba(var(--color-turquoise-rgb), 0.14);
+    background-color: rgba(var(--color-pearlaqua-rgb), 0.14);
 }
 
 .sort-option.active {
-    color: var(--color-turquoise);
-    background-color: rgba(var(--color-turquoise-rgb), 0.14);
+    color: var(--color-pearlaqua);
+    background-color: rgba(var(--color-pearlaqua-rgb), 0.14);
 }
 
 

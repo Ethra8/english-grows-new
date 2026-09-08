@@ -3,7 +3,7 @@
     width: 100%;
     margin: 2rem 0;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    background-color: rgba(var(--color-aquamarine-rgb), 0.15);    
+    background-color: rgba(var(--color-frozen-water-rgb), 0.5);    
     border-radius: 8px;
 }
 
@@ -68,7 +68,7 @@
     background: rgba(var(--color-teal-rgb), 0.85);
     padding: 0.75rem 0.15rem 0.75rem 1.2rem;
     border-radius: 8px 8px 0 0;
-    border: outset 1px rgba(var(--color-turquoise-rgb), 0.95);
+    border: outset 1px rgba(var(--color-pearlaqua-rgb), 0.95);
 }
 
 .course-details-page .course-selector-form {
@@ -82,7 +82,7 @@
     justify-content: center;
     width: 38px;
     height: 38px;
-    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: radial-gradient(circle, rgba(var(--color-frozen-water-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
 }
@@ -128,7 +128,7 @@
     -moz-appearance: none;
     padding: 0.45rem 3.5rem 0.45rem 1.1rem;
     color: var(--color-navy);
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     border-radius: 8px;
     box-shadow: 0 5px 14px rgba(var(--color-navy-rgb), 0.18), inset 0 3px 10px rgba(0, 0, 0, 0.25);
     font-size: 0.95rem;
@@ -139,14 +139,14 @@
 }
 
 .course-select:hover {
-    border-color: var(--color-turquoise);
+    border-color: var(--color-pearlaqua);
     box-shadow: var(--inner-shadow-turquoise);
 }
 
 .course-select:focus {
-    border-color: var(--color-turquoise);
+    border-color: var(--color-pearlaqua);
     box-shadow:
-        0 0 0 3px rgba(var(--color-turquoise-rgb), 0.22),
+        0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.22),
         0 6px 16px rgba(var(--color-navy-rgb), 0.22);
 }
 
@@ -214,7 +214,7 @@
     width: 100%;
     z-index: 1000;
     background: var(--color-whitesmoke);
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 0.4rem 0.8rem rgba(var(--color-shadow-rgba));

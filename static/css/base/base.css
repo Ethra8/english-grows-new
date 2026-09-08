@@ -9,7 +9,7 @@
     position: fixed;
     z-index: 999;
     width: 100%;
-    background: var(--color-turquoise);
+    background: var(--color-pearlaqua);
     display: flex;
     align-items: center;      /* Vertical centering */
     justify-content: space-around;  /* Horizontal centering */
@@ -24,7 +24,7 @@
 }
 
 .maintenance-banner>div {
-    background-color: var(--color-icy);
+    background-color: var(--color_frozen-water);
     width: 98%;
     display: flex;
     flex-direction: column;
@@ -150,7 +150,7 @@ a.js-back-link:hover {
 
 .btn-navbar {
     display: inline-flex;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.6);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.6);
     color: var(--color-whitesmoke);
     padding: 0 1.1rem;
     justify-content: space-between;
@@ -165,8 +165,8 @@ a.js-back-link:hover {
 }
 
 .btn-navbar:hover {
-    background: rgba(var(--color-turquoise-rgb), 0.15);
-    color: var(--color-icy);
+    background: rgba(var(--color-pearlaqua-rgb), 0.15);
+    color: var(--color_frozen-water);
     text-decoration: none;
 }
 
@@ -188,7 +188,7 @@ a.js-back-link:hover {
     color: var(--color-whitesmoke);
     text-transform: uppercase;
     padding: 0.5rem 1rem;
-    border: outset 1px var(--color-turquoise);
+    border: outset 1px var(--color-pearlaqua);
     box-shadow: 0 1px 3px 0 rgba(var(--color-shadow-rgba));    
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -251,10 +251,10 @@ a.js-back-link:hover {
 .error-page-button:hover,
 .error-page-button:active,
 .error-page-button:focus {
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     color: var(--color-navy);
     text-decoration: none;
-    background: rgba(var(--color-icy-rgb), 1);
+    background: rgba(var(--color-frozen-water-rgb), 1);
     align-self: center;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.5);
@@ -269,13 +269,13 @@ a.js-back-link:hover {
 .btn-outline-custom:hover,
 .btn-outline-custom:active,
 .btn-outline-custom:focus {
-    background: var(--color-turquoise);
+    background: var(--color-pearlaqua);
     color: var(--color-navy) !important;
     font-weight: 700;
 }
 
 .btn-bg-light {
-    background-color: var(--color-turquoise);
+    background-color: var(--color-pearlaqua);
     color: var(--color-navy) !important;
     border: inset 2px teal;
 }
@@ -356,7 +356,7 @@ a.js-back-link:hover {
 
 /* #topnav .fa-user:hover, */
 #topnav .fa-arrow-right-from-bracket:hover {
-    color: var(--color-icy) !important;
+    color: var(--color_frozen-water) !important;
 }
 
 #contact-form,
@@ -407,7 +407,7 @@ a.js-back-link:hover {
 }
 
 a.text-white:hover {
-    color: var(--color-icy) !important;
+    color: var(--color_frozen-water) !important;
 }
 
 .eg-font {
@@ -429,7 +429,7 @@ a.text-white:hover {
 
 .list-inline-item p:hover,
 .list-inline-item .icon-nav:hover {
-    color: var(--color-icy);
+    color: var(--color_frozen-water);
     text-align: left;
 }
 
@@ -448,7 +448,7 @@ a.text-white:hover {
     margin: 0 1.75rem;
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.6);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.6);
     background: rgba(255, 255, 255, 0.06);
 }
 
@@ -470,11 +470,11 @@ a.text-white:hover {
 
 .nav-language-btn:hover,
 .nav-language-btn:focus-visible {
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
 }
 
 .nav-language-btn.active {
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
 }
 
 .nav-language-btn.active::after {
@@ -486,7 +486,7 @@ a.text-white:hover {
     height: 2px;
     transform: translateX(-50%);
     border-radius: 999px;
-    background: var(--color-turquoise);
+    background: var(--color-pearlaqua);
 }
 
 .nav-language-divider {
@@ -523,7 +523,7 @@ footer .topage-link {
 }
 
 footer .topage-link:hover {
-    color: var(--color-turquoise) !important;
+    color: var(--color-pearlaqua) !important;
 }
 
 #subscribe-link a {
@@ -541,7 +541,7 @@ footer .topage-link:hover {
 }
 
 #subscribe-link:hover{
-    background-color: var(--color-icy);
+    background-color: var(--color_frozen-water);
     color: var(--color-navy) !important;
     font-weight: 600;
 }
@@ -551,7 +551,7 @@ footer .topage-link:hover {
 } 
 
 .icons-social {
-    color: var(--color-icy);
+    color: var(--color_frozen-water);
     font-size: 1.5rem;
     padding: 15px;
     transition: all 0.15s linear;
@@ -795,7 +795,7 @@ span.btt-link:hover {
 }
 
 #index header p {
-    color: var(--color-icy);
+    color: var(--color_frozen-water);
     margin-top: 0.25rem;
     font-size: 1.2rem;
     width: 75%;
@@ -1020,7 +1020,7 @@ stacks every slide in precisely the same screen position.
 
     background-color: transparent;
 
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     border-radius: 50%;
 
     cursor: pointer;
@@ -1036,13 +1036,13 @@ stacks every slide in precisely the same screen position.
 }
 
 .platform-slide-dot:focus {
-    outline: 2px solid rgba(var(--color-turquoise-rgb), 0.45);
+    outline: 2px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     outline-offset: 3px;
 }
 
 .platform-slide-dot.active {
-    background-color: var(--color-turquoise);
-    border-color: var(--color-turquoise);
+    background-color: var(--color-pearlaqua);
+    border-color: var(--color-pearlaqua);
 }
 
 /* ******************************* |

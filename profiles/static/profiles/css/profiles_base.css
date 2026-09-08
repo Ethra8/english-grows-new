@@ -122,7 +122,7 @@ main.profile-main {
 .student-edit-attendance-btn,
 .skill-edit-link,
 .btn-skill-save-assessment {
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     color: var(--color-teal);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
@@ -134,7 +134,7 @@ main.profile-main {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(var(--color-turquoise-rgb), 0.1);
+    background: rgba(var(--color-pearlaqua-rgb), 0.1);
     align-self: center;
     cursor: pointer;
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
@@ -191,7 +191,7 @@ div:has(> .student-action-btn) {
     justify-content: center;
     gap: 0.75rem;
     min-height: 70px;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-radius: 8px;
     background: rgba(var(--color-navy-rgb), 0.45);
     color: var(--color-whitesmoke);
@@ -242,7 +242,7 @@ div:has(> .student-action-btn) {
 
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
-    border-top: 14px solid var(--color-turquoise);
+    border-top: 14px solid var(--color-pearlaqua);
     filter: drop-shadow(0 3px 4px rgba(var(--color-navy-rgb), 0.45));
 }
 
@@ -251,7 +251,7 @@ div:has(> .student-action-btn) {
 } */
 
 .attendance-filter-btn strong {
-    background: rgba(var(--color-turquoise-rgb), 0.18);
+    background: rgba(var(--color-pearlaqua-rgb), 0.18);
     border-radius: 999px;
     padding: 0.25rem 0.65rem;
     color: var(--color-whitesmoke);
@@ -269,18 +269,18 @@ div:has(> .student-action-btn) {
 .course-status-btn.active,
 .course-status-btn.active:hover {
     background: var(--bg-gradient-metacard);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
     color: var(--color-whitesmoke);
 }
 
 .course-status-btn:hover {
     background: var(--bg-gradient-metacard);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
     color: rgba(var(--color-whitesmoke-rgb), 1);
 }
 
 .btn-join-class {
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     color: var(--color-whitesmoke);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
@@ -306,7 +306,7 @@ div:has(> .student-action-btn) {
 }
 
 .btn-join-class:hover {
-   color: var(--color-whitesmoke) !important;  /* var(--color-turquoise) */
+   color: var(--color-whitesmoke) !important;  /* var(--color-pearlaqua) */
     box-shadow: 0 1px 2px 0 #8b8b8b;
     font-weight: 500;
 }
@@ -383,16 +383,16 @@ div:has(> .student-action-btn) {
 
 .sidebar-user span {
     display: inline-block;
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     border-radius: 999px;
     padding: 0.5rem 1.4rem;
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     font-size: 0.9rem;
 }
 
 .profile-sidebar hr {
-    /* border: 1px solid rgba(var(--color-icy-rgb), 0.7); */
-    border: 1px outset var(--color-turquoise);
+    /* border: 1px solid rgba(var(--color-frozen-water-rgb), 0.7); */
+    border: 1px outset var(--color-pearlaqua);
 }
 
 .sidebar-nav {
@@ -436,7 +436,7 @@ div:has(> .student-action-btn) {
     justify-content: center;
 
     padding: 0;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.8);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.8);
     border-radius: 8px;
 
     background: transparent;
@@ -453,7 +453,7 @@ div:has(> .student-action-btn) {
 .mobile-sidebar-toggle:hover,
 .mobile-sidebar-toggle:focus {
     background-color: var(--color-teal);
-    border-color: var(--color-turquoise);
+    border-color: var(--color-pearlaqua);
     color: var(--color-whitesmoke);
     outline: none;
 }
@@ -511,9 +511,9 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.today {
-    background: var(--color-icy);
+    background: var(--color_frozen-water);
     color: var(--color-navy);
-    border: 1px outset var(--color-icy) !important;
+    border: 1px outset var(--color_frozen-water) !important;
 }
 
 .status-badge.active,
@@ -541,8 +541,8 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.completed {
-    background: rgba(var(--color-turquoise-rgb), 0.15);
-    border: 0.5px solid rgba(var(--color-turquoise-rgb), 0.15) !important;
+    background: rgba(var(--color-pearlaqua-rgb), 0.15);
+    border: 0.5px solid rgba(var(--color-pearlaqua-rgb), 0.15) !important;
 }
 
 /* END of STATUS-BADGES *************/

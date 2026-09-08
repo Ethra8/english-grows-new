@@ -131,12 +131,6 @@
         gap: 1rem;
     }
 
-    /* TODAY'S CLASSES */
-    #company_admin .today-sessions-list {
-        width: 100%;
-        min-width: 0;
-    }
-
     /* Time */
     #company_admin .today-time {
         grid-area: time;

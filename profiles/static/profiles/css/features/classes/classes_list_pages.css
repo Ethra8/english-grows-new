@@ -79,7 +79,7 @@
     margin-left: 1.5rem;
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    background: rgba(var(--color-turquoise-rgb), 0.18);
+    background: rgba(var(--color-pearlaqua-rgb), 0.18);
     color: var(--color-whitesmoke);
     font-family: "Big Shoulders Display", sans-serif;
     font-size: 1.8rem;
@@ -90,7 +90,7 @@
 
 .classes-list-filter {
     padding: 0.6rem 2.5rem 0.6rem 1rem;
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     border-radius: 8px;
     background: rgba(var(--color-navy-rgb), 0.60);
     color: var(--color-whitesmoke);
@@ -176,7 +176,7 @@
 
 .classes-status-tab:hover strong,
 .classes-status-tab.active strong {
-    background: rgba(var(--color-turquoise-rgb), 0.42);
+    background: rgba(var(--color-pearlaqua-rgb), 0.42);
 }
 
 .classes-status-tab.active {
@@ -204,14 +204,14 @@
     border: 0;
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
-    border-top: 10px solid var(--color-turquoise);
+    border-top: 10px solid var(--color-pearlaqua);
     border-radius: 0;
     background: transparent;
     filter: drop-shadow(0 1px 1px rgba(var(--color-navy-rgb), 0.16));
 }
 
 .classes-status-tab:focus-visible {
-    outline: 3px solid rgba(var(--color-turquoise-rgb), 0.32);
+    outline: 3px solid rgba(var(--color-pearlaqua-rgb), 0.32);
     outline-offset: 2px;
 }
 
@@ -490,11 +490,11 @@
 .teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--completed) {
     grid-template-columns:
         minmax(400px, 1fr)
-        minmax(60px, 0.25fr)
+        90px
         minmax(200px, 1fr)
-        minmax(150px, 0.75fr)
+        minmax(120px, 0.7fr)
         minmax(150px, 1fr);
-    gap: 1rem;
+    /* gap: 1rem; */
     min-width: 1300px;
 }
 
@@ -668,14 +668,18 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
     min-width: 0;
     height: 68%;
     margin: 0;
-    padding: 0 1rem;
+    padding: 0 25%;
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
     color: var(--color-slate);
     gap: 0.75rem;
+}
+
+.class-list-student-num {
+    border-right: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    padding: 0 40%;
 }
 
 .class-list-date .icon,
@@ -759,7 +763,7 @@
 .class-row--completed:hover .class-attendance-link,
 .class-attendance-link:hover,
 .class-attendance-link:focus-visible {
-    background: rgba(var(--color-turquoise-rgb), 0.13);
+    background: rgba(var(--color-pearlaqua-rgb), 0.13);
     color: var(--color-navy);
     transform: translateX(2px);
 }

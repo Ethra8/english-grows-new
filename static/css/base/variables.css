@@ -19,9 +19,13 @@
     --color-tropical-teal-rgb: 22, 175, 181;
 
     /* Turquoise */
-    --color-turquoise: #5ff0df;
+    /* --color-turquoise: #5ff0df;
     --color-turquoise-rgb: 95, 240, 223;
-
+ */
+    /* Pearl Aqua: #88E7DC */
+    --color-pearlaqua: #88E7DC;
+    --color-pearlaqua-rgb: 136, 231, 220;
+    
     /* Electric aqua */
     /* --color-aqua: #5FF5FC;
     --color-aqua-rgb: 95, 245, 252; */
@@ -29,9 +33,14 @@
     /* Aquamarine */
     --color-aquamarine: #B5F9DE;
     --color-aquamarine-rgb: 181, 249, 222;
+    
     /* Icy Aqua */
-    --color-icy: #C7fff9;
-    --color-icy-rgb: 199, 255, 249;
+    /* --color-icy: #C7fff9;
+    --color-icy-rgb: 199, 255, 249; */
+
+    /* Frozen Water */
+    --color_frozen-water: #E4FFF4;
+    --color-frozen-water-rgb: 228, 255, 244;
     /* Azure Mist */
     --color-mist: #EDF9F7;
     --color-mist-rgb: 237, 249, 247;
@@ -93,7 +102,7 @@
     /* Active Enrollment*/
     --color-active-dot: #4dffb5;
     /* Confirmed Enrollment */
-    --color-completed-dot: #006b7d;
+    --color-confirmed-dot: #006b7d;
     /* Paused Enrollment */
     --color-paused-dot: #ffb000;
     /* Cancelled Enrollment */
@@ -149,7 +158,7 @@
 
     --inner-shadow-turquoise:
         0 7px 18px rgba(var(--color-navy-rgb), 0.24),
-        inset 0 4px 10px rgba(var(--color-turquoise-rgb), 0.5);
+        inset 0 4px 10px rgba(var(--color-pearlaqua-rgb), 0.5);
 
     --inner-shadow-teal: 
         0 7px 14px rgba(var(--color-teal-rgb), 0.44),

@@ -49,7 +49,7 @@ stop stretching the two columns together.
 /* SKILL CARD **********************/
 .skill-card {
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.1), rgba(var(--color-teal-rgb), 0.2));
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     border-radius: 8px;
     overflow: hidden;
     padding: 0.5px;
@@ -166,7 +166,7 @@ stop stretching the two columns together.
     font-weight: 900;
     font-size: 2.5rem;
     color: rgba(var(--color-listening-rgb), 0.7);
-    /* color: rgba(var(--color-turquoise-rgb), 0.2); */
+    /* color: rgba(var(--color-pearlaqua-rgb), 0.2); */
     rotate: calc(-10deg);
 }
 

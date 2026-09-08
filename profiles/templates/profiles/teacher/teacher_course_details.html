@@ -285,8 +285,8 @@
         </a>
 
         <a href="{% url 'profiles:teacher_group_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
-            <div class="metric-icon completion-ring"
-                style="--completion: {{ average_attendance|default:0 }};">
+            <div class="metric-icon"
+                style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>
                     <img src="{% static 'icons/clipboard_check_turquoise_icon.png' %}" alt="" width="22" aria-hidden="true">
             </div>

@@ -45,7 +45,8 @@
 - [Design Choices](#design-choices)
   - [Colour System](#colour-system)
     - [Colour Architecture](#colour-architecture)
-    - [Core Brand / Interface Palette](#core-brand---interface-palette)
+    - [Core Brand / Interface Palette](#core-brand--interface-palette)
+    - [Supporting Neutrals](#supporting-neutrals)
     - [CEFR Level Colours](#cefr-level-colours)
     - [Language Skills Colours](#language-skills-colours)
     - [Semantic / Status Colours](#semantic--status-colours)
@@ -1752,31 +1753,31 @@ StudentSkillAssessment
                 └── Rating
 ```
 
-Subskills are evaluated using qualitative assessment categories such as:
+Subskills are evaluated using the current qualitative assessment categories:
 
-- **Strong**
-- **Confident**
-- **Required Standard**
-- **Developing**
-- **Needs Work**
+- **Priority areas**
+- **Developing areas**
+- **Required standard achieved**
+- **Confident areas**
+- **Key strengths**
 
-The overall skill score is derived from the student's subskill assessments and presented on a `/10` scale.
+The overall skill score is derived from the student's rated subskills and presented on a `/10` scale.
 
 Historical progress is stored independently through assessment snapshots.
 
 ```text
 Current Assessment
         │
-        ├── Snapshot — Term / Assessment Point 1
-        ├── Snapshot — Term / Assessment Point 2
-        └── Snapshot — Term / Assessment Point 3
+        ├── Detailed Assessment Snapshots
+        │
+        └── Term Assessment Snapshots
 ```
 
-A snapshot records a skill score at a particular stage of the course without replacing earlier results.
+`StudentSkillAssessmentSnapshot` records meaningful changes to the assessment over time, while `StudentSkillTermSnapshot` records formal assessment checkpoints.
 
 This distinction is essential because updating the student's current assessment should not destroy the data required to visualise their development over time.
 
-The resulting historical records are used by the progress charts shown to teachers, students and company administrators.
+The resulting historical records are used by progress interfaces shown to teachers, students and company administrators.
 
 ---
 
@@ -1837,9 +1838,11 @@ Role-specific dashboards and navigation expose the information most relevant to 
 
 ---
 
-The **English Grows** interface uses a carefully defined colour system centred around navy, tropical teal, cyan, turquoise and aquamarine tones, supported by cool neutrals and a small set of purpose-specific semantic colours.
+The **English Grows** interface uses a deliberately restrained aqua–teal–navy brand palette, supported by a dedicated cool-neutral system.
 
-The system has been designed to reinforce the platform's **boutique corporate identity** while maintaining clear visual hierarchy, consistency and readability across dashboards, navigation, cards, forms, assessment interfaces and data visualisations.
+The colour system has been refined to reinforce the platform's **boutique corporate identity** while maintaining clear visual hierarchy, consistency and readability across dashboards, navigation, cards, lists, tables, forms, assessment interfaces and data visualisations.
+
+The current palette intentionally reduces highly saturated accent colours in favour of a calmer progression from very light contextual surfaces through aqua and teal to deep navy.
 
 Colour is used deliberately to communicate:
 
@@ -1862,35 +1865,34 @@ Colour is therefore treated as a **functional component of the design system**, 
 
 The overall colour architecture is organised into **four functional layers**:
 
-1. **Brand / Interface Colours** — establish the visual identity and general UI hierarchy of the application.
+1. **Brand / Interface Colours** — establish product identity, interface hierarchy, interaction and supporting surfaces.
 2. **Assessment / Data Colours** — provide persistent visual identification of the four principal language skills.
 3. **CEFR Level Colours** — provide persistent visual identification of language proficiency classifications from A1 to C2.
-4. **Semantic / Status Colours** — communicate operational meaning such as active, confirmed, paused, completed, attended, excused or missed.
+4. **Semantic / Status Colours** — communicate operational states and outcomes across learners, enrolments, courses and attendance.
 
 These layers are **functionally distinct rather than mutually exclusive palettes**. Selected brand colours are intentionally reused for semantic states where their visual character supports the intended meaning. This avoids unnecessary expansion of the overall palette while maintaining consistent semantic associations.
+
+The Brand / Interface layer itself contains both the principal chromatic palette and a supporting neutral system:
 
 ```text
 COLOUR SYSTEM
 │
 ├── BRAND / INTERFACE COLOURS
 │   │
-│   ├── DARK / CORPORATE
-│   │   └── #0B355F  Oxford Blue
-│   │
-│   ├── BRAND / INTERACTIVE ACCENTS
-│   │   ├── #16AFB5  Tropical Teal
-│   │   ├── #07C0C7  Strong Cyan
-│   │   └── #5FF0DF  Turquoise
-│   │
-│   ├── LIGHT / CONTEXTUAL SURFACES
-│   │   ├── #B5F9DE  Aquamarine
-│   │   ├── #C7FFF9  Icy Aqua
+│   ├── CORE BRAND
 │   │   ├── #EDF9F7  Azure Mist
-│   │   └── #F5F5F5  White Smoke
+│   │   ├── #E4FFF4  Frozen Water
+│   │   ├── #B5F9DE  Aquamarine
+│   │   ├── #88E7DC  Pearl Aqua
+│   │   ├── #16AFB5  Tropical Teal
+│   │   ├── #006B7D  Stormy Teal
+│   │   └── #002D5A  Oxford Navy
 │   │
-│   └── COOL NEUTRALS
-│       ├── #4F6870  Blue Slate
-│       └── #7A949B  Cool Steel
+│   └── SUPPORTING NEUTRALS
+│       ├── #F5F5F5  White Smoke
+│       ├── #CFDCDC  Grey Mist
+│       ├── #7A949B  Cool Steel
+│       └── #4F6870  Blue Slate
 │
 ├── ASSESSMENT / DATA COLOURS
 │   │
@@ -1910,95 +1912,157 @@ COLOUR SYSTEM
 │
 └── SEMANTIC / STATUS COLOURS
     │
-    ├── LEARNER STATUS
-    │   ├── #38DF9C  Active
+    ├── ENROLMENT STATUS
+    │   ├── #4DFFB5  Active
+    │   ├── #006B7D  Confirmed
+    │   ├── #FFB000  Paused
+    │   ├── #EF4444  Cancelled
+    │   ├── #7A949B  Completed
     │   └── #7A949B  Inactive
     │
     ├── COURSE STATUS
-    │   ├── #16AFB5  Confirmed
     │   ├── #5FF0DF  Active
+    │   ├── #006B7D  Confirmed
     │   ├── #FFB000  Paused
     │   ├── #EF4444  Cancelled
-    │   └── #4F6870  Completed
+    │   └── #7A949B  Completed
     │
-    └── ATTENDANCE STATUS
-        ├── #38DF9C  Attended
-        ├── #07C0C7  Excused
-        └── #FF5A5A  Missed
+    ├── ATTENDANCE STATUS
+    │   ├── #4DFFB5  Attended
+    │   ├── #FF5A5A  Missed
+    │   ├── #666666  Excused
+    │   └── #FFB000  Pending
+    │
+    └── ATTENDANCE SUBMISSION STATUS
+        ├── #C47D00  Awaiting
+        └── #008F78  Complete
 ```
 
 The four layers are **conceptually independent but intentionally interconnected**:
 
-- the **brand/interface palette** establishes the identity and visual hierarchy of English Grows;
-- the **assessment/data palette** provides persistent visual identification of pedagogical skill information;
-- the **CEFR level palette** provides persistent visual identification of language proficiency classifications;
-- the **semantic/status palette** communicates application state, reusing selected brand colours where appropriate and introducing dedicated semantic colours only where necessary.
+- the **Brand / Interface palette** establishes the identity, hierarchy, surfaces and structural language of English Grows;
+- the **Assessment / Data palette** provides persistent visual identification of pedagogical skill information;
+- the **CEFR Level palette** provides persistent visual identification of language proficiency classifications;
+- the **Semantic / Status palette** communicates operational state, reusing selected brand colours where appropriate and introducing dedicated semantic colours where necessary.
+
+A colour can therefore remain valid as a semantic token without belonging to the current core brand palette.
 
 Colour is always accompanied by text, labels, icons or other interface context rather than being used as the sole means of communicating meaning.
 
 ---
 
-### Core Brand - Interface Palette
+### Core Brand / Interface Palette
 
 ---
 
-The core **English Grows** interface palette consists of ten colours:
-
-<img width="1600" height="1200" alt="Color Palette_EnglishGrows" src="https://github.com/user-attachments/assets/a92e4372-16ec-4776-96e2-314406eaeed6" />
+The current **English Grows** core brand/interface palette consists of seven chromatic colours:
 
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
-| **Oxford Blue** | ![#0B355F](https://img.shields.io/badge/Oxford_Blue-0B355F?style=flat&labelColor=0B355F&color=0B355F) | `#0B355F` | Primary brand colour, navigation, headings and high-emphasis elements |
-| **Tropical Teal** | ![#16AFB5](https://img.shields.io/badge/Tropical_Teal-16AFB5?style=flat&labelColor=16AFB5&color=16AFB5) | `#16AFB5` | Principal mid-tone (`rgb(22, 175, 181)`), data / completion fills and restrained interactive emphasis on light surfaces |
-| **Strong Cyan** | ![#07C0C7](https://img.shields.io/badge/Strong_Cyan-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` | Primary interactive colour and distinctive brand accent |
-| **Turquoise** | ![#5FF0DF](https://img.shields.io/badge/Turquoise-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Secondary accent, indicators and selected interface elements |
-| **Aquamarine** | ![#B5F9DE](https://img.shields.io/badge/Aquamarine-B5F9DE?style=flat&labelColor=B5F9DE&color=B5F9DE) | `#B5F9DE` | Restricted contextual / identity surface for course headers and static featured information; typically used as a very soft tint rather than as a general accent |
-| **Icy Aqua** | ![#C7FFF9](https://img.shields.io/badge/Icy_Aqua-C7FFF9?style=flat&labelColor=C7FFF9&color=C7FFF9) | `#C7FFF9` | Soft highlighted backgrounds and subtle accent surfaces |
-| **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Light backgrounds, surfaces and subtle visual separation |
-| **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Neutral data surfaces and card backgrounds; occasionally used as light text on dark surfaces |
-| **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Dark neutral, secondary text and subdued interface elements |
-| **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary neutral, supporting text, borders and low-emphasis elements |
+| **Azure Mist** | ![#EDF9F7](https://img.shields.io/badge/Azure_Mist-EDF9F7?style=flat&labelColor=EDF9F7&color=EDF9F7) | `#EDF9F7` | Very light aqua-tinted background and low-intensity surface differentiation |
+| **Frozen Water** | ![#E4FFF4](https://img.shields.io/badge/Frozen_Water-E4FFF4?style=flat&labelColor=E4FFF4&color=E4FFF4) | `#E4FFF4` | Soft contextual identity surface, established particularly for course-header backgrounds |
+| **Aquamarine** | ![#B5F9DE](https://img.shields.io/badge/Aquamarine-B5F9DE?style=flat&labelColor=B5F9DE&color=B5F9DE) | `#B5F9DE` | Reserved supporting brand colour that introduces a subtle mint variation without requiring a permanent high-frequency UI role |
+| **Pearl Aqua** | ![#88E7DC](https://img.shields.io/badge/Pearl_Aqua-88E7DC?style=flat&labelColor=88E7DC&color=88E7DC) | `#88E7DC` | Borders, separators, outlines and restrained structural definition |
+| **Tropical Teal** | ![#16AFB5](https://img.shields.io/badge/Tropical_Teal-16AFB5?style=flat&labelColor=16AFB5&color=16AFB5) | `#16AFB5` | Completion rings, progress/data emphasis and controlled mid-tone brand accent |
+| **Stormy Teal** | ![#006B7D](https://img.shields.io/badge/Stormy_Teal-006B7D?style=flat&labelColor=006B7D&color=006B7D) | `#006B7D` | Strong structural UI, meta cards, prominent controls, confirmed states and secondary brand anchor |
+| **Oxford Navy** | ![#002D5A](https://img.shields.io/badge/Oxford_Navy-002D5A?style=flat&labelColor=002D5A&color=002D5A) | `#002D5A` | Primary corporate anchor, navigation, major typography and highest-emphasis interface elements |
 
----
-
-#### Brand Palette Rationale
-
----
-
-The core palette is organised into four complementary functional families:
+The palette follows a deliberately controlled progression:
 
 ```text
-DARK / CORPORATE
-#0B355F  Oxford Blue
-
-BRAND / INTERACTIVE ACCENTS
-#16AFB5  Tropical Teal
+Azure Mist
+#EDF9F7
     │
-    ├── #07C0C7  Strong Cyan
-    └── #5FF0DF  Turquoise
-
-LIGHT / CONTEXTUAL SURFACES
-#B5F9DE  Aquamarine
+    ▼
+Frozen Water
+#E4FFF4
     │
-    ├── #C7FFF9  Icy Aqua
-    ├── #EDF9F7  Azure Mist
-    └── #F5F5F5  White Smoke
-
-COOL NEUTRALS
-#4F6870  Blue Slate
+    ▼
+Aquamarine
+#B5F9DE
     │
-    └── #7A949B  Cool Steel
+    ▼
+Pearl Aqua
+#88E7DC
+    │
+    ▼
+Tropical Teal
+#16AFB5
+    │
+    ▼
+Stormy Teal
+#006B7D
+    │
+    ▼
+Oxford Navy
+#002D5A
 ```
 
-- **Oxford Blue** provides the strongest corporate anchor and is used where visual authority and high contrast are required.
-- **Tropical Teal** (`#16AFB5`, `rgb(22, 175, 181)`) provides the principal mid-tone between Oxford Blue and the lighter aqua / turquoise family. It is strong enough for data fills, completion indicators and selected emphasis against light surfaces while remaining more restrained than the brightest accents.
-- **Strong Cyan** and **Turquoise** provide brighter English Grows accents and are used selectively for interaction, emphasis and active interface elements.
-- **Aquamarine** (`#B5F9DE`) is intentionally restricted to **soft contextual / identity surfaces**, particularly course-identity or page-header areas and static featured-information emphasis. It is typically used as a very light tint such as `rgba(181, 249, 222, 0.15)`, rather than for buttons, KPI cards, borders, icons, progress rings, hover states or other general interactive UI.
-- **Icy Aqua** and **Azure Mist** provide subtle tinted surfaces and visual separation without relying exclusively on pure white.
-- **White Smoke** provides a clean neutral surface for cards and data-heavy areas while remaining softer than pure white.
-- **Blue Slate** and **Cool Steel** provide a controlled neutral hierarchy for secondary information, borders and lower-emphasis elements.
+This progression is intentionally **not a mathematically uniform monochromatic scale**.
 
-This hierarchy allows brighter colours to remain distinctive because they are used selectively against a restrained corporate and neutral foundation.
+**Aquamarine `#B5F9DE`** introduces a subtle mint shift into the lighter half of the palette. This gives the brand additional personality and prevents the system from becoming a purely linear aqua-to-navy progression. It remains a reserved supporting brand colour rather than being forced into a frequently repeated interface role.
+
+The other colours have increasingly specific functional responsibilities:
+
+- **Azure Mist `#EDF9F7`** provides very light brand-tinted backgrounds and subtle surface differentiation.
+- **Frozen Water `#E4FFF4`** provides a contextual identity surface and is established particularly for **course-header backgrounds**, where it distinguishes the current course without making the header visually dominant.
+- **Pearl Aqua `#88E7DC`** is used predominantly for **borders, separators and structural outlines**. Its softer chromatic weight provides definition without making cards, lists or tables feel heavily boxed.
+- **Tropical Teal `#16AFB5`** provides the principal controlled data/progress accent and works particularly well for **completion rings and quantitative emphasis**.
+- **Stormy Teal `#006B7D`** provides stronger structural emphasis, including meta-card surfaces and prominent interface elements.
+- **Oxford Navy `#002D5A`** provides the strongest corporate anchor for navigation, typography and high-authority interface areas.
+
+The revised palette deliberately avoids unnecessary bright cyan/aqua accents and keeps the core Brand / Interface palette focused on colours with clearly defined structural, contextual or brand roles.
+
+The result is a calmer and more disciplined brand system while retaining enough tonal and hue variation to avoid a flat or overly mechanical progression.
+
+---
+
+### Supporting Neutrals
+
+---
+
+The core brand palette is supported by a restrained four-colour neutral system used primarily for **content surfaces, data presentation, secondary text and structural hierarchy**.
+
+These neutrals are deliberately cool so that they remain visually compatible with the wider aqua–teal–navy brand system.
+
+| Colour | Preview | Hex | Primary UI Role |
+| :--- | :---: | :---: | :--- |
+| **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Principal neutral surface for main cards, lists, tables and data-heavy content areas |
+| **Grey Mist** | ![#CFDCDC](https://img.shields.io/badge/Grey_Mist-CFDCDC?style=flat&labelColor=CFDCDC&color=CFDCDC) | `#CFDCDC` | Very light structural neutral for subtle separators, borders and low-intensity surface differentiation |
+| **Cool Steel** | ![#7A949B](https://img.shields.io/badge/Cool_Steel-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Secondary and data text, low-emphasis information, inactive and completed states |
+| **Blue Slate** | ![#4F6870](https://img.shields.io/badge/Blue_Slate-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Darker secondary/data text, subdued headings and information requiring greater emphasis than Cool Steel |
+
+The neutral hierarchy can be represented as:
+
+```text
+WHITE SMOKE
+#F5F5F5
+    │
+    └── Main cards / lists / tables / data surfaces
+
+GREY MIST
+#CFDCDC
+    │
+    └── Subtle structural separation / borders
+
+COOL STEEL
+#7A949B
+    │
+    └── Secondary / low-emphasis data text
+
+BLUE SLATE
+#4F6870
+    │
+    └── Darker secondary text / stronger subdued information
+```
+
+**White Smoke `#F5F5F5`** is intentionally used extensively across main cards, lists, tables and information panels. It provides a calm neutral base that allows stronger brand, CEFR, assessment and semantic colours to retain meaning rather than competing across the entire interface.
+
+**Grey Mist `#CFDCDC`** provides very subtle structure where a chromatic Pearl Aqua border would be unnecessarily prominent.
+
+**Cool Steel `#7A949B`** and **Blue Slate `#4F6870`** establish a controlled hierarchy for secondary and data typography. Cool Steel handles lower-emphasis information, while Blue Slate provides a darker level for supporting information that requires greater legibility or prominence.
+
+This neutral system is therefore an essential part of the restrained boutique-corporate visual language rather than an incidental secondary palette.
 
 ---
 
@@ -2008,11 +2072,9 @@ This hierarchy allows brighter colours to remain distinctive because they are us
 
 The application uses a dedicated colour system to provide immediate visual identification of a learner's **CEFR proficiency level**.
 
-The official [**Common European Framework of Reference for Languages (CEFR)**](https://www.coe.int/en/web/common-european-framework-reference-languages/level-descriptions), developed by the **Council of Europe**, defines six principal proficiency levels from **A1 to C2** through language proficiency descriptors. It does **not prescribe a mandatory or universal colour scheme** for those levels.
+The official **Common European Framework of Reference for Languages (CEFR)** defines six principal proficiency levels from **A1 to C2** through language-proficiency descriptors. It does **not prescribe a mandatory or universal colour scheme** for those levels.
 
-Colour coding is nevertheless commonly used in language-learning materials and multi-level course series to help learners and teachers distinguish proficiency levels visually. Major educational publishers such as **Pearson** organise extensive course ranges around clearly differentiated CEFR levels, although the colours assigned to individual levels vary between publishers and product families.
-
-English Grows follows this broader visual convention while defining its **own consistent CEFR colour mapping** as part of the application's design system.
+English Grows therefore uses its own consistent CEFR colour mapping as part of the application's design system.
 
 | CEFR Level | Preview | Colour | Hex |
 | :---: | :---: | :--- | :---: |
@@ -2055,18 +2117,9 @@ This grouping reflects the three broad CEFR proficiency bands:
 
 The individual colours are deliberately distinct in hue so that the level can be recognised quickly without requiring progressively darker or lighter versions of a single colour.
 
-The CEFR colours are therefore used as **persistent level identifiers**, rather than as indicators of success, warning or status. For example, **C2 Burgundy does not represent an error state**, just as **A1 Mint Glow does not represent a success state**; each colour identifies a proficiency category within the learning system.
+The CEFR colours are therefore used as **persistent level identifiers**, rather than as indicators of success, warning or status.
 
 As with the rest of the English Grows colour system, colour reinforces rather than replaces textual information. CEFR colours are always accompanied by their corresponding **A1, A2, B1, B2, C1 or C2 label**, ensuring that proficiency level remains explicit regardless of colour perception.
-
-The resulting hierarchy keeps four different uses of colour clearly separated:
-
-```text
-BRAND / INTERFACE       → Product identity and UI hierarchy
-ASSESSMENT / DATA       → Speaking, Listening, Reading and Writing
-CEFR LEVELS             → Language proficiency classification
-SEMANTIC / STATUS       → Operational meaning and application state
-```
 
 ---
 
@@ -2077,8 +2130,6 @@ SEMANTIC / STATUS       → Operational meaning and application state
 The language assessment system uses a dedicated colour set for the four principal language skills.
 
 These colours are intentionally separate from the core brand palette because they carry a **persistent pedagogical meaning**, rather than a general interface function.
-
-<img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/c7694cb2-94e2-4a78-a2e2-2a9ddd330612" />
 
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
@@ -2098,9 +2149,7 @@ These colours remain consistent across:
 
 Maintaining a permanent colour assignment for each skill improves visual recognition across different areas of the application and prevents assessment data from becoming visually dependent on the surrounding interface.
 
-For example, **Sunflower Gold** consistently represents Speaking, while **Indigo Velvet** consistently represents Listening, regardless of whether the user is viewing an assessment card, progress graph or historical assessment data.
-
-This creates a clear distinction between **interface colour** and **assessment colour**: the core palette establishes the product identity, while the skill palette identifies pedagogical information.
+These colours function as **categorical identifiers**. They identify the pedagogical skill represented by the data rather than indicating whether the learner's performance is positive or negative.
 
 ---
 
@@ -2115,40 +2164,66 @@ The semantic system follows a consistent rationale:
 | Colour Family | Semantic Meaning |
 | :--- | :--- |
 | **Green** | Positive, valid or successfully fulfilled state |
-| **Cyan / Teal / Turquoise** | Operational or informational state without warning or negative meaning |
-| **Amber** | Interruption or state requiring attention |
+| **Teal / Turquoise** | Operational, confirmed or active state without warning or negative meaning |
+| **Amber** | Pending, interrupted or attention-requiring state |
 | **Red** | Negative outcome or termination |
-| **Blue-grey neutrals** | Inactive, completed, historical or de-emphasised state |
+| **Grey / Blue-grey** | Excused, inactive, completed, historical or de-emphasised state |
 
 Some semantic colours intentionally reuse colours from the core brand palette. This reduces unnecessary palette expansion while allowing colours to perform clearly defined roles within specific application contexts.
 
-#### Learner Status
+#### Enrolment Status
 
-Learner status distinguishes between profiles currently participating in the platform and those that are inactive.
+Enrolment-status colours communicate the learner's current relationship with a course.
 
 | Status | Preview | Hex | Rationale |
 | :--- | :---: | :---: | :--- |
-| **Active** | ![#38DF9C](https://img.shields.io/badge/Active-38DF9C?style=flat&labelColor=38DF9C&color=38DF9C) | `#38DF9C` | Green communicates a positive, currently active learner state |
-| **Inactive** | ![#7A949B](https://img.shields.io/badge/Inactive-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel provides a de-emphasised neutral state |
+| **Active** | ![#4DFFB5](https://img.shields.io/badge/Active-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` | Bright green communicates current active participation |
+| **Confirmed** | ![#006B7D](https://img.shields.io/badge/Confirmed-006B7D?style=flat&labelColor=006B7D&color=006B7D) | `#006B7D` | Stormy Teal communicates an established / confirmed enrolment state |
+| **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates temporary interruption |
+| **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` | Red communicates termination |
+| **Completed** | ![#7A949B](https://img.shields.io/badge/Completed-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a closed, historical enrolment state |
+| **Inactive** | ![#7A949B](https://img.shields.io/badge/Inactive-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a de-emphasised inactive or unenrolled state |
+
+The enrolment palette therefore follows the current status-dot variables:
+
+```text
+ACTIVE
+#4DFFB5
+
+CONFIRMED
+#006B7D
+
+PAUSED
+#FFB000
+
+CANCELLED
+#EF4444
+
+COMPLETED
+#7A949B
+
+INACTIVE
+#7A949B
+```
 
 #### Course Status
 
-Course status colours communicate both the normal lifecycle of a course and exceptional states requiring attention.
+Course-status colours communicate both the normal lifecycle of a course and exceptional states requiring attention.
 
 | Status | Preview | Hex | Rationale |
 | :--- | :---: | :---: | :--- |
-| **Confirmed** | ![#16AFB5](https://img.shields.io/badge/Confirmed-16AFB5?style=flat&labelColor=16AFB5&color=16AFB5) | `#16AFB5` | Tropical Teal represents an established course that has been confirmed but is not yet active |
-| **Active** | ![#5FF0DF](https://img.shields.io/badge/Active-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Brighter Turquoise gives currently running courses greater visual immediacy |
+| **Confirmed** | ![#006B7D](https://img.shields.io/badge/Confirmed-006B7D?style=flat&labelColor=006B7D&color=006B7D) | `#006B7D` | Stormy Teal represents an established course that has been confirmed but is not yet active |
+| **Active** | ![#5FF0DF](https://img.shields.io/badge/Active-5FF0DF?style=flat&labelColor=5FF0DF&color=5FF0DF) | `#5FF0DF` | Turquoise gives currently running courses greater visual immediacy |
 | **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates temporary interruption and a state requiring attention |
 | **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` | Red communicates termination and a negative operational state |
-| **Completed** | ![#4F6870](https://img.shields.io/badge/Completed-4F6870?style=flat&labelColor=4F6870&color=4F6870) | `#4F6870` | Blue Slate communicates a closed, historical state without implying an error |
+| **Completed** | ![#7A949B](https://img.shields.io/badge/Completed-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a closed, historical state without implying an error |
 
 The normal course lifecycle follows a deliberate visual progression:
 
 ```text
 CONFIRMED              ACTIVE                 COMPLETED
-#16AFB5                #5FF0DF               #4F6870
-Tropical Teal      →   Turquoise         →   Blue Slate
+#006B7D                #5FF0DF               #7A949B
+Stormy Teal        →   Turquoise         →   Cool Steel
 Established            Current                Historical
 ```
 
@@ -2163,23 +2238,37 @@ Attention              Negative / Terminated
 
 #### Attendance Status
 
-Attendance colours distinguish between a positive attendance outcome, an accepted absence and a negative absence.
+Attendance colours distinguish between recorded attendance outcomes and classes that still require an attendance outcome.
 
 | Status | Preview | Hex | Rationale |
 | :--- | :---: | :---: | :--- |
-| **Attended** | ![#38DF9C](https://img.shields.io/badge/Attended-38DF9C?style=flat&labelColor=38DF9C&color=38DF9C) | `#38DF9C` | Green communicates a positive attendance outcome |
-| **Excused** | ![#07C0C7](https://img.shields.io/badge/Excused-07C0C7?style=flat&labelColor=07C0C7&color=07C0C7) | `#07C0C7` | Strong Cyan communicates a neutral, acknowledged exception without implying a warning |
+| **Attended** | ![#4DFFB5](https://img.shields.io/badge/Attended-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` | Bright green communicates a positive attendance outcome |
 | **Missed** | ![#FF5A5A](https://img.shields.io/badge/Missed-FF5A5A?style=flat&labelColor=FF5A5A&color=FF5A5A) | `#FF5A5A` | Red communicates a negative attendance outcome |
+| **Excused** | ![#666666](https://img.shields.io/badge/Excused-666666?style=flat&labelColor=666666&color=666666) | `#666666` | Neutral grey communicates an acknowledged absence without presenting it as either a positive outcome or warning state |
+| **Pending** | ![#FFB000](https://img.shields.io/badge/Pending-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates that an attendance outcome still requires attention |
 
-The attendance palette follows a simple semantic model:
+The attendance palette therefore distinguishes between outcome and workflow state:
 
 ```text
-ATTENDED               EXCUSED                MISSED
-#38DF9C                #07C0C7               #FF5A5A
-Positive         →     Informational    →     Negative
+ATTENDED              EXCUSED               MISSED
+#4DFFB5               #666666               #FF5A5A
+Positive              Neutral               Negative
+
+                         PENDING
+                         #FFB000
+                         Attention required
 ```
 
-This distinction is particularly important for **Excused**. An excused absence represents an accepted exception rather than a warning or failure, so **Strong Cyan** is used instead of amber or red.
+#### Attendance Submission Status
+
+Attendance submission has a separate semantic distinction from the attendance outcome of an individual learner.
+
+| Status | Preview | Hex | Rationale |
+| :--- | :---: | :---: | :--- |
+| **Awaiting** | ![#C47D00](https://img.shields.io/badge/Awaiting-C47D00?style=flat&labelColor=C47D00&color=C47D00) | `#C47D00` | Dark amber indicates that attendance submission remains outstanding |
+| **Complete** | ![#008F78](https://img.shields.io/badge/Complete-008F78?style=flat&labelColor=008F78&color=008F78) | `#008F78` | Deep green-teal indicates that the attendance-submission workflow has been completed |
+
+This distinction prevents **lesson-level attendance submission state** from being conflated with the **attendance outcome of an individual learner**.
 
 ---
 
@@ -2190,13 +2279,23 @@ This distinction is particularly important for **Excused**. An excused absence r
 Across the application, colour follows several consistent principles:
 
 - **Colour reinforces meaning rather than replacing it.** Statuses and assessment information are always accompanied by text, labels, icons or other contextual information.
-- **Brand colours are used selectively.** Tropical Teal, Strong Cyan and Turquoise are reserved for purposeful emphasis so that they retain their visual impact.
-- **Aquamarine remains contextual rather than interactive.** It is reserved for soft course-identity / page-header surfaces and static featured-information emphasis, not for buttons, KPI cards, borders, icons, progress rings or hover states.
+- **The brand palette remains deliberately restrained.** Oxford Navy, Stormy Teal and Tropical Teal provide the principal structural progression, while the lighter aqua/mint colours are used selectively for surfaces and definition.
+- **Oxford Navy anchors the corporate identity.** `#002D5A` provides the strongest visual authority for navigation, major typography and high-emphasis elements.
+- **Stormy Teal provides strong structural emphasis.** `#006B7D` supports meta cards, prominent controls, structural bars and other high-visibility secondary brand elements.
+- **Tropical Teal carries progress and quantitative emphasis.** `#16AFB5` is particularly suited to completion rings, progress indicators and controlled data emphasis.
+- **Pearl Aqua provides soft structure.** `#88E7DC` is used predominantly for borders, separators and outlines, maintaining visible structure without producing a heavy or overly boxed interface.
+- **Frozen Water provides contextual identity surfaces.** `#E4FFF4` is established particularly for course-header backgrounds, where it differentiates context while remaining quiet enough for the content to stay dominant.
+- **Aquamarine remains intentionally selective.** `#B5F9DE` remains part of the brand palette because its subtle mint shift adds personality and avoids a mechanically linear aqua-to-navy scale, but it does not need to be forced into a permanent high-frequency UI role.
+- **Azure Mist provides very light brand-tinted separation.** `#EDF9F7` can support extremely subtle backgrounds and low-intensity surface differentiation.
+- **White Smoke is the principal neutral content surface.** `#F5F5F5` supports main cards, lists, tables and data-heavy information areas, helping the application remain restrained rather than overly chromatic.
+- **Grey Mist provides neutral structural separation.** `#CFDCDC` is appropriate for very subtle borders and dividers where Pearl Aqua would introduce more colour than required.
+- **Cool Steel and Blue Slate control secondary/data typography.** `#7A949B` provides lower-emphasis data and supporting text, while `#4F6870` provides a darker secondary-text level.
+- **Hover states remain deliberately subtle.** Dense course, class, learner and employee lists use very low-intensity hover treatments so that interaction feedback does not compete with CEFR badges, statuses, data or primary actions.
 - **Assessment colours remain persistent.** Each language skill retains the same colour wherever it appears.
 - **CEFR colours remain categorical.** They identify proficiency levels rather than success, warning or status.
-- **Semantic colours reflect meaning.** Green communicates positive states, amber communicates attention, red communicates negative states and cool colours communicate neutral or operational information.
-- **Neutral colours control hierarchy.** Blue Slate and Cool Steel allow secondary and historical information to remain visible without competing with active content.
-- **Palette expansion is avoided where possible.** Existing brand colours are reused for semantic purposes when their established visual character appropriately supports the intended meaning.
+- **Semantic colours reflect operational meaning.** Green communicates positive outcomes, teal/turquoise communicates established or operational states, amber communicates pending/attention states, red communicates negative outcomes, and neutral greys communicate excused, completed or de-emphasised information.
+- **Colour frequency is intentionally unequal.** Structural colours and neutral surfaces naturally appear more often than reserved supporting colours; not every palette colour needs to appear with equal frequency.
+- **Palette expansion is avoided where possible.** New colours require a defined functional or brand role rather than purely decorative justification.
 
 Together, these principles create a colour system that is **consistent, scalable and semantically meaningful**, while preserving the restrained boutique/corporate visual identity of English Grows.
 
@@ -2277,33 +2376,45 @@ This separation ensures that colour has a **predictable purpose** rather than be
 
 ### Brand Colours in Visualisation
 
-The surrounding interface and supporting elements of data visualisations follow the core **English Grows brand palette**:
+The surrounding interface and supporting elements of data visualisations follow the current **English Grows brand palette and neutral system**:
 
 ```text
-Oxford Blue      → #0B355F
-Tropical Teal    → #16AFB5
-Strong Cyan      → #07C0C7
-Turquoise        → #5FF0DF
-Aquamarine       → #B5F9DE  (contextual surfaces only)
-Icy Aqua         → #C7FFF9
+CORE BRAND
 Azure Mist       → #EDF9F7
+Frozen Water     → #E4FFF4
+Aquamarine       → #B5F9DE
+Pearl Aqua       → #88E7DC
+Tropical Teal    → #16AFB5
+Stormy Teal      → #006B7D
+Oxford Navy      → #002D5A
+
+SUPPORTING NEUTRALS
 White Smoke      → #F5F5F5
-Blue Slate       → #4F6870
+Grey Mist        → #CFDCDC
 Cool Steel       → #7A949B
+Blue Slate       → #4F6870
 ```
 
 These colours provide visual structure through elements such as:
 
-- chart containers and card surfaces;
+- chart containers and neutral card surfaces;
 - headings and labels;
-- progress indicators;
+- completion indicators;
 - supporting lines and borders;
-- active interface elements;
-- secondary and de-emphasised information.
+- contextual surfaces;
+- secondary and de-emphasised information;
+- data and supporting typography.
 
-Brighter accent colours are used selectively so that they retain visual prominence, while the lighter and neutral tones provide sufficient space for data to remain the primary focus.
+Their use follows the same functional hierarchy established elsewhere in the interface:
 
-**Aquamarine is the exception to general chart-accent use:** it remains a contextual surface colour and is not used as a data series, progress-ring fill or interactive chart state.
+- **Tropical Teal** provides controlled completion/progress emphasis.
+- **Pearl Aqua** provides borders and restrained structural definition.
+- **White Smoke** provides the principal neutral surface for data-heavy containers.
+- **Cool Steel** and **Blue Slate** provide secondary/data-text hierarchy.
+- **Frozen Water** remains a contextual surface rather than a chart-series colour.
+- **Aquamarine** remains a selective/reserved supporting brand colour rather than a general-purpose data series.
+
+Brighter colours are used selectively so that they retain visual prominence, while neutral surfaces and typography colours provide sufficient space for the data itself to remain the primary focus.
 
 ---
 
@@ -2337,7 +2448,7 @@ These colours function as **categorical identifiers**. They do not indicate whet
 
 ### Historical Skill Progress
 
-Historical skill progress graphs use `StudentSkillTermSnapshot` records to represent assessment results at different stages of a learner's course.
+Historical skill progress graphs use `StudentSkillTermSnapshot` records to represent formal assessment results at different stages of a learner's course.
 
 Each snapshot stores a skill score at a particular assessment point, allowing progression to be visualised over time without replacing previous results.
 
@@ -2355,9 +2466,9 @@ Assessment 1        Assessment 2        Assessment 3
 
 Each skill retains its dedicated assessment colour throughout the graph, allowing several skill datasets to be displayed together while remaining visually distinguishable.
 
-Charts use restrained styling and smoothed data lines to communicate progression without overwhelming the surrounding interface.
-
 Historical visualisation is deliberately separated from the learner's current assessment state: the current assessment describes **where the learner is now**, while snapshots provide the historical data required to show **how that assessment has developed over time**.
+
+Detailed `StudentSkillAssessmentSnapshot` records additionally preserve the finer-grained history created by genuine assessment changes, while `StudentSkillTermSnapshot` records provide the formal checkpoints used for structured term-based progress reporting.
 
 ---
 
@@ -2376,7 +2487,7 @@ C2  → #902331  Burgundy
 
 These colours function as **categorical identifiers**, rather than as indicators of performance, success or application status.
 
-For example, the green used for **A1** does not imply a successful state, and the Burgundy used for **C2** does not represent an error or warning. Each colour simply provides a persistent visual identity for its corresponding proficiency level.
+For example, the green used for **A1** does not imply a successful state, and Burgundy used for **C2** does not represent an error or warning. Each colour simply provides a persistent visual identity for its corresponding proficiency level.
 
 CEFR colours are always accompanied by their textual level labels to ensure that proficiency information never depends on colour alone.
 
@@ -2389,30 +2500,39 @@ Semantic colours are used when the visualisation represents an **application sta
 Examples include:
 
 ```text
-LEARNER
-Active           → #38DF9C
+ENROLMENT
+Active           → #4DFFB5
+Confirmed        → #006B7D
+Paused           → #FFB000
+Cancelled        → #EF4444
+Completed        → #7A949B
 Inactive         → #7A949B
 
 COURSE
-Confirmed        → #16AFB5
+Confirmed        → #006B7D
 Active           → #5FF0DF
 Paused           → #FFB000
 Cancelled        → #EF4444
-Completed        → #4F6870
+Completed        → #7A949B
 
 ATTENDANCE
-Attended         → #38DF9C
-Excused          → #07C0C7
+Attended         → #4DFFB5
 Missed           → #FF5A5A
+Excused          → #666666
+Pending          → #FFB000
+
+ATTENDANCE SUBMISSION
+Awaiting         → #C47D00
+Complete         → #008F78
 ```
 
 The semantic system follows a consistent visual rationale:
 
-- **green** communicates a positive or successfully fulfilled state;
-- **cyan, teal and turquoise** communicate informational or operational states;
-- **amber** communicates interruption or attention;
+- **green** communicates positive or successfully fulfilled states;
+- **teal and turquoise** communicate confirmed, active or operational states;
+- **amber** communicates interruption, pending work or attention;
 - **red** communicates negative outcomes or termination;
-- **blue-grey neutrals** communicate inactive, completed, historical or de-emphasised states.
+- **grey and blue-grey neutrals** communicate excused, inactive, completed, historical or de-emphasised states.
 
 This prevents semantic colours from being confused with categorical colours used for skills or CEFR proficiency levels.
 
@@ -2430,7 +2550,7 @@ Examples include:
 
 Course completion can therefore be represented through progress bars or completion rings because the value describes progress towards a finite total.
 
-Attendance percentages similarly represent a proportion derived from completed attendance records.
+Attendance percentages similarly represent a proportion derived from recorded attendance outcomes.
 
 Assessment ability, however, is displayed using a **`/10` score rather than a percentage** because the value represents a pedagogical evaluation rather than completion of a quantity.
 

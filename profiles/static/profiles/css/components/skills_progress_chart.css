@@ -37,7 +37,7 @@
     background-color: whitesmoke;
     padding: 1.25rem;
     border-radius: 8px;
-    border: 2px solid rgba(var(--color-turquoise-rgb), 0.6);
+    border: 2px solid rgba(var(--color-pearlaqua-rgb), 0.6);
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 

@@ -89,7 +89,7 @@ addresses.
 
 .course-detail-item hr {
     border:
-        1px solid rgba(var(--color-turquoise-rgb), 0.2);
+        1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
     border-radius: 0;
     margin: 0.5rem auto;
 }

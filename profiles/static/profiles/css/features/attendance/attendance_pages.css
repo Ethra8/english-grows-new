@@ -40,8 +40,8 @@
 }
 
 .take-attendance-save-btn {
-    color: var(--color-turquoise);
-    border: 1px solid var(--color-turquoise);
+    color: var(--color-pearlaqua);
+    border: 1px solid var(--color-pearlaqua);
     background: rgba(var(--color-tropical-teal-rgb), 0.35);
 }
 
@@ -143,7 +143,7 @@
     width: 500px;
     height: 501px;
     border-radius: 50%;
-    background: linear-gradient(64deg, rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-turquoise-rgb), 0.9) 100%);
+    background: linear-gradient(64deg, rgba(var(--color-navy-rgb), 1) 0%, rgba(var(--color-teal-rgb), 1) 68%, rgba(var(--color-tropical-teal-rgb), 0.8) 90%, rgba(var(--color-pearlaqua-rgb), 0.9) 100%);
     box-shadow: 0 10px 25px rgba(0, 107, 125, .25), inset 0 1px rgba(var(--color-steel-rgb), .15);
     padding-left: 150px;
     padding-top: 90px;
@@ -227,7 +227,7 @@
     border-radius: 50px;
     box-shadow:
         0 2px 2px rgba(0,107,125,.25),
-        inset 0 2px rgba(var(--color-icy-rgb),.75);
+        inset 0 2px rgba(var(--color-frozen-water-rgb),.75);
 }
 
 .attendance-progress::-webkit-progress-bar {
@@ -236,15 +236,15 @@
 }
 
 .attendance-progress::-webkit-progress-value {
-    background: linear-gradient(233deg,rgba(var(--color-turquoise-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-pearlaqua-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
     border-radius: 999px;
     box-shadow:
         0 2px 2px rgba(0,107,125,.25),
-        inset 0 2px rgba(var(--color-icy-rgb),.75);
+        inset 0 2px rgba(var(--color-frozen-water-rgb),.75);
 }
 
 .attendance-progress::-moz-progress-bar {
-    background: linear-gradient(233deg,rgba(var(--color-turquoise-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
+    background: linear-gradient(233deg,rgba(var(--color-pearlaqua-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
     border-radius: 999px;
 }
 
@@ -350,7 +350,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: outset 1px var(--color-turquoise);
+    border: outset 1px var(--color-pearlaqua);
     background-color: #F4FFFE;
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     color: var(--color-teal);
@@ -478,7 +478,7 @@
 .attendance-list-card {
     min-height: fit-content;
     background: linear-gradient(285deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     padding: .6rem 9.6px;
@@ -516,7 +516,7 @@
 .attendance-tools input {
     height: 42px;
     background: rgba(0, 30, 60, 0.7);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     color: var(--color-whitesmoke);
     border-radius: 8px;
     padding: 0.8rem 1rem;
@@ -530,8 +530,8 @@
 
 .attendance-tools input:focus {
     outline: none;
-    border-color: var(--color-turquoise);
-    box-shadow: 0 0 0 3px rgba(var(--color-turquoise-rgb), 0.12);
+    border-color: var(--color-pearlaqua);
+    box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12);
 }
 
 .teacher-attendance-page .attendance-class-info strong {
@@ -553,7 +553,7 @@
 }
 
 .attendance-class-info>span {
-    color: var(--color-icy) !important;
+    color: var(--color_frozen-water) !important;
     font-size: 0.95rem;
     font-weight: 400;
 } */
@@ -568,7 +568,7 @@
 
 /* .attendance-time i, */
 .attendance-students i {
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     font-size: 1.1rem;
 }
 
@@ -727,7 +727,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable;
     scrollbar-width: auto;
-    scrollbar-color: var(--color-turquoise) var(--color-navy);
+    scrollbar-color: var(--color-pearlaqua) var(--color-navy);
 }
 
 .attendance-list {
@@ -780,7 +780,7 @@
 |***** & STUDENT DETAILS page ***********************************|
 |****  : Summary BUTTONS Wrapper & Cards*************************/
 .wrapper-attendance-course-info {
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
     border-radius: 8px;
     background-color: rgba(var(--color-teal-rgb), 0.15);
     padding: 1rem 2rem;
@@ -854,7 +854,7 @@
     padding: 0.5rem 0.8rem;
     border-radius: 8px;
     box-shadow: none;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     gap: 0.7rem;
     justify-content: flex-start;
 }
@@ -873,7 +873,7 @@
 
 .attendance-summary-card strong {
     order: 2;
-    background: rgba(var(--color-turquoise-rgb), 0.18);
+    background: rgba(var(--color-pearlaqua-rgb), 0.18);
     color: var(--color-whitesmoke);
     padding: 0.2rem 0.8rem;
     border-radius: 999px;
@@ -933,7 +933,7 @@
 .take-attendance-card, 
 .attendance-detail-card {
     background-color: var(--color-whitesmoke);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-radius: 8px;
     padding: 1.6rem;
     max-width: 750px;
@@ -987,7 +987,7 @@
 
 .attendance-detail-list,
 .take-attendance-list {
-    border-top: 1px solid rgba(var(--color-turquoise-rgb), 0.22);
+    border-top: 1px solid rgba(var(--color-pearlaqua-rgb), 0.22);
 }
 
 .attendance-detail-list .student-main-info strong a
@@ -1069,7 +1069,7 @@
     gap: 0.7rem;
     padding: 0.4rem 0.7rem;
     border-radius: 8px;
-    border: 1.5px outset rgba(var(--color-turquoise-rgb), 0.22);
+    border: 1.5px outset rgba(var(--color-pearlaqua-rgb), 0.22);
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
 }
 
@@ -1090,7 +1090,7 @@
     min-height: 46px;
     padding: 0.6rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     color: #d7fffb;
     font-weight: 500;
     font-size: 1rem;
@@ -1116,7 +1116,7 @@
 }
 
 .attendance-radio-pill span:hover {
-    border-color: var(--color-turquoise);
+    border-color: var(--color-pearlaqua);
 }
 
 .attendance-summary-card.success {
@@ -1141,7 +1141,7 @@
     z-index: 20;
     margin-top: 1.5rem;
     background: rgba(0, 48, 92, 0.96);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-radius: 8px;
     padding: 0.4rem;
     display: flex;
@@ -1283,7 +1283,7 @@
     align-items: center;
     justify-content: space-between;
     justify-self: flex-end;
-    background: rgba(var(--color-turquoise-rgb), 0.1);
+    background: rgba(var(--color-pearlaqua-rgb), 0.1);
     align-self: center;
     cursor: pointer;
     box-shadow: 1px 3px 5px rgba(0, 20, 40, 0.25);
@@ -1310,7 +1310,7 @@
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-turquoise-rgb), 0.2);
+    background: rgba(var(--color-pearlaqua-rgb), 0.2);
 }
 
 .wrapper-attendance-list-panel h2 {
@@ -1339,8 +1339,8 @@
 
 .attendance-tools input:focus {
     outline: none;
-    border-color: var(--color-turquoise);
-    box-shadow: 0 0 0 3px rgba(var(--color-turquoise-rgb), 0.12);
+    border-color: var(--color-pearlaqua);
+    box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12);
 }
 
 /* .attendance-row {
@@ -1350,7 +1350,7 @@
     align-content: space-around;
     gap: 1.2rem;
     padding: 1.3rem 1rem;
-    border-bottom: 1px solid rgba(var(--color-turquoise-rgb), 0.22);
+    border-bottom: 1px solid rgba(var(--color-pearlaqua-rgb), 0.22);
     background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
 } */
 
@@ -1358,13 +1358,13 @@
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: rgba(var(--color-turquoise-rgb), 0.16);
+    background: rgba(var(--color-pearlaqua-rgb), 0.16);
     border: 1px outset rgba(var(--color-steel-rgb), 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgba));
 }
 
@@ -1393,8 +1393,8 @@
 /* .attendance-list .attendance-row > div:first-of-type img {
     width: 46px;
     height: 46px;
-    background: var(--color-icy);
-    background: radial-gradient(circle, rgba(var(--color-icy-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
+    background: var(--color_frozen-water);
+    background: radial-gradient(circle, rgba(var(--color-frozen-water-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
     border-radius: 999px;
     margin-right: 0.5rem;
     display: flex;
@@ -1683,7 +1683,7 @@
     .attendance-list-card {
         min-height: 260px;
         background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-        border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+        border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
         padding: .6rem;
     }
 
@@ -1694,7 +1694,7 @@
     .attendance-list-card {
         min-height: 260px;
         background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-        border: 1px solid rgba(var(--color-turquoise-rgb), 0.45);
+        border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
         padding: .6rem;
     }
 

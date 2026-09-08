@@ -7,7 +7,7 @@
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-turquoise-rgb), 0.2);
+    background: rgba(var(--color-pearlaqua-rgb), 0.2);
     /* background: linear-gradient(319deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb),0.85)); */
     max-width: fit-content;
     width: 70%;
@@ -27,7 +27,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(var(--color-turquoise-rgb), 0.1);
+    background: rgba(var(--color-pearlaqua-rgb), 0.1);
     align-self:right;
     cursor: pointer;
     box-shadow: 1px 2px 4px rgba(0, 20, 40, 0.5);
@@ -35,9 +35,9 @@
 }
 
 .btn-update:hover {
-    border: outset 1px rgba(var(--color-turquoise-rgb), 0.5);
+    border: outset 1px rgba(var(--color-pearlaqua-rgb), 0.5);
     box-shadow: 0 1px 1px 0 #4b4b4b;
-    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.35), rgba(var(--color-turquoise-rgb), 0.55));
+    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.35), rgba(var(--color-pearlaqua-rgb), 0.55));
     color: var(--color-teal);
 }
 
@@ -51,7 +51,7 @@
 .account-settings-form {
     background-color: var(--color-mist);
     padding: 2rem;
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.85);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.85);
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 var(--color-navy);
     border-radius: 8px;

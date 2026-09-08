@@ -36,7 +36,7 @@
     gap: 1.2rem;
     min-height: fit-content;
     padding: 0.15rem 1.5rem 0.15rem 0.15rem;
-    /* border: 1.5px solid rgba(var(--color-turquoise-rgb), 0.35); */
+    /* border: 1.5px solid rgba(var(--color-pearlaqua-rgb), 0.35); */
     border: 1px solid rgba(199, 255, 249, 0.28);  
     border-radius: 50px;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));    
@@ -106,7 +106,7 @@
     justify-content: center;
     border-radius: 50%;
     background-color: rgba(var(--color-navy-rgb), 0.6);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.35);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
 }
 
 .course-meta-icon .completion-ring {
@@ -136,7 +136,7 @@
 
 .meta-text span,
 .course-meta-text span {
-    color: rgba(var(--color-turquoise-rgb), 0.9);
+    color: rgba(var(--color-pearlaqua-rgb), 0.9);
     font-size: 1.4rem;
     font-weight: 400;
     margin-top: -0.3rem;
@@ -174,7 +174,7 @@
                 0
                 calc(var(--percentage) * 1%),
 
-            rgba(var(--color-turquoise-rgb), 0.32)
+            rgba(var(--color-pearlaqua-rgb), 0.32)
                 calc(var(--percentage) * 1%)
                 100%
         );
@@ -238,8 +238,8 @@
     border-radius: 50%;
     background:
         conic-gradient(
-            rgba(var(--color-turquoise-rgb), 0.15) 0deg 70deg,
-            rgba(var(--color-turquoise-rgb), 0.07) 70deg 360deg
+            rgba(var(--color-pearlaqua-rgb), 0.15) 0deg 70deg,
+            rgba(var(--color-pearlaqua-rgb), 0.07) 70deg 360deg
         );
     opacity: 1;
     pointer-events: none;

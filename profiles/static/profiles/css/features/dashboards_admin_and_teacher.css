@@ -64,8 +64,8 @@
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-tropical-teal-rgb), 0.8) 80%, rgba(var(--color-turquoise-rgb), 1) 100%);
-    border: 1px outset rgba(var(--color-turquoise-rgb), 0.5);
+    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-tropical-teal-rgb), 0.8) 80%, rgba(var(--color-pearlaqua-rgb), 1) 100%);
+    border: 1px outset rgba(var(--color-pearlaqua-rgb), 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +115,7 @@
 }
 
 .dashboard-card .title span {
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
 }
 
 .today-classes-card.dashboard-card {
@@ -241,6 +241,15 @@
     scroll-behavior: smooth;    
 }
 
+/* TODAY'S CLASSES */
+.today-sessions-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    gap: 0.2rem;
+}
+
 .today-classes-list p {
     color: var(--color-steel);
     padding: 0;
@@ -253,7 +262,7 @@
     grid-template-columns: 150px minmax(280px, 1fr) 60px minmax(120px, 1fr);
     align-items: center;
     background: var(--color-whitesmoke);
-    border: 1px solid rgba(var(--color-turquoise-rgb), 0.25);
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
     border-radius: 8px;
     overflow: hidden;
     padding: 0.25rem 1rem 0.25rem 0.25rem;
@@ -270,7 +279,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
     font-weight: 700;
     background: rgba(var(--color-navy-rgb), 0.95);
     border-radius: 8px;
@@ -283,7 +292,7 @@
     flex: 1;
     min-width: 0;
     color: var(--color-teal);
-    border-left: 1px solid rgba(var(--color-turquoise-rgb), 0.2);
+    border-left: 1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
     margin: 0;
 }
 
@@ -322,7 +331,7 @@
 }
 
 a.btn-class-today {
-    border: 1px solid var(--color-turquoise);
+    border: 1px solid var(--color-pearlaqua);
     color: var(--color-navy);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
@@ -339,7 +348,7 @@ a.btn-class-today {
 
 .today-action button:hover,
 a.btn-class-today:hover {
-    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.35), rgba(var(--color-turquoise-rgb), 0.55));
+    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.35), rgba(var(--color-pearlaqua-rgb), 0.55));
     text-decoration: none;
     box-shadow: 0 0 0 rgba(0, 20, 40, 0.5);
     transform: translateY(-1px);

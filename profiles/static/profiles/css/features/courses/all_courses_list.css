@@ -12,7 +12,7 @@
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(11, 53, 95, 0.08);
-    background: rgba(var(--color-turquoise-rgb), 0.2);
+    background: rgba(var(--color-pearlaqua-rgb), 0.2);
 }
 
 .assigned-courses-panel {
@@ -56,7 +56,7 @@
 
 .assigned-courses-page .course-status-btn i {
     font-size: 1.3rem;
-    color: var(--color-turquoise);
+    color: var(--color-pearlaqua);
 }
 
 .assigned-courses-page .course-status-btn strong {
@@ -75,11 +75,11 @@
 
 /* rounded pill with course num value */
 .assigned-courses-page .course-status-btn.active strong {
-    background: rgba(var(--color-turquoise-rgb), 0.3);
+    background: rgba(var(--color-pearlaqua-rgb), 0.3);
 }
 
 .assigned-courses-page .course-status-btn:hover strong {
-    background: rgba(var(--color-turquoise-rgb), 0.3);
+    background: rgba(var(--color-pearlaqua-rgb), 0.3);
 }
 
 
@@ -391,7 +391,7 @@
         height: 42px;
         margin: 0;
         padding: 0.45rem 1.1rem;
-        border: 1px solid var(--color-turquoise);
+        border: 1px solid var(--color-pearlaqua);
         border-radius: 8px;
         background: var(--color-whitesmoke);
         color: var(--color-navy);
@@ -410,14 +410,14 @@
     }
 
     .course-status-dropdown-toggle:hover {
-        border-color: var(--color-turquoise);
+        border-color: var(--color-pearlaqua);
         box-shadow: var(--inner-shadow-turquoise);
     }
 
     .course-status-dropdown-toggle:focus,
     .course-status-dropdown-toggle:focus-visible {
-        border-color: var(--color-turquoise);
-        box-shadow: 0 0 0 3px rgba(var(--color-turquoise-rgb), 0.22),
+        border-color: var(--color-pearlaqua);
+        box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.22),
             0 6px 16px rgba(var(--color-navy-rgb), 0.22);
     }
 
@@ -493,18 +493,18 @@
     }
 
     .course-status-dropdown-option.active {
-        background: rgba(var(--color-turquoise-rgb), 0.15);
+        background: rgba(var(--color-pearlaqua-rgb), 0.15);
     }
 
     .course-status-dropdown-option:hover,
     .course-status-dropdown-option:focus-visible {
-        background: rgba(var(--color-turquoise-rgb), 0.11);
+        background: rgba(var(--color-pearlaqua-rgb), 0.11);
         outline: none;
     }
 
     .course-status-dropdown-option.active:hover,
     .course-status-dropdown-option.active:focus-visible {
-        background: rgba(var(--color-turquoise-rgb), 0.18);
+        background: rgba(var(--color-pearlaqua-rgb), 0.18);
     }
 
     .course-status-dropdown-option > span:last-child {
