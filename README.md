@@ -1913,7 +1913,7 @@ COLOUR SYSTEM
 │   ├── #6EFF7F  A1 — Mint Glow
 │   ├── #FF954F  A2 — Tangerine Dream
 │   ├── #436EFD  B1 — Electric Sapphire
-│   ├── #7B27A5  B2 — Indigo Bloom
+│   ├── #5C008A  B2 — Indigo
 │   ├── #DBDF2B  C1 — Lemon Lime
 │   └── #902331  C2 — Burgundy
 │
@@ -2097,7 +2097,7 @@ English Grows therefore uses its own consistent CEFR colour mapping as part of t
 | **A1** | ![#6EFF7F](https://img.shields.io/badge/A1-6EFF7F?style=flat&labelColor=6EFF7F&color=6EFF7F) | Mint Glow | `#6EFF7F` |
 | **A2** | ![#FF954F](https://img.shields.io/badge/A2-FF954F?style=flat&labelColor=FF954F&color=FF954F) | Tangerine Dream | `#FF954F` |
 | **B1** | ![#436EFD](https://img.shields.io/badge/B1-436EFD?style=flat&labelColor=436EFD&color=436EFD) | Electric Sapphire | `#436EFD` |
-| **B2** | ![#7B27A5](https://img.shields.io/badge/B2-7B27A5?style=flat&labelColor=7B27A5&color=7B27A5) | Indigo Bloom | `#7B27A5` |
+| **B2** | ![#5C008A](https://img.shields.io/badge/B2-5C008A?style=flat&labelColor=5C008A&color=5C008A) | Indigo | `#5C008A` |
 | **C1** | ![#DBDF2B](https://img.shields.io/badge/C1-DBDF2B?style=flat&labelColor=DBDF2B&color=DBDF2B) | Lemon Lime | `#DBDF2B` |
 | **C2** | ![#902331](https://img.shields.io/badge/C2-902331?style=flat&labelColor=902331&color=902331) | Burgundy | `#902331` |
 
@@ -2499,7 +2499,7 @@ CEFR colours provide persistent visual identification of language proficiency le
 A1  → #6EFF7F  Mint Glow
 A2  → #FF954F  Tangerine Dream
 B1  → #436EFD  Electric Sapphire
-B2  → #7B27A5  Indigo Bloom
+B2  → #5C008A  Indigo
 C1  → #DBDF2B  Lemon Lime
 C2  → #902331  Burgundy
 ```
