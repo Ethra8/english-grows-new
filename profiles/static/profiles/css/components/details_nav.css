@@ -1,0 +1,135 @@
+/* INSIDE PROFILE DETAILS NAV ******************************/
+.details-nav-wrapper {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.details-page__navigation nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.15rem 1rem 0.15rem 0.5rem;
+    border-radius: 0 0 8px 8px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+
+}
+.details-page__navigation nav.student-detail-tabs {
+    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
+    background-color: var(--color-navy);
+}
+
+.details-page__navigation nav.course-detail-tabs {
+    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
+    height: 68px;
+}
+
+.details-page__navigation nav.student-detail-tabs.smaller-devs {
+    padding: 0 1.25rem;
+}
+
+.details-page__navigation nav.student-detail-tabs a,
+.details-page__navigation nav.course-detail-tabs a {
+    color: rgba(var(--color-whitesmoke-rgb), 0.85);
+    padding: 0.75rem 0;
+    text-decoration: none;
+    position: relative;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.details-page__navigation nav a.active, 
+.details-page__navigation nav a:hover {
+    color: var(--color-pearlaqua);
+    border-bottom: 2px solid var(--color-pearlaqua);
+}
+
+.details-page__navigation nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 3px;
+    background: var(--color-pearlaqua);
+    border-radius: 999px;
+}
+
+/* INNER NAV - Larger devs */
+.wrapper-links-inner-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+
+@media (max-width: 1360.98px) {
+
+    .details-page__navigation nav {
+        flex-direction: column;
+        padding: 0.5rem;
+        align-items: normal;
+    }
+
+}
+
+
+
+
+@media (max-width: 991.99px) {
+    
+    /*****************************************************|
+    |*** STUDENT DETAIL Page  ****************************|
+    |*****************************************************/
+    .details-nav-wrapper {
+        margin-bottom: .5rem;
+    }
+
+    .details-page__navigation nav a.active{
+        justify-content: flex-start;
+    }
+
+    .details-page__navigation nav a.active{
+        padding-inline: 1rem;
+    }
+
+}
+
+
+
+@media (max-width: 576px) {
+
+    .details-nav-wrapper {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .details-page__navigation {
+        flex-wrap: nowrap;
+        justify-content: space-evenly;
+        width: max-content;
+        min-width: 100%;
+        max-width: none;
+    }
+
+    .details-page__navigation nav a{
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+}

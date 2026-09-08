@@ -2,7 +2,9 @@
     padding: 30px 7% 70px;
 }
 
-.student-detail-page {
+.student-detail-page,
+.teacher-student-skills-page,
+.teacher-edit-skill-page {
     color: var(--color-whitesmoke);
     width: 100%;
     max-width: 100%;
@@ -55,7 +57,6 @@ header .student-avatar-large {
     width: 135px;
     height: 135px;
     border-radius: 50%;
-    /* background: rgba(var(--color-pearlaqua-rgb), 0.16); */
     border: 2px outset rgba(84, 85, 85, 0.75);
     display: flex;
     align-items: center;
@@ -63,14 +64,9 @@ header .student-avatar-large {
     overflow: visible;
     color: var(--color-pearlaqua);
     margin: 0 auto;
-    /* border-right: 2px solid var(--color-teal); */
 }
 
 header .student-avatar-large img {
-    /* display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; */
     border-radius: 50%;
 }
 
@@ -120,9 +116,7 @@ header .student-details-header a:hover {
 
 .profile-user-role span {
     display: inline-block;
-    /* border: 1px solid var(--color-pearlaqua); */
     border-radius: 999px;
-    /* padding: 0.5rem 1rem; */
     color: var(--color-pearlaqua) !important;
     font-size: 1rem;
     max-width: fit-content;
@@ -136,21 +130,6 @@ header .student-details-header a:hover {
     width: 100%;
 }
 
-/* Level & status */
-/* header .student-details-header > div:last-child {
-    flex: 1;
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-} */
-
-/* .student-meta-line,
-.student-meta-line span {
-    min-width: 0;
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-} */
 
 /* LEVEL PILL ***********************/
 
@@ -158,90 +137,6 @@ header .student-details-header a:hover {
     display: none;
 }
 /* END LEVEL PILL *******************/
-
-
-/* INSIDE PROFILE DETAILS NAV ******************************/
-.student-detail-tabs-wrapper {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    overflow: visible;
-    box-sizing: border-box;
-}
-
-.student-detail-tabs {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0rem 1rem 0rem 0.25rem;
-    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
-    /* margin-bottom: 1.7rem; */
-    background-color: var(--color-navy);
-    /* margin-top: 0.25rem; */
-    border-radius: 0 0 8px 8px;
-    flex-wrap: nowrap;
-    /* justify-content: flex-start; */
-    justify-content: space-between;
-    width: max-content;
-    min-width: 100%;
-    max-width: none;
-    box-sizing: border-box;
-}
-
-.student-detail-tabs.smaller-devs {
-    padding: 0 1.25rem;
-}
-
-.student-detail-tabs a {
-    color: rgba(var(--color-whitesmoke-rgb), 0.85);
-    padding: 1rem 0;
-    text-decoration: none;
-    position: relative;
-
-    flex: 0 0 auto;
-    white-space: nowrap;
-}
-
-.student-detail-tabs a.active, .student-detail-tabs a:hover {
-    color: var(--color-pearlaqua);
-    border-bottom: 3px solid var(--color-pearlaqua);
-}
-
-.student-detail-tabs a.active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    /* width: 100%; */
-    height: 3px;
-    background: var(--color-pearlaqua);
-    border-radius: 999px;
-}
-
-/* INNER NAV - Larger devs */
-.wrapper-links-inner-nav {
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-}
-
-/* END OF INSIDE NAV *************** */
-
-/*** META CARDS (Headers) ***************** */
-.student-detail-page .course-meta-card.meta-attendance::after {
-    content: "\f46c"; /* fa-clipboard-check */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 5.5rem;
-    color: rgba(var(--color-pearlaqua-rgb), 0.1);
-    position: absolute;
-    top: 25px;
-    right: -5px;
-    rotate: calc(-15deg);
-}
-/* ********** */
-
 
 /* CARD BODY of Attendance & Course completion cards */
 .student-ring-layout {
@@ -334,7 +229,6 @@ header .student-details-header a:hover {
 }
 
 .student-detail-card h2,
-/* .recent-attendance-card h2, */
 .skills-chart-header h2 {
     position: relative;
     display: flex;
@@ -371,7 +265,6 @@ header .student-details-header a:hover {
     font-weight: 400;
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
     z-index: 999;
-    /* margin-left: auto; */
 }
 
 .course-info-detail-card .status-badge.status-course i {
@@ -387,7 +280,6 @@ header .student-details-header a:hover {
     justify-content: space-between;
 }
 
-/* .recent-attendance-card h2::after, */
 .student-detail-card-attendance h2::after {
     content: "";
     position: absolute;
@@ -419,7 +311,7 @@ header .student-details-header a:hover {
 }
 
 .course-completion-detail-card h2::after {
-    content: "\e522"; /* fa-magnifying-glass-chart */
+    content: "\e522";
     font-family: "Font Awesome 6 Free";
     position: absolute;
     top: 0;
@@ -461,17 +353,6 @@ header .student-details-header a:hover {
 /*****************************************|
 |**** STUDENT DETAIL Page *****************|
 |*****************************************/
-
-.student-detail-page,
-.teacher-student-skills-page,
-.teacher-edit-skill-page {
-    color: var(--color-whitesmoke);
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
 .student-header-actions {
     display: flex;
     flex-direction: column;
@@ -505,7 +386,6 @@ header .student-details-header a:hover {
     align-items: stretch;
 }
 
-
 .student-level-area small {
     color: rgba(var(--color-steel-rgb),0.75);
 }
@@ -531,7 +411,6 @@ header .student-details-header a:hover {
 
 /* .recent-attendance-card h3 */
 .student-detail-card h3 {
-    /* border-bottom: 1px solid rgba(255, 255, 255, 0.08); */
     padding: 0 0.5rem 0;
     font-size: 1.5rem;
 }
@@ -541,28 +420,22 @@ header .student-details-header a:hover {
     padding: 0.5rem;
 }
 
-/* .student-course-details .detail-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: .25rem;
-    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    padding: 0.8rem 0;
-    margin: 0;
-} */
-
 .progress-ring-inner {
     width: 6rem;
     height: 6rem;
-    background: var(--color-navy);
+    background: var(--color-whitesmoke);
     border-radius: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    box-shadow: 4px 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
 .progress-ring-inner strong {
     font-size: 1.6rem;
+    color: var(--color-navy);
+    font-weight: 500;
 }
 
 .progress-ring-inner span {
@@ -571,18 +444,18 @@ header .student-details-header a:hover {
 }
 
 .student-detail-page .progress-ring-inner span {
-    color: rgba(var(--color-whiteesmoke-rgb), 0.85);
+    color: rgba(var(--color-navy-rgb), 0.85);
 }
 
 /* BIG ring: Student detail page */
 .student-detail-page .progress-ring {
     --percentage: 0;
-    width: 8rem;
-    height: 8rem;
+    width: 7.5rem;
+    height: 7.5rem;
     border-radius: 50%;
     background:
         conic-gradient(
-            var(--color-pearlaqua) calc(var(--percentage) * 1%),
+            var(--color-tropical-teal) calc(var(--percentage) * 1%),
             rgba(var(--color-pearlaqua-rgb), 0.18) 0
         );
     display: flex;
@@ -621,8 +494,6 @@ header .student-details-header a:hover {
 }
 
 
-
-
 /************************************************|
 **** STUDENT ATTENDANCE RECORD Page *************|
 *********************************************** */
@@ -633,64 +504,6 @@ header .student-details-header a:hover {
     gap: 1rem;
     margin-top: 2.5rem;
 }
-
-/* .recent-attendance-card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
-    border-radius: 8px;
-    padding: 1.25rem;
-    height: 100%;
-    justify-content: space-between;
-    background: var(--color-whitesmoke);
-    gap: 1rem; 
-    box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
-}
-
-.recent-attendance-card-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--color-whitesmoke);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-.recent-attendance-card-header .detail-row {
-    gap: 0;
-}
-
-.recent-attendance-card-header .icon {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    flex: 0 0 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: var(--color-whitesmoke);
-    border: 1px solid rgba(var(--color-navy-rgb), 0.3);
-}
-
-.recent-attendance-card-header .icon i {
-    margin: 0;
-    font-size: 1.45rem;
-    color:var(--color-navy);
-}
-
-.recent-attendance-card-header strong {
-    color: var(--color-teal);
-}
-
-.recent-attendance-info span,
-.recent-attendance-info small {
-    color: var(--color-steel);
-}
-
-.recent-attendance-info small {
-    font-weight: 600;
-} */
 
 .attendance-edit-form button {
     border-width: 1px;
@@ -704,7 +517,6 @@ header .student-details-header a:hover {
 /************************************************|
 **** STUDENT SKILLS OVERVIEW Page *************|
 *********************************************** */
-
 .student-skills-notes-card {
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
@@ -772,13 +584,11 @@ header .student-details-header a:hover {
 
 
 
-
 @media (max-width: 1499.98px) {
 
     .student-detail-page header {
         flex-direction: column;
         align-items: start;
-        /* padding: 2rem 4rem; */
     }
 
     header .student-details-header {
@@ -793,22 +603,11 @@ header .student-details-header a:hover {
 }
 
 
-
 @media (max-width: 1360.98px) {
 
     .student-overview-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-}
-
-
-@media (max-width: 1199.98px) {
-
-    .student-detail-tabs {
-        flex-direction: column;
-        padding: 0.5rem;
-    }
-
 
 }
 
@@ -824,22 +623,8 @@ header .student-details-header a:hover {
         font-size: 2.6rem;
     }
 
-    /*****************************************************|
-    |*** STUDENT DETAIL Page  ****************************|
-    |*****************************************************/
-    .student-detail-tabs-wrapper {
-        margin-bottom: .5rem;
-    }
-
-    .student-detail-tabs {
-        justify-content: flex-start;
-    }
-
-    .student-detail-tabs a {
-        padding-inline: 1rem;
-    }
-
 }
+
 
 
 @media (max-width: 767.99px) {
@@ -880,10 +665,6 @@ header .student-details-header a:hover {
         max-width: fit-content;
     }
 
-    /* .student-details-header h1 {
-        margin: 1rem auto 1rem;
-    } */
-
     header .student-details-header p a {
         margin: 1rem auto 1rem;
         text-align: center;
@@ -896,11 +677,9 @@ header .student-details-header a:hover {
         width: 100%;
     }
 
-
     /*****************************************************|
     |*** STUDENT DETAIL Page  ****************************|
     |*****************************************************/
-
     .student-detail-main {
         flex-direction: column;
         align-items: flex-start;
@@ -925,9 +704,7 @@ header .student-details-header a:hover {
         padding: 0px 3% 70px;
     }
 
-
     /* *** MY COURSE Page ******************************** */
-
     .course-details-page {
         padding: 0 3% 70px;
     }
@@ -959,45 +736,6 @@ header .student-details-header a:hover {
         padding: 0.15rem 0.8rem;
     }
 
-    .student-detail-tabs-wrapper {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-
-        overflow-x: auto;
-        overflow-y: hidden;
-
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-    }
-
-    .student-detail-tabs {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-evenly;
-        width: max-content;
-        min-width: 100%;
-        max-width: none;
-    }
-
-    .wrapper-links-inner-nav {
-        display: flex;
-
-        flex: 0 0 auto;
-
-        width: max-content;
-        min-width: max-content;
-
-        justify-content: flex-start;
-
-        gap: 1.25rem;
-    }
-
-    .student-detail-tabs a {
-        flex: 0 0 auto;
-        white-space: nowrap;
-    }
-
 }
 
 
@@ -1010,7 +748,6 @@ header .student-details-header a:hover {
 
     .student-detail-page .level-pill.smaller-devs {
         display: inline-flex;
-        /* min-width: 100%; */
     }
 
     .student-detail-page .level-pill .current-level-label {
@@ -1026,7 +763,6 @@ header .student-details-header a:hover {
         width: 50%;
         flex-grow: 1;
     }
-
 
 }
 

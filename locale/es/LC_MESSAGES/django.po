@@ -766,3 +766,20 @@ msgstr "inscrito"
 msgctxt "course details plural"
 msgid "enrolled"
 msgstr "inscritos"
+
+
+msgctxt "course detail tabs"
+msgid "Overview"
+msgstr "Resumen"
+
+msgctxt "course detail tabs"
+msgid "Enrollments"
+msgstr "Inscripciones"
+
+msgctxt "course detail tabs"
+msgid "Attendance"
+msgstr "Asistencia"
+
+msgctxt "course detail tabs"
+msgid "Assessment"
+msgstr "Evaluaciones"

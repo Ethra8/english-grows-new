@@ -11,23 +11,23 @@
     padding: 0 0 1rem;
 }
 
-.course-attendance-details header {
+/* .course-attendance-details header {
     padding: 1rem 0 ;
     border-top: 1px solid rgba(var(--color-teal-rgb), 0.3);
-}
+} */
 
 /* Course selector inside header */
-.course-details-page header > div:nth-child(1) {
+.course-details-page header > .course-selector-wrapper {
     margin-bottom: 2rem;
 }
 
-.course-attendance-details header > div:nth-child(1) {
+/* .course-attendance-details header > div:nth-child(1) {
     margin-top: 2rem;
-}
+} */
 
 /* Course name in header */
-.course-details-page header > div:nth-child(2),
-.course-attendance-details header > div:nth-child(1) {
+/* .course-attendance-details header > div:nth-child(1), */
+.course-details-page header > .course-header-info {
     gap: 0.35rem;
     display: flex;
     flex-direction: column;
@@ -37,8 +37,8 @@
 }
 
 /* Course Level in header */
-.course-details-page header > div:nth-child(3),
-.course-attendance-details header > div:nth-child(2)  {
+/* .course-attendance-details header > div:nth-child(2), */
+.course-details-page header > .course-header-level {
     gap: 1.95rem;
     display: flex;
     align-items: center;
@@ -95,9 +95,9 @@
     .course-attendance-details header {
         text-align: center;
     }
-
-    .course-details-page header > div:nth-child(2),
-    .course-attendance-details header > div:nth-child(1) {
+/* 
+    .course-attendance-details header > div:nth-child(1), */
+    .course-details-page header > .course-header-info {
         flex-direction: column;
     }
 
@@ -144,7 +144,7 @@
 
 @media (max-width: 419.98px) {
     
-    .course-details-page header > div:nth-child(3),
+    .course-details-page header > .course-header-level,
     .course-attendance-details header > div:nth-child(2) {
         flex-direction: column;
         gap: 1rem;
@@ -152,7 +152,7 @@
     }
 
 
-    .course-details-page header > div:nth-child(3) .status-badge.status-course,
+    .course-details-page header > .course-header-level .status-badge.status-course,
     .course-attendance-details > div:nth-child(2) .status-badge.status-course {
         margin-right: auto;
     }

@@ -102,7 +102,7 @@
                     <a href="{% url 'profiles:teacher_dashboard' %}"
                        class="btn-navbar">
                         {% trans 'Platform' %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                     </a>
 
                 {% elif request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
@@ -110,7 +110,7 @@
                     <a href="{% url 'profiles:student_dashboard' %}"
                        class="btn-navbar">
                         {% trans 'Platform' %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                     </a>
 
                 {% elif request.user.profile.role == "company_admin" %}
@@ -118,7 +118,7 @@
                     <a href="{% url 'profiles:company_admin_dashboard' %}"
                        class="btn-navbar">
                         {% trans 'Platform' %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                     </a>
 
                 {% else %}
@@ -126,7 +126,7 @@
                     <a href="{% url 'profiles:student_dashboard' %}"
                        class="btn-navbar">
                         {% trans 'Platform' %}
-                        <img src="{% static 'icons/arrow_right_turquoise_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
+                        <img src="{% static 'icons/arrow_right_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="32" class="mb-1 ml-2">
                     </a>
 
                 {% endif %}

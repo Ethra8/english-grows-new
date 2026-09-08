@@ -2,19 +2,21 @@
 {% load time_extras %}
 
 
-{% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
+{% block details_page_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
+{% endblock %}
 
-    {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course %}
+<div class="course-selector-wrapper">
+    {% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
+        {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course %}
 
+    {% else %}
+        {% include "profiles/components/course_selector.html" with selector_mode="course" selector_items=available_courses course=course course_selector_url=course_selector_url only %}
 
-{% else %}
+    {% endif %}
+</div>
 
-    {% include "profiles/components/course_selector.html" with selector_mode="course" selector_items=available_courses course=course course_selector_url=course_selector_url only %}
-
-{% endif %}
-
-
-<div>
+<div class="course-header-info">
     <h1>{{ course.name|default:"Course Name" }}</h1>
 
     <h2>
@@ -33,8 +35,8 @@
 </div>
 
 
-<div>
-    <div class="col-12 level-pill">
+<div class="course-header-level">
+    <div class="level-pill">
         <span class="current-level-label">{% trans 'Level' %}</span>
         <span class="current-level-value">{{ course.course_level|default:"Pending" }}</span>
     </div>
