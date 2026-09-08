@@ -1,3 +1,10 @@
+# English Grows
+
+English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
+
+The application combines course management, automated lesson scheduling, attendance tracking, learner assessment, progress monitoring and role-specific interfaces within a single relational data architecture.
+
+---
 ## 📑 Table of Contents
 
 - [Site Structure](#site-structure)
