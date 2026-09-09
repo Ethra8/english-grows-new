@@ -363,8 +363,8 @@
 }
 
 .detailed-attendance-card .item-text > strong:first-of-type {
-    color: var(--color-teal);
-    font-weight: 700;
+    color: var(--color-navy);
+    font-weight: 550;
 }
 
 .detailed-attendance-card .item-text strong {

@@ -467,7 +467,7 @@ msgid "Missed"
 msgstr "Ausencia"
 
 msgid "Excused"
-msgstr "Justificada"
+msgstr "Justificantes"
 
 msgid "absence"
 msgstr "ausencia"
@@ -679,11 +679,11 @@ msgstr "Ausencias"
 
 msgctxt "excused singular"
 msgid "Excused"
-msgstr "Justificada"
+msgstr "Justificante"
 
 msgctxt "excused plural"
 msgid "Excused"
-msgstr "Justificadas"
+msgstr "Justificantes"
 
 
 msgctxt "attended class list"

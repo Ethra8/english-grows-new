@@ -20,11 +20,17 @@ import json
 
 from datetime import timedelta, datetime, time
 import calendar
-from collections import defaultdict
+from decimal import Decimal, ROUND_HALF_UP
 
-from decimal import Decimal
-
-from profiles.utils.time_formating import format_hours_duration
+from profiles.utils.attendance import build_enrollment_attendance_summary
+from profiles.utils.courses import build_formatted_timetable
+from profiles.utils.enrollments import order_enrollments_by_course_status
+from profiles.utils.skills import build_student_skill_cards
+from profiles.utils.time_formating import (
+    format_hours_duration,
+    format_minutes_duration,
+    get_session_minutes,
+)
 
 from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
@@ -217,7 +223,7 @@ def profile_settings(request):
 # STUDENT COURSE INFO PAGE
 @login_required
 def my_course(request):
-
+    student = request.user
     profile = get_object_or_404(
         UserProfile,
         user=request.user
@@ -231,7 +237,7 @@ def my_course(request):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    #
+    # HElper in profiles/utils/enrollments.py
     # Historical courses remain accessible regardless of
     # CourseEnrollment status or Course status.
     #
@@ -249,41 +255,14 @@ def my_course(request):
     # - course name A-Z
     # ---------------------------------------------------------
 
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
-        .filter(
-            student=request.user,
-        )
+        .filter(student=student)
         .select_related(
             "course",
+            "course__teacher",
             "course__course_type",
             "course__company",
-            "course__teacher",
-        )
-        .annotate(
-            status_order=Case(
-                When(course__status="active", then=Value(1)),
-                When(course__status="confirmed", then=Value(2)),
-                When(course__status="paused", then=Value(3)),
-                When(course__status="completed", then=Value(4)),
-                When(course__status="cancelled", then=Value(5)),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "-completed_date_order",
-            "course__name",
         )
     )
 
@@ -612,7 +591,7 @@ def my_learning_progress(request):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    #
+    # Helper in profiles/utils/enrollments.py
     # Historical courses remain accessible.
     #
     # Order:
@@ -628,59 +607,16 @@ def my_learning_progress(request):
     # Completed courses additionally use end_date as a
     # tie-breaker, newest first.
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
-        .filter(
-            student=student,
-        )
+        .filter(student=student)
         .select_related(
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
-
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
@@ -877,75 +813,37 @@ def my_learning_progress(request):
         )
     )
 
-
     # ---------------------------------------------------------
     # ATTENDANCE COUNTS
+    # All counts extracted from helper build_attendance_summary
+    # Helper in pofiles/utils/attendance.py
     # ---------------------------------------------------------
-    attended_count = attendances.filter(
-        status=Attendance.STATUS_ATTENDED
-    ).count()
-
-    missed_count = attendances.filter(
-        status=Attendance.STATUS_MISSED
-    ).count()
-
-    excused_count = attendances.filter(
-        status=Attendance.STATUS_EXCUSED
-    ).count()
-
-    total_attendance_records = (
-        attended_count
-        + missed_count
-        + excused_count
+    attendance_summary = build_enrollment_attendance_summary(
+        enrollment
     )
-
-
     # ---------------------------------------------------------
     # ATTENDED HOURS
-    #
     # Calculate the actual duration of every class the learner
     # attended. This correctly supports sessions with different
     # durations, including a shorter final class.
     # ---------------------------------------------------------
-    attended_minutes = 0
+    attended_sessions = (
+        attendance.class_session
+        for attendance in attendances
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
 
-    for attendance in attendances:
-        if (
-            attendance.status == Attendance.STATUS_ATTENDED
-            and attendance.class_session.start_time
-            and attendance.class_session.end_time
-        ):
-            session_duration = (
-                attendance.class_session.end_time
-                - attendance.class_session.start_time
-            )
-
-            attended_minutes += round(
-                session_duration.total_seconds() / 60
-            )
-
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
 
     # Decimal version, useful if you ever need calculations.
     attended_hours = attended_minutes / 60
 
-
-    # Human-friendly display:
-    # 90 minutes  -> 1h30
-    # 120 minutes -> 2h
-    attended_whole_hours, attended_remaining_minutes = divmod(
-        attended_minutes,
-        60,
+    # Human-friendly display.
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
     )
-
-    if attended_remaining_minutes:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-            f"{attended_remaining_minutes:02d}"
-        )
-    else:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -961,42 +859,17 @@ def my_learning_progress(request):
         )
     )
 
-    completed_minutes = 0
-
-    for class_session in completed_course_sessions:
-        if (
-            class_session.start_time
-            and class_session.end_time
-        ):
-            session_duration = (
-                class_session.end_time
-                - class_session.start_time
-            )
-
-            completed_minutes += round(
-                session_duration.total_seconds() / 60
-            )
-
+    completed_minutes = get_session_minutes(
+        completed_course_sessions
+    )
 
     # Numeric version if needed elsewhere.
     completed_hours = completed_minutes / 60
 
-
     # Human-friendly display.
-    completed_whole_hours, completed_remaining_minutes = divmod(
-        completed_minutes,
-        60,
+    completed_hours_display = format_minutes_duration(
+        completed_minutes
     )
-
-    if completed_remaining_minutes:
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-            f"{completed_remaining_minutes:02d}"
-        )
-    else:
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -1008,33 +881,8 @@ def my_learning_progress(request):
         float(total_hours) * 60
     )
 
-    total_whole_hours, total_remaining_minutes = divmod(
-        total_minutes,
-        60,
-    )
-
-    if total_remaining_minutes:
-        total_hours_display = (
-            f"{total_whole_hours}h"
-            f"{total_remaining_minutes:02d}"
-        )
-    else:
-        total_hours_display = (
-            f"{total_whole_hours}h"
-        )
-
-
-    # ---------------------------------------------------------
-    # ATTENDANCE %
-    # ---------------------------------------------------------
-    attendance_percentage = (
-        round(
-            attended_count
-            / total_attendance_records
-            * 100
-        )
-        if total_attendance_records > 0
-        else 0
+    total_hours_display = format_minutes_duration(
+        total_minutes
     )
 
 
@@ -1083,27 +931,9 @@ def my_learning_progress(request):
 
     # ---------------------------------------------------------
     # COURSE TIMETABLE
+    # Helper def in utils/courses.py
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -1125,11 +955,10 @@ def my_learning_progress(request):
         "formatted_timetable": formatted_timetable,
 
         # Attendance
-        "attended_count": attended_count,
-        "missed_count": missed_count,
-        "excused_count": excused_count,
-        "total_attendance_records": total_attendance_records,
-        "attendance_percentage": attendance_percentage,
+        # All vars (**) of attendance_summary extracted
+        # from helper build_attendance_summary
+        # in profiles/utils/attendance.py
+        **attendance_summary,
         "recent_attendance": recent_attendance,
 
         # Attendance hours
@@ -1182,7 +1011,7 @@ def my_attendance(request):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    #
+    # Helper in profiles/utils/enrollments.py
     # Historical courses remain accessible.
     #
     # Order:
@@ -1198,59 +1027,16 @@ def my_attendance(request):
     # Completed courses additionally use end_date as a
     # tie-breaker, newest first.
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
-        .filter(
-            student=student,
-        )
+        .filter(student=student)
         .select_related(
             "course",
+            "course__teacher",
             "course__course_type",
             "course__company",
-            "course__teacher",
-        )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
         )
     )
-
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
@@ -1400,14 +1186,19 @@ def my_attendance(request):
         context
     )
 
+
+
 @login_required
 def my_skills(request):
     student = request.user
+    student_profile = get_object_or_404(UserProfile, user=student)
 
-    student_profile = get_object_or_404(
-        UserProfile,
-        user=student,
-    )
+    # Only learner roles can access this page.
+    if student_profile.role not in [
+        UserProfile.ROLE_EMPLOYEE,
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+    ]:
+        return redirect("home")
 
     user_currently_enrolled = CourseEnrollment.objects.filter(
         student=student,
@@ -1415,118 +1206,34 @@ def my_skills(request):
         course__status="active",
     ).exists()
 
-
-    # ---------------------------------------------------------
-    # SECURITY
-    # Only learner roles can access this page.
-    # ---------------------------------------------------------
-    if student_profile.role not in [
-        UserProfile.ROLE_EMPLOYEE,
-        UserProfile.ROLE_INDIVIDUAL_LEARNER,
-    ]:
-        return redirect("home")
-
-
-    # ---------------------------------------------------------
-    # ALL ENROLLMENTS
-    #
-    # Historical courses remain accessible.
-    #
-    # Order:
-    # 1. Active
-    # 2. Confirmed
-    # 3. Paused
-    # 4. Completed
-    # 5. Cancelled
-    # ---------------------------------------------------------
-    enrollments = (
+    # All enrollments remain available, including historical courses.
+    # Helper in profiles/utils/enrollments.py
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
-        .filter(
-            student=student,
-        )
+        .filter(student=student)
         .select_related(
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
 
-
-    # ---------------------------------------------------------
-    # SELECTED COURSE
-    #
-    # Example:
-    # /profiles/student/my_skills/?course=4
-    # ---------------------------------------------------------
+    # Resolve the selected course.
     selected_course_id = request.GET.get("course")
 
-
-    # ---------------------------------------------------------
-    # COURSE SELECTED IN URL
-    # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
             enrollments,
             course_id=selected_course_id,
         )
-
-
-    # ---------------------------------------------------------
-    # NO COURSE SELECTED
-    # ---------------------------------------------------------
     else:
         enrollment = enrollments.first()
 
         if enrollment:
-            return redirect(
-                f"{request.path}?course={enrollment.course_id}"
-            )
+            return redirect(f"{request.path}?course={enrollment.course_id}")
 
-
-    # ---------------------------------------------------------
-    # NO ENROLLMENTS
-    # ---------------------------------------------------------
+    # Student has no enrollments yet.
     if not enrollment:
         return render(
             request,
@@ -1534,433 +1241,63 @@ def my_skills(request):
             {
                 "student": student,
                 "student_profile": student_profile,
-
-                "user_currently_enrolled":
-                    user_currently_enrolled,
-
+                "user_currently_enrolled": user_currently_enrolled,
+                "active_section": "skills",
                 "enrollments": enrollments,
-
                 "enrollment": None,
                 "course": None,
-
                 "skills": [],
-
                 "skill_notes": [],
                 "skill_note_display": [],
-
                 "academic_profile": None,
-
-                "chart_data": {
-                    "labels": [],
-                    "datasets": [],
-                },
-
-                "level_choices":
-                    UserProfile.LEVEL_CHOICES,
+                "chart_data": {"labels": [], "datasets": []},
+                "level_choices": UserProfile.LEVEL_CHOICES,
             },
         )
 
-
-    # ---------------------------------------------------------
-    # SELECTED COURSE
-    # ---------------------------------------------------------
     course = enrollment.course
 
-
-    # ---------------------------------------------------------
-    # SKILL ICONS
-    # ---------------------------------------------------------
-    skill_icons = {
-        "speaking": "fa-solid fa-microphone",
-        "reading": "fa-solid fa-book-open",
-        "writing": "fa-solid fa-pen",
-        "listening": "fa-solid fa-headphones",
-    }
-
-
-    # ---------------------------------------------------------
-    # SKILL ASSESSMENTS
-    #
-    # IMPORTANT:
-    # Explicitly scoped to:
-    #
-    # - this learner
-    # - this selected course
-    #
-    # Therefore assessment information from another course
-    # cannot enter this queryset.
-    # ---------------------------------------------------------
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .prefetch_related(
-            "subskill_assessments",
-        )
-        .order_by("skill")
+    # Shared skill-card data.
+    skill_assessments, skills = build_student_skill_cards(
+        student=student,
+        course=course,
+        build_skill_note_display=build_skill_note_display,
     )
 
-
-    # ---------------------------------------------------------
-    # EXISTING ASSESSMENTS INDEXED BY SKILL
-    # ---------------------------------------------------------
-    assessments_by_skill = {
-        assessment.skill: assessment
-        for assessment in skill_assessments
-    }
-
-
-    # ---------------------------------------------------------
-    # ALL FOUR SKILL AREAS
-    #
-    # We deliberately build all four cards even when no
-    # assessment exists yet.
-    # ---------------------------------------------------------
-    skill_areas = [
-        ("listening", "Listening"),
-        ("reading", "Reading"),
-        ("speaking", "Speaking"),
-        ("writing", "Writing"),
-    ]
-
-
-    # ---------------------------------------------------------
-    # BUILD SKILL CARDS
-    #
-    # Each skill contains:
-    #
-    # - ALL canonical subskills from SUBSKILLS
-    # - existing assessment data where available
-    # - is_assessed flag
-    # - assessed count
-    # - total count
-    # ---------------------------------------------------------
-    skills = []
-
-    for skill_value, skill_name in skill_areas:
-
-        assessment = assessments_by_skill.get(
-            skill_value
-        )
-
-
-        # -----------------------------------------------------
-        # CANONICAL SUBSKILLS
-        #
-        # Example:
-        #
-        # "speaking": [
-        #     ("fluency", "Fluency"),
-        #     ("accuracy_and_range", "Accuracy & Range"),
-        #     ...
-        # ]
-        # -----------------------------------------------------
-        expected_subskills = SUBSKILLS.get(
-            skill_value,
-            [],
-        )
-
-        total_subskills_count = len(
-            expected_subskills
-        )
-
-
-        # -----------------------------------------------------
-        # EXISTING SUBSKILL ROWS FOR THIS ASSESSMENT
-        # -----------------------------------------------------
-        existing_subskills = {}
-
-        if assessment:
-            existing_subskills = {
-                subskill.subskill: subskill
-                for subskill
-                in assessment.subskill_assessments.all()
-            }
-
-
-        # -----------------------------------------------------
-        # BUILD DISPLAY LIST
-        # -----------------------------------------------------
-        subskills_display = []
-
-        assessed_subskills_count = 0
-
-
-        for (
-            subskill_value,
-            subskill_label,
-        ) in expected_subskills:
-
-            subskill_assessment = (
-                existing_subskills.get(
-                    subskill_value
-                )
-            )
-
-
-            # -------------------------------------------------
-            # ASSESSED?
-            #
-            # A DB row existing is NOT enough.
-            #
-            # It counts as assessed only if it contains an
-            # actual rating.
-            # -------------------------------------------------
-            is_assessed = bool(
-                subskill_assessment
-                and subskill_assessment.rating
-            )
-
-
-            if is_assessed:
-                assessed_subskills_count += 1
-
-
-            subskills_display.append({
-                "value": subskill_value,
-                "name": subskill_label,
-
-                "assessment":
-                    subskill_assessment,
-
-                "is_assessed":
-                    is_assessed,
-
-                "rating": (
-                    subskill_assessment
-                    .get_rating_display()
-                    if is_assessed
-                    else None
-                ),
-            })
-
-
-        # -----------------------------------------------------
-        # EXISTING PARENT SKILL ASSESSMENT
-        # -----------------------------------------------------
-        if assessment:
-
-            note_display = (
-                build_skill_note_display(
-                    assessment
-                )
-            )
-
-            # Do not display an overall score when no subskill
-            # has actually been assessed.
-            score = (
-                assessment.average_score
-                if assessed_subskills_count > 0
-                else None
-            )
-
-
-            skills.append({
-                "assessment":
-                    assessment,
-
-                "assessment_id":
-                    assessment.id,
-
-                "skill_value":
-                    skill_value,
-
-                "name":
-                    skill_name,
-
-                "icon":
-                    skill_icons.get(
-                        skill_value
-                    ),
-
-                "score":
-                    score,
-
-                # ALL canonical subskills
-                "subskills":
-                    subskills_display,
-
-                # Counts used by the card heading
-                "assessed_subskills_count":
-                    assessed_subskills_count,
-
-                "total_subskills_count":
-                    total_subskills_count,
-
-                # Existing grouped assessment display
-                "strengths":
-                    note_display["strengths"],
-
-                "confident":
-                    note_display["confident"],
-
-                "required_standard":
-                    note_display[
-                        "required_standard"
-                    ],
-
-                "developing":
-                    note_display["developing"],
-
-                "needs_work":
-                    note_display["needs_work"],
-            })
-
-
-        # -----------------------------------------------------
-        # NO PARENT ASSESSMENT YET
-        #
-        # Still return the full canonical subskill structure.
-        # -----------------------------------------------------
-        else:
-
-            skills.append({
-                "assessment":
-                    None,
-
-                "assessment_id":
-                    None,
-
-                "skill_value":
-                    skill_value,
-
-                "name":
-                    skill_name,
-
-                "icon":
-                    skill_icons.get(
-                        skill_value
-                    ),
-
-                "score":
-                    None,
-
-                # All expected subskills still display,
-                # but each has is_assessed=False.
-                "subskills":
-                    subskills_display,
-
-                "assessed_subskills_count":
-                    0,
-
-                "total_subskills_count":
-                    total_subskills_count,
-
-                "strengths": [],
-                "confident": [],
-                "required_standard": [],
-                "developing": [],
-                "needs_work": [],
-            })
-
-
-    # ---------------------------------------------------------
-    # SKILL NOTES DISPLAY
-    #
-    # Only existing parent assessments can have notes.
-    # ---------------------------------------------------------
     skill_note_display = [
-        build_skill_note_display(
-            skill_assessment
-        )
-        for skill_assessment
-        in skill_assessments
+        build_skill_note_display(assessment)
+        for assessment in skill_assessments
     ]
 
-
-    # ---------------------------------------------------------
-    # TEACHER NOTES
-    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(
-            teacher_notes=""
-        )
+        .filter(student=student, course=course)
+        .exclude(teacher_notes="")
         .order_by("skill")
     )
 
+    academic_profile = getattr(student, "academic_profile", None)
 
-    # ---------------------------------------------------------
-    # ACADEMIC PROFILE
-    # ---------------------------------------------------------
-    academic_profile = getattr(
-        student,
-        "academic_profile",
-        None,
+    chart_data = build_skill_progress_chart_data(
+        student=student,
+        course=course,
     )
 
-
-    # ---------------------------------------------------------
-    # SKILL PROGRESS CHART
-    #
-    # Historical course status does not matter.
-    # Data is explicitly scoped to selected student + course.
-    # ---------------------------------------------------------
-    chart_data = (
-        build_skill_progress_chart_data(
-            student=student,
-            course=course,
-        )
-    )
-
-
-    # ---------------------------------------------------------
-    # CONTEXT
-    # ---------------------------------------------------------
     context = {
-        "student":
-            student,
-
-        "student_profile":
-            student_profile,
-
-        "user_currently_enrolled":
-            user_currently_enrolled,
-        # component course detail nav (active tab)
+        "student": student,
+        "student_profile": student_profile,
+        "user_currently_enrolled": user_currently_enrolled,
         "active_section": "skills",
-
-        # ALL enrollments -> course selector
-        "enrollments":
-            enrollments,
-
-        # ONE selected enrollment
-        "enrollment":
-            enrollment,
-
-        # Selected course
-        "course":
-            course,
-
-        # Skill cards
-        "skills":
-            skills,
-
-        # Academic profile
-        "academic_profile":
-            academic_profile,
-
-        # Chart
-        "chart_data":
-            chart_data,
-
-        # Notes
-        "skill_notes":
-            skill_notes,
-
-        "skill_note_display":
-            skill_note_display,
-
-        # Level choices
-        "level_choices":
-            UserProfile.LEVEL_CHOICES,
+        "enrollments": enrollments,
+        "enrollment": enrollment,
+        "course": course,
+        "skills": skills,
+        "academic_profile": academic_profile,
+        "chart_data": chart_data,
+        "skill_notes": skill_notes,
+        "skill_note_display": skill_note_display,
+        "level_choices": UserProfile.LEVEL_CHOICES,
     }
-
 
     return render(
         request,
@@ -2132,9 +1469,7 @@ def teacher_dashboard(request):
     today = timezone.localdate()
     now = timezone.now()
 
-    # ---------------------------------------------------------
-    # DATE RANGES
-    # ---------------------------------------------------------
+    # --- DATE RANGES ----------
 
     # Today
     start_of_day = timezone.make_aware(
@@ -2170,10 +1505,7 @@ def teacher_dashboard(request):
         datetime.combine(end_of_month_date, time.max)
     )
 
-
-    # ---------------------------------------------------------
-    # COURSES
-    # ---------------------------------------------------------
+    # --- COURSES ---------
 
     courses = (
         Course.objects
@@ -2194,10 +1526,7 @@ def teacher_dashboard(request):
         status="active"
     ).count()
 
-
-    # ---------------------------------------------------------
-    # TODAY'S SESSIONS
-    # ---------------------------------------------------------
+    # --- TODAY'S SESSIONS -----------
 
     todays_sessions = (
         ClassSession.objects
@@ -2223,10 +1552,7 @@ def teacher_dashboard(request):
         .order_by("start_time")
     )
 
-
-    # ---------------------------------------------------------
-    # WEEKLY / MONTHLY SESSIONS
-    # ---------------------------------------------------------
+    # --- WEEKLY / MONTHLY SESSIONS ----------
 
     weekly_sessions = (
         ClassSession.objects
@@ -2262,10 +1588,7 @@ def teacher_dashboard(request):
         .prefetch_related("attendance_records")
     )
 
-
-    # ---------------------------------------------------------
-    # HELPER
-    # ---------------------------------------------------------
+    # --- HELPER ------------
 
     def get_percentage(value, total):
         if total == 0:
@@ -2273,10 +1596,7 @@ def teacher_dashboard(request):
 
         return round((value / total) * 100)
 
-
-    # =========================================================
-    # WEEKLY DATA
-    # =========================================================
+    # === WEEKLY DATA =======
 
     total_weekly_sessions = weekly_sessions.count()
 
@@ -2294,10 +1614,7 @@ def teacher_dashboard(request):
         total_weekly_sessions,
     )
 
-
-    # ---------------------------------------------------------
-    # WEEKLY ATTENDANCE SUBMISSION
-    # ---------------------------------------------------------
+    # --- WEEKLY ATTENDANCE SUBMISSION ---------
 
     weekly_held_sessions = weekly_sessions.filter(
         end_time__lt=now,
@@ -2322,10 +1639,7 @@ def teacher_dashboard(request):
         0,
     )
 
-
-    # ---------------------------------------------------------
-    # WEEKLY ATTENDANCE RATE
-    # ---------------------------------------------------------
+    # --- WEEKLY ATTENDANCE RATE -------------
 
     weekly_attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
@@ -2355,10 +1669,7 @@ def teacher_dashboard(request):
         weekly_total_attendance_records,
     )
 
-
-    # =========================================================
-    # MONTHLY DATA
-    # =========================================================
+    # === MONTHLY DATA ==========
 
     total_monthly_sessions = monthly_sessions.count()
 
@@ -2375,10 +1686,7 @@ def teacher_dashboard(request):
         total_monthly_sessions,
     )
 
-
-    # ---------------------------------------------------------
-    # MONTHLY ATTENDANCE SUBMISSION
-    # ---------------------------------------------------------
+    # --- MONTHLY ATTENDANCE SUBMISSION ---------
 
     monthly_held_sessions = monthly_sessions.filter(
         end_time__lt=now,
@@ -2403,10 +1711,7 @@ def teacher_dashboard(request):
         0,
     )
 
-
-    # ---------------------------------------------------------
-    # MONTHLY ATTENDANCE RATE
-    # ---------------------------------------------------------
+    # --- MONTHLY ATTENDANCE RATE -----------
 
     monthly_attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
@@ -2436,10 +1741,7 @@ def teacher_dashboard(request):
         monthly_total_attendance_records,
     )
 
-
-    # =========================================================
-    # GENERAL DATA
-    # =========================================================
+    # === GENERAL DATA ===============
 
     total_students = (
         courses
@@ -2452,10 +1754,7 @@ def teacher_dashboard(request):
         .count()
     )
 
-
-    # ---------------------------------------------------------
-    # GENERAL ATTENDANCE RATE
-    # ---------------------------------------------------------
+    # --- GENERAL ATTENDANCE RATE -------------
 
     attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
@@ -2479,10 +1778,7 @@ def teacher_dashboard(request):
         total_attendance_records,
     )
 
-
-    # =========================================================
-    # CONTEXT
-    # =========================================================
+    # === CONTEXT ==========
 
     context = {
         "profile": profile,
@@ -2531,6 +1827,7 @@ def teacher_dashboard(request):
         "profiles/teacher/teacher_dashboard.html",
         context,
     )
+
 
 
 @login_required
@@ -2724,6 +2021,7 @@ def teacher_courses(request):
 
 @login_required
 def teacher_course_details(request, course_id):
+
     profile = get_object_or_404(
         UserProfile,
         user=request.user,
@@ -2774,10 +2072,8 @@ def teacher_course_details(request, course_id):
         )
     )
 
-
     # ---------------------------------------------------------
     # CURRENT COURSE
-    #
     # Course remains accessible regardless of status,
     # provided it belongs to this teacher.
     # ---------------------------------------------------------
@@ -2786,10 +2082,8 @@ def teacher_course_details(request, course_id):
         id=course_id,
     )
 
-
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    #
     # Keep historical enrollment records visible regardless
     # of enrollment status.
     #
@@ -2826,8 +2120,6 @@ def teacher_course_details(request, course_id):
             "student__username",
         )
     )
-
-
     # ---------------------------------------------------------
     # CLASS SESSIONS
     # ---------------------------------------------------------
@@ -2882,27 +2174,14 @@ def teacher_course_details(request, course_id):
     # - a shorter final class
     # - rescheduled classes
     # ---------------------------------------------------------
-    past_held_hours = Decimal("0.00")
+    past_held_minutes = get_session_minutes(
+        held_classes
+    )
 
-    for session in held_classes:
-        if session.start_time and session.end_time:
-            duration = (
-                session.end_time
-                - session.start_time
-            )
-
-            duration_hours = (
-                Decimal(
-                    str(
-                        duration.total_seconds()
-                    )
-                )
-                / Decimal("3600")
-            )
-
-            past_held_hours += duration_hours
-
-    past_held_hours = past_held_hours.quantize(
+    past_held_hours = (
+        Decimal(past_held_minutes)
+        / Decimal("60")
+    ).quantize(
         Decimal("0.01")
     )
 
@@ -2937,26 +2216,7 @@ def teacher_course_details(request, course_id):
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -3221,26 +2481,7 @@ def teacher_course_students_list(request, course_id):
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M")
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
     # ---------------------------------------------------------
     # GROUP EMAIL
@@ -3380,9 +2621,6 @@ def build_skill_progress_chart_data(student, course):
         "datasets": datasets,
     }
 
-
-from decimal import Decimal, ROUND_HALF_UP
-from django.utils import timezone
 
 
 def build_overall_skill_progress_chart_data(student, course):
@@ -3624,7 +2862,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
-    #
+    # HElper in profles/utils/enrollments.py
     # Historical courses remain accessible.
     #
     # Order:
@@ -3634,62 +2872,19 @@ def teacher_student_detail(request, course_id, enrollment_id):
     # 4. Completed
     # 5. Cancelled
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
             course__teacher=request.user,
         )
         .select_related(
-            "student",
-            "student__profile",
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
-
 
     # ---------------------------------------------------------
     # SELECTED COURSE FROM QUERY STRING
@@ -3744,36 +2939,12 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
     # ---------------------------------------------------------
     # ATTENDANCE COUNTS
+    # Helper extracts all data and vars in dictionary
+    # in profiles/utils/attendance.py
     # ---------------------------------------------------------
-    total_attendance_records = (
-        attendances.count()
+    attendance_summary = build_enrollment_attendance_summary(
+        enrollment
     )
-
-    attended_count = (
-        attendances
-        .filter(
-            status=Attendance.STATUS_ATTENDED
-        )
-        .count()
-    )
-
-    missed_count = (
-        attendances
-        .filter(
-            status=Attendance.STATUS_MISSED
-        )
-        .count()
-    )
-
-    excused_count = (
-        attendances
-        .filter(
-            status=Attendance.STATUS_EXCUSED
-        )
-        .count()
-    )
-
-
     # ---------------------------------------------------------
     # COURSE PROGRESS
     # ---------------------------------------------------------
@@ -3787,24 +2958,6 @@ def teacher_student_detail(request, course_id, enrollment_id):
 
     remaining_classes = (
         enrollment.upcoming_classes
-    )
-
-
-    # ---------------------------------------------------------
-    # ATTENDANCE %
-    #
-    # Based on submitted attendance records only.
-    # ---------------------------------------------------------
-    attendance_percentage = (
-        round(
-            (
-                attended_count
-                / total_attendance_records
-            )
-            * 100
-        )
-        if total_attendance_records > 0
-        else 0
     )
 
 
@@ -3829,48 +2982,23 @@ def teacher_student_detail(request, course_id, enrollment_id):
     #
     # Actual duration of classes the learner attended.
     # ---------------------------------------------------------
-    attended_minutes = 0
+    attended_sessions = (
+        attendance.class_session
+        for attendance in attendances
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
 
-    for attendance in attendances:
-
-        if (
-            attendance.status == Attendance.STATUS_ATTENDED
-            and attendance.class_session.start_time
-            and attendance.class_session.end_time
-        ):
-            session_duration = (
-                attendance.class_session.end_time
-                - attendance.class_session.start_time
-            )
-
-            attended_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
 
     attended_hours = (
         attended_minutes / 60
     )
 
-
-    attended_whole_hours, attended_remaining_minutes = divmod(
-        attended_minutes,
-        60,
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
     )
-
-    if attended_remaining_minutes:
-
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-            f"{attended_remaining_minutes:02d}"
-        )
-
-    else:
-
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -3887,47 +3015,17 @@ def teacher_student_detail(request, course_id, enrollment_id):
     )
 
 
-    completed_minutes = 0
-
-    for class_session in completed_course_sessions:
-
-        if (
-            class_session.start_time
-            and class_session.end_time
-        ):
-            session_duration = (
-                class_session.end_time
-                - class_session.start_time
-            )
-
-            completed_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    completed_minutes = get_session_minutes(
+        completed_course_sessions
+    )
 
     completed_hours = (
         completed_minutes / 60
     )
 
-
-    completed_whole_hours, completed_remaining_minutes = divmod(
-        completed_minutes,
-        60,
+    completed_hours_display = format_minutes_duration(
+        completed_minutes
     )
-
-    if completed_remaining_minutes:
-
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-            f"{completed_remaining_minutes:02d}"
-        )
-
-    else:
-
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -3943,25 +3041,9 @@ def teacher_student_detail(request, course_id, enrollment_id):
         * 60
     )
 
-
-    total_whole_hours, total_remaining_minutes = divmod(
-        total_minutes,
-        60,
+    total_hours_display = format_minutes_duration(
+        total_minutes
     )
-
-
-    if total_remaining_minutes:
-
-        total_hours_display = (
-            f"{total_whole_hours}h"
-            f"{total_remaining_minutes:02d}"
-        )
-
-    else:
-
-        total_hours_display = (
-            f"{total_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -4045,29 +3127,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
     #
     # Groups slots sharing the same start/end time.
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -4097,11 +3157,11 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "formatted_timetable": formatted_timetable,
 
         # Attendance
-        "attended_count": attended_count,
-        "missed_count": missed_count,
-        "excused_count": excused_count,
-        "total_attendance_records": total_attendance_records,
-        "attendance_percentage": attendance_percentage,
+        # from helper build_attendance_summary in 
+        # profiles/utils/attendance.py
+        # Extracts attended, missed, excused,
+        # total resolved attendance, attendance %
+        **attendance_summary,
         "recent_attendance": recent_attendance,
 
         # Attendance hours
@@ -4300,62 +3360,19 @@ def student_attendance_record(request, course_id, enrollment_id):
     # - belong to this learner
     # - are assigned to the logged-in teacher
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
             course__teacher=request.user,
         )
         .select_related(
-            "student",
-            "student__profile",
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
-
 
     # ---------------------------------------------------------
     # COURSE SELECTOR
@@ -4587,50 +3604,23 @@ def student_attendance_record(request, course_id, enrollment_id):
     #
     # Actual duration of sessions marked attended.
     # ---------------------------------------------------------
-    attended_minutes = 0
+    attended_sessions = (
+        attendance.class_session
+        for attendance in attendances
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
 
-    for attendance in attendances:
-
-        if (
-            attendance.status == Attendance.STATUS_ATTENDED
-            and attendance.class_session.start_time
-            and attendance.class_session.end_time
-        ):
-
-            session_duration = (
-                attendance.class_session.end_time
-                - attendance.class_session.start_time
-            )
-
-            attended_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
 
     attended_hours = (
         attended_minutes / 60
     )
 
-
-    attended_whole_hours, attended_remaining_minutes = divmod(
-        attended_minutes,
-        60,
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
     )
-
-
-    if attended_remaining_minutes:
-
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-            f"{attended_remaining_minutes:02d}"
-        )
-
-    else:
-
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -4647,49 +3637,17 @@ def student_attendance_record(request, course_id, enrollment_id):
     )
 
 
-    completed_minutes = 0
-
-    for class_session in completed_course_sessions:
-
-        if (
-            class_session.start_time
-            and class_session.end_time
-        ):
-
-            session_duration = (
-                class_session.end_time
-                - class_session.start_time
-            )
-
-            completed_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    completed_minutes = get_session_minutes(
+        completed_course_sessions
+    )
 
     completed_hours = (
         completed_minutes / 60
     )
 
-
-    completed_whole_hours, completed_remaining_minutes = divmod(
-        completed_minutes,
-        60,
+    completed_hours_display = format_minutes_duration(
+        completed_minutes
     )
-
-
-    if completed_remaining_minutes:
-
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-            f"{completed_remaining_minutes:02d}"
-        )
-
-    else:
-
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -4705,25 +3663,9 @@ def student_attendance_record(request, course_id, enrollment_id):
         * 60
     )
 
-
-    total_whole_hours, total_remaining_minutes = divmod(
-        total_minutes,
-        60,
+    total_hours_display = format_minutes_duration(
+        total_minutes
     )
-
-
-    if total_remaining_minutes:
-
-        total_hours_display = (
-            f"{total_whole_hours}h"
-            f"{total_remaining_minutes:02d}"
-        )
-
-    else:
-
-        total_hours_display = (
-            f"{total_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -4733,29 +3675,7 @@ def student_attendance_record(request, course_id, enrollment_id):
     # supplied, but kept available because the learner header /
     # shared course components may use it.
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -4775,31 +3695,19 @@ def student_attendance_record(request, course_id, enrollment_id):
 
         "user_currently_enrolled": user_currently_enrolled,
         # Explicit learner account status.
-        #
         # This is User.is_active and is completely independent
         # from CourseEnrollment.status and Course.status.
         "student_is_active": student_is_active,
-
-        # -----------------------------------------------------
         # COURSE SELECTOR
-        # -----------------------------------------------------
         "enrollments": enrollments,
-
         "course": course,
         "enrollment": enrollment,
 
-
-        # -----------------------------------------------------
-        # COURSE / TIMETABLE
-        # -----------------------------------------------------
+        # COURSE / TIMETABLE 
         "formatted_timetable": (
             formatted_timetable
         ),
-
-
-        # -----------------------------------------------------
         # ATTENDANCE
-        # -----------------------------------------------------
         "attended_count": (
             attended_count
         ),
@@ -4958,7 +3866,6 @@ def update_student_attendance_status(request, course_id, enrollment_id, attendan
 
 @login_required
 def student_skills_overview(request, course_id, enrollment_id):
-
     # ---------------------------------------------------------
     # ORIGINAL COURSE / ENROLLMENT
     #
@@ -5020,62 +3927,19 @@ def student_skills_overview(request, course_id, enrollment_id):
     # 4. Completed
     # 5. Cancelled
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
             course__teacher=request.user,
         )
         .select_related(
-            "student",
-            "student__profile",
             "course",
             "course__teacher",
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
-
 
     # ---------------------------------------------------------
     # SELECTED COURSE FROM QUERY STRING
@@ -5108,20 +3972,12 @@ def student_skills_overview(request, course_id, enrollment_id):
 
 
     # ---------------------------------------------------------
-    # SKILL ICONS
-    # ---------------------------------------------------------
-    skill_icons = {
-        "speaking": "fa-solid fa-microphone",
-        "reading": "fa-solid fa-book-open",
-        "writing": "fa-solid fa-pen",
-        "listening": "fa-solid fa-headphones",
-    }
-
-
-    # ---------------------------------------------------------
     # ENSURE ALL PREDEFINED SKILLS / SUBSKILLS EXIST
     #
-    # Important:
+    # Teacher-specific behavior:
+    #
+    # The teacher needs editable assessment rows to exist.
+    #
     # Creating an unrated subskill does NOT create a snapshot,
     # because rating=None means "Not assessed yet".
     # ---------------------------------------------------------
@@ -5150,19 +4006,28 @@ def student_skills_overview(request, course_id, enrollment_id):
 
 
     # ---------------------------------------------------------
-    # SKILL ASSESSMENTS
+    # SHARED SKILL CARD DATA
+    #
+    # Shared helper builds:
+    #
+    # - all four skill cards
+    # - all canonical subskills
+    # - assessed / pending state
+    # - assessed subskill count
+    # - total canonical subskill count
+    # - current skill score
+    # - grouped assessment categories
+    #
+    # assessment_id remains available for the teacher Edit
+    # Skill button.
     # ---------------------------------------------------------
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
+    skill_assessments, skills = (
+        build_student_skill_cards(
             student=student,
             course=course,
-        )
-        .prefetch_related(
-            "subskill_assessments",
-        )
-        .order_by(
-            "skill"
+            build_skill_note_display=(
+                build_skill_note_display
+            ),
         )
     )
 
@@ -5221,72 +4086,6 @@ def student_skills_overview(request, course_id, enrollment_id):
         )
         for skill_assessment in skill_assessments
     ]
-
-
-    # ---------------------------------------------------------
-    # BUILD SKILL CARDS
-    #
-    # Same structure as learner Skills page,
-    # but assessment_id is retained so teacher can edit.
-    # ---------------------------------------------------------
-    skills = []
-
-    for assessment in skill_assessments:
-
-        note_display = (
-            build_skill_note_display(
-                assessment
-            )
-        )
-
-        # Only genuinely assessed subskills.
-        assessed_subskills = (
-            assessment.subskill_assessments
-            .exclude(
-                rating__isnull=True
-            )
-            .exclude(
-                rating=""
-            )
-        )
-
-
-        skills.append({
-            "assessment": assessment,
-
-            # Needed by Edit Skill button
-            "assessment_id": assessment.id,
-
-            "skill_value": assessment.skill,
-
-            "name": (
-                assessment.get_skill_display()
-            ),
-
-            "icon": skill_icons.get(
-                assessment.skill,
-                "fa-solid fa-chart-simple",
-            ),
-
-            # Overall assessment /10
-            "score": assessment.average_score,
-
-            "teacher_notes": (
-                assessment.teacher_notes
-            ),
-
-            # Use only genuinely assessed subskills
-            "subskills": assessed_subskills,
-
-            # Grouped assessment categories
-            "strengths": note_display["strengths"],
-            "confident": note_display["confident"],
-            "required_standard": (
-                note_display["required_standard"]
-            ),
-            "developing": note_display["developing"],
-            "needs_work": note_display["needs_work"],
-        })
 
 
     # ---------------------------------------------------------
@@ -5353,40 +4152,31 @@ def student_skills_overview(request, course_id, enrollment_id):
         # Student
         "student": student,
         "student_profile": student_profile,
-
-        "user_currently_enrolled": user_currently_enrolled,
+        "user_currently_enrolled":
+            user_currently_enrolled,
         "student_is_active": student_is_active,
         # Course selector
         "enrollments": enrollments,
-
         # Current selected course / enrollment
         "course": course,
         "enrollment": enrollment,
-
         # Skills
         "skills": skills,
         "skill_assessments": skill_assessments,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
-
         # Overall current score
         "overall_average_score": overall_average_score,
-
         # Graphs
         "chart_data": chart_data,
         "overall_skill_chart_data": overall_skill_chart_data,
-
         # Academic profile
         "academic_profile": academic_profile,
-
         # Level choices
-        "level_choices": UserProfile.LEVEL_CHOICES,
+        "level_choices":
+            UserProfile.LEVEL_CHOICES,
     }
 
-
-    # ---------------------------------------------------------
-    # RENDER
-    # ---------------------------------------------------------
     return render(
         request,
         "profiles/teacher/student_skills_overview.html",
@@ -7301,6 +6091,7 @@ def company_admin_all_courses_attendance(request):
 
 @login_required
 def company_admin_course_details(request, course_id):
+
     profile = get_object_or_404(
         UserProfile,
         user=request.user,
@@ -7362,7 +6153,7 @@ def company_admin_course_details(request, course_id):
     )
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    #
+    # 
     # Keep all enrollment records available so historical
     # course/student information remains accessible regardless
     # of enrollment status.
@@ -7391,7 +6182,6 @@ def company_admin_course_details(request, course_id):
             "student__username",
         )
     )
-
 
     # ---------------------------------------------------------
     # CLASS SESSIONS
@@ -7460,19 +6250,14 @@ def company_admin_course_details(request, course_id):
         )
     )
 
-    past_held_hours = Decimal("0.00")
+    past_held_minutes = get_session_minutes(
+        past_completed_hour_sessions
+    )
 
-    for session in past_completed_hour_sessions:
-        duration = session.end_time - session.start_time
-
-        duration_hours = (
-            Decimal(str(duration.total_seconds()))
-            / Decimal("3600")
-        )
-
-        past_held_hours += duration_hours
-
-    past_held_hours = past_held_hours.quantize(
+    past_held_hours = (
+        Decimal(past_held_minutes)
+        / Decimal("60")
+    ).quantize(
         Decimal("0.01")
     )
 
@@ -7506,26 +6291,7 @@ def company_admin_course_details(request, course_id):
     # ---------------------------------------------------------
     # TIMETABLE DISPLAY
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -7725,7 +6491,7 @@ def company_admin_course_students_list(request, course_id):
 
     # ---------------------------------------------------------
     # ENROLLMENTS
-    #
+    # 
     # All enrollments belonging to the currently selected
     # course are displayed, regardless of enrollment status.
     # ---------------------------------------------------------
@@ -7826,27 +6592,7 @@ def company_admin_course_students_list(request, course_id):
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
-
+    formatted_timetable = build_formatted_timetable(course)
 
     # ---------------------------------------------------------
     # EMAIL ALL STUDENTS
@@ -8305,7 +7051,7 @@ def company_admin_student_detail(request, student_id):
     ).exists()
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
-    #
+    # Helper in profiles/utils/enrollments.py
     # Course lifecycle order:
     # 1. Active
     # 2. Confirmed
@@ -8313,7 +7059,7 @@ def company_admin_student_detail(request, student_id):
     # 4. Completed
     # 5. Cancelled
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
@@ -8324,48 +7070,6 @@ def company_admin_student_detail(request, student_id):
             "course__teacher",
             "course__course_type",
             "course__company",
-            "student",
-            "student__profile",
-        )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
         )
     )
 
@@ -8549,46 +7253,23 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     # ATTENDED HOURS
     # ---------------------------------------------------------
-    attended_minutes = 0
+    attended_sessions = (
+        attendance.class_session
+        for attendance in attendances
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
 
-    for attendance in attendances:
-
-        if (
-            attendance.status == Attendance.STATUS_ATTENDED
-            and attendance.class_session.start_time
-            and attendance.class_session.end_time
-        ):
-            session_duration = (
-                attendance.class_session.end_time
-                - attendance.class_session.start_time
-            )
-
-            attended_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
 
     attended_hours = (
         attended_minutes / 60
     )
 
-
-    attended_whole_hours, attended_remaining_minutes = divmod(
-        attended_minutes,
-        60,
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
     )
-
-    if attended_remaining_minutes:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-            f"{attended_remaining_minutes:02d}"
-        )
-
-    else:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -8604,45 +7285,17 @@ def company_admin_student_detail(request, student_id):
         )
     )
 
-    completed_minutes = 0
-
-    for class_session in completed_course_sessions:
-
-        if (
-            class_session.start_time
-            and class_session.end_time
-        ):
-            session_duration = (
-                class_session.end_time
-                - class_session.start_time
-            )
-
-            completed_minutes += round(
-                session_duration.total_seconds()
-                / 60
-            )
-
+    completed_minutes = get_session_minutes(
+        completed_course_sessions
+    )
 
     completed_hours_numeric = (
         completed_minutes / 60
     )
 
-
-    completed_whole_hours, completed_remaining_minutes = divmod(
-        completed_minutes,
-        60,
+    completed_course_hours_display = format_minutes_duration(
+        completed_minutes
     )
-
-    if completed_remaining_minutes:
-        completed_course_hours_display = (
-            f"{completed_whole_hours}h"
-            f"{completed_remaining_minutes:02d}"
-        )
-
-    else:
-        completed_course_hours_display = (
-            f"{completed_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -8658,21 +7311,9 @@ def company_admin_student_detail(request, student_id):
         float(course_total_hours) * 60
     )
 
-    course_total_whole_hours, course_total_remaining_minutes = divmod(
-        course_total_minutes,
-        60,
+    course_total_hours_display = format_minutes_duration(
+        course_total_minutes
     )
-
-    if course_total_remaining_minutes:
-        course_total_hours_display = (
-            f"{course_total_whole_hours}h"
-            f"{course_total_remaining_minutes:02d}"
-        )
-
-    else:
-        course_total_hours_display = (
-            f"{course_total_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -8687,21 +7328,13 @@ def company_admin_student_detail(request, student_id):
         )
     )
 
-    completed_hours = sum(
-        (
-            Decimal(
-                str(
-                    (
-                        session.end_time
-                        - session.start_time
-                    ).total_seconds()
-                )
-            )
-            / Decimal("3600")
+    completed_assigned_minutes = get_session_minutes(
+        completed_session_list
+    )
 
-            for session in completed_session_list
-        ),
-        Decimal("0"),
+    completed_hours = (
+        Decimal(completed_assigned_minutes)
+        / Decimal("60")
     )
 
 
@@ -8712,21 +7345,13 @@ def company_admin_student_detail(request, student_id):
         enrollment.eligible_sessions
     )
 
-    total_hours = sum(
-        (
-            Decimal(
-                str(
-                    (
-                        session.end_time
-                        - session.start_time
-                    ).total_seconds()
-                )
-            )
-            / Decimal("3600")
+    assigned_minutes = get_session_minutes(
+        assigned_session_list
+    )
 
-            for session in assigned_session_list
-        ),
-        Decimal("0"),
+    total_hours = (
+        Decimal(assigned_minutes)
+        / Decimal("60")
     )
 
 
@@ -8882,29 +7507,7 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-    timetable_groups = defaultdict(list)
-
-    for slot in course.timetable_slots.all():
-
-        key = (
-            slot.start_time.strftime("%Hh%M"),
-            slot.end_time.strftime("%Hh%M"),
-        )
-
-        timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
-        )
-
-
-    formatted_timetable = []
-
-    for (start, end), days in timetable_groups.items():
-
-        formatted_timetable.append({
-            "days": " / ".join(days),
-            "start": start,
-            "end": end,
-        })
+    formatted_timetable = build_formatted_timetable(course)
 
 
     # ---------------------------------------------------------
@@ -9019,8 +7622,9 @@ def company_admin_student_attendance_record(request, student_id):
     ).exists()
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
+    # Helper in profiles/utils/enrollments.py 
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
@@ -9031,33 +7635,6 @@ def company_admin_student_attendance_record(request, student_id):
             "course__teacher",
             "course__course_type",
             "course__company",
-            "student",
-            "student__profile",
-        )
-        .annotate(
-            status_order=Case(
-                When(course__status="active", then=Value(1)),
-                When(course__status="confirmed", then=Value(2)),
-                When(course__status="paused", then=Value(3)),
-                When(course__status="completed", then=Value(4)),
-                When(course__status="cancelled", then=Value(5)),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
         )
     )
 
@@ -9288,45 +7865,23 @@ def company_admin_student_attendance_record(request, student_id):
     #
     # Actual duration of the sessions this employee attended.
     # ---------------------------------------------------------
-    attended_minutes = 0
+    attended_sessions = (
+        attendance.class_session
+        for attendance in attendances
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
 
-    for attendance in attendances:
-
-        if (
-            attendance.status == Attendance.STATUS_ATTENDED
-            and attendance.class_session.start_time
-            and attendance.class_session.end_time
-        ):
-            session_duration = (
-                attendance.class_session.end_time
-                - attendance.class_session.start_time
-            )
-
-            attended_minutes += round(
-                session_duration.total_seconds() / 60
-            )
-
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
 
     attended_hours = (
         attended_minutes / 60
     )
 
-
-    attended_whole_hours, attended_remaining_minutes = divmod(
-        attended_minutes,
-        60,
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
     )
-
-
-    if attended_remaining_minutes:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-            f"{attended_remaining_minutes:02d}"
-        )
-    else:
-        attended_hours_display = (
-            f"{attended_whole_hours}h"
-        )
 
 
     # ---------------------------------------------------------
@@ -9339,8 +7894,6 @@ def company_admin_student_attendance_record(request, student_id):
     # so the denominator matches the attendance context shown
     # elsewhere in the card.
     # ---------------------------------------------------------
-    completed_minutes = 0
-
     completed_attendance_records = (
         attendances
         .filter(
@@ -9348,45 +7901,22 @@ def company_admin_student_attendance_record(request, student_id):
         )
     )
 
+    completed_sessions = (
+        attendance.class_session
+        for attendance in completed_attendance_records
+    )
 
-    for attendance in completed_attendance_records:
-
-        class_session = attendance.class_session
-
-        if (
-            class_session.start_time
-            and class_session.end_time
-        ):
-            session_duration = (
-                class_session.end_time
-                - class_session.start_time
-            )
-
-            completed_minutes += round(
-                session_duration.total_seconds() / 60
-            )
-
+    completed_minutes = get_session_minutes(
+        completed_sessions
+    )
 
     completed_hours = (
         completed_minutes / 60
     )
 
-
-    completed_whole_hours, completed_remaining_minutes = divmod(
-        completed_minutes,
-        60,
+    completed_hours_display = format_minutes_duration(
+        completed_minutes
     )
-
-
-    if completed_remaining_minutes:
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-            f"{completed_remaining_minutes:02d}"
-        )
-    else:
-        completed_hours_display = (
-            f"{completed_whole_hours}h"
-        )
 
     # ---------------------------------------------------------
     # FULL ATTENDANCE HISTORY
@@ -9468,11 +7998,9 @@ def company_admin_student_skills_overview(request, student_id):
     if not company:
         return redirect("home")
 
-
     # ---------------------------------------------------------
     # GET EMPLOYEE
     # ---------------------------------------------------------
-
     student = get_object_or_404(
         User.objects.select_related("profile"),
         id=student_id,
@@ -9487,12 +8015,10 @@ def company_admin_student_skills_overview(request, student_id):
         course__status="active",
     ).exists()
 
-
     # ---------------------------------------------------------
     # GET ALL ENROLLMENTS FOR THIS EMPLOYEE
-    #
+    # HElper in profiles/utils/enrollments.py
     # Historical courses remain accessible.
-    #
     # Order:
     # 1. Active
     # 2. Confirmed
@@ -9500,8 +8026,7 @@ def company_admin_student_skills_overview(request, student_id):
     # 4. Completed
     # 5. Cancelled
     # ---------------------------------------------------------
-
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
@@ -9513,63 +8038,18 @@ def company_admin_student_skills_overview(request, student_id):
             "course__course_type",
             "course__company",
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    course__status="active",
-                    then=Value(1),
-                ),
-                When(
-                    course__status="confirmed",
-                    then=Value(2),
-                ),
-                When(
-                    course__status="paused",
-                    then=Value(3),
-                ),
-                When(
-                    course__status="completed",
-                    then=Value(4),
-                ),
-                When(
-                    course__status="cancelled",
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            ),
-
-            completed_date_order=Case(
-                When(
-                    course__status="completed",
-                    then=F("course__end_date"),
-                ),
-                default=Value(None),
-                output_field=DateField(),
-            ),
-        )
-        .order_by(
-            "status_order",
-            "course__name",
-            "-completed_date_order",
-        )
     )
-
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
-    #
     # Example:
     # /profiles/company-admin/employees/3/skills/?course=9
     # ---------------------------------------------------------
-
     selected_course_id = request.GET.get("course")
-
 
     # ---------------------------------------------------------
     # DETERMINE SELECTED ENROLLMENT
     # ---------------------------------------------------------
-
     if selected_course_id:
         enrollment = get_object_or_404(
             enrollments,
@@ -9582,200 +8062,83 @@ def company_admin_student_skills_overview(request, student_id):
     # ---------------------------------------------------------
     # NO ENROLLMENTS
     # ---------------------------------------------------------
-
     if not enrollment:
         context = {
             "profile": profile,
             "company": company,
-
             "student": student,
             "student_profile": student_profile,
-
+            "user_currently_enrolled":
+                user_currently_enrolled,
             "enrollments": enrollments,
             "enrollment": None,
             "course": None,
-
             "skills": [],
-
             "academic_profile": getattr(
                 student,
                 "academic_profile",
                 None,
             ),
-
             "chart_data": {
                 "labels": [],
                 "datasets": [],
             },
-
             "skill_notes": [],
             "skill_note_display": [],
         }
 
         return render(
             request,
-            "profiles/company_admin/company_admin_student_skills_overview.html",
+            "profiles/company_admin/"
+            "company_admin_student_skills_overview.html",
             context,
         )
-
 
     # ---------------------------------------------------------
     # SELECTED COURSE
     # ---------------------------------------------------------
-
     course = enrollment.course
 
-
     # ---------------------------------------------------------
-    # SKILL ICONS
-    # ---------------------------------------------------------
-
-    skill_icons = {
-        "speaking": "fa-solid fa-microphone",
-        "reading": "fa-solid fa-book-open",
-        "writing": "fa-solid fa-pen",
-        "listening": "fa-solid fa-headphones",
-    }
-
-
-    # ---------------------------------------------------------
-    # EXISTING SKILL ASSESSMENTS
+    # SHARED SKILL CARD DATA
+    # Helper in FILE profiles/utils/skills.py
+    # Helper shared w.all profile roles
+    # Builds:
+    # - all four skill cards
+    # - all canonical subskills
+    # - assessed / pending state
+    # - assessed subskill count
+    # - total subskill count
+    # - current skill score
+    # - grouped assessment categories
     #
-    # IMPORTANT:
-    # This may legitimately be empty for a confirmed/new course.
-    # We do NOT create assessments here.
+    # The helper is explicitly scoped to:
+    # student + selected course
     # ---------------------------------------------------------
-
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
+    skill_assessments, skills = (
+        build_student_skill_cards(
             student=student,
             course=course,
+            build_skill_note_display=(
+                build_skill_note_display
+            ),
         )
-        .prefetch_related(
-            "subskill_assessments"
-        )
-        .order_by("skill")
     )
-
 
     # ---------------------------------------------------------
     # DISPLAY-FRIENDLY NOTES
-    #
     # Only existing assessments can have notes.
     # ---------------------------------------------------------
-
     skill_note_display = [
-        build_skill_note_display(skill_assessment)
+        build_skill_note_display(
+            skill_assessment
+        )
         for skill_assessment in skill_assessments
     ]
-
-
-    # ---------------------------------------------------------
-    # BUILD ALL FOUR SKILL CARDS
-    #
-    # This is the important change.
-    #
-    # Even if no assessment exists yet, Listening, Reading,
-    # Speaking and Writing are still added to `skills`.
-    # ---------------------------------------------------------
-
-    assessments_by_skill = {
-        assessment.skill: assessment
-        for assessment in skill_assessments
-    }
-
-    skill_areas = [
-        ("listening", "Listening"),
-        ("reading", "Reading"),
-        ("speaking", "Speaking"),
-        ("writing", "Writing"),
-    ]
-
-    skills = []
-
-    for skill_value, skill_name in skill_areas:
-
-        assessment = assessments_by_skill.get(skill_value)
-
-        # -----------------------------------------------------
-        # ASSESSMENT EXISTS
-        # -----------------------------------------------------
-
-        if assessment:
-
-            note_display = build_skill_note_display(
-                assessment
-            )
-
-            skills.append({
-                "assessment": assessment,
-                "assessment_id": assessment.id,
-                "skill_value": skill_value,
-                "name": skill_name,
-
-                "icon": skill_icons.get(
-                    skill_value,
-                    "fa-solid fa-chart-simple",
-                ),
-
-                "score": assessment.average_score,
-
-                "teacher_notes": assessment.teacher_notes,
-
-                "subskills": (
-                    assessment
-                    .subskill_assessments
-                    .all()
-                ),
-
-                "strengths": note_display["strengths"],
-                "confident": note_display["confident"],
-                "required_standard": note_display["required_standard"],
-                "developing": note_display["developing"],
-                "needs_work": note_display["needs_work"],
-            })
-
-
-        # -----------------------------------------------------
-        # NO ASSESSMENT YET
-        #
-        # Still build the card so the UI can show:
-        #
-        # Listening      —/10
-        # 0 subskills assessed yet
-        # -----------------------------------------------------
-
-        else:
-
-            skills.append({
-                "assessment": None,
-                "assessment_id": None,
-                "skill_value": skill_value,
-                "name": skill_name,
-
-                "icon": skill_icons.get(
-                    skill_value,
-                    "fa-solid fa-chart-simple",
-                ),
-
-                "score": None,
-                "teacher_notes": "",
-
-                "subskills": [],
-
-                "strengths": [],
-                "confident": [],
-                "required_standard": [],
-                "developing": [],
-                "needs_work": [],
-            })
-
 
     # ---------------------------------------------------------
     # SKILL NOTES
     # ---------------------------------------------------------
-
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -9788,17 +8151,14 @@ def company_admin_student_skills_overview(request, student_id):
         .order_by("skill")
     )
 
-
     # ---------------------------------------------------------
     # ACADEMIC PROFILE
     # ---------------------------------------------------------
-
     academic_profile = getattr(
         student,
         "academic_profile",
         None,
     )
-
 
     # ---------------------------------------------------------
     # CHART DATA
@@ -9806,49 +8166,45 @@ def company_admin_student_skills_overview(request, student_id):
     # Course status does not matter.
     # No assessments yet simply means an empty chart.
     # ---------------------------------------------------------
-
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
-
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
-
     context = {
         "profile": profile,
         "company": company,
-
         "student": student,
         "student_profile": student_profile,
-
-        "user_currently_enrolled": user_currently_enrolled,
+        "user_currently_enrolled":
+            user_currently_enrolled,
         # Full enrollment list for selector
         "enrollments": enrollments,
-
         # Selected enrollment/course
         "enrollment": enrollment,
         "course": course,
-
-        # Always contains all four skill cards
+        # Shared skill-card structure
         "skills": skills,
-
+        # Academic profile
         "academic_profile": academic_profile,
-
+        # Chart
         "chart_data": chart_data,
-
+        # Notes
         "skill_notes": skill_notes,
-        "skill_note_display": skill_note_display,
+        "skill_note_display":
+            skill_note_display,
     }
-
 
     return render(
         request,
-        "profiles/company_admin/company_admin_student_skills_overview.html",
+        "profiles/company_admin/"
+        "company_admin_student_skills_overview.html",
         context,
     )
+
 
 
 @login_required
