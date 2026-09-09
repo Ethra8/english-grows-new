@@ -733,9 +733,6 @@ div:has(> .student-action-btn) {
         padding: 30px 4% 70px;
     }
 
-    .student-detail-page.profile-page {
-        padding: 0px 3% 70px;
-    }
 
 
 }

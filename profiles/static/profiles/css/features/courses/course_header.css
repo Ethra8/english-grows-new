@@ -4,11 +4,7 @@
     margin: 2rem 0 0;
     position: relative;
     overflow: hidden;
-    /* border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.3); */
-    /* background-color: rgba(var(--color-tropical-teal-rgb), 0.07);     */
-    /* background: url('/static/images/globe_1920x1080.png') no-repeat center center fixed; */
-    /* background: url('/static/images/globe_teal_transparent.png') no-repeat right top 70px fixed; */
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
 }
 
 /* GLOBE BACKGROUND ONLY */
@@ -20,10 +16,10 @@
 
     background-image: url('/static/images/globe_tropical_teal_transparent.png');
     background-repeat: no-repeat;
-    background-position: right -220px top 60px;
+    background-position: right -170px top 60px;
     background-attachment: fixed;
 
-    opacity: 0.06; /* adjust only globe opacity */
+    opacity: 0.05; /* adjust only globe opacity */
 
     pointer-events: none;
     z-index: 0;

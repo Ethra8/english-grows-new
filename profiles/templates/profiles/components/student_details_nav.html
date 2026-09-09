@@ -5,14 +5,12 @@
     <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
 {% endblock %}
 
-<div class="details-nav-wrapper notranslate" translate="no">
+<div id="studentDetails" class="details-nav-wrapper notranslate" translate="no">
+        
+    {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course only %}
 
-    <nav
-        class="student-detail-tabs"
-        aria-label="{% trans 'Student details navigation' %}"
-    >
+    <nav class="student-detail-tabs" aria-label="{% trans 'Student details navigation' %}">
 
-        {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course only %}
 
         <div class="wrapper-links-inner-nav">
             {% if request.user.profile.role == "company_admin" %}
@@ -21,7 +19,7 @@
                     class="{% if active_section == 'general' %}active{% endif %}"
                     {% if active_section == "general" %}aria-current="page"{% endif %}
                 >
-                    {% trans "General" %}
+                    {% trans "Overview" %}
                 </a>
 
 
@@ -48,7 +46,7 @@
                     class="{% if active_section == 'general' %}active{% endif %}"
                     {% if active_section == "general" %}aria-current="page"{% endif %}
                 >
-                    {% trans "General" %}
+                    {% trans "Overview" %}
                 </a>
 
 
@@ -75,7 +73,7 @@
                     class="{% if active_section == 'general' %}active{% endif %}"
                     {% if active_section == "general" %}aria-current="page"{% endif %}
                 >
-                    {% trans "General" %}
+                    {% trans "Overview" %}
                 </a>
 
 

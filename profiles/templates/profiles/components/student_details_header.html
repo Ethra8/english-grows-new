@@ -40,13 +40,11 @@
             {% endif %}    
 
             {% if show_company and student_profile.company %}
-                <div>
-                    <p>
-                        <span>
-                            <i class="fa-regular fa-building ml-2 mr-2" aria-hidden="true"></i>
-                            {{ student_profile.company.name }}
-                        </span>
-                    </p>
+                <div class="profile-user-company">
+                    <span>
+                        <i class="fa-regular fa-building ml-2 mr-2" aria-hidden="true"></i>
+                        {{ student_profile.company.name }}
+                    </span>
                 </div>
             {% endif %}    
 

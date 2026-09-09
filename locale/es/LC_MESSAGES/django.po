@@ -350,7 +350,7 @@ msgstr "Registro de Asistencia"
 
 
 msgid "Overview"
-msgstr "General"
+msgstr "Resumen"
 
 msgid "Skills Progress"
 msgstr "Progreso por Skills"

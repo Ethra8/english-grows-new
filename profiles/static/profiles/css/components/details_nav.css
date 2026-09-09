@@ -3,8 +3,9 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: visible;
+    /* overflow-x: auto;
+    overflow-y: visible; */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     scrollbar-width: none;
@@ -20,11 +21,12 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow: visible;
+    /* overflow: visible; */
     box-sizing: border-box;
 }
 
-/* NAV *****************************************************/
+
+/* NAV - GENRAL RULES *****************************************************/
 .details-page__navigation nav {
     display: flex;
     align-items: center;
@@ -34,6 +36,7 @@
     width: max-content;
     min-width: 100%;
     max-width: none;
+    height: 62px;
     padding: 0.15rem 1rem 0.15rem 0.5rem;
     overflow-x: auto;
     overflow-y: hidden;
@@ -47,53 +50,95 @@
     flex: 0 0 auto;
 }
 
-/* STUDENT DETAIL NAV **************************************/
-.details-page__navigation nav.student-detail-tabs {
-    border-bottom: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
-    background-color: var(--color-navy);
-}
-
-/* COURSE DETAIL NAV ***************************************/
-.details-page__navigation nav.course-detail-tabs {
-    height: 62px;
-    border-bottom: 2px solid rgba(var(--color-teal-rgb), 0.35);
-    border-radius: 0;
-    background: transparent;
-}
-
-/* NAV LINKS ***********************************************/
-.details-page__navigation nav.student-detail-tabs a,
-.details-page__navigation nav.course-detail-tabs a {
+.details-page__navigation nav a {
     position: relative;
     flex: 0 0 auto;
     height: 62px;
-    padding: 1rem 1.5rem;
-    color: rgba(var(--color-navy-rgb), 0.85);
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
 }
 
-.details-page__navigation nav a.active,
-.details-page__navigation nav a:hover {
-    height: 56px;
+.details-page__navigation nav.student-detail-tabs a {
+    padding: 0.5rem 1.5rem;
+    height: 51px;
+}
+
+.details-page__navigation nav.course-detail-tabs a {
+    padding: 1rem 1.5rem 0.5rem;
+    height: 54px;
+}
+
+/* created underlined decoration on active & hover */
+.details-page__navigation nav a::after {
+    content: "";
+    position: absolute;
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: 4px;
+    height: 3px;
+    border-radius: 999px;
+    opacity: 0;
+    transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* STUDENT DETAIL NAV **************************************/
+.details-page__navigation nav.student-detail-tabs {
+    flex-direction: column;
+    /* height: 130px;
+    min-height: 130px; */
+    border-bottom: 2px solid rgba(var(--color-tropical-teal-rgb), 0.35);
+    /* background-color: var(--color-navy); */
+    padding: 0.5rem 0.5rem 0;
+    border-radius: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.details-page__navigation nav.student-detail-tabs a {
+    color: rgba(var(--color-navy-rgb), 0.85);
+}
+
+.details-page__navigation nav.student-detail-tabs a.active,
+.details-page__navigation nav.student-detail-tabs a:hover {
     color: var(--color-teal);
-    border-bottom: 3px solid var(--color-tropical-teal);
     background-color: transparent;
 }
 
-.details-page__navigation nav a.active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    height: 3px;
-    background: var(--color-pearlaqua);
-    border-radius: 999px;
+.details-page__navigation nav.student-detail-tabs a.active::after,
+.details-page__navigation nav.student-detail-tabs a:hover::after {
+    background: var(--color-tropical-teal);
+    opacity: 1;
 }
 
-/* INNER NAV LINKS WRAPPER *********************************/
+
+/* COURSE DETAIL NAV ***************************************/
+.details-page__navigation nav.course-detail-tabs {
+    border-bottom: 2px solid rgba(var(--color-teal-rgb), 0.35);
+    border-radius: 0;
+    background: transparent;
+}
+
+.details-page__navigation nav.course-detail-tabs a {
+    color: rgba(var(--color-navy-rgb), 0.85);
+}
+
+.details-page__navigation nav.course-detail-tabs a.active,
+.details-page__navigation nav.course-detail-tabs a:hover {
+    color: var(--color-teal);
+    background-color: transparent;
+}
+
+.details-page__navigation nav.course-detail-tabs a.active::after,
+.details-page__navigation nav.course-detail-tabs a:hover::after {
+    background: var(--color-tropical-teal);
+    opacity: 1;
+}
+
 .wrapper-links-inner-nav {
     display: flex;
     width: 100%;
@@ -105,6 +150,9 @@
 
 @media (max-width: 1360.98px) {
 
+    .details-page__navigation {
+        min-height: fit-content;
+    }
     .details-page__navigation nav {
         flex-direction: column;
     }
@@ -137,7 +185,22 @@
      * Horizontal scrolling belongs to this wrapper.
      * Keep the page itself constrained to viewport width.
      */
-    .details-nav-wrapper {
+    /* .details-nav-wrapper {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 0.45rem;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
+        scrollbar-color:
+            rgba(var(--color-teal-rgb), 0.30)
+            transparent;
+    } */
+
+    .details-page__navigation nav {
         width: 100%;
         max-width: 100%;
         min-width: 0;
@@ -159,8 +222,26 @@
         white-space: nowrap;
     }
 
+    .details-page__navigation nav::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .details-page__navigation nav::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .details-page__navigation nav::-webkit-scrollbar-thumb {
+        background: rgba(var(--color-teal-rgb), 0.30);
+        border-radius: 999px;
+    }
+
+    .details-page__navigation nav::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--color-teal-rgb), 0.50);
+    }
+
+
     /* SCROLLBAR — CHROME / EDGE / SAFARI */
-    .details-nav-wrapper::-webkit-scrollbar {
+    /* .details-nav-wrapper::-webkit-scrollbar {
         height: 4px;
     }
 
@@ -175,6 +256,11 @@
 
     .details-nav-wrapper::-webkit-scrollbar-thumb:hover {
         background: rgba(var(--color-teal-rgb), 0.50);
-    }
+    } */
+
+    /* .details-page__navigation nav.student-detail-tabs {
+        height: 176px;
+        min-height: 176px;
+    } */
 
 }

@@ -3,6 +3,7 @@
     width: 100%;
     min-height: 100vh;
     box-sizing: border-box;
+    background-color: rgba(var(--color-mist-rgb), 0.7);
 }
 
 

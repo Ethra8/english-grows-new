@@ -1,5 +1,6 @@
 .student-detail-page.profile-page {
     padding: 30px 7% 70px;
+    background-color: rgba(var(--color-mist-rgb), 0.7);
 }
 
 .student-detail-page,
@@ -13,6 +14,8 @@
 }
 
 .student-detail-page header {
+    position: relative;
+    overflow: hidden;
     color: var(--color-whitesmoke);
     display: flex;
     justify-content: space-between;
@@ -25,9 +28,26 @@
     box-sizing: border-box;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
     border: 1px solid rgba(var(--color-tropical-teal-rgb), 0.35);
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
     box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
+
+.student-detail-page header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/images/globe_tropical_teal_transparent.png');
+    background-repeat: no-repeat;
+    /* background-position: right 100px top 100px; */
+    background-position: right -120px top 60px;
+    background-attachment: fixed;
+
+    opacity: 0.09; /* adjust only globe opacity */
+
+    pointer-events: none;
+    z-index: 0;
+}
+
 
 /* email */
 .student-detail-page header a,
@@ -114,13 +134,15 @@ header .student-details-header a:hover {
     color: var(--color-tropical-teal);
 }
 
-.profile-user-role span {
+.profile-user-role span,
+.profile-user-company span {
     display: inline-block;
     border-radius: 999px;
     color: var(--color-pearlaqua) !important;
     font-size: 1rem;
     max-width: fit-content;
     max-height: 42px;
+    padding-top: 0.2rem;
 }
 
 /* DIV WITH LEVEL ************/
