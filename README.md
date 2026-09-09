@@ -1810,7 +1810,11 @@ The architecture of **English Grows** has been designed around the separation of
 
 Several areas that could initially appear suitable for a single model have deliberately been separated in order to reduce duplication, improve maintainability and preserve historical data.
 
+---
+
 ### Separation of Responsibilities
+
+---
 
 The application follows a clear separation of responsibilities across its Django architecture:
 
@@ -1842,7 +1846,11 @@ TEMPLATE
   └── Presents the prepared data to the user
 ```
 
+---
+
 ### Authentication vs. Application Profile
+
+---
 
 Django's built-in `User` model is responsible for authentication-related information such as:
 
