@@ -6,16 +6,12 @@
 
 {% block details_page_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
 
 {% block details_page_shell_class %}student-detail-page{% endblock %}
 
-{% block details_page_background %}
-    <div class="overlay-globe" aria-hidden="true"></div>
-    <div class="overlay-mist" aria-hidden="true"></div>
-{% endblock %}
+{% block details_page_background %}{% endblock %}
 
 {% block details_header %}
     {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
@@ -77,7 +73,15 @@
                     </div>
                     <div class="item-text">
                         <strong>{% trans 'Total Attendance' %}</strong>
-                        <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
+                        <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} 
+                            <small class="ml-2">
+                                {% if enrollment.total_completed_classes == 1 %}
+                                    {% trans 'class' %}
+                                {% elif enrollment.total_completed_classes > 1 or enrollment.total_completed_classes == 0 %}
+                                    {% trans 'classes' %}
+                                {% endif %}
+                            </small>
+                        </span>
                     </div>
                 </div>
 
@@ -152,7 +156,15 @@
                     </div>
                     <div class="item-text">
                         <strong>{% trans 'Total Absences' %}</strong>
-                        <span>{{ enrollment.total_absences|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} <small>{% trans 'classes' %}</small></span>
+                        <span>{{ enrollment.total_absences|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} 
+                            <small class="ml-2">
+                                {% if enrollment.total_completed_classes == 1 %}
+                                    {% trans 'class' %}
+                                {% elif enrollment.total_completed_classes > 1 or enrollment.total_completed_classes == 0 %}
+                                    {% trans 'classes' %}
+                                {% endif %}
+                            </small>
+                        </span>
                     </div>
                 </div>
 
@@ -160,7 +172,15 @@
                     <div class="item-icon"><i class="fa-solid fa-user-minus" aria-hidden="true"></i></div>
                     <div class="item-text">
                         <strong>{% trans 'Excused Absences' %}</strong>
-                        <span>{{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}</span>
+                        <span>{{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}
+                            <small class="ml-2">
+                                {% if enrollment.total_absences == 1 %}
+                                    {% trans 'absence' %}
+                                {% elif enrollment.total_absences > 1 or enrollment.total_absences == 0 %}                                
+                                    {% trans 'absences' %}
+                                {% endif %}
+                            </small>
+                        </span>
                     </div>
                 </div>
 
@@ -238,5 +258,4 @@
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 {% endblock %}

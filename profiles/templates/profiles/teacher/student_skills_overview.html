@@ -8,17 +8,13 @@
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skill_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
 {% block details_page_shell_class %}student-detail-page{% endblock %}
 
-{% block details_page_background %}
-    <div class="overlay-globe" aria-hidden="true"></div>
-    <div class="overlay-mist" aria-hidden="true"></div>
-{% endblock %}
+{% block details_page_background %}{% endblock %}
 
 {% block details_header %}
     {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=True %}
@@ -202,7 +198,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>
-<script type="text/javascript" src="{% static 'profiles/js/components/course_selector_form.js' %}"></script>
 <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
 <script src="{% static 'profiles/js/components/skill_cards.js' %}"></script>
 

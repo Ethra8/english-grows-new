@@ -490,6 +490,10 @@ header .student-details-header a:hover {
     flex: 1;
 }
 
+/* .student-stat-list .detail-row {
+    padding: ;
+} */
+
 .student-stat-list p {
     display: flex;
     justify-content: space-between;
@@ -500,7 +504,8 @@ header .student-details-header a:hover {
 }
 
 .student-detail-card .detail-row strong {
-    color: var(--color-teal);
+    color: var(--color-navy);
+    font-weight: 550;
 }
 
 .student-stat-list span,

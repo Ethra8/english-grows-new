@@ -602,7 +602,7 @@ div:has(> .student-action-btn) {
 .level-pill .current-level-label {
     padding: 0.25rem 1rem 0.25rem;
     color: var(--color-whitesmoke);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -612,7 +612,7 @@ div:has(> .student-action-btn) {
     padding: 0.25rem 1rem 0.25rem;
     background: var(--color-navy);
     color: var(--color-whitesmoke);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;

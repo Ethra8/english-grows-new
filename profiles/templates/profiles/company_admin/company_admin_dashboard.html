@@ -242,11 +242,11 @@
                             <span class="overview-period-total">
                                 <a href="{% url 'profiles:company_admin_classes_list' %}?filter=weekly" class="overview-period-link" aria-label="{% trans 'View this week classes' %}">
                                     <strong>{{ total_weekly_sessions|default:"0" }}
-                                    {% blocktrans trimmed count total=total_weekly_sessions %}
-                                        class
-                                    {% plural %}
-                                        classes
-                                    {% endblocktrans %}
+                                    {% if total_weekly_sessions == 1 %}
+                                        {% trans 'class' %}
+                                    {% elif total_weekly_sessions > 1 or total_weekly_sessions == 0 %}
+                                        {% trans 'classes' %}
+                                    {% endif %}
                                     </strong>
                                     <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="" aria-hidden="true" width="26">
                                 </a>

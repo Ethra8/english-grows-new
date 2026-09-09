@@ -448,6 +448,9 @@ msgstr "Ausencia"
 msgid "Total Absences"
 msgstr "Total Ausencias"
 
+msgid "class"
+msgstr "clase"
+
 msgid "classes"
 msgstr "clases"
 
@@ -465,6 +468,13 @@ msgstr "Ausencia"
 
 msgid "Excused"
 msgstr "Justificada"
+
+msgid "absence"
+msgstr "ausencia"
+
+msgid "absences"
+msgstr "ausencias"
+
 
 msgid "No absences recorded yet"
 msgstr "No se encontraron ausencias registradas"
@@ -679,11 +689,6 @@ msgstr "Justificadas"
 msgctxt "attended class list"
 msgid "Attended"
 msgstr "Asistentes"
-
-msgid "class"
-msgid_plural "classes"
-msgstr[0] "clase"
-msgstr[1] "clases"
 
 msgctxt "learner enrollment status"
 msgid "Enrolled"
