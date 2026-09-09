@@ -1948,6 +1948,8 @@ Changing one class therefore does not require changing the general course config
 
 ### Enrolment vs. User Identity
 
+---
+
 A student's identity and their participation in a course are intentionally stored separately.
 
 `User` and `UserProfile` describe **who the person is**, while `CourseEnrollment` describes **their relationship with a particular course**.
