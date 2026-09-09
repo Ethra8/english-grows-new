@@ -44,6 +44,7 @@ The application combines course management, automated lesson scheduling, attenda
 - [Application Data Flow](#application-data-flow)
 
 - [Architectural Design Choices](#architectural-design-choices)
+  - [Separation of Responsibilities](#separation-of-responsibilities)   
   - [Authentication vs. Application Profile](#authentication-vs-application-profile)
   - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
   - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
@@ -1808,6 +1809,38 @@ Attendance, session completion and assessment data then contribute to the progre
 The architecture of **English Grows** has been designed around the separation of identity, learning configuration, lesson delivery and assessment history.
 
 Several areas that could initially appear suitable for a single model have deliberately been separated in order to reduce duplication, improve maintainability and preserve historical data.
+
+### Separation of Responsibilities
+
+The application follows a clear separation of responsibilities across its Django architecture:
+
+> **The model should calculate
+> the helper should package
+> the view should orchestrate
+> the template should display.**
+
+This principle helps prevent business logic from becoming duplicated across views and templates and keeps each layer focused on a clearly defined responsibility.
+
+```text
+MODEL
+  │
+  └── Owns domain rules and calculations
+          │
+          ▼
+HELPER
+  │
+  └── Packages and transforms reusable data
+          │
+          ▼
+VIEW
+  │
+  └── Orchestrates the request and selects the required data
+          │
+          ▼
+TEMPLATE
+  │
+  └── Presents the prepared data to the user
+```
 
 ### Authentication vs. Application Profile
 
