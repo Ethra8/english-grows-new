@@ -410,7 +410,7 @@
     overflow-x: auto;
     overflow-y: auto;
     border: 0;
-    border-top: 1px solid rgba(var(--color-teal-rgb), 0.08);
+    border-top: 3px solid rgba(var(--color-teal-rgb), 0.15);
     border-radius: 0 0 7px 7px;
     background: var(--color-whitesmoke);
     box-sizing: border-box;
@@ -501,6 +501,7 @@
 
 .assigned-class-row:hover {
     background: rgba(var(--color-teal-rgb), 0.065);
+    border-radius: 4px;
 }
 
 .assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
@@ -655,14 +656,14 @@
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
 }
 
-.class-list-level-cell .level,
+/* .class-list-level-cell .level,
 .class-list-course .level {
     width: auto;
     min-width: 46px;
     height: auto;
     margin: 0;
     padding: 0.15rem 0.45rem;
-}
+} */
 
 .class-list-date,
 .class-list-student-num {
@@ -886,7 +887,7 @@
 
     .classes-status-panel .mobile-filter-select,
     .classes-panel-select {
-        display: block !important;
+        display: inline-block !important;
     }
 
     .assigned-classes-list,

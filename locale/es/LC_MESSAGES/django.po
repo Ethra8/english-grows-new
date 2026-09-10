@@ -497,7 +497,7 @@ msgid "Employees"
 msgstr "Empleados"
 
 msgid "Total Employees"
-msgstr "Empleados Totales"
+msgstr "Total de Empleados"
 
 msgid "Active Employees"
 msgstr "Empleados Activos"
