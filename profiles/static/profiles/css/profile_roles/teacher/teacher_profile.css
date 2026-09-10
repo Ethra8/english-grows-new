@@ -434,71 +434,7 @@ h2 {
     font-weight: 600;
 }
 
-.attendance-record-card {
-    background: rgba(0, 52, 91, 0.82);
-    border: 1px solid var(--color-pearlaqua);
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 0 18px rgba(var(--color-shadow-rgba));
-    max-width: fit-content;
-}
-
-.attendance-record-card h2 {
-    color: #d7fffb;
-    margin-bottom: 1.5rem;
-}
-
-.attendance-record-table {
-    max-width: fit-content;
-    overflow-x: auto;
-    border-collapse: collapse;
-}
-
-.attendance-record-table table {
-    max-width: fit-content;
-    overflow-x: auto;
-    border-collapse: collapse;
-}
-
-.attendance-record-table th,
-.attendance-record-table td {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
-    color: var(--color-whitesmoke);
-}
-
-.attendance-record-table th {
-    color: var(--color-pearlaqua);
-    font-weight: 700;
-    text-align: left;
-}
-
-.attendance-record-table th:nth-child(1),
-.attendance-record-table td:nth-child(1) {
-    min-width: 130px;
-}
-
-.attendance-record-table th:nth-child(2),
-.attendance-record-table td:nth-child(2) {
-    min-width: 130px;
-}
-
-.attendance-record-table th:nth-child(3),
-.attendance-record-table td:nth-child(3) {
-    min-width: 180px;
-}
-
-.attendance-record-table th:nth-child(4),
-.attendance-record-table td:nth-child(4) {
-    min-width: 260px;
-}
-
-.attendance-record-table th:nth-child(5),
-.attendance-record-table td:nth-child(5) {
-    min-width: 120px;
-}
-
-.attendance-status {
+/* .attendance-status {
     display: inline-block;
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
@@ -506,7 +442,7 @@ h2 {
     font-size: 0.85rem;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
     padding: 0;
-}
+} */
 
 
 

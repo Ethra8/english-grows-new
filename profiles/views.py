@@ -2281,20 +2281,55 @@ def teacher_course_details(request, course_id):
 
 
 @login_required
-def teacher_group_attendance(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
-
-    now = timezone.now()
+def teacher_course_attendance(request, course_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+    now = timezone.now()
+
+
+    # ---------------------------------------------------------
+    # COURSE
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
         teacher=request.user,
     )
 
+
+    # ---------------------------------------------------------
+    # AVAILABLE COURSES
+    #
+    # Used by the shared course selector in
+    # course_details_header.html.
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(
+            teacher=request.user,
+        )
+        .select_related(
+            "course_type",
+            "company",
+        )
+        .order_by(
+            "name",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    #
+    # Attendance history includes past sessions that are
+    # scheduled, rescheduled or completed.
+    # ---------------------------------------------------------
     class_sessions = (
         course.class_sessions
         .filter(
@@ -2308,29 +2343,42 @@ def teacher_group_attendance(request, course_id):
         .annotate(
             attended_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="attended"),
+                filter=Q(
+                    attendance_records__status="attended",
+                ),
             ),
             missed_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="missed"),
+                filter=Q(
+                    attendance_records__status="missed",
+                ),
             ),
             excused_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="excused"),
+                filter=Q(
+                    attendance_records__status="excused",
+                ),
             ),
         )
-        .order_by("-start_time")
-    )   
- 
+        .order_by(
+            "-start_time",
+        )
+    )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "course": course,
+        "available_courses": available_courses,
         "class_sessions": class_sessions,
         "active_section": "attendance",
     }
 
     return render(
         request,
-        "profiles/teacher/teacher_group_attendance.html",
+        "profiles/teacher/teacher_course_attendance.html",
         context,
     )
 
@@ -4763,6 +4811,8 @@ def teacher_take_attendance(request, session_id):
         course__teacher=request.user,
     )
 
+    course = class_session.course
+
     enrollments = (
         CourseEnrollment.objects
         .filter(
@@ -4850,6 +4900,7 @@ def teacher_take_attendance(request, session_id):
 
     context = {
         "profile": profile,
+        "course": course,
         "class_session": class_session,
         "enrollments": enrollments,
     }

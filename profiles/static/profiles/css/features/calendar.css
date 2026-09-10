@@ -193,6 +193,7 @@
 .fc .fc-button-group > .fc-button:focus,
 .fc .fc-button-group > .fc-button:hover {
     background-color: #6afae1 !important; /* birds color */
+    background: linear-gradient(135deg, rgba(var(--color-aquamarine-rgb), 0.75), rgba(var(--color-tropical-teal-rgb), 0.82));
 }
 
 .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {

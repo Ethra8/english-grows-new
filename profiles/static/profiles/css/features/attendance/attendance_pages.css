@@ -71,7 +71,7 @@
     display: flex;
     gap: 0.9rem;
     margin: 1.5rem auto 2.5rem !important;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
     padding: 0.5rem;
     border-radius: 8px;
 }
@@ -85,36 +85,37 @@
     cursor: pointer;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     width: 100%;
+    background: rgba(var(--color-navy-rgb), 0.8);
 }
 
 .mark-all-btn.mark-all-attended-btn {
-    background: rgba(77, 255, 181, 0.18);
     border: 1px outset #4dffb5;
     color: #4dffb5;
 }
 
 .mark-all-btn.mark-all-attended-btn:hover {
     background: rgba(77, 255, 181, 0.38);
+    color: #28835d;
 }
 
 .mark-all-btn.mark-all-excused-btn {
-    border: 1px outset rgba(255, 179, 71, 0.8);
-    background-color: rgba(255, 179, 71, 0.2);;
-    color: #ffb347;
+    border: 1px outset rgba(var(--color-attendance-status-pending-rgb), 0.8);
+    color: var(--color-attendance-status-pending);
 }
 
 .mark-all-btn.mark-all-excused-btn:hover {
     background-color: rgba(255, 179, 71, 0.38);;
+    color: #c47d00;
 }
 
 .mark-all-btn.mark-all-missed-btn {
-    border: 1px outset rgba(252, 26, 1, 0.8);
-    background-color: rgba(252, 26, 1, 0.18);
-    color: var(--color-whitesmoke);
+    border: 1px outset rgba(var(--color-attendance-status-missed-rgb), 0.8);
+    color: var(--color-attendance-status-missed);
 }
 
 .mark-all-btn.mark-all-missed-btn:hover {
     background-color: rgba(252, 26, 1, 0.38);
+    color: rgba(252, 26, 1, 0.38);
 }
 /* ******************************************************* */
 
@@ -163,7 +164,6 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    /* opacity: 0.3; */
 }
 
 .attendance-progress-card .circle-panel1 h2 {
@@ -477,6 +477,7 @@
 /* Main list card */
 .attendance-list-card {
     min-height: fit-content;
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.65), rgba(var(--color-teal-rgb), 0.82));
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -539,7 +540,6 @@
 
 .teacher-attendance-page .attendance-class-info strong {
     display: block;
-    /* margin: 0 0 0.25rem; */
     color: var(--color-navy);
     font-size: 1.2rem;
     font-weight: 500;
@@ -588,9 +588,8 @@
 
 /* ** ATTENDANCE STATUS PILL *************************** */
 .status-pill {
-    /* display: inline-block; */
     width: max-content;
-    padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    padding: 0.3rem 0.4rem 0.3rem 0.6rem;    
     border-radius: 999px;
     font-size: 1rem;
     font-weight: 500;
@@ -617,26 +616,26 @@
 }
 
 .status-pill.excused {
-    background: rgba(var(--color-attendance-status-excused-rgb), 0.18);
+    background: rgba(var(--color-navy-rgb), 0.68);
     color: var(--color-attendance-status-missed);
     border: 1px outset var(--color-attendance-status-excused);
 }
 
 .status-pill.completed,
 .status-pill.attended {
-    /* background: rgba(var(--color-attendance-status-attended-rgb), 0.18); */
+    background: rgba(var(--color-navy-rgb), 0.68);
     color: var(--color-attendance-status-attended);
     border: 1px outset var(--color-attendance-status-attended);
 }
 
 .status-pill.missed {
-    background: rgba(var(--color-attendance-status-missed-rgb), 0.25);
+    background: rgba(var(--color-navy-rgb), 0.68);
     color: var(--color-attendance-status-missed);
     border: 1px outset var(--color-attendance-status-missed);
 }
 
 .status-pill.pending {
-    background: rgba(var(--color-attendance-status-pending-rgb), 0.25);
+    background: rgba(var(--color-navy-rgb), 0.68);
     color: var(--color-attendance-status-pending);
     border: 1px outset #75736f;
 }
@@ -703,16 +702,13 @@
     box-sizing: border-box;
 
     overflow-x: scroll !important;
-    overflow-y: hidden;
+    max-height: 560px;
+    overflow-y: scroll;
 
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable;
     scrollbar-width: auto;
     scrollbar-color: var(--color-pearlaqua) var(--color-navy);
-}
-
-.attendance-list {
-    width: 100%;
 }
 
 .attendance-row {
@@ -761,14 +757,13 @@
 |***** & STUDENT DETAILS page ***********************************|
 |****  : Summary BUTTONS Wrapper & Cards*************************/
 .wrapper-attendance-course-info {
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
     border-radius: 8px;
-    background-color: rgba(var(--color-teal-rgb), 0.15);
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
     padding: 1rem 2rem;
     align-items: center;
     align-content: center;
     width: 100%;
-    margin: 0 0 1rem;
+    margin: 2rem 0 1rem;
 }
 
 .wrapper-attendance-course-info > div:first-child {
@@ -802,12 +797,6 @@
     border-radius: 8px;
 }
 
-/* .wrapper-attendance-course-info > div:last-child span {
-    background-color: rgba(var(--color-steel-rgb), 0.1);
-    padding: 0.25rem .75rem;
-    border-radius: 8px;
-} */
-
 /* Wrapper of attendace-summary-cards */
 .wrapper-attendance-summary-card {
     display: flex;
@@ -816,7 +805,7 @@
     padding: 0.2rem;
     margin: 1rem auto 2rem;
     width: 100%;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));    
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
 }
 
 .student-detail-page .wrapper-attendance-summary-card {
@@ -868,8 +857,8 @@
     order: 1;
     margin: 0;
     font-size: 1.05rem;
-    font-weight: 300;
-    color: var(--color-whitesmoke);
+    font-weight: 500;
+    color: var(--color-slate);
 }
 
 /* Attendance Detail page : SUMMARY CARDS */
@@ -877,7 +866,6 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin: 1.5rem auto;
-    /* width: fit-content; */
 }
 
 /* Take Attendance page: SUMMARY CARDS *****/
@@ -1051,7 +1039,7 @@
     padding: 0.4rem 0.7rem;
     border-radius: 8px;
     border: 1.5px outset rgba(var(--color-pearlaqua-rgb), 0.22);
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
 }
 
 .attendance-radio-pill {
@@ -1113,7 +1101,11 @@
 }
 
 .attendance-summary-card.missed i {
-    color: #ff5a5a;
+    color: #fa9a9a
+}
+
+.attendance-summary-card.pending i {
+    color: #ffda87;
 }
 
 .take-attendance-save-bar {
@@ -1167,7 +1159,6 @@
     gap: 1.2rem;
     padding: 0.75rem 1.25rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
-    /* width: 900px; */
     min-width: 1230px;
     max-width: none;
     background: var(--color-whitesmoke) !important;
@@ -1325,17 +1316,6 @@
     box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12);
 }
 
-/* .attendance-row {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
-    align-items: center;
-    align-content: space-around;
-    gap: 1.2rem;
-    padding: 1.3rem 1rem;
-    border-bottom: 1px solid rgba(var(--color-pearlaqua-rgb), 0.22);
-    background: linear-gradient(123deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.85));
-} */
-
 .student-avatar {
     width: 46px;
     height: 46px;
@@ -1371,19 +1351,6 @@
     flex-direction: column;
     align-items: flex-start;
 }
-
-/* .attendance-list .attendance-row > div:first-of-type img {
-    width: 46px;
-    height: 46px;
-    background: var(--color_frozen-water);
-    background: radial-gradient(circle, rgba(var(--color-frozen-water-rgb), 0.97) 1%, rgba(var(--color-mist-rgb), 1) 47%, rgba(95, 245, 207, 1) 99%);
-    border-radius: 999px;
-    margin-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-} */
 
 .attendance-list .attendance-row > div:first-of-type span {
     color: var(--color-steel);
@@ -1593,10 +1560,6 @@
         grid-template-columns: 1fr;
         margin: 1.5rem auto;
         width: 100%;
-    }
-
-    .take-attendance-form .take-attendance-card-header p:first-child {
-        padding: 1rem;
     }
 
     #attendanceListTitle {

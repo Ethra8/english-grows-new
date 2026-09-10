@@ -14,12 +14,12 @@
     position: absolute;
     inset: 0;
 
-    background-image: url('/static/images/globe_tropical_teal_transparent.png');
+    background-image: url('/static/images/globe_tropical_teal_937x937.png');
     background-repeat: no-repeat;
     background-position: right -170px top 60px;
     background-attachment: fixed;
 
-    opacity: 0.05; /* adjust only globe opacity */
+    opacity: 0.04; /* adjust only globe opacity */
 
     pointer-events: none;
     z-index: 0;
@@ -29,7 +29,8 @@
 .course-details-page header > div {
     display: flex;
     flex-direction: column;
-    background: rgba(var(--color-teal-rgb), 0.25);
+    /* background: rgba(var(--color-teal-rgb), 0.25); */
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.15), rgba(var(--color-teal-rgb), 0.3));
     padding: 0 0 1.15rem;
 }
 
@@ -46,7 +47,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0 4%;
+    padding: 2.5rem 4% 0;
 }
 
 /* Course Level in header */
@@ -141,10 +142,14 @@
         background-position: right -600px top 20px;
     }
 
-    .course-details-page header .course-header-info,
+    .course-details-page header .course-header-info {
+        padding: 2.5rem 7% 0;
+    }
+
     .course-details-page header .course-header-level {
         padding: 0 7%;
     }
+    
 }
 
 

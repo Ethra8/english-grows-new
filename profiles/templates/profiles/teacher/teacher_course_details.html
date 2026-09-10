@@ -9,6 +9,9 @@
 
 {% block extra_css %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
 {% endblock %}
 
 
@@ -51,7 +54,7 @@
             </div>
         </a>
 
-        <a href="{% url 'profiles:teacher_group_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
+        <a href="{% url 'profiles:teacher_course_attendance' course.id %}" class="course-meta-card metric-card meta-attendance">
             <div class="metric-icon"
                 style="--percentage: {{ average_attendance|default:0 }};">
                 <span class="progress-ring"></span>

@@ -255,7 +255,7 @@ header .student-details-header a:hover {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -264,6 +264,7 @@ header .student-details-header a:hover {
     padding: 0 0.75rem 0 4.3rem;
     gap: 1rem;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.86) 0%, rgba(var(--color-teal-rgb), 0.66) 36%, rgba(var(--color-teal-rgb), 0.55)) 100%;    position: relative; */
     border-radius: 999px;
     border: 2px solid rgba(var(--color-teal-rgb), 0.65);
     color: var(--color-whitesmoke);
@@ -273,6 +274,24 @@ header .student-details-header a:hover {
     box-shadow: 0 2px 4px rgba(var(--color-shadow-rgba));
     overflow: hidden;
     white-space: nowrap;
+}
+
+.student-detail-card h2 .card-header-arrow,
+.skills-chart-header h2 .card-header-arrow {
+    opacity: 0;
+    transform: translateX(-5px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    pointer-events: none;
+}
+
+.student-detail-card h2:hover .card-header-arrow,
+.skills-chart-header h2:hover .card-header-arrow,
+.student-detail-card h2:focus-within .card-header-arrow,
+.skills-chart-header h2:focus-within .card-header-arrow {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .student-detail-card .course-info-detail-card h2 {

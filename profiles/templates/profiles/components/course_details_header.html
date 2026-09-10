@@ -2,14 +2,6 @@
 {% load time_extras %}
 
 
-{% block details_page_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
-{% endblock %}
-
-
-
 <div class="course-header-wrapper">
     <div class="course-selector-wrapper">
         {% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}

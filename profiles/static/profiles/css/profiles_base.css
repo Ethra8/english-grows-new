@@ -132,6 +132,10 @@ main.profile-main {
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.btn-email-all {
+    text-transform: none;
+}
+
 .btn-course-details:hover,
 .btn-attendance-tools:hover,
 .btn-email-all:hover,

@@ -346,7 +346,7 @@ msgstr "Asistencia"
 
 
 msgid "Registered Attendance"
-msgstr "Registro de Asistencia"
+msgstr "Asistencia Registrada"
 
 
 msgid "Overview"
@@ -358,8 +358,8 @@ msgstr "Progreso por Skills"
 msgid "Pending assessment"
 msgstr "Evaluación pendiente"
 
-msgid "Progress"
-msgstr "Progreso"
+msgid "Progress Assessed"
+msgstr "Progreso Evaluado"
 
 msgid "completed"
 msgstr "completado"
@@ -466,8 +466,6 @@ msgstr "Historial Ausencias"
 msgid "Missed"
 msgstr "Ausencia"
 
-msgid "Excused"
-msgstr "Justificantes"
 
 msgid "absence"
 msgstr "ausencia"
@@ -506,7 +504,7 @@ msgid "Name A-Z"
 msgstr "Nombre A-Z"
 
 msgid "Email all"
-msgstr "Email a todos"
+msgstr "Mandar correo a todos"
 
 msgid "Inactive"
 msgstr "Inactivo"
@@ -565,11 +563,16 @@ msgstr "Registro"
 msgid "No submitted attendance records found"
 msgstr "Todavía no hay registros de asistencia disponibles para este grupo"
 
+msgctxt "attendance detail card"
 msgid "employee record"
-msgstr "historial del empleado"
+msgstr "registro"
+
+msgctxt "attendance detail card"
+msgid "employee records"
+msgstr "registros"
 
 msgid "saved for this class session"
-msgstr "registrados para esta sesión"
+msgstr "guardados para esta sesión"
 
 
 msgid "No courses assigned yet to your company"

@@ -3,7 +3,7 @@
     width: 100%;
     min-height: 100vh;
     box-sizing: border-box;
-    background-color: rgba(var(--color-mist-rgb), 0.7);
+    background-color: rgba(var(--color-mist-rgb), 0.5);
 }
 
 
@@ -243,8 +243,8 @@ remain vertically centred.*/
     align-items: center;
     height: 52px;
     /* background: rgba(var(--color-whitesmoke-rgb), 1); */
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75)); ;
-    position: relative;
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75)); ; */
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.86) 0%, rgba(var(--color-teal-rgb), 0.66) 36%, rgba(var(--color-teal-rgb), 0.55)) 100%;    position: relative;
     color: var(--color-whitesmoke);
     font-size: 1.5rem;
     letter-spacing: 0.05em;
