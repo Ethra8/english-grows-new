@@ -234,10 +234,10 @@
     -webkit-overflow-scrolling: touch;
 
     /* Firefox — default / no overflow */
-    scrollbar-width: 8px;
+    scrollbar-width: thin;
     scrollbar-color:
-        rgba(var(--color-navy-rgb), 0.6)
-        rgba(var(--color-tropical-teal-rgb), 0.5);
+        rgba(var(--color-teal-rgb), 0.30)
+        transparent;
     scroll-behavior: smooth;    
 }
 

@@ -176,7 +176,8 @@
 
 .classes-status-tab:hover strong,
 .classes-status-tab.active strong {
-    background: rgba(var(--color-pearlaqua-rgb), 0.42);
+    background: rgba(var(--color-tropical-teal-rgb), 0.42);
+    color: var(--color-navy);
 }
 
 .classes-status-tab.active {
@@ -671,18 +672,21 @@
     min-width: 0;
     height: 68%;
     margin: 0;
-    padding: 0 25%;
     border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
     color: var(--color-slate);
     gap: 0.75rem;
 }
 
-.class-list-student-num {
-    border-right: 1px solid rgba(var(--color-teal-rgb), 0.18);
-    padding: 0 40%;
+.class-list-date {
+    padding: 0 20%;
 }
 
-.class-list-date .icon,
+.class-list-student-num {
+    border-right: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    padding: 0 25%;
+}
+
+/* .class-list-date .icon,
 .class-list-student-num .icon {
     display: inline-flex;
     align-items: center;
@@ -695,7 +699,7 @@
     border: 1px solid var(--color-teal);
     border-radius: 999px;
     background: transparent;
-}
+} */
 
 .class-list-date .icon img,
 .class-list-student-num .icon img {

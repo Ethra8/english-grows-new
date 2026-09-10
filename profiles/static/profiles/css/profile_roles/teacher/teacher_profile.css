@@ -708,7 +708,10 @@ h2 {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable;
-    scrollbar-width: auto;
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(var(--color-teal-rgb), 0.30)
+        transparent;
 }
 
 

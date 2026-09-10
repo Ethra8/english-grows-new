@@ -108,13 +108,13 @@
                 {% for enrollment in all_status_enrollments %}
                     <div class="employees-list-row" data-url="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}?course={{ course.id }}">
 
-                        <div class="small-avatar {% if enrollment.user_currently_enrolled %}status-active{% else %}status-inactive{% endif %}">
+                        <div class="small-avatar {% if enrollment.status == 'active' and course.status == 'active' %}status-active{% else %}status-inactive{% endif %}">
                             {% if enrollment.student.profile.profile_photo %}
                                 <img src="{{ enrollment.student.profile.profile_photo.url }}" alt="" aria-hidden="true" width="60">
                             {% else %}
                                 <img src="{% static 'icons/sidebar_no_photo_user_icon.png' %}" alt="" aria-hidden="true" width="60">
                             {% endif %}
-                            <span class="small-avatar-status-dot" aria-label="{% if enrollment.user_currently_enrolled %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}" title="{% if enrollment.user_currently_enrolled %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}"></span>
+                            <span class="small-avatar-status-dot" aria-label="{% if enrollment.status == 'active' and course.status == 'active' %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}" title="{% if enrollment.user_currently_enrolled %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}"></span>
                         </div>
 
                         <div class="main-info">

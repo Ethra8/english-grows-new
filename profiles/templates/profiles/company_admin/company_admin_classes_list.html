@@ -1,262 +1,123 @@
 {% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
-{% load date_extras %}
+{% load static i18n date_extras %}
 
 {% block extra_title %}| Company Classes {% endblock %}
 
 {% block extra_css %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
+{{ block.super }} <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}"> <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
 {% endblock %}
 
 {% block profile_content %}
 
-<section class="classes-list-page profile-page notranslate" translate="no">    
+<section class="classes-list-page profile-page notranslate" translate="no">
     <div class="overlay-globe"></div>
     <div class="overlay-mist"></div>
-        
-    <header>
-        <div class="row">        
-            <div class="col-12 ml-0 pl-0">
-                <h1>{% trans 'Class Sessions List' %}</h1>
-            </div>
-        </div>
-        <hr>
-    </header>
 
-    <p class="text-dark">{% trans 'Review and filter upcoming and past class sessions' %}.</p>
-
-    <div class="all-assigned-classes mt-5">
-
-        <!-- PRIMARY VIEW NAVIGATION -->
-        <nav class="classes-status-nav"
-            aria-label="Class session status">
-
-            <button
-                type="button"
-                class="classes-status-tab active"
-                data-status-tab="upcoming"
-                aria-selected="true"
-                aria-label="{% trans 'Upcoming' context 'classes list' %}"
-            >
-                <!-- <i class="fa-solid fa-clock mr-2"></i> -->
-
-                <span>{% trans 'Upcoming' context 'classes list' %}</span>
-
-                <strong>
-                    {{ class_filter_counts.upcoming.all }}
-                </strong>
-            </button>
-
-            <button
-                type="button"
-                class="classes-status-tab"
-                data-status-tab="completed"
-                aria-selected="false"
-                aria-label="{% trans 'Past Classes' %}"
-            >
-                <!-- <i class="fa-solid fa-clock-rotate-left mr-2"></i> -->
-
-                <span>{% trans 'Held' context 'classes list' %}</span>
-
-                <strong>
-                    {{ class_filter_counts.completed.all }}
-                </strong>
-            </button>
-
-        </nav>
-
-
-        <!-- UPCOMING CLASSES -->
-        <section
-            class="classes-status-panel active"
-            data-status-panel="upcoming"
-        >
-
-            <div class="classes-filter-buttons">
-
-                <button
-                    type="button"
-                    class="classes-filter-btn active"
-                    data-filter="today"
-                >
-                    <span>{% trans 'Today' %}</span>
-                    <strong>{{ class_filter_counts.upcoming.today }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="weekly"
-                >
-                    <span>{% trans 'This Week' %}</span>
-                    <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="monthly"
-                >
-                    <span>{% trans 'This Month' %}</span>
-                    <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="all"
-                >
-                    <span>{% trans 'All' context 'classes list' %}</span>
-                    <strong>{{ class_filter_counts.upcoming.all }}</strong>
-                </button>
-
-            </div>
-
-
-            <select
-                class="mobile-filter-select classes-panel-select"
-                aria-label="Filter upcoming classes"
-            >
-                <option value="today">
-                    {% trans 'Today' %}: {{ class_filter_counts.upcoming.today }}
-                </option>
-
-                <option value="weekly">
-                    {% trans 'This Week' %}: {{ class_filter_counts.upcoming.weekly }}
-                </option>
-
-                <option value="monthly">
-                    {% trans 'This Month' %}: {{ class_filter_counts.upcoming.monthly }}
-                </option>
-
-                <option value="all">
-                    {% trans 'All' context 'classes list' %}: {{ class_filter_counts.upcoming.all }}
-                </option>
-            </select>
-
-
-            <div class="assigned-classes-list">
-
-                {% for session in sessions %}
-
-                    {% if session.class_status_group == "upcoming" %}
-
-                        {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
-
-                    {% endif %}
-
-                {% endfor %}
-
-                <p class="no-classes-message text-grey p-3" hidden>
-                    {% trans 'No upcoming classes apply to the selected filter' %}.
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- PAST CLASSES -->
-        <section
-            class="classes-status-panel"
-            data-status-panel="completed"
-            hidden
-        >
-
-            <div class="classes-filter-buttons">
-
-                <button
-                    type="button"
-                    class="classes-filter-btn active"
-                    data-filter="today"
-                >
-                    <span>{% trans 'Today' %}</span>
-                    <strong>{{ class_filter_counts.completed.today }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="weekly"
-                >
-                    <span>{% trans 'This Week' %}</span>
-                    <strong>{{ class_filter_counts.completed.weekly }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="monthly"
-                >
-                    <span>{% trans 'This Month' %}</span>
-                    <strong>{{ class_filter_counts.completed.monthly }}</strong>
-                </button>
-
-                <button
-                    type="button"
-                    class="classes-filter-btn"
-                    data-filter="all"
-                >
-                    <span>{% trans 'All' context 'classes list' %}</span>
-                    <strong>{{ class_filter_counts.completed.all }}</strong>
-                </button>
-
-            </div>
-
-
-            <select
-                class="mobile-filter-select classes-panel-select"
-                aria-label="Filter past classes"
-            >
-                <option value="today">
-                    {% trans 'Today' %}: {{ class_filter_counts.completed.today }}
-                </option>
-
-                <option value="weekly">
-                    {% trans 'This Week' %}: {{ class_filter_counts.completed.weekly }}
-                </option>
-
-                <option value="monthly">
-                    {% trans 'This Month' %}: {{ class_filter_counts.completed.monthly }}
-                </option>
-
-                <option value="all">
-                    {% trans 'All' context 'classes list' %}: {{ class_filter_counts.completed.all }}
-                </option>
-            </select>
-
-
-            <div class="assigned-classes-list">
-
-                {% for session in sessions %}
-
-                    {% if session.class_status_group == "completed" %}
-
-                        {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
-
-                    {% endif %}
-
-                {% endfor %}
-
-                <p class="no-classes-message text-grey p-3" hidden>
-                    {% trans 'No held classes apply to the selected filter' %}.
-                </p>
-
-            </div>
-
-        </section>
-
+```
+<header>
+    <div class="row">
+        <div class="col-12 ml-0 pl-0"><h1>{% trans 'Class Sessions List' %}</h1></div>
     </div>
+    <hr>
+</header>
+
+<p class="text-dark">{% trans 'Review and filter upcoming and past class sessions' %}.</p>
+
+<div class="all-assigned-classes mt-5">
+    <!-- PRIMARY VIEW NAVIGATION -->
+    <nav class="classes-status-nav" aria-label="Class session status">
+        <button type="button" class="classes-status-tab active" data-status-tab="upcoming" aria-selected="true" aria-label="{% trans 'Upcoming' context 'classes list' %}">
+            <span>{% trans 'Upcoming' context 'classes list' %}</span>
+            <strong>{{ class_filter_counts.upcoming.all }}</strong>
+        </button>
+
+        <button type="button" class="classes-status-tab" data-status-tab="completed" aria-selected="false" aria-label="{% trans 'Past Classes' %}">
+            <span>{% trans 'Held' context 'classes list' %}</span>
+            <strong>{{ class_filter_counts.completed.all }}</strong>
+        </button>
+    </nav>
+
+    <!-- UPCOMING CLASSES -->
+    <section class="classes-status-panel active" data-status-panel="upcoming">
+        <div class="classes-filter-buttons">
+            <button type="button" class="classes-filter-btn active" data-filter="today">
+                <span>{% trans 'Today' %}</span>
+                <strong>{{ class_filter_counts.upcoming.today }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="weekly">
+                <span>{% trans 'This Week' %}</span>
+                <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="monthly">
+                <span>{% trans 'This Month' %}</span>
+                <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="all">
+                <span>{% trans 'All' context 'classes list' %}</span>
+                <strong>{{ class_filter_counts.upcoming.all }}</strong>
+            </button>
+        </div>
+
+        <select class="mobile-filter-select classes-panel-select" aria-label="Filter upcoming classes">
+            <option value="today">{% trans 'Today' %}: {{ class_filter_counts.upcoming.today }}</option>
+            <option value="weekly">{% trans 'This Week' %}: {{ class_filter_counts.upcoming.weekly }}</option>
+            <option value="monthly">{% trans 'This Month' %}: {{ class_filter_counts.upcoming.monthly }}</option>
+            <option value="all">{% trans 'All' context 'classes list' %}: {{ class_filter_counts.upcoming.all }}</option>
+        </select>
+
+        <div class="assigned-classes-list">
+            {% for session in sessions %}
+                {% if session.class_status_group == "upcoming" %}
+                    {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
+                {% endif %}
+            {% endfor %}
+            <p class="no-classes-message text-grey p-3" hidden>{% trans 'No upcoming classes apply to the selected filter' %}.</p>
+        </div>
+    </section>
+
+    <!-- PAST CLASSES -->
+    <section class="classes-status-panel" data-status-panel="completed" hidden>
+        <div class="classes-filter-buttons">
+            <button type="button" class="classes-filter-btn active" data-filter="today">
+                <span>{% trans 'Today' %}</span>
+                <strong>{{ class_filter_counts.completed.today }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="weekly">
+                <span>{% trans 'This Week' %}</span>
+                <strong>{{ class_filter_counts.completed.weekly }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="monthly">
+                <span>{% trans 'This Month' %}</span>
+                <strong>{{ class_filter_counts.completed.monthly }}</strong>
+            </button>
+            <button type="button" class="classes-filter-btn" data-filter="all">
+                <span>{% trans 'All' context 'classes list' %}</span>
+                <strong>{{ class_filter_counts.completed.all }}</strong>
+            </button>
+        </div>
+
+        <select class="mobile-filter-select classes-panel-select" aria-label="Filter past classes">
+            <option value="today">{% trans 'Today' %}: {{ class_filter_counts.completed.today }}</option>
+            <option value="weekly">{% trans 'This Week' %}: {{ class_filter_counts.completed.weekly }}</option>
+            <option value="monthly">{% trans 'This Month' %}: {{ class_filter_counts.completed.monthly }}</option>
+            <option value="all">{% trans 'All' context 'classes list' %}: {{ class_filter_counts.completed.all }}</option>
+        </select>
+
+        <div class="assigned-classes-list">
+            {% for session in sessions %}
+                {% if session.class_status_group == "completed" %}
+                    {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
+                {% endif %}
+            {% endfor %}
+            <p class="no-classes-message text-grey p-3" hidden>{% trans 'No held classes apply to the selected filter' %}.</p>
+        </div>
+    </section>
+</div>
+```
 
 </section>
-
 {% endblock %}
 
 {% block postloadjs %}
-    {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profiles/js/features/classes/classes_list_pages.js' %}"></script>
+{{ block.super }} <script src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script> <script src="{% static 'profiles/js/features/classes/classes_list_pages.js' %}"></script>
 {% endblock %}

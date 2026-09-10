@@ -1,103 +1,84 @@
 {% extends "profiles/components/details_page_shell.html" %}
-{% load static i18n %}
+{% load static i18n date_extras time_extras %}
 
-{% load date_extras %}
-{% load time_extras %}
-
-
-{% block extra_title %}| Attendance Record  {% endblock %}
+{% block extra_title %}| Attendance Record {% endblock %}
 
 {% block details_page_css %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
 {% endblock %}
-
 
 {% block details_page_shell_class %}course-details-page course-attendance{% endblock %}
 
-{% block details_page_background %}
-    <div class="overlay-mist" aria-hidden="true"></div>
+{% block details_page_background %} <div class="overlay-mist" aria-hidden="true"></div>
 {% endblock %}
 
-
 {% block details_header %}
-    {% include "profiles/components/course_details_header.html" with course_selector_url="profiles:company_admin_course_attendance" %}
+{% include "profiles/components/course_details_header.html" with course_selector_url="profiles:company_admin_course_attendance" %}
 {% endblock %}
 
 {% block details_nav %}
-    {% include "profiles/components/course_details_nav.html" %}
+{% include "profiles/components/course_details_nav.html" %}
 {% endblock %}
 
 {% block details_content %}
 
-    <div class="meta-row">
-        <div class="meta-card meta-attendance">
-            <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="50">
-            <div class="meta-text">
-                <strong>{% trans 'Attendance Submitted' %}:</strong>
-                <span>{{ submitted_class_sessions_count }} / <small>{{ completed_classes }} {% trans 'past classes' %}</small></span>
-            </div>
-        </div>
+<div class="meta-row">
 
-        <div class="meta-card meta-percentage">
-            <img src="{% static 'icons/meta_clipboard_percentage_gradient_icon.png' %}" alt="" aria-hidden="true" width="50">
-            <div class="meta-text">
-                <strong>{% trans 'Attendance Rate' %}:</strong>
-                <span>{{ average_attendance }} %</span>
-            </div>
+    <div class="meta-card meta-attendance">
+        <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="50">
+        <div class="meta-text">
+            <strong>{% trans 'Attendance Submitted' %}:</strong>
+            <span>{{ submitted_class_sessions_count }} / <small>{{ completed_classes }} {% trans 'past classes' %}</small></span>
         </div>
     </div>
 
-    <div class="wrapper-attendance-list-panel mt-5">
-        <div class="attendance-list-panel">
-            <div class="attendance-list-card">
+    <div class="meta-card meta-percentage">
+        <img src="{% static 'icons/meta_clipboard_percentage_gradient_icon.png' %}" alt="" aria-hidden="true" width="50">
+        <div class="meta-text">
+            <strong>{% trans 'Attendance Rate' %}:</strong>
+            <span>{{ average_attendance }} %</span>
+        </div>
+    </div>
 
-                <div class="attendance-list-header-filter">
-                    <h3>{% trans 'Filter Attendance' %}</h3>
+</div>
 
-                    <div class="attendance-tools">
-                        <label for="attendanceDateFilter" class="sr-only">
-                            {% trans "Filter by date" %}
-                        </label>
-                        <input type="date" id="attendanceDateFilter">
 
-                        <label for="attendanceSearchInput" class="sr-only">
-                            {% trans "Find employee" %}
-                        </label>
-                        <input
-                            type="text"
-                            id="attendanceSearchInput"
-                            placeholder="{% trans 'Find employee ...' %}"
-                        >
-                    </div>
+<div class="wrapper-attendance-list-panel mt-5">
+    <div class="attendance-list-panel">
+
+        <div class="attendance-list-card">
+            <div class="attendance-list-header-filter">
+                <h3>{% trans 'Filter Attendance' %}</h3>
+
+                <div class="attendance-tools">
+                    <label for="attendanceDateFilter" class="sr-only">{% trans "Filter by date" %}</label>
+                    <input type="date" id="attendanceDateFilter">
+
+                    <label for="attendanceSearchInput" class="sr-only">{% trans "Find employee" %}</label>
+                    <input type="text" id="attendanceSearchInput" placeholder="{% trans 'Find employee ...' %}">
                 </div>
+            </div>
 
-                <div class="attendance-list">
-
-                    {% for submitted_class_session in submitted_class_sessions %}
-                        <div
-                            class="attendance-row"
-                            data-status="completed"
-                            data-date="{{ submitted_class_session.start_time|date:'Y-m-d' }}"
-                            data-search="{{ submitted_class_session.employee_search_text|lower }}"
-                        >
+            <div class="attendance-list">
+                {% for submitted_class_session in submitted_class_sessions %}
+                        <div class="attendance-row" data-status="completed" data-date="{{ submitted_class_session.start_time|date:'Y-m-d' }}" data-search="{{ submitted_class_session.employee_search_text|lower }}" data-url="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}">
+                            <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="44">
                             <div>
-                                <img src="{% static 'icons/class_session_icon.png' %}" alt="" aria-hidden="true" width="44">
-
-                                <div class="attendance-class-info">
-                                    <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>
-                                </div>
+                                <a href="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}" class="attendance-class-link">
+                                    <div class="attendance-class-info">
+                                        <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>
+                                        <img class="attendance-session-arrow" src="{% static 'icons/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="36">
+                                    </div>
+                                </a>    
                             </div>
 
                             <div class="class-list-date">
-                                <div class="icon">
-                                    <!-- <i class="fa-solid fa-calendar-day" aria-hidden="true"></i> -->
-                                     <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22">
-                                </div>
+                                <div class="icon"><img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22"></div>
                                 <div>
                                     <strong>{{ submitted_class_session.start_time|date:"D, d M" }}</strong>
                                     <span>{{ submitted_class_session.start_time|time:"H:i" }} - {{ submitted_class_session.end_time|time:"H:i" }}</span>
@@ -105,10 +86,7 @@
                             </div>
 
                             <div class="class-list-attendance-rate">
-                                <div class="icon">
-                                    <!-- <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> -->
-                                     <img src="{% static 'icons/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16">
-                                </div>
+                                <div class="icon"><img src="{% static 'icons/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16"></div>
                                 <div>
                                     <strong>{% trans 'Attendance' %}</strong><br>
                                     <span>{{ submitted_class_session.attendance_percentage }}%</span>
@@ -116,37 +94,35 @@
                             </div>
 
                             <div class="class-list-student-num">
-                                <div class="icon">
-                                    <!-- <i class="fa-solid fa-users" aria-hidden="true"></i> -->
-                                    <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="24">
-                                </div>
+                                <div class="icon"><img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="24"></div>
                                 <div>
                                     <strong>{% trans 'Attended' context "attended class list" %}</strong>
                                     <span>{{ submitted_class_session.attended_count }}/{{ submitted_class_session.registered_count }}</span>
                                 </div>
                             </div>
 
-                            <div class="attendance-action">
-                                <a
-                                    href="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}"
-                                    class="btn-attendance-details"
-                                >
-                                    {% trans 'Register' %}
-                                    <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="" aria-hidden="true">
-                                </a>
-                            </div>
+                             
                         </div>
-
-                    {% empty %}
-                        <p class="attendance-empty-message">{% trans 'No submitted attendance records found' %}.</p>
-                    {% endfor %}
-
-                </div>
-
+                {% empty %}
+                    <p class="attendance-empty-message">{% trans 'No submitted attendance records found' %}.</p>
+                {% endfor %}
             </div>
         </div>
     </div>
 
-</section>
+</div>
 
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        document.querySelectorAll(".attendance-row[data-url]").forEach(row => {
+            row.addEventListener("click", event => {
+                if (event.target.closest("a, button, input, select")) return;
+                window.location.href = row.dataset.url;
+            });
+        });
+    </script>
 {% endblock %}

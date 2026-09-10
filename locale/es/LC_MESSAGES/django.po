@@ -391,12 +391,6 @@ msgstr "Fechas"
 msgid "Dates & Timetable"
 msgstr "Fechas y Horarios"
 
-msgid "Hours Done"
-msgstr "Horas Realizadas"
-
-msgid "Class Sessions Held"
-msgstr "Clases Realizadas"
-
 
 msgid "Completed Hours"
 msgstr "Horas Completadas"
@@ -623,7 +617,7 @@ msgstr "ver materiales del curso"
 
 
 msgid "Review and filter upcoming and past class sessions"
-msgstr "Revise y filtre todas las próximas sesiones de clase y las ya realizadas"
+msgstr "Revisa y filtra todas las próximas sesiones de clase y las ya realizadas"
 
 msgid "Class Sessions List"
 msgstr "Listado de Clases"
@@ -634,7 +628,7 @@ msgstr "No se ha encontrado ninguna inscripción en este momento"
 
 
 msgid "Currently enrolled in an active course"
-msgstr "Actualment inscrito en curso activo"
+msgstr "Actualmente inscrito en un curso activo"
 
 msgid "Not currently enrolled in an active course"
 msgstr "Actualmente no inscrito en ningún curso activo"
@@ -802,3 +796,26 @@ msgstr "Asistencia"
 msgctxt "course detail tabs"
 msgid "Assessment"
 msgstr "Evaluaciones"
+
+
+msgctxt "course details page"
+msgid "Course Delivery"
+msgstr "Desarrollo del Curso"
+
+msgctxt "course details page"
+msgid "Delivery"
+msgstr "Desarrollo"
+
+msgctxt "course details page"
+msgid "delivered"
+msgstr "impartido"
+
+
+msgctxt "course details page"
+msgid "Hours delivered"
+msgstr "Horas impartidas"
+
+msgctxt "course details page"
+msgid "Classe held"
+msgstr "Clases impartidass"
+

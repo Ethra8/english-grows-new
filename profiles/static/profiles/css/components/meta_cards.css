@@ -39,7 +39,8 @@
     /* border: 1.5px solid rgba(var(--color-pearlaqua-rgb), 0.35); */
     border: 1px solid rgba(199, 255, 249, 0.28);  
     border-radius: 50px;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));    
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));     */
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.85), rgba(var(--color-teal-rgb), 0.75), rgba(var(--color-teal-rgb), 0.55));
     box-shadow: 0 4px 8px rgba(var(--color-shadow-rgb), 0.14);
 }
 

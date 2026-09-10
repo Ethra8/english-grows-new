@@ -8,7 +8,6 @@
     overflow-y: visible; */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
-    scrollbar-width: none;
 }
 
 .details-page__navigation::-webkit-scrollbar {
@@ -44,6 +43,11 @@
     border-radius: 0 0 8px 8px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(var(--color-teal-rgb), 0.30)
+        transparent;
 }
 
 .details-page__navigation nav > * {

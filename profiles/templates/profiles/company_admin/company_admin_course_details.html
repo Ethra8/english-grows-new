@@ -197,7 +197,7 @@
             <!-- RIGHT COLUMN -->
             <div class="course-progress-card">
                 
-                <h3>{% trans 'Progress' %}</h3>
+                <h3>{% trans 'Course Delivery' context 'course details page' %}</h3>
                 <div class="course-detail-grid">
                     <div class="course-detail-item">
 
@@ -208,8 +208,8 @@
                                 <img src="{% static 'icons/meta_courses_teal_icon.png' %}" alt="" width="34" aria-hidden="true" class="mb-1">
                             </div>
                             <div>
-                                <strong>{% trans 'Progress' %}</strong>
-                                <span>{{ completion_percentage }} % <small>{% trans 'completed' %}</small></span>                                
+                                <strong>{% trans 'Delivered' context 'course details page' %}</strong>
+                                <span>{{ completion_percentage }} % <small>{% trans 'delivered' context 'course details page' %}</small></span>                                
                             </div>
                         </div>
                         <div class="detail-row">
@@ -217,7 +217,7 @@
                                 <img src="{% static 'icons/completed_hours_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
                             </div>
                             <div>
-                                <strong>{% trans 'Hours Done' %}</strong>
+                                <strong>{% trans 'Hours delivered' context 'course details page' %}</strong>
                                 <span>{{ past_held_hours|clean_decimal }} / {{ course.total_hours|clean_decimal }} h.</span>
                             </div>
                         </div>
@@ -227,7 +227,7 @@
                                 <img src="{% static 'icons/classes_completed_icons.png' %}" alt="" width="32" aria-hidden="true" class="mb-1">
                             </div>
                             <div>
-                                <strong>{% trans 'Class Sessions Held' %}</strong>
+                                <strong>{% trans 'Classe held' context 'course details page'  %}</strong>
                                 <span>{{ past_held_classes|default:"0" }} / {{ course.number_of_classes }}</span>
                             </div>
                         </div>

@@ -78,7 +78,7 @@ h3 > div {
     /* gap: 1.2rem; */
     background-color: var(--color-whitesmoke);
     margin-top: 0;
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.75rem;
     border-radius: 8px;
     width: 100%;
     max-width: 100%;
@@ -87,13 +87,16 @@ h3 > div {
     max-height: 360px;
     /* smoother horizontal scrolling on touch devices */
     -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
+    scrollbar-color: rgba(var(--color-slate-rgb), 0.3) rgba(var(--color-steel-rgb), 0.05);
 }
 
 .employees-list-row {
     display: grid;
     grid-template-columns: 60px minmax(420px, 480px) 1fr auto;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.2);
-    padding: 1rem 0;
+    padding: 1rem 0.75rem;
     gap: 1.2rem;
     align-items: center;
 }
@@ -102,6 +105,33 @@ h3 > div {
     cursor: pointer;
     background: rgba(var(--color-pearlaqua-rgb), 0.08);
     border-radius: 8px;
+}
+
+.employees-list-row .employees-list-arrow {
+    display: block;
+    flex: 0 0 auto;
+    width: 36px;
+    height: auto;
+    max-width: 0;
+    margin-left: 1rem;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-5px);
+    pointer-events: none;
+    transition:
+        max-width 0.18s ease,
+        margin-left 0.18s ease,
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.employees-list-row:hover .employees-list-arrow,
+.employees-list-row-link:hover .employees-list-arrow,
+.employees-list-row-link:focus-visible .employees-list-arrow {
+    max-width: 36px;
+    margin-left: 0.45rem;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .employees-list-grid div:last-child,
@@ -126,9 +156,10 @@ h3 > div {
 
 .students-list-page .employees-list-row .main-info {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     align-self: center;
+    align-items: center;
     /* gap: 0.25rem; */
     width: 100%;
     max-width: 100%;
@@ -137,6 +168,10 @@ h3 > div {
 
 .students-list-page .employees-list-row .main-info strong {
     color: var(--color-navy);
+}
+
+.students-list-page .employees-list-row .main-info strong:hover {
+    color: var(--color-teal);
 }
 
 .students-list-page .employees-list-row .main-info a span {
@@ -165,17 +200,17 @@ h3 > div {
     color: var(--color-navy);
 }
 
-.students-list-page .employees-list-row .review .btn-to-student-detail:hover {
+/* .students-list-page .employees-list-row .review .btn-to-student-detail:hover {
     color: var(--color-whitesmoke);
     transform: translateY(-0.5px);
     background: linear-gradient(135deg, #00acaf, #008589);
     box-shadow: 0 10px 20px rgba(0, 122, 125, 0.24);
-}
+} */
 
-.students-list-page .employees-list-row .review .btn-to-student-detail img {
+/* .students-list-page .employees-list-row .review .btn-to-student-detail img {
     width: 28px;
     margin-left: .5rem;
-}
+} */
 
 /* ************************************************************************************************************************************* */
 
@@ -317,8 +352,8 @@ h3 > div {
 }
 
 .sort-option.active {
-    color: var(--color-pearlaqua);
-    background-color: rgba(var(--color-teal-rgb), 0.65);
+    color: var(--color-whitesmoke);
+    background-color: rgba(var(--color-teal-rgb), 0.75);
 }
 
 
