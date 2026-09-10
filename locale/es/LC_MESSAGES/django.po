@@ -205,6 +205,19 @@ msgstr "Sin confirmar"
 msgid "Active"
 msgstr "Activo"
 
+msgctxt "students list page"
+msgid "Active Registrations"
+msgstr "Inscripciones Activas"
+
+msgctxt "students list page"
+msgid "All Registrations"
+msgstr "Total Inscripciones"
+
+msgctxt "students list page"
+msgid "Review"
+msgstr "Revisar"
+
+
 msgid "Confirmed"
 msgstr "Confirmado"
 
@@ -504,7 +517,7 @@ msgid "Name A-Z"
 msgstr "Nombre A-Z"
 
 msgid "Email all"
-msgstr "Mandar correo a todos"
+msgstr "Mandar correo grupal"
 
 msgid "Inactive"
 msgstr "Inactivo"
@@ -523,8 +536,6 @@ msgstr "Progreso"
 msgid "Learners"
 msgstr "Estudiantes"
 
-msgid "enrolled"
-msgstr "inscritos"
 
 msgid "Start & End Dates"
 msgstr "Fechas de Inicio y Finalización"

@@ -35,13 +35,38 @@
 
     <!-- META CARD -->
     <div class="meta-row">
-        <div class="meta-card meta-students mt-2 mb-3">
+        <div class="meta-card meta-students-active mt-2 mb-3">
             <div>
                 <img src="{% static 'icons/employees_active_icon.png' %}" alt="" aria-hidden="true" width="60" >
             </div>
             <div class="meta-text">
-                <strong>{% trans 'Registrations' %}</strong>
-                <span>{{ enrollments|length|default:"0" }} {% trans 'enrolled' %}</span>
+                <strong>{% trans 'Active Registrations' context 'students list page' %}</strong>
+                <span>{{ currently_active_enrollments_count|default:"0" }}
+                    <small>
+                        {% if currently_active_enrollments_count == 1 %}    
+                            {% trans 'active' context 'metacards singular' %}
+                        {% elif currently_active_enrollments_count > 1 or currently_active_enrollments_count == 0 %}
+                            {% trans 'active' context 'metacards plural' %}  
+                        {% endif %}
+                    </small>
+                </span>
+            </div>
+        </div>
+        <div class="meta-card meta-students mt-2 mb-3">
+            <div>
+                <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="54" >
+            </div>
+            <div class="meta-text">
+                <strong>{% trans 'All Registrations' context 'students list page' %}</strong>
+                <span>{{ all_status_enrollments_count|default:"0" }} 
+                    <small>
+                        {% if all_status_enrollments_count == 1 %}    
+                            {% trans 'enrolled' context 'metacards singular' %}
+                        {% elif all_status_enrollments_count > 1 or all_status_enrollments_count == 0 %}
+                            {% trans 'enrolled' context 'metacards plural' %}  
+                        {% endif %}
+                    </small>
+                </span>
             </div>
         </div>
     </div>
@@ -61,7 +86,7 @@
 
             <span class="sort-label">
                 <!-- <i class="fa-solid fa-arrow-down-a-z mr-2"></i> -->
-                {% trans 'Sort by' %}:
+                {% trans 'Sort by' %}
             </span>
 
             <div class="sort-options">
@@ -79,16 +104,17 @@
         </div>
 
         <div class="employees-list-grid"> 
-            {% if enrollments %}
-                {% for enrollment in enrollments %}
-                    <div class="employees-list-row">
+            {% if all_status_enrollments %}
+                {% for enrollment in all_status_enrollments %}
+                    <div class="employees-list-row" data-url="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}?course={{ course.id }}">
 
-                        <div class="small-avatar">
+                        <div class="small-avatar {% if enrollment.user_currently_enrolled %}status-active{% else %}status-inactive{% endif %}">
                             {% if enrollment.student.profile.profile_photo %}
                                 <img src="{{ enrollment.student.profile.profile_photo.url }}" alt="" aria-hidden="true" width="60">
                             {% else %}
                                 <img src="{% static 'icons/sidebar_no_photo_user_icon.png' %}" alt="" aria-hidden="true" width="60">
                             {% endif %}
+                            <span class="small-avatar-status-dot" aria-label="{% if enrollment.user_currently_enrolled %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}" title="{% if enrollment.user_currently_enrolled %}{% trans 'Currently enrolled in an active course' %}{% else %}{% trans 'Not currently enrolled in an active course' %}{% endif %}"></span>
                         </div>
 
                         <div class="main-info">
@@ -103,10 +129,9 @@
                             </span>  
                         </div>
 
-                        <div class="review">
-                            <a href="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}" class="btn-to-student-detail">
-                                Review
-                                <img src="{% static 'icons/arrow_right_teal_icon.png' %}" alt="icon">
+                        <div>
+                            <a href="{% url 'profiles:company_admin_student_detail' enrollment.student.id %}">
+                                <img src="{% static 'icons/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="36">
                             </a>
                         </div>
                     </div>
@@ -123,4 +148,12 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script>
+        document.querySelectorAll(".employees-list-row[data-url]").forEach(row => {
+            row.addEventListener("click", event => {
+                if (event.target.closest("a, button, input, select")) return;
+                window.location.href = row.dataset.url;
+            });
+        });
+    </script>
 {% endblock %}

@@ -1136,9 +1136,13 @@
 *********************************************** */
 
 .course-attendance .meta-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin-top: 2.5rem;
+    display: flex;
+    /* grid-template-columns: repeat(2, 1fr); */
+    margin-top: 3.5rem;
+}
+
+.course-attendance .meta-card {
+    width: 380px;
 }
 
 .course-attendance .wrapper-assigned-courses-panel h2 {

@@ -63,17 +63,13 @@ h3 > div {
 
 .wrapper-employees-list {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
     background: rgba(var(--color-mist-rgb), 0.6);
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    /* smoother horizontal scrolling on touch devices */
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
 }
 
 .employees-list-grid {
@@ -85,7 +81,12 @@ h3 > div {
     padding: 1rem 1.5rem;
     border-radius: 8px;
     width: 100%;
-    min-width: 1000px;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: scroll;
+    max-height: 360px;
+    /* smoother horizontal scrolling on touch devices */
+    -webkit-overflow-scrolling: touch;
 }
 
 .employees-list-row {
@@ -95,6 +96,12 @@ h3 > div {
     padding: 1rem 0;
     gap: 1.2rem;
     align-items: center;
+}
+
+.employees-list-row:hover {
+    cursor: pointer;
+    background: rgba(var(--color-pearlaqua-rgb), 0.08);
+    border-radius: 8px;
 }
 
 .employees-list-grid div:last-child,
@@ -138,6 +145,7 @@ h3 > div {
 
 .students-list-page .employees-list-row .main-info a span:hover {
     font-weight: 500;
+    color: var(--color-teal);
 }
 
 .students-list-page .employees-list-row .employee-level {
@@ -226,7 +234,7 @@ h3 > div {
     background-color: var(--color-cancelled-dot);
 }
 /* user not enrolled in any course */
-.small-avatar.status .small-avatar-status-dot {
+.small-avatar.status-inactive .small-avatar-status-dot {
     background-color: var(--color-inactive-dot);
 }
 
@@ -239,15 +247,16 @@ h3 > div {
     flex-direction: row;
     align-items: center;
     gap: 1rem;
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.8);
+    border-bottom: 3px solid rgba(var(--color-teal-rgb), 0.15);
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     margin: 0;
     padding: 0.75rem 1rem;
     width: 100%;
-    min-width: 1000px;
-    /* background-color: rgba(var(--color-whitesmoke-rgb), 0.8); */
-    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
+    min-width: 0;
+    /* min-width: 1000px; */
+    background-color: rgba(var(--color-whitesmoke-rgb), 0.8);
+    /* background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12)); */
 }
 
 .sort-label {
@@ -275,9 +284,9 @@ h3 > div {
 
     padding: 0.2rem;
 
-    background-color: rgba(var(--color-navy-rgb), 0.8);
+    background-color: rgba(var(--color-teal-rgb), 0.2);
 
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
+    /* border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35); */
     border-radius: 6px;
 }
 
@@ -290,7 +299,7 @@ h3 > div {
 
     border-radius: 4px;
 
-    color: rgba(var(--color-whitesmoke-rgb), 0.8);
+    color: rgba(var(--color-slate-rgb), 0.8);
     font-size: 1rem;
     font-weight: 500;
 
@@ -304,12 +313,12 @@ h3 > div {
 .sort-option:hover {
     color: var(--color-pearlaqua);
     text-decoration: none;
-    background-color: rgba(var(--color-pearlaqua-rgb), 0.14);
+    background-color: rgba(var(--color-teal-rgb), 0.65);
 }
 
 .sort-option.active {
     color: var(--color-pearlaqua);
-    background-color: rgba(var(--color-pearlaqua-rgb), 0.14);
+    background-color: rgba(var(--color-teal-rgb), 0.65);
 }
 
 

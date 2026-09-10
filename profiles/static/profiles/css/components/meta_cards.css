@@ -79,6 +79,23 @@
     pointer-events: none;
 }
 
+.meta-students-active::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-image: url("/static/icons/employees_active_icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: -10%;
+    right: 1%;
+    transform: rotate(12deg);
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+
 .meta-attendance::after {
     content: "";
     position: absolute;

@@ -4,8 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
-from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField
-
+from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField, Exists, OuterRef
 from django.db.models.functions import Coalesce, Concat, Lower, NullIf, Trim
 
 from django.http import JsonResponse
@@ -6546,7 +6545,13 @@ def company_admin_course_students_list(request, course_id):
     # All enrollments belonging to the currently selected
     # course are displayed, regardless of enrollment status.
     # ---------------------------------------------------------
-    enrollments = (
+    active_course_enrollment = CourseEnrollment.objects.filter(
+        student_id=OuterRef("student_id"),
+        status="active",
+        course__status="active",
+    )
+
+    all_status_enrollments = (
         course.enrollments
         .select_related(
             "student",
@@ -6561,10 +6566,19 @@ def company_admin_course_students_list(request, course_id):
                     ),
                     "student__username",
                 )
-            )
+            ),
+            user_currently_enrolled=Exists(active_course_enrollment),
+
         )
     )
 
+    all_status_enrollments_count = all_status_enrollments.count()
+
+    currently_active_enrollments = all_status_enrollments.filter(
+        status="active",
+    )
+
+    currently_active_enrollments_count = currently_active_enrollments.count()
 
     # ---------------------------------------------------------
     # SORTING
@@ -6575,7 +6589,7 @@ def company_admin_course_students_list(request, course_id):
     )
 
     if sort_by == "level":
-        enrollments = enrollments.order_by(
+        all_status_enrollments = all_status_enrollments.order_by(
             "student__profile__current_level",
             "sort_name",
             "student__last_name",
@@ -6585,7 +6599,7 @@ def company_admin_course_students_list(request, course_id):
         # Default: Name A-Z
         sort_by = "name"
 
-        enrollments = enrollments.order_by(
+        all_status_enrollments = all_status_enrollments.order_by(
             "sort_name",
             "student__last_name",
         )
@@ -6618,7 +6632,7 @@ def company_admin_course_students_list(request, course_id):
     # ---------------------------------------------------------
     attendance_percentages = []
 
-    for enrollment in enrollments:
+    for enrollment in all_status_enrollments:
         total_completed = enrollment.total_completed_classes
 
         if total_completed > 0:
@@ -6650,7 +6664,7 @@ def company_admin_course_students_list(request, course_id):
     # ---------------------------------------------------------
     student_emails = [
         enrollment.student.email
-        for enrollment in enrollments
+        for enrollment in all_status_enrollments
         if enrollment.student.email
     ]
 
@@ -6675,7 +6689,10 @@ def company_admin_course_students_list(request, course_id):
         "available_courses": available_courses,
 
         # Current course data
-        "enrollments": enrollments,
+        "all_status_enrollments": all_status_enrollments,
+        "all_status_enrollments_count": all_status_enrollments_count,
+        "currently_active_enrollments_count": currently_active_enrollments_count,
+
         "sessions": sessions,
         "sort_by": sort_by,
 
