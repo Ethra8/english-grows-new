@@ -222,8 +222,20 @@ msgstr "C2 - Maestría"
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:41
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:44
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:58
+
+msgid "Review attendance across all company courses"
+msgstr "Rivisa la asistencia global a través de todos los cursos de la empresa"
+
 msgid "View all courses"
 msgstr "Ver todos los cursos"
+
+msgid "View all employees"
+msgstr "Ver todos los empleados"
+
+msgid "Global Attendance"
+msgstr "Asistencia Global"
+
+
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:48
 #, fuzzy
@@ -341,7 +353,7 @@ msgstr "Empleados"
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:241
 msgctxt "admin all course attendance table"
 msgid "Submitted"
-msgstr "Registros"
+msgstr "Registros actualizados"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:245
 msgctxt "admin all course attendance table"
@@ -361,9 +373,13 @@ msgstr "Detalles"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:312
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:323
-msgctxt "submitted attendance status badge"
+msgctxt "submitted attendance status badge singular"
 msgid "awaiting"
 msgstr "pendiente"
+
+msgctxt "submitted attendance status badge plural"
+msgid "awaiting"
+msgstr "pendientes"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:318
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:330

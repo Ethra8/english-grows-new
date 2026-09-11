@@ -5750,7 +5750,6 @@ def company_admin_courses(request):
     )
 
 
-
 @login_required
 def company_admin_all_courses_attendance(request):
     profile = get_object_or_404(
@@ -5766,6 +5765,19 @@ def company_admin_all_courses_attendance(request):
     if not company:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # COMPANY COURSES
+    #
+    # Base company queryset used both for global company course
+    # totals and for the filterable attendance course list.
+    # ---------------------------------------------------------
+    company_courses = Course.objects.filter(company=company)
+
+    total_company_courses_count = company_courses.count()
+    active_company_courses_count = company_courses.filter(
+        status="active",
+    ).count()
+
     now = timezone.now()
 
     selected_date = request.GET.get("date", "").strip()
@@ -5777,7 +5789,11 @@ def company_admin_all_courses_attendance(request):
     if selected_date:
         parsed_date = parse_date(selected_date)
 
-    # Active employees enrolled in each course.
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS
+    #
+    # Used for the employee count displayed for each course.
+    # ---------------------------------------------------------
     enrollment_queryset = (
         CourseEnrollment.objects
         .filter(status="active")
@@ -5792,7 +5808,15 @@ def company_admin_all_courses_attendance(request):
         )
     )
 
-    # Load class sessions and their attendance records efficiently.
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    #
+    # Load class sessions and their attendance records
+    # efficiently.
+    #
+    # When a date filter is selected, the per-course attendance
+    # figures refer only to that date.
+    # ---------------------------------------------------------
     class_session_queryset = (
         ClassSession.objects
         .filter(
@@ -5825,15 +5849,16 @@ def company_admin_all_courses_attendance(request):
         .order_by("start_time")
     )
 
-    # When a date is selected, the course figures refer only to that date.
     if parsed_date:
         class_session_queryset = class_session_queryset.filter(
             start_time__date=parsed_date,
         )
 
+    # ---------------------------------------------------------
+    # FILTERABLE COMPANY COURSE QUERYSET
+    # ---------------------------------------------------------
     courses = (
-        Course.objects
-        .filter(company=company)
+        company_courses
         .select_related(
             "course_type",
             "company",
@@ -5869,14 +5894,18 @@ def company_admin_all_courses_attendance(request):
         )
     )
 
-    # Search by course name or course type.
+    # ---------------------------------------------------------
+    # COURSE SEARCH
+    # ---------------------------------------------------------
     if course_search:
         courses = courses.filter(
             Q(name__icontains=course_search)
             | Q(course_type__name__icontains=course_search)
         )
 
-    # Find courses containing the searched employee.
+    # ---------------------------------------------------------
+    # EMPLOYEE SEARCH
+    # ---------------------------------------------------------
     if employee_search:
         employee_parts = employee_search.split()
 
@@ -5915,7 +5944,12 @@ def company_admin_all_courses_attendance(request):
 
         courses = courses.filter(employee_query).distinct()
 
-    # If a date was selected, only show courses with a class on that date.
+    # ---------------------------------------------------------
+    # DATE SEARCH
+    #
+    # Only courses containing a class session on the selected
+    # date remain in the result set.
+    # ---------------------------------------------------------
     if parsed_date:
         courses = courses.filter(
             class_sessions__status__in=[
@@ -5926,8 +5960,10 @@ def company_admin_all_courses_attendance(request):
             class_sessions__start_time__date=parsed_date,
         ).distinct()
 
+    # ---------------------------------------------------------
+    # BUILD FILTERED COURSE LIST
+    # ---------------------------------------------------------
     all_courses_list = []
-    active_courses_list = []
 
     global_employee_ids = set()
     global_past_classes = 0
@@ -5963,8 +5999,8 @@ def company_admin_all_courses_attendance(request):
         excused_count = 0
 
         for class_session in past_class_sessions:
-            # ULifecycle: attendance is considered submitted
-            # only when the lesson itself has been marked as completed.
+            # Attendance is considered submitted only when the
+            # lesson itself has been marked as completed.
             if class_session.status != ClassSession.STATUS_COMPLETED:
                 continue
 
@@ -6045,7 +6081,9 @@ def company_admin_all_courses_attendance(request):
             else None
         )
 
-        # Custom attributes available directly in the template.
+        # -----------------------------------------------------
+        # COURSE ATTRIBUTES FOR TEMPLATE
+        # -----------------------------------------------------
         course.employee_count = len(active_enrollments)
 
         course.past_classes_count = past_classes_count
@@ -6063,15 +6101,25 @@ def company_admin_all_courses_attendance(request):
 
         all_courses_list.append(course)
 
-        if course.status == "active":
-            active_courses_list.append(course)
-
         global_past_classes += past_classes_count
         global_submitted_classes += submitted_classes_count
         global_attended_count += attended_count
         global_missed_count += missed_count
         global_excused_count += excused_count
 
+    # ---------------------------------------------------------
+    # FILTER RESULT COUNT
+    # ---------------------------------------------------------
+    filtered_company_courses_count = len(all_courses_list)
+
+    # ---------------------------------------------------------
+    # ATTENDANCE SUMMARY
+    #
+    # NOTE:
+    # These values are still based on the filtered queryset.
+    # They will be separated into true company-wide statistics
+    # in the next refactor step.
+    # ---------------------------------------------------------
     global_total_attendance_records = (
         global_attended_count
         + global_missed_count
@@ -6105,16 +6153,16 @@ def company_admin_all_courses_attendance(request):
         "profile": profile,
         "company": company,
 
-        # One item per course.
+        # Filtered course results.
         "all_courses_list": all_courses_list,
-        "active_courses_list": active_courses_list,
+        "filtered_company_courses_count": filtered_company_courses_count,
 
-        # Global summary.
-        "total_courses_count": len(all_courses_list),
-        "active_courses_count": len(active_courses_list),
+        # Company-wide course summary.
+        "total_company_courses_count": total_company_courses_count,
+        "active_company_courses_count": active_company_courses_count,
 
+        # Attendance summary.
         "total_active_employees": len(global_employee_ids),
-        
         "total_past_classes": global_past_classes,
         "total_submitted_classes": global_submitted_classes,
         "global_attended_count": global_attended_count,
@@ -6136,7 +6184,6 @@ def company_admin_all_courses_attendance(request):
         "company_admin_all_courses_attendance.html",
         context,
     )
-
 
 
 @login_required
