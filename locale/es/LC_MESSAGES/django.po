@@ -2,12 +2,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: English Grows\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 14:20+0200\n"
+"POT-Creation-Date: 2026-09-11 18:46+0200\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: .\config\settings.py:224
+#, fuzzy
+#| msgid "English training"
+msgid "English"
+msgstr "De profesional a profesional"
+
+#: .\config\settings.py:225
+#, fuzzy
+#| msgid "Company"
+msgid "Spanish"
+msgstr "Empresa"
+
+#: .\config\settings.py:226
+msgid "Catalan"
+msgstr ""
+
+#: .\config\settings.py:227
+msgid "French"
+msgstr ""
+
+#: .\courses\models.py:71
+#, fuzzy
+#| msgctxt "assigned courses"
+#| msgid "Confirmed"
+msgid "Confirmed"
+msgstr "Confirmados"
+
+#: .\courses\models.py:72
+#, fuzzy
+#| msgctxt "assigned courses"
+#| msgid "Active"
+msgid "Active"
+msgstr "Activos"
+
+#: .\courses\models.py:73
+#, fuzzy
+#| msgctxt "assigned courses"
+#| msgid "Paused"
+msgid "Paused"
+msgstr "Pausados"
+
+#: .\courses\models.py:74
+#: .\profiles\templates\profiles\student\my_learning_progress.html:163
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:192
+#, fuzzy
+#| msgctxt "assigned courses"
+#| msgid "Completed"
+msgid "Completed"
+msgstr "Completados"
+
+#: .\courses\models.py:75
+#, fuzzy
+#| msgctxt "assigned courses"
+#| msgid "Cancelled"
+msgid "Cancelled"
+msgstr "Cancelados"
+
+#: .\courses\models.py:1021
+msgid "Monday"
+msgstr "Lunes"
+
+#: .\courses\models.py:1022
+msgid "Tuesday"
+msgstr "Martes"
+
+#: .\courses\models.py:1023
+msgid "Wednesday"
+msgstr "Miércoles"
+
+#: .\courses\models.py:1024
+msgid "Thursday"
+msgstr "Jueves"
+
+#: .\courses\models.py:1025
+msgid "Friday"
+msgstr "Viernes"
+
+#: .\courses\models.py:1026
+msgid "Saturday"
+msgstr "Sábado"
+
+#: .\courses\models.py:1027
+msgid "Sunday"
+msgstr "Domingo"
+
+#: .\courses\models.py:1031
+msgid "Mon."
+msgstr "Lun."
+
+#: .\courses\models.py:1032
+msgid "Tue."
+msgstr "Mar."
+
+#: .\courses\models.py:1033
+msgid "Wed."
+msgstr "Mié."
+
+#: .\courses\models.py:1034
+msgid "Thu."
+msgstr "Jue."
+
+#: .\courses\models.py:1035
+msgid "Fri."
+msgstr "Vie."
+
+#: .\courses\models.py:1036
+msgid "Sat."
+msgstr "Sab."
+
+#: .\courses\models.py:1037
+msgid "Sun."
+msgstr "Dom."
 
 #: .\home\templates\home\index.html:18
 msgid "PLATFORM CURRENTLY UNDER DEVELOPMENT"
@@ -161,6 +273,7 @@ msgid "Date"
 msgstr "Fecha"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:150
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:63
 msgid "Choose date"
 msgstr ""
 
@@ -241,35 +354,35 @@ msgid "Attendance rate"
 msgstr "Tasa de asistencia"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:253
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:346
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:344
 msgctxt "admin all course attendance table"
 msgid "Details"
 msgstr "Detalles"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:314
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:312
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:323
 msgctxt "submitted attendance status badge"
 msgid "awaiting"
 msgstr "pendiente"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:320
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:318
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:330
 msgctxt "submitted attendance status badge"
 msgid "Up to date"
 msgstr "actualizado"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:326
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:324
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:335
 msgctxt "submitted attendance status badge"
 msgid "No past classes"
 msgstr "sin registros"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:357
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:355
 msgctxt "admin all course attendance search form"
 msgid "No courses matched the selected filters"
 msgstr "No se encontraron coincidencias con los filtros aplicados"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:361
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:359
 msgctxt "admin all course attendance search form"
 msgid "Clear Filters"
 msgstr "Limpiar Filtros"
@@ -341,10 +454,10 @@ msgid "Group details"
 msgstr "Detalles"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:42
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:74
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:79
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:36
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:168
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:212
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:216
 #: .\profiles\templates\profiles\includes\company_admin\company_admin_class_session_row.html:49
 #: .\profiles\templates\profiles\student\my_attendance.html:214
 #: .\profiles\templates\profiles\student\my_calendar.html:44
@@ -474,26 +587,26 @@ msgstr "Filtrar Asistencias"
 msgid "Filter by date"
 msgstr "Filtrar Asistencias"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:62
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:68
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:72
 #, fuzzy
 #| msgid "Employee"
 msgid "Find employee"
 msgstr "Empleado/a"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:63
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:69
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:77
 #, fuzzy
 #| msgid "View employees list"
 msgid "Find employee ..."
 msgstr "Ver lista de empleados"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:91
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:96
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:56
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:33
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:64
-#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:117
-#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:126
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:119
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:128
 #: .\profiles\templates\profiles\components\student_details_nav.html:40
 #: .\profiles\templates\profiles\components\student_details_nav.html:67
 #: .\profiles\templates\profiles\components\student_details_nav.html:94
@@ -514,13 +627,13 @@ msgstr "Ver lista de empleados"
 msgid "Attendance"
 msgstr "Asistencia"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:99
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:104
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:127
 msgctxt "attended class list"
 msgid "Attended"
 msgstr "Asistentes"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:107
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:112
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:142
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:144
 msgid "No submitted attendance records found"
@@ -674,10 +787,12 @@ msgid "delivered"
 msgstr "impartido"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:220
-#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:104
+#, fuzzy
+#| msgctxt "course details page"
+#| msgid "Hours Delivered"
 msgctxt "course details page"
 msgid "Hours delivered"
-msgstr "Horas impartidas"
+msgstr "Horas Impartidas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:230
 msgctxt "course details page"
@@ -1000,7 +1115,7 @@ msgid "Details"
 msgstr "Detalles"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:75
-#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:132
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:134
 #: .\profiles\templates\profiles\student\my_attendance.html:75
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:77
 #: .\profiles\templates\profiles\teacher\teacher_student_detail.html:314
@@ -1008,7 +1123,7 @@ msgid "Total Attendance"
 msgstr "Total Asistencias"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:93
-#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:136
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:138
 #: .\profiles\templates\profiles\student\my_attendance.html:93
 #: .\profiles\templates\profiles\student\my_learning_progress.html:297
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:95
@@ -1053,38 +1168,38 @@ msgstr "Ausencia"
 msgid "Total Absences"
 msgstr "Total Ausencias"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:173
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:177
 #: .\profiles\templates\profiles\student\my_attendance.html:174
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:174
 msgid "Excused Absences"
 msgstr "Ausencias Justificadas"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:177
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:181
 #: .\profiles\templates\profiles\student\my_attendance.html:178
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:178
 msgid "absence"
 msgstr "ausencia"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:179
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:183
 #: .\profiles\templates\profiles\student\my_attendance.html:180
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:180
 msgid "absences"
 msgstr "ausencias"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:196
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:200
 #: .\profiles\templates\profiles\student\my_attendance.html:198
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:197
 msgid "Absence Record"
 msgstr "Historial Ausencias"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:216
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:220
 #: .\profiles\templates\profiles\student\my_attendance.html:218
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:217
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:69
 msgid "Missed"
 msgstr "Ausencia"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:218
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:222
 #: .\profiles\templates\profiles\student\my_attendance.html:220
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:219
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:78
@@ -1094,7 +1209,7 @@ msgstr "Ausencia"
 msgid "Excused"
 msgstr "Justificante"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:226
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:230
 #: .\profiles\templates\profiles\student\my_attendance.html:228
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:227
 msgid "No absences recorded yet"
@@ -1119,6 +1234,31 @@ msgstr "Info Curso"
 #: .\profiles\templates\profiles\teacher\teacher_student_detail.html:207
 msgid "Dates"
 msgstr "Fechas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:104
+msgctxt "course details page"
+msgid "Hours Delivered"
+msgstr "Horas Impartidas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:105
+msgctxt "course details page"
+msgid "total"
+msgstr "totales"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:106
+msgctxt "course details page"
+msgid "Total Hours"
+msgstr "Horas Totales"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:135
+msgctxt "course details page attendance"
+msgid "classes held"
+msgstr "clases impartidas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:139
+msgctxt "course details page attendance"
+msgid "delivered"
+msgstr "impartidas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:38
 #: .\profiles\templates\profiles\student\my_skills.html:35

@@ -590,7 +590,7 @@ class Course(models.Model):
             return "Not assigned"
 
         return "/ ".join(
-            slot.get_day_of_week_display()[:3]
+            slot.day_abbreviation
             for slot in slots
         )
 
@@ -619,11 +619,12 @@ class Course(models.Model):
             )
 
         return " · ".join(
-            f"{slot.get_day_of_week_display()[:3]} "
+            f"{slot.day_abbreviation} "
             f"{slot.start_time.strftime('%H:%M')} - "
             f"{slot.end_time.strftime('%H:%M')}"
             for slot in slots
         )
+
 
     def generate_class_sessions(self):
         """
@@ -1025,7 +1026,24 @@ class CourseTimetableSlot(models.Model):
         (SATURDAY, _("Saturday")),
         (SUNDAY, _("Sunday")),
     ]
-    
+
+    DAY_ABBREVIATIONS = {
+        MONDAY: _("Mon."),
+        TUESDAY: _("Tue."),
+        WEDNESDAY: _("Wed."),
+        THURSDAY: _("Thu."),
+        FRIDAY: _("Fri."),
+        SATURDAY: _("Sat."),
+        SUNDAY: _("Sun."),
+    }
+
+    @property
+    def day_abbreviation(self):
+        return str (
+            self.DAY_ABBREVIATIONS[self.day_of_week]   
+        )
+
+
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,

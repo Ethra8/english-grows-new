@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-# Helper used in course views in views.py 
+
 def build_formatted_timetable(course):
     timetable_groups = defaultdict(list)
 
@@ -11,7 +11,7 @@ def build_formatted_timetable(course):
         )
 
         timetable_groups[key].append(
-            slot.get_day_of_week_display()[:3]
+            slot.day_abbreviation
         )
 
     return [

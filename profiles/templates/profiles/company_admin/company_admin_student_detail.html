@@ -101,8 +101,10 @@
                                 </div>
 
                                 <div class="detail-row">
-                                    <strong>{% trans 'Hours delivered' context 'course details page' %}:</strong>
-                                    <span>{{ completed_hours_display }} / {{ total_hours_display }}</span>
+                                    <strong>{% trans 'Hours Delivered' context 'course details page' %}:</strong>
+                                    <span>{{ completed_hours_display }} / {{ total_hours_display }} <small>{% trans 'total' context 'course details page' %}</small></span>
+                                    <!-- <strong>{% trans 'Total Hours' context 'course details page' %}:</strong>
+                                    <span>{{ total_hours_display }}</span> -->
                                 </div>
                             </div>
                         </div>
@@ -130,11 +132,11 @@
                         <div class="student-stat-list">
                             <div class="detail-row">
                                 <strong>{% trans 'Total Attendance' %}:</strong>
-                                <span>{{ attended_count }} / {{ total_attendance_records }}</span>
+                                <span>{{ attended_count }} / {{ total_attendance_records }} <small>{% trans 'classes held' context 'course details page attendance' %}</small></span>
                             </div>
                             <div class="detail-row">
                                 <strong>{% trans 'Hours Attended' %}:</strong>
-                                <span>{{ attended_hours_display }} / {{ completed_hours_display }}</span>
+                                <span>{{ attended_hours_display }} / {{ completed_hours_display }} <small>{% trans 'delivered' context 'course details page attendance' %}</small></span>
                             </div>
                         </div>
                     </div>
