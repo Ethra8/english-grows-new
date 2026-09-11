@@ -156,11 +156,9 @@ h3 > div {
 
 .students-list-page .employees-list-row .main-info {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
-    align-self: center;
-    align-items: center;
-    /* gap: 0.25rem; */
+    align-self: center;    /* gap: 0.25rem; */
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -243,7 +241,7 @@ h3 > div {
 /* USER ENROLLMENT STATUS DOT */
 .employees-list-row .small-avatar-status-dot {
     position: absolute;
-    right: -5%;
+    right: -3%;
     bottom: 8%;
     width: 12px;
     height: 12px;

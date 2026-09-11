@@ -57,13 +57,18 @@
 
                 <div class="attendance-tools">
                     <label for="attendanceDateFilter" class="sr-only">{% trans "Filter by date" %}</label>
-                    <input type="date" id="attendanceDateFilter">
+
+                    <div class="attendance-date-input">
+                        <input type="date" id="attendanceDateFilter">
+                        <button type="button" class="attendance-date-picker-btn" aria-label="{% trans 'Choose date' %}">
+                            <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true">
+                        </button>
+                    </div>
 
                     <label for="attendanceSearchInput" class="sr-only">{% trans "Find employee" %}</label>
                     <input type="text" id="attendanceSearchInput" placeholder="{% trans 'Find employee ...' %}">
-                </div>
+                </div>            
             </div>
-
             <div class="attendance-list">
                 {% for submitted_class_session in submitted_class_sessions %}
                         <div class="attendance-row" data-status="completed" data-date="{{ submitted_class_session.start_time|date:'Y-m-d' }}" data-search="{{ submitted_class_session.employee_search_text|lower }}" data-url="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}">
@@ -124,5 +129,21 @@
                 window.location.href = row.dataset.url;
             });
         });
-    </script>
+
+
+    document.querySelectorAll('.attendance-date-picker-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const input = button.previousElementSibling;
+
+            if (typeof input.showPicker === 'function') {
+                input.showPicker();
+            } else {
+                input.focus();
+                input.click();
+            }
+        });
+    });
+
+</script>
+    
 {% endblock %}

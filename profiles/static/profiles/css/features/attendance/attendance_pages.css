@@ -467,11 +467,11 @@
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
 }
 
-#attendanceDateFilter::-webkit-calendar-picker-indicator {
+/* #attendanceDateFilter::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: .9;
     cursor: pointer;
-}
+} */
 
 /* ATTENDANCE LIST ***************************************************************/
 /* Main list card */
@@ -535,6 +535,42 @@
     font-size: 1rem;
     width: 170px;
 }
+
+/* Calendar in DATE INPUT ***************/
+
+.attendance-date-input {
+    position: relative;
+}
+
+.attendance-date-input input {
+    width: 100%;
+    padding-right: 2.75rem;
+}
+
+.attendance-date-picker-btn {
+    position: absolute;
+    top: 50%;
+    right: .9rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.attendance-date-picker-btn img {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.attendance-date-input input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+/* END Calendar in DATE INPUT ***********/
 
 .attendance-tools input::placeholder {
     color: var(--color-slate);
@@ -1576,7 +1612,8 @@
     
     /* COURSE ATTENDANCE page *******************************/
     .course-attendance .meta-row {
-        grid-template-columns: repeat(1, 1fr);
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
 
@@ -1678,6 +1715,9 @@
 
 @media (max-width: 576.98px) {
 
+    .course-attendance .meta-card {
+        width: 100%;
+    }
     /* .attendance-list-card {
         min-height: 260px;
         background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
