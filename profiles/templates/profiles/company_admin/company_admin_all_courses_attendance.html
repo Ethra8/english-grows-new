@@ -145,12 +145,12 @@
                                         {% trans 'Date' context 'admin all course attendance search form' %}
                                     </label>
 
-                                    <input
-                                        type="date"
-                                        id="attendanceDateFilter"
-                                        name="date"
-                                        value="{{ selected_date }}"
-                                    >
+                                    <div class="attendance-date-input">
+                                        <input type="date" id="attendanceDateFilter" name="date" value="{{ selected_date }}">
+                                        <button type="button" class="attendance-date-picker-btn" aria-label="{% trans 'Choose date' %}">
+                                            <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true">
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="attendance-filter-field">
@@ -163,7 +163,7 @@
                                         id="attendanceCourseSearchInput"
                                         name="course"
                                         value="{{ course_search }}"
-                                        placeholder="Course name or type..."
+                                        placeholder="{% trans 'Name or type...' %}"
                                         autocomplete="off"
                                     >
                                 </div>
@@ -178,7 +178,7 @@
                                         id="attendanceEmployeeSearchInput"
                                         name="employee"
                                         value="{{ employee_search }}"
-                                        placeholder="Employee name or email..."
+                                        placeholder="{% trans 'Name or email...' %}"
                                         autocomplete="off"
                                     >
                                 </div>
@@ -203,9 +203,11 @@
 
                         <div class="filter-result">
                             <p>
-                                {{ total_courses_count }}
-                                course{{ total_courses_count|pluralize }}
-                                found.
+                                {% blocktrans count counter=total_courses_count %}
+                                    {{ counter }} course found.
+                                {% plural %}
+                                    {{ counter }} courses found.
+                                {% endblocktrans %}
                             </p>
                         </div>
                     </div>

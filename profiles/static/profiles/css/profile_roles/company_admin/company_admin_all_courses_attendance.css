@@ -233,11 +233,42 @@
     max-height: 42px;
 }
 
-.all-course-attendance #attendanceDateFilter::-webkit-calendar-picker-indicator {
-    color-scheme: light;
-    opacity: 0.75;
+
+/* DATE PICKER in Form **********************/
+.attendance-date-input {
+    position: relative;
+}
+
+.attendance-date-input input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.attendance-date-picker-btn {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
     cursor: pointer;
 }
+
+.attendance-date-picker-btn img {
+    width: 1.1rem;
+    height: 1.1rem;
+    object-fit: contain;
+}
+
+/* Hide browser-specific calendar icon */
+.attendance-date-input input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
 
 /* =========================================================
    FILTER RESULT

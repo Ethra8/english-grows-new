@@ -1,821 +1,2018 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: English Grows\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 14:20+0200\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
+#: .\home\templates\home\index.html:18
 msgid "PLATFORM CURRENTLY UNDER DEVELOPMENT"
 msgstr "PLATAFORMA ACTUALMENTE EN DESARROLLO"
 
-msgid "Thank you for your patience while new features are being built and refined"
-msgstr "Nuevas funcionalidades están siendo implementadas. Gracias por su paciencia"
+#: .\home\templates\home\index.html:23
+msgid ""
+"Thank you for your patience while new features are being built and refined"
+msgstr ""
+"Nuevas funcionalidades están siendo implementadas. Gracias por su paciencia"
 
+#: .\home\templates\home\index.html:79
 msgid "Online professional"
 msgstr "Formación de Inglés Online"
 
+#: .\home\templates\home\index.html:79
 msgid "English training"
 msgstr "De profesional a profesional"
 
+#: .\home\templates\home\index.html:81
 msgid "Communicate confidently and improve your performance"
 msgstr "Comunícate con confianza y mejora tu rendimiento"
 
+#: .\home\templates\home\index.html:82
 msgid "Take the best from different methodologies"
 msgstr "Llévate lo mejor de dos metodologías"
 
-msgid "Switch language to English"
-msgstr "Cambiar idioma al inglés"
-
-msgid "Switch language to Spanish"
-msgstr "Cambiar idioma al español"
-
-msgid "Switch language to Catalan"
-msgstr "Cambiar idioma al Catalán"
-
-msgid "Switch language to French"
-msgstr "Cambiar idioma al francés"
-
-msgid "Close"
-msgstr "Cerrar"
-
-msgid "Developed & designed by Edna T.M."
-msgstr "Desarrollado y diseñado por Edna T.M."
-
-msgid "All rights reserved"
-msgstr "Reservados todos los derechos"
-
-msgid "Terms & Cons"
-msgstr "Términos y Condiciones"
-
-msgid "Privacy Policy"
-msgstr "Política de Privacidad"
-
-msgid "Contact"
-msgstr "Contacto"
-
-
-msgid "English Grows"
-msgstr "English Grows"
-
-msgid "Go Back"
-msgstr "Volver"
-
-msgid "My Platform"
-msgstr "Mi Plataforma"
-
-msgid "Profile navigation"
-msgstr "Barra de navegación del perfil"
-
-msgid "My Profile"
-msgstr "Mi Perfil"
-
-msgid "Learner"
-msgstr "Estudiante"
-
-msgid "Company Admin"
-msgstr "Admin. Empresa"
-
-msgid "Employee"
-msgstr "Empleado/a"
-
-
-msgid "Profile photo"
-msgstr "Foto de Perfil"
-
-msgid "Company"
-msgstr "Empresa"
-
-
-msgid "Dashboard"
-msgstr "Inicio"
-
-msgid "Course Info"
-msgstr "Info Curso"
-
-msgid "Courses"
-msgstr "Cursos"
-
-msgid "Class List"
-msgstr "Lista Clases"
-
-
-msgid "Calendar"
-msgstr "Calendario"
-
-msgid "My Performance"
-msgstr "Mi Progreso"
-
-msgctxt "admin sidebar"
-msgid "Performance"
-msgstr "Empleados"
-
-
-msgid "Employee Performance"
-msgstr "Progreso de Empleados"
-
-msgid "Review all employees' individual performance across different areas"
-msgstr "Revise el progreso y rendimiento individual de cada empleado"
-
-
-msgid "Materials"
-msgstr "Materiales"
-
-msgid "My Attendance"
-msgstr "Mi Asistencia"
-
-msgid "Reschedule"
-msgstr "Reagendar"
-
-msgid "Evaluations"
-msgstr "Evaluaciones"
-
-msgid "Account Settings"
-msgstr "Configuración"
-
-msgid "Logout"
-msgstr "Salir"
-
-msgid "View"
-msgstr "Ver"
-
-
-msgid "View all courses"
-msgstr "Ver todos los cursos"
-
-msgid "View employees list"
-msgstr "Ver lista de empleados"
-
-msgid "View global attendance"
-msgstr "Ver asistencia global"
-
-
-msgid "View learners list"
-msgstr "Ver lista de estudiantes"
-
-msgid "Today's Classes"
-msgstr "Clases Hoy"
-
-msgid "No classes scheduled for today"
-msgstr "No hay clases agendadas para hoy"
-
-
-msgid "Training Overview"
-msgstr "Vista General"
-
-msgid "Weekly & monthly performance"
-msgstr "Rendimiento semanal y mensual"
-
-msgid "Total Classes"
-msgstr "Total clases"
-
-msgid "Completed Classes"
-msgstr "Clases Completadas"
-
-msgid "Attendance Rate"
-msgstr "Tasa de Asistencia"
-
-msgid "This Week"
-msgstr "Esta Semana"
-
-msgid "This Month"
-msgstr "Este Mes"
-
-msgid "View this week classes"
-msgstr "Ver clases de esta semana"
-
-msgid "View this month classes"
-msgstr "Ver clases de este mes"
-
-msgid "Not assessed yet"
-msgstr "Pendiente"
-
-msgid "Monthly attendance"
-msgstr "Asistencia mensual"
-
-msgid "Group Average Score"
-msgstr "Evaluación Grupal"
-
-msgid "Not confirmed yet"
-msgstr "Sin confirmar"
-
-msgid "Not assigned yet"
-msgstr "Sin confirmar"
-
-msgid "Active"
-msgstr "Activo"
-
-msgctxt "students list page"
-msgid "Active Registrations"
-msgstr "Inscripciones Activas"
-
-msgctxt "students list page"
-msgid "All Registrations"
-msgstr "Total Inscripciones"
-
-msgctxt "students list page"
-msgid "Review"
-msgstr "Revisar"
-
-
-msgid "Confirmed"
-msgstr "Confirmado"
-
-msgid "Paused"
-msgstr "Pausado"
-
-msgid "Completed"
-msgstr "Completado"
-
-msgid "Cancelled"
-msgstr "Cancelado"
-
-
-msgctxt "assigned courses"
-msgid "Active"
-msgstr "Activos"
-
-msgctxt "assigned courses"
-msgid "Confirmed"
-msgstr "Confirmados"
-
-msgctxt "assigned courses"
-msgid "Paused"
-msgstr "Pausados"
-
-msgctxt "assigned courses"
-msgid "Completed"
-msgstr "Completados"
-
-msgctxt "assigned courses"
-msgid "Cancelled"
-msgstr "Cancelados"
-
-msgid "All Status"
-msgstr "Todos"
-
-
-msgid "Level"
-msgstr "Nivel"
-
-msgid "Next class"
-msgstr "Próxima clase"
-
-msgctxt "student dashboard"
-msgid "Next Class"
-msgstr "Próxima Clase"
-
-msgctxt "student dashboard"
-msgid "Join Class"
-msgstr "Unirse"
-
-msgctxt "student dashboard"
-msgid "No upcoming class scheduled yet"
-msgstr "Todavía no tiene clases agendadas próximamente"
-
-msgid "Join class"
-msgstr "Unirse"
-
-msgid "Course"
-msgstr "Curso"
-
-msgid "Course Name"
-msgstr "Nombre del Curso"
-
-msgid "Course Type"
-msgstr "Tipo de Curso"
-
-
-
-msgid "Class Calendar"
-msgstr "Calendario"
-
-msgid "All-day"
-msgstr "Festivo"
-
-msgid "Today"
-msgstr "Hoy"
-
-msgid "Week"
-msgstr "Semana"
-
-msgid "Month"
-msgstr "Mes"
-
-msgid "Month List"
-msgstr "Lista Mensual"
-
-msgid "Year"
-msgstr "Año"
-
-msgid "Lesson"
-msgstr "Sesión"
-
-msgid "Session"
-msgstr "Sesión"
-
-
-
-msgid "Pending"
-msgstr "Pendiente"
-
-msgid "Pending Assessment"
-msgstr "Evaluación Pendiente"
-
-
-msgid "A1 - Beginner"
-msgstr "A1 - Principiante"
-
-msgid "A2 - Elementary"
-msgstr "A2 - Elemental"
-
-msgid "B1.1 - Pre-Intermediate"
-msgstr "B1.1 - Preintermedio"
-
-msgid "B1.2 - Lower Intermediate"
-msgstr "B1.2 - Intermedio bajo"
-
-msgid "B2.1 - Intermediate"
-msgstr "B2.1 - Intermedio"
-
-msgid "B2.2 - Higher Intermediate"
-msgstr "B2.2 - Intermedio alto"
-
-msgid "C1.1 - Lower Advanced"
-msgstr "C1.1 - Avanzado inicial"
-
-msgid "C1.2 - Higher Advanced"
-msgstr "C1.2 - Avanzado alto"
-
-msgid "C2 Proficiency"
-msgstr "C2 - Maestría"
-
-msgid "Attendance"
-msgstr "Asistencia"
-
-msgctxt "dashboard metacard"
-msgid "Attendance"
-msgstr "Asistencia"
-
-
-msgid "Registered Attendance"
-msgstr "Asistencia Registrada"
-
-
-msgid "Overview"
-msgstr "Resumen"
-
-msgid "Skills Progress"
-msgstr "Progreso por Skills"
-
-msgid "Pending assessment"
-msgstr "Evaluación pendiente"
-
-msgid "Progress Assessed"
-msgstr "Progreso Evaluado"
-
-msgid "completed"
-msgstr "completado"
-
-
-msgid "Assessment"
-msgstr "Evaluaciones"
-
-
-msgid "Timetable"
-msgstr "Horario"
-
-msgid "Dates"
-msgstr "Fechas"
-
-msgid "Dates & Timetable"
-msgstr "Fechas y Horarios"
-
-
-msgid "Completed Hours"
-msgstr "Horas Completadas"
-
-msgid "Completed Lessons"
-msgstr "Clases Completadas"
-
-
-msgid "Total Attendance"
-msgstr "Total Asistencias"
-
-msgid "Hours Attended"
-msgstr "Horas Asistidas"
-
-
-msgid "assessed"
-msgstr "evaluadas"
-
-msgid "assessed yet"
-msgstr "evaluadas"
-
-msgid "Key strengths"
-msgstr "Puntos fuertes"
-
-msgid "Confident in"
-msgstr "Competente en"
-
-msgid "Required standard achieved"
-msgstr "Mínimo standard"
-
-msgid "Developing areas"
-msgstr "En desarrollo"
-
-msgid "Focus areas"
-msgstr "Areas por desarrollar"
-
-
-msgid "Registrations"
-msgstr "Inscripciones"
-
-msgid "Rate"
-msgstr "Porcentaje"
-
-msgid "Attendance is below the recommended level of 75%!"
-msgstr "Asistencia por debajo del nivel recomendado de 75%!"
-
-msgid "Details"
-msgstr "Detalles"
-
-msgid "Enrollment date"
-msgstr "Fecha de inscripción"
-
-msgid "Classes held prior to enrollment"
-msgstr "Clases anteriores a inscripción"
-
-msgid "Classes held since enrollment"
-msgstr "Clases desde inscripción"
-
-msgid "Absence"
-msgstr "Ausencia"
-
-msgid "Total Absences"
-msgstr "Total Ausencias"
-
-msgid "class"
-msgstr "clase"
-
-msgid "classes"
-msgstr "clases"
-
-msgid "Lessons Missed"
-msgstr "Sin justificar"
-
-msgid "Excused Absences"
-msgstr "Ausencias Justificadas"
-
-msgid "Absence Record"
-msgstr "Historial Ausencias"
-
-msgid "Missed"
-msgstr "Ausencia"
-
-
-msgid "absence"
-msgstr "ausencia"
-
-msgid "absences"
-msgstr "ausencias"
-
-
-msgid "No absences recorded yet"
-msgstr "No se encontraron ausencias registradas"
-
-msgid "No courses assigned yet"
-msgstr "No hay ninguna inscripción a un curso todavía"
-
-msgid "Your course information will appear here once you are enrolled in a course"
-msgstr "Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
-
-msgid "General Info"
-msgstr "Info General"
-
-msgid "Employees"
-msgstr "Empleados"
-
-msgid "Total Employees"
-msgstr "Total de Empleados"
-
-msgid "Active Employees"
-msgstr "Empleados Activos"
-
-
-
-msgid "Sort by"
-msgstr "Ordenar por"
-
-msgid "Name A-Z"
-msgstr "Nombre A-Z"
-
-msgid "Email all"
-msgstr "Mandar correo grupal"
-
-msgid "Inactive"
-msgstr "Inactivo"
-
-msgid "Enrolled"
-msgstr "inscrito"
-
-
-msgid "Post-commencement enrollment"
-msgstr "Inscripción posterior al inicio del curso"
-
-msgctxt "courses list row"
-msgid "Completion"
-msgstr "Progreso"
-
-msgid "Learners"
-msgstr "Estudiantes"
-
-
-msgid "Start & End Dates"
-msgstr "Fechas de Inicio y Finalización"
-
-msgid "Class Duration"
-msgstr "Duración de Clase"
-
-msgid "Last Class Duration"
-msgstr "Última Clase"
-
+#: .\profiles\models.py:93
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:163
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:167
 msgid "Teacher"
 msgstr "Profesor/a"
 
-msgid "Total Hours"
-msgstr "Total horas"
+#: .\profiles\models.py:94
+#: .\profiles\templates\profiles\components\student_details_header.html:42
+msgid "Learner"
+msgstr "Estudiante"
 
-msgctxt "dashboard training overview"
-msgid "Classes Held"
-msgstr "Clases realizadas"
+#: .\profiles\models.py:95
+msgid "Company Admin"
+msgstr "Admin. Empresa"
 
-msgid "Attendance Submitted"
-msgstr "Registros de asistencia"
+#: .\profiles\models.py:96
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:173
+msgid "Employee"
+msgstr "Empleado/a"
 
-msgid "past classes"
-msgstr "clases realizadas"
+#: .\profiles\models.py:111
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:107
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:187
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:97
+#: .\profiles\templates\profiles\components\student_details_header.html:65
+#: .\profiles\templates\profiles\components\student_details_header.html:75
+#: .\profiles\templates\profiles\student\my_course.html:219
+#: .\profiles\templates\profiles\student\my_course.html:293
+#: .\profiles\templates\profiles\student\my_learning_progress.html:211
+#: .\profiles\templates\profiles\student\student_dashboard.html:36
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:111
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:191
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:240
+msgid "Pending"
+msgstr "Pendiente"
 
-msgid "Filter Attendance"
-msgstr "Filtrar Asistencias"
+#: .\profiles\models.py:112
+msgid "A1 - Beginner"
+msgstr "A1 - Principiante"
 
-msgid "Attended"
-msgstr "Asistido"
+#: .\profiles\models.py:113
+msgid "A2 - Elementary"
+msgstr "A2 - Elemental"
 
-msgid "Register"
-msgstr "Registro"
+#: .\profiles\models.py:114
+msgid "B1.1 - Pre-Intermediate"
+msgstr "B1.1 - Pre-intermedio"
 
-msgid "No submitted attendance records found"
-msgstr "Todavía no hay registros de asistencia disponibles para este grupo"
+#: .\profiles\models.py:115
+msgid "B1.2 - Lower Intermediate"
+msgstr "B1.2 - Intermedio bajo"
 
-msgctxt "attendance detail card"
-msgid "employee record"
-msgstr "registro"
+#: .\profiles\models.py:116
+msgid "B2.1 - Intermediate"
+msgstr "B2.1 - Intermedio"
 
-msgctxt "attendance detail card"
-msgid "employee records"
-msgstr "registros"
+#: .\profiles\models.py:117
+msgid "B2.2 - Higher Intermediate"
+msgstr "B2.2 - Intermedio alto"
 
-msgid "saved for this class session"
-msgstr "guardados para esta sesión"
+#: .\profiles\models.py:118
+msgid "C1.1 - Lower Advanced"
+msgstr "C1.1 - Avanzado (nivel 1)"
 
+#: .\profiles\models.py:119
+msgid "C1.2 - Higher Advanced"
+msgstr "C1.2 - Avanzado (nivel 2)"
 
-msgid "No courses assigned yet to your company"
-msgstr "Su empresa todavía no tiene grupos asignados"
+#: .\profiles\models.py:120
+msgid "C2 Proficiency"
+msgstr "C2 - Maestría"
 
-msgid "No courses to show for this filter"
-msgstr "No se encontraron cursos en este filtro"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:41
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:44
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:58
+msgid "View all courses"
+msgstr "Ver todos los cursos"
 
-msgid "Review all your company's courses, organized by their current status"
-msgstr "Consulta todos los cursos de tu empresa, organizados según su estado actual"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:48
+#, fuzzy
+#| msgctxt "company attendance summary"
+#| msgid "Active Courses"
+msgid "Active Courses"
+msgstr "Cursos Activos"
 
-
-msgid "No held classes apply to the selected filter"
-msgstr "El filtro no aplica a ninguna clase realizada"
-
-msgid "No upcoming classes apply to the selected filter"
-msgstr "El filtro no aplica a ninguna próxima clase"
-
-msgctxt "classes list"
-msgid "Held"
-msgstr "Realizadas"
-
-msgctxt "classes list"
-msgid "Upcoming"
-msgstr "Próximas"
-
-msgctxt "classes list"
-msgid "All"
-msgstr "Todas"
-
-msgctxt "my course"
-msgid "Upcoming"
-msgstr "Próxima"
-
-msgid "view course materials"
-msgstr "ver materiales del curso"
-
-
-msgid "Review and filter upcoming and past class sessions"
-msgstr "Revisa y filtra todas las próximas sesiones de clase y las ya realizadas"
-
-msgid "Class Sessions List"
-msgstr "Listado de Clases"
-
-
-msgid "No employees enrolled yet"
-msgstr "No se ha encontrado ninguna inscripción en este momento"
-
-
-msgid "Currently enrolled in an active course"
-msgstr "Actualmente inscrito en un curso activo"
-
-msgid "Not currently enrolled in an active course"
-msgstr "Actualmente no inscrito en ningún curso activo"
-
-msgid "Student details navigation"
-msgstr "Navegación de los detalles del estudiante"
-
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:62
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:76
 msgctxt "dashboard metacards"
 msgid "Employees"
 msgstr "Plantilla"
 
-msgctxt "metacards singular"
-msgid "active"
-msgstr "activo"
-
-msgctxt "metacards plural"
-msgid "active"
-msgstr "activos"
-
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:69
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:64
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:83
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:53
 msgctxt "metacards singular"
 msgid "enrolled"
 msgstr "inscrito"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:71
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:66
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:85
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:55
 msgctxt "metacards plural"
 msgid "enrolled"
 msgstr "inscritos"
 
-msgctxt "dashboard training overview"
-msgid "Upcoming Classes"
-msgstr "Próximas Clases"
-
-msgctxt "dashboard training overview"
-msgid "Attendance Rate"
-msgstr "Tasa de Asistencia"
-
-msgctxt "employees list"
-msgid "Review"
-msgstr "Revisar"
-
-
-msgctxt "attendance singular"
-msgid "Attended"
-msgstr "Asistencia"
-
-msgctxt "attendance plural"
-msgid "Attended"
-msgstr "Asistencias"
-
-msgctxt "absence singular"
-msgid "Missed"
-msgstr "Ausencia"
-
-msgctxt "absence plural"
-msgid "Missed"
-msgstr "Ausencias"
-
-msgctxt "excused singular"
-msgid "Excused"
-msgstr "Justificante"
-
-msgctxt "excused plural"
-msgid "Excused"
-msgstr "Justificantes"
-
-
-msgctxt "attended class list"
-msgid "Attended"
-msgstr "Asistentes"
-
-msgctxt "learner enrollment status"
-msgid "Enrolled"
-msgstr "inscrito"
-
-msgctxt "learner enrollment status"
-msgid "Inactive"
-msgstr "Inactivo"
-
-msgctxt "company attendance summary"
-msgid "active"
-msgstr "activos"
-
-msgctxt "company attendance summary"
-msgid "Active Courses"
-msgstr "Cursos Activos"
-
-
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:129
+#, fuzzy
+#| msgctxt "admin all course attendance table"
+#| msgid "Attendance rate"
 msgctxt "admin all course attendance search form"
-msgid "Date"
-msgstr "Fecha"
+msgid "Attendance by Course"
+msgstr "Tasa de asistencia"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:137
 msgctxt "admin all course attendance search form"
 msgid "Search attendance by date, course or employee"
 msgstr "Busca registros de asistencia por fecha, curso o empleado/a"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:145
+msgctxt "admin all course attendance search form"
+msgid "Date"
+msgstr "Fecha"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:150
+msgid "Choose date"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:158
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:229
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:93
+#: .\profiles\templates\profiles\components\course_selector.html:7
+#: .\profiles\templates\profiles\components\course_selector.html:18
+msgid "Course"
+msgstr "Curso"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:166
+msgid "Name or type..."
+msgstr "Nombre o tipo de curso..."
+
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:181
+msgid "Name or email..."
+msgstr "Nombre o email..."
+
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:188
 msgctxt "admin all course attendance search form"
 msgid "Search"
 msgstr "Buscar"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:197
 msgctxt "admin all course attendance search form"
 msgid "Clear"
 msgstr "Limpiar"
 
-msgctxt "admin all course attendance search form"
-msgid "No courses matched the selected filters"
-msgstr "No se encontraron coincidencias con los filtros aplicados"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:206
+#, python-format
+msgid ""
+"\n"
+"                                    %(counter)s course found.\n"
+"                                "
+msgid_plural ""
+"\n"
+"                                    %(counter)s courses found.\n"
+"                                "
+msgstr[0] ""
+"\n"
+"                                    %(counter)s curso encontrado.\n"
+"                                "
+msgstr[1] ""
+"\n"
+"                                    %(counter)s cursos encontrados.\n"
+"                                "
 
-msgctxt "admin all course attendance search form"
-msgid "Clear Filters"
-msgstr "Limpiar Filtros"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:233
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:100
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:79
+#: .\profiles\templates\profiles\components\course_details_header.html:37
+#: .\profiles\templates\profiles\components\student_details_header.html:60
+#: .\profiles\templates\profiles\components\student_details_header.html:70
+#: .\profiles\templates\profiles\student\my_course.html:214
+#: .\profiles\templates\profiles\student\student_dashboard.html:31
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:75
+msgid "Level"
+msgstr "Nivel"
 
-msgctxt "admin all course attendance table"
-msgid "Details"
-msgstr "Detalles"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:237
+msgid "Employees"
+msgstr "Empleados"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:241
 msgctxt "admin all course attendance table"
 msgid "Submitted"
 msgstr "Registros"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:245
 msgctxt "admin all course attendance table"
 msgid "Submission status"
 msgstr "Estado de registros"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:249
 msgctxt "admin all course attendance table"
 msgid "Attendance rate"
 msgstr "Tasa de asistencia"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:253
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:346
+msgctxt "admin all course attendance table"
+msgid "Details"
+msgstr "Detalles"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:314
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:323
 msgctxt "submitted attendance status badge"
 msgid "awaiting"
 msgstr "pendiente"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:320
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:330
 msgctxt "submitted attendance status badge"
 msgid "Up to date"
 msgstr "actualizado"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:326
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:335
 msgctxt "submitted attendance status badge"
 msgid "No past classes"
 msgstr "sin registros"
 
-msgctxt "course details"
-msgid "Learners"
-msgstr "Estudiantes"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:357
+msgctxt "admin all course attendance search form"
+msgid "No courses matched the selected filters"
+msgstr "No se encontraron coincidencias con los filtros aplicados"
 
-msgctxt "course details singular"
-msgid "enrolled"
-msgstr "inscrito"
+#: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:361
+msgctxt "admin all course attendance search form"
+msgid "Clear Filters"
+msgstr "Limpiar Filtros"
 
-msgctxt "course details plural"
-msgid "enrolled"
-msgstr "inscritos"
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:11
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:49
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:51
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:42
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:44
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:50
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:52
+msgid "Calendar"
+msgstr "Calendario"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:22
+#: .\profiles\templates\profiles\student\my_calendar.html:24
+msgid "Class Calendar"
+msgstr "Calendario"
 
-msgctxt "course detail tabs"
-msgid "Overview"
-msgstr "Resumen"
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:34
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:43
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:61
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:81
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:99
+#: .\profiles\templates\profiles\student\my_calendar.html:36
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:32
+msgid "Today"
+msgstr "Hoy"
 
-msgctxt "course detail tabs"
-msgid "Enrollments"
-msgstr "Inscripciones"
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:35
+#: .\profiles\templates\profiles\student\my_calendar.html:37
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:33
+msgid "Week"
+msgstr "Semana"
 
-msgctxt "course detail tabs"
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:36
+#: .\profiles\templates\profiles\student\my_calendar.html:38
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:34
+msgid "Month"
+msgstr "Mes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:37
+#: .\profiles\templates\profiles\student\my_calendar.html:39
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:35
+msgid "Month List"
+msgstr "Lista Mensual"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:38
+#: .\profiles\templates\profiles\student\my_calendar.html:40
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:36
+msgid "Year"
+msgstr "Año"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:40
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:114
+#: .\profiles\templates\profiles\student\my_calendar.html:42
+#: .\profiles\templates\profiles\student\my_calendar.html:85
+#: .\profiles\templates\profiles\student\my_calendar.html:86
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:38
+msgid "Join class"
+msgstr "Unirse"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:41
+#: .\profiles\templates\profiles\student\my_calendar.html:43
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:39
+#, fuzzy
+#| msgid "Details"
+msgid "Group details"
+msgstr "Detalles"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:42
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:74
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:36
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:168
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:212
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_class_session_row.html:49
+#: .\profiles\templates\profiles\student\my_attendance.html:214
+#: .\profiles\templates\profiles\student\my_calendar.html:44
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:35
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:40
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:95
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:213
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:40
+msgid "Lesson"
+msgstr "Sesión"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:43
+#: .\profiles\templates\profiles\student\my_calendar.html:45
+#: .\profiles\templates\profiles\teacher\teacher_calendar.html:41
+msgid "Course information unavailable"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:74
+#: .\templates\base.html:303
+msgid "Close"
+msgstr "Cerrar"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:88
+msgid "When"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:98
+#, fuzzy
+#| msgid "class"
+msgid "Class"
+msgstr "clase"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:18
+msgid "Class Sessions List"
+msgstr "Listado de Clases"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:23
+msgid "Review and filter upcoming and past class sessions"
+msgstr ""
+"Revisa y filtra todas las próximas sesiones de clase y las ya realizadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:28
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:29
+msgctxt "classes list"
+msgid "Upcoming"
+msgstr "Próximas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:33
+#, fuzzy
+#| msgid "past classes"
+msgid "Past Classes"
+msgstr "clases realizadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:34
+msgctxt "classes list"
+msgid "Held"
+msgstr "Realizadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:47
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:62
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:85
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:100
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:240
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:233
+msgid "This Week"
+msgstr "Esta Semana"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:51
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:63
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:89
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:101
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:385
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:436
+msgid "This Month"
+msgstr "Este Mes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:55
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:64
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:93
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:102
+msgctxt "classes list"
+msgid "All"
+msgstr "Todas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:73
+msgid "No upcoming classes apply to the selected filter"
+msgstr "El filtro no aplica a ninguna próxima clase"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:111
+msgid "No held classes apply to the selected filter"
+msgstr "El filtro no aplica a ninguna clase realizada"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:35
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:308
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:454
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:44
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:263
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:360
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:466
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:524
+msgid "Attendance Submitted"
+msgstr "Registros de asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:36
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:45
+msgid "past classes"
+msgstr "clases realizadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:43
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:52
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:267
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:397
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:470
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:560
+msgid "Attendance Rate"
+msgstr "Tasa de Asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:56
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:63
+msgid "Filter Attendance"
+msgstr "Filtrar Asistencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:59
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:67
+#, fuzzy
+#| msgid "Filter Attendance"
+msgid "Filter by date"
+msgstr "Filtrar Asistencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:62
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:72
+#, fuzzy
+#| msgid "Employee"
+msgid "Find employee"
+msgstr "Empleado/a"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:63
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:77
+#, fuzzy
+#| msgid "View employees list"
+msgid "Find employee ..."
+msgstr "Ver lista de empleados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:91
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:56
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:33
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:64
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:117
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:126
+#: .\profiles\templates\profiles\components\student_details_nav.html:40
+#: .\profiles\templates\profiles\components\student_details_nav.html:67
+#: .\profiles\templates\profiles\components\student_details_nav.html:94
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:59
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:61
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:40
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:42
+#: .\profiles\templates\profiles\student\my_attendance.html:33
+#: .\profiles\templates\profiles\student\my_attendance.html:64
+#: .\profiles\templates\profiles\student\my_learning_progress.html:252
+#: .\profiles\templates\profiles\student\my_learning_progress.html:271
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:116
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:64
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:36
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:68
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:281
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:301
 msgid "Attendance"
 msgstr "Asistencia"
 
-msgctxt "course detail tabs"
-msgid "Assessment"
-msgstr "Evaluaciones"
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:99
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:127
+msgctxt "attended class list"
+msgid "Attended"
+msgstr "Asistentes"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:107
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:142
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:144
+msgid "No submitted attendance records found"
+msgstr "Todavía no hay registros de asistencia disponibles para este grupo"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:30
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:29
+msgid "Registered Attendance"
+msgstr "Asistencia Registrada"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:46
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:44
+msgctxt "attendance detail card"
+msgid "employee record"
+msgstr "registro"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:48
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:46
+msgctxt "attendance detail card"
+msgid "employee records"
+msgstr "registros"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:50
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:48
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:47
+msgid "saved for this class session"
+msgstr "guardados para esta sesión"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:63
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:61
+msgctxt "attendance singular"
+msgid "Attended"
+msgstr "Asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:65
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:63
+msgctxt "attendance plural"
+msgid "Attended"
+msgstr "Asistencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:77
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:75
+msgctxt "absence singular"
+msgid "Missed"
+msgstr "Ausencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:79
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:77
+msgctxt "absence plural"
+msgid "Missed"
+msgstr "Ausencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:91
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:89
+msgctxt "excused singular"
+msgid "Excused"
+msgstr "Justificante"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance_detail.html:93
+#: .\profiles\templates\profiles\teacher\teacher_attendance_detail.html:91
+msgctxt "excused plural"
+msgid "Excused"
+msgstr "Justificantes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:42
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:43
+msgid "Registrations"
+msgstr "Inscripciones"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:45
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:44
+#, fuzzy
+#| msgctxt "metacards singular"
+#| msgid "enrolled"
+msgid "enrolled"
+msgstr "inscrito"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:70
+msgid "Group Average Score"
+msgstr "Evaluación Grupal"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:74
+msgid "Not assessed yet"
+msgstr "Pendiente"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:87
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:91
+msgid "Dates & Timetable"
+msgstr "Fechas y Horarios"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:98
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:90
+#: .\profiles\templates\profiles\student\my_course.html:268
+#: .\profiles\templates\profiles\student\my_learning_progress.html:190
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:102
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:219
+msgid "Timetable"
+msgstr "Horario"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:117
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:121
+msgid "Start & End Dates"
+msgstr "Fechas de Inicio y Finalización"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:126
+#: .\profiles\templates\profiles\student\my_course.html:322
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:130
+msgid "Class Duration"
+msgstr "Duración de Clase"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:137
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:141
+msgid "Last Class Duration"
+msgstr "Última Clase"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:150
+#: .\profiles\templates\profiles\student\my_course.html:249
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:154
+msgid "General Info"
+msgstr "Info General"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:173
+#: .\profiles\templates\profiles\student\my_course.html:306
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:177
+msgid "Total Hours"
+msgstr "Total horas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:183
+#: .\profiles\templates\profiles\student\my_course.html:336
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:187
+msgid "Total Classes"
+msgstr "Total clases"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:200
 msgctxt "course details page"
 msgid "Course Delivery"
 msgstr "Desarrollo del Curso"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:211
+#, fuzzy
+#| msgctxt "course details page"
+#| msgid "delivered"
 msgctxt "course details page"
-msgid "Delivery"
-msgstr "Desarrollo"
+msgid "Delivered"
+msgstr "impartido"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:212
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:80
 msgctxt "course details page"
 msgid "delivered"
 msgstr "impartido"
 
-
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:220
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:104
 msgctxt "course details page"
 msgid "Hours delivered"
 msgstr "Horas impartidas"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:230
 msgctxt "course details page"
 msgid "Classe held"
 msgstr "Clases impartidass"
 
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:43
+msgctxt "students list page"
+msgid "Active Registrations"
+msgstr "Inscripciones Activas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:47
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:58
+msgctxt "metacards singular"
+msgid "active"
+msgstr "activo"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:49
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:60
+msgctxt "metacards plural"
+msgid "active"
+msgstr "activos"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:60
+msgctxt "students list page"
+msgid "All Registrations"
+msgstr "Total Inscripciones"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:78
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:53
+msgid "Email all"
+msgstr "Mandar correo grupal"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:89
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:68
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:64
+msgid "Sort by"
+msgstr "Ordenar por"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:95
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:74
+#: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:70
+msgid "Name A-Z"
+msgstr "Nombre A-Z"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:117
+#: .\profiles\templates\profiles\components\student_details_header.html:20
+msgid "Currently enrolled in an active course"
+msgstr "Actualmente inscrito en un curso activo"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:117
+#: .\profiles\templates\profiles\components\student_details_header.html:20
+msgid "Not currently enrolled in an active course"
+msgstr "Actualmente no inscrito en ningún curso activo"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:25
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:51
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:39
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:41
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:45
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:47
+msgid "Courses"
+msgstr "Cursos"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:31
+msgid "Review all your company's courses, organized by their current status"
+msgstr ""
+"Consulta todos los cursos de tu empresa, organizados según su estado actual"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:43
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:105
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:135
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:139
+msgctxt "assigned courses"
+msgid "Active"
+msgstr "Activos"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:49
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:151
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:155
+msgctxt "assigned courses"
+msgid "Confirmed"
+msgstr "Confirmados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:55
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:167
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:171
+msgctxt "assigned courses"
+msgid "Paused"
+msgstr "Pausados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:61
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:183
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:187
+msgctxt "assigned courses"
+msgid "Cancelled"
+msgstr "Cancelados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:67
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:199
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:203
+msgctxt "assigned courses"
+msgid "Completed"
+msgstr "Completados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:73
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:215
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:219
+msgid "All Status"
+msgstr "Todos"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:83
+msgid "Filter courses by status"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:235
+msgid "No courses assigned yet to your company"
+msgstr "Su empresa todavía no tiene grupos asignados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:292
+msgctxt "courses list row"
+msgid "Completion"
+msgstr "Progreso"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_courses.html:298
+msgid "No courses to show for this filter"
+msgstr "No se encontraron cursos en este filtro"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:29
+msgid "Welcome"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:69
+msgid "View employees list"
+msgstr "Ver lista de empleados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:93
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:88
+msgid "View global attendance"
+msgstr "Ver asistencia global"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:100
+msgctxt "dashboard metacard"
+msgid "Attendance"
+msgstr "Asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:143
+msgid "Today's Classes"
+msgstr "Clases Hoy"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:191
+msgid "No classes scheduled for today"
+msgstr "No hay clases agendadas para hoy"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:217
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:205
+msgid "Training Overview"
+msgstr "Vista General"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:219
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:207
+msgid "Weekly & monthly performance"
+msgstr "Rendimiento semanal y mensual"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:243
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:235
+msgid "View this week classes"
+msgstr "Ver clases de esta semana"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:246
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:390
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:79
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:161
+#: .\profiles\templates\profiles\student\my_attendance.html:79
+#: .\profiles\templates\profiles\student\my_attendance.html:162
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:237
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:440
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:81
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:162
+#, fuzzy
+#| msgid "class"
+msgid "class"
+msgid_plural "classes"
+msgstr[0] "clase"
+msgstr[1] "clase"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:248
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:81
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:134
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:163
+#: .\profiles\templates\profiles\student\my_attendance.html:81
+#: .\profiles\templates\profiles\student\my_attendance.html:164
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:83
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:164
+msgid "classes"
+msgstr "clases"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:263
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:408
+msgctxt "dashboard training overview"
+msgid "Classes Held"
+msgstr "Clases realizadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:272
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:284
+#, fuzzy
+#| msgid "Classes held since enrollment"
+msgid "Classes held this week"
+msgstr "Clases desde inscripción"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:295
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:441
+msgctxt "dashboard training overview"
+msgid "Upcoming Classes"
+msgstr "Próximas Clases"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:346
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:495
+msgctxt "dashboard training overview"
+msgid "Attendance Rate"
+msgstr "Tasa de Asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:358
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:409
+#, fuzzy
+#| msgctxt "admin all course attendance table"
+#| msgid "Attendance rate"
+msgid "Weekly attendance rate"
+msgstr "Tasa de asistencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:388
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:438
+msgid "View this month classes"
+msgstr "Ver clases de este mes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:417
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:487
+#, fuzzy
+#| msgid "Classes held since enrollment"
+msgid "Classes held this month"
+msgstr "Clases desde inscripción"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:467
+#, python-format
+msgid ""
+"\n"
+"                                        %(pending)s awaiting\n"
+"                                    "
+msgid_plural ""
+"\n"
+"                                        %(pending)s awaiting\n"
+"                                    "
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:478
+#, fuzzy
+#| msgctxt "submitted attendance status badge"
+#| msgid "Up to date"
+msgctxt "dashboard training overview"
+msgid "Up to date"
+msgstr "actualizado"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:483
+#, fuzzy
+#| msgctxt "course details page"
+#| msgid "Classe held"
+msgctxt "dashboard training overview"
+msgid "No classes held"
+msgstr "Clases impartidass"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:507
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:572
+#, fuzzy
+#| msgid "Monthly attendance"
+msgid "Monthly attendance rate"
+msgstr "Asistencia mensual"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:26
+msgid "Employee Performance"
+msgstr "Progreso de Empleados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:31
+msgid "Review all employees' individual performance across different areas"
+msgstr "Revise el progreso y rendimiento individual de cada empleado"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:40
+msgid "Total Employees"
+msgstr "Total de Empleados"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:49
+msgid "Active Employees"
+msgstr "Empleados Activos"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_employees_list.html:128
+msgid "No employees enrolled yet"
+msgstr "No se ha encontrado ninguna inscripción en este momento"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:33
+#: .\profiles\templates\profiles\student\my_attendance.html:33
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:36
+msgid "Rate"
+msgstr "Porcentaje"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:50
+#: .\profiles\templates\profiles\student\my_attendance.html:49
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:52
+#, fuzzy, python-format
+#| msgid "Attendance is below the recommended level of 75%!"
+msgid "Attendance is below the recommended level of 75%%!"
+msgstr "Asistencia por debajo del nivel recomendado de 75%!"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:64
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:146
+#: .\profiles\templates\profiles\student\my_attendance.html:64
+#: .\profiles\templates\profiles\student\my_attendance.html:147
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:68
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:147
+msgid "Details"
+msgstr "Detalles"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:75
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:132
+#: .\profiles\templates\profiles\student\my_attendance.html:75
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:77
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:314
+msgid "Total Attendance"
+msgstr "Total Asistencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:93
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:136
+#: .\profiles\templates\profiles\student\my_attendance.html:93
+#: .\profiles\templates\profiles\student\my_learning_progress.html:297
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:95
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:327
+msgid "Hours Attended"
+msgstr "Horas Asistidas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:103
+#: .\profiles\templates\profiles\student\my_attendance.html:103
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:103
+msgid "Enrollment date"
+msgstr "Fecha de inscripción"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:114
+#: .\profiles\templates\profiles\student\my_attendance.html:114
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:114
+msgid "Post-commencement enrollment"
+msgstr "Inscripción posterior al inicio del curso"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:123
+#: .\profiles\templates\profiles\student\my_attendance.html:123
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:123
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:133
+msgid "Classes held prior to enrollment"
+msgstr "Clases anteriores a inscripción"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:133
+#, fuzzy
+#| msgid "Classes held since enrollment"
+msgid "Classes since enrollment"
+msgstr "Clases desde inscripción"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:146
+#: .\profiles\templates\profiles\student\my_attendance.html:147
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:147
+msgid "Absence"
+msgstr "Ausencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:157
+#: .\profiles\templates\profiles\student\my_attendance.html:158
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:158
+msgid "Total Absences"
+msgstr "Total Ausencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:173
+#: .\profiles\templates\profiles\student\my_attendance.html:174
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:174
+msgid "Excused Absences"
+msgstr "Ausencias Justificadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:177
+#: .\profiles\templates\profiles\student\my_attendance.html:178
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:178
+msgid "absence"
+msgstr "ausencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:179
+#: .\profiles\templates\profiles\student\my_attendance.html:180
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:180
+msgid "absences"
+msgstr "ausencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:196
+#: .\profiles\templates\profiles\student\my_attendance.html:198
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:197
+msgid "Absence Record"
+msgstr "Historial Ausencias"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:216
+#: .\profiles\templates\profiles\student\my_attendance.html:218
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:217
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:69
+msgid "Missed"
+msgstr "Ausencia"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:218
+#: .\profiles\templates\profiles\student\my_attendance.html:220
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:219
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:78
+#, fuzzy
+#| msgctxt "excused singular"
+#| msgid "Excused"
+msgid "Excused"
+msgstr "Justificante"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:226
+#: .\profiles\templates\profiles\student\my_attendance.html:228
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:227
+msgid "No absences recorded yet"
+msgstr "No se encontraron ausencias registradas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:34
+#: .\profiles\templates\profiles\student\my_learning_progress.html:43
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:56
+msgid "Progress Assessed"
+msgstr "Progreso Evaluado"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:52
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:37
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:39
+#: .\profiles\templates\profiles\student\my_learning_progress.html:76
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:102
+msgid "Course Info"
+msgstr "Info Curso"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:87
+#: .\profiles\templates\profiles\student\my_learning_progress.html:178
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:207
+msgid "Dates"
+msgstr "Fechas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:38
+#: .\profiles\templates\profiles\student\my_skills.html:35
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:36
+msgid "Skills Progress"
+msgstr "Progreso por Skills"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:40
+#: .\profiles\templates\profiles\student\my_skills.html:38
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:39
+msgid "Pending assessment"
+msgstr "Evaluación pendiente"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:82
+#: .\profiles\templates\profiles\student\my_skills.html:81
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:85
+msgid "assessed"
+msgstr "evaluadas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:96
+#: .\profiles\templates\profiles\student\my_skills.html:95
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:103
+msgid "Key strengths"
+msgstr "Puntos fuertes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:108
+#: .\profiles\templates\profiles\student\my_skills.html:107
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:115
+msgid "Confident in"
+msgstr "Competente en"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:120
+#: .\profiles\templates\profiles\student\my_skills.html:119
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:127
+msgid "Required standard achieved"
+msgstr "Mínimo standard"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:132
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:58
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:58
+#: .\profiles\templates\profiles\student\my_skills.html:131
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:139
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:80
+msgid "Developing areas"
+msgstr "En desarrollo"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:144
+#: .\profiles\templates\profiles\student\my_skills.html:143
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:151
+msgid "Focus areas"
+msgstr "Areas por desarrollar"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:156
+#: .\profiles\templates\profiles\student\my_skills.html:155
+#: .\profiles\templates\profiles\teacher\student_skills_overview.html:163
+msgid "Pending Assessment"
+msgstr "Evaluación Pendiente"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:36
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:36
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:62
+#, fuzzy
+#| msgid "Key strengths"
+msgid "Strengths"
+msgstr "Puntos fuertes"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:47
+#, fuzzy
+#| msgid "Required standard achieved"
+msgid "Required Standard Achieved"
+msgstr "Mínimo standard"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:69
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:69
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:89
+msgid "Needs work"
+msgstr ""
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:81
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:82
+#, fuzzy
+#| msgid "Not assessed yet"
+msgid "No assessment available yet"
+msgstr "Pendiente"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:82
+msgid ""
+"The teacher's notes will appear here once the employee's progress has been "
+"assessed."
+msgstr ""
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:5
+#, fuzzy
+#| msgid "Student details navigation"
+msgid "Course details navigation"
+msgstr "Navegación de los detalles del estudiante"
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:14
+#: .\profiles\templates\profiles\components\course_details_nav.html:35
+#: .\profiles\templates\profiles\components\course_details_nav.html:61
+msgctxt "course detail tabs"
+msgid "Overview"
+msgstr "Resumen"
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:20
+#: .\profiles\templates\profiles\components\course_details_nav.html:41
+msgctxt "course detail tabs"
+msgid "Enrollments"
+msgstr "Inscripciones"
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:26
+#: .\profiles\templates\profiles\components\course_details_nav.html:47
+#: .\profiles\templates\profiles\components\course_details_nav.html:73
+msgctxt "course detail tabs"
+msgid "Attendance"
+msgstr "Asistencia"
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:53
+msgctxt "course detail tabs"
+msgid "Assessment"
+msgstr "Evaluaciones"
+
+#: .\profiles\templates\profiles\components\course_details_nav.html:67
+msgctxt "course detail tabs"
+msgid "skills"
+msgstr ""
+
+#: .\profiles\templates\profiles\components\details_page_shell.html:28
+#: .\profiles\templates\profiles\teacher\teacher_edit_student_skill.html:22
+msgid "Go Back"
+msgstr "Volver"
+
+#: .\profiles\templates\profiles\components\student_details_nav.html:12
+msgid "Student details navigation"
+msgstr "Navegación de los detalles del estudiante"
+
+#: .\profiles\templates\profiles\components\student_details_nav.html:22
+#: .\profiles\templates\profiles\components\student_details_nav.html:49
+#: .\profiles\templates\profiles\components\student_details_nav.html:76
+msgid "Overview"
+msgstr "Resumen"
+
+#: .\profiles\templates\profiles\components\student_details_nav.html:31
+#: .\profiles\templates\profiles\components\student_details_nav.html:58
+#: .\profiles\templates\profiles\components\student_details_nav.html:85
+msgid "Skills"
+msgstr ""
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_class_session_row.html:4
+#, python-format
+msgid "View course details for %(course_name)s"
+msgstr ""
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_class_session_row.html:5
+#, python-format
+msgid "View attendance for %(course_name)s, lesson %(lesson_number)s"
+msgstr ""
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:32
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:30
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:28
+msgid "Profile navigation"
+msgstr "Barra de navegación del perfil"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:34
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:36
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:32
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:34
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:30
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:32
+msgid "Dashboard"
+msgstr "Inicio"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:44
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:46
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:35
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:37
+msgid "Class List"
+msgstr "Lista Clases"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:54
+#, fuzzy
+#| msgctxt "admin sidebar"
+#| msgid "Performance"
+msgid "Performance"
+msgstr "Empleados"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:56
+msgctxt "admin sidebar"
+msgid "Performance"
+msgstr "Empleados"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:64
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:57
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:70
+#, fuzzy
+#| msgid "Account Settings"
+msgid "Account Setting"
+msgstr "Configuración"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:66
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:59
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:72
+msgid "Account Settings"
+msgstr "Configuración"
+
+#: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:73
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:66
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:79
+#: .\templates\base.html:218 .\templates\includes\mobile_top_header.html:140
+msgid "Logout"
+msgstr "Salir"
+
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:9
+msgid "Profile photo"
+msgstr "Foto de Perfil"
+
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:47
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:49
+msgid "My Performance"
+msgstr "Mi Progreso"
+
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:52
+#: .\profiles\templates\profiles\includes\student\student_sidebar.html:54
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:65
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:67
+msgid "Materials"
+msgstr "Materiales"
+
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:55
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:57
+msgid "Reschedule"
+msgstr "Reagendar"
+
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:60
+#: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:62
+msgid "Evaluations"
+msgstr "Evaluaciones"
+
+#: .\profiles\templates\profiles\profile_base.html:51 .\templates\base.html:108
+#: .\templates\includes\mobile_top_header.html:35
+msgid "Switch language to English"
+msgstr "Cambiar idioma al inglés"
+
+#: .\profiles\templates\profiles\profile_base.html:63 .\templates\base.html:123
+#: .\templates\includes\mobile_top_header.html:47
+msgid "Switch language to Spanish"
+msgstr "Cambiar idioma al español"
+
+#: .\profiles\templates\profiles\profile_base.html:75 .\templates\base.html:138
+#: .\templates\includes\mobile_top_header.html:59
+msgid "Switch language to Catalan"
+msgstr "Cambiar idioma al Catalán"
+
+#: .\profiles\templates\profiles\profile_base.html:87 .\templates\base.html:153
+#: .\templates\includes\mobile_top_header.html:71
+msgid "Switch language to French"
+msgstr "Cambiar idioma al francés"
+
+#: .\profiles\templates\profiles\student\my_attendance.html:133
+msgid "Classes held since enrollment"
+msgstr "Clases desde inscripción"
+
+#: .\profiles\templates\profiles\student\my_attendance.html:247
+msgid "No courses assigned yet"
+msgstr "No hay ninguna inscripción a un curso todavía"
+
+#: .\profiles\templates\profiles\student\my_attendance.html:248
+msgid ""
+"Your course information will appear here once you are enrolled in a course"
+msgstr ""
+"Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
+
+#: .\profiles\templates\profiles\student\my_course.html:193
+msgid "Course Name"
+msgstr "Nombre del Curso"
+
+#: .\profiles\templates\profiles\student\my_course.html:201
+msgid "Course Type"
+msgstr "Tipo de Curso"
+
+#: .\profiles\templates\profiles\student\my_course.html:276
+#: .\profiles\templates\profiles\student\my_course.html:312
+#: .\profiles\templates\profiles\student\my_course.html:326
+#: .\profiles\templates\profiles\student\my_course.html:390
+msgid "Not assigned yet"
+msgstr "Sin confirmar"
+
+#: .\profiles\templates\profiles\student\my_course.html:282
+msgctxt "my course"
+msgid "Upcoming"
+msgstr "Próxima"
+
+#: .\profiles\templates\profiles\student\my_course.html:288
+#, fuzzy
+#| msgctxt "student dashboard"
+#| msgid "Next Class"
+msgid "Next Class"
+msgstr "Próxima Clase"
+
+#: .\profiles\templates\profiles\student\my_course.html:340
+#: .\profiles\templates\profiles\student\my_course.html:357
+#: .\profiles\templates\profiles\student\my_course.html:371
+msgid "Not confirmed yet"
+msgstr "Sin confirmar"
+
+#: .\profiles\templates\profiles\student\my_course.html:353
+#, fuzzy
+#| msgid "Start & End Dates"
+msgid "Start Date"
+msgstr "Fechas de Inicio y Finalización"
+
+#: .\profiles\templates\profiles\student\my_course.html:367
+#, fuzzy
+#| msgid "Enrollment date"
+msgid "End date"
+msgstr "Fecha de inscripción"
+
+#: .\profiles\templates\profiles\student\my_learning_progress.html:6
+msgid "My Learning Progress"
+msgstr ""
+
+#: .\profiles\templates\profiles\student\my_learning_progress.html:225
+msgid "Completed Lessons"
+msgstr "Clases Completadas"
+
+#: .\profiles\templates\profiles\student\my_learning_progress.html:284
+#, fuzzy
+#| msgid "Hours Attended"
+msgid "Lessons Attended"
+msgstr "Horas Asistidas"
+
+#: .\profiles\templates\profiles\student\my_learning_progress.html:323
+msgid "No course information is currently available."
+msgstr ""
+
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:47
+msgid "Minimum level requirements"
+msgstr ""
+
+#: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:83
+#, fuzzy
+#| msgid ""
+#| "Your course information will appear here once you are enrolled in a course"
+msgid ""
+"Your teacher's notes will appear here once your progress has been assessed."
+msgstr ""
+"Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
+
+#: .\profiles\templates\profiles\student\student_dashboard.html:45
+msgctxt "student dashboard"
+msgid "Next Class"
+msgstr "Próxima Clase"
+
+#: .\profiles\templates\profiles\student\student_dashboard.html:70
+msgctxt "student dashboard"
+msgid "Join Class"
+msgstr "Unirse"
+
+#: .\profiles\templates\profiles\student\student_dashboard.html:75
+msgctxt "student dashboard"
+msgid "No upcoming class scheduled yet"
+msgstr "Todavía no tiene clases agendadas próximamente"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:137
+msgid "Register"
+msgstr "Registro"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:42
+msgctxt "course details"
+msgid "Learners"
+msgstr "Estudiantes"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:48
+msgctxt "course details singular"
+msgid "enrolled"
+msgstr "inscrito"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:50
+msgctxt "course details plural"
+msgid "enrolled"
+msgstr "inscritos"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:78
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:204
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:215
+#, fuzzy
+#| msgid "Skills Progress"
+msgid "Progress"
+msgstr "Progreso por Skills"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:79
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:216
+msgid "completed"
+msgstr "completado"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:224
+#, fuzzy
+#| msgid "Hours Attended"
+msgid "Hours Done"
+msgstr "Horas Asistidas"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:234
+#, fuzzy
+#| msgid "Class Sessions List"
+msgid "Class Sessions Held"
+msgstr "Listado de Clases"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:246
+msgid "view course materials"
+msgstr "ver materiales del curso"
+
+#: .\profiles\templates\profiles\teacher\teacher_course_details.html:247
+msgid "View"
+msgstr "Ver"
+
+#: .\profiles\templates\profiles\teacher\teacher_courses.html:178
+#, fuzzy
+#| msgctxt "courses list row"
+#| msgid "Completion"
+msgid "Completion"
+msgstr "Progreso"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:73
+msgid "View learners list"
+msgstr "Ver lista de estudiantes"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:255
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:275
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:458
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:478
+#, fuzzy
+#| msgctxt "dashboard training overview"
+#| msgid "Classes Held"
+msgid "Classes Held"
+msgstr "Clases realizadas"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:259
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:347
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:462
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:511
+#, fuzzy
+#| msgctxt "dashboard training overview"
+#| msgid "Upcoming Classes"
+msgid "Upcoming Classes"
+msgstr "Próximas Clases"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:316
+#, fuzzy
+#| msgid "Attendance Submitted"
+msgid "attendance submitted"
+msgstr "Registros de asistencia"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:327
+#, fuzzy
+#| msgid "Attendance Submitted"
+msgid "All attendance submitted"
+msgstr "Registros de asistencia"
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:375
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:537
+#, python-format
+msgid ""
+"\n"
+"                                    %(pending)s awaiting\n"
+"                                "
+msgid_plural ""
+"\n"
+"                                    %(pending)s awaiting\n"
+"                                "
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:386
+#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:548
+#, fuzzy
+#| msgctxt "submitted attendance status badge"
+#| msgid "Up to date"
+msgid "Up to date"
+msgstr "actualizado"
+
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:25
+msgid "Message"
+msgstr ""
+
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:30
+msgid "Current Level"
+msgstr ""
+
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:42
+msgid "Save"
+msgstr ""
+
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:71
+msgid "Meets minimum required standard"
+msgstr ""
+
+#: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:98
+msgid "No teacher notes yet."
+msgstr ""
+
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:246
+#, fuzzy
+#| msgid "No courses assigned yet"
+msgid "No active course assigned yet"
+msgstr "No hay ninguna inscripción a un curso todavía"
+
+#: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:247
+#, fuzzy
+#| msgid ""
+#| "Your course information will appear here once you are enrolled in a course"
+msgid ""
+"Course information will appear here once the employee is enrolled in a "
+"course."
+msgstr ""
+"Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
+
+#: .\profiles\templates\profiles\teacher\teacher_student_detail.html:254
+msgid "Completed Hours"
+msgstr "Horas Completadas"
+
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:47
+#, fuzzy
+#| msgctxt "attendance detail card"
+#| msgid "employee record"
+msgid "employee record"
+msgstr "registro"
+
+#: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:60
+msgid "Attended"
+msgstr "Asistido"
+
+#: .\templates\account\email.html:6
+msgid "E-mail Addresses"
+msgstr ""
+
+#: .\templates\account\email.html:11
+msgid "The following e-mail addresses are associated with your account:"
+msgstr ""
+
+#: .\templates\account\email.html:25
+msgid "Verified"
+msgstr ""
+
+#: .\templates\account\email.html:27
+msgid "Unverified"
+msgstr ""
+
+#: .\templates\account\email.html:29
+msgid "Primary"
+msgstr ""
+
+#: .\templates\account\email.html:35
+msgid "Make Primary"
+msgstr ""
+
+#: .\templates\account\email.html:36
+msgid "Re-send Verification"
+msgstr ""
+
+#: .\templates\account\email.html:37
+msgid "Remove"
+msgstr ""
+
+#: .\templates\account\email.html:44
+msgid "Warning:"
+msgstr ""
+
+#: .\templates\account\email.html:44
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: .\templates\account\email.html:49
+msgid "Add E-mail Address"
+msgstr ""
+
+#: .\templates\account\email.html:54
+msgid "Add E-mail"
+msgstr ""
+
+#: .\templates\account\email.html:64
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr ""
+
+#: .\templates\account\email_confirm.html:7
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: .\templates\account\email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user %(user_display)s."
+msgstr ""
+
+#: .\templates\account\email_confirm.html:20
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Confirm"
+msgstr "Confirmado"
+
+#: .\templates\account\email_confirm.html:27
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+
+#: .\templates\account\login.html:7
+msgid "Sign in to your account"
+msgstr ""
+
+#: .\templates\account\login.html:13
+msgid ""
+"\n"
+"        Sign in with your email and password.\n"
+"        "
+msgstr ""
+
+#: .\templates\account\login.html:19
+msgid ""
+"\n"
+"        If you have not created an account yet, please\n"
+"        "
+msgstr ""
+
+#: .\templates\account\login.html:22
+msgid "sign up"
+msgstr ""
+
+#: .\templates\account\login.html:40
+msgid "Sign In"
+msgstr ""
+
+#: .\templates\account\login.html:46
+#: .\templates\account\password_change.html:14
+msgid "Forgot Password?"
+msgstr ""
+
+#: .\templates\account\logout.html:8 .\templates\account\logout.html:21
+msgid "Log Out"
+msgstr ""
+
+#: .\templates\account\logout.html:12
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+#: .\templates\account\logout.html:25
+#, fuzzy
+#| msgid "Cancelled"
+msgid "Cancel"
+msgstr "Cancelado"
+
+#: .\templates\account\password_change.html:6
+#: .\templates\account\password_change.html:13
+#: .\templates\account\password_reset_from_key.html:5
+#: .\templates\account\password_reset_from_key_done.html:4
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\account\password_reset.html:7
+msgid "Reset your password"
+msgstr ""
+
+#: .\templates\account\password_reset.html:15
+msgid ""
+"Enter the email address associated with your account and we'll send you a "
+"link to reset your password."
+msgstr ""
+
+#: .\templates\account\password_reset.html:20
+msgid "Reset My Password"
+msgstr ""
+
+#: .\templates\account\password_reset.html:23
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: .\templates\account\password_reset_done.html:6
+msgid "Password Reset"
+msgstr ""
+
+#: .\templates\account\password_reset_done.html:14
+msgid ""
+"We have sent you an e-mail. If you have not received it please check your "
+"spam folder. Otherwise contact us if you do not receive it in a few minutes."
+msgstr ""
+
+#: .\templates\account\password_reset_from_key.html:11
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+
+#: .\templates\account\password_reset_from_key.html:16
+msgid "change password"
+msgstr ""
+
+#: .\templates\account\password_reset_from_key_done.html:8
+msgid "Your password is now changed."
+msgstr ""
+
+#: .\templates\account\password_set.html:6
+msgid "Set your password"
+msgstr ""
+
+#: .\templates\account\password_set.html:13
+msgid "Set Password"
+msgstr ""
+
+#: .\templates\account\signup.html:6
+msgid "Create your account"
+msgstr ""
+
+#: .\templates\account\signup.html:16
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\account\signup.html:19
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">log in</a>."
+msgstr ""
+
+#: .\templates\account\signup_closed.html:5
+msgid "Sign Up Closed"
+msgstr ""
+
+#: .\templates\account\signup_closed.html:9
+msgid "We are sorry, but the sign up is currently closed."
+msgstr ""
+
+#: .\templates\account\verification_sent.html:5
+#: .\templates\account\verified_email_required.html:5
+msgid "Verify Your E-mail Address"
+msgstr ""
+
+#: .\templates\account\verification_sent.html:9
+msgid ""
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process. If you do not see the verification e-mail in "
+"your main inbox, check your spam folder. Please contact us if you do not "
+"receive the verification e-mail within a few minutes."
+msgstr ""
+
+#: .\templates\account\verified_email_required.html:11
+msgid ""
+"This part of the site requires us to verify that\n"
+"you are who you claim to be. For this purpose, we require that you\n"
+"verify ownership of your e-mail address. "
+msgstr ""
+
+#: .\templates\account\verified_email_required.html:15
+msgid ""
+"We have sent an e-mail to you for\n"
+"verification. Please click on the link inside that e-mail. If you do not see "
+"the verification e-mail in your main inbox, check your spam folder. "
+"Otherwise\n"
+"contact us if you do not receive it within a few minutes."
+msgstr ""
+
+#: .\templates\account\verified_email_required.html:19
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address</a>."
+msgstr ""
+
+#: .\templates\base.html:69
+msgid "Skip to main content"
+msgstr ""
+
+#: .\templates\base.html:79
+msgid "Go to the home page"
+msgstr ""
+
+#: .\templates\base.html:176 .\templates\base.html:186
+#: .\templates\base.html:196 .\templates\base.html:206
+msgid "My Platform"
+msgstr "Mi Plataforma"
+
+#: .\templates\base.html:228 .\templates\includes\mobile_top_header.html:149
+msgid "Login"
+msgstr ""
+
+#: .\templates\base.html:340
+#, fuzzy
+#| msgid "Company"
+msgid "Companies"
+msgstr "Empresa"
+
+#: .\templates\base.html:347
+#, fuzzy
+#| msgid "Online professional"
+msgid "Professionals"
+msgstr "Formación de Inglés Online"
+
+#: .\templates\base.html:354
+msgid "Exam Candidates"
+msgstr ""
+
+#: .\templates\base.html:365
+msgid "About"
+msgstr ""
+
+#: .\templates\base.html:372
+msgid "Contact"
+msgstr "Contacto"
+
+#: .\templates\base.html:383
+msgid "Privacy Policy"
+msgstr "Política de Privacidad"
+
+#: .\templates\base.html:390
+msgid "Terms & Cons"
+msgstr "Términos y Condiciones"
+
+#: .\templates\base.html:432
+msgid "All rights reserved"
+msgstr "Reservados todos los derechos"
+
+#: .\templates\base.html:436
+msgid "Developed & designed by Edna T.M."
+msgstr "Desarrollado y diseñado por Edna T.M."
+
+#: .\templates\includes\mobile_top_header.html:104
+#: .\templates\includes\mobile_top_header.html:112
+#: .\templates\includes\mobile_top_header.html:120
+#: .\templates\includes\mobile_top_header.html:128
+#, fuzzy
+#| msgid "My Platform"
+msgid "Platform"
+msgstr "Mi Plataforma"
+
+#~ msgid "My Profile"
+#~ msgstr "Mi Perfil"
+
+#~ msgid "My Attendance"
+#~ msgstr "Mi Asistencia"
+
+#~ msgid "Completed Classes"
+#~ msgstr "Clases Completadas"
+
+#~ msgctxt "students list page"
+#~ msgid "Review"
+#~ msgstr "Revisar"
+
+#~ msgid "Next class"
+#~ msgstr "Próxima clase"
+
+#~ msgid "All-day"
+#~ msgstr "Festivo"
+
+#~ msgid "Session"
+#~ msgstr "Sesión"
+
+#~ msgid "Assessment"
+#~ msgstr "Evaluaciones"
+
+#~ msgid "assessed yet"
+#~ msgstr "evaluadas"
+
+#~ msgid "Lessons Missed"
+#~ msgstr "Sin justificar"
+
+#~ msgid "Inactive"
+#~ msgstr "Inactivo"
+
+#~ msgid "Enrolled"
+#~ msgstr "inscrito"
+
+#~ msgid "Learners"
+#~ msgstr "Estudiantes"
+
+#~ msgctxt "employees list"
+#~ msgid "Review"
+#~ msgstr "Revisar"
+
+#~ msgctxt "learner enrollment status"
+#~ msgid "Enrolled"
+#~ msgstr "inscrito"
+
+#~ msgctxt "learner enrollment status"
+#~ msgid "Inactive"
+#~ msgstr "Inactivo"
+
+#~ msgctxt "company attendance summary"
+#~ msgid "active"
+#~ msgstr "activos"
+
+#~ msgctxt "course details page"
+#~ msgid "Delivery"
+#~ msgstr "Desarrollo"
