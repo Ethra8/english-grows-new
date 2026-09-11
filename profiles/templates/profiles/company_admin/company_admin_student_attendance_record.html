@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon">
+                    <div>
                         <img src="{% static 'icons/hours_attended_icon.png' %}" alt="" width="26" aria-hidden="true">
                     </div>
                     <div class="item-text">
@@ -96,7 +96,7 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon">
+                    <div>
                         <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
                     <div class="item-text">
@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon">
+                    <div>
                         <img src="{% static 'icons/previous_classes_teal_icon.png' %}" alt="" width="26" aria-hidden="true">
                     </div>
                     <div class="item-text">
@@ -126,7 +126,7 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon">
+                    <div>
                         <img src="{% static 'icons/classes_completed_icons.png' %}" alt="" width="23" aria-hidden="true">
                     </div>
                     <div class="item-text">
@@ -168,7 +168,11 @@
                 </div>
 
                 <div class="item">
-                    <div class="item-icon"><i class="fa-solid fa-user-minus" aria-hidden="true"></i></div>
+                    <div class="attendance-status">
+                        <span class="status-pill excused">
+                            <img src="{% static 'icons/clipboard_xmark_teal_icon.png' %}" alt="" aria-hidden="true" width="20">
+                        </span>
+                    </div>
                     <div class="item-text">
                         <strong>{% trans 'Excused Absences' %}</strong>
                         <span>{{ enrollment.classes_excused|default:"0" }} / {{ enrollment.total_absences|default:"0" }}

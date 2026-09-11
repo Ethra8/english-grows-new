@@ -662,8 +662,8 @@
 }
 
 .status-pill.excused {
-    background: rgba(var(--color-navy-rgb), 0.68);
-    color: var(--color-attendance-status-missed);
+    background: rgba(var(--color-navy-rgb), 0.18);
+    color: var(--color-attendance-status-excused);
     border: 1px outset var(--color-attendance-status-excused);
 }
 
