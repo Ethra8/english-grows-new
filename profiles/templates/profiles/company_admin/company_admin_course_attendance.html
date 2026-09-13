@@ -30,15 +30,18 @@
 <div class="meta-row">
 
     <div class="meta-card meta-attendance">
-        <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="50">
+        <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="55">
         <div class="meta-text">
             <strong>{% trans 'Attendance Submitted' %}:</strong>
-            <span>{{ submitted_class_sessions_count }} / <small>{{ completed_classes }} {% trans 'past classes' %}</small></span>
+            <span>
+                {{ attendance_submitted_classes }} /
+                <small>{{ total_classes_held }} {% trans 'held classes' %}</small>
+            </span>        
         </div>
     </div>
 
     <div class="meta-card meta-percentage">
-        <img src="{% static 'icons/meta_clipboard_percentage_gradient_icon.png' %}" alt="" aria-hidden="true" width="50">
+        <img src="{% static 'icons/meta_clipboard_percentage_gradient_icon.png' %}" alt="" aria-hidden="true" width="55">
         <div class="meta-text">
             <strong>{% trans 'Attendance Rate' %}:</strong>
             <span>{{ average_attendance }} %</span>
@@ -53,7 +56,7 @@
 
         <div class="attendance-list-card">
             <div class="attendance-list-header-filter">
-                <h3>{% trans 'Filter Attendance' %}</h3>
+                <h3>{% trans 'Filter Records' %}</h3>
 
                 <div class="attendance-tools">
                     <label for="attendanceDateFilter" class="sr-only">{% trans "Filter by date" %}</label>

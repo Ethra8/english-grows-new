@@ -49,7 +49,7 @@
         </div>
 
         <a href="{% url 'profiles:company_admin_courses' %}" aria-label="{% trans 'View all courses' %}">
-            <div class="meta-card meta-course">
+            <div class="meta-card meta-courses">
                 <div>
                     <img src="{% static 'icons/course_turquoise_icon.png' %}" alt="" aria-hidden="true" width="50">
                 </div>
@@ -63,7 +63,7 @@
             </div>
         </a>
 
-        <a href="{% url 'profiles:company_admin_employees_list' %}" aria-label="{% trans 'View all employees' %}">
+        <a href="{% url 'profiles:company_admin_employees_list' %}?sort=name" aria-label="{% trans 'View all employees' %}">
             <div class="meta-card meta-students">
                 <div>
                     <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
@@ -86,42 +86,15 @@
                 </div>
             </div>
         </a>    
-        <!-- <div class="attendance-summary-card">
-            <div class="status-pill completed">
-                <i class="fa-solid fa-calendar-check"></i>
-            </div>
-
-            <div>
-                <span>Past Classes</span>
-                <strong>{{ total_past_classes }}</strong>
-            </div>
-        </div>
-
-        <div class="attendance-summary-card success">
-            <div class="status-pill completed">
-                <i class="fa-solid fa-clipboard-check"></i>
-            </div>
-
-            <div>
-                <span>Attendance Submitted</span>
-                <strong>{{ total_submitted_classes }}</strong>
-            </div>
-        </div> -->
 
     </div>
 
-    {# ============================================================ #}
-    {# SEARCH FILTERS                                                #}
-    {# ============================================================ #}
-
+    <!-- SEARCH FILTERS *****************************-->
     <div class="wrapper-assigned-courses-panel mt-5">
         <div class="assigned-courses-panel">
 
 
-            {# ==================================================== #}
-            {# COURSE ATTENDANCE LIST                                #}
-            {# ==================================================== #}
-
+            <!-- COURSE ATTENDANCE LIST -->
             <div class="attendance-list-card">
 
                 <div class="attendance-list-header-filter">
@@ -182,22 +155,23 @@
                                         autocomplete="off"
                                     >
                                 </div>
+                                
+                                <div class="d-flex direction-row align-items-center mt-2">
+                                    <button type="submit" class="btn-attendance-tools">
+                                        <i class="fa-solid fa-magnifying-glass mr-2"></i>
+                                        {% trans 'Search' context 'admin all course attendance search form' %}
+                                    </button>
 
-                                <button type="submit" class="btn-attendance-tools">
-                                    <i class="fa-solid fa-magnifying-glass mr-2"></i>
-                                    {% trans 'Search' context 'admin all course attendance search form' %}
-                                </button>
-
-                                {% if selected_date or course_search or employee_search %}
-                                    <a
-                                        href="{% url 'profiles:company_admin_all_courses_attendance' %}"
-                                        class="btn-course-details"
-                                    >
-                                        <i class="fa-solid fa-xmark mr-2"></i>
-                                        {% trans 'Clear' context 'admin all course attendance search form' %}
-                                    </a>
-                                {% endif %}
-
+                                    {% if selected_date or course_search or employee_search %}
+                                        <a
+                                            href="{% url 'profiles:company_admin_all_courses_attendance' %}"
+                                            class="btn-course-details ml-3"
+                                        >
+                                            <i class="fa-solid fa-xmark mr-2"></i>
+                                            {% trans 'Clear' context 'admin all course attendance search form' %}
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </form>
                         </div>
 

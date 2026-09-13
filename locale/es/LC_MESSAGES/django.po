@@ -235,6 +235,15 @@ msgstr "Ver todos los empleados"
 msgid "Global Attendance"
 msgstr "Asistencia Global"
 
+msgid "attendance record"
+msgstr "registro de asistencia"
+
+msgid "attendance records"
+msgstr "registros de asistencia"
+
+msgid "registered attendance"
+msgstr "asistencia registrada"
+
 
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:48
@@ -558,6 +567,11 @@ msgctxt "classes list"
 msgid "All"
 msgstr "Todas"
 
+msgid "held classes"
+msgstr "clases impartidas"
+
+
+
 #: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:73
 msgid "No upcoming classes apply to the selected filter"
 msgstr "El filtro no aplica a ninguna próxima clase"
@@ -593,13 +607,13 @@ msgstr "Tasa de Asistencia"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:56
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:63
-msgid "Filter Attendance"
-msgstr "Filtrar Asistencias"
+msgid "Filter Records"
+msgstr "Filtrar Registros"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:59
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:67
 #, fuzzy
-#| msgid "Filter Attendance"
+#| msgid "Filter Records"
 msgid "Filter by date"
 msgstr "Filtrar Asistencias"
 
@@ -610,12 +624,9 @@ msgstr "Filtrar Asistencias"
 msgid "Find employee"
 msgstr "Empleado/a"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:69
-#: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:77
-#, fuzzy
-#| msgid "View employees list"
 msgid "Find employee ..."
-msgstr "Ver lista de empleados"
+msgstr "Empleado/a"
+
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:96
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:56
@@ -785,16 +796,14 @@ msgstr "Total clases"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:200
 msgctxt "course details page"
-msgid "Course Delivery"
-msgstr "Desarrollo del Curso"
+msgid "General Progress"
+msgstr "Progreso del Curso"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:211
 #, fuzzy
-#| msgctxt "course details page"
-#| msgid "delivered"
 msgctxt "course details page"
 msgid "Delivered"
-msgstr "impartido"
+msgstr "Desarrollo general"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:212
 #: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:80
@@ -1275,6 +1284,16 @@ msgstr "clases impartidas"
 msgctxt "course details page attendance"
 msgid "delivered"
 msgstr "impartidas"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:135
+msgctxt "course details page attendance"
+msgid "submitted records"
+msgstr "registros"
+
+#: .\profiles\templates\profiles\company_admin\company_admin_student_detail.html:135
+msgctxt "course details page attendance"
+msgid "submitted"
+msgstr "registradas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_skills_overview.html:38
 #: .\profiles\templates\profiles\student\my_skills.html:35

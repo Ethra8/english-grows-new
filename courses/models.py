@@ -343,7 +343,7 @@ class Course(models.Model):
         - a timetable slot changes
 
         Safety rules:
-        - Completed sessions are NEVER moved.
+        - Held/complete sessions are NEVER moved.
         - pending_reschedule sessions are NEVER moved.
         - rescheduled sessions are NEVER moved.
         - Past sessions are NEVER moved.
@@ -651,7 +651,7 @@ class Course(models.Model):
         IMPORTANT:
         Rescheduling never creates a replacement ClassSession.
         The existing ClassSession is updated and must eventually
-        reach status="completed".
+        reach status="complete_attendance_submitted".
         """
 
         if not self.start_date:
@@ -877,23 +877,56 @@ class Course(models.Model):
         """
         Total number of ClassSession records belonging to this course.
 
-        No sessions are excluded based on cancellation/rescheduling.
-        Every generated session must eventually be completed.
+        No sessions are excluded based on lifecycle status.
         """
         return self.class_sessions.count()
 
 
     @property
-    def completed_sessions(self):
+    def held_attendance_pending_sessions(self):
         """
-        A ClassSession counts as completed ONLY when its own
-        status has explicitly been set to "completed".
-
-        Being in the past does not automatically mean completed.
+        Number of lessons that have been held but whose attendance
+        has not yet been fully submitted.
         """
         return self.class_sessions.filter(
-            status="completed"
+            status=ClassSession.STATUS_HELD_ATTENDANCE_PENDING
         ).count()
+
+
+    @property
+    def complete_attendance_submitted_sessions(self):
+        """
+        Number of lessons that have been held and whose attendance
+        has been fully submitted.
+        """
+        return self.class_sessions.filter(
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        ).count()
+
+
+    @property
+    def total_held_sessions(self):
+        """
+        Total number of lessons that have been held, regardless of
+        whether attendance is pending or already submitted.
+        """
+        return self.class_sessions.filter(
+            status__in=[
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ]
+        ).count()
+
+
+    @property
+    def completed_sessions(self):
+        """
+        Backwards-compatible alias for lessons whose attendance has
+        been fully submitted.
+
+        Prefer complete_attendance_submitted_sessions in new code.
+        """
+        return self.complete_attendance_submitted_sessions
 
 
     @property
@@ -901,42 +934,56 @@ class Course(models.Model):
         """
         ClassSessions that still require teaching.
 
-        Completed and cancelled sessions are not outstanding.
+        Held, complete and cancelled sessions are not outstanding
+        teaching sessions.
         """
-        return self.class_sessions.exclude(
+        return self.class_sessions.filter(
             status__in=[
-                ClassSession.STATUS_COMPLETED,
-                ClassSession.STATUS_CANCELLED,
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_PENDING_RESCHEDULE,
+                ClassSession.STATUS_RESCHEDULED,
             ]
         ).count()
 
 
     @property
-    def completion_percentage(self):
+    def teaching_progress_percentage(self):
         """
-        Percentage of this course's ClassSession records
-        that have reached status="completed".
+        Percentage of this course's ClassSessions that have been held,
+        regardless of whether attendance has already been submitted.
         """
         if self.total_sessions == 0:
             return 0
 
         return round(
             (
-                self.completed_sessions
+                self.total_held_sessions
                 / self.total_sessions
             ) * 100
         )
 
 
+    @property
+    def completion_percentage(self):
+        """
+        Backwards-compatible course teaching progress percentage.
+
+        Prefer teaching_progress_percentage in new code.
+        """
+        return self.teaching_progress_percentage
+
+
     def update_completion_status(self):
         """
-        Mark the Course as completed when EVERY ClassSession
-        belonging to it has status="completed".
+        Mark the Course as completed only when EVERY ClassSession
+        has reached the terminal status:
+
+            complete_attendance_submitted
 
         Active enrollments are also marked completed at the same time.
 
         Returns:
-            True  -> all sessions are completed
+            True  -> all sessions are complete and attendance submitted
             False -> at least one session is still outstanding
         """
 
@@ -944,25 +991,23 @@ class Course(models.Model):
         if not self.class_sessions.exists():
             return False
 
-        # If even ONE session is not completed,
-        # the course must remain unfinished.
         has_unfinished_sessions = (
             self.class_sessions
-            .exclude(status="completed")
+            .exclude(
+                status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            )
             .exists()
         )
 
         if has_unfinished_sessions:
             return False
 
-        # All ClassSessions are completed.
         if self.status != "completed":
             self.status = "completed"
             self.save(
                 update_fields=["status"]
             )
 
-        # Keep enrollment lifecycle consistent with course lifecycle.
         self.enrollments.filter(
             status="active"
         ).update(
@@ -972,6 +1017,17 @@ class Course(models.Model):
         return True
 
     def cancel_future_sessions(self):
+        """
+        Cancel future ClassSessions that have not yet been held.
+
+        Attendance does not have a cancelled learner outcome. Instead,
+        untouched Attendance(status="scheduled") placeholders are deleted
+        because a cancelled lesson will never produce an attendance outcome.
+
+        Genuine attendance history (attended/missed/excused) is never deleted.
+
+        Returns the number of ClassSessions cancelled.
+        """
 
         future_sessions = self.class_sessions.filter(
             start_time__gte=timezone.now(),
@@ -986,17 +1042,20 @@ class Course(models.Model):
             future_sessions.values_list("id", flat=True)
         )
 
-        future_sessions.update(
-            status=ClassSession.STATUS_CANCELLED
-        )
+        if not session_ids:
+            return 0
 
-        Attendance.objects.filter(
-            class_session_id__in=session_ids,
-        ).exclude(
-            status=Attendance.STATUS_CANCELLED
-        ).update(
-            status=Attendance.STATUS_CANCELLED
-        )
+        with transaction.atomic():
+            Attendance.objects.filter(
+                class_session_id__in=session_ids,
+                status=Attendance.STATUS_SCHEDULED,
+            ).delete()
+
+            cancelled_count = future_sessions.update(
+                status=ClassSession.STATUS_CANCELLED
+            )
+
+        return cancelled_count
 
 
 
@@ -1162,13 +1221,15 @@ class CourseEnrollment(models.Model):
     - no new ClassSessions are created
     - Attendance records are created automatically
       for that learner
-    - completed ClassSessions are NOT assigned retroactively
+    - already-held / complete / cancelled ClassSessions are NOT
+      assigned retroactively
     - scheduled / pending_reschedule / rescheduled sessions
       are assigned
 
-    A ClassSession is considered completed ONLY when:
+    A ClassSession has completed its lesson + attendance workflow
+    ONLY when:
 
-        ClassSession.status == "completed"
+        ClassSession.status == "complete_attendance_submitted"
     """
 
     # ---------------------------------------------------------
@@ -1299,10 +1360,8 @@ class CourseEnrollment(models.Model):
 
     def create_future_attendance_records(self):
         """
-        Create missing Attendance records for this learner
-        for every unfinished ClassSession in the course.
-
-        Completed sessions are NOT assigned retroactively.
+        Create missing Attendance records for this learner only for
+        ClassSessions that have not yet been held.
 
         Included:
         - scheduled
@@ -1310,16 +1369,22 @@ class CourseEnrollment(models.Model):
         - rescheduled
 
         Excluded:
-        - completed
+        - held_attendance_pending
+        - complete_attendance_submitted
+        - cancelled
 
-        This supports learners who join after the course
-        has already started.
+        This prevents a learner who joins later from being assigned
+        retroactively to a lesson that has already been held.
         """
 
         eligible_sessions = (
             self.course.class_sessions
-            .exclude(
-                status=ClassSession.STATUS_COMPLETED
+            .filter(
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_PENDING_RESCHEDULE,
+                    ClassSession.STATUS_RESCHEDULED,
+                ]
             )
             .order_by("start_time")
         )
@@ -1396,52 +1461,109 @@ class CourseEnrollment(models.Model):
 
 
     # ---------------------------------------------------------
-    # TOTAL COMPLETED CLASSES
+    # HELD / COMPLETE CLASSES
     # ---------------------------------------------------------
 
     @property
-    def total_completed_classes(self):
+    def held_attendance_pending_classes(self):
         """
-        Number of assigned ClassSessions explicitly marked
-        as completed.
-
-        A session being in the past does NOT automatically
-        count as completed.
+        Assigned lessons that have been held but whose attendance
+        has not yet been fully submitted.
         """
 
         return (
             self.eligible_sessions
             .filter(
-                status=ClassSession.STATUS_COMPLETED
+                status=ClassSession.STATUS_HELD_ATTENDANCE_PENDING
             )
             .count()
         )
 
 
+    @property
+    def complete_attendance_submitted_classes(self):
+        """
+        Assigned lessons that have been held and whose attendance
+        has been fully submitted.
+        """
+
+        return (
+            self.eligible_sessions
+            .filter(
+                status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            )
+            .count()
+        )
+
+
+    @property
+    def total_held_classes(self):
+        """
+        Total assigned lessons that have been held, regardless of
+        whether attendance is pending or already submitted.
+        """
+
+        return (
+            self.eligible_sessions
+            .filter(
+                status__in=[
+                    ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+                ]
+            )
+            .count()
+        )
+
+
+    @property
+    def total_completed_classes(self):
+        """
+        Backwards-compatible alias for assigned lessons whose attendance
+        has been fully submitted.
+
+        Prefer complete_attendance_submitted_classes in new code.
+        """
+
+        return self.complete_attendance_submitted_classes
+
+
     # ---------------------------------------------------------
-    # REMAINING CLASSES
+    # REMAINING / UPCOMING CLASSES
     # ---------------------------------------------------------
 
     @property
-    def upcoming_classes(self):
+    def remaining_classes(self):
         """
-        Number of assigned sessions still unfinished.
+        Number of assigned sessions that still require teaching.
 
-        Despite the property name "upcoming_classes",
-        this includes:
-
+        Included:
         - scheduled
         - pending_reschedule
         - rescheduled
 
-        because all three still need to reach "completed".
+        Held and cancelled lessons are excluded.
         """
 
-        return max(
-            self.total_assigned_classes
-            - self.total_completed_classes,
-            0
+        return (
+            self.eligible_sessions
+            .filter(
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_PENDING_RESCHEDULE,
+                    ClassSession.STATUS_RESCHEDULED,
+                ]
+            )
+            .count()
         )
+
+
+    @property
+    def upcoming_classes(self):
+        """
+        Backwards-compatible alias for remaining_classes.
+        """
+
+        return self.remaining_classes
 
 
     # ---------------------------------------------------------
@@ -1451,7 +1573,7 @@ class CourseEnrollment(models.Model):
     @property
     def classes_attended(self):
         """
-        Completed ClassSessions where this learner
+        ClassSessions with submitted attendance where this learner
         was marked as attended.
         """
 
@@ -1460,7 +1582,9 @@ class CourseEnrollment(models.Model):
             .filter(
                 student=self.student,
                 class_session__course=self.course,
-                class_session__status=ClassSession.STATUS_COMPLETED,
+                class_session__status=(
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                ),
                 status=Attendance.STATUS_ATTENDED,
             )
             .values(
@@ -1478,7 +1602,7 @@ class CourseEnrollment(models.Model):
     @property
     def classes_missed(self):
         """
-        Completed ClassSessions where this learner
+        ClassSessions with submitted attendance where this learner
         was marked as missed.
         """
 
@@ -1487,7 +1611,9 @@ class CourseEnrollment(models.Model):
             .filter(
                 student=self.student,
                 class_session__course=self.course,
-                class_session__status=ClassSession.STATUS_COMPLETED,
+                class_session__status=(
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                ),
                 status=Attendance.STATUS_MISSED,
             )
             .values(
@@ -1505,7 +1631,7 @@ class CourseEnrollment(models.Model):
     @property
     def classes_excused(self):
         """
-        Completed ClassSessions where this learner
+        ClassSessions with submitted attendance where this learner
         was marked as excused.
         """
 
@@ -1514,7 +1640,9 @@ class CourseEnrollment(models.Model):
             .filter(
                 student=self.student,
                 class_session__course=self.course,
-                class_session__status=ClassSession.STATUS_COMPLETED,
+                class_session__status=(
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                ),
                 status=Attendance.STATUS_EXCUSED,
             )
             .values(
@@ -1532,7 +1660,7 @@ class CourseEnrollment(models.Model):
     @property
     def total_absences(self):
         """
-        Total missed + excused completed sessions.
+        Total missed + excused lessons with submitted attendance.
         """
 
         return (
@@ -1548,18 +1676,18 @@ class CourseEnrollment(models.Model):
     @property
     def attendance_percentage(self):
         """
-        Attendance percentage calculated only from completed
-        ClassSessions.
+        Attendance percentage calculated only from lessons whose
+        attendance has been fully submitted.
 
         Example:
 
-        10 completed classes
+        10 complete_attendance_submitted classes
         8 attended
 
         attendance_percentage = 80
         """
 
-        total = self.total_completed_classes
+        total = self.complete_attendance_submitted_classes
 
         if total == 0:
             return 0
@@ -1581,11 +1709,11 @@ class CourseEnrollment(models.Model):
         """
         Returns True when attendance is below 75%.
 
-        No warning is shown until at least one ClassSession
-        has been completed.
+        No warning is shown until at least one ClassSession has
+        submitted attendance.
         """
 
-        if self.total_completed_classes == 0:
+        if self.complete_attendance_submitted_classes == 0:
             return False
 
         return self.attendance_percentage < 75
@@ -1676,7 +1804,9 @@ class ClassSession(models.Model):
 
         scheduled
             ↓
-        completed
+        held_attendance_pending
+            ↓
+        complete_attendance_submitted
 
     RESCHEDULING FLOW:
 
@@ -1686,7 +1816,15 @@ class ClassSession(models.Model):
             ↓
         rescheduled
             ↓
-        completed
+        held_attendance_pending
+            ↓
+        complete_attendance_submitted
+
+    CANCELLATION FLOW:
+
+        scheduled / pending_reschedule / rescheduled
+            ↓
+        cancelled
 
     IMPORTANT:
     A rescheduled lesson remains the SAME ClassSession object.
@@ -1699,9 +1837,24 @@ class ClassSession(models.Model):
 
     are updated.
 
+    Status meaning:
+    - scheduled:
+      lesson is scheduled and has not yet been held
+    - pending_reschedule:
+      lesson will not take place at its current scheduled time
+      and is waiting for a new date/time
+    - rescheduled:
+      lesson has been moved and is waiting for its new occurrence
+    - held_attendance_pending:
+      lesson has been held but attendance has not yet been fully submitted
+    - complete_attendance_submitted:
+      lesson has been held and attendance has been fully submitted
+    - cancelled:
+      lesson will not take place
+
     Every ClassSession belonging to a course must eventually
-    reach status="completed" before the Course itself can be
-    automatically marked as completed.
+    reach status="complete_attendance_submitted" before the Course
+    itself can be automatically marked as completed.
     """
 
     # ---------------------------------------------------------
@@ -1711,14 +1864,16 @@ class ClassSession(models.Model):
     STATUS_SCHEDULED = "scheduled"
     STATUS_PENDING_RESCHEDULE = "pending_reschedule"
     STATUS_RESCHEDULED = "rescheduled"
-    STATUS_COMPLETED = "completed"
+    STATUS_HELD_ATTENDANCE_PENDING = "held_attendance_pending"
+    STATUS_COMPLETE_ATTENDANCE_SUBMITTED = "complete_attendance_submitted"
     STATUS_CANCELLED = "cancelled"
 
     STATUS_CHOICES = [
         (STATUS_SCHEDULED, "Scheduled"),
         (STATUS_PENDING_RESCHEDULE, "Pending reschedule"),
         (STATUS_RESCHEDULED, "Rescheduled"),
-        (STATUS_COMPLETED, "Completed"),
+        (STATUS_HELD_ATTENDANCE_PENDING, "Held — attendance pending"),
+        (STATUS_COMPLETE_ATTENDANCE_SUBMITTED, "Complete — attendance submitted"),
         (STATUS_CANCELLED, "Cancelled"),
     ]
 
@@ -1743,11 +1898,7 @@ class ClassSession(models.Model):
         default="English Class"
     )
 
-    # class_number is now mandatory.
-    #
-    # Already checked that:
-    # - no existing sessions have class_number=None
-    # - no course has duplicate class_numbers
+    # class_number is mandatory.
     #
     # It is the stable identity of a lesson within a course,
     # even when the lesson is rescheduled.
@@ -1846,11 +1997,12 @@ class ClassSession(models.Model):
         1. If the meeting link changes, propagate it to the
            other ClassSessions belonging to the same course.
 
-        2. If this ClassSession changes TO status="completed",
+        2. If this ClassSession changes TO
+           status="complete_attendance_submitted",
            check whether every ClassSession belonging to the
-           Course is now completed.
+           Course has reached that same terminal status.
 
-           If every ClassSession is completed:
+           If every ClassSession is complete:
 
                Course.status -> completed
                active CourseEnrollments -> completed
@@ -1858,11 +2010,6 @@ class ClassSession(models.Model):
 
         old_meeting_link = None
         old_status = None
-
-
-        # -----------------------------------------------------
-        # GET PREVIOUS VALUES BEFORE SAVING
-        # -----------------------------------------------------
 
         if self.pk:
             old_session = ClassSession.objects.get(
@@ -1872,39 +2019,7 @@ class ClassSession(models.Model):
             old_meeting_link = old_session.meeting_link
             old_status = old_session.status
 
-
-        # -----------------------------------------------------
-        # SAVE SESSION
-        # -----------------------------------------------------
-        #
-        # Save first so that the database already contains
-        # the latest:
-        #
-        # - status
-        # - start_time
-        # - end_time
-        # - meeting_link
-        #
-        # before any related logic is executed.
-        # -----------------------------------------------------
-
         super().save(*args, **kwargs)
-
-
-        # -----------------------------------------------------
-        # PROPAGATE MEETING LINK
-        # -----------------------------------------------------
-        #
-        # The meeting link belongs conceptually to the course.
-        #
-        # Therefore, changing it on one ClassSession propagates
-        # the same link to all the other sessions belonging to
-        # the same course.
-        #
-        # QuerySet.update() is deliberate:
-        # it avoids calling ClassSession.save() separately
-        # for every other session.
-        # -----------------------------------------------------
 
         if (
             self.meeting_link
@@ -1916,41 +2031,14 @@ class ClassSession(models.Model):
                 meeting_link=self.meeting_link
             )
 
-
-        # -----------------------------------------------------
-        # CHECK COURSE COMPLETION
-        # -----------------------------------------------------
-        #
-        # Only check the Course when THIS session has just
-        # changed TO "completed".
-        #
-        # This avoids unnecessary Course queries when:
-        #
-        # - topic changes
-        # - meeting link changes
-        # - start_time changes
-        # - end_time changes
-        # - scheduled -> pending_reschedule
-        # - pending_reschedule -> rescheduled
-        #
-        # Course.update_completion_status() then checks ALL
-        # ClassSessions belonging to the Course.
-        #
-        # scheduled             -> unfinished
-        # pending_reschedule    -> unfinished
-        # rescheduled           -> unfinished
-        # completed             -> finished
-        #
-        # The Course completes only when EVERY session is
-        # completed.
-        # -----------------------------------------------------
-
-        became_completed = (
-            self.status == self.STATUS_COMPLETED
-            and old_status != self.STATUS_COMPLETED
+        became_complete = (
+            self.status
+            == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            and old_status
+            != self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
         )
 
-        if became_completed:
+        if became_complete:
             self.course.update_completion_status()
 
 
@@ -1973,28 +2061,112 @@ class ClassSession(models.Model):
     @property
     def is_past(self):
         """
-        Return True when the session's current end time
-        has passed.
+        Return True when the session's current end time has passed.
 
         IMPORTANT:
-
-        is_past is only a date/time helper.
-
-        A past ClassSession is NOT necessarily completed.
-
-        For example:
-
-            end_time in the past
-            status = pending_reschedule
-
-        means the lesson is still outstanding.
-
-        Completion depends exclusively on:
-
-            status == STATUS_COMPLETED
+        is_past is only a date/time helper. A past ClassSession is
+        not necessarily held; pending_reschedule and cancelled sessions
+        can also have past timestamps.
         """
 
-        return self.end_time < timezone.now()
+        return self.end_time <= timezone.now()
+
+
+    @property
+    def is_held(self):
+        """
+        Return True only when the ClassSession lifecycle explicitly
+        records that the lesson has been held.
+        """
+
+        return self.status in {
+            self.STATUS_HELD_ATTENDANCE_PENDING,
+            self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        }
+
+
+    @property
+    def attendance_is_pending(self):
+        """
+        Return True when the lesson has been held but attendance
+        has not yet been fully submitted.
+        """
+
+        return (
+            self.status
+            == self.STATUS_HELD_ATTENDANCE_PENDING
+        )
+
+
+    @property
+    def attendance_is_submitted(self):
+        """
+        Return True when the lesson has been held and attendance
+        has been fully submitted.
+        """
+
+        return (
+            self.status
+            == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        )
+
+
+    def transition_to_held_if_past(self):
+        """
+        Move a finished scheduled/rescheduled lesson into the explicit
+        held_attendance_pending state.
+
+        pending_reschedule and cancelled sessions are deliberately
+        untouched because a past timestamp does not mean they were held.
+
+        Returns:
+            True  -> status changed
+            False -> no transition was required
+        """
+        if self.status not in {
+            self.STATUS_SCHEDULED,
+            self.STATUS_RESCHEDULED,
+        }:
+            return False
+
+        if not self.is_past:
+            return False
+
+        self.status = self.STATUS_HELD_ATTENDANCE_PENDING
+        self.save(update_fields=["status"])
+
+        return True
+
+
+    @classmethod
+    def transition_past_sessions_to_held(cls, course=None):
+        """
+        Bulk-transition finished scheduled/rescheduled ClassSessions
+        to held_attendance_pending.
+
+        If course is provided, only sessions belonging to that course
+        are synchronized. Without a course, all eligible ClassSessions
+        are synchronized.
+
+        QuerySet.update() is deliberate because this transition does
+        not require the side effects in ClassSession.save().
+
+        Returns the number of ClassSessions updated.
+        """
+        sessions = cls.objects.filter(
+            end_time__lte=timezone.now(),
+            status__in=[
+                cls.STATUS_SCHEDULED,
+                cls.STATUS_RESCHEDULED,
+            ],
+        )
+
+        if course is not None:
+            sessions = sessions.filter(course=course)
+
+        return sessions.update(
+            status=cls.STATUS_HELD_ATTENDANCE_PENDING
+        )
 
 
 
@@ -2019,7 +2191,9 @@ class Attendance(models.Model):
 
             scheduled
                 ↓
-            completed
+            held_attendance_pending
+                ↓
+            complete_attendance_submitted
 
         RESCHEDULING FLOW:
 
@@ -2029,7 +2203,9 @@ class Attendance(models.Model):
                 ↓
             rescheduled
                 ↓
-            completed
+            held_attendance_pending
+                ↓
+            complete_attendance_submitted
 
     Attendance controls only the individual LEARNER'S outcome
     for that lesson:
@@ -2044,6 +2220,10 @@ class Attendance(models.Model):
     The existing Attendance record remains attached to the same
     ClassSession and normally remains status="scheduled" until
     the lesson actually takes place.
+
+    If a future ClassSession is cancelled, untouched scheduled
+    Attendance placeholders are deleted because no learner attendance
+    outcome can exist for a lesson that never takes place.
     """
 
     # ---------------------------------------------------------

@@ -1,11 +1,11 @@
+/* =============================================================
+   GENERAL / ACTIONS
+   ============================================================= */
 
-.no-course-assigned {
-    padding: 1rem 2rem 1rem 18rem;
-    width: 100%;
-}
+.no-course-assigned { padding: 1rem 2rem 1rem 18rem; width: 100%; }
 
 .no-course-assigned h2 {
-    color:var(--color-navy);
+    color: var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-size: 1.8rem;
@@ -13,9 +13,6 @@
     padding-left: 0%;
 }
 
-/* *** BUTTONS *********************************************/
-
-/* edit-attendance-btn WRAPPER */
 .edit-attendance {
     width: 100%;
     display: inline-flex;
@@ -23,9 +20,7 @@
     margin-bottom: 1.5rem;
 }
 
-.edit-attendance-btn {
-    margin-bottom: auto;
-}
+.edit-attendance-btn { margin-bottom: auto; }
 
 .take-attendance-save-btn,
 .take-attendance-cancel-btn {
@@ -45,27 +40,13 @@
     background: rgba(var(--color-tropical-teal-rgb), 0.35);
 }
 
-.take-attendance-save-btn:hover {
-    color: var(--color-whitesmoke);
-    background: rgba(var(--color-tropical-teal-rgb), 0.45);
-    text-decoration: none;
-}
+.take-attendance-save-btn:hover { color: var(--color-whitesmoke); background: rgba(var(--color-tropical-teal-rgb), 0.45); text-decoration: none; }
 
-.take-attendance-cancel-btn {
-    color: #fb3636;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    background: rgba(192, 1, 1, 0.35);
-}
+.take-attendance-cancel-btn { color: #fb3636; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(192, 1, 1, 0.35); }
 
-.take-attendance-cancel-btn:hover {
-    color: var(--color-whitesmoke);
-    background: rgba(192, 1, 1, 0.7);
-    text-decoration: none;
-}
+.take-attendance-cancel-btn:hover { color: var(--color-whitesmoke); background: rgba(192, 1, 1, 0.7); text-decoration: none; }
 
-.attendance-radio-pill input:checked + .status-pill {
-    border: 1px solid var(--color-whitesmoke);
-}
+.attendance-radio-pill input:checked + .status-pill { border: 1px solid var(--color-whitesmoke); }
 
 .mark-all-actions {
     display: flex;
@@ -88,44 +69,30 @@
     background: rgba(var(--color-navy-rgb), 0.8);
 }
 
-.mark-all-btn.mark-all-attended-btn {
-    border: 1px outset #4dffb5;
-    color: #4dffb5;
-}
+.mark-all-btn.mark-all-attended-btn { border: 1px outset #4dffb5; color: #4dffb5; }
 
-.mark-all-btn.mark-all-attended-btn:hover {
-    background: rgba(77, 255, 181, 0.38);
-    color: #28835d;
-}
+.mark-all-btn.mark-all-attended-btn:hover { background: rgba(77, 255, 181, 0.38); color: #28835d; }
 
 .mark-all-btn.mark-all-excused-btn {
     border: 1px outset rgba(var(--color-attendance-status-pending-rgb), 0.8);
     color: var(--color-attendance-status-pending);
 }
 
-.mark-all-btn.mark-all-excused-btn:hover {
-    background-color: rgba(255, 179, 71, 0.38);;
-    color: #c47d00;
-}
+.mark-all-btn.mark-all-excused-btn:hover { background-color: rgba(255, 179, 71, 0.38); color: #c47d00; }
 
 .mark-all-btn.mark-all-missed-btn {
     border: 1px outset rgba(var(--color-attendance-status-missed-rgb), 0.8);
     color: var(--color-attendance-status-missed);
 }
 
-.mark-all-btn.mark-all-missed-btn:hover {
-    background-color: rgba(252, 26, 1, 0.38);
-    color: rgba(252, 26, 1, 0.38);
-}
-/* ******************************************************* */
+.mark-all-btn.mark-all-missed-btn:hover { background-color: rgba(252, 26, 1, 0.38); color: rgba(252, 26, 1, 0.38); }
 
 
-/* LEANER ATTENDANCE SubPages (Inside Performance/Progress) ***************************************/
+/* =============================================================
+   LEARNER ATTENDANCE / PROGRESS
+   ============================================================= */
 
-/*** ATTENDANCE RATE card *****************************************/
-.wrapper-attendance-progress-card {
-    margin: 2.5rem auto;
-}
+.wrapper-attendance-progress-card { margin: 2.5rem auto; }
 
 .attendance-progress-card {
     position: relative;
@@ -204,7 +171,7 @@
 }
 
 .attendance-percentage-card p {
-    font-family: "Big Shoulders Display", sans-serif;    
+    font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     color: var(--color-navy);
     font-size: 2rem;
@@ -218,28 +185,22 @@
     align-content: center;
 }
 
-/**** Attendance Progress bar ***/
 .attendance-progress {
     width: 100%;
     height: 25px;
     appearance: none;
     -webkit-appearance: none;
     border-radius: 50px;
-    box-shadow:
-        0 2px 2px rgba(0,107,125,.25),
+    box-shadow: 0 2px 2px rgba(0,107,125,.25),
         inset 0 2px rgba(var(--color-frozen-water-rgb),.75);
 }
 
-.attendance-progress::-webkit-progress-bar {
-    background-color: rgba(0, 59, 111, 0.15);
-    border-radius: 999px;
-}
+.attendance-progress::-webkit-progress-bar { background-color: rgba(0, 59, 111, 0.15); border-radius: 999px; }
 
 .attendance-progress::-webkit-progress-value {
     background: linear-gradient(233deg,rgba(var(--color-pearlaqua-rgb), 1) 0%, rgba(40, 169, 158, 1) 50%, rgba(var(--color-teal-rgb), 1) 100%);
     border-radius: 999px;
-    box-shadow:
-        0 2px 2px rgba(0,107,125,.25),
+    box-shadow: 0 2px 2px rgba(0,107,125,.25),
         inset 0 2px rgba(var(--color-frozen-water-rgb),.75);
 }
 
@@ -258,13 +219,13 @@
     width: 100%;
 }
 
-.attendance-warning img {
-    margin-right: 1rem;
-}
-/* END ATTENDANCE RATE card ****************************************/
+.attendance-warning img { margin-right: 1rem; }
 
 
-/*** Detailed Attendance ********************************************/
+/* =============================================================
+   LEARNER ATTENDANCE / DETAIL CARDS
+   ============================================================= */
+
 .attendance-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -273,7 +234,6 @@
     align-items: stretch;
 }
 
-/* ** CARDS ATTENDANCE / ABSENCE DETAILS ************************** */
 .detailed-attendance-card {
     position: relative;
     overflow: hidden;
@@ -289,9 +249,7 @@
     z-index: 2;
 }
 
-.detailed-attendance-card .status-pill {
-    padding: 0.3rem 0.5rem;
-}
+.detailed-attendance-card .status-pill { padding: 0.3rem 0.5rem; }
 
 .detailed-attendance-card .circle-panel1 {
     position: absolute;
@@ -306,7 +264,7 @@
 }
 
 .detailed-attendance-card h2 {
-    font-family: "Big Shoulders Display", sans-serif;    
+    font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     color: var(--color-whitesmoke);
     font-size: 1.8rem;
@@ -356,32 +314,20 @@
     color: var(--color-teal);
 }
 
-.detailed-attendance-card .item-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.25;
-}
+.detailed-attendance-card .item-text { display: flex; flex-direction: column; line-height: 1.25; }
 
-.detailed-attendance-card .item-text > strong:first-of-type {
-    color: var(--color-navy);
-    font-weight: 550;
-}
+.detailed-attendance-card .item-text > strong:first-of-type { color: var(--color-navy); font-weight: 550; }
 
-.detailed-attendance-card .item-text strong {
-    color: var(--color-steel);
-    font-weight: 550;
-}
+.detailed-attendance-card .item-text strong { color: var(--color-steel); font-weight: 550; }
 
-.detailed-attendance-card .item-text span {
-    color: var(--color-steel);
-}
-/* END CARDS ATTENDANCE / ABSENCE DETAILS ************************** */
+.detailed-attendance-card .item-text span { color: var(--color-steel); }
 
 
-/* ******* ACCORDION: Absence Records ********************* */
-.wrapper-attendance-accordion {
-    width: 100%;
-}
+/* =============================================================
+   ABSENCE RECORDS / ACCORDION
+   ============================================================= */
+
+.wrapper-attendance-accordion { width: 100%; }
 
 #parentAbsenceHeading {
     background-color: rgba(var(--color-steel-rgb), 0.1);
@@ -389,18 +335,11 @@
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-#parentAbsenceHeading:hover {
-    background-color: rgba(var(--color-steel-rgb), 0.3);
-}
+#parentAbsenceHeading:hover { background-color: rgba(var(--color-steel-rgb), 0.3); }
 
-#parentAbsenceHeading a {
-    color: var(--color-navy);
-    font-weight: 500;
-}    
+#parentAbsenceHeading a { color: var(--color-navy); font-weight: 500; }
 
-#parentAbsenceHeading a:hover {
-    color: var(--color-teal);
-}
+#parentAbsenceHeading a:hover { color: var(--color-teal); }
 
 #parentAbsenceHeading img {
     position: relative;
@@ -422,11 +361,10 @@
     text-align: left;
 }
 
-#absence_accordion  {
+#absence_accordion {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-
     height: 100%;
     max-height: 100%;
     border-radius: 8px;
@@ -435,50 +373,29 @@
     padding: 0.5rem .75rem;
 }
 
-#parentAbsenceCollapse .card-body {
-    padding: 1.25rem 0;
-    border-radius: 8px;
-}
+#parentAbsenceCollapse .card-body { padding: 1.25rem 0; border-radius: 8px; }
 
-#parentAbsenceCollapse .card-body p {
-    line-height: 1.4;
-    margin: 0%;
-    color: var(--color-navy);
-}
+#parentAbsenceCollapse .card-body p { line-height: 1.4; margin: 0%; color: var(--color-navy); }
 
 .recent-attendance-row {
     display: grid;
-    grid-template-columns: minmax(120px, 120px) minmax(120px, 1.5fr) minmax(120px, 0.75fr);    
+    grid-template-columns: minmax(120px, 120px) minmax(120px, 1.5fr) minmax(120px, 0.75fr);
     padding: 0.75rem;
     border-bottom: 1px solid rgba(var(--color-steel-rgb), 0.2);
 }
 
-.attendance-history-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+.attendance-history-item { display: flex; align-items: center; gap: 1rem; }
 
 
-/**** COMPANY ADMIN FILTER ATTENDANCE Page ************************************ */
-#attendanceDateFilter {
-    color-scheme: dark;
-    cursor: pointer;
-    font-family: "Montserrat", Arial, Helvetica, sans-serif;
-}
+/* =============================================================
+   ATTENDANCE FILTERS / LISTS
+   ============================================================= */
 
-/* #attendanceDateFilter::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    opacity: .9;
-    cursor: pointer;
-} */
+#attendanceDateFilter { cursor: pointer; font-family: "Montserrat", Arial, Helvetica, sans-serif; }
 
-/* ATTENDANCE LIST ***************************************************************/
-/* Main list card */
 .attendance-list-card {
     min-height: fit-content;
-    /* background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.65), rgba(var(--color-teal-rgb), 0.82)); */
-    background: var(--color-whitesmoke);    
+    background: var(--color-whitesmoke);
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
     padding: .6rem 4.6px 4.6px;
@@ -489,63 +406,69 @@
     display: inline-flex;
     justify-content: flex-start;
     align-items: center;
+    align-content: center;
     gap: 2.8rem;
-    /* color: var(--color-whitesmoke); */
     margin: 0 0 0.75rem;
     padding: 1.2rem 1.2rem 2.5rem;
-    font-size: 1.8rem;
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
-    font-weight: 500;
     border-bottom: 3px solid rgba(var(--color-teal-rgb), 0.15);
     min-width: 0;
     width: 100%;
 }
 
 .attendance-list-header-filter h3 {
+    position: relative;
+    overflow: hidden;
     border-radius: 999px;
     color: var(--color-whitesmoke);
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
     font-weight: 500;
     background: linear-gradient(76deg, rgba(var(--color-navy-rgb), 0.85), rgba(var(--color-teal-rgb), 0.55));
     display: block;
     width: 100%;
-    min-width: 0;
+    min-width: 280px;
     max-width: 580px;
-    padding: .45rem 1.2rem;
+    padding: .45rem 1.2rem 0.45rem 4rem;
+}
+
+.attendance-list-header-filter h3::after {
+    content: "";
+    position: absolute;
+    top: 55%;
+    left: 2%;
+    width: 55px;
+    height: 55px;
+    transform: translateY(-50%) rotate(-12deg);
+    background-image: url(/static/icons/meta_filter_magnifying_glass_icon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.15;
 }
 
 .attendance-tools {
     display: flex;
     gap: 1rem;
+    align-items: center;
+    align-content: center;
 }
 
 .attendance-tools input {
     height: 42px;
-    /* background: rgba(0, 30, 60, 0.7); */
     background: rgba(var(--color-teal-rgb), 0.08);
     border: none;
-    /* border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45); */
     color: var(--color-slate);
     border-radius: 8px;
     padding: 0.8rem 1rem;
     font-size: 1rem;
-    width: 170px;
+    min-width: 185px;
 }
 
-/* Calendar in DATE INPUT ***************/
+.attendance-date-input { position: relative; }
 
-.attendance-date-input {
-    position: relative;
-}
-
-.attendance-date-input input {
-    width: 100%;
-    padding-right: 2.75rem;
-}
+.attendance-date-input input { width: 100%; padding-right: 2.75rem; }
 
 .attendance-date-picker-btn {
     position: absolute;
@@ -561,28 +484,13 @@
     cursor: pointer;
 }
 
-.attendance-date-picker-btn img {
-    width: 1.1rem;
-    height: 1.1rem;
-}
+.attendance-date-picker-btn img { width: 1.1rem; height: 1.1rem; }
 
-.attendance-date-input input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-}
-/* END Calendar in DATE INPUT ***********/
+.attendance-date-input input[type="date"]::-webkit-calendar-picker-indicator { display: none; -webkit-appearance: none; }
 
-.attendance-tools input::placeholder {
-    color: var(--color-slate);
-    font-size: 1rem;
-    font-weight: 500;
-}
+.attendance-tools input::placeholder { color: var(--color-slate); font-size: 1rem; font-weight: 500; }
 
-.attendance-tools input:focus {
-    outline: none;
-    border-color: var(--color-pearlaqua);
-    box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12);
-}
+.attendance-tools input:focus { outline: none; border-color: var(--color-pearlaqua); box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12); }
 
 .teacher-attendance-page .attendance-class-info strong {
     display: block;
@@ -591,9 +499,7 @@
     font-weight: 500;
 }
 
-.teacher-attendance-page .level {
-    width: 52px;
-}
+.teacher-attendance-page .level { width: 52px; }
 
 .attendance-time,
 .attendance-students {
@@ -601,12 +507,6 @@
     align-items: center;
     gap: 0.7rem;
 }
-
-/* .attendance-time i, */
-/* .attendance-students i {
-    color: var(--color-pearlaqua);
-    font-size: 1.1rem;
-} */
 
 .attendance-time strong,
 .attendance-students strong {
@@ -621,9 +521,7 @@
     font-size: 0.9rem;
 }
 
-.attendance-time span i {
-    font-size: 1.1rem;
-}
+.attendance-time span i { font-size: 1.1rem; }
 
 .attendance-time div,
 .attendance-students div {
@@ -632,18 +530,19 @@
 }
 
 
-/* ** ATTENDANCE STATUS PILL *************************** */
+/* =============================================================
+   ATTENDANCE STATUS
+   ============================================================= */
+
 .status-pill {
     width: max-content;
-    padding: 0.3rem 0.4rem 0.3rem 0.6rem;    
+    padding: 0.3rem 0.4rem 0.3rem 0.6rem;
     border-radius: 999px;
     font-size: 1rem;
     font-weight: 500;
 }
 
-.attendance-detail-row .status-pill {
-    padding: 0.4rem 0.5rem;
-}
+.attendance-detail-row .status-pill { padding: 0.4rem 0.5rem; }
 
 .attendance-status {
     display: flex;
@@ -664,7 +563,7 @@
 .status-pill.excused {
     background: rgba(var(--color-navy-rgb), 0.18);
     color: var(--color-attendance-status-excused);
-    border: 1px solid var(--color-attendance-status-excused);
+    border: 1px solid rgba(var(--color-navy-rgb), 0.18);
 }
 
 .status-pill.completed,
@@ -680,18 +579,9 @@
     border: 1px solid var(--color-attendance-status-missed);
 }
 
-.status-pill.pending {
-    background: rgba(var(--color-navy-rgb), 0.68);
-    color: var(--color-attendance-status-pending);
-    border: 1px solid #75736f;
-}
+.status-pill.pending { background: rgba(var(--color-navy-rgb), 0.68); color: var(--color-attendance-status-pending); border: 1px solid #75736f; }
 
-/* ******************************************************* */
-
-.recent-attendance-row span {
-    color: rgba(var(--color-teal-rgb, 0.7), 0.7);
-    font-weight: 500;
-}
+.recent-attendance-row span { color: rgba(var(--color-teal-rgb, 0.7), 0.7); font-weight: 500; }
 
 .recent-attendance-row small {
     color: rgba(var(--color-steel-rgb), 0.95);
@@ -700,13 +590,8 @@
     margin-left: 1rem;
 }
 
-.recent-attendance-row .absence-status {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-}
+.recent-attendance-row .absence-status { display: inline-flex; align-items: center; justify-content: flex-start; }
 
-/* COURSE STATUS Text & DOT in ROW */
 .absence-status {
     display: flex;
     align-items: center;
@@ -714,7 +599,7 @@
     font-size: 1rem;
     font-weight: 500;
     color: var(--color-steel);
-    height: 70%;    
+    height: 70%;
     justify-content: center;
 }
 
@@ -725,20 +610,17 @@
     flex-shrink: 0;
 }
 
-.status-dot.attended {
-    background: var(--color-course-status-confirmed);
-}
+.status-dot.attended { background: var(--color-course-status-confirmed); }
 
-.status-dot.excused {
-    background: var(--color-course-status-completed);
-}
+.status-dot.excused { background: var(--color-course-status-completed); }
 
-.status-dot.missed {
-    background: var(--color-course-status-cancelled);
-}
+.status-dot.missed { background: var(--color-course-status-cancelled); }
 
 
-/* Attendance Page: Sessions list (Pending/Completed) */
+/* =============================================================
+   ATTENDANCE ROWS
+   ============================================================= */
+
 .attendance-list {
     display: block;
     width: 100%;
@@ -746,15 +628,12 @@
     min-width: 0;
     border-radius: 8px;
     box-sizing: border-box;
-
     overflow-x: scroll !important;
     max-height: 480px;
     overflow-y: scroll;
-
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable;
     scrollbar-width: auto;
-    /* scrollbar-color: rgba(var(--color-pearlaqua-rgb), 0.3) rgba(var(--color-teal-rgb), 0.7); */
     scrollbar-color: rgba(var(--color-slate-rgb), 0.3) rgba(var(--color-steel-rgb), 0.05);
 }
 
@@ -769,44 +648,34 @@
     background-color: var(--color-whitesmoke);
 }
 
-.attendance-row:hover {
-    background-color: rgba(var(--color-teal-rgb), 0.15) !important;
-}
+.attendance-row:hover { background-color: rgba(var(--color-teal-rgb), 0.15) !important; }
 
-.attendance-row img:first-of-type {
-    opacity: 0.8;
-}
+.attendance-row img:first-of-type { opacity: 0.8; }
 
-.attendance-row.course-hidden {
-    display: none;
-}
+.attendance-row.course-hidden { display: none; }
 
 .wrapper-attendance-details,
 .wrapper-absence-details {
-    /* override col default */
     padding-left: 0;
     padding-right: 0;
-    /* prevent cards from shrinking unequaly */
     width: 100%;
     min-width: 0;
     height: 100%;
 }
 
-/* When the accordion opens, cards stop stretching together */
-.attendance-cards-grid.absence-expanded {
-    align-items: start;
-}
+.attendance-cards-grid.absence-expanded { align-items: start; }
 
-/* Absence card is allowed to grow naturally */
 .attendance-cards-grid.absence-expanded
 .wrapper-absence-details
 .detailed-attendance-card {
     height: auto;
 }
 
-/* ** ALL ATTENDANCE PAGES *************************************|
-|***** & STUDENT DETAILS page ***********************************|
-|****  : Summary BUTTONS Wrapper & Cards*************************/
+
+/* =============================================================
+   SHARED ATTENDANCE INFO / SUMMARY
+   ============================================================= */
+
 .wrapper-attendance-course-info {
     border-radius: 8px;
     background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
@@ -837,10 +706,7 @@
     color: var(--color-teal);
 }
 
-
-.wrapper-attendance-course-info i {
-    font-size: 1.2rem;
-}
+.wrapper-attendance-course-info i { font-size: 1.2rem; }
 
 .wrapper-attendance-course-info > div:last-child {
     background-color: rgba(var(--color-whitesmoke-rgb), 1);
@@ -848,7 +714,6 @@
     border-radius: 8px;
 }
 
-/* Wrapper of attendace-summary-cards */
 .wrapper-attendance-summary-card {
     display: flex;
     gap: 0.2rem;
@@ -867,8 +732,6 @@
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
 }
 
-
-/* Attendance Summary cards : GENERAL */
 .attendance-summary-card {
     display: flex;
     min-height: 58px;
@@ -888,9 +751,7 @@
     align-self: center;
 }
 
-.attendance-summary-card i {
-    font-size: 1rem;
-}
+.attendance-summary-card i { font-size: 1rem; }
 
 .attendance-summary-card strong {
     order: 2;
@@ -912,19 +773,9 @@
     color: var(--color-slate);
 }
 
-/* Attendance Detail page : SUMMARY CARDS */
-.wrapper-attendance-summary-card {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 1.5rem auto;
-}
+.wrapper-attendance-summary-card { display: grid; grid-template-columns: repeat(3, 1fr); margin: 1.5rem auto; }
 
-/* Take Attendance page: SUMMARY CARDS *****/
-.take-attendance-page .wrapper-attendance-summary-card {
-    gap: 0.1rem;
-    padding: 0 !important;
-    width: 100%;
-}
+.take-attendance-page .wrapper-attendance-summary-card { gap: 0.1rem; padding: 0 !important; width: 100%; }
 
 .take-attendance-page .attendance-summary-card {
     background: transparent;
@@ -933,11 +784,14 @@
     align-items: center;
 }
 
-/* *** TAKE ATTENDANCE Page ************************/
-/* Empty messages */
+
+/* =============================================================
+   TAKE ATTENDANCE / ATTENDANCE DETAIL
+   ============================================================= */
+
 .attendance-empty-message {
     text-align: left;
-    padding : 1.5rem;
+    padding: 1.5rem;
     font-size: 1rem;
     color: var(--color-slate);
 }
@@ -960,16 +814,10 @@
     margin: 0;
 }
 
-.take-attendance-form .take-attendance-card-header {
-    margin-bottom: 1.5rem;
-}
+.take-attendance-form .take-attendance-card-header { margin-bottom: 1.5rem; }
 
-.attendance-detail-card-header {
-    position:relative;
-    overflow: hidden !important;
-}
+.attendance-detail-card-header { position: relative; overflow: hidden !important; }
 
-/* takes main styling from learners_list.css */
 .attendance-detail-card h3 {
     position: relative;
     margin-bottom: 1.5rem;
@@ -995,15 +843,9 @@
     z-index: -1;
 }
 
-/* TAKE ATTENDANCE FORM ************************************** */
-.take-attendance-form .take-attendance-card-header p {
-    margin: 0;
-    color: var(--color-steel);
-}
+.take-attendance-form .take-attendance-card-header p { margin: 0; color: var(--color-steel); }
 
-.take-attendance-form .take-attendance-card-header span {
-    display: block;
-}
+.take-attendance-form .take-attendance-card-header span { display: block; }
 
 .attendance-detail-list,
 .take-attendance-list {
@@ -1026,7 +868,6 @@
     padding: 1rem 0;
     border-bottom: 1px solid rgba(var(--color-steel-rgb), 0.2);
     border-top: 1px solid rgba(var(--color-steel-rgb), 0.2);
-
 }
 
 .attendance-detail-row .student-main-info,
@@ -1045,11 +886,7 @@
     overflow: hidden;
 }
 
-.student-name {
-    flex: 1 1 0;
-    min-width: 0;
-    overflow: hidden;
-}
+.student-name { flex: 1 1 0; min-width: 0; overflow: hidden; }
 
 .attendance-detail-row  .student-main-info .student-name,
 .take-attendance-row .student-main-info .student-name {
@@ -1059,7 +896,6 @@
     align-content: center;
 }
 
-/* student full name/ Username */
 .student-name strong,
 .student-name strong a {
     margin: 0;
@@ -1070,7 +906,6 @@
     font-weight: 600;
 }
 
-/* student email */
 .attendance-detail-row  .student-main-info .student-name span,
 .take-attendance-row .student-main-info .student-name span {
     text-decoration: none;
@@ -1124,14 +959,9 @@
     background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.05), rgba(var(--color-teal-rgb), 0.12));
 }
 
-.attendance-radio-pill {
-    margin: 0;
-    cursor: pointer;
-}
+.attendance-radio-pill { margin: 0; cursor: pointer; }
 
-.attendance-radio-pill input {
-    display: none;
-}
+.attendance-radio-pill input { display: none; }
 
 .attendance-radio-pill span {
     display: flex;
@@ -1148,47 +978,23 @@
     transition: all 0.2s ease;
 }
 
-.attendance-radio-pill.attended input:checked + span {
-    background: rgba(77, 255, 181, 0.18);
-    border-color: #4dffb5;
-    color: #4dffb5;
-}
+.attendance-radio-pill.attended input:checked + span { background: rgba(77, 255, 181, 0.18); border-color: #4dffb5; color: #4dffb5; }
 
-.attendance-radio-pill.missed input:checked + span {
-    background: rgba(255, 90, 90, 0.16);
-    border-color: #ff5a5a;
-    color: #ff5a5a;
-}
+.attendance-radio-pill.missed input:checked + span { background: rgba(255, 90, 90, 0.16); border-color: #ff5a5a; color: #ff5a5a; }
 
-.attendance-radio-pill.excused input:checked + span {
-    background: rgba(255, 179, 71, 0.18);
-    border-color: #ffb347;
-    color: #ffb347;
-}
+.attendance-radio-pill.excused input:checked + span { background: rgba(255, 179, 71, 0.18); border-color: #ffb347; color: #ffb347; }
 
-.attendance-radio-pill span:hover {
-    border-color: var(--color-pearlaqua);
-}
+.attendance-radio-pill span:hover { border-color: var(--color-pearlaqua); }
 
-.attendance-summary-card.success {
-    background: rgba(35, 201, 154, 0.3);
-}
+.attendance-summary-card.success { background: rgba(35, 201, 154, 0.3); }
 
-.attendance-summary-card.missed {
-    background: rgba(255, 90, 90, 0.3);
-}
+.attendance-summary-card.missed { background: rgba(255, 90, 90, 0.3); }
 
-.attendance-summary-card.pending {
-    background: rgba(255, 179, 71, 0.3);
-}
+.attendance-summary-card.pending { background: rgba(255, 179, 71, 0.3); }
 
-.attendance-summary-card.missed i {
-    color: #fa9a9a
-}
+.attendance-summary-card.missed i { color: #fa9a9a; }
 
-.attendance-summary-card.pending i {
-    color: #ffda87;
-}
+.attendance-summary-card.pending i { color: #ffda87; }
 
 .take-attendance-save-bar {
     position: sticky;
@@ -1208,34 +1014,21 @@
 .take-attendance-save-bar .take-attendance-cancel-btn {
     min-width: 120px;
     text-transform: uppercase;
-    color: var(--color-whitesmoke)
-}
-
-
-/* ********************************************************************************************************************************************* */
-/************************************************|
-**** COURSE_ATTENDANCE Page ******************|
-*********************************************** */
-
-.course-attendance .meta-row {
-    display: flex;
-    /* grid-template-columns: repeat(2, 1fr); */
-    margin-top: 3.5rem;
-}
-
-.course-attendance .meta-card {
-    width: 380px;
-}
-
-.course-attendance .wrapper-assigned-courses-panel h2 {
     color: var(--color-whitesmoke);
 }
 
-.course-attendance .attendance-list {
-    background: var(--color-whitesmoke);
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-}
+
+/* =============================================================
+   COURSE ATTENDANCE
+   ============================================================= */
+
+.course-attendance .meta-row { display: flex; margin-top: 3.5rem; }
+
+.course-attendance .meta-card { width: 380px; }
+
+.course-attendance .wrapper-assigned-courses-panel h2 { color: var(--color-whitesmoke); }
+
+.course-attendance .attendance-list { background: var(--color-whitesmoke); border-radius: 8px; padding: 0.5rem 0.75rem; }
 
 .course-attendance .attendance-row {
     display: grid;
@@ -1243,7 +1036,6 @@
     align-items: center;
     align-content: space-around;
     gap: 0.5rem;
-    /* padding: 0.75rem 1.25rem; */
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
     min-width: 930px;
     max-width: none;
@@ -1251,11 +1043,7 @@
     padding: 0.5rem;
 }
 
-.course-attendance .attendance-row:hover {
-    cursor: pointer;
-    background: rgba(var(--color-pearlaqua-rgb), 0.08) !important;
-    border-radius: 8px;
-}
+.course-attendance .attendance-row:hover { cursor: pointer; background: rgba(var(--color-pearlaqua-rgb), 0.08) !important; border-radius: 8px; }
 
 .attendance-session-arrow {
     display: block;
@@ -1268,8 +1056,7 @@
     opacity: 0;
     transform: translateX(-5px);
     pointer-events: none;
-    transition:
-        max-width 0.18s ease,
+    transition: max-width 0.18s ease,
         margin-left 0.18s ease,
         opacity 0.18s ease,
         transform 0.18s ease;
@@ -1294,8 +1081,6 @@
     gap: 0.5rem;
 }
 
-
-/* DATES in ROW */
 .class-list-date,
 .class-list-attendance-rate,
 .class-list-student-num {
@@ -1310,23 +1095,6 @@
     padding-left: 3rem;
 }
 
-/* .class-list-date .icon,
-.class-list-attendance-rate .icon,
-.class-list-student-num .icon {
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--color-teal);
-    background: transparent;
-    border-radius: 999px;
-    text-align: center !important;
-} */
-
-/* .class-list-date i,
-.class-list-student-num i,
-.class-list-attendance-rate i {
-    color: var(--color-teal);
-} */
-
 .class-list-date strong,
 .class-list-attendance-rate strong,
 .class-list-student-num strong {
@@ -1336,7 +1104,6 @@
     font-weight: 550;
 }
 
-/* Keep span elements in separate lines */
 .class-list-date span,
 .class-list-attendance-rate span,
 .class-list-student-num span {
@@ -1344,16 +1111,9 @@
     color: var(--color-slate);
 }
 
-.class-list-attendance-students strong {
-    color: var(--color-teal);
-    font-size: 0.95rem;
-    font-weight: 700;
-}
+.class-list-attendance-students strong { color: var(--color-teal); font-size: 0.95rem; font-weight: 700; }
 
-.class-list-attendance-students span {
-    color: #96a0a1;
-    font-size: 0.9rem;
-}
+.class-list-attendance-students span { color: #96a0a1; font-size: 0.9rem; }
 
 .course-attendance .attendance-class-info strong {
     margin: 0 0 0.25rem;
@@ -1362,15 +1122,9 @@
     font-weight: 550;
 }
 
-.course-attendance .attendance-action {
-    display: inline-flex;
-    justify-content:flex-end;
-}
+.course-attendance .attendance-action { display: inline-flex; justify-content: flex-end; }
 
-.course-attendance .attendance-action img {
-    width: 28px;
-    margin-left: .5rem;
-}
+.course-attendance .attendance-action img { width: 28px; margin-left: .5rem; }
 
 .course-attendance .attendance-action .btn-attendance-details {
     border: 1px solid var(--color-teal);
@@ -1390,8 +1144,7 @@
     align-self: center;
     cursor: pointer;
     box-shadow: 1px 3px 5px rgba(0, 20, 40, 0.25);
-    transition:
-        transform 0.2s ease,
+    transition: transform 0.2s ease,
         background 0.2s ease,
         border-color 0.2s ease,
         box-shadow 0.2s ease;
@@ -1402,49 +1155,35 @@
     transform: translateY(-1px);
     background: linear-gradient(135deg, #00acaf, #008589);
     box-shadow: 0 1px 5px rgba(0, 122, 125, 0.24);
-
 }
 
 
-
-/* ********************************************************************************************************************************************* */
+/* =============================================================
+   SHARED LIST PANEL / STUDENT AVATAR
+   ============================================================= */
 
 .wrapper-attendance-list-panel {
     border-radius: 8px;
     padding: 4px;
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-        background: rgba(var(--color-steel-rgb), 0.15);
+    background: rgba(var(--color-steel-rgb), 0.15);
 }
 
-.wrapper-attendance-list-panel h2 {
-    color: var(--color-whitesmoke);
-}
+.wrapper-attendance-list-panel h2 { color: var(--color-whitesmoke); }
 
 .attendance-list-panel {
     width: 100%;
-    /* background: rgba(var(--color-navy-rgb), 0.9); */
     border: 1px solid rgba(80, 230, 220, 0.85);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 20, 40, 0.02);
 }
 
-.attendance-tools input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    opacity: 0.8;
-    cursor: pointer;
-}
+.attendance-tools input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
 
-.attendance-tools input::placeholder {
-    font-family: "Montserrat", Arial, Helvetica, sans-serif;
-    color: var(--color-slate);
-}
+.attendance-tools input::placeholder { font-family: "Montserrat", Arial, Helvetica, sans-serif; color: var(--color-slate); }
 
-.attendance-tools input:focus {
-    outline: none;
-    border-color: var(--color-pearlaqua);
-    box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12);
-}
+.attendance-tools input:focus { outline: none; border-color: var(--color-pearlaqua); box-shadow: 0 0 0 3px rgba(var(--color-pearlaqua-rgb), 0.12); }
 
 .student-avatar {
     width: 46px;
@@ -1466,60 +1205,47 @@
     object-fit: cover;
 }
 
-.teacher-attendance-page .attendance-list .attendance-row > div:first-of-type {
-    flex-direction: column;
-    align-items: flex-start;
-}
+.teacher-attendance-page .attendance-list .attendance-row > div:first-of-type { flex-direction: column; align-items: flex-start; }
 
-.attendance-list .attendance-row > div:first-of-type span {
-    color: var(--color-steel);
-}
+.attendance-list .attendance-row > div:first-of-type span { color: var(--color-steel); }
 
-.attendance-row:last-child {
-    border-bottom: none;
-}
+.attendance-row:last-child { border-bottom: none; }
 
-.attendance-row.course-hidden {
-    display: none;
-}
+.attendance-row.course-hidden { display: none; }
 
 
-/*********************************************************************************** */
-/*** MEDIA QUERIES ***************************************************************** */
-/*********************************************************************************** */
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
 
 @media (max-width: 1399.98px) {
-    /* Scrollable container */
     #absence_accordion {
         width: 100%;
         max-width: 100%;
         min-width: 0;
-
         overflow-x: auto;
         overflow-y: hidden;
-
         -webkit-overflow-scrolling: touch;
     }
 
-    #absence_accordion .recent-attendance-row {
-        min-width: 500px;
-    }
+    #absence_accordion .recent-attendance-row { min-width: 500px; }
 
-    .attendance-list-header-filter {
-        justify-content: space-between;
-    }
-
+    .attendance-list-header-filter { justify-content: space-between; }
 }
 
-@media (max-width: 1199.98px) {
+@media (max-width: 1129.98px) {
+    .attendance-list-header-filter { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
 
+    .attendance-list-header-filter h3 { min-width: 100%; }
+
+    .attendance-tools { width: 100%; margin-left: 0; }
+
+    .attendance-tools input { width: 100%; }
+
+    .attendance-date-input { width: 100%; }
 }
-
-
 
 @media (max-width: 991.98px) {
-    
-
     .detailed-attendance-card {
         width: 100%;
         max-width: 100%;
@@ -1527,43 +1253,15 @@
         padding-left: 3%;
     }
 
-    .attendance-list-header-filter {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-    }
-
-    .attendance-tools {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .attendance-tools input {
-        width: 100%;
-    }
-
-    .attendance-row {
-        grid-template-columns: 1fr;
-        gap: 0.8rem;
-        padding: 1.4rem 1rem 1rem;
-    }
-
-    /* .course-attendance .attendance-list-card .attendance-list-header-filter h3 {
-        margin: .25rem auto 1rem;
-    } */
-
+    .attendance-row { grid-template-columns: 1fr; gap: 0.8rem; padding: 1.4rem 1rem 1rem; }
 }
 
-
-
 @media (max-width: 767.98px) {
-    /* LEARNER PROGRESS ATTENDANCE Page */
     .attendance-cards-grid {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         gap: 1.5rem;
-
         width: 100%;
         margin-left: 0;
         margin-right: 0;
@@ -1576,18 +1274,10 @@
         flex: 0 0 100%;
     }
 
-    /* LEARNER PROGRESS ATTENDANCE RATE CARD */
-    .wrapper-attendance-progress-card {
-        margin: 1.5rem auto;
-    }
+    .wrapper-attendance-progress-card { margin: 1.5rem auto; }
 
-    .attendance-progress-card {
-        display: block;
-        min-height: 220px;
-        padding-top: 100px;
-    }
+    .attendance-progress-card { display: block; min-height: 220px; padding-top: 100px; }
 
-    /* Reposition branded circular header */
     .attendance-progress-card .circle-panel1 {
         top: -430px;
         left: -130px;
@@ -1602,25 +1292,12 @@
         height: 480px;
     }
 
-    /* Match detail-card heading placement */
-    .attendance-progress-card .circle-panel1 h2 {
-        margin: 360px 2rem 1rem .8rem;
-        font-size: 1.8rem;
-        line-height: 1.1;
-    }
+    .attendance-progress-card .circle-panel1 h2 { margin: 360px 2rem 1rem .8rem; font-size: 1.8rem; line-height: 1.1; }
 
-    .detailed-attendance-card h2 {
-        margin: 450px 2rem 1rem 10.3rem;
-    }
+    .detailed-attendance-card h2 { margin: 450px 2rem 1rem 10.3rem; }
 
-    /* Remove desktop left offset */
-    .attendance-progress-card .info {
-        width: 100%;
-        min-height: 0;
-        padding: 1.5rem 2rem 2rem;
-    }
+    .attendance-progress-card .info { width: 100%; min-height: 0; padding: 1.5rem 2rem 2rem; }
 
-    /* Stack percentage and progress vertically */
     .attendance-percentage-card {
         display: flex;
         flex-direction: column;
@@ -1629,25 +1306,12 @@
         width: 100%;
     }
 
-    /* Percentage */
-    .attendance-percentage-card p {
-        font-size: 2rem;
-        margin: 0;
-    }
+    .attendance-percentage-card p { font-size: 2rem; margin: 0; }
 
-    /* Full-width progress bar */
-    .attendance-progress {
-        width: 100%;
-    }
-    
-    /* COURSE ATTENDANCE page *******************************/
-    .course-attendance .meta-row {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
+    .attendance-progress { width: 100%; }
 
+    .course-attendance .meta-row { flex-direction: column; gap: 1.5rem; }
 
-    /* ATTENDANCE - All Courses *******************************/
     .attendance-tools {
         justify-content: flex-start;
         flex-direction: column;
@@ -1655,25 +1319,8 @@
         width: 100%;
     }
 
-    /* TEACHER_ATTENDANCE Page *******************************/
-    .attendance-filter-card.two-filters {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-    }
+    .attendance-filter-card.two-filters { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
 
-    /*****************************************************|
-    |*** TAKE ATTENDANCE Page  ***************************|
-    |*****************************************************/
-        
-    /* .wrapper-attendance-course-info {
-        grid-template-columns: 1fr;
-    }
-
-    .wrapper-attendance-course-info > div:last-child {
-        border-left: none;
-        padding-left: 0%;
-    }
- */
     .wrapper-attendance-summary-card,
     .wrapper-attendance-summary-card {
         display: grid;
@@ -1682,10 +1329,8 @@
         width: 100%;
     }
 
-    #attendanceListTitle {
-        padding: 1rem 1rem 0rem;
-    }
-    
+    #attendanceListTitle { padding: 1rem 1rem 0rem; }
+
     .attendance-radio-group {
         display: flex;
         justify-content: flex-start;
@@ -1696,26 +1341,9 @@
         padding: 0.4rem 0.7rem;
     }
 
+    .edit-attendance-btn { padding: 0.75rem; }
 
-    /*****************************************************|
-    |*** ATTENDANCE DETAIL Page  *************************|
-    |*****************************************************/
-    
-    /* .attendance-detail-card-header {
-        flex-direction: column;
-        padding: 1rem;
-    } */
-
-    .edit-attendance-btn {
-        padding: 0.75rem;
-    }
-
-    .edit-attendance-btn i {
-        margin: 0;
-    }
-
-    /* *** TAKE ATTENDANCE page ************************ */
-    /* *** ATTENDANCE DETAIL page ************************/
+    .edit-attendance-btn i { margin: 0; }
 
     .take-attendance-card,
     .attendance-detail-card {
@@ -1731,7 +1359,6 @@
         width: 100%;
     }
 
-    /* ONLY company_admin_student_attendance_record.html */
     .attendance-record-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -1739,33 +1366,13 @@
         gap: 1rem;
         margin-top: 1.25rem;
     }
+
+    .course-attendance .meta-card { width: 100%; }
 }
 
-
-
 @media (max-width: 576.98px) {
+    .course-attendance .meta-card { width: 100%; }
 
-    .course-attendance .meta-card {
-        width: 100%;
-    }
-    /* .attendance-list-card {
-        min-height: 260px;
-        background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-        border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
-        padding: .6rem;
-    } */
-
-    /*****************************************************|
-    |*** ALL ATTENDANCE PageS  ***************************|
-    |*****************************************************/
-
-    /* .attendance-list-card {
-        min-height: 260px;
-        background: linear-gradient(270deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.65));
-        border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.45);
-        padding: .6rem;
-    }
- */
     .attendance-filter-btn {
         padding: 0.25rem 0.8rem;
         gap: 1rem;
@@ -1774,22 +1381,9 @@
         align-items: center;
     }
 
-    .attendance-filter-btn span {
-        text-align: left;
-    }
+    .attendance-filter-btn span { text-align: left; }
 
-    /* .attendance-filter-btn.active::after {
-        display: none;
-    }
- */
-
-    /*****************************************************|
-    |*** TAKE ATTENDANCE Page  ***************************|
-    |*****************************************************/
-    
-    .wrapper-attendance-summary-card {
-        width: 100%;
-    }
+    .wrapper-attendance-summary-card { width: 100%; }
 
     .take-attendance-page .wrapper-attendance-summary-card {
         flex-direction: row;
@@ -1807,33 +1401,21 @@
         flex-wrap: wrap;
     }
 
-    .mark-all-actions {
-        width: 100%;
-        flex-direction: column;
-    }
+    .mark-all-actions { width: 100%; flex-direction: column; }
 
-    .take-attendance-page .attendance-radio-group {
-        justify-content: space-around;
-        width: 100%;
-        padding: 0.4rem 1rem;
-    }
-
+    .take-attendance-page .attendance-radio-group { justify-content: space-around; width: 100%; padding: 0.4rem 1rem; }
 
     .take-attendance-save-bar .take-attendance-save-btn,
     .take-attendance-save-bar .take-attendance-cancel-btn {
         min-width: 0;
     }
 
-
-    /*****************************************************|
-    |*** ATTENDANCE DETAIL Page  *************************|
-    |*****************************************************/
     .attendance-summary-card,
     .attendance-summary-card {
         min-height: 0;
         height: fit-content;
         width: 100%;
-     }
+    }
 
     .attendance-summary-card strong,
     .attendance-summary-card strong {
@@ -1852,10 +1434,7 @@
         overflow: hidden;
     }
 
-    .student-avatar {
-        display: none;
-        visibility: hidden;
-    }
+    .student-avatar { display: none; visibility: hidden; }
 
     .attendance-detail-row .student-main-info,
     .take-attendance-row .student-main-info {
@@ -1876,16 +1455,7 @@
     .attendance-detail-card {
         padding: 1.6rem 0.4rem;
     }
-
-
 }
 
-
-
 @media (max-width: 370px) {
-
-    /* .recent-attendance-card h2 {
-        font-size: 1.5rem;
-    } */
-
 }
