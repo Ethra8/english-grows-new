@@ -1792,11 +1792,6 @@ class ClassSession(models.Model):
     """
     One scheduled lesson for a specific course.
 
-    Examples:
-    - Individual Classes.01 - Lesson 1
-    - Individual Classes.01 - Lesson 2
-    - Individual Classes.01 - Lesson 3
-
     A ClassSession is created once when the course sessions
     are initially generated.
 
@@ -1804,7 +1799,19 @@ class ClassSession(models.Model):
 
         scheduled
             ↓
+        lesson ends
+            ↓
+        ┌─────────────────────────────────────┐
+        │ attendance already submitted       │
+        │ → complete_attendance_submitted    │
+        │                                     │
+        │ attendance not yet submitted       │
+        │ → held_attendance_pending          │
+        └─────────────────────────────────────┘
+
         held_attendance_pending
+            ↓
+        attendance submitted
             ↓
         complete_attendance_submitted
 
@@ -1816,8 +1823,10 @@ class ClassSession(models.Model):
             ↓
         rescheduled
             ↓
-        held_attendance_pending
+        lesson ends
             ↓
+        held_attendance_pending
+            OR
         complete_attendance_submitted
 
     CANCELLATION FLOW:
@@ -1827,40 +1836,29 @@ class ClassSession(models.Model):
         cancelled
 
     IMPORTANT:
+
+    Attendance records MAY be submitted after start_time but
+    before end_time.
+
+    In that case the Attendance records are stored immediately,
+    but the ClassSession remains scheduled/rescheduled until the
+    lesson has actually ended.
+
+    After end_time:
+    - submitted attendance -> complete_attendance_submitted
+    - attendance pending   -> held_attendance_pending
+
     A rescheduled lesson remains the SAME ClassSession object.
-
     Rescheduling does NOT create a new ClassSession.
-    Instead, the existing session's:
-    - status
-    - start_time
-    - end_time
-
-    are updated.
-
-    Status meaning:
-    - scheduled:
-      lesson is scheduled and has not yet been held
-    - pending_reschedule:
-      lesson will not take place at its current scheduled time
-      and is waiting for a new date/time
-    - rescheduled:
-      lesson has been moved and is waiting for its new occurrence
-    - held_attendance_pending:
-      lesson has been held but attendance has not yet been fully submitted
-    - complete_attendance_submitted:
-      lesson has been held and attendance has been fully submitted
-    - cancelled:
-      lesson will not take place
 
     Every ClassSession belonging to a course must eventually
-    reach status="complete_attendance_submitted" before the Course
-    itself can be automatically marked as completed.
+    reach complete_attendance_submitted before the Course itself
+    can be automatically marked as completed.
     """
 
     # ---------------------------------------------------------
     # STATUS CHOICES
     # ---------------------------------------------------------
-
     STATUS_SCHEDULED = "scheduled"
     STATUS_PENDING_RESCHEDULE = "pending_reschedule"
     STATUS_RESCHEDULED = "rescheduled"
@@ -1877,73 +1875,52 @@ class ClassSession(models.Model):
         (STATUS_CANCELLED, "Cancelled"),
     ]
 
-
     # ---------------------------------------------------------
     # COURSE
     # ---------------------------------------------------------
-
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name="class_sessions"
+        related_name="class_sessions",
     )
-
 
     # ---------------------------------------------------------
     # CLASS INFORMATION
     # ---------------------------------------------------------
-
     title = models.CharField(
         max_length=200,
-        default="English Class"
+        default="English Class",
     )
 
-    # class_number is mandatory.
-    #
-    # It is the stable identity of a lesson within a course,
-    # even when the lesson is rescheduled.
+    # Stable lesson identity within the Course.
+    # It does not change when a lesson is rescheduled.
     class_number = models.PositiveIntegerField(
         help_text="Lesson number within the course."
     )
 
     start_time = models.DateTimeField()
-
     end_time = models.DateTimeField()
 
-    meeting_link = models.URLField(
-        blank=True
-    )
-
-    topic = models.CharField(
-        max_length=200,
-        blank=True
-    )
-
+    meeting_link = models.URLField(blank=True)
+    topic = models.CharField(max_length=200, blank=True)
 
     # ---------------------------------------------------------
     # SESSION STATUS
     # ---------------------------------------------------------
-
     status = models.CharField(
         max_length=30,
         choices=STATUS_CHOICES,
         default=STATUS_SCHEDULED,
     )
 
-
     # ---------------------------------------------------------
     # METADATA
     # ---------------------------------------------------------
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
+    created_at = models.DateTimeField(auto_now_add=True)
 
     # ---------------------------------------------------------
     # META
     # ---------------------------------------------------------
-
     class Meta:
         ordering = ["start_time"]
 
@@ -1951,19 +1928,17 @@ class ClassSession(models.Model):
             # A course can have only ONE Lesson 1,
             # ONE Lesson 2, ONE Lesson 3, etc.
             #
-            # start_time is deliberately NOT used here because
-            # start_time can change when a lesson is rescheduled.
+            # start_time is deliberately NOT used because it
+            # can change when a lesson is rescheduled.
             models.UniqueConstraint(
                 fields=["course", "class_number"],
-                name="unique_course_class_number"
+                name="unique_course_class_number",
             )
         ]
-
 
     # ---------------------------------------------------------
     # VALIDATION
     # ---------------------------------------------------------
-
     def clean(self):
         """
         Validate the ClassSession before it is saved through
@@ -1971,7 +1946,6 @@ class ClassSession(models.Model):
 
         A session must always finish after it starts.
         """
-
         super().clean()
 
         if (
@@ -1980,16 +1954,12 @@ class ClassSession(models.Model):
             and self.end_time <= self.start_time
         ):
             raise ValidationError({
-                "end_time": (
-                    "End time must be after start time."
-                )
+                "end_time": "End time must be after start time."
             })
-
 
     # ---------------------------------------------------------
     # SAVE
     # ---------------------------------------------------------
-
     def save(self, *args, **kwargs):
         """
         Save the ClassSession and perform related updates.
@@ -1998,24 +1968,19 @@ class ClassSession(models.Model):
            other ClassSessions belonging to the same course.
 
         2. If this ClassSession changes TO
-           status="complete_attendance_submitted",
-           check whether every ClassSession belonging to the
-           Course has reached that same terminal status.
+           complete_attendance_submitted, check whether every
+           ClassSession belonging to the Course has reached
+           that same terminal status.
 
-           If every ClassSession is complete:
-
-               Course.status -> completed
-               active CourseEnrollments -> completed
+        If every ClassSession is complete:
+            Course.status -> completed
+            active CourseEnrollments -> completed
         """
-
         old_meeting_link = None
         old_status = None
 
         if self.pk:
-            old_session = ClassSession.objects.get(
-                pk=self.pk
-            )
-
+            old_session = ClassSession.objects.get(pk=self.pk)
             old_meeting_link = old_session.meeting_link
             old_status = old_session.status
 
@@ -2025,27 +1990,21 @@ class ClassSession(models.Model):
             self.meeting_link
             and self.meeting_link != old_meeting_link
         ):
-            self.course.class_sessions.exclude(
-                pk=self.pk
-            ).update(
+            self.course.class_sessions.exclude(pk=self.pk).update(
                 meeting_link=self.meeting_link
             )
 
         became_complete = (
-            self.status
-            == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-            and old_status
-            != self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            self.status == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            and old_status != self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
         )
 
         if became_complete:
             self.course.update_completion_status()
 
-
     # ---------------------------------------------------------
     # STRING REPRESENTATION
     # ---------------------------------------------------------
-
     def __str__(self):
         return (
             f"{self.course} - "
@@ -2053,105 +2012,163 @@ class ClassSession(models.Model):
             f"{self.start_time:%d/%m/%Y %H:%M}"
         )
 
-
     # ---------------------------------------------------------
-    # HELPERS
+    # TIME / LIFECYCLE HELPERS
     # ---------------------------------------------------------
-
     @property
     def is_past(self):
         """
-        Return True when the session's current end time has passed.
+        Return True when the session's current end_time has passed.
 
-        IMPORTANT:
-        is_past is only a date/time helper. A past ClassSession is
-        not necessarily held; pending_reschedule and cancelled sessions
-        can also have past timestamps.
+        This is only a temporal helper.
+
+        A past pending_reschedule or cancelled session was not
+        necessarily held.
         """
-
         return self.end_time <= timezone.now()
-
 
     @property
     def is_held(self):
         """
-        Return True only when the ClassSession lifecycle explicitly
-        records that the lesson has been held.
+        Return True only when the lifecycle explicitly records
+        that the lesson has been held.
         """
-
         return self.status in {
             self.STATUS_HELD_ATTENDANCE_PENDING,
             self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
         }
 
-
     @property
     def attendance_is_pending(self):
         """
-        Return True when the lesson has been held but attendance
+        Return True when the lesson has ended but attendance
         has not yet been fully submitted.
         """
-
-        return (
-            self.status
-            == self.STATUS_HELD_ATTENDANCE_PENDING
-        )
-
+        return self.status == self.STATUS_HELD_ATTENDANCE_PENDING
 
     @property
     def attendance_is_submitted(self):
         """
-        Return True when the lesson has been held and attendance
+        Return True when the lesson has ended AND attendance
         has been fully submitted.
+
+        This describes the ClassSession lifecycle state.
+
+        It is deliberately different from
+        attendance_records_submitted, because Attendance records
+        may be submitted before the lesson ends.
         """
+        return self.status == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
 
-        return (
-            self.status
-            == self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        )
-
-
-    def transition_to_held_if_past(self):
+    # ---------------------------------------------------------
+    # ATTENDANCE RECORD STATE
+    # ---------------------------------------------------------
+    @property
+    def attendance_records_submitted(self):
         """
-        Move a finished scheduled/rescheduled lesson into the explicit
-        held_attendance_pending state.
+        Return True when this ClassSession has Attendance records
+        and every record contains a final submitted outcome.
 
-        pending_reschedule and cancelled sessions are deliberately
-        untouched because a past timestamp does not mean they were held.
+        Final Attendance outcomes:
+        - attended
+        - missed
+        - excused
+
+        This may legitimately be True BEFORE end_time while the
+        ClassSession itself is still scheduled/rescheduled.
+        """
+        attendance_records = self.attendance_records.all()
+
+        if not attendance_records.exists():
+            return False
+
+        final_statuses = {
+            Attendance.STATUS_ATTENDED,
+            Attendance.STATUS_MISSED,
+            Attendance.STATUS_EXCUSED,
+        }
+
+        return not attendance_records.exclude(
+            status__in=final_statuses
+        ).exists()
+
+    # ---------------------------------------------------------
+    # SYNCHRONIZE ONE FINISHED SESSION
+    # ---------------------------------------------------------
+    def synchronize_status_after_end(self):
+        """
+        Synchronize this ClassSession after its end_time passes.
+
+        scheduled/rescheduled + attendance already submitted
+            -> complete_attendance_submitted
+
+        scheduled/rescheduled + attendance not submitted
+            -> held_attendance_pending
+
+        pending_reschedule and cancelled are deliberately untouched.
 
         Returns:
             True  -> status changed
             False -> no transition was required
         """
-        if self.status not in {
-            self.STATUS_SCHEDULED,
-            self.STATUS_RESCHEDULED,
-        }:
+        if not self.pk:
             return False
 
-        if not self.is_past:
-            return False
+        with transaction.atomic():
+            session = (
+                ClassSession.objects
+                .select_for_update()
+                .select_related("course")
+                .get(pk=self.pk)
+            )
 
-        self.status = self.STATUS_HELD_ATTENDANCE_PENDING
-        self.save(update_fields=["status"])
+            if session.status not in {
+                self.STATUS_SCHEDULED,
+                self.STATUS_RESCHEDULED,
+            }:
+                self.status = session.status
+                return False
+
+            if not session.is_past:
+                self.status = session.status
+                return False
+
+            if session.attendance_records_submitted:
+                session.status = self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            else:
+                session.status = self.STATUS_HELD_ATTENDANCE_PENDING
+
+            # Deliberately use save(), rather than QuerySet.update(),
+            # because transitioning directly to COMPLETE must trigger
+            # Course.update_completion_status().
+            session.save(update_fields=["status"])
+
+            self.status = session.status
 
         return True
 
-
+    # ---------------------------------------------------------
+    # SYNCHRONIZE ALL FINISHED SESSIONS
+    # ---------------------------------------------------------
     @classmethod
-    def transition_past_sessions_to_held(cls, course=None):
+    def transition_past_sessions(cls, course=None):
         """
-        Bulk-transition finished scheduled/rescheduled ClassSessions
-        to held_attendance_pending.
+        Synchronize finished scheduled/rescheduled ClassSessions.
 
-        If course is provided, only sessions belonging to that course
-        are synchronized. Without a course, all eligible ClassSessions
-        are synchronized.
+        For every eligible lesson:
 
-        QuerySet.update() is deliberate because this transition does
-        not require the side effects in ClassSession.save().
+        attendance already submitted
+            -> complete_attendance_submitted
 
-        Returns the number of ClassSessions updated.
+        attendance not submitted
+            -> held_attendance_pending
+
+        If course is provided, only sessions belonging to that
+        Course are synchronized.
+
+        Without course, all eligible ClassSessions are synchronized.
+
+        Returns the number of ClassSessions whose status changed.
         """
         sessions = cls.objects.filter(
             end_time__lte=timezone.now(),
@@ -2164,9 +2181,35 @@ class ClassSession(models.Model):
         if course is not None:
             sessions = sessions.filter(course=course)
 
-        return sessions.update(
-            status=cls.STATUS_HELD_ATTENDANCE_PENDING
+        session_ids = list(
+            sessions.values_list("pk", flat=True)
         )
+
+        updated_count = 0
+
+        for session_id in session_ids:
+            session = cls.objects.get(pk=session_id)
+
+            if session.synchronize_status_after_end():
+                updated_count += 1
+
+        return updated_count
+
+    # ---------------------------------------------------------
+    # TEMPORARY BACKWARDS-COMPATIBILITY WRAPPERS
+    #
+    # Keep these while existing views / the deployed Render
+    # management command still call the old method names.
+    #
+    # They now execute the NEW business logic.
+    # ---------------------------------------------------------
+    # def transition_to_held_if_past(self):
+    #     return self.synchronize_status_after_end()
+
+    # @classmethod
+    # def transition_past_sessions_to_held(cls, course=None):
+    #     return cls.transition_past_sessions(course=course)
+
 
 
 

@@ -4810,6 +4810,18 @@ def teacher_take_attendance(request, session_id):
         course__teacher=request.user,
     )
 
+    # ---------------------------------------------------------
+    # SYNCHRONIZE SESSION LIFECYCLE
+    #
+    # If this scheduled/rescheduled lesson has now finished,
+    # transition it immediately to held_attendance_pending.
+    #
+    # This gives the teacher an immediate transition without
+    # waiting for the next 5-minute Cron Job run.
+    # ---------------------------------------------------------
+    class_session.synchronize_status_after_end()
+
+    # ---------------------------------------------------------
     course = class_session.course
 
     enrollments = (
@@ -5768,7 +5780,7 @@ def company_admin_all_courses_attendance(request):
     # ---------------------------------------------------------
     # SESSION LIFECYCLE / FILTERS
     # ---------------------------------------------------------
-    ClassSession.transition_past_sessions_to_held()
+    ClassSession.transition_past_sessions()
     now = timezone.now()
 
     held_statuses = {
@@ -6310,7 +6322,7 @@ def company_admin_course_students_list(request, course_id):
         return redirect("home")
 
     # Keep past scheduled/rescheduled sessions aligned with lifecycle status.
-    ClassSession.transition_past_sessions_to_held()
+    ClassSession.transition_past_sessions()
 
     # ---------------------------------------------------------
     # AVAILABLE COURSES
@@ -6475,7 +6487,7 @@ def company_admin_course_attendance(request, course_id):
         return redirect("home")
 
     # Keep stale scheduled/rescheduled sessions aligned with the lifecycle.
-    ClassSession.transition_past_sessions_to_held()
+    ClassSession.transition_past_sessions()
 
     # ---------------------------------------------------------
     # AVAILABLE COURSES
@@ -6766,7 +6778,7 @@ def company_admin_student_detail(request, student_id):
     if not company:
         return redirect("home")
 
-    ClassSession.transition_past_sessions_to_held()
+    ClassSession.transition_past_sessions()
 
     # ---------------------------------------------------------
     # EMPLOYEE
@@ -7159,7 +7171,7 @@ def company_admin_student_attendance_record(request, student_id):
     if not company:
         return redirect("home")
 
-    ClassSession.transition_past_sessions_to_held()
+    ClassSession.transition_past_sessions()
 
     held_statuses = [
         ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
