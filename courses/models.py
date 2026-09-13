@@ -2210,7 +2210,38 @@ class ClassSession(models.Model):
     # def transition_past_sessions_to_held(cls, course=None):
     #     return cls.transition_past_sessions(course=course)
 
+    def update_status_from_attendance(self):
+        """
+        Mark this ClassSession as complete_attendance_submitted when:
 
+        - the lesson has ended;
+        - its lifecycle is eligible to become complete; and
+        - every Attendance record has a submitted outcome.
+
+        Attendance may be submitted before end_time, but the
+        ClassSession must not become complete until the lesson ends.
+
+        Returns:
+            True  -> status changed
+            False -> no transition was required
+        """
+        if self.status not in {
+            self.STATUS_SCHEDULED,
+            self.STATUS_RESCHEDULED,
+            self.STATUS_HELD_ATTENDANCE_PENDING,
+        }:
+            return False
+
+        if not self.is_past:
+            return False
+
+        if not self.attendance_records_submitted:
+            return False
+
+        self.status = self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        self.save(update_fields=["status"])
+
+        return True
 
 
 class Attendance(models.Model):
