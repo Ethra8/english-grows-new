@@ -354,26 +354,74 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
         ============================================================
-        EVENT ACTION
+        EVENT TEMPORAL STATE
         ============================================================
 
-        Single source of truth for:
+        Prefer the server-provided is_past value when available.
 
-        - Month List button
-        - Modal button
+        This keeps temporal state aligned with Django business logic:
+        a ClassSession becomes past only when its end_time has passed.
 
-        Rules:
-
-        COMPANY ADMIN
-            Always -> Group details
-
-        EVERYONE ELSE
-            meeting_link exists
-                -> Join class
-
-            otherwise
-                -> Group details
+        The event.end fallback preserves compatibility with calendar
+        endpoints that have not yet started exposing is_past.
         ============================================================
+    */
+
+    function isEventPast(event) {
+
+        const props =
+            event.extendedProps || {};
+
+        if (
+            typeof props.is_past ===
+            'boolean'
+        ) {
+            return props.is_past;
+        }
+
+        return Boolean(
+            event.end
+            && event.end <= new Date()
+        );
+    }
+
+
+    /*
+    ============================================================
+    EVENT ACTION
+    ============================================================
+
+    Single source of truth for:
+
+    - Month List button
+    - Modal button
+
+    ClassSession lifecycle:
+
+    scheduled / rescheduled
+        -> valid teaching slot
+        -> Join class when meeting_link exists
+        -> otherwise Group details
+
+    held_attendance_pending / complete_attendance_submitted
+        -> lesson has already been held
+        -> no action for teacher / employee / learner
+
+    pending_reschedule
+        -> no valid teaching slot
+        -> never treated as joinable
+
+    cancelled
+        -> lesson will not take place
+        -> never treated as joinable
+
+    COMPANY ADMIN
+        Always -> Group details
+
+    The status check is deliberately backward-compatible:
+    if an older calendar endpoint does not expose status yet,
+    meeting_link continues to control the Join action.
+    ============================================================
     */
 
     function getEventAction(event) {
@@ -390,6 +438,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const groupDetailsUrl =
             props.group_details_url || '';
 
+        const status =
+            props.status || '';
+
+        const joinableStatuses = [
+            'scheduled',
+            'rescheduled'
+        ];
+
+        const statusAllowsJoin =
+            !status
+            || joinableStatuses.includes(status);
+
 
         /*
             ============================================================
@@ -397,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ============================================================
 
             Company Admin always gets Group Details,
-            even when the class has already passed.
+            including for historical sessions.
         */
 
         if (
@@ -432,14 +492,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             Teacher / Employee / Individual:
 
-            If the class has already finished,
-            do not show any action button.
+            Once the lesson has ended, do not expose an action button.
+
+            Temporal state is based on end_time, never start_time.
         */
 
         if (
-            event.end
-            &&
-            event.end < new Date()
+            isEventPast(event)
         ) {
             return null;
         }
@@ -447,19 +506,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /*
             ============================================================
-            FUTURE / CURRENT SESSION
+            CURRENT / FUTURE SESSION
             ============================================================
 
-            All non-admin roles:
+            Join is allowed only when:
 
-            meeting link exists
-                -> Join class
+            - the ClassSession has not ended
+            - its lifecycle is scheduled/rescheduled
+            - a meeting link exists
 
-            otherwise
-                -> Group details
+            If status is unavailable from an older endpoint, preserve
+            the previous meeting-link behaviour for compatibility.
         */
 
-        if (meetingLink) {
+        if (
+            meetingLink
+            && statusAllowsJoin
+        ) {
 
             return {
                 label:
@@ -476,6 +539,13 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         }
 
+
+        /*
+            No joinable meeting link is available.
+
+            Group Details remains the fallback for a current/future
+            event when the endpoint supplies a destination.
+        */
 
         if (groupDetailsUrl) {
 
@@ -497,7 +567,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return null;
     }
-
 
     /*
         ============================================================

@@ -236,7 +236,8 @@ def my_course(request):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    # HElper in profiles/utils/enrollments.py
+    # Helper in profiles/utils/enrollments.py
+    #
     # Historical courses remain accessible regardless of
     # CourseEnrollment status or Course status.
     #
@@ -253,7 +254,6 @@ def my_course(request):
     # Otherwise:
     # - course name A-Z
     # ---------------------------------------------------------
-
     enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(student=student)
@@ -287,17 +287,8 @@ def my_course(request):
     # ---------------------------------------------------------
     # SELECTED COURSE
     # ---------------------------------------------------------
-    course = (
-        enrollment.course
-        if enrollment
-        else None
-    )
-
-    enrollment_status = (
-        enrollment.status
-        if enrollment
-        else None
-    )
+    course = enrollment.course if enrollment else None
+    enrollment_status = enrollment.status if enrollment else None
 
     # ---------------------------------------------------------
     # TIMETABLE
@@ -316,15 +307,23 @@ def my_course(request):
         )
 
     # ---------------------------------------------------------
-    # NEXT CLASS
+    # NEXT / CURRENT CLASS
     #
     # Only available when:
     # - the learner's enrollment is active
-    # - the course is active or confirmed
-    # - the session is scheduled or rescheduled
+    # - the Course is active or confirmed
+    # - the ClassSession is scheduled or rescheduled
+    # - the ClassSession has not yet ended
+    #
+    # A lesson remains available while it is in progress.
+    # ClassSession temporal "past" logic is based on end_time,
+    # not start_time.
+    #
+    # pending_reschedule sessions are deliberately excluded
+    # because they do not yet represent a valid teaching slot.
     #
     # Historical, paused, completed or cancelled enrollments /
-    # courses must not expose a future "next class".
+    # Courses must not expose a next/current class.
     # ---------------------------------------------------------
     next_class = None
 
@@ -333,11 +332,12 @@ def my_course(request):
         and enrollment.status == "active"
         and course.status in ["active", "confirmed"]
     ):
+        now = timezone.now()
+
         next_class = (
-            ClassSession.objects
+            course.class_sessions
             .filter(
-                course=course,
-                start_time__gte=timezone.now(),
+                end_time__gt=now,
                 status__in=[
                     ClassSession.STATUS_SCHEDULED,
                     ClassSession.STATUS_RESCHEDULED,
@@ -359,7 +359,8 @@ def my_course(request):
         # ONE selected enrollment/course -> page content
         "enrollment": enrollment,
         "course": course,
-        # component course detail nav (active tab)
+
+        # Component course detail nav -> active tab
         "active_section": "overview",
 
         "enrollment_status": enrollment_status,
@@ -374,9 +375,35 @@ def my_course(request):
     )
 
 
+
 # STUDENT CALENDAR PAGE
 @login_required
 def my_calendar(request):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
+
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENT
+    #
+    # The student calendar is available only for a learner who:
+    # - has an active CourseEnrollment
+    # - belongs to an active Course
+    #
+    # Confirmed Courses are deliberately excluded because they
+    # are not yet part of the learner's active teaching lifecycle.
+    #
+    # Historical paused/completed/cancelled enrollments and Courses
+    # remain accessible elsewhere, but do not define the learner's
+    # current calendar state.
+    # ---------------------------------------------------------
     active_enrollment = (
         CourseEnrollment.objects
         .filter(
@@ -394,28 +421,59 @@ def my_calendar(request):
     )
 
     context = {
+        "profile": profile,
         "active_enrollment": active_enrollment,
     }
 
+    return render(
+        request,
+        "profiles/student/my_calendar.html",
+        context
+    )
 
-    return render(request, "profiles/student/my_calendar.html", context)
 
 
-
-# STUDENT CALENDAR PAGE
+# STUDENT CALENDAR EVENTS
+# STUDENT CALENDAR EVENTS
 @login_required
 def my_calendar_events(request):
     """
     Calendar events for employee / individual learner profiles.
 
+    Current teaching events:
+    - scheduled
+    - rescheduled
+
+    These are shown only when:
+    - the learner's CourseEnrollment is active
+    - the Course itself is active
+
+    Historical teaching events:
+    - held_attendance_pending
+    - complete_attendance_submitted
+
+    These remain visible regardless of the current CourseEnrollment
+    or Course status so historical calendar records are preserved.
+
+    Excluded:
+    - pending_reschedule:
+        no valid teaching slot currently exists
+
+    - cancelled:
+        the lesson will not take place
+
     Event actions exposed to calendar.js:
 
     - meeting_link:
-        Join class when available.
+        available only for a current/upcoming scheduled or
+        rescheduled ClassSession that has not yet ended
 
     - group_details_url:
-        Fallback action when no meeting link exists.
-        Opens the learner's course page.
+        course-details fallback / historical navigation
+
+    Temporal state and lifecycle state remain separate:
+    - is_past is determined by end_time
+    - status represents the ClassSession lifecycle
     """
 
     profile = get_object_or_404(
@@ -434,7 +492,50 @@ def my_calendar_events(request):
 
     start = request.GET.get("start")
     end = request.GET.get("end")
+    now = timezone.now()
 
+    # ---------------------------------------------------------
+    # ALL LEARNER COURSES
+    # ---------------------------------------------------------
+    #
+    # Used for historical ClassSessions.
+    #
+    # Historical lessons must remain visible even when the
+    # CourseEnrollment or Course later becomes:
+    #
+    # - paused
+    # - completed
+    # - cancelled
+    #
+    # The learner's enrollment establishes that the Course forms
+    # part of their historical teaching record.
+    # ---------------------------------------------------------
+    learner_course_ids = (
+        CourseEnrollment.objects
+        .filter(
+            student=request.user,
+        )
+        .order_by()
+        .values_list(
+            "course_id",
+            flat=True,
+        )
+        .distinct()
+    )
+
+    # ---------------------------------------------------------
+    # CURRENT ACTIVE COURSES
+    # ---------------------------------------------------------
+    #
+    # Used only for scheduled/rescheduled teaching.
+    #
+    # Future/current lessons should be exposed only when:
+    # - CourseEnrollment.status == active
+    # - Course.status == active
+    #
+    # This prevents paused/completed/cancelled historical courses
+    # from exposing future teaching slots.
+    # ---------------------------------------------------------
     active_course_ids = (
         CourseEnrollment.objects
         .filter(
@@ -442,21 +543,56 @@ def my_calendar_events(request):
             status="active",
             course__status="active",
         )
+        .order_by()
         .values_list(
             "course_id",
             flat=True,
         )
+        .distinct()
     )
 
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    # ---------------------------------------------------------
+    #
+    # CURRENT / UPCOMING:
+    #
+    # scheduled / rescheduled
+    # - require active enrollment
+    # - require active Course
+    #
+    # HISTORICAL:
+    #
+    # held_attendance_pending / complete_attendance_submitted
+    # - remain visible for all learner Courses
+    # - independent of current Course / enrollment status
+    #
+    # EXCLUDED:
+    #
+    # pending_reschedule
+    # - no valid teaching slot exists yet
+    #
+    # cancelled
+    # - lesson will not take place
+    # ---------------------------------------------------------
     sessions = (
         ClassSession.objects
         .filter(
-            course_id__in=active_course_ids,
-            status__in=[
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_RESCHEDULED,
-                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            ],
+            Q(
+                course_id__in=active_course_ids,
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_RESCHEDULED,
+                ],
+            )
+            |
+            Q(
+                course_id__in=learner_course_ids,
+                status__in=[
+                    ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+                ],
+            )
         )
         .select_related(
             "course",
@@ -466,6 +602,9 @@ def my_calendar_events(request):
         )
     )
 
+    # ---------------------------------------------------------
+    # BANK HOLIDAYS
+    # ---------------------------------------------------------
     bank_holidays = (
         BankHoliday.objects
         .filter(
@@ -476,15 +615,23 @@ def my_calendar_events(request):
         )
     )
 
+    # ---------------------------------------------------------
+    # FULLCALENDAR DATE RANGE
+    # ---------------------------------------------------------
+    #
+    # FullCalendar sends the visible date range through start/end.
+    #
+    # A ClassSession is included whenever it overlaps the requested
+    # range rather than only when its start_time falls inside it.
+    # ---------------------------------------------------------
     if start and end:
         start_datetime = parse_datetime(start)
         end_datetime = parse_datetime(end)
 
         if start_datetime and end_datetime:
-
             sessions = sessions.filter(
-                start_time__gte=start_datetime,
                 start_time__lt=end_datetime,
+                end_time__gt=start_datetime,
             )
 
             bank_holidays = (
@@ -500,34 +647,59 @@ def my_calendar_events(request):
                 )
             )
 
+    # ---------------------------------------------------------
+    # BUILD CLASS SESSION EVENTS
+    # ---------------------------------------------------------
     events = []
 
     for session in sessions:
+        is_past = session.end_time <= now
+
+        # -----------------------------------------------------
+        # JOINABILITY
+        # -----------------------------------------------------
+        #
+        # Join is possible only when:
+        # - the lesson has not ended
+        # - lifecycle is scheduled/rescheduled
+        #
+        # held_attendance_pending and
+        # complete_attendance_submitted are historical states.
+        # -----------------------------------------------------
+        is_joinable = (
+            not is_past
+            and session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+        )
 
         events.append({
             "id": session.id,
             "title": session.title,
             "start": session.start_time.isoformat(),
-            "end": (
-                session.end_time.isoformat()
-                if session.end_time
-                else None
-            ),
+            "end": session.end_time.isoformat(),
 
             "extendedProps": {
                 "type": "class_session",
+                "course": session.course.name,
+                "class_number": session.class_number,
 
-                "course":
-                    session.course.name,
+                # Lifecycle and temporal state are deliberately
+                # exposed separately to calendar.js.
+                "status": session.status,
+                "is_past": is_past,
 
-                "class_number":
-                    session.class_number,
+                # Only expose a meeting link for a genuine
+                # current/upcoming teaching slot.
+                "meeting_link": (
+                    get_calendar_meeting_link(session)
+                    if is_joinable
+                    else None
+                ),
 
-                "meeting_link": get_calendar_meeting_link(session),
-
-                # This becomes the Group Details fallback
-                # in calendar.js when no meeting link exists.
-                
+                # Historical and current sessions can both link
+                # back to their Course details page.
                 "group_details_url": (
                     f"{reverse('profiles:my_course')}"
                     f"?course={session.course.id}"
@@ -535,30 +707,19 @@ def my_calendar_events(request):
             },
         })
 
+    # ---------------------------------------------------------
+    # BUILD BANK HOLIDAY EVENTS
+    # ---------------------------------------------------------
     for holiday in bank_holidays:
-
         event = {
-            "id":
-                f"holiday-{holiday.id}",
-
-            "title":
-                holiday.title,
-
-            "start":
-                holiday.start_date.isoformat(),
-
-            "allDay":
-                True,
-
-            "display":
-                "block",
-
-            "className":
-                "bank-holiday-event",
-
+            "id": f"holiday-{holiday.id}",
+            "title": holiday.title,
+            "start": holiday.start_date.isoformat(),
+            "allDay": True,
+            "display": "block",
+            "className": "bank-holiday-event",
             "extendedProps": {
-                "type":
-                    "bank_holiday",
+                "type": "bank_holiday",
             },
         }
 
