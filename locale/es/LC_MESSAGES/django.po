@@ -820,8 +820,8 @@ msgstr "Horas Impartidas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:230
 msgctxt "course details page"
-msgid "Classe held"
-msgstr "Clases impartidass"
+msgid "Classes held"
+msgstr "Clases impartidas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_students_list.html:43
 msgctxt "students list page"
