@@ -37,17 +37,15 @@ msgstr "Confirmados"
 
 #: .\courses\models.py:72
 
-#| msgctxt "assigned courses"
-#| msgid "Active"
 msgid "Active"
-msgstr "Activos"
+msgstr "Activo"
 
 #: .\courses\models.py:73
 
 #| msgctxt "assigned courses"
 #| msgid "Paused"
 msgid "Paused"
-msgstr "Pausados"
+msgstr "Pausado"
 
 #: .\courses\models.py:74
 #: .\profiles\templates\profiles\student\my_learning_progress.html:163
@@ -56,14 +54,14 @@ msgstr "Pausados"
 #| msgctxt "assigned courses"
 #| msgid "Completed"
 msgid "Completed"
-msgstr "Completados"
+msgstr "Completado"
 
 #: .\courses\models.py:75
 
 #| msgctxt "assigned courses"
 #| msgid "Cancelled"
 msgid "Cancelled"
-msgstr "Cancelados"
+msgstr "Cancelado"
 
 #: .\courses\models.py:1021
 msgid "Monday"
