@@ -4886,7 +4886,7 @@ def teacher_take_attendance(request, session_id):
 
         has_attendance_records = attendance_records.exists()
         has_unfinished_attendance = attendance_records.filter(
-            status=Attendance.STATUS_SCHEDULED
+            status=Attendance.STATUS_PENDING
         ).exists()
 
         if has_attendance_records and not has_unfinished_attendance:

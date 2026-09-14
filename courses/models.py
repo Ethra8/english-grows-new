@@ -853,7 +853,7 @@ class Course(models.Model):
                         class_session=class_session,
                         student=student,
                         defaults={
-                            "status": Attendance.STATUS_SCHEDULED,
+                            "status": Attendance.STATUS_PENDING,
                         }
                     )
                 )
@@ -1048,7 +1048,7 @@ class Course(models.Model):
         with transaction.atomic():
             Attendance.objects.filter(
                 class_session_id__in=session_ids,
-                status=Attendance.STATUS_SCHEDULED,
+                status=Attendance.STATUS_PENDING,
             ).delete()
 
             cancelled_count = future_sessions.update(
@@ -1394,7 +1394,7 @@ class CourseEnrollment(models.Model):
                 student=self.student,
                 class_session=session,
                 defaults={
-                    "status": Attendance.STATUS_SCHEDULED,
+                    "status": Attendance.STATUS_PENDING,
                 }
             )
 
@@ -2263,7 +2263,7 @@ class Attendance(models.Model):
 
         NORMAL FLOW:
 
-            scheduled
+            pending
                 ↓
             held_attendance_pending
                 ↓
@@ -2271,7 +2271,7 @@ class Attendance(models.Model):
 
         RESCHEDULING FLOW:
 
-            scheduled
+            pending
                 ↓
             pending_reschedule
                 ↓
@@ -2284,7 +2284,7 @@ class Attendance(models.Model):
     Attendance controls only the individual LEARNER'S outcome
     for that lesson:
 
-        scheduled
+        pending
         attended
         missed
         excused
@@ -2304,13 +2304,13 @@ class Attendance(models.Model):
     # ATTENDANCE STATUS
     # ---------------------------------------------------------
 
-    STATUS_SCHEDULED = "scheduled"
+    STATUS_PENDING = "pending"
     STATUS_ATTENDED = "attended"
     STATUS_MISSED = "missed"
     STATUS_EXCUSED = "excused"
 
     ATTENDANCE_STATUS_CHOICES = [
-        (STATUS_SCHEDULED, "Scheduled"),
+        (STATUS_PENDING, "Pending"),
         (STATUS_ATTENDED, "Attended"),
         (STATUS_MISSED, "Missed"),
         (STATUS_EXCUSED, "Excused"),
@@ -2341,7 +2341,7 @@ class Attendance(models.Model):
     status = models.CharField(
         max_length=30,
         choices=ATTENDANCE_STATUS_CHOICES,
-        default=STATUS_SCHEDULED,
+        default=STATUS_PENDING,
     )
 
     minutes_late = models.PositiveIntegerField(
