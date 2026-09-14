@@ -5,6 +5,7 @@ English Grows is a Django-based English language training platform designed for 
 The application combines course management, automated lesson scheduling, attendance tracking, learner assessment, progress monitoring and role-specific interfaces within a single relational data architecture.
 
 ---
+
 ## 📑 Table of Contents
 
 - [Site Structure](#site-structure)
@@ -20,12 +21,15 @@ The application combines course management, automated lesson scheduling, attenda
     - [Course Types](#course-types)
     - [Course Management](#course-management)
     - [Course Enrolment](#course-enrolment)
+    - [Course Enrolment Lifecycle](#course-enrolment-lifecycle)
     - [Course Timetable](#course-timetable)
     - [Bank Holidays & Course Scheduling](#bank-holidays--course-scheduling)
     - [Class Session Generation](#class-session-generation)
+    - [Safe Future Schedule Synchronisation](#safe-future-schedule-synchronisation)
     - [Class Session Lifecycle](#class-session-lifecycle)
     - [Automatic Class Session Status Synchronisation](#automatic-class-session-status-synchronisation)
     - [Rescheduling a Class Lesson](#rescheduling-a-class-lesson)
+    - [Course Pause](#course-pause)
     - [Course Cancellation](#course-cancellation)
     - [Attendance](#attendance)
     - [Attendance Reporting](#attendance-reporting)
@@ -45,7 +49,7 @@ The application combines course management, automated lesson scheduling, attenda
 - [Application Data Flow](#application-data-flow)
 
 - [Architectural Design Choices](#architectural-design-choices)
-  - [Separation of Responsibilities](#separation-of-responsibilities)   
+  - [Separation of Responsibilities](#separation-of-responsibilities)
   - [Authentication vs. Application Profile](#authentication-vs-application-profile)
   - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
   - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
@@ -187,7 +191,13 @@ The selector is displayed only when the learner has **more than one lifetime enr
 
 The selected course is passed through the `?course=<id>` query parameter and is resolved from the authenticated learner's own enrolment queryset. A learner therefore cannot use the query parameter to access a course in which they have never been enrolled.
 
-Operational information remains context-sensitive. For example, a historical course can still be reviewed through **My Course**, while upcoming-class information is only exposed when the selected enrolment and course are in an applicable current state.
+Operational information remains context-sensitive. A historical Course can still be reviewed through **My Course**, while next/current-class information is exposed only when the selected enrolment is active and the Course is active or confirmed.
+
+The next/current-class query uses the lesson's `end_time`, not only its `start_time`. A lesson that has started but has not yet ended therefore remains available as the learner's current class.
+
+Only `scheduled` and `rescheduled` ClassSessions are valid next/current teaching slots. `pending_reschedule`, held, complete and cancelled lessons are not presented as a future class.
+
+The learner calendar applies a related but slightly different rule: current `scheduled`/`rescheduled` teaching is limited to active enrolment + active Course context, while historical `held_attendance_pending` and `complete_attendance_submitted` lessons remain visible across the learner's own Course history.
 
 ---
 
@@ -401,7 +411,7 @@ This separates the **type of training being offered** from the **actual delivery
 
 ---
 
-The `Course` model represents a concrete training programme delivered to one or more learners.
+`Course` represents a concrete training programme delivered to one or more learners.
 
 Each course can be associated with:
 
@@ -409,8 +419,8 @@ Each course can be associated with:
 - An assigned teacher
 - A company, when the course is corporate
 - One or more learners through `CourseEnrollment`
-- One or more recurring timetable slots
-- Multiple generated class sessions
+- One or more recurring `CourseTimetableSlot` records
+- Multiple generated `ClassSession` records
 
 A course stores delivery-specific information including:
 
@@ -422,10 +432,9 @@ A course stores delivery-specific information including:
 - **Total training hours**
 - **Class duration**
 - **Class-duration source**
-- **Number of classes**
+- **Number of classes**, calculated from total hours and class duration
 - **Start date**
 - **End date**
-- **Meeting link**
 - **Course status**
 - **Creation date**
 
@@ -439,9 +448,38 @@ Completed
 Cancelled
 ```
 
-When a course is manually changed to `Cancelled` through the Django Admin, the application also cancels its applicable future `ClassSession` records and removes their untouched future `Attendance` placeholders. Genuine historical attendance outcomes are preserved. This keeps the operational lesson schedule consistent with the manually cancelled parent course while preserving past lesson and attendance history.
+The `Course` model owns the principal course-level lifecycle rules. The Django Admin, views and background tasks do not maintain separate interpretations of what pausing, cancelling or completing a course means.
 
-Course duration and class-generation logic are linked. The application uses the total number of training hours and lesson duration to determine the number of lessons required.
+Conceptually:
+
+```text
+Course.save()
+    │
+    ├── genuine transition → paused
+    │       └── pause applicable future teaching slots
+    │
+    ├── genuine transition → cancelled
+    │       └── cancel applicable unresolved lessons
+    │
+    ├── new Course
+    │       └── safe initial ClassSession generation attempt
+    │
+    └── existing confirmed/active Course
+            └── synchronize future scheduled lessons ONLY
+                when a schedule-defining Course field actually changed
+```
+
+Schedule-defining Course fields currently include:
+
+```text
+start_date
+total_hours
+class_duration
+```
+
+An unchanged Course save must **not** reschedule existing lessons. This is important because generated `ClassSession` records become historical operational data as teaching progresses.
+
+Course duration and class-generation logic are linked. The application uses the total number of training hours and lesson duration to determine the required number of lessons.
 
 A course is not considered completed simply because its scheduled end date has passed.
 
@@ -461,17 +499,29 @@ All sessions complete_attendance_submitted?
    └── Yes → Course becomes completed
 ```
 
-A `ClassSession` reaches `complete_attendance_submitted` only after the lesson has ended and attendance has been fully submitted. Attendance may be submitted before `end_time`, but that early submission does not make the lesson itself complete while it is still in progress.
+A `ClassSession` reaches `complete_attendance_submitted` only after the lesson has ended and its learner-specific attendance obligations have been finalized.
 
-When all `ClassSession` records belonging to a course have reached `complete_attendance_submitted`, the course is automatically moved to `completed`.
+Attendance may be submitted before `end_time`, but early submission does not make the still-running lesson itself complete.
 
-Active learner enrolments belonging to that course are then also moved to `completed`.
+When every `ClassSession` belonging to a course has reached `complete_attendance_submitted`:
+
+```text
+Course.status
+→ completed
+
+active CourseEnrollment records
+→ completed
+```
 
 This ensures that course status reflects **actual teaching delivery and finalized attendance rather than dates alone**.
+
+Once `ClassSession` records exist, the actual final session is also the operational source of truth for `Course.end_date`. The course end date is synchronized from the final stored lesson rather than being treated as a permanently fixed theoretical date.
 
 ---
 
 ### Course Enrolment
+
+---
 
 Learners are connected to courses through the `CourseEnrollment` model.
 
@@ -489,7 +539,7 @@ CourseEnrollment
 Course
 ```
 
-Using a dedicated enrolment model rather than a simple many-to-many relationship allows EnglishGrows to store information that belongs specifically to the learner's participation in a particular course.
+Using a dedicated enrolment model rather than a simple many-to-many relationship allows English Grows to store information that belongs specifically to the learner's participation in a particular course.
 
 Each enrolment can contain:
 
@@ -511,37 +561,199 @@ Cancelled
 
 The database prevents the same learner from being enrolled more than once in the same course.
 
-When a learner becomes actively enrolled in a course that already contains generated lessons, the application automatically creates any missing `Attendance` records for applicable unfinished sessions.
+`CourseEnrollment` is also the authority for learner-specific assignment to course lessons.
 
-Only sessions still in the teaching pipeline — `scheduled`, `pending_reschedule`, or `rescheduled` — receive missing attendance placeholders. Lessons already recorded as `held_attendance_pending` or `complete_attendance_submitted` are deliberately excluded.
+When a learner becomes actively enrolled in a course that already contains generated lessons, the application automatically creates missing `Attendance` records only for lessons that can still legitimately belong to that learner's teaching future.
 
-This prevents a learner who joins a course after it has started from receiving artificial attendance records for lessons that took place before their enrolment.
+The eligibility rules are:
 
-Deleting a learner's `CourseEnrollment` also cleans up that learner's course-specific attendance relationships.
+```text
+scheduled / rescheduled
+→ included only when start_time is still in the future
 
-The `ClassSession` records themselves are **not deleted or rewritten**, because they belong to the `Course` and represent the shared teaching schedule/history independently of any one learner.
+pending_reschedule
+→ always eligible because the lesson has not yet taken place,
+  even if its old stored time is already in the past
 
-Instead, when the enrolment is deleted, all `Attendance` records that connect that learner to `ClassSession` records belonging to the same course are deleted.
+held_attendance_pending
+→ excluded
+
+complete_attendance_submitted
+→ excluded
+
+cancelled
+→ excluded
+```
+
+Using `start_time` rather than `end_time` for new assignment prevents a learner who becomes active after a lesson has already started from being attached halfway through that lesson.
+
+The learner's actually assigned sessions are subsequently determined from their `Attendance` records rather than reconstructed from dates. This means that once an Attendance relationship exists for a learner/session, that lesson remains part of that learner's enrolment history even if the `ClassSession.start_time` is later changed by rescheduling.
 
 Conceptually:
 
 ```text
-CourseEnrollment deleted
+CourseEnrollment
         │
-        ▼
-Learner is no longer enrolled in the Course
-        │
-        ├── Course ClassSessions
-        │       └── preserved unchanged
-        │
-        └── Learner-specific Attendance records
-                for those Course ClassSessions
+        └── learner membership in one Course
                 │
                 ▼
-              deleted
+Attendance
+        │
+        └── learner-specific relationship with one ClassSession
 ```
 
-This ensures that removing a learner from a course also removes the learner from the course's attendance data, while preserving the shared lesson records required by the course and any remaining learners.
+This distinction is fundamental:
+
+```text
+CourseEnrollment = one learner's membership in one course
+ClassSession     = one lesson lifecycle
+Attendance       = one learner's state/outcome for that lesson
+```
+
+Deleting an enrolment does **not** delete the course's `ClassSession` records because those lessons belong to the shared course schedule and may also belong to other learners.
+
+Permanent enrolment deletion is reserved for correcting genuinely erroneous enrolments. Legitimate lifecycle changes should use the enrolment statuses instead.
+
+Normal deletion is blocked when genuine attendance history already exists. A deliberate superuser correction can use the force-delete path to remove:
+
+```text
+erroneous CourseEnrollment
++
+all Attendance records for that learner/course
+```
+
+while preserving:
+
+```text
+Course
++
+Course ClassSessions
++
+other learners' Attendance
+```
+
+This gives the database two distinct behaviours:
+
+```text
+Legitimate enrolment lifecycle
+→ preserve history
+→ active / paused / completed / cancelled
+
+Enrolment created by mistake
+→ superuser administrative correction
+→ permanent enrolment + learner/course Attendance removal
+```
+
+---
+
+### Course Enrolment Lifecycle
+
+---
+
+`CourseEnrollment.save()` detects genuine status transitions and synchronizes only the learner-specific Attendance records affected by that transition.
+
+#### Pausing an enrolment
+
+When an active enrolment becomes `paused`:
+
+```text
+future scheduled/rescheduled Attendance(status=pending)
+→ enrollment_paused
+
+pending_reschedule Attendance(status=pending)
+→ enrollment_paused
+```
+
+For `scheduled` and `rescheduled` lessons, only lessons that have **not yet started** are changed.
+
+For `pending_reschedule`, the old stored lesson time may already be past, but the lesson has not actually taken place; therefore the learner's pending Attendance can still become `enrollment_paused`.
+
+The following are preserved:
+
+- lessons that have already started;
+- `held_attendance_pending` lessons;
+- `complete_attendance_submitted` lessons;
+- cancelled lessons;
+- genuine `attended`, `missed`, or `excused` outcomes.
+
+Pausing a learner's enrolment does **not** pause the parent `Course` and does not change other learners.
+
+#### Reactivating an enrolment
+
+When a paused enrolment becomes `active` again:
+
+```text
+eligible enrollment_paused Attendance
+→ pending
+```
+
+The application also creates any missing Attendance records for lessons that still represent future teaching.
+
+Historical `enrollment_paused` records are not rewritten retroactively.
+
+#### Cancelling an enrolment
+
+When an enrolment becomes `cancelled`, remaining operational Attendance placeholders are removed:
+
+```text
+pending
+enrollment_paused
+```
+
+for:
+
+```text
+future scheduled/rescheduled lessons
++
+all pending_reschedule lessons
+```
+
+Genuine historical attendance outcomes remain untouched:
+
+```text
+attended
+missed
+excused
+```
+
+Cancelling one learner's `CourseEnrollment` does **not** cancel the shared `ClassSession` because the lesson belongs to the Course, not to an individual learner.
+
+#### Paused learners and lesson delivery
+
+`enrollment_paused` means that **this learner does not require an attendance outcome for that lesson**.
+
+A mixed group remains a valid held lesson when, for example:
+
+```text
+Student A → attended
+Student B → enrollment_paused
+Student C → missed
+```
+
+However, if every assigned learner is `enrollment_paused` when a scheduled/rescheduled lesson reaches its `end_time`, the lesson must not be interpreted as physically held merely because time passed.
+
+The model therefore distinguishes:
+
+```text
+attendance_records_submitted
+→ Does every Attendance row require no further teacher action?
+
+all_attendance_enrollment_paused
+→ Is there nobody expected to attend this lesson?
+```
+
+When **all** assigned learners are paused:
+
+```text
+scheduled / rescheduled
++
+end_time passed
++
+all Attendance = enrollment_paused
+→ pending_reschedule
+```
+
+This keeps the lesson in the teaching obligation rather than falsely recording an undelivered lesson as held.
 
 ---
 
@@ -569,8 +781,6 @@ Each timetable slot stores:
 
 The timetable represents a **scheduling rule**, not an individual lesson.
 
-This distinction is important:
-
 ```text
 CourseTimetableSlot
         │
@@ -591,23 +801,49 @@ course
 + start_time
 ```
 
-Validation also ensures that the end time occurs after the start time.
+The end time is deliberately **not** part of the uniqueness identity because it is an editable property of the slot.
 
-The timetable architecture allows the system to generate individual class sessions automatically while keeping those generated lessons independent enough to be completed or rescheduled later.
+Validation also ensures:
 
-Changes to a recurring timetable can be propagated to applicable **future scheduled sessions**. Historical lesson records are protected: held sessions and lessons that have already been individually rescheduled are not rewritten simply because the recurring timetable changes.
+- `end_time` occurs after `start_time`;
+- when Course class duration is manually controlled, the slot duration must match that class duration.
+
+A genuine timetable-slot change is allowed to synchronize applicable future scheduled lessons, but routine saves must not rewrite historical teaching data.
+
+`CourseTimetableSlot.save()` therefore detects whether the slot was actually added or changed before delegating schedule synchronization.
+
+`CourseTimetableSlot.delete()` can likewise synchronize the remaining future scheduled sequence when the Course is operational and other timetable slots remain.
+
+For automatic-duration Courses, timetable changes also update the calculated `class_duration`.
+
+Historical delivery is protected throughout this process:
 
 ```text
-Recurring timetable rule
-        │
-        └── may update applicable future scheduled lessons
+Held / complete lesson
+→ never moved by recurring timetable synchronization
 
-Completed / individually rescheduled lesson
-        │
-        └── remains unchanged
+pending_reschedule
+→ never moved automatically
+
+rescheduled
+→ never moved automatically
+
+lesson already started
+→ never moved automatically
+
+future scheduled
+→ may be rebuilt from the current timetable
 ```
 
-This preserves historical accuracy while allowing future scheduled lessons to remain synchronised with legitimate timetable changes.
+This preserves the distinction between:
+
+```text
+Recurring timetable
+→ current scheduling rule
+
+ClassSession
+→ actual operational/historical lesson record
+```
 
 ---
 
@@ -615,11 +851,9 @@ This preserves historical accuracy while allowing future scheduled lessons to re
 
 ---
 
-Course scheduling takes configured bank holidays into account when calculating the expected delivery calendar.
+Course scheduling takes configured active `BankHoliday` records into account when calculating the expected delivery calendar.
 
-Rather than treating the course end date as a simple arithmetic calculation from the start date, the scheduling logic builds the expected teaching dates from the recurring timetable and excludes dates represented by applicable `BankHoliday` records.
-
-Conceptually:
+Rather than treating the course end date as a simple arithmetic calculation from the start date, the scheduling logic builds valid teaching dates from the recurring timetable and skips applicable bank-holiday dates.
 
 ```text
 Course start date
@@ -627,6 +861,8 @@ Course start date
 Recurring timetable
         +
 Required number of classes
+        +
+Active BankHoliday ranges
         │
         ▼
 Generate teaching dates
@@ -642,7 +878,9 @@ Final valid teaching date
 Course end date
 ```
 
-This ensures that the calculated course end date reflects the **actual expected teaching calendar** rather than assuming that every recurring timetable date will contain a lesson.
+Initial generation and later safe future-schedule synchronization both respect active bank-holiday ranges.
+
+Once actual `ClassSession` records exist, however, the final stored ClassSession becomes the operational source of truth for the Course end date because individual lessons may later be rescheduled or otherwise diverge from the original theoretical schedule.
 
 ---
 
@@ -652,7 +890,17 @@ This ensures that the calculated course end date reflects the **actual expected 
 
 `ClassSession` represents an **actual lesson instance** belonging to a course.
 
-Once the required course configuration exists, EnglishGrows can automatically generate the lessons required to deliver the complete course.
+Once the required course configuration exists, English Grows automatically generates the lessons required to deliver the complete course.
+
+Generation is permitted only when the Course:
+
+- has already been saved;
+- is `confirmed` or `active`;
+- has no existing `ClassSession` records;
+- has a `start_date`;
+- has a calculable `number_of_classes`;
+- has at least one timetable slot;
+- has at least one active `CourseEnrollment`.
 
 The generation process uses:
 
@@ -660,7 +908,7 @@ The generation process uses:
 - **Number of classes**
 - **Class duration**
 - **Recurring timetable slots**
-- **Configured bank holidays**
+- **Configured active bank holidays**
 - **Active learner enrolments**
 
 Conceptually:
@@ -674,7 +922,7 @@ Course configuration
         └── Timetable
                 │
                 ▼
-        Generate sessions
+        calculate_course_schedule()
                 │
                 ▼
         ClassSession 1
@@ -686,13 +934,9 @@ Course configuration
         Final ClassSession
 ```
 
-The generation process is designed to be **idempotent** and guarded against accidental duplication.
-
-Re-running the generation logic does not duplicate existing lessons. Where appropriate, it can create missing sessions or attendance records while preserving sessions and attendance records that already exist.
+Initial generation is guarded so that an existing course schedule is never regenerated merely because the helper is called again.
 
 Each generated session receives a sequential `class_number`.
-
-For example:
 
 ```text
 Course
@@ -703,47 +947,216 @@ Course
 └── Lesson 5
 ```
 
-The combination of:
+The combination:
 
 ```text
 course + class_number
 ```
 
-is unique.
+is unique and acts as the stable lesson identity within the Course.
 
-Attendance records are also automatically generated for active learners when the class-session structure is created.
+`start_time` is deliberately not part of this identity because a lesson may later be rescheduled while remaining the same lesson.
 
-Class sessions can expose a session-specific meeting link, with the course meeting link used as a fallback where appropriate. This allows the calendar and role-specific lesson interfaces to use the same underlying course/session data when presenting **Join class** actions.
+Existing ClassSession records are never overwritten by initial generation. Their dates, status and identity are preserved.
+
+Attendance records are generated for learners who are actively enrolled when the initial ClassSession structure is created:
+
+```text
+ClassSession
+    │
+    ├── Attendance → Student A
+    ├── Attendance → Student B
+    └── Attendance → Student C
+```
+
+Each initial Attendance record starts as:
+
+```text
+pending
+```
+
+Later learners are handled by the `CourseEnrollment` lifecycle rather than by regenerating the Course.
+
+Class sessions also contain the meeting link used by calendar and lesson interfaces. When a ClassSession meeting link is changed, the model propagates that non-empty link across the other ClassSessions belonging to the same Course so the course's lesson series remains operationally consistent.
+
+After generation, the Course end date is synchronized from the actual final ClassSession.
+
+---
+
+### Safe Future Schedule Synchronisation
+
+---
+
+Initial course generation and synchronization of an **existing** course are deliberately separate operations.
+
+Initial generation can safely construct the whole sequence from Lesson 1 because there is no teaching history yet.
+
+Once teaching has started, recalculating the whole theoretical schedule from Lesson 1 and selectively applying those dates to only some existing ClassSessions is unsafe. It can mix historical dates from an old timetable with future dates from a new timetable and produce duplicate or chronologically corrupted lesson sequences.
+
+English Grows therefore uses a protected future-only synchronization strategy.
+
+#### When synchronization is triggered
+
+For an existing `confirmed` or `active` Course, future schedule synchronization is triggered only when a genuine schedule-defining change occurs.
+
+Course-level schedule-defining changes include:
+
+```text
+start_date
+total_hours
+class_duration
+```
+
+Timetable-level triggers include:
+
+```text
+CourseTimetableSlot added
+CourseTimetableSlot day changed
+CourseTimetableSlot start_time changed
+CourseTimetableSlot end_time changed
+CourseTimetableSlot deleted
+```
+
+An unchanged Course save — including simply opening a Course in Django Admin and pressing **Save** — must **not** synchronize the schedule.
+
+#### Which ClassSessions can move
+
+Only ClassSessions satisfying both conditions are mutable:
+
+```text
+status == scheduled
+AND
+start_time > now
+```
+
+The following are protected:
+
+```text
+held_attendance_pending
+complete_attendance_submitted
+pending_reschedule
+rescheduled
+cancelled
+already-started / past lessons
+```
+
+Existing ClassSession IDs and class numbers remain unchanged, and Attendance rows stay attached to the same lesson records.
+
+#### How the replacement future sequence is built
+
+The model rebuilds only the remaining future `scheduled` teaching sequence from the Course's **current timetable**.
+
+```text
+Current Course timetable
+        │
+        ├── skip active BankHoliday dates
+        ├── skip slots already occupied by protected future lessons
+        ├── ignore past/currently-started slots
+        ▼
+Next safe future slot
+        │
+        ▼
+Next mutable scheduled ClassSession
+```
+
+For a Course already in progress, scanning begins from the current local date rather than restarting the operational history from Lesson 1.
+
+A protected future `rescheduled` lesson remains fixed and blocks an overlapping automatically generated slot.
+
+`pending_reschedule` and `cancelled` records do not block a timetable slot because their stored times no longer represent a valid teaching appointment.
+
+The final short lesson, where applicable, preserves its calculated reduced duration.
+
+#### Corruption guard
+
+The synchronization process also contains an explicit integrity guard.
+
+Once a higher-numbered lesson has genuinely been held, an earlier-numbered lesson must not still exist as an ordinary future `scheduled` lesson.
+
+For example:
+
+```text
+Lesson 16 → complete_attendance_submitted
+Lesson 5  → scheduled in the future
+```
+
+is not a valid teaching sequence.
+
+If such pre-existing inconsistency is detected, automatic synchronization raises a `ValidationError` rather than attempting another partial rewrite.
+
+```text
+Inconsistent historical/future class numbering
+        │
+        ▼
+Automatic synchronization BLOCKED
+        │
+        ▼
+Deliberate data repair required
+```
+
+The synchronization runs inside a database transaction. If a complete safe future sequence cannot be produced, the operation fails rather than leaving a partially rewritten schedule.
+
+After a successful synchronization, the Course end date is synchronized again from the actual final ClassSession.
 
 ---
 
 ### Class Session Lifecycle
 
-A `ClassSession` has its own lifecycle independently of the parent course.
+---
+
+A `ClassSession` has its own lifecycle independently of the parent Course and independently of each learner's `Attendance`.
 
 The canonical statuses are:
 
 | Status | Meaning |
 | :--- | :--- |
-| `scheduled` | The lesson is scheduled normally and has not yet reached its current `end_time` |
-| `pending_reschedule` | The lesson will not take place at its current scheduled time and is waiting for a new date/time |
-| `rescheduled` | The existing lesson has been moved to a new date/time and is waiting for that occurrence |
-| `held_attendance_pending` | The lesson has ended and is therefore held, but attendance has not yet been fully submitted |
-| `complete_attendance_submitted` | The lesson has ended and attendance has been fully submitted |
+| `scheduled` | The lesson is scheduled normally and has not yet completed its current teaching slot |
+| `pending_reschedule` | The lesson has not taken place and is waiting for a valid new date/time |
+| `rescheduled` | The same existing lesson has been moved to a new valid date/time and is waiting for that occurrence |
+| `held_attendance_pending` | The lesson has ended and was held, but one or more Attendance records still require teacher action |
+| `complete_attendance_submitted` | The lesson has ended and every learner-specific Attendance obligation has been finalized |
 | `cancelled` | The lesson will not take place |
 
-The normal post-lesson flow is:
+The legacy `completed` ClassSession status is no longer part of the canonical lifecycle. Course completion remains a separate `Course.status="completed"` state.
+
+Two concepts are intentionally kept separate:
+
+```text
+TEMPORAL STATE
+→ determined from end_time
+
+LIFECYCLE STATE
+→ determined from ClassSession.status
+```
+
+The temporal helper is:
+
+```text
+is_past
+→ end_time <= current time
+```
+
+while the lifecycle helper `is_held` is true only for:
+
+```text
+held_attendance_pending
+complete_attendance_submitted
+```
+
+A lesson can therefore have an old/past stored time without necessarily being considered held, for example when it is `pending_reschedule`.
+
+#### Normal lesson flow
 
 ```text
 scheduled
     │
     │ end_time passes
     ▼
-Attendance already submitted?
+Are learner Attendance obligations finalized?
     │
     ├── No  → held_attendance_pending
     │              │
-    │              │ teacher submits attendance
+    │              │ teacher finalizes remaining Attendance
     │              ▼
     │       complete_attendance_submitted
     │
@@ -752,9 +1165,7 @@ Attendance already submitted?
 
 Attendance submission and lesson completion are deliberately separate concepts.
 
-A teacher may submit the learner `Attendance` records **after `start_time` but before `end_time`**. Those records are stored immediately as `attended`, `missed`, or `excused`, but the parent `ClassSession` remains `scheduled` or `rescheduled` while the lesson is still in progress.
-
-For example:
+A teacher may submit learner Attendance **after `start_time` but before `end_time`**.
 
 ```text
 ClassSession
@@ -763,52 +1174,123 @@ ClassSession
 19:15
 Teacher submits attendance
         │
-        ├── Attendance records → attended / missed / excused
-        └── ClassSession       → remains scheduled
+        ├── Attendance → attended / missed / excused
+        └── ClassSession remains scheduled/rescheduled
 
 20:00+
 Lesson has ended
         │
-        └── attendance already submitted
+        └── Attendance already finalized
                 │
                 ▼
         complete_attendance_submitted
 ```
 
-If the lesson reaches `end_time` without fully submitted attendance, the session becomes `held_attendance_pending`.
+If the lesson reaches `end_time` while one or more Attendance rows remain `pending`:
 
 ```text
-19:00 – 20:00 lesson
+scheduled / rescheduled
         │
-        ▼
-20:00+
-Attendance still pending
-        │
+        │ end_time passes
         ▼
 held_attendance_pending
         │
-        │ teacher later submits attendance
+        │ teacher later finalizes Attendance
         ▼
 complete_attendance_submitted
 ```
 
-This distinction ensures that:
+#### All learners paused
 
-- attendance can be entered during a live lesson without prematurely marking the lesson as held;
-- course-delivery metrics count a lesson as held only after `end_time`;
-- attendance-reporting metrics use finalized attendance only after the parent session reaches `complete_attendance_submitted`;
+`enrollment_paused` is not a learner attendance outcome. It records that no attendance outcome is required for that learner because their CourseEnrollment is paused for that lesson.
+
+This creates an important edge case.
+
+If every assigned learner is `enrollment_paused`, the session must not become a held lesson merely because `end_time` passed.
+
+```text
+scheduled / rescheduled
+        +
+end_time passed
+        +
+ALL Attendance rows = enrollment_paused
+        │
+        ▼
+pending_reschedule
+```
+
+This keeps the lesson outstanding for future delivery.
+
+The order of lifecycle checks is therefore important:
+
+```text
+1. all assigned learners enrollment_paused?
+   → pending_reschedule
+
+2. otherwise, all Attendance obligations finalized?
+   → complete_attendance_submitted
+
+3. otherwise
+   → held_attendance_pending
+```
+
+A mixed group behaves differently:
+
+```text
+Student A → attended
+Student B → enrollment_paused
+Student C → missed
+```
+
+In that case the lesson was genuinely delivered, all learner-specific obligations are accounted for, and after `end_time` the ClassSession can become:
+
+```text
+complete_attendance_submitted
+```
+
+#### Rescheduling flow
+
+```text
+scheduled
+    ↓
+pending_reschedule
+    ↓
+rescheduled
+    ↓
+end_time passes
+    ├── attendance finalized → complete_attendance_submitted
+    └── attendance pending   → held_attendance_pending
+```
+
+A rescheduled lesson always remains the **same ClassSession database object**.
+
+#### Cancellation flow
+
+```text
+scheduled / pending_reschedule / rescheduled
+    ↓
+cancelled
+```
+
+Cancellation means the lesson will not take place.
+
+These lifecycle distinctions ensure that:
+
+- attendance can be entered during a live lesson without prematurely marking it as held;
+- delivery metrics count a lesson as held only when its lifecycle explicitly records that fact;
+- attendance-reporting metrics use finalized learner outcomes only after the parent session reaches `complete_attendance_submitted`;
+- all-paused lessons do not become false held lessons;
 - a session with outstanding attendance remains visibly actionable through `held_attendance_pending`;
-- course completion cannot occur until every `ClassSession` has reached `complete_attendance_submitted`.
-
-A session can also reach `cancelled` when its parent `Course` is manually cancelled through the Django Admin and the session is still a future unresolved lesson.
-
-Course-level cancellation is distinct from lesson rescheduling: a cancelled lesson is no longer expected to take place, whereas a `pending_reschedule` or `rescheduled` lesson remains part of the course delivery plan.
+- `pending_reschedule` remains part of the teaching obligation;
+- course completion cannot occur until every ClassSession has reached `complete_attendance_submitted`.
 
 ---
 
 ### Automatic Class Session Status Synchronisation
 
-Passing `end_time` does not itself execute Django code. EnglishGrows therefore combines **model-owned lifecycle rules** with a scheduled production task so that finished lessons are transitioned automatically.
+---
+
+Passing `end_time` does not itself execute Django code. English Grows therefore combines **model-owned lifecycle rules** with a scheduled production task so that finished lessons transition automatically.
 
 The `ClassSession` model owns two complementary synchronization operations:
 
@@ -833,26 +1315,45 @@ AND
 status is scheduled OR rescheduled
 ```
 
-For each eligible session, `synchronize_status_after_end()` applies the attendance-aware transition:
+For each eligible lesson, `synchronize_status_after_end()` applies the following logic:
 
 ```text
 Finished scheduled/rescheduled ClassSession
                 │
                 ▼
-Attendance records already submitted?
+Are ALL assigned learners enrollment_paused?
                 │
-        ┌───────┴───────┐
-        │               │
-       Yes              No
-        │               │
-        ▼               ▼
-complete_attendance_    held_attendance_pending
-submitted
+        ┌───────┴────────┐
+        │                │
+       Yes               No
+        │                │
+        ▼                ▼
+pending_reschedule   Are all Attendance obligations finalized?
+                          │
+                    ┌─────┴─────┐
+                    │           │
+                   Yes          No
+                    │           │
+                    ▼           ▼
+          complete_attendance_  held_attendance_pending
+              submitted
 ```
 
-The synchronization process changes the `ClassSession` lifecycle state only. It does **not** rewrite or resubmit the learner `Attendance` records.
+A session already in `held_attendance_pending` can later move to `complete_attendance_submitted` when its remaining Attendance obligations are finalized.
 
-In production, a dedicated **Render Cron Job** runs every **5 minutes** and invokes the Django management command:
+The following states are deliberately untouched by this end-time synchronizer:
+
+```text
+pending_reschedule
+complete_attendance_submitted
+cancelled
+```
+
+The synchronization process changes the parent `ClassSession` lifecycle state only. It does **not** fabricate or rewrite learner Attendance outcomes.
+
+`Attendance.save()` calls the same parent synchronization helper after storing a learner-specific change. This means that when a teacher finalizes the last outstanding Attendance record for an already-ended lesson, the parent ClassSession can transition immediately without waiting for the next background run.
+
+In production, a dedicated **Render Cron Job** runs every **5 minutes** and invokes:
 
 ```bash
 python manage.py transition_past_sessions
@@ -866,27 +1367,27 @@ ClassSession.transition_past_sessions()
 
 This provides automatic background synchronization even when no user is interacting with the application.
 
-The individual `synchronize_status_after_end()` method can also be called from a teacher attendance workflow so that a specific lesson is synchronized immediately when the teacher opens or submits attendance after the lesson has ended, without waiting for the next Cron Job run.
-
 The combined behaviour is therefore:
 
 ```text
 Lesson ends
     │
-    ├── Teacher interacts with attendance immediately
+    ├── Teacher interacts with attendance
     │       │
-    │       └── synchronize_status_after_end()
+    │       └── Attendance.save()
+    │               ↓
+    │          synchronize_status_after_end()
     │               → immediate targeted synchronization
     │
     └── No user action
             │
             └── Render Cron Job
-                    → runs every 5 minutes
+                    → every 5 minutes
                     → transition_past_sessions()
-                    → background synchronization
+                    → same model-owned lifecycle rules
 ```
 
-Both paths use the same model-owned lifecycle rules, preventing the view, management command, and scheduled task from maintaining separate interpretations of session status.
+The model remains the single authority for these transitions. Views, Django Admin, the management command and the Cron Job do not maintain separate status logic.
 
 ---
 
@@ -898,7 +1399,7 @@ When a lesson needs to be rescheduled, either the **learner/employee or the teac
                          ┌─────────────────────┐
                          │      scheduled      │
                          └──────────┬──────────┘
-                                    │
+                                   │
                      Reschedule requested by
                          either party
                          ┌──────────┴──────────┐
@@ -907,19 +1408,19 @@ When a lesson needs to be rescheduled, either the **learner/employee or the teac
                 Learner / Employee          Teacher
                          │                     │
                          └──────────┬──────────┘
-                                    ▼
+                                   ▼
                          pending_reschedule
-                                    │
+                                   │
                           New date/time agreed
-                                    │
-                                    ▼
+                                   │
+                                   ▼
                        Teacher reschedules class
-                                    │
-                                    ▼
+                                   │
+                                   ▼
                               rescheduled
-                                    │
+                                   │
                            Lesson reaches end_time
-                                    │
+                                   │
                          ┌──────────┴──────────┐
                          │                     │
                          ▼                     ▼
@@ -927,9 +1428,9 @@ When a lesson needs to be rescheduled, either the **learner/employee or the teac
                          │                     │
                          ▼                     ▼
           complete_attendance_submitted   held_attendance_pending
-                                               │
-                                               │ attendance submitted
-                                               ▼
+                                              │
+                                              │ attendance submitted
+                                              ▼
                                 complete_attendance_submitted
 ```
 
@@ -998,85 +1499,160 @@ The distinction between the statuses is therefore:
 | `rescheduled` | The teacher has updated the existing session with the newly agreed date/time |
 | `held_attendance_pending` | The lesson has reached its `end_time` but attendance has not yet been fully submitted |
 | `complete_attendance_submitted` | The lesson has reached its `end_time` and attendance has been fully submitted |
-| `cancelled` | The lesson has been cancelled because its parent course was manually cancelled before that future session took place |
+| `cancelled` | The lesson will not take place because the Course cancellation lifecycle cancelled that unresolved lesson |
 
 This workflow allows rescheduling to be initiated by either side while keeping responsibility for modifying the official course schedule with the teacher.
 
 ---
 
-### Course Cancellation
+### Course Pause
 
-Course cancellation is an **administrative course-level action** and is deliberately separate from the normal lesson-rescheduling workflow.
+---
 
-The current rule is:
+Pausing a Course is a **course-level teaching interruption** and is deliberately different from pausing an individual learner's `CourseEnrollment`.
 
-> When a `Course` is manually changed to `Cancelled` in the Django Admin, applicable future class sessions are automatically moved to `cancelled`.
-
-The Django Admin detects a genuine status change through `CourseAdmin.save_model()`:
+When a `Course` genuinely transitions to:
 
 ```text
-Course edited in Django Admin
-        │
-        ▼
-Status field changed to Cancelled
-        │
-        ▼
-Course saved
-        │
-        ▼
-Course.cancel_future_sessions()
+paused
 ```
 
-Only future sessions whose `start_time` has not yet passed are considered. Within that future set, the following session states are cancelled:
+the Course model invalidates future normal teaching slots:
 
 ```text
-scheduled
+future scheduled   → pending_reschedule
+future rescheduled → pending_reschedule
+```
+
+The following are not rewritten:
+
+```text
+existing pending_reschedule
+lesson already started
+held_attendance_pending
+complete_attendance_submitted
+cancelled
+```
+
+Course-level pause does **not** change learner Attendance outcomes and does **not** automatically change `CourseEnrollment.status`.
+
+In particular:
+
+```text
+Course paused
+≠
+Attendance enrollment_paused
+```
+
+`Attendance.STATUS_ENROLLMENT_PAUSED` belongs only to an individual learner's enrolment lifecycle.
+
+The use of `pending_reschedule` for future Course-level paused lessons means:
+
+> the lesson remains part of the Course obligation, but its currently stored slot is no longer considered a valid teaching appointment.
+
+Reactivating the Course does **not** automatically convert these `pending_reschedule` lessons back to `scheduled`. A valid date/time still needs to be established through the normal rescheduling workflow.
+
+This prevents a Course pause from silently restoring old teaching appointments that may no longer be valid.
+
+---
+
+### Course Cancellation
+
+---
+
+Course cancellation is an **administrative course-level lifecycle transition** and is deliberately separate from lesson rescheduling and learner-enrolment cancellation.
+
+The cancellation rule belongs to `Course.save()`.
+
+Whenever a Course genuinely transitions to:
+
+```text
+cancelled
+```
+
+the model invokes its cancellation helper regardless of whether that transition originated from Django Admin or another legitimate model save path.
+
+The applicable ClassSession rules are:
+
+```text
+scheduled / rescheduled
+→ cancelled only when the lesson has not yet started
+
 pending_reschedule
-rescheduled
+→ always cancelled because the lesson has not taken place,
+  even if its old stored time is already in the past
+```
+
+Held, complete and already-started lesson history is preserved.
+
+Conceptually:
+
+```text
+Course → cancelled
+        │
+        ▼
+Unresolved ClassSessions that will no longer take place
+        │
+        ├── future scheduled
+        ├── future rescheduled
+        └── pending_reschedule
         │
         ▼
 cancelled
 ```
 
-Held and historical lesson records are preserved.
+The cancellation operation updates the existing ClassSession records rather than deleting them or creating replacements.
 
-Conceptually:
+Their:
+
+- database identity;
+- class number;
+- Course relationship;
+- historical references
+
+remain intact.
+
+Attendance has no separate `cancelled` learner outcome because cancellation describes whether the **lesson** will take place, not how a learner attended it.
+
+For ClassSessions being cancelled, operational Attendance placeholders are removed:
 
 ```text
-Course manually set to Cancelled
-            │
-            ▼
-Future unresolved ClassSessions
-            │
-            ├── scheduled
-            ├── pending_reschedule
-            └── rescheduled
-            │
-            ▼
-        cancelled
-            │
-            ▼
-Untouched scheduled Attendance placeholders
-            │
-            ▼
-          deleted
+pending
+enrollment_paused
 ```
 
-The cancellation operation updates the existing `ClassSession` records rather than deleting them or generating replacements. Their database identity, class number, course relationship, and historical references are therefore preserved.
+Genuine historical learner outcomes are preserved:
 
-Cancellation belongs to the `ClassSession` lifecycle rather than to the learner `Attendance` outcome lifecycle. `Attendance` therefore does not require a separate `cancelled` status.
+```text
+attended
+missed
+excused
+```
 
-For the future sessions being cancelled, only untouched `Attendance` rows that are still `pending` placeholders are deleted. Genuine attendance outcomes already stored as `attended`, `missed`, or `excused` are preserved rather than rewritten.
+The Course cancellation helper therefore separates:
 
-Past lesson and attendance history remains untouched. This preserves the training record that existed before cancellation while ensuring that no future cancelled lesson remains as a pending attendance obligation.
+```text
+lesson lifecycle
+→ ClassSession.status = cancelled
 
-This automatic propagation is currently tied specifically to a **manual course-status change in the Django Admin**. It is not a generic side effect of every possible `Course.save()` operation elsewhere in the application.
+learner historical outcome
+→ preserve genuine Attendance
+
+future learner obligation
+→ remove pending / enrollment_paused placeholders
+```
+
+Course cancellation does **not** automatically rewrite individual `CourseEnrollment.status` values. Course lifecycle and learner membership lifecycle remain separate dimensions.
+
+Django Admin is one interface through which a Course can be cancelled, but Admin does not own the business rule. The rule belongs to the Course model so all valid save paths use the same lifecycle semantics.
 
 ---
 
 ### Attendance
 
-The `Attendance` model records the attendance status of an individual learner for an individual `ClassSession`.
+---
+
+The `Attendance` model records the state or outcome of **one individual learner for one individual `ClassSession`**.
 
 The relationship can be represented as:
 
@@ -1092,7 +1668,9 @@ ClassSession
     User
 ```
 
-Each attendance record can store:
+In a group lesson there is still only one `ClassSession`, but there may be many learner-specific Attendance rows.
+
+Each Attendance record can store:
 
 - **Class session**
 - **Student**
@@ -1101,47 +1679,47 @@ Each attendance record can store:
 - **Teacher notes**
 - **Recorded timestamp**
 
-**Attendance statuses include:**
+The canonical Attendance statuses are:
 
 ```text
-Pending
-Attended
-Missed
-Excused
+pending
+attended
+missed
+excused
+enrollment_paused
 ```
 
-The status meanings are deliberately learner-specific:
+Their meanings are deliberately learner-specific:
 
 | Status | Meaning |
 | :--- | :--- |
-| `pending` | Pre-created attendance placeholder; no final learner outcome has yet been submitted |
+| `pending` | Pre-created operational placeholder; the learner's outcome still requires teacher action |
 | `attended` | The learner attended the lesson |
 | `missed` | The learner missed the lesson |
 | `excused` | The learner's absence was excused |
+| `enrollment_paused` | No learner outcome is currently required for this lesson because that learner's CourseEnrollment is paused |
 
-**The database enforces a unique learner/session relationship:**
+`enrollment_paused` is therefore **not** a positive, negative or excused attendance outcome. It is an operational non-obligation state.
+
+The database enforces:
 
 ```text
 class_session + student = unique
 ```
 
-A learner therefore cannot accidentally have two contradictory attendance records for the same lesson.
-
-For example, this is prevented:
+A learner cannot have two contradictory Attendance records for the same lesson.
 
 ```text
 Lesson 4
-├── Student A → Attended
-└── Student A → Missed   ✗
+├── Student A → attended
+└── Student A → missed   ✗
 ```
 
-Instead, the existing attendance record changes status.
+Instead, the existing Attendance row changes status.
 
-Attendance records initially act as `pending` placeholders and are subsequently updated when the teacher records the actual attendance outcome.
+Attendance rows initially act as `pending` placeholders and are subsequently updated when the teacher records the genuine learner outcome.
 
-Teachers are allowed to submit attendance **after the `ClassSession.start_time` and before its `end_time`**. Early submission finalizes the learner `Attendance` records immediately but does not prematurely mark the parent lesson as held or complete.
-
-The distinction is:
+Teachers are allowed to submit attendance **after `ClassSession.start_time` and before `ClassSession.end_time`**.
 
 ```text
 DURING THE LESSON
@@ -1155,22 +1733,82 @@ Attendance
 
 AFTER end_time
 
-attendance already submitted
+all learner obligations finalized
 → ClassSession complete_attendance_submitted
 
-attendance still pending
+one or more Attendance rows still pending
 → ClassSession held_attendance_pending
+
+all assigned learners enrollment_paused
+→ ClassSession pending_reschedule
 ```
 
-`ClassSession.attendance_records_submitted` represents whether the child attendance records all contain final submitted outcomes. It can therefore be `True` while the lesson is still running.
+`ClassSession.attendance_records_submitted` answers:
 
-By contrast, `ClassSession.attendance_is_submitted` represents the parent session lifecycle and is `True` only when the lesson has ended and its status is `complete_attendance_submitted`.
+> Does every Attendance row now represent a state requiring no further teacher attendance action?
 
-When a course is manually cancelled through the Django Admin, untouched `pending` Attendance placeholders belonging to applicable future cancelled sessions are deleted. Genuine `attended`, `missed`, or `excused` outcomes are preserved.
+The accepted states are:
 
-Attendance also participates in the `CourseEnrollment` deletion lifecycle. When a learner is removed from a course by deleting that learner's `CourseEnrollment`, the learner's `Attendance` records for that course's `ClassSession` records are deleted as well.
+```text
+attended
+missed
+excused
+enrollment_paused
+```
 
-The underlying `ClassSession` records remain intact because lesson/session identity belongs to the course, not to the individual enrolment.
+This property may therefore be `True` before the lesson ends.
+
+It is deliberately different from:
+
+```text
+ClassSession.attendance_is_submitted
+```
+
+which is true only when the **parent lesson lifecycle** has reached:
+
+```text
+complete_attendance_submitted
+```
+
+A second ClassSession property:
+
+```text
+all_attendance_enrollment_paused
+```
+
+answers a different question:
+
+> Is nobody currently expected to attend this lesson?
+
+That distinction prevents an all-paused lesson from being falsely recorded as held.
+
+Every `Attendance.save()` stores the learner-specific state first and then allows the parent ClassSession to run `synchronize_status_after_end()`.
+
+This provides immediate lifecycle synchronization when the last outstanding Attendance is finalized after a lesson has ended.
+
+Attendance also participates in CourseEnrollment lifecycle changes:
+
+```text
+CourseEnrollment → paused
+future applicable pending Attendance
+→ enrollment_paused
+
+CourseEnrollment → active
+eligible enrollment_paused Attendance
+→ pending
+
+CourseEnrollment → cancelled
+remaining operational pending/enrollment_paused Attendance
+→ deleted
+```
+
+Historical `attended`, `missed`, and `excused` outcomes are never overwritten by those ordinary enrolment status changes.
+
+Course cancellation similarly removes operational `pending` / `enrollment_paused` placeholders for lessons being cancelled while preserving genuine learner outcomes.
+
+Permanent superuser correction of an erroneous CourseEnrollment can deliberately remove **all** Attendance records for that learner/course, because the enrolment itself is known to be invalid data.
+
+The underlying ClassSession records remain intact because lesson identity belongs to the Course rather than to any individual learner.
 
 ---
 
@@ -1180,7 +1818,6 @@ The underlying `ClassSession` records remain intact because lesson/session ident
 
 Attendance data provides a shared source of information for the three principal authenticated areas of the platform.
 
----
 #### Learners
 
 Learners can review their own:
@@ -1192,7 +1829,6 @@ Learners can review their own:
 - **Excused absences**
 - **Individual lesson records**
 
----
 #### Teachers
 
 Teachers can:
@@ -1204,7 +1840,6 @@ Teachers can:
 - **Review attendance by learner**
 - **Review attendance by course**
 
----
 #### Company Administrators
 
 Company administrators can review:
@@ -1219,20 +1854,20 @@ Company administrators can review:
 
 Attendance reporting deliberately distinguishes **lesson delivery** from **attendance finalization**.
 
-A lesson counts as held for delivery purposes when its `ClassSession` status is either:
+A lesson counts as held for delivery purposes when its ClassSession status is:
 
 ```text
 held_attendance_pending
 complete_attendance_submitted
 ```
 
-Attendance rates and submitted-attendance reporting, however, use only lessons whose parent `ClassSession` has reached:
+Attendance-rate calculations use only learner outcomes attached to parent sessions that have reached:
 
 ```text
 complete_attendance_submitted
 ```
 
-Within those finalized sessions, the learner outcomes used for attendance calculations are:
+The learner outcomes included in the attendance-rate denominator are:
 
 ```text
 attended
@@ -1240,11 +1875,32 @@ missed
 excused
 ```
 
-Future `pending` attendance placeholders are excluded from attendance-rate calculations.
+The current percentage is:
 
-Attendance records submitted during a lesson are also excluded from finalized attendance reporting until the parent `ClassSession.end_time` has passed and the session itself reaches `complete_attendance_submitted`.
+```text
+attended
+────────────── × 100
+attended + missed + excused
+```
 
-**This prevents future or still-running lessons from affecting historical attendance statistics while still allowing teachers to submit attendance during the lesson.**
+The following are excluded:
+
+```text
+pending
+enrollment_paused
+```
+
+because they do not represent finalized learner attendance outcomes.
+
+An `excused` absence remains part of the current denominator policy even though it is distinguished from `missed` in reporting.
+
+Low-attendance warning logic is evaluated only after at least one finalized learner outcome exists. The current warning threshold is below **75%**.
+
+Attendance records submitted during a still-running lesson are also excluded from finalized reporting until the parent ClassSession itself reaches `complete_attendance_submitted`.
+
+This prevents future, paused, or still-running lesson obligations from distorting historical attendance statistics while still allowing teachers to submit attendance during the lesson.
+
+`CourseEnrollment.eligible_sessions` uses existing Attendance relationships as the source of truth for which lessons were actually assigned to that learner. This avoids reconstructing learner participation from mutable lesson dates.
 
 ---
 
@@ -1548,11 +2204,9 @@ This separation allows EnglishGrows to provide both **fine-grained progress grap
 
 ---
 
-EnglishGrows includes a role-aware calendar built from the platform's existing `ClassSession` records.
+EnglishGrows includes a role-aware calendar built directly from the platform's existing `ClassSession` records.
 
 A separate calendar-event model is not required.
-
-Instead:
 
 ```text
 Course
@@ -1561,12 +2215,15 @@ Course
 ClassSession
    │
    ▼
-Calendar presentation
+Calendar event endpoint
+   │
+   ▼
+FullCalendar presentation
 ```
 
-This ensures that the calendar reflects the same lesson information used throughout the rest of the application.
+This ensures that the calendar reflects the same lesson lifecycle and dates used throughout the rest of the application.
 
-If a class is rescheduled, the corresponding calendar entry therefore reflects the updated `ClassSession` rather than requiring a second calendar record to be manually synchronised.
+If a lesson is rescheduled, the same ClassSession appears at its updated date/time rather than requiring a second calendar record.
 
 The calendar is available in the relevant interfaces for:
 
@@ -1579,36 +2236,113 @@ Depending on device size, the interface supports views such as:
 - **Day**
 - **Week**
 - **Month**
-- **List**
+- **Month List**
 - **Multi-month / year**
 
-Calendar events provide contextual information and links appropriate to the authenticated user's role.
+Calendar presentation deliberately separates:
 
-For example:
+```text
+ClassSession.status
+→ lifecycle truth
+
+ClassSession.end_time
+→ temporal past/current truth
+
+calendar.js
+→ presentation/action decision
+```
+
+A lesson is considered temporally past only when:
+
+```text
+end_time <= current time
+```
+
+This means a lesson that has started but has not yet ended remains a current joinable lesson when its lifecycle and meeting-link conditions allow it.
+
+#### Learner / employee calendar scope
+
+The learner calendar page can identify the learner's current active enrolment for current-state interface context, but the event endpoint distinguishes **current teaching** from **historical teaching**.
+
+Current teaching events are exposed only when:
+
+```text
+CourseEnrollment.status == active
+AND
+Course.status == active
+AND
+ClassSession.status in {scheduled, rescheduled}
+```
+
+Historical lessons remain visible for Courses in which the learner has been enrolled, even if that Course or CourseEnrollment later becomes historical:
+
+```text
+held_attendance_pending
+complete_attendance_submitted
+```
+
+This prevents completed historical lessons from disappearing merely because a Course or enrolment later becomes paused, completed or cancelled.
+
+The learner calendar deliberately excludes:
+
+```text
+pending_reschedule
+→ no valid teaching slot currently exists
+
+cancelled
+→ the lesson will not take place
+```
+
+A `pending_reschedule` lesson therefore reappears only after the teacher gives the existing ClassSession a valid new date/time and changes it to `rescheduled`.
+
+#### Event lifecycle data
+
+Calendar event JSON exposes lifecycle and temporal information separately through `extendedProps`, including:
+
+```text
+status
+is_past
+meeting_link
+group_details_url
+```
+
+The JavaScript prefers the server-provided `is_past` value and retains an `event.end` fallback for compatibility with endpoints that do not yet expose it.
+
+Joinability for teacher/learner-style actions requires:
+
+```text
+NOT past
+AND
+status is scheduled OR rescheduled
+AND
+meeting_link exists
+```
+
+`held_attendance_pending` and `complete_attendance_submitted` remain visible historically but do not expose a Join action once the lesson has ended.
+
+Role-specific actions remain deliberately different:
 
 ```text
 Teacher
     ↓
-Join class when a meeting link is available
-or open Group details
+Join class for a valid current/upcoming teaching slot
+or Group details when available
 
 Learner / Employee
     ↓
-Join class when a meeting link is available
-or open Group details
+Join class for a valid current/upcoming teaching slot
+or Group details when available
 
 Company Administrator
     ↓
-Open Group details
+Group details
 ```
 
-Role-specific actions are deliberately different even though every calendar view is generated from the same underlying `ClassSession` data.
+For company administrators, Group Details remains the monitoring action even for historical events where that destination is available.
 
-Company administrators are given monitoring and course-detail access rather than teaching controls, while teachers and learners can access the class meeting when an appropriate meeting link is available.
+The frontend keeps one central `getEventAction()` decision for both list-view buttons and modal actions so action rules are not duplicated across presentation modes.
 
-Past lessons do not expose the **Join class** action, preventing obsolete meeting links from being presented as active lesson actions.
-
-The calendar therefore acts as a visual representation of the underlying lesson-delivery architecture rather than as an independent scheduling system.
+The calendar therefore acts as a visual projection of the underlying lesson-delivery architecture rather than as an independent scheduling system.
 
 ---
 
@@ -1616,7 +2350,7 @@ The calendar therefore acts as a visual representation of the underlying lesson-
 
 ---
 
-The built-in Django Admin interface provides authorised administrative access to the application's core database records.
+The built-in Django Admin provides authorised administrative access to the application's core database records.
 
 It is used as an operational and development-management interface rather than as the primary user-facing interface.
 
@@ -1637,20 +2371,109 @@ Administrators can manage data including:
 
 Where appropriate, related objects are presented through Django Admin inlines.
 
-For example, course administration can expose related:
+For example:
 
 ```text
 Course
-├── Enrolments
-├── Timetable Slots
-└── Class Sessions
+├── CourseTimetableSlot inline
+└── CourseEnrollment inline
 ```
 
-Generated class sessions are primarily intended to be **managed and updated rather than manually recreated**, helping protect the integrity of the automatically generated course structure.
+Initial ClassSession generation is **not** exposed as a manual Admin action.
 
-The Django Admin also owns the current manual course-cancellation workflow. When an administrator changes a `Course` status to `Cancelled` in the Admin interface, `CourseAdmin` detects that explicit status change and invokes the course cancellation helper. Applicable future `scheduled`, `pending_reschedule`, and `rescheduled` sessions are changed to `cancelled`; untouched `scheduled` Attendance placeholders for those sessions are deleted, while genuine attendance outcomes and held/historical lesson data remain untouched.
+Instead:
 
-The Django Admin therefore complements the role-specific application interfaces while providing authorised access to lower-level database administration.
+```text
+Course / timetable / enrolment prerequisites become complete
+        │
+        ▼
+model lifecycle
+        │
+        ▼
+try_generate_class_sessions()
+        │
+        ▼
+safe one-time initial generation
+```
+
+#### Course Admin schedule safety
+
+`CourseAdmin.save_related()` deliberately does **not** call `synchronize_future_scheduled_sessions()` merely because an existing operational Course was saved.
+
+The responsibilities are separated as follows:
+
+```text
+Course.save()
+→ detects genuine changes to start_date / total_hours / class_duration
+→ owns Course pause/cancellation lifecycle
+
+CourseTimetableSlot.save()/delete()
+→ detects genuine timetable changes
+→ delegates safe future schedule synchronization
+
+CourseAdmin.save_related()
+→ saves related inline objects
+→ finalizes automatic class-duration state
+→ performs safe initial generation only when no ClassSessions exist
+→ synchronizes end_date from actual ClassSessions
+→ does NOT independently rebuild an existing schedule
+```
+
+This protects established Courses from accidental schedule rewrites caused by an ordinary Admin save.
+
+Paused, cancelled and completed Courses do not generate new teaching schedules through `CourseAdmin.save_related()`.
+
+#### CourseEnrollment correction path
+
+Normal enrolment lifecycle changes should use:
+
+```text
+active
+paused
+completed
+cancelled
+```
+
+However, a genuinely erroneous enrolment should not remain permanently in the database simply because it was created by mistake.
+
+Permanent deletion is therefore restricted to **superusers**.
+
+The Course inline uses a custom `BaseInlineFormSet` deletion path so a superuser can explicitly invoke:
+
+```text
+CourseEnrollment.delete(force=True)
+```
+
+The dedicated `CourseEnrollmentAdmin` also provides the superuser-only force-delete path for an individual erroneous record.
+
+Force deletion removes:
+
+```text
+the erroneous CourseEnrollment
++
+all Attendance rows for that learner/course
+```
+
+while preserving:
+
+```text
+Course
+ClassSessions
+other learners
+other learners' Attendance
+```
+
+Bulk deletion is deliberately disabled in the dedicated CourseEnrollment Admin so this exceptional correction remains an individual deliberate action.
+
+#### ClassSession and Attendance protection
+
+Generated `ClassSession` records are not manually added or deleted through the standard Admin configuration. They represent the Course's generated lesson identity and history.
+
+Attendance rows are likewise generated through Course / CourseEnrollment lifecycle logic. Admin users can edit learner outcomes where appropriate, but the standard Attendance Admin and ClassSession Attendance inline do not manually add or delete Attendance rows.
+
+These restrictions complement the model-owned lifecycle rather than replacing it.
+
+The Django Admin therefore acts as a controlled administrative interface over the same domain rules used by the rest of English Grows.
 
 ---
 
@@ -1761,10 +2584,8 @@ erDiagram
         decimal total_hours
         decimal class_duration
         varchar class_duration_source
-        integer number_of_classes
         date start_date
         date end_date
-        varchar meeting_link
         varchar status
         datetime created_at
     }
@@ -1886,7 +2707,7 @@ Assessment history is deliberately separated from current assessment state throu
 
 ### Key Data-Integrity Rules
 
-EnglishGrows implements database constraints and application-level business rules to protect the consistency of teaching and learner data.
+EnglishGrows implements database constraints and model-owned business rules to protect the consistency of teaching and learner data.
 
 #### User & Organisation
 
@@ -1902,50 +2723,79 @@ EnglishGrows implements database constraints and application-level business rule
 - A learner may participate in multiple courses.
 - The learner-course relationship is represented through `CourseEnrollment`.
 - A learner cannot have duplicate enrolments for the same course.
-- Enrolment status is maintained independently from course status.
-- Completing a course automatically completes its active enrolments.
-- Historical `CourseEnrollment` records remain accessible on the relevant Teacher and Company Admin course-detail/learner pages regardless of course or enrolment status.
-- Deleting a `CourseEnrollment` removes that learner's `Attendance` records for the same course while preserving the course's shared `ClassSession` records.
+- Enrolment status is maintained independently from Course status.
+- Completing a Course automatically completes its active enrolments.
+- Historical `CourseEnrollment` records remain accessible on the relevant Teacher and Company Admin course-detail/learner pages regardless of Course or enrolment status.
+- An active learner joining an existing Course receives missing Attendance only for eligible future teaching: future `scheduled`/`rescheduled` sessions and all `pending_reschedule` sessions.
+- A learner is never assigned retroactively to an already-started `scheduled`/`rescheduled` lesson.
+- Pausing an enrolment converts applicable future `pending` Attendance rows to `enrollment_paused`.
+- Reactivating an enrolment restores eligible `enrollment_paused` rows to `pending` and creates missing eligible Attendance rows.
+- Cancelling an enrolment deletes remaining operational `pending` / `enrollment_paused` rows while preserving genuine historical outcomes.
+- Legitimate enrolments should normally be retained through `active`, `paused`, `completed` or `cancelled` lifecycle states.
+- Normal permanent enrolment deletion is blocked once genuine `attended`, `missed` or `excused` history exists.
+- A deliberate superuser force-delete path exists for genuinely erroneous enrolments and removes that learner's Attendance for the Course while preserving the shared ClassSessions.
+- Attendance rows are the source of truth for which ClassSessions were actually assigned to a particular learner.
 
 #### Timetable & Sessions
 
-- A course may contain multiple timetable slots.
-- Duplicate timetable slots for the same course, day, and start time are prevented.
+- A Course may contain multiple timetable slots.
+- Duplicate timetable slots for the same Course, day and start time are prevented.
 - Timetable end time must occur after start time.
 - `CourseTimetableSlot` represents a recurring scheduling rule.
 - `ClassSession` represents an actual lesson.
-- Each class number is unique within its course.
-- Class-session generation is protected against accidental duplication.
-- Applicable future scheduled sessions can be synchronised when the recurring timetable changes.
-- Held sessions and individually rescheduled sessions are protected from routine timetable synchronisation.
-- Configured bank holidays are excluded from generated teaching dates.
+- Each class number is unique within its Course.
+- Initial ClassSession generation is guarded against accidental regeneration.
+- Existing ClassSession IDs and class numbers are preserved when future schedule synchronization occurs.
+- Routine Course/Admin saves do not resynchronize an established schedule.
+- Existing Course synchronization is triggered only by genuine schedule-defining Course changes or genuine timetable changes.
+- Only future `scheduled` ClassSessions are mutable during recurring timetable synchronization.
+- Held, complete, pending-reschedule, rescheduled, cancelled, past and already-started lessons are protected from automatic timetable rewriting.
+- Protected future lessons block overlapping automatically generated timetable slots where appropriate.
+- Active BankHoliday ranges are skipped during schedule calculation.
+- A sequence-integrity guard blocks automatic synchronization when an earlier-numbered lesson remains future-scheduled after a higher-numbered lesson has already been held.
+- Future schedule synchronization is transactional: an unsafe or incomplete rebuild is rejected rather than partially applied.
 - A rescheduled lesson remains the same `ClassSession`.
-- A manually cancelled course causes applicable future `scheduled`, `pending_reschedule`, and `rescheduled` sessions to move to `cancelled`.
-- Past and held lesson history is preserved when a course is cancelled.
-- Teachers may submit Attendance records after `start_time` and before `end_time` without changing the still-running `ClassSession` to a held state.
-- Once `end_time` passes, an eligible `scheduled` or `rescheduled` session becomes `complete_attendance_submitted` if attendance was already submitted, otherwise it becomes `held_attendance_pending`.
-- A course only becomes completed when all of its ClassSessions have reached `complete_attendance_submitted`.
+- `ClassSession.is_past` is based on `end_time`; temporal past state is not itself proof that the lesson was held.
+- `ClassSession.is_held` is based only on `held_attendance_pending` / `complete_attendance_submitted`.
+- Teachers may submit Attendance after `start_time` and before `end_time` without changing the still-running ClassSession to a held state.
+- Once `end_time` passes, a `scheduled`/`rescheduled` lesson with outstanding Attendance becomes `held_attendance_pending`.
+- Once `end_time` passes, a `scheduled`/`rescheduled` lesson whose learner obligations are finalized becomes `complete_attendance_submitted`.
+- If **all** assigned Attendance rows are `enrollment_paused`, an ended `scheduled`/`rescheduled` lesson becomes `pending_reschedule` rather than being falsely marked held.
+- A Course only becomes completed when all of its ClassSessions have reached `complete_attendance_submitted`.
 - Finished sessions are synchronized automatically in production by a Render Cron Job running `python manage.py transition_past_sessions` every 5 minutes.
+
+#### Course Pause & Cancellation
+
+- A genuine Course transition to `paused` invalidates applicable future `scheduled` / `rescheduled` teaching slots by moving them to `pending_reschedule`.
+- Course pause does not automatically pause CourseEnrollments.
+- Course pause does not create `enrollment_paused` Attendance; that state belongs only to an individual enrolment.
+- Reactivating a Course does not automatically restore `pending_reschedule` lessons to their old slots.
+- A genuine Course transition to `cancelled` cancels applicable future `scheduled` / `rescheduled` lessons.
+- `pending_reschedule` lessons are cancelled regardless of whether their old stored date is already past because they have not taken place.
+- Course cancellation removes operational `pending` / `enrollment_paused` Attendance placeholders for cancelled lessons.
+- Genuine `attended`, `missed` and `excused` Attendance outcomes are preserved by Course cancellation.
+- Course cancellation does not automatically rewrite individual CourseEnrollment statuses.
 
 #### Attendance
 
-- Each attendance record belongs to one learner and one class session.
-- A learner can have only one attendance record per class session.
-- Attendance statuses are limited to `scheduled`, `attended`, `missed`, and `excused`.
-- Attendance records are automatically created for active learners when applicable.
-- Learners joining an existing course receive attendance records only for sessions still in the teaching pipeline.
-- Teachers may submit final attendance outcomes during a lesson after its `start_time`.
-- Early attendance submission does not make the parent `ClassSession` held or complete before `end_time`.
-- `attendance_records_submitted` can be true before the lesson ends; `attendance_is_submitted` becomes true only when the parent session reaches `complete_attendance_submitted`.
-- Future `scheduled` Attendance placeholders belonging to sessions cancelled through the course-cancellation workflow are deleted rather than moved to a separate cancelled Attendance status.
-- Genuine `attended`, `missed`, and `excused` outcomes are preserved by course cancellation.
-- Deleting a learner's `CourseEnrollment` deletes that learner's attendance records for the course without deleting the shared `ClassSession` records.
-- Attendance-rate calculations use finalized outcomes only from parent sessions in `complete_attendance_submitted`.
+- Each Attendance row belongs to one learner and one ClassSession.
+- A learner can have only one Attendance row per ClassSession.
+- Canonical Attendance statuses are `pending`, `attended`, `missed`, `excused`, and `enrollment_paused`.
+- `pending` means teacher attendance action is still required.
+- `enrollment_paused` is an operational non-obligation state, not an attendance outcome.
+- `attendance_records_submitted` treats `attended`, `missed`, `excused`, and `enrollment_paused` as states that require no further teacher attendance action.
+- `all_attendance_enrollment_paused` separately identifies the no-learner-expected edge case.
+- `attendance_records_submitted` can be true before the lesson ends; `attendance_is_submitted` becomes true only when the parent ClassSession reaches `complete_attendance_submitted`.
+- `Attendance.save()` allows the parent ClassSession to synchronize its lifecycle after the learner row is saved.
+- Attendance-rate calculations use finalized `attended`, `missed`, and `excused` outcomes from parent sessions in `complete_attendance_submitted`.
+- `pending` and `enrollment_paused` are excluded from attendance percentage calculations.
+- The current attendance denominator includes `excused` together with `attended` and `missed`.
+- Low-attendance warnings are suppressed until at least one finalized learner outcome exists.
 
 #### Assessment
 
-- Skill assessments are course-specific.
-- One current `StudentSkillAssessment` exists for each student/course/skill combination.
+- Skill assessments are Course-specific.
+- One current `StudentSkillAssessment` exists for each student/Course/skill combination.
 - Each subskill appears only once within its parent skill assessment.
 - Unrated subskills are excluded from the calculated skill average.
 - Assessment uses descriptive pedagogical categories with internal **0–10 scores**, rather than user-facing percentages.
@@ -1955,7 +2805,7 @@ EnglishGrows implements database constraints and application-level business rule
 - `StudentSkillTermSnapshot` stores formal periodic assessment checkpoints.
 - A term label can occur only once for each skill assessment.
 
-Together, these constraints help ensure that the database remains a consistent **single source of truth** for course delivery, attendance, learner assessment, and historical progress.
+Together, these constraints help ensure that the database remains a consistent **single source of truth** for Course delivery, learner assignment, Attendance, lifecycle state, assessment and historical progress.
 
 ---
 
@@ -1965,7 +2815,7 @@ Together, these constraints help ensure that the database remains a consistent *
 
 The application follows a **role-aware data flow** in which authenticated users interact with the same underlying business data through interfaces adapted to their permissions and responsibilities.
 
-At a high level, application data moves through the following structure:
+At a high level:
 
 ```text
 User Authentication
@@ -2008,46 +2858,142 @@ Courses
                         └── Assessment Snapshots
 ```
 
-The Django views act as the intermediary between the database and the user interface. Each view retrieves only the information relevant to the authenticated user's role and, where appropriate, further restricts access by teacher, company, course or student.
+The Django views act as the intermediary between the database and the user interface. Each view retrieves only the information relevant to the authenticated user's role and, where appropriate, further restricts access by teacher, company, Course or student.
 
 For example:
 
-- A **teacher** may access only courses assigned to them and the students enrolled in those courses.
-- A **company administrator** may access employees and courses belonging to their own company.
-- A **student or employee** may access only their own enrolments, attendance records, assessments and course information.
+- A **teacher** may access only Courses assigned to them and the students enrolled in those Courses.
+- A **company administrator** may access employees and Courses belonging to their own company.
+- A **student or employee** may access only their own enrolments, Attendance records, assessments and Course information.
 
-This approach allows the platform to maintain a **single source of truth at database level** while presenting different views of that information depending on the user's role.
+The application maintains a **single source of truth at model/database level** while role-specific views orchestrate which subset of that truth should be presented.
 
-Course activity also drives several dependent data flows automatically. When class sessions are generated, attendance records are created for enrolled students. When new students join a course already in progress, attendance records are generated only for the relevant unfinished sessions.
+Course activity drives several dependent data flows automatically.
 
-The same relational structure also governs cleanup, lifecycle synchronization and historical access:
+### Initial Course setup
 
 ```text
-CourseEnrollment deleted
+Course saved
+    +
+valid timetable
+    +
+active enrolment
+    +
+required scheduling data
         │
-        ├── Course ClassSessions remain unchanged
-        └── learner-specific Attendance for that course is deleted
-
-Course manually set to Cancelled in Django Admin
+        ▼
+try_generate_class_sessions()
         │
-        ├── applicable future ClassSessions        → cancelled
-        └── untouched scheduled Attendance records → deleted
-
-ClassSession end_time passes
+        ▼
+ClassSession sequence generated
         │
-        ├── attendance already submitted → complete_attendance_submitted
-        └── attendance still pending      → held_attendance_pending
+        ▼
+Attendance(status=pending)
+created for active learners
 ```
 
-The ClassSession end-time transition is enforced by model-owned synchronization logic. In production, the Render Cron Job executes `python manage.py transition_past_sessions` every 5 minutes so eligible finished sessions are synchronized even when no user request occurs.
+### Learner enrolment lifecycle
+
+```text
+CourseEnrollment → active
+        │
+        ├── restore eligible enrollment_paused → pending
+        ├── create missing Attendance for eligible future teaching
+        └── possibly complete initial generation prerequisites
+
+CourseEnrollment → paused
+        │
+        └── applicable future pending Attendance
+                → enrollment_paused
+
+CourseEnrollment → cancelled
+        │
+        └── remaining operational pending/enrollment_paused
+                → deleted
+```
+
+### ClassSession end-time lifecycle
+
+```text
+ClassSession end_time passes
+        │
+        ├── all assigned learners enrollment_paused
+        │       → pending_reschedule
+        │
+        ├── all learner obligations finalized
+        │       → complete_attendance_submitted
+        │
+        └── Attendance still pending
+                → held_attendance_pending
+```
+
+The same rule is used whether synchronization is triggered by:
+
+```text
+Attendance.save()
+teacher interaction
+Render Cron Job
+management command
+```
+
+### Course pause / cancellation
+
+```text
+Course → paused
+        │
+        └── future scheduled/rescheduled
+                → pending_reschedule
+
+Course → cancelled
+        │
+        ├── future scheduled/rescheduled → cancelled
+        ├── pending_reschedule           → cancelled
+        └── operational Attendance
+            pending/enrollment_paused    → deleted
+```
+
+Historical genuine Attendance remains intact.
+
+### Safe schedule changes
+
+```text
+Genuine Course/timetable scheduling change
+        │
+        ▼
+synchronize_future_scheduled_sessions()
+        │
+        ├── preserve history
+        ├── preserve rescheduled/pending-reschedule lessons
+        ├── move only future scheduled lessons
+        ├── skip BankHolidays
+        ├── avoid protected future collisions
+        └── block inconsistent class-number sequences
+```
+
+A routine Admin save does not trigger this process.
+
+### Erroneous enrolment correction
+
+```text
+Legitimate CourseEnrollment
+→ preserve with lifecycle status
+
+Erroneous CourseEnrollment
+→ superuser force-delete
+        │
+        ├── CourseEnrollment removed
+        ├── that learner's Course Attendance removed
+        └── shared Course ClassSessions preserved
+```
 
 Role-specific views then determine how current and historical data is exposed:
 
-- **Learner / Employee — My Course:** all lifetime enrolments belonging to the authenticated learner can provide course context; the selector appears only when more than one lifetime enrolment exists.
-- **Teacher:** assigned courses and their relevant historical enrolments remain accessible regardless of status on course-detail/learner pages.
-- **Company Administrator:** company courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary.
+- **Learner / Employee — My Course:** all lifetime enrolments belonging to the authenticated learner can provide Course context; the selector appears only when more than one lifetime enrolment exists.
+- **Learner / Employee — Calendar:** current `scheduled`/`rescheduled` teaching comes from active enrolment + active Course context, while historical held/complete lessons remain visible across the learner's own Course history.
+- **Teacher:** assigned Courses and their relevant historical enrolments remain accessible regardless of status on Course-detail/learner pages.
+- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary.
 
-Attendance, held/session lifecycle state and assessment data then contribute to the progress information displayed throughout the platform.
+Attendance, ClassSession lifecycle state and assessment data then contribute to the progress information displayed throughout the platform.
 
 ---
 
@@ -2149,8 +3095,8 @@ A `Course` represents the overall teaching programme rather than an individual l
 
 It stores long-term configuration such as:
 
-- course name;
-- course type;
+- Course name;
+- Course type;
 - level;
 - teacher;
 - company;
@@ -2158,8 +3104,7 @@ It stores long-term configuration such as:
 - class duration;
 - number of classes;
 - start and end dates;
-- meeting link;
-- course status.
+- Course status.
 
 Recurring timetable information is stored independently through `CourseTimetableSlot`.
 
@@ -2181,18 +3126,36 @@ Course
 
 `ClassSession`, by contrast, represents one concrete occurrence of a lesson.
 
-This separation is important because individual classes may later:
+This separation is important because individual lessons may later:
 
-- become held with attendance still pending;
-- become complete once attendance has been submitted and the lesson has ended;
+- be held with Attendance still pending;
+- become complete once Attendance is finalized and the lesson has ended;
+- become `pending_reschedule`;
 - be rescheduled;
-- become pending reschedule;
-- be cancelled when the parent course is manually cancelled;
+- be cancelled;
 - receive a different date or time;
 - contain specific lesson information;
-- generate attendance records.
+- remain linked to learner-specific Attendance.
 
-Changing one class therefore does not require changing the general course configuration.
+The recurring timetable remains a **rule**, while ClassSessions become actual operational/historical records.
+
+For a newly generated Course, the whole ClassSession sequence can be created from the Course start date and recurring timetable.
+
+For an established Course, future synchronization is deliberately narrower:
+
+```text
+historical / protected ClassSessions
+→ preserve
+
+future scheduled ClassSessions
+→ may be rebuilt from the current timetable
+```
+
+An ordinary Course save is not itself a reason to rebuild lesson dates.
+
+Only genuine schedule-defining Course changes or genuine timetable changes trigger the protected future synchronization process.
+
+This keeps long-term Course configuration separate from lesson-delivery history while still allowing legitimate future schedule changes to propagate safely.
 
 ---
 
@@ -2200,20 +3163,19 @@ Changing one class therefore does not require changing the general course config
 
 ---
 
-A student's identity and their participation in a course are intentionally stored separately.
+A student's identity and their participation in a Course are intentionally stored separately.
 
-`User` and `UserProfile` describe **who the person is**, while `CourseEnrollment` describes **their relationship with a particular course**.
+`User` and `UserProfile` describe **who the person is**, while `CourseEnrollment` describes **their relationship with one particular Course**.
 
-An enrolment can therefore contain course-specific information such as:
+An enrolment can therefore contain Course-specific information such as:
 
 - enrolment status;
 - enrolment date;
 - target level;
 - learning objective;
-- attendance statistics;
-- course participation.
-
-The relationship can be represented as:
+- assigned lesson relationships;
+- Attendance statistics;
+- Course participation.
 
 ```text
 Student
@@ -2225,15 +3187,45 @@ Student
    └── CourseEnrollment ─── Course C
 ```
 
-This is particularly important because the same student may participate in more than one course over time.
+This is particularly important because the same student may participate in more than one Course over time.
 
-Completed or previous enrolments can remain in the database without altering the student's account or creating duplicate user records.
+Completed, paused or cancelled enrolments can remain in the database without altering the student's account or creating duplicate users.
 
-This historical separation also allows the learner/employee **My Course** page to use the authenticated learner's complete enrolment history as course context when more than one lifetime enrolment exists.
+The separation also allows the learner/employee **My Course** page to use the authenticated learner's complete enrolment history as Course context when more than one lifetime enrolment exists.
 
-When an enrolment is deliberately deleted rather than retained historically, only the learner-course relationship and that learner's course-specific `Attendance` records are removed. The shared `ClassSession` records remain part of the course's teaching history.
+`CourseEnrollment` also owns learner-specific lesson assignment behaviour through Attendance:
 
-The same architecture also supports employees who may undertake multiple company-sponsored courses during their time with an organisation.
+```text
+active
+→ learner is eligible for future teaching assignment
+
+paused
+→ applicable pending Attendance becomes enrollment_paused
+
+active again
+→ eligible enrollment_paused returns to pending
+
+cancelled
+→ remaining operational Attendance is removed
+```
+
+The underlying ClassSession remains a Course-owned lesson throughout these learner-specific lifecycle changes.
+
+Permanent deletion is conceptually different from cancellation.
+
+```text
+Cancelled enrolment
+→ legitimate historical relationship
+→ retain CourseEnrollment + genuine Attendance history
+
+Erroneous enrolment
+→ bad data
+→ superuser may permanently remove it
+```
+
+The deliberate force-delete correction removes the erroneous learner/Course relationship and that learner's Attendance rows for the Course, but leaves shared ClassSessions untouched.
+
+This architecture supports both historical integrity and administrative correction without conflating user identity, Course membership and lesson delivery.
 
 ---
 
@@ -2425,7 +3417,6 @@ COLOUR SYSTEM
     │
     ├── ENROLMENT STATUS
     │   ├── #4DFFB5  Active
-    │   ├── #006B7D  Confirmed
     │   ├── #FFB000  Paused
     │   ├── #EF4444  Cancelled
     │   ├── #7A949B  Completed
@@ -2442,7 +3433,8 @@ COLOUR SYSTEM
     │   ├── #4DFFB5  Attended
     │   ├── #FF5A5A  Missed
     │   ├── #666666  Excused
-    │   └── #FFB000  Pending
+    │   ├── #FFB000  Pending
+    │   └── operational  Enrollment paused
     │
     └── ATTENDANCE SUBMISSION STATUS
         ├── #C47D00  Awaiting
@@ -2469,7 +3461,6 @@ Colour is always accompanied by text, labels, icons or other interface context r
 The current **English Grows** core brand/interface palette consists of seven chromatic colours:
 
 <img width="1600" height="1200" alt="Color Palette" src="https://github.com/user-attachments/assets/3ad753be-78b5-4f4b-bfec-ec1b0da14136" />
-
 
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
@@ -2541,7 +3532,6 @@ These neutrals are deliberately cool so that they remain visually compatible wit
 
 <img width="1600" height="1200" alt="Neutral Palette" src="https://github.com/user-attachments/assets/b2c6d456-239f-4dd6-aeca-f283f177d2da" />
 
-
 | Colour | Preview | Hex | Primary UI Role |
 | :--- | :---: | :---: | :--- |
 | **White Smoke** | ![#F5F5F5](https://img.shields.io/badge/White_Smoke-F5F5F5?style=flat&labelColor=F5F5F5&color=F5F5F5) | `#F5F5F5` | Principal neutral surface for main cards, lists, tables and data-heavy content areas |
@@ -2594,7 +3584,6 @@ The official **Common European Framework of Reference for Languages (CEFR)** def
 English Grows therefore uses its own consistent CEFR colour mapping as part of the application's design system.
 
 <img width="1600" height="1200" alt="CEFR Levels_Color palette" src="https://github.com/user-attachments/assets/fa2b4a12-e9fa-43a3-b801-3965e41d90fa" />
-
 
 | CEFR Level | Preview | Colour | Hex |
 | :---: | :---: | :--- | :---: |
@@ -2653,7 +3642,6 @@ These colours are intentionally separate from the core brand palette because the
 
 <img width="1600" height="1200" alt="Skills_color_palette" src="https://github.com/user-attachments/assets/87382759-bfb8-412d-93d2-8434d15cbf16" />
 
-
 | Skill | Preview | Colour | Hex |
 | :--- | :---: | :--- | :---: |
 | 🎧 **Listening** | ![#4E2496](https://img.shields.io/badge/Indigo_Velvet-4E2496?style=flat&labelColor=4E2496&color=4E2496) | Indigo Velvet | `#4E2496` |
@@ -2696,25 +3684,23 @@ Some semantic colours intentionally reuse colours from the core brand palette. T
 
 #### Enrolment Status
 
-Enrolment-status colours communicate the learner's current relationship with a course.
+Enrolment-status colours communicate the learner's current relationship with a Course.
+
+The canonical `CourseEnrollment` model statuses are **Active**, **Paused**, **Completed**, and **Cancelled**. `Inactive` is a derived/de-emphasised UI state used where a learner is not currently participating rather than a stored CourseEnrollment status.
 
 | Status | Preview | Hex | Rationale |
 | :--- | :---: | :---: | :--- |
 | **Active** | ![#4DFFB5](https://img.shields.io/badge/Active-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` | Bright green communicates current active participation |
-| **Confirmed** | ![#006B7D](https://img.shields.io/badge/Confirmed-006B7D?style=flat&labelColor=006B7D&color=006B7D) | `#006B7D` | Stormy Teal communicates an established / confirmed enrolment state |
 | **Paused** | ![#FFB000](https://img.shields.io/badge/Paused-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates temporary interruption |
 | **Cancelled** | ![#EF4444](https://img.shields.io/badge/Cancelled-EF4444?style=flat&labelColor=EF4444&color=EF4444) | `#EF4444` | Red communicates termination |
 | **Completed** | ![#7A949B](https://img.shields.io/badge/Completed-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a closed, historical enrolment state |
-| **Inactive** | ![#7A949B](https://img.shields.io/badge/Inactive-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a de-emphasised inactive or unenrolled state |
+| **Inactive** | ![#7A949B](https://img.shields.io/badge/Inactive-7A949B?style=flat&labelColor=7A949B&color=7A949B) | `#7A949B` | Cool Steel communicates a de-emphasised derived inactive / unenrolled display state |
 
-The enrolment palette therefore follows the current status-dot variables:
+The enrolment palette therefore follows:
 
 ```text
 ACTIVE
 #4DFFB5
-
-CONFIRMED
-#006B7D
 
 PAUSED
 #FFB000
@@ -2725,7 +3711,7 @@ CANCELLED
 COMPLETED
 #7A949B
 
-INACTIVE
+INACTIVE / UNENROLLED DISPLAY
 #7A949B
 ```
 
@@ -2761,14 +3747,15 @@ Attention              Negative / Terminated
 
 #### Attendance Status
 
-Attendance colours distinguish between recorded attendance outcomes and classes that still require an attendance outcome.
+Attendance colours distinguish between recorded learner outcomes, outstanding teacher action, and the special non-obligation state created when an enrolment is paused.
 
 | Status | Preview | Hex | Rationale |
 | :--- | :---: | :---: | :--- |
 | **Attended** | ![#4DFFB5](https://img.shields.io/badge/Attended-4DFFB5?style=flat&labelColor=4DFFB5&color=4DFFB5) | `#4DFFB5` | Bright green communicates a positive attendance outcome |
 | **Missed** | ![#FF5A5A](https://img.shields.io/badge/Missed-FF5A5A?style=flat&labelColor=FF5A5A&color=FF5A5A) | `#FF5A5A` | Red communicates a negative attendance outcome |
 | **Excused** | ![#666666](https://img.shields.io/badge/Excused-666666?style=flat&labelColor=666666&color=666666) | `#666666` | Neutral grey communicates an acknowledged absence without presenting it as either a positive outcome or warning state |
-| **Pending** | ![#FFB000](https://img.shields.io/badge/Pending-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates that an attendance outcome still requires attention |
+| **Pending** | ![#FFB000](https://img.shields.io/badge/Pending-FFB000?style=flat&labelColor=FFB000&color=FFB000) | `#FFB000` | Amber communicates that an attendance outcome still requires teacher action |
+| **Enrollment paused** | — | — | Operational non-obligation state; it is deliberately not treated as a positive/negative attendance outcome and does not require a dedicated outcome colour |
 
 The attendance palette therefore distinguishes between outcome and workflow state:
 
@@ -2780,7 +3767,12 @@ Positive              Neutral               Negative
                          PENDING
                          #FFB000
                          Attention required
+
+                   ENROLLMENT PAUSED
+                   operational / no outcome required
 ```
+
+`enrollment_paused` belongs to the enrolment lifecycle rather than the learner-outcome colour semantics. If surfaced in the interface, it should remain visually de-emphasised and explicitly labelled rather than borrowing the meaning of Attended, Missed or Excused.
 
 #### Attendance Submission Status
 
@@ -2864,7 +3856,7 @@ Data visualisation is used selectively throughout **English Grows** where graphi
 
 The principal visualisations currently include:
 
-- course completion indicators;
+- course teaching-delivery progress indicators;
 - attendance rates and attendance summaries;
 - skill assessment scores;
 - historical skill progress graphs;
@@ -3025,11 +4017,10 @@ Examples include:
 ```text
 ENROLMENT
 Active           → #4DFFB5
-Confirmed        → #006B7D
 Paused           → #FFB000
 Cancelled        → #EF4444
 Completed        → #7A949B
-Inactive         → #7A949B
+Inactive         → #7A949B  (derived display state)
 
 COURSE
 Confirmed        → #006B7D
@@ -3039,10 +4030,11 @@ Cancelled        → #EF4444
 Completed        → #7A949B
 
 ATTENDANCE
-Attended         → #4DFFB5
-Missed           → #FF5A5A
-Excused          → #666666
-Pending          → #FFB000
+Attended          → #4DFFB5
+Missed            → #FF5A5A
+Excused           → #666666
+Pending           → #FFB000
+Enrollment paused → operational / non-outcome state
 
 ATTENDANCE SUBMISSION
 Awaiting         → #C47D00
@@ -3068,7 +4060,7 @@ Percentage-based visualisations are used only where the underlying value represe
 Examples include:
 
 - attendance rates;
-- course completion;
+- course teaching progress;
 - held versus remaining classes.
 
 Course delivery progress can therefore be represented through progress bars or completion rings because the value describes held teaching delivered towards a finite total.

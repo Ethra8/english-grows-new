@@ -320,7 +320,11 @@
                                 <span class="attendance-status-badge pending">
                                     <i class="fa-solid fa-clock" aria-hidden="true"></i>
                                     {{ weekly_attendance_pending_sessions }}
-                                    {% trans 'awaiting' context 'submitted attendance status badge' %}
+                                    {% if weekly_attendance_pending_sessions == 1 %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge singular' %}
+                                    {% else %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge plural' %}
+                                    {% endif %}
                                 </span>
 
                             {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
