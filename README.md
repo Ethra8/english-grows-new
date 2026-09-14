@@ -1066,9 +1066,9 @@ The cancellation operation updates the existing `ClassSession` records rather th
 
 Cancellation belongs to the `ClassSession` lifecycle rather than to the learner `Attendance` outcome lifecycle. `Attendance` therefore does not require a separate `cancelled` status.
 
-For the future sessions being cancelled, only untouched `Attendance` rows that are still `scheduled` placeholders are deleted. Genuine attendance outcomes already stored as `attended`, `missed`, or `excused` are preserved rather than rewritten.
+For the future sessions being cancelled, only untouched `Attendance` rows that are still `pending` placeholders are deleted. Genuine attendance outcomes already stored as `attended`, `missed`, or `excused` are preserved rather than rewritten.
 
-Past lesson and attendance history remains untouched. This preserves the training record that existed before cancellation while ensuring that no future cancelled lesson remains as a scheduled attendance obligation.
+Past lesson and attendance history remains untouched. This preserves the training record that existed before cancellation while ensuring that no future cancelled lesson remains as a pending attendance obligation.
 
 This automatic propagation is currently tied specifically to a **manual course-status change in the Django Admin**. It is not a generic side effect of every possible `Course.save()` operation elsewhere in the application.
 
@@ -1104,7 +1104,7 @@ Each attendance record can store:
 **Attendance statuses include:**
 
 ```text
-Scheduled
+Pending
 Attended
 Missed
 Excused
@@ -1114,7 +1114,7 @@ The status meanings are deliberately learner-specific:
 
 | Status | Meaning |
 | :--- | :--- |
-| `scheduled` | Pre-created attendance placeholder; no final learner outcome has yet been submitted |
+| `pending` | Pre-created attendance placeholder; no final learner outcome has yet been submitted |
 | `attended` | The learner attended the lesson |
 | `missed` | The learner missed the lesson |
 | `excused` | The learner's absence was excused |
@@ -1137,7 +1137,7 @@ Lesson 4
 
 Instead, the existing attendance record changes status.
 
-Attendance records initially act as `scheduled` placeholders and are subsequently updated when the teacher records the actual attendance outcome.
+Attendance records initially act as `pending` placeholders and are subsequently updated when the teacher records the actual attendance outcome.
 
 Teachers are allowed to submit attendance **after the `ClassSession.start_time` and before its `end_time`**. Early submission finalizes the learner `Attendance` records immediately but does not prematurely mark the parent lesson as held or complete.
 
@@ -1166,7 +1166,7 @@ attendance still pending
 
 By contrast, `ClassSession.attendance_is_submitted` represents the parent session lifecycle and is `True` only when the lesson has ended and its status is `complete_attendance_submitted`.
 
-When a course is manually cancelled through the Django Admin, untouched `scheduled` Attendance placeholders belonging to applicable future cancelled sessions are deleted. Genuine `attended`, `missed`, or `excused` outcomes are preserved.
+When a course is manually cancelled through the Django Admin, untouched `pending` Attendance placeholders belonging to applicable future cancelled sessions are deleted. Genuine `attended`, `missed`, or `excused` outcomes are preserved.
 
 Attendance also participates in the `CourseEnrollment` deletion lifecycle. When a learner is removed from a course by deleting that learner's `CourseEnrollment`, the learner's `Attendance` records for that course's `ClassSession` records are deleted as well.
 
@@ -1180,6 +1180,7 @@ The underlying `ClassSession` records remain intact because lesson/session ident
 
 Attendance data provides a shared source of information for the three principal authenticated areas of the platform.
 
+---
 #### Learners
 
 Learners can review their own:
@@ -1191,6 +1192,7 @@ Learners can review their own:
 - **Excused absences**
 - **Individual lesson records**
 
+---
 #### Teachers
 
 Teachers can:
@@ -1202,6 +1204,7 @@ Teachers can:
 - **Review attendance by learner**
 - **Review attendance by course**
 
+---
 #### Company Administrators
 
 Company administrators can review:
@@ -1237,7 +1240,7 @@ missed
 excused
 ```
 
-Future `scheduled` attendance placeholders are excluded from attendance-rate calculations.
+Future `pending` attendance placeholders are excluded from attendance-rate calculations.
 
 Attendance records submitted during a lesson are also excluded from finalized attendance reporting until the parent `ClassSession.end_time` has passed and the session itself reaches `complete_attendance_submitted`.
 
