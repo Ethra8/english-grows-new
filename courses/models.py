@@ -160,95 +160,118 @@ class Course(models.Model):
         Status transitions:
 
         -> paused:
-        future scheduled/rescheduled ClassSessions become
-        pending_reschedule because their current teaching slot
-        is no longer valid.
+           future scheduled/rescheduled ClassSessions become
+           pending_reschedule because their current teaching slot
+           is no longer valid.
 
         -> cancelled:
-        unresolved ClassSessions that will no longer take place
-        are cancelled through cancel_future_sessions().
+           unresolved ClassSessions that will no longer take place
+           are cancelled through cancel_future_sessions().
+
+        Schedule synchronization:
+
+        Existing future scheduled ClassSessions are synchronized only
+        when a schedule-defining Course field actually changes:
+        - start_date
+        - total_hours
+        - class_duration
+
+        Simply opening and saving an unchanged Course must NEVER
+        reschedule its ClassSessions.
+
+        Timetable changes are handled separately by CourseTimetableSlot.
 
         Course status does not alter individual CourseEnrollment
         statuses or learner-specific Attendance outcomes.
         """
         is_new = self.pk is None
-        old_class_duration = None
-        old_status = None
 
-        if self.pk:
-            old_course = Course.objects.get(pk=self.pk)
-            old_class_duration = old_course.class_duration
-            old_status = old_course.status
+        with transaction.atomic():
+            old_class_duration = None
+            old_total_hours = None
+            old_start_date = None
+            old_status = None
 
-        if self.total_hours is None and self.course_type.default_hours is not None:
-            self.total_hours = self.course_type.default_hours
+            if self.pk:
+                old_course = (
+                    Course.objects
+                    .select_for_update()
+                    .get(pk=self.pk)
+                )
+                old_class_duration = old_course.class_duration
+                old_total_hours = old_course.total_hours
+                old_start_date = old_course.start_date
+                old_status = old_course.status
 
-        if self.class_duration and (
-            is_new
-            or self.class_duration != old_class_duration
-        ):
-            self.class_duration_source = "manual"
+            if self.total_hours is None and self.course_type.default_hours is not None:
+                self.total_hours = self.course_type.default_hours
 
-        became_paused = (
-            self.status == "paused"
-            and old_status != "paused"
-        )
+            if self.class_duration and (
+                is_new
+                or self.class_duration != old_class_duration
+            ):
+                self.class_duration_source = "manual"
 
-        became_cancelled = (
-            self.status == "cancelled"
-            and old_status != "cancelled"
-        )
+            became_paused = (
+                self.status == "paused"
+                and old_status != "paused"
+            )
 
-        super().save(*args, **kwargs)
+            became_cancelled = (
+                self.status == "cancelled"
+                and old_status != "cancelled"
+            )
 
-        # ---------------------------------------------------------
-        # COURSE STATUS TRANSITIONS
-        # ---------------------------------------------------------
-
-        if became_paused:
-            self.pause_future_sessions()
-
-        if became_cancelled:
-            self.cancel_future_sessions()
-
-        # ---------------------------------------------------------
-        # INITIAL CLASS SESSION GENERATION
-        # ---------------------------------------------------------
-
-        if is_new:
-            self.try_generate_class_sessions()
-
-        else:
-            # Existing courses may need their future scheduled lessons
-            # synchronized when:
-            # - a BankHoliday has been added/changed since course creation
-            # - start_date / total_hours / class_duration has changed
-            # - the Course is simply opened and saved again in Django Admin
-            #
-            # Do not synchronize timetable dates for paused, cancelled
-            # or completed courses.
             update_fields = kwargs.get("update_fields")
 
-            should_sync_schedule = (
+            changed_schedule_fields = set()
+
+            if not is_new:
+                if self.start_date != old_start_date:
+                    changed_schedule_fields.add("start_date")
+
+                if self.total_hours != old_total_hours:
+                    changed_schedule_fields.add("total_hours")
+
+                if self.class_duration != old_class_duration:
+                    changed_schedule_fields.add("class_duration")
+
+                if update_fields is not None:
+                    changed_schedule_fields &= set(update_fields)
+
+            super().save(*args, **kwargs)
+
+            # ---------------------------------------------------------
+            # COURSE STATUS TRANSITIONS
+            # ---------------------------------------------------------
+            if became_paused:
+                self.pause_future_sessions()
+
+            if became_cancelled:
+                self.cancel_future_sessions()
+
+            # ---------------------------------------------------------
+            # INITIAL CLASS SESSION GENERATION
+            # ---------------------------------------------------------
+            if is_new:
+                self.try_generate_class_sessions()
+
+            # ---------------------------------------------------------
+            # EXISTING COURSE SCHEDULE SYNCHRONIZATION
+            # ---------------------------------------------------------
+            #
+            # Only genuine schedule-defining field changes trigger
+            # synchronization. An unchanged Admin save must do nothing.
+            # ---------------------------------------------------------
+            elif (
                 self.status in {
                     "confirmed",
                     "active",
                 }
-                and (
-                    update_fields is None
-                    or bool(
-                        {
-                            "start_date",
-                            "total_hours",
-                            "class_duration",
-                        }
-                        & set(update_fields)
-                    )
-                )
-            )
-
-            if should_sync_schedule:
+                and changed_schedule_fields
+            ):
                 self.synchronize_future_scheduled_sessions()
+
 
     def can_generate_class_sessions(self):
         """
@@ -373,141 +396,324 @@ class Course(models.Model):
 
     def synchronize_future_scheduled_sessions(self):
         """
-        Recalculate future ClassSessions that are still status="scheduled"
-        from the Course's canonical timetable.
+        Rebuild ONLY the remaining future scheduled teaching sequence
+        from the Course's CURRENT timetable.
 
-        This is used to keep existing courses consistent when:
-        - BankHoliday records are added or changed later
-        - the course start date / duration data changes
-        - a timetable slot changes
+        This method is deliberately different from initial generation.
 
-        Safety rules:
-        - Held/complete sessions are NEVER moved.
-        - pending_reschedule sessions are NEVER moved.
-        - rescheduled sessions are NEVER moved.
-        - Past sessions are NEVER moved.
-        - Existing ClassSession IDs and class_numbers are preserved.
-        - Attendance rows remain attached to the same ClassSession.
-        - The final short lesson keeps its correct shortened duration.
-        - end_date is synchronized from the actual final ClassSession.
+        Initial generation:
+        - starts from Course.start_date
+        - creates the complete lesson sequence
+
+        Existing-course synchronization:
+        - preserves every ClassSession object and class_number
+        - preserves all held / complete history
+        - preserves pending_reschedule and rescheduled lessons
+        - preserves lessons that have already started
+        - moves only future ClassSessions still status="scheduled"
+        - starts the replacement teaching sequence from now / start_date
+        - skips active BankHoliday dates
+        - skips times already occupied by protected future lessons
+
+        IMPORTANT:
+
+        We must NOT recalculate the whole course from Lesson 1 and then
+        selectively apply those dates by class_number. Doing so can mix
+        an old historical timetable with a new future timetable and create
+        duplicate or chronologically corrupted lesson sequences.
 
         Returns the number of ClassSessions whose date/time changed.
         """
-
         if not self.pk:
+            return 0
+
+        if self.status not in {
+            "confirmed",
+            "active",
+        }:
             return 0
 
         if not self.start_date:
             return 0
 
-        if not self.number_of_classes:
+        timetable_slots = list(
+            self.timetable_slots
+            .all()
+            .order_by(
+                "day_of_week",
+                "start_time",
+            )
+        )
+
+        if not timetable_slots:
             return 0
-
-        if not self.timetable_slots.exists():
-            return 0
-
-        if not self.class_sessions.exists():
-            return 0
-
-        schedule = calculate_course_schedule(self)
-
-        if not schedule:
-            return 0
-
-        schedule_by_class_number = {
-            item["class_number"]: item
-            for item in schedule
-        }
 
         now = timezone.now()
         current_timezone = timezone.get_current_timezone()
 
-        future_scheduled_sessions = (
-            self.class_sessions
-            .filter(
-                start_time__gte=now,
-                status=ClassSession.STATUS_SCHEDULED,
-            )
-            .order_by("class_number")
-        )
-
-        sessions_updated = 0
-
-        for session in future_scheduled_sessions:
-            schedule_item = schedule_by_class_number.get(
-                session.class_number
+        with transaction.atomic():
+            all_sessions = list(
+                self.class_sessions
+                .select_for_update()
+                .all()
             )
 
-            if not schedule_item:
-                continue
+            if not all_sessions:
+                return 0
 
-            target_date = schedule_item["date"]
-            slot = schedule_item["slot"]
-
-            naive_start = datetime.combine(
-                target_date,
-                slot.start_time
-            )
-
-            target_start = timezone.make_aware(
-                naive_start,
-                current_timezone
-            )
-
-            # Never move a currently-future session backwards into the past.
-            # This mainly protects established courses if their structural
-            # settings are edited after teaching has already begun.
-            if target_start < now:
-                continue
-
-            is_final_class = (
-                session.class_number
-                == self.number_of_classes
-            )
-
-            if (
-                is_final_class
-                and self.has_short_final_class
-            ):
-                target_end = target_start + timedelta(
-                    seconds=float(
-                        self.final_class_duration
-                        * Decimal("3600")
+            # -----------------------------------------------------
+            # FUTURE SCHEDULED SESSIONS THAT MAY BE MOVED
+            # -----------------------------------------------------
+            mutable_sessions = sorted(
+                [
+                    session
+                    for session in all_sessions
+                    if (
+                        session.status == ClassSession.STATUS_SCHEDULED
+                        and session.start_time > now
                     )
-                )
-
-            else:
-                naive_end = datetime.combine(
-                    target_date,
-                    slot.end_time
-                )
-
-                target_end = timezone.make_aware(
-                    naive_end,
-                    current_timezone
-                )
-
-            if (
-                session.start_time == target_start
-                and session.end_time == target_end
-            ):
-                continue
-
-            session.start_time = target_start
-            session.end_time = target_end
-
-            session.save(
-                update_fields=[
-                    "start_time",
-                    "end_time",
-                ]
+                ],
+                key=lambda session: (
+                    session.class_number,
+                    session.start_time,
+                ),
             )
 
-            sessions_updated += 1
+            if not mutable_sessions:
+                self.sync_end_date_from_sessions()
+                return 0
 
-        self.sync_end_date_from_sessions()
+            # -----------------------------------------------------
+            # PROTECT AGAINST EXISTING SEQUENCE CORRUPTION
+            # -----------------------------------------------------
+            #
+            # Once Lesson N has genuinely been held, an earlier numbered
+            # lesson must not still exist as an ordinary future scheduled
+            # lesson. That indicates pre-existing inconsistent data and
+            # must be repaired deliberately rather than "fixed" by another
+            # automatic schedule synchronization.
+            # -----------------------------------------------------
+            held_class_numbers = [
+                session.class_number
+                for session in all_sessions
+                if session.status in {
+                    ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+                }
+            ]
 
-        return sessions_updated
+            if held_class_numbers:
+                highest_held_class_number = max(held_class_numbers)
+
+                invalid_future_numbers = [
+                    session.class_number
+                    for session in mutable_sessions
+                    if session.class_number <= highest_held_class_number
+                ]
+
+                if invalid_future_numbers:
+                    raise ValidationError(
+                        "This Course has future scheduled lessons whose "
+                        "class numbers precede an already-held lesson. "
+                        "Automatic schedule synchronization has been blocked "
+                        "to protect historical ClassSession data. "
+                        "Repair the inconsistent Course schedule first."
+                    )
+
+            mutable_session_ids = {
+                session.pk
+                for session in mutable_sessions
+            }
+
+            # -----------------------------------------------------
+            # PROTECTED FUTURE TEACHING WINDOWS
+            # -----------------------------------------------------
+            #
+            # pending_reschedule:
+            # - its stored slot is no longer a valid teaching appointment
+            #
+            # cancelled:
+            # - it will not take place
+            #
+            # Every other non-mutable future session is treated as fixed
+            # and blocks overlapping automatically scheduled slots.
+            # -----------------------------------------------------
+            blocked_intervals = [
+                (
+                    session.start_time,
+                    session.end_time,
+                )
+                for session in all_sessions
+                if (
+                    session.pk not in mutable_session_ids
+                    and session.end_time > now
+                    and session.status not in {
+                        ClassSession.STATUS_PENDING_RESCHEDULE,
+                        ClassSession.STATUS_CANCELLED,
+                    }
+                )
+            ]
+
+            # -----------------------------------------------------
+            # ACTIVE BANK HOLIDAYS
+            # -----------------------------------------------------
+            holiday_ranges = list(
+                BankHoliday.objects
+                .filter(
+                    is_active=True,
+                    start_date__isnull=False,
+                )
+                .values_list(
+                    "start_date",
+                    "end_date",
+                )
+            )
+
+            def is_bank_holiday(candidate_date):
+                return any(
+                    start_date
+                    <= candidate_date
+                    <= (end_date or start_date)
+                    for start_date, end_date in holiday_ranges
+                )
+
+            def overlaps_blocked_interval(candidate_start, candidate_end):
+                return any(
+                    candidate_start < blocked_end
+                    and candidate_end > blocked_start
+                    for blocked_start, blocked_end in blocked_intervals
+                )
+
+            # -----------------------------------------------------
+            # FUTURE TIMETABLE SLOT GENERATOR
+            # -----------------------------------------------------
+            #
+            # Continue from today for an in-progress Course, or from the
+            # Course start_date when the Course has not started yet.
+            # -----------------------------------------------------
+            local_today = timezone.localtime(
+                now,
+                current_timezone,
+            ).date()
+
+            candidate_date = max(
+                self.start_date,
+                local_today,
+            )
+
+            max_days_to_scan = max(
+                3660,
+                len(mutable_sessions) * 14,
+            )
+
+            def future_timetable_slots():
+                current_date = candidate_date
+
+                for _ in range(max_days_to_scan):
+                    if not is_bank_holiday(current_date):
+                        current_day = current_date.isoweekday()
+
+                        for slot in timetable_slots:
+                            if slot.day_of_week != current_day:
+                                continue
+
+                            naive_start = datetime.combine(
+                                current_date,
+                                slot.start_time,
+                            )
+
+                            naive_end = datetime.combine(
+                                current_date,
+                                slot.end_time,
+                            )
+
+                            target_start = timezone.make_aware(
+                                naive_start,
+                                current_timezone,
+                            )
+
+                            target_end = timezone.make_aware(
+                                naive_end,
+                                current_timezone,
+                            )
+
+                            if target_start <= now:
+                                continue
+
+                            yield (
+                                target_start,
+                                target_end,
+                            )
+
+                    current_date += timedelta(days=1)
+
+            slot_iterator = future_timetable_slots()
+            sessions_to_update = []
+
+            # -----------------------------------------------------
+            # ASSIGN THE NEW FUTURE SEQUENCE
+            # -----------------------------------------------------
+            for session in mutable_sessions:
+                slot_found = False
+
+                for target_start, standard_target_end in slot_iterator:
+                    target_end = standard_target_end
+
+                    if (
+                        session.class_number == self.number_of_classes
+                        and self.has_short_final_class
+                    ):
+                        target_end = target_start + timedelta(
+                            seconds=float(
+                                self.final_class_duration
+                                * Decimal("3600")
+                            )
+                        )
+
+                    if overlaps_blocked_interval(
+                        target_start,
+                        target_end,
+                    ):
+                        continue
+
+                    blocked_intervals.append(
+                        (
+                            target_start,
+                            target_end,
+                        )
+                    )
+
+                    slot_found = True
+                    break
+
+                if not slot_found:
+                    raise ValidationError(
+                        "A safe future timetable could not be generated "
+                        "for all remaining scheduled ClassSessions."
+                    )
+
+                if (
+                    session.start_time == target_start
+                    and session.end_time == target_end
+                ):
+                    continue
+
+                session.start_time = target_start
+                session.end_time = target_end
+                sessions_to_update.append(session)
+
+            if sessions_to_update:
+                ClassSession.objects.bulk_update(
+                    sessions_to_update,
+                    [
+                        "start_time",
+                        "end_time",
+                    ],
+                )
+
+            self.sync_end_date_from_sessions()
+
+        return len(sessions_to_update)
 
 
     def format_duration(self, duration):
@@ -1220,45 +1426,93 @@ class CourseTimetableSlot(models.Model):
                 )
 
     def save(self, *args, **kwargs):
+        """
+        Save the timetable slot and synchronize the Course only when
+        this timetable definition genuinely changes.
+
+        Existing held / complete lesson history is never rewritten.
+
+        For an established confirmed/active Course, adding or editing a
+        timetable slot delegates future schedule rebuilding to
+        Course.synchronize_future_scheduled_sessions().
+
+        Initial Course setup remains safe because synchronization is a
+        no-op when no ClassSessions exist; try_generate_class_sessions()
+        then performs the one-time initial generation when ready.
+        """
+        is_new = self.pk is None
         old_slot = None
 
-        if self.pk:
-            old_slot = CourseTimetableSlot.objects.get(pk=self.pk)
+        with transaction.atomic():
+            if self.pk:
+                old_slot = (
+                    CourseTimetableSlot.objects
+                    .select_for_update()
+                    .get(pk=self.pk)
+                )
 
-        self.full_clean()
-        super().save(*args, **kwargs)
+            self.full_clean()
+            super().save(*args, **kwargs)
 
-        if self.course.class_duration_source != "manual":
-            self.course.update_class_duration_from_timetable()
+            if self.course.class_duration_source != "manual":
+                self.course.update_class_duration_from_timetable()
 
-        if old_slot:
             timetable_changed = (
-                old_slot.day_of_week != self.day_of_week or
-                old_slot.start_time != self.start_time or
-                old_slot.end_time != self.end_time
+                is_new
+                or old_slot.day_of_week != self.day_of_week
+                or old_slot.start_time != self.start_time
+                or old_slot.end_time != self.end_time
             )
 
-            if timetable_changed:
-                self.update_future_class_sessions(old_slot)
+            if (
+                timetable_changed
+                and self.course.status in {
+                    "confirmed",
+                    "active",
+                }
+                and self.course.class_sessions.exists()
+            ):
+                self.course.synchronize_future_scheduled_sessions()
 
-        # Automatic initial generation:
-        # Course.save() happens before related Admin inline objects are saved.
-        # Once a timetable slot exists (and all other prerequisites are ready),
-        # this safely creates the complete ClassSession schedule exactly once.
-        self.course.try_generate_class_sessions()
+            # Automatic initial generation:
+            # Course.save() happens before related Admin inline objects are saved.
+            # Once the final prerequisite exists, generation occurs exactly once.
+            self.course.try_generate_class_sessions()
+
+    def delete(self, *args, **kwargs):
+        """
+        Delete this timetable slot and safely synchronize the remaining
+        future scheduled ClassSessions when the Course is operational.
+
+        Historical / held / rescheduled lesson records are preserved.
+        """
+        course = self.course
+
+        with transaction.atomic():
+            result = super().delete(*args, **kwargs)
+
+            if course.class_duration_source != "manual":
+                course.update_class_duration_from_timetable()
+
+            if (
+                course.status in {
+                    "confirmed",
+                    "active",
+                }
+                and course.class_sessions.exists()
+                and course.timetable_slots.exists()
+            ):
+                course.synchronize_future_scheduled_sessions()
+
+        return result
 
     def update_future_class_sessions(self, old_slot=None):
         """
-        Synchronize the Course's complete future scheduled timetable.
+        Synchronize only the Course's remaining future scheduled lessons.
 
-        This delegates to Course.synchronize_future_scheduled_sessions()
-        so timetable edits and BankHoliday changes use the SAME canonical
-        scheduling logic as initial ClassSession generation.
-
-        old_slot is retained as an optional argument for backwards
-        compatibility with existing callers, but is no longer needed.
+        The Course model owns the scheduling rules. old_slot is retained
+        for backwards compatibility with existing callers.
         """
-
         return self.course.synchronize_future_scheduled_sessions()
 
 
@@ -2001,21 +2255,24 @@ class CourseEnrollment(models.Model):
         ).exists()
 
 
-    def delete(self, *args, **kwargs):
+    def delete(self, *args, force=False, **kwargs):
         """
         Permanently delete an erroneous enrollment.
 
-        Deletion is blocked when genuine attendance history exists.
+        Normal deletion is blocked when genuine Attendance history exists.
 
-        When deletion is permitted:
-        - all Attendance records for this learner/course are removed
-        - the CourseEnrollment itself is removed
-        - both operations happen inside one database transaction
+        A deliberate administrative correction may use force=True to remove:
+        - the CourseEnrollment
+        - every Attendance record belonging to this learner/course
 
-        A legitimate enrollment that should remain part of the
-        historical record must be marked cancelled instead.
+        The underlying ClassSessions remain because they belong to the Course,
+        not to this individual enrollment.
+
+        Legitimate enrollment lifecycle changes should use:
+        active / paused / completed / cancelled
+        rather than permanent deletion.
         """
-        if not self.can_be_deleted:
+        if not force and not self.can_be_deleted:
             raise ValidationError(
                 "This enrollment cannot be deleted because attendance "
                 "has already been recorded for this learner."

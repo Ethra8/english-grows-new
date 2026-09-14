@@ -219,19 +219,28 @@ class CourseAdmin(admin.ModelAdmin):
 
         1. Save Course-related inline objects.
         2. Synchronize automatically calculated class duration.
-        3. For confirmed/active Courses with existing ClassSessions:
-           - synchronize only future scheduled sessions
-           - preserve pending-reschedule / rescheduled / held / complete /
-             cancelled sessions
-           - preserve ClassSession IDs and Attendance records
+        3. Do NOT resynchronize an existing Course merely because the
+           Admin form was saved.
         4. If no ClassSessions exist yet and the Course is confirmed/active:
            - calculate the expected end_date from the timetable
            - perform the final safe initial generation attempt
         5. If ClassSessions exist after processing:
-           - synchronize end_date once from the actual final ClassSession
+           - synchronize end_date from the actual final ClassSession
 
-        Paused, cancelled and completed Courses do not generate or
-        automatically resynchronize teaching sessions here.
+        Existing-course schedule synchronization is owned by the model:
+
+        - Course.save() triggers it only when a schedule-defining Course
+          field genuinely changes:
+          start_date / total_hours / class_duration
+
+        - CourseTimetableSlot.save()/delete() trigger it only when the
+          timetable genuinely changes.
+
+        Django Admin must therefore NOT call
+        synchronize_future_scheduled_sessions() unconditionally.
+
+        Paused, cancelled and completed Courses do not generate teaching
+        sessions here.
 
         Course-level pause/cancellation lifecycle rules are owned by
         Course.save(), not Django Admin.
@@ -256,9 +265,12 @@ class CourseAdmin(admin.ModelAdmin):
         # 1. SYNCHRONIZE AUTOMATIC CLASS DURATION
         # -------------------------------------------------------------
         #
-        # Django Admin saves timetable inline rows before save_related()
-        # finishes, so the timetable is now available for calculating
-        # automatic class duration.
+        # Timetable inline objects have now been saved.
+        #
+        # CourseTimetableSlot already owns schedule synchronization when
+        # a timetable change genuinely occurs. This final calculation
+        # simply guarantees that the stored automatic class duration
+        # reflects the complete final inline state.
         # -------------------------------------------------------------
         if (
             course.timetable_slots.exists()
@@ -268,28 +280,18 @@ class CourseAdmin(admin.ModelAdmin):
             course.refresh_from_db()
 
         # -------------------------------------------------------------
-        # 2. SYNCHRONIZE EXISTING COURSE SCHEDULE
+        # 2. EXISTING CLASS SESSIONS
         # -------------------------------------------------------------
         #
-        # Schedule synchronization is allowed only while the Course is
-        # operational: confirmed or active.
+        # IMPORTANT:
         #
-        # Paused:
-        # Course.save() has already moved applicable future lessons to
-        # pending_reschedule.
+        # Do NOT call course.synchronize_future_scheduled_sessions() here.
         #
-        # Cancelled:
-        # Course.save() has already cancelled applicable unresolved lessons.
-        #
-        # Completed:
-        # historical delivery must remain unchanged.
+        # An ordinary Admin save must never rebuild the teaching schedule.
+        # Genuine Course/timetable changes are detected and handled by the
+        # corresponding model methods.
         # -------------------------------------------------------------
-        if course.class_sessions.exists():
-
-            if operational_course:
-                course.synchronize_future_scheduled_sessions()
-
-        elif operational_course:
+        if not course.class_sessions.exists() and operational_course:
 
             # ---------------------------------------------------------
             # 3. CALCULATE EXPECTED END DATE BEFORE INITIAL GENERATION
@@ -328,9 +330,8 @@ class CourseAdmin(admin.ModelAdmin):
             # 4. FINAL SAFE INITIAL CLASS SESSION GENERATION ATTEMPT
             # ---------------------------------------------------------
             #
-            # try_generate_class_sessions() still contains its own
-            # prerequisite guards, but Django Admin also deliberately
-            # restricts this attempt to confirmed/active Courses.
+            # try_generate_class_sessions() contains its own prerequisite
+            # guards, including the no-existing-ClassSessions guard.
             # ---------------------------------------------------------
             course.try_generate_class_sessions()
 
@@ -338,11 +339,8 @@ class CourseAdmin(admin.ModelAdmin):
         # 5. FINAL END-DATE SYNCHRONIZATION
         # -------------------------------------------------------------
         #
-        # Once ClassSessions exist, they are the operational source of
-        # truth for the Course end date.
-        #
-        # This runs once after any schedule synchronization or initial
-        # generation performed above.
+        # Once ClassSessions exist, their actual final session remains
+        # the operational source of truth for Course.end_date.
         # -------------------------------------------------------------
         if course.class_sessions.exists():
             course.sync_end_date_from_sessions()
@@ -442,10 +440,21 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         """
         Permanent deletion is restricted to superusers.
 
-        CourseEnrollment.delete() remains responsible for deciding
-        whether the enrollment can actually be deleted safely.
+        Legitimate enrollment lifecycle changes should use status values.
+        Permanent deletion is reserved for correcting genuinely erroneous
+        enrollments.
         """
         return request.user.is_superuser
+
+    def delete_model(self, request, obj):
+        """
+        Superuser-only correction path.
+
+        Force-delete the erroneous CourseEnrollment together with that
+        learner's Attendance records for the Course. ClassSessions remain
+        unchanged because they belong to the Course itself.
+        """
+        obj.delete(force=True)
 
     def get_actions(self, request):
         """
