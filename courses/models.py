@@ -1021,7 +1021,7 @@ class Course(models.Model):
         Cancel future ClassSessions that have not yet been held.
 
         Attendance does not have a cancelled learner outcome. Instead,
-        untouched Attendance(status="scheduled") placeholders are deleted
+        untouched Attendance(status="pending") placeholders are deleted
         because a cancelled lesson will never produce an attendance outcome.
 
         Genuine attendance history (attended/missed/excused) is never deleted.

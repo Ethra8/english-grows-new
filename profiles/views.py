@@ -5021,7 +5021,7 @@ def mark_class_pending_reschedule(request, session_id):
 
     if request.method == "POST":
         # Rescheduling belongs to ClassSession, not Attendance.
-        # Existing Attendance records remain status="scheduled" and stay
+        # Existing Attendance records remain status="pending" and stay
         # attached to this same ClassSession throughout the reschedule flow.
         session.status = ClassSession.STATUS_PENDING_RESCHEDULE
         session.save(update_fields=["status"])
