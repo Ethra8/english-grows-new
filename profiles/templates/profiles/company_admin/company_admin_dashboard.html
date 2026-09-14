@@ -468,23 +468,23 @@
                                 <span class="attendance-status-badge pending">
                                     <i class="fa-solid fa-clock" aria-hidden="true"></i>
 
-                                    {% blocktrans count pending=monthly_attendance_pending_sessions %}
-                                        {{ pending }} awaiting
-                                    {% plural %}
-                                        {{ pending }} awaiting
-                                    {% endblocktrans %}
+                                    {% if monthly_attendance_pending_sessions == 1 %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge singular' %}
+                                    {% elif monthly_attendance_pending_sessions > 1 or monthly_attendance_pending_sessions == 0 %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge plural' %}
+                                    {% endif %}
                                 </span>
 
                                 {% elif held_monthly_sessions > 1 and monthly_attendance_pending_sessions == 0 %}
 
                                     <span class="attendance-status-badge complete">
                                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                        {% trans 'Up to date' context 'dashboard training overview' %}
+                                        {% trans 'Up to date' context 'submitted attendance status badge' %}
                                     </span>
                                 
                                 {% else %}    
                                     <span class="attendance-status-badge neutral">
-                                        {% trans 'No classes held' context 'dashboard training overview' %}
+                                        {% trans 'No classes held' context 'submitted attendance status badge' %}
                                     </span>    
 
                                 {% endif %}

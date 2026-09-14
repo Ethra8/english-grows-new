@@ -9,13 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: .\config\settings.py:224
-#, fuzzy
+
 #| msgid "English training"
 msgid "English"
 msgstr "De profesional a profesional"
 
 #: .\config\settings.py:225
-#, fuzzy
+
 #| msgid "Company"
 msgid "Spanish"
 msgstr "Empresa"
@@ -29,21 +29,21 @@ msgid "French"
 msgstr ""
 
 #: .\courses\models.py:71
-#, fuzzy
+
 #| msgctxt "assigned courses"
 #| msgid "Confirmed"
 msgid "Confirmed"
 msgstr "Confirmados"
 
 #: .\courses\models.py:72
-#, fuzzy
+
 #| msgctxt "assigned courses"
 #| msgid "Active"
 msgid "Active"
 msgstr "Activos"
 
 #: .\courses\models.py:73
-#, fuzzy
+
 #| msgctxt "assigned courses"
 #| msgid "Paused"
 msgid "Paused"
@@ -52,14 +52,14 @@ msgstr "Pausados"
 #: .\courses\models.py:74
 #: .\profiles\templates\profiles\student\my_learning_progress.html:163
 #: .\profiles\templates\profiles\teacher\teacher_student_detail.html:192
-#, fuzzy
+
 #| msgctxt "assigned courses"
 #| msgid "Completed"
 msgid "Completed"
 msgstr "Completados"
 
 #: .\courses\models.py:75
-#, fuzzy
+
 #| msgctxt "assigned courses"
 #| msgid "Cancelled"
 msgid "Cancelled"
@@ -247,7 +247,7 @@ msgstr "asistencia registrada"
 
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:48
-#, fuzzy
+
 #| msgctxt "company attendance summary"
 #| msgid "Active Courses"
 msgid "Active Courses"
@@ -276,7 +276,7 @@ msgid "enrolled"
 msgstr "inscritos"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:129
-#, fuzzy
+
 #| msgctxt "admin all course attendance table"
 #| msgid "Attendance rate"
 msgctxt "admin all course attendance search form"
@@ -473,8 +473,7 @@ msgstr "Unirse"
 #: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:41
 #: .\profiles\templates\profiles\student\my_calendar.html:43
 #: .\profiles\templates\profiles\teacher\teacher_calendar.html:39
-#, fuzzy
-#| msgid "Details"
+
 msgid "Group details"
 msgstr "Detalles"
 
@@ -510,7 +509,7 @@ msgid "When"
 msgstr ""
 
 #: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:98
-#, fuzzy
+
 #| msgid "class"
 msgid "Class"
 msgstr "clase"
@@ -531,7 +530,7 @@ msgid "Upcoming"
 msgstr "Próximas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:33
-#, fuzzy
+
 #| msgid "past classes"
 msgid "Past Classes"
 msgstr "clases realizadas"
@@ -612,14 +611,14 @@ msgstr "Filtrar Registros"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:59
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:67
-#, fuzzy
+
 #| msgid "Filter Records"
 msgid "Filter by date"
 msgstr "Filtrar Asistencias"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_attendance.html:68
 #: .\profiles\templates\profiles\teacher\teacher_course_attendance.html:72
-#, fuzzy
+
 #| msgid "Employee"
 msgid "Find employee"
 msgstr "Empleado/a"
@@ -732,7 +731,7 @@ msgstr "Inscripciones"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:45
 #: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:44
-#, fuzzy
+
 #| msgctxt "metacards singular"
 #| msgid "enrolled"
 msgid "enrolled"
@@ -800,7 +799,7 @@ msgid "General Progress"
 msgstr "Progreso del Curso"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:211
-#, fuzzy
+
 msgctxt "course details page"
 msgid "Delivered"
 msgstr "Desarrollo general"
@@ -812,7 +811,7 @@ msgid "delivered"
 msgstr "impartido"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:220
-#, fuzzy
+
 #| msgctxt "course details page"
 #| msgid "Hours Delivered"
 msgctxt "course details page"
@@ -997,7 +996,7 @@ msgstr "Ver clases de esta semana"
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:440
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:81
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:162
-#, fuzzy
+
 #| msgid "class"
 msgid "class"
 msgid_plural "classes"
@@ -1023,7 +1022,7 @@ msgstr "Clases realizadas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:272
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:284
-#, fuzzy
+
 #| msgid "Classes held since enrollment"
 msgid "Classes held this week"
 msgstr "Clases desde inscripción"
@@ -1042,7 +1041,7 @@ msgstr "Tasa de Asistencia"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:358
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:409
-#, fuzzy
+
 #| msgctxt "admin all course attendance table"
 #| msgid "Attendance rate"
 msgid "Weekly attendance rate"
@@ -1055,43 +1054,23 @@ msgstr "Ver clases de este mes"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:417
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:487
-#, fuzzy
+
 #| msgid "Classes held since enrollment"
 msgid "Classes held this month"
 msgstr "Clases desde inscripción"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:467
-#, python-format
-msgid ""
-"\n"
-"                                        %(pending)s awaiting\n"
-"                                    "
-msgid_plural ""
-"\n"
-"                                        %(pending)s awaiting\n"
-"                                    "
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:478
-#, fuzzy
-#| msgctxt "submitted attendance status badge"
-#| msgid "Up to date"
-msgctxt "dashboard training overview"
-msgid "Up to date"
-msgstr "actualizado"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:483
-#, fuzzy
+
 #| msgctxt "course details page"
 #| msgid "Classe held"
 msgctxt "dashboard training overview"
 msgid "No classes held"
-msgstr "Clases impartidass"
+msgstr "0 Clases impartidas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:507
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:572
-#, fuzzy
+
 #| msgid "Monthly attendance"
 msgid "Monthly attendance rate"
 msgstr "Asistencia mensual"
@@ -1125,9 +1104,7 @@ msgstr "Porcentaje"
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:50
 #: .\profiles\templates\profiles\student\my_attendance.html:49
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:52
-#, fuzzy, python-format
-#| msgid "Attendance is below the recommended level of 75%!"
-msgid "Attendance is below the recommended level of 75%%!"
+msgid "Attendance is below the recommended level of 75%!"
 msgstr "Asistencia por debajo del nivel recomendado de 75%!"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:64
@@ -1176,7 +1153,7 @@ msgid "Classes held prior to enrollment"
 msgstr "Clases anteriores a inscripción"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:133
-#, fuzzy
+
 #| msgid "Classes held since enrollment"
 msgid "Classes since enrollment"
 msgstr "Clases desde inscripción"
@@ -1228,7 +1205,7 @@ msgstr "Ausencia"
 #: .\profiles\templates\profiles\student\my_attendance.html:220
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:219
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:78
-#, fuzzy
+
 #| msgctxt "excused singular"
 #| msgid "Excused"
 msgid "Excused"
@@ -1355,13 +1332,13 @@ msgstr "Evaluación Pendiente"
 #: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:36
 #: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:36
 #: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:62
-#, fuzzy
+
 #| msgid "Key strengths"
 msgid "Strengths"
 msgstr "Puntos fuertes"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:47
-#, fuzzy
+
 #| msgid "Required standard achieved"
 msgid "Required Standard Achieved"
 msgstr "Mínimo standard"
@@ -1374,7 +1351,7 @@ msgstr ""
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_teacher_notes.html:81
 #: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:82
-#, fuzzy
+
 #| msgid "Not assessed yet"
 msgid "No assessment available yet"
 msgstr "Pendiente"
@@ -1386,7 +1363,7 @@ msgid ""
 msgstr ""
 
 #: .\profiles\templates\profiles\components\course_details_nav.html:5
-#, fuzzy
+
 #| msgid "Student details navigation"
 msgid "Course details navigation"
 msgstr "Navegación de los detalles del estudiante"
@@ -1475,7 +1452,7 @@ msgid "Class List"
 msgstr "Lista Clases"
 
 #: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:54
-#, fuzzy
+
 #| msgctxt "admin sidebar"
 #| msgid "Performance"
 msgid "Performance"
@@ -1489,7 +1466,7 @@ msgstr "Empleados"
 #: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:64
 #: .\profiles\templates\profiles\includes\student\student_sidebar.html:57
 #: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:70
-#, fuzzy
+
 #| msgid "Account Settings"
 msgid "Account Setting"
 msgstr "Configuración"
@@ -1588,7 +1565,7 @@ msgid "Upcoming"
 msgstr "Próxima"
 
 #: .\profiles\templates\profiles\student\my_course.html:288
-#, fuzzy
+
 #| msgctxt "student dashboard"
 #| msgid "Next Class"
 msgid "Next Class"
@@ -1601,13 +1578,13 @@ msgid "Not confirmed yet"
 msgstr "Sin confirmar"
 
 #: .\profiles\templates\profiles\student\my_course.html:353
-#, fuzzy
+
 #| msgid "Start & End Dates"
 msgid "Start Date"
 msgstr "Fechas de Inicio y Finalización"
 
 #: .\profiles\templates\profiles\student\my_course.html:367
-#, fuzzy
+
 #| msgid "Enrollment date"
 msgid "End date"
 msgstr "Fecha de inscripción"
@@ -1621,7 +1598,7 @@ msgid "Completed Lessons"
 msgstr "Clases Completadas"
 
 #: .\profiles\templates\profiles\student\my_learning_progress.html:284
-#, fuzzy
+
 #| msgid "Hours Attended"
 msgid "Lessons Attended"
 msgstr "Horas Asistidas"
@@ -1635,7 +1612,7 @@ msgid "Minimum level requirements"
 msgstr ""
 
 #: .\profiles\templates\profiles\student\my_learning_progress_assessment.html:83
-#, fuzzy
+
 #| msgid ""
 #| "Your course information will appear here once you are enrolled in a course"
 msgid ""
@@ -1680,7 +1657,7 @@ msgstr "inscritos"
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:78
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:204
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:215
-#, fuzzy
+
 #| msgid "Skills Progress"
 msgid "Progress"
 msgstr "Progreso por Skills"
@@ -1691,13 +1668,13 @@ msgid "completed"
 msgstr "completado"
 
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:224
-#, fuzzy
+
 #| msgid "Hours Attended"
 msgid "Hours Done"
 msgstr "Horas Asistidas"
 
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:234
-#, fuzzy
+
 #| msgid "Class Sessions List"
 msgid "Class Sessions Held"
 msgstr "Listado de Clases"
@@ -1711,7 +1688,7 @@ msgid "View"
 msgstr "Ver"
 
 #: .\profiles\templates\profiles\teacher\teacher_courses.html:178
-#, fuzzy
+
 #| msgctxt "courses list row"
 #| msgid "Completion"
 msgid "Completion"
@@ -1721,71 +1698,30 @@ msgstr "Progreso"
 msgid "View learners list"
 msgstr "Ver lista de estudiantes"
 
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:255
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:275
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:458
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:478
-#, fuzzy
-#| msgctxt "dashboard training overview"
-#| msgid "Classes Held"
-msgid "Classes Held"
-msgstr "Clases realizadas"
-
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:259
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:347
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:462
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:511
-#, fuzzy
-#| msgctxt "dashboard training overview"
-#| msgid "Upcoming Classes"
-msgid "Upcoming Classes"
-msgstr "Próximas Clases"
 
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:316
-#, fuzzy
 #| msgid "Attendance Submitted"
 msgid "attendance submitted"
 msgstr "Registros de asistencia"
 
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:327
-#, fuzzy
+
 #| msgid "Attendance Submitted"
 msgid "All attendance submitted"
 msgstr "Registros de asistencia"
 
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:375
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:537
-#, python-format
-msgid ""
-"\n"
-"                                    %(pending)s awaiting\n"
-"                                "
-msgid_plural ""
-"\n"
-"                                    %(pending)s awaiting\n"
-"                                "
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:386
-#: .\profiles\templates\profiles\teacher\teacher_dashboard.html:548
-#, fuzzy
-#| msgctxt "submitted attendance status badge"
-#| msgid "Up to date"
-msgid "Up to date"
-msgstr "actualizado"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:25
 msgid "Message"
-msgstr ""
+msgstr "Enviar correo"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:30
 msgid "Current Level"
-msgstr ""
+msgstr "Nivel actual"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:42
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_assessment_notes.html:71
 msgid "Meets minimum required standard"
@@ -1796,29 +1732,22 @@ msgid "No teacher notes yet."
 msgstr ""
 
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:246
-#, fuzzy
+
 #| msgid "No courses assigned yet"
 msgid "No active course assigned yet"
 msgstr "No hay ninguna inscripción a un curso todavía"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:247
-#, fuzzy
-#| msgid ""
-#| "Your course information will appear here once you are enrolled in a course"
-msgid ""
-"Course information will appear here once the employee is enrolled in a "
-"course."
-msgstr ""
-"Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
+
+msgid "Course information will appear here once the employee is enrolled in a course."
+msgstr "Información sobre el curso aparecerá una vez su inscripción se haga efectiva"
 
 #: .\profiles\templates\profiles\teacher\teacher_student_detail.html:254
 msgid "Completed Hours"
 msgstr "Horas Completadas"
 
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:47
-#, fuzzy
-#| msgctxt "attendance detail card"
-#| msgid "employee record"
+
 msgid "employee record"
 msgstr "registro"
 
@@ -1832,49 +1761,47 @@ msgstr ""
 
 #: .\templates\account\email.html:11
 msgid "The following e-mail addresses are associated with your account:"
-msgstr ""
+msgstr "La ssiguiente dirección de correo está asociada con su cuenta"
 
 #: .\templates\account\email.html:25
 msgid "Verified"
-msgstr ""
+msgstr "Verificado"
 
 #: .\templates\account\email.html:27
 msgid "Unverified"
-msgstr ""
+msgstr "Sin verificar"
 
 #: .\templates\account\email.html:29
 msgid "Primary"
-msgstr ""
+msgstr "Principal"
 
 #: .\templates\account\email.html:35
 msgid "Make Primary"
-msgstr ""
+msgstr "Convertir en principal"
 
 #: .\templates\account\email.html:36
 msgid "Re-send Verification"
-msgstr ""
+msgstr "Reenviar verificación"
 
 #: .\templates\account\email.html:37
 msgid "Remove"
-msgstr ""
+msgstr "Quitar"
 
 #: .\templates\account\email.html:44
 msgid "Warning:"
-msgstr ""
+msgstr "Atención:"
 
 #: .\templates\account\email.html:44
-msgid ""
-"You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
+msgid "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
 
 #: .\templates\account\email.html:49
 msgid "Add E-mail Address"
-msgstr ""
+msgstr "Añadir dirección de correo"
 
 #: .\templates\account\email.html:54
 msgid "Add E-mail"
-msgstr ""
+msgstr "Añadir correo"
 
 #: .\templates\account\email.html:64
 msgid "Do you really want to remove the selected e-mail address?"
@@ -1882,7 +1809,7 @@ msgstr ""
 
 #: .\templates\account\email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr ""
+msgstr "Confirmar dirección de correo?"
 
 #: .\templates\account\email_confirm.html:16
 #, python-format
@@ -1892,7 +1819,7 @@ msgid ""
 msgstr ""
 
 #: .\templates\account\email_confirm.html:20
-#, fuzzy
+
 #| msgid "Confirmed"
 msgid "Confirm"
 msgstr "Confirmado"
@@ -1933,18 +1860,18 @@ msgstr ""
 #: .\templates\account\login.html:46
 #: .\templates\account\password_change.html:14
 msgid "Forgot Password?"
-msgstr ""
+msgstr "¿Contraseña olvidada?"
 
 #: .\templates\account\logout.html:8 .\templates\account\logout.html:21
 msgid "Log Out"
-msgstr ""
+msgstr "Desconectarse"
 
 #: .\templates\account\logout.html:12
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Estás seguro/a que quieres desconectarte"
 
 #: .\templates\account\logout.html:25
-#, fuzzy
+
 #| msgid "Cancelled"
 msgid "Cancel"
 msgstr "Cancelado"
@@ -1954,38 +1881,33 @@ msgstr "Cancelado"
 #: .\templates\account\password_reset_from_key.html:5
 #: .\templates\account\password_reset_from_key_done.html:4
 msgid "Change Password"
-msgstr ""
+msgstr "Cambiar contraseña"
 
 #: .\templates\account\password_reset.html:7
 msgid "Reset your password"
-msgstr ""
+msgstr "Resetear contraseña"
 
 #: .\templates\account\password_reset.html:15
-msgid ""
-"Enter the email address associated with your account and we'll send you a "
-"link to reset your password."
-msgstr ""
+msgid "Enter the email address associated with your account and we'll send you a link to reset your password."
+msgstr "Introduce la dirección de correo asociada con tu cuenta y recibirás un enlace para resetear tu contraseña."
 
 #: .\templates\account\password_reset.html:20
 msgid "Reset My Password"
-msgstr ""
+msgstr "Resetear mi contraseña"
 
 #: .\templates\account\password_reset.html:23
 msgid "Please contact us if you have any trouble resetting your password."
-msgstr ""
+msgstr "Por favor, informa si tienes algún problema al resetear tu contraseña."
 
 #: .\templates\account\password_reset_done.html:6
 msgid "Password Reset"
-msgstr ""
+msgstr "Resetear contraseña"
 
 #: .\templates\account\password_reset_done.html:14
-msgid ""
-"We have sent you an e-mail. If you have not received it please check your "
-"spam folder. Otherwise contact us if you do not receive it in a few minutes."
+msgid "We have sent you an e-mail. If you have not received it please check your spam folder. Otherwise contact us if you do not receive it in a few minutes."
 msgstr ""
 
 #: .\templates\account\password_reset_from_key.html:11
-#, python-format
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
@@ -1994,27 +1916,27 @@ msgstr ""
 
 #: .\templates\account\password_reset_from_key.html:16
 msgid "change password"
-msgstr ""
+msgstr "Cambiar contraseña"
 
 #: .\templates\account\password_reset_from_key_done.html:8
 msgid "Your password is now changed."
-msgstr ""
+msgstr "Tu contraseña ha sido actualizada"
 
 #: .\templates\account\password_set.html:6
 msgid "Set your password"
-msgstr ""
+msgstr "Incluye una contraseña"
 
 #: .\templates\account\password_set.html:13
 msgid "Set Password"
-msgstr ""
+msgstr "Incluir contraseña"
 
 #: .\templates\account\signup.html:6
 msgid "Create your account"
-msgstr ""
+msgstr "Crea tu cuenta"
 
 #: .\templates\account\signup.html:16
 msgid "Sign Up"
-msgstr ""
+msgstr "Regístrate"
 
 #: .\templates\account\signup.html:19
 #, python-format
@@ -2033,7 +1955,7 @@ msgstr ""
 #: .\templates\account\verification_sent.html:5
 #: .\templates\account\verified_email_required.html:5
 msgid "Verify Your E-mail Address"
-msgstr ""
+msgstr "Verifica tu dirección de correo"
 
 #: .\templates\account\verification_sent.html:9
 msgid ""
@@ -2084,13 +2006,13 @@ msgid "Login"
 msgstr ""
 
 #: .\templates\base.html:340
-#, fuzzy
+
 #| msgid "Company"
 msgid "Companies"
 msgstr "Empresa"
 
 #: .\templates\base.html:347
-#, fuzzy
+
 #| msgid "Online professional"
 msgid "Professionals"
 msgstr "Formación de Inglés Online"
@@ -2127,7 +2049,7 @@ msgstr "Desarrollado y diseñado por Edna T.M."
 #: .\templates\includes\mobile_top_header.html:112
 #: .\templates\includes\mobile_top_header.html:120
 #: .\templates\includes\mobile_top_header.html:128
-#, fuzzy
+
 #| msgid "My Platform"
 msgid "Platform"
 msgstr "Mi Plataforma"
