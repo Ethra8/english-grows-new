@@ -14,6 +14,8 @@ from .models import (
     SUBSKILLS,
 )
 
+from courses.models import Course, CourseEnrollment
+
 User = get_user_model()
 
 
@@ -122,110 +124,114 @@ class CustomUserAdmin(UserAdmin):
     # -------------------------------------------------------------------------
 
     def skills_assessments_editor(self, obj):
-        assessments = list(
+        # ---------------------------------------------------------------------
+        # COURSES
+        #
+        # Build from enrollments, NOT from existing skill assessments.
+        # This ensures a student can be assessed for the first time from Admin.
+        # ---------------------------------------------------------------------
+        enrollments = (
+            CourseEnrollment.objects
+            .filter(student=obj)
+            .select_related("course")
+            .order_by("course__name", "course_id")
+        )
+
+        courses = []
+        seen_course_ids = set()
+
+        for enrollment in enrollments:
+            if enrollment.course_id not in seen_course_ids:
+                courses.append(enrollment.course)
+                seen_course_ids.add(enrollment.course_id)
+
+        # ---------------------------------------------------------------------
+        # EXISTING ASSESSMENTS
+        #
+        # These are optional. Missing assessments/subskills will still be
+        # displayed from the canonical SUBSKILLS definition.
+        # ---------------------------------------------------------------------
+        assessments = (
             StudentSkillAssessment.objects
             .filter(student=obj)
             .select_related("course")
             .prefetch_related("subskill_assessments")
         )
 
-        if not assessments:
-            return "No skill assessments are available for this user."
+        # Keep historical assessment courses visible even if an enrollment
+        # record is unexpectedly unavailable.
+        for assessment in assessments:
+            if assessment.course_id not in seen_course_ids:
+                courses.append(assessment.course)
+                seen_course_ids.add(assessment.course_id)
 
-        skill_order = {
-            value: index
-            for index, (value, label)
-            in enumerate(StudentSkillAssessment.SKILL_AREA_CHOICES)
-        }
+        if not courses:
+            return "No courses are associated with this user."
 
-        assessments.sort(
-            key=lambda assessment: (
-                (assessment.course.name or "").lower(),
-                assessment.course_id,
-                skill_order.get(assessment.skill, 999),
-            )
-        )
-
-        course_blocks = []
-        course_ids = []
+        existing = {}
 
         for assessment in assessments:
-            if assessment.course_id not in course_ids:
-                course_ids.append(assessment.course_id)
+            existing[(assessment.course_id, assessment.skill)] = {
+                subskill.subskill: subskill
+                for subskill in assessment.subskill_assessments.all()
+            }
 
-        for course_id in course_ids:
-            course_assessments = [
-                assessment
-                for assessment in assessments
-                if assessment.course_id == course_id
-            ]
+        course_blocks = []
 
-            course = course_assessments[0].course
+        # ---------------------------------------------------------------------
+        # ALWAYS DISPLAY THE COMPLETE CANONICAL ASSESSMENT FRAMEWORK
+        # ---------------------------------------------------------------------
+        for course in courses:
             skill_blocks = []
 
-            for assessment in course_assessments:
-                canonical_order = {
-                    value: index
-                    for index, (value, label)
-                    in enumerate(SUBSKILLS.get(assessment.skill, []))
-                }
-
-                subskills = sorted(
-                    assessment.subskill_assessments.all(),
-                    key=lambda subskill: canonical_order.get(
-                        subskill.subskill,
-                        999,
-                    ),
+            for skill_value, skill_label in StudentSkillAssessment.SKILL_AREA_CHOICES:
+                rows = []
+                existing_subskills = existing.get(
+                    (course.id, skill_value),
+                    {},
                 )
 
-                rows = []
+                for subskill_value, subskill_label in SUBSKILLS.get(
+                    skill_value,
+                    [],
+                ):
+                    subskill = existing_subskills.get(subskill_value)
 
-                for subskill in subskills:
+                    current_rating = (
+                        subskill.rating
+                        if subskill
+                        else ""
+                    )
+
+                    field_name = (
+                        f"subskill_rating__"
+                        f"{course.id}__"
+                        f"{skill_value}__"
+                        f"{subskill_value}"
+                    )
+
                     choices = [
                         ("", "— Not assessed —"),
                         *StudentSubSkillAssessment.Rating.choices,
                     ]
 
-                    options = []
-
-                    for value, label in choices:
-                        if (subskill.rating or "") == value:
-                            options.append(
-                                format_html(
-                                    '<option value="{}" selected>{}</option>',
-                                    value,
-                                    label,
-                                )
-                            )
-                        else:
-                            options.append(
-                                format_html(
-                                    '<option value="{}">{}</option>',
-                                    value,
-                                    label,
-                                )
-                            )
-
-                    options_html = format_html_join(
-                        "",
-                        "{}",
-                        ((option,) for option in options),
-                    )
-
-                    select = format_html(
-                        '<select name="subskill_rating_{}" '
-                        'style="min-width:260px;">{}</select>',
-                        subskill.pk,
-                        options_html,
+                    select = forms.Select(
+                        choices=choices
+                    ).render(
+                        name=field_name,
+                        value=current_rating,
+                        attrs={
+                            "style": "min-width:260px;",
+                        },
                     )
 
                     rows.append(
                         format_html(
-                            '<tr>'
-                            '<td style="padding:8px 16px 8px 0; width:45%;">{}</td>'
+                            "<tr>"
+                            '<td style="padding:8px 16px 8px 0;width:45%;">{}</td>'
                             '<td style="padding:8px 0;">{}</td>'
-                            '</tr>',
-                            subskill.get_subskill_display(),
+                            "</tr>",
+                            subskill_label,
                             select,
                         )
                     )
@@ -240,9 +246,9 @@ class CustomUserAdmin(UserAdmin):
                     format_html(
                         '<div style="margin:0 0 24px;">'
                         '<h3 style="margin:0 0 8px;">{}</h3>'
-                        '<table style="width:100%; max-width:760px;">{}</table>'
-                        '</div>',
-                        assessment.get_skill_display(),
+                        '<table style="width:100%;max-width:760px;">{}</table>'
+                        "</div>",
+                        skill_label,
                         rows_html,
                     )
                 )
@@ -256,12 +262,10 @@ class CustomUserAdmin(UserAdmin):
             course_blocks.append(
                 format_html(
                     '<div style="margin:0 0 32px;">'
-                    '<h2 style="margin:0 0 18px; padding-bottom:8px; '
-                    'border-bottom:1px solid var(--hairline-color);">'
-                    '{}'
-                    '</h2>'
-                    '{}'
-                    '</div>',
+                    '<h2 style="margin:0 0 18px;padding-bottom:8px;'
+                    'border-bottom:1px solid var(--hairline-color);">{}</h2>'
+                    "{}"
+                    "</div>",
                     course.name,
                     skills_html,
                 )
@@ -272,7 +276,6 @@ class CustomUserAdmin(UserAdmin):
             "{}",
             ((block,) for block in course_blocks),
         )
-
     skills_assessments_editor.short_description = "Subskill ratings"
 
 
@@ -286,39 +289,135 @@ class CustomUserAdmin(UserAdmin):
         if not form.instance.pk:
             return
 
+        user = form.instance
+
+        allowed_course_ids = set(
+            CourseEnrollment.objects
+            .filter(student=user)
+            .values_list("course_id", flat=True)
+        )
+
+        valid_skills = {
+            value
+            for value, label
+            in StudentSkillAssessment.SKILL_AREA_CHOICES
+        }
+
+        valid_subskills = {
+            skill: {
+                value
+                for value, label
+                in subskills
+            }
+            for skill, subskills in SUBSKILLS.items()
+        }
+
         allowed_ratings = {
             value
             for value, label
             in StudentSubSkillAssessment.Rating.choices
         }
 
-        subskills = (
-            StudentSubSkillAssessment.objects
-            .filter(skill_assessment__student=form.instance)
-        )
-
-        for subskill in subskills:
-            field_name = f"subskill_rating_{subskill.pk}"
-
-            if field_name not in request.POST:
+        for field_name, submitted_rating in request.POST.items():
+            if not field_name.startswith("subskill_rating__"):
                 continue
 
-            rating = request.POST.get(field_name) or None
+            try:
+                prefix, course_id, skill, subskill = field_name.split("__", 3)
+                course_id = int(course_id)
+            except (ValueError, TypeError):
+                continue
+
+            # -----------------------------------------------------------------
+            # VALIDATE THE POSTED STRUCTURE
+            # -----------------------------------------------------------------
+            if course_id not in allowed_course_ids:
+                continue
+
+            if skill not in valid_skills:
+                continue
+
+            if subskill not in valid_subskills.get(skill, set()):
+                continue
+
+            rating = submitted_rating or None
 
             if rating is not None and rating not in allowed_ratings:
                 continue
 
-            if subskill.rating == rating:
+            # -----------------------------------------------------------------
+            # BLANK RATING
+            #
+            # Do not create assessment records merely because Admin displayed
+            # them. Only clear an existing rating when necessary.
+            # -----------------------------------------------------------------
+            if rating is None:
+                assessment = (
+                    StudentSkillAssessment.objects
+                    .filter(
+                        student=user,
+                        course_id=course_id,
+                        skill=skill,
+                    )
+                    .first()
+                )
+
+                if not assessment:
+                    continue
+
+                subskill_assessment = (
+                    StudentSubSkillAssessment.objects
+                    .filter(
+                        skill_assessment=assessment,
+                        subskill=subskill,
+                    )
+                    .first()
+                )
+
+                if (
+                    subskill_assessment
+                    and subskill_assessment.rating
+                ):
+                    subskill_assessment.rating = None
+                    subskill_assessment.save(
+                        update_fields=(
+                            "rating",
+                            "updated_at",
+                        )
+                    )
+
                 continue
 
-            subskill.rating = rating
-            subskill.save(
+            # -----------------------------------------------------------------
+            # FIRST OR EXISTING ASSESSMENT
+            #
+            # Create the parent skill assessment and subskill only if necessary.
+            # -----------------------------------------------------------------
+            assessment, created = (
+                StudentSkillAssessment.objects.get_or_create(
+                    student=user,
+                    course_id=course_id,
+                    skill=skill,
+                )
+            )
+
+            subskill_assessment, created = (
+                StudentSubSkillAssessment.objects.get_or_create(
+                    skill_assessment=assessment,
+                    subskill=subskill,
+                )
+            )
+
+            if subskill_assessment.rating == rating:
+                continue
+
+            subskill_assessment.rating = rating
+            subskill_assessment.save(
                 update_fields=(
                     "rating",
                     "updated_at",
                 )
             )
-
 
     # -------------------------------------------------------------------------
     # DISPLAY HELPERS
