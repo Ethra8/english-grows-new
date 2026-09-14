@@ -4854,7 +4854,7 @@ def teacher_take_attendance(request, session_id):
         enrollment.current_attendance = attendance_by_student_id.get(
             enrollment.student_id
         )
-    
+
     if request.method == "POST":
         final_attendance_statuses = {
             Attendance.STATUS_ATTENDED,
@@ -4876,39 +4876,29 @@ def teacher_take_attendance(request, session_id):
                     }
                 )
 
-        # Once every Attendance record assigned to this session has a final
-        # learner outcome, the lesson itself is completed.
-        #
-        # ClassSession.save() will then check whether this was the final
-        # unfinished lesson and, if so, complete the Course + active
-        # CourseEnrollments automatically.
-        attendance_records = class_session.attendance_records.all()
+        class_session.refresh_from_db()
 
-        has_attendance_records = attendance_records.exists()
-        has_unfinished_attendance = attendance_records.filter(
-            status=Attendance.STATUS_PENDING
-        ).exists()
-
-        if has_attendance_records and not has_unfinished_attendance:
-            if class_session.status != ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED:
-                class_session.status = ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-                class_session.save(update_fields=["status"])
-
+        if class_session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED:
             messages.success(
                 request,
                 "Attendance saved and lesson marked as completed."
             )
+        elif class_session.attendance_records_submitted:
+            messages.success(
+                request,
+                "Attendance saved. The lesson will be completed automatically after it ends."
+            )
         else:
             messages.success(
                 request,
-                "Attendance saved. Complete all learner records to finish the lesson."
+                "Attendance saved. Complete all learner records to finish the attendance submission."
             )
 
         return redirect(
             "profiles:teacher_attendance_detail",
             session_id=class_session.id,
         )
-
+    
     context = {
         "profile": profile,
         "course": course,

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils import timezone
+from django.forms.models import BaseInlineFormSet
 
 from .models import (
     CourseType,
@@ -35,21 +36,65 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 
 # -------------------------------------------------------------------------
+# COURSE ENROLLMENT INLINE FORMSET
+# -------------------------------------------------------------------------
+#
+# Django Admin inline deletion normally calls CourseEnrollment.delete()
+# without any custom arguments.
+#
+# CourseEnrollment.delete() deliberately protects genuine historical
+# enrollments from accidental permanent deletion unless force=True is used.
+#
+# This custom inline formset provides the explicit superuser correction path:
+#
+# - the CourseEnrollmentInline itself restricts deletion to superusers
+# - when a superuser confirms deletion from the Course admin
+# - delete_existing() calls obj.delete(force=True)
+# - the erroneous CourseEnrollment is permanently removed
+# - all learner-specific Attendance records for that learner/course are removed
+# - the Course's ClassSessions remain unchanged
+#
+# This is intended only for correcting genuinely erroneous enrollments,
+# such as assigning a learner to the wrong Course.
+#
+# Legitimate enrollment lifecycle changes should use:
+# active / paused / completed / cancelled
+# rather than permanent deletion.
+# -------------------------------------------------------------------------
+class CourseEnrollmentInlineFormSet(BaseInlineFormSet):
+    def delete_existing(self, obj, commit=True):
+        if commit:
+            obj.delete(force=True)
+
+
+# -------------------------------------------------------------------------
 # COURSE ENROLLMENT INLINE
 # -------------------------------------------------------------------------
 #
-# Enrollments can be added from the Course admin.
+# Enrollments can be added and managed from the Course admin.
 #
 # When a new enrollment becomes active:
 # - NO new ClassSessions are generated if the course already has sessions.
 # - CourseEnrollment.save() automatically creates Attendance records for
-#   this learner for every unfinished ClassSession.
+#   this learner for the relevant unfinished ClassSessions.
 #
-# We avoid deleting enrollments from the Course page because the enrollment
-# lifecycle already provides paused/completed/cancelled statuses.
+# Normal enrollment lifecycle changes should use:
+# - active
+# - paused
+# - completed
+# - cancelled
+#
+# Permanent deletion is reserved for superusers and should be used only
+# to correct genuinely erroneous enrollments, such as assigning a learner
+# to the wrong Course.
+#
+# Deleting an erroneous enrollment removes the learner-specific Attendance
+# records belonging to that enrollment, while the Course's ClassSessions
+# remain unchanged because lesson identity belongs to the Course itself.
 # -------------------------------------------------------------------------
 class CourseEnrollmentInline(admin.TabularInline):
     model = CourseEnrollment
+    formset = CourseEnrollmentInlineFormSet
     extra = 0
     can_delete = True
 
@@ -68,6 +113,9 @@ class CourseEnrollmentInline(admin.TabularInline):
     readonly_fields = (
         "enrolled_at",
     )
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 # -------------------------------------------------------------------------
@@ -160,7 +208,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     # Manual "Generate class sessions" action removed.
     #
-    # ClassSessions + initial Attendance records are now generated
+    # ClassSessions + initial Attendance records are generated
     # automatically by the model lifecycle once all prerequisites exist.
 
     def save_related(self, request, form, formsets, change):
@@ -171,22 +219,25 @@ class CourseAdmin(admin.ModelAdmin):
 
         1. Save Course-related inline objects.
         2. Synchronize automatically calculated class duration.
-        3. If ClassSessions already exist:
-           - recalculate only future scheduled sessions
-           - skip active bank holidays
-           - preserve completed / pending-reschedule / rescheduled sessions
+        3. For confirmed/active Courses with existing ClassSessions:
+           - synchronize only future scheduled sessions
+           - preserve pending-reschedule / rescheduled / held / complete /
+             cancelled sessions
            - preserve ClassSession IDs and Attendance records
-           - synchronize end_date from the actual final ClassSession
-        4. If no ClassSessions exist yet:
+        4. If no ClassSessions exist yet and the Course is confirmed/active:
            - calculate the expected end_date from the timetable
-           - skip active bank holidays
-        5. Perform the final safe initial ClassSession generation attempt.
-        6. If generation occurred, synchronize end_date from the actual
-           final ClassSession.
+           - perform the final safe initial generation attempt
+        5. If ClassSessions exist after processing:
+           - synchronize end_date once from the actual final ClassSession
+
+        Paused, cancelled and completed Courses do not generate or
+        automatically resynchronize teaching sessions here.
+
+        Course-level pause/cancellation lifecycle rules are owned by
+        Course.save(), not Django Admin.
 
         Existing ClassSessions are never deleted or regenerated here.
         """
-
         super().save_related(
             request,
             form,
@@ -195,6 +246,11 @@ class CourseAdmin(admin.ModelAdmin):
         )
 
         course = form.instance
+
+        operational_course = course.status in {
+            "confirmed",
+            "active",
+        }
 
         # -------------------------------------------------------------
         # 1. SYNCHRONIZE AUTOMATIC CLASS DURATION
@@ -209,46 +265,31 @@ class CourseAdmin(admin.ModelAdmin):
             and course.class_duration_source == "auto"
         ):
             course.update_class_duration_from_timetable()
-
-            # Refresh values written by
-            # update_class_duration_from_timetable().
             course.refresh_from_db()
 
         # -------------------------------------------------------------
         # 2. SYNCHRONIZE EXISTING COURSE SCHEDULE
         # -------------------------------------------------------------
         #
-        # If ClassSessions already exist, they must NOT be regenerated.
+        # Schedule synchronization is allowed only while the Course is
+        # operational: confirmed or active.
         #
-        # Instead, synchronize_future_scheduled_sessions() updates only:
+        # Paused:
+        # Course.save() has already moved applicable future lessons to
+        # pending_reschedule.
         #
-        #     future + status="scheduled"
+        # Cancelled:
+        # Course.save() has already cancelled applicable unresolved lessons.
         #
-        # It deliberately leaves untouched:
-        #
-        #     completed
-        #     pending_reschedule
-        #     rescheduled
-        #     past sessions
-        #
-        # This allows newly added/changed BankHoliday records and timetable
-        # changes to be reflected safely without breaking:
-        #
-        # - ClassSession IDs
-        # - class_number
-        # - Attendance records
-        # - completed history
-        # - manual rescheduling
+        # Completed:
+        # historical delivery must remain unchanged.
         # -------------------------------------------------------------
         if course.class_sessions.exists():
 
-            course.synchronize_future_scheduled_sessions()
+            if operational_course:
+                course.synchronize_future_scheduled_sessions()
 
-            # Existing ClassSessions are the operational source of truth
-            # for the Course end date.
-            course.sync_end_date_from_sessions()
-
-        else:
+        elif operational_course:
 
             # ---------------------------------------------------------
             # 3. CALCULATE EXPECTED END DATE BEFORE INITIAL GENERATION
@@ -262,8 +303,8 @@ class CourseAdmin(admin.ModelAdmin):
             # - number_of_classes
             # - active BankHoliday records
             #
-            # calculate_course_end_date() uses the same centralized
-            # scheduling rules as ClassSession generation.
+            # Only confirmed/active Courses should establish an
+            # operational teaching schedule.
             # ---------------------------------------------------------
             if (
                 course.start_date
@@ -283,46 +324,28 @@ class CourseAdmin(admin.ModelAdmin):
 
                     course.end_date = calculated_end_date
 
-        # -------------------------------------------------------------
-        # 4. FINAL SAFE INITIAL CLASS SESSION GENERATION ATTEMPT
-        # -------------------------------------------------------------
-        #
-        # try_generate_class_sessions() generates only when:
-        #
-        # - no ClassSessions exist yet
-        # - start_date exists
-        # - number_of_classes is available
-        # - timetable slots exist
-        # - at least one active enrollment exists
-        #
-        # The model guard prevents regeneration of an existing schedule.
-        # -------------------------------------------------------------
-        course.try_generate_class_sessions()
+            # ---------------------------------------------------------
+            # 4. FINAL SAFE INITIAL CLASS SESSION GENERATION ATTEMPT
+            # ---------------------------------------------------------
+            #
+            # try_generate_class_sessions() still contains its own
+            # prerequisite guards, but Django Admin also deliberately
+            # restricts this attempt to confirmed/active Courses.
+            # ---------------------------------------------------------
+            course.try_generate_class_sessions()
 
         # -------------------------------------------------------------
         # 5. FINAL END-DATE SYNCHRONIZATION
         # -------------------------------------------------------------
         #
-        # If ClassSessions were generated above, their real final date
-        # becomes authoritative immediately.
+        # Once ClassSessions exist, they are the operational source of
+        # truth for the Course end date.
         #
-        # This also keeps end_date correct if the final lesson has been
-        # shortened or if active BankHoliday records extended the course.
+        # This runs once after any schedule synchronization or initial
+        # generation performed above.
         # -------------------------------------------------------------
         if course.class_sessions.exists():
             course.sync_end_date_from_sessions()
-
-    def save_model(self, request, obj, form, change):
-        status_changed_to_cancelled = (
-            change
-            and "status" in form.changed_data
-            and obj.status == "cancelled"
-        )
-
-        super().save_model(request, obj, form, change)
-
-        if status_changed_to_cancelled:
-            obj.cancel_future_sessions()        
 
     inlines = (
         CourseTimetableSlotInline,
@@ -417,18 +440,24 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         """
-        Preserve enrollment history.
+        Permanent deletion is restricted to superusers.
 
-        Use the enrollment status
-        (paused/completed/cancelled)
-        instead of deleting the enrollment record.
-
-        Only superuser can alter.
+        CourseEnrollment.delete() remains responsible for deciding
+        whether the enrollment can actually be deleted safely.
         """
-        if request.user.is_superuser:
-            return True
+        return request.user.is_superuser
 
-        return False
+    def get_actions(self, request):
+        """
+        Disable bulk deletion.
+
+        Enrollment deletion is exceptional and should be evaluated
+        individually by CourseEnrollment.delete().
+        """
+        actions = super().get_actions(request)
+        actions.pop("delete_selected", None)
+        return actions
+
 
 
 # -------------------------------------------------------------------------
@@ -446,10 +475,6 @@ class AttendanceInline(admin.TabularInline):
     extra = 0
     can_delete = False
 
-    autocomplete_fields = (
-        "student",
-    )
-
     fields = (
         "student",
         "status",
@@ -464,10 +489,8 @@ class AttendanceInline(admin.TabularInline):
     )
 
     def has_add_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-
         return False
+
 
 
 class ClassSessionCourseFilter(admin.SimpleListFilter):
@@ -526,10 +549,6 @@ class ClassSessionAdmin(admin.ModelAdmin):
         "course__name",
     )
 
-    autocomplete_fields = (
-        "course",
-    )
-
     fields = (
         "course",
         "class_number",
@@ -553,15 +572,9 @@ class ClassSessionAdmin(admin.ModelAdmin):
     )
 
     def has_add_permission(self, request):
-        if request.user.is_superuser:
-            return True
-
         return False
 
     def has_delete_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-
         return False
 
     # ----------------------------------------
@@ -666,11 +679,6 @@ class AttendanceAdmin(admin.ModelAdmin):
         "class_session__course__name",
     )
 
-    autocomplete_fields = (
-        "student",
-        "class_session",
-    )
-
     fields = (
         "student",
         "class_session",
@@ -699,11 +707,8 @@ class AttendanceAdmin(admin.ModelAdmin):
         Attendance rows are created automatically from CourseEnrollment /
         Course generation logic.
 
-        Only superuser can alter.
+        Superuser cannot alter.
         """
-        if request.user.is_superuser:
-            return True
-
         return False
 
     def has_delete_permission(self, request, obj=None):
@@ -711,11 +716,8 @@ class AttendanceAdmin(admin.ModelAdmin):
         Preserve attendance history and the one-record-per-student/session
         invariant.
 
-        Only superuser can alter.
+        Superuser cannot alter.
         """
-        if request.user.is_superuser:
-            return True
-
         return False
 
     # ----------------------------------------

@@ -148,38 +148,73 @@ class Course(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ["-created_at", "name"]
 
-    # If admin creates a Course and leaves total_hours empty,
-    # Django automatically copies the hours from the CourseType.
+
     def save(self, *args, **kwargs):
-        # Include logic to adapt to whether class_duration
-        # or timeslots are introduced first
+        """
+        Save the Course and enforce Course-level lifecycle transitions.
+
+        Status transitions:
+
+        -> paused:
+        future scheduled/rescheduled ClassSessions become
+        pending_reschedule because their current teaching slot
+        is no longer valid.
+
+        -> cancelled:
+        unresolved ClassSessions that will no longer take place
+        are cancelled through cancel_future_sessions().
+
+        Course status does not alter individual CourseEnrollment
+        statuses or learner-specific Attendance outcomes.
+        """
         is_new = self.pk is None
         old_class_duration = None
+        old_status = None
 
         if self.pk:
             old_course = Course.objects.get(pk=self.pk)
             old_class_duration = old_course.class_duration
+            old_status = old_course.status
 
         if self.total_hours is None and self.course_type.default_hours is not None:
             self.total_hours = self.course_type.default_hours
 
         if self.class_duration and (
-            is_new or self.class_duration != old_class_duration
+            is_new
+            or self.class_duration != old_class_duration
         ):
             self.class_duration_source = "manual"
 
+        became_paused = (
+            self.status == "paused"
+            and old_status != "paused"
+        )
+
+        became_cancelled = (
+            self.status == "cancelled"
+            and old_status != "cancelled"
+        )
+
         super().save(*args, **kwargs)
 
-        # A newly saved Course may not yet have its related timetable slots
-        # and enrollments (e.g. Django Admin saves inline objects afterwards).
-        #
-        # Therefore this is a SAFE attempt: generation only happens when ALL
-        # required data already exists. The related models also call the same
-        # helper after they are saved, so generation occurs automatically as
-        # soon as the final prerequisite is available.
+        # ---------------------------------------------------------
+        # COURSE STATUS TRANSITIONS
+        # ---------------------------------------------------------
+
+        if became_paused:
+            self.pause_future_sessions()
+
+        if became_cancelled:
+            self.cancel_future_sessions()
+
+        # ---------------------------------------------------------
+        # INITIAL CLASS SESSION GENERATION
+        # ---------------------------------------------------------
+
         if is_new:
             self.try_generate_class_sessions()
 
@@ -190,26 +225,30 @@ class Course(models.Model):
             # - start_date / total_hours / class_duration has changed
             # - the Course is simply opened and saved again in Django Admin
             #
-            # Avoid doing this for narrow internal saves such as:
-            #     self.save(update_fields=["status"])
-            # when the course is being marked completed.
+            # Do not synchronize timetable dates for paused, cancelled
+            # or completed courses.
             update_fields = kwargs.get("update_fields")
 
             should_sync_schedule = (
-                update_fields is None
-                or bool(
-                    {
-                        "start_date",
-                        "total_hours",
-                        "class_duration",
-                    }
-                    & set(update_fields)
+                self.status in {
+                    "confirmed",
+                    "active",
+                }
+                and (
+                    update_fields is None
+                    or bool(
+                        {
+                            "start_date",
+                            "total_hours",
+                            "class_duration",
+                        }
+                        & set(update_fields)
+                    )
                 )
             )
 
             if should_sync_schedule:
                 self.synchronize_future_scheduled_sessions()
-
 
     def can_generate_class_sessions(self):
         """
@@ -1016,30 +1055,48 @@ class Course(models.Model):
 
         return True
 
+
     def cancel_future_sessions(self):
         """
-        Cancel future ClassSessions that have not yet been held.
+        Cancel ClassSessions that will no longer take place.
 
-        Attendance does not have a cancelled learner outcome. Instead,
-        untouched Attendance(status="pending") placeholders are deleted
-        because a cancelled lesson will never produce an attendance outcome.
+        scheduled / rescheduled:
+        - cancelled only when the lesson has not yet started
 
-        Genuine attendance history (attended/missed/excused) is never deleted.
+        pending_reschedule:
+        - always cancelled because the lesson has not taken place,
+        even when its original scheduled time is already past
+
+        Attendance does not have a cancelled learner outcome.
+
+        Operational Attendance placeholders are deleted:
+        - pending
+        - enrollment_paused
+
+        Genuine Attendance outcomes are preserved:
+        - attended
+        - missed
+        - excused
 
         Returns the number of ClassSessions cancelled.
         """
+        now = timezone.now()
 
-        future_sessions = self.class_sessions.filter(
-            start_time__gte=timezone.now(),
-            status__in=[
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_PENDING_RESCHEDULE,
-                ClassSession.STATUS_RESCHEDULED,
-            ],
+        sessions_to_cancel = self.class_sessions.filter(
+            models.Q(
+                start_time__gte=now,
+                status__in=[
+                    ClassSession.STATUS_SCHEDULED,
+                    ClassSession.STATUS_RESCHEDULED,
+                ],
+            )
+            | models.Q(
+                status=ClassSession.STATUS_PENDING_RESCHEDULE
+            )
         )
 
         session_ids = list(
-            future_sessions.values_list("id", flat=True)
+            sessions_to_cancel.values_list("id", flat=True)
         )
 
         if not session_ids:
@@ -1048,15 +1105,17 @@ class Course(models.Model):
         with transaction.atomic():
             Attendance.objects.filter(
                 class_session_id__in=session_ids,
-                status=Attendance.STATUS_PENDING,
+                status__in=[
+                    Attendance.STATUS_PENDING,
+                    Attendance.STATUS_ENROLLMENT_PAUSED,
+                ],
             ).delete()
 
-            cancelled_count = future_sessions.update(
+            cancelled_count = sessions_to_cancel.update(
                 status=ClassSession.STATUS_CANCELLED
             )
 
         return cancelled_count
-
 
 
 class CourseTimetableSlot(models.Model):
@@ -1119,12 +1178,18 @@ class CourseTimetableSlot(models.Model):
 
     class Meta:
         ordering = ["day_of_week", "start_time"]
-        unique_together = (
-            "course",
-            "day_of_week",
-            "start_time",
-            "end_time",
-        )
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "course",
+                    "day_of_week",
+                    "start_time",
+                ],
+                name="unique_course_timetable_start",
+            )
+        ]
+
 
     @property
     def duration_in_hours(self):
@@ -1226,6 +1291,16 @@ class CourseEnrollment(models.Model):
     - scheduled / pending_reschedule / rescheduled sessions
       are assigned
 
+    If an active enrollment becomes paused:
+    - remaining pending Attendance records become enrollment_paused
+    - genuine historical Attendance outcomes are preserved
+    - lessons that have already started are not changed
+
+    If a paused enrollment becomes active again:
+    - remaining enrollment_paused Attendance records return to pending
+    - missing Attendance records are created for eligible lessons
+    - historical enrollment_paused Attendance records are preserved
+
     A ClassSession has completed its lesson + attendance workflow
     ONLY when:
 
@@ -1302,24 +1377,28 @@ class CourseEnrollment(models.Model):
             "student"
         ]
 
-
     # ---------------------------------------------------------
     # SAVE
     # ---------------------------------------------------------
 
     def save(self, *args, **kwargs):
         """
-        Save the enrollment.
+        Save the enrollment and synchronize its Attendance records.
 
-        Whenever an enrollment becomes active:
-        - create missing Attendance records
-        - only for unfinished ClassSessions
+        When an enrollment becomes paused:
+        - remaining pending Attendance records become enrollment_paused
 
-        This happens when:
-        - a new enrollment is created as active
-        - an existing enrollment becomes active again
-    """
+        When an enrollment becomes active:
+        - remaining enrollment_paused Attendance records return to pending
+        - missing Attendance records are created for unfinished lessons
 
+        When an enrollment becomes cancelled:
+        - remaining pending Attendance records are deleted
+        - remaining enrollment_paused Attendance records are deleted
+        - genuine attendance outcomes are preserved
+
+        Historical Attendance outcomes are never overwritten or deleted.
+        """
         is_new = self.pk is None
         old_status = None
 
@@ -1327,10 +1406,14 @@ class CourseEnrollment(models.Model):
             old_enrollment = CourseEnrollment.objects.get(
                 pk=self.pk
             )
-
             old_status = old_enrollment.status
 
         super().save(*args, **kwargs)
+
+        became_paused = (
+            self.status == "paused"
+            and old_status != "paused"
+        )
 
         became_active = (
             self.status == "active"
@@ -1340,7 +1423,19 @@ class CourseEnrollment(models.Model):
             )
         )
 
+        became_cancelled = (
+            self.status == "cancelled"
+            and old_status != "cancelled"
+        )
+
+        if became_paused:
+            self.pause_remaining_attendance_records()
+
         if became_active:
+            # Restore Attendance rows that were paused because the
+            # enrollment itself was paused.
+            self.restore_remaining_attendance_records()
+
             # If the Course already has ClassSessions, assign this learner
             # automatically to every unfinished lesson.
             self.create_future_attendance_records()
@@ -1353,7 +1448,160 @@ class CourseEnrollment(models.Model):
             # so enrolling learners later will NEVER regenerate the schedule.
             self.course.try_generate_class_sessions()
 
+        if became_cancelled:
+            self.cancel_remaining_attendance_records()
 
+    # ---------------------------------------------------------
+    # PAUSE REMAINING ATTENDANCE
+    # ---------------------------------------------------------
+
+    def pause_remaining_attendance_records(self):
+        """
+        Change this learner's remaining pending Attendance records
+        to enrollment_paused.
+
+        scheduled/rescheduled:
+        - only lessons that have not yet started are changed
+
+        pending_reschedule:
+        - always changed because the lesson has not taken place,
+          even when its original scheduled time is already past
+
+        Never changed:
+        - lessons that have already started
+        - held lessons
+        - complete lessons
+        - cancelled lessons
+        - attended
+        - missed
+        - excused
+
+        Returns the number of Attendance records updated.
+        """
+        now = timezone.now()
+
+        pending_attendance = Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            status=Attendance.STATUS_PENDING,
+        )
+
+        future_count = pending_attendance.filter(
+            class_session__status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ],
+            class_session__start_time__gt=now,
+        ).update(
+            status=Attendance.STATUS_ENROLLMENT_PAUSED
+        )
+
+        pending_reschedule_count = pending_attendance.filter(
+            class_session__status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        ).update(
+            status=Attendance.STATUS_ENROLLMENT_PAUSED
+        )
+
+        return future_count + pending_reschedule_count
+
+
+    # ---------------------------------------------------------
+    # RESTORE REMAINING ATTENDANCE
+    # ---------------------------------------------------------
+
+    def restore_remaining_attendance_records(self):
+        """
+        Restore this learner's remaining enrollment_paused Attendance
+        records to pending when the enrollment becomes active again.
+
+        scheduled/rescheduled:
+        - only lessons that have not yet started are restored
+
+        pending_reschedule:
+        - always restored because the lesson still has to take place
+
+        Historical enrollment_paused records remain unchanged.
+
+        Returns the number of Attendance records updated.
+        """
+        now = timezone.now()
+
+        paused_attendance = Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            status=Attendance.STATUS_ENROLLMENT_PAUSED,
+        )
+
+        future_count = paused_attendance.filter(
+            class_session__status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ],
+            class_session__start_time__gt=now,
+        ).update(
+            status=Attendance.STATUS_PENDING
+        )
+
+        pending_reschedule_count = paused_attendance.filter(
+            class_session__status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        ).update(
+            status=Attendance.STATUS_PENDING
+        )
+
+        return future_count + pending_reschedule_count
+
+    # ---------------------------------------------------------
+    # CANCEL REMAINING ATTENDANCE
+    # ---------------------------------------------------------
+
+    def cancel_remaining_attendance_records(self):
+        """
+        Delete this learner's remaining operational Attendance records
+        when the enrollment becomes cancelled.
+
+        scheduled/rescheduled:
+        - only lessons that have not yet started are affected
+
+        pending_reschedule:
+        - always affected because the lesson has not taken place,
+        even when its original scheduled time is already past
+
+        Deleted:
+        - pending
+        - enrollment_paused
+
+        Preserved:
+        - attended
+        - missed
+        - excused
+
+        Returns the number of Attendance records deleted.
+        """
+        now = timezone.now()
+
+        attendance_records = Attendance.objects.filter(
+            student=self.student,
+            class_session__course=self.course,
+            status__in=[
+                Attendance.STATUS_PENDING,
+                Attendance.STATUS_ENROLLMENT_PAUSED,
+            ],
+        )
+
+        future_deleted, _ = attendance_records.filter(
+            class_session__status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ],
+            class_session__start_time__gt=now,
+        ).delete()
+
+        pending_reschedule_deleted, _ = attendance_records.filter(
+            class_session__status=ClassSession.STATUS_PENDING_RESCHEDULE,
+        ).delete()
+
+        return future_deleted + pending_reschedule_deleted
+    
     # ---------------------------------------------------------
     # CREATE MISSING ATTENDANCE
     # ---------------------------------------------------------
@@ -1361,30 +1609,42 @@ class CourseEnrollment(models.Model):
     def create_future_attendance_records(self):
         """
         Create missing Attendance records for this learner only for
-        ClassSessions that have not yet been held.
+        ClassSessions that still represent future teaching.
 
         Included:
-        - scheduled
-        - pending_reschedule
-        - rescheduled
+
+        scheduled / rescheduled:
+        - only when start_time is still in the future
+
+        pending_reschedule:
+        - always included because the lesson has not taken place,
+        even when its original scheduled time is already past
 
         Excluded:
+        - scheduled/rescheduled lessons that have already started
         - held_attendance_pending
         - complete_attendance_submitted
         - cancelled
 
-        This prevents a learner who joins later from being assigned
-        retroactively to a lesson that has already been held.
+        This prevents a learner who joins or becomes active later
+        from being assigned retroactively to a lesson that has
+        already started or finished.
         """
+        now = timezone.now()
 
         eligible_sessions = (
             self.course.class_sessions
             .filter(
-                status__in=[
-                    ClassSession.STATUS_SCHEDULED,
-                    ClassSession.STATUS_PENDING_RESCHEDULE,
-                    ClassSession.STATUS_RESCHEDULED,
-                ]
+                models.Q(
+                    status__in=[
+                        ClassSession.STATUS_SCHEDULED,
+                        ClassSession.STATUS_RESCHEDULED,
+                    ],
+                    start_time__gt=now,
+                )
+                | models.Q(
+                    status=ClassSession.STATUS_PENDING_RESCHEDULE
+                )
             )
             .order_by("start_time")
         )
@@ -1397,7 +1657,6 @@ class CourseEnrollment(models.Model):
                     "status": Attendance.STATUS_PENDING,
                 }
             )
-
 
     # ---------------------------------------------------------
     # STRING REPRESENTATION
@@ -1425,7 +1684,6 @@ class CourseEnrollment(models.Model):
         Once an Attendance record exists for a learner/session,
         that session remains part of that learner's enrollment.
         """
-
         assigned_session_ids = (
             Attendance.objects
             .filter(
@@ -1456,7 +1714,6 @@ class CourseEnrollment(models.Model):
         """
         Total number of ClassSessions assigned to this learner.
         """
-
         return self.eligible_sessions.count()
 
 
@@ -1470,7 +1727,6 @@ class CourseEnrollment(models.Model):
         Assigned lessons that have been held but whose attendance
         has not yet been fully submitted.
         """
-
         return (
             self.eligible_sessions
             .filter(
@@ -1484,9 +1740,8 @@ class CourseEnrollment(models.Model):
     def complete_attendance_submitted_classes(self):
         """
         Assigned lessons that have been held and whose attendance
-        has been fully submitted.
+        workflow has been completed.
         """
-
         return (
             self.eligible_sessions
             .filter(
@@ -1502,7 +1757,6 @@ class CourseEnrollment(models.Model):
         Total assigned lessons that have been held, regardless of
         whether attendance is pending or already submitted.
         """
-
         return (
             self.eligible_sessions
             .filter(
@@ -1519,11 +1773,10 @@ class CourseEnrollment(models.Model):
     def total_completed_classes(self):
         """
         Backwards-compatible alias for assigned lessons whose attendance
-        has been fully submitted.
+        workflow has been completed.
 
         Prefer complete_attendance_submitted_classes in new code.
         """
-
         return self.complete_attendance_submitted_classes
 
 
@@ -1543,7 +1796,6 @@ class CourseEnrollment(models.Model):
 
         Held and cancelled lessons are excluded.
         """
-
         return (
             self.eligible_sessions
             .filter(
@@ -1556,13 +1808,11 @@ class CourseEnrollment(models.Model):
             .count()
         )
 
-
     @property
     def upcoming_classes(self):
         """
         Backwards-compatible alias for remaining_classes.
         """
-
         return self.remaining_classes
 
 
@@ -1576,7 +1826,6 @@ class CourseEnrollment(models.Model):
         ClassSessions with submitted attendance where this learner
         was marked as attended.
         """
-
         return (
             Attendance.objects
             .filter(
@@ -1605,7 +1854,6 @@ class CourseEnrollment(models.Model):
         ClassSessions with submitted attendance where this learner
         was marked as missed.
         """
-
         return (
             Attendance.objects
             .filter(
@@ -1634,7 +1882,6 @@ class CourseEnrollment(models.Model):
         ClassSessions with submitted attendance where this learner
         was marked as excused.
         """
-
         return (
             Attendance.objects
             .filter(
@@ -1662,12 +1909,10 @@ class CourseEnrollment(models.Model):
         """
         Total missed + excused lessons with submitted attendance.
         """
-
         return (
             self.classes_missed
             + self.classes_excused
         )
-
 
     # ---------------------------------------------------------
     # ATTENDANCE PERCENTAGE
@@ -1676,18 +1921,16 @@ class CourseEnrollment(models.Model):
     @property
     def attendance_percentage(self):
         """
-        Attendance percentage calculated only from lessons whose
-        attendance has been fully submitted.
+        Attendance percentage calculated only from this learner's
+        submitted attendance outcomes.
 
-        Example:
-
-        10 complete_attendance_submitted classes
-        8 attended
-
-        attendance_percentage = 80
+        enrollment_paused records are excluded.
         """
-
-        total = self.complete_attendance_submitted_classes
+        total = (
+            self.classes_attended
+            + self.classes_missed
+            + self.classes_excused
+        )
 
         if total == 0:
             return 0
@@ -1699,7 +1942,6 @@ class CourseEnrollment(models.Model):
             ) * 100
         )
 
-
     # ---------------------------------------------------------
     # LOW ATTENDANCE WARNING
     # ---------------------------------------------------------
@@ -1707,17 +1949,21 @@ class CourseEnrollment(models.Model):
     @property
     def has_low_attendance_warning(self):
         """
-        Returns True when attendance is below 75%.
+        Return True when attendance is below 75%.
 
-        No warning is shown until at least one ClassSession has
-        submitted attendance.
+        No warning is shown until this learner has at least one
+        submitted attendance outcome.
         """
+        total = (
+            self.classes_attended
+            + self.classes_missed
+            + self.classes_excused
+        )
 
-        if self.complete_attendance_submitted_classes == 0:
+        if total == 0:
             return False
 
         return self.attendance_percentage < 75
-
 
     # ---------------------------------------------------------
     # SAFE ENROLLMENT DELETION
@@ -1738,10 +1984,9 @@ class CourseEnrollment(models.Model):
         - missed
         - excused
 
-        Other operational statuses do not, by themselves, prevent
-        deletion.
+        pending and enrollment_paused are operational states and do
+        not, by themselves, prevent deletion.
         """
-
         if not self.pk:
             return True
 
@@ -1770,7 +2015,6 @@ class CourseEnrollment(models.Model):
         A legitimate enrollment that should remain part of the
         historical record must be marked cancelled instead.
         """
-
         if not self.can_be_deleted:
             raise ValidationError(
                 "This enrollment cannot be deleted because attendance "
@@ -1778,7 +2022,6 @@ class CourseEnrollment(models.Model):
             )
 
         with transaction.atomic():
-
             Attendance.objects.filter(
                 student=self.student,
                 class_session__course=self.course,
@@ -2067,12 +2310,14 @@ class ClassSession(models.Model):
     def attendance_records_submitted(self):
         """
         Return True when this ClassSession has Attendance records
-        and every record contains a final submitted outcome.
+        and every record is in a state that no longer requires
+        teacher attendance action.
 
-        Final Attendance outcomes:
+        Accepted states:
         - attended
         - missed
         - excused
+        - enrollment_paused
 
         This may legitimately be True BEFORE end_time while the
         ClassSession itself is still scheduled/rescheduled.
@@ -2082,16 +2327,38 @@ class ClassSession(models.Model):
         if not attendance_records.exists():
             return False
 
-        final_statuses = {
+        submitted_statuses = {
             Attendance.STATUS_ATTENDED,
             Attendance.STATUS_MISSED,
             Attendance.STATUS_EXCUSED,
+            Attendance.STATUS_ENROLLMENT_PAUSED,
         }
 
         return not attendance_records.exclude(
-            status__in=final_statuses
+            status__in=submitted_statuses
         ).exists()
 
+
+    @property
+    def all_attendance_enrollment_paused(self):
+        """
+        Return True when this ClassSession has Attendance records
+        and every assigned learner is enrollment_paused.
+
+        This means no learner is expected to attend this lesson.
+
+        An all-paused ClassSession must NOT later be interpreted as
+        physically held merely because its end_time has passed.
+        """
+        attendance_records = self.attendance_records.all()
+
+        if not attendance_records.exists():
+            return False
+
+        return not attendance_records.exclude(
+            status=Attendance.STATUS_ENROLLMENT_PAUSED
+        ).exists()
+    
     # ---------------------------------------------------------
     # SYNCHRONIZE ONE FINISHED SESSION
     # ---------------------------------------------------------
@@ -2099,13 +2366,20 @@ class ClassSession(models.Model):
         """
         Synchronize this ClassSession after its end_time passes.
 
-        scheduled/rescheduled + attendance already submitted
-            -> complete_attendance_submitted
+        scheduled/rescheduled + all learners enrollment_paused
+            -> pending_reschedule
 
-        scheduled/rescheduled + attendance not submitted
+        scheduled/rescheduled + attendance still pending
             -> held_attendance_pending
 
-        pending_reschedule and cancelled are deliberately untouched.
+        scheduled/rescheduled + all attendance submitted
+            -> complete_attendance_submitted
+
+        held_attendance_pending + all attendance submitted
+            -> complete_attendance_submitted
+
+        pending_reschedule, cancelled and already-complete sessions
+        are deliberately untouched.
 
         Returns:
             True  -> status changed
@@ -2122,25 +2396,45 @@ class ClassSession(models.Model):
                 .get(pk=self.pk)
             )
 
-            if session.status not in {
-                self.STATUS_SCHEDULED,
-                self.STATUS_RESCHEDULED,
-            }:
-                self.status = session.status
-                return False
-
             if not session.is_past:
                 self.status = session.status
                 return False
 
-            if session.attendance_records_submitted:
-                session.status = self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-            else:
-                session.status = self.STATUS_HELD_ATTENDANCE_PENDING
+            if session.status not in {
+                self.STATUS_SCHEDULED,
+                self.STATUS_RESCHEDULED,
+                self.STATUS_HELD_ATTENDANCE_PENDING,
+            }:
+                self.status = session.status
+                return False
 
-            # Deliberately use save(), rather than QuerySet.update(),
-            # because transitioning directly to COMPLETE must trigger
-            # Course.update_completion_status().
+            if (
+                session.status in {
+                    self.STATUS_SCHEDULED,
+                    self.STATUS_RESCHEDULED,
+                }
+                and session.all_attendance_enrollment_paused
+            ):
+                new_status = self.STATUS_PENDING_RESCHEDULE
+
+            elif session.attendance_records_submitted:
+                new_status = self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+
+            elif session.status in {
+                self.STATUS_SCHEDULED,
+                self.STATUS_RESCHEDULED,
+            }:
+                new_status = self.STATUS_HELD_ATTENDANCE_PENDING
+
+            else:
+                self.status = session.status
+                return False
+
+            if new_status == session.status:
+                self.status = session.status
+                return False
+
+            session.status = new_status
             session.save(update_fields=["status"])
 
             self.status = session.status
@@ -2195,53 +2489,6 @@ class ClassSession(models.Model):
 
         return updated_count
 
-    # ---------------------------------------------------------
-    # TEMPORARY BACKWARDS-COMPATIBILITY WRAPPERS
-    #
-    # Keep these while existing views / the deployed Render
-    # management command still call the old method names.
-    #
-    # They now execute the NEW business logic.
-    # ---------------------------------------------------------
-    # def transition_to_held_if_past(self):
-    #     return self.synchronize_status_after_end()
-
-    # @classmethod
-    # def transition_past_sessions_to_held(cls, course=None):
-    #     return cls.transition_past_sessions(course=course)
-
-    def update_status_from_attendance(self):
-        """
-        Mark this ClassSession as complete_attendance_submitted when:
-
-        - the lesson has ended;
-        - its lifecycle is eligible to become complete; and
-        - every Attendance record has a submitted outcome.
-
-        Attendance may be submitted before end_time, but the
-        ClassSession must not become complete until the lesson ends.
-
-        Returns:
-            True  -> status changed
-            False -> no transition was required
-        """
-        if self.status not in {
-            self.STATUS_SCHEDULED,
-            self.STATUS_RESCHEDULED,
-            self.STATUS_HELD_ATTENDANCE_PENDING,
-        }:
-            return False
-
-        if not self.is_past:
-            return False
-
-        if not self.attendance_records_submitted:
-            return False
-
-        self.status = self.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        self.save(update_fields=["status"])
-
-        return True
 
 
 class Attendance(models.Model):
@@ -2263,7 +2510,7 @@ class Attendance(models.Model):
 
         NORMAL FLOW:
 
-            pending
+            scheduled
                 ↓
             held_attendance_pending
                 ↓
@@ -2271,7 +2518,7 @@ class Attendance(models.Model):
 
         RESCHEDULING FLOW:
 
-            pending
+            scheduled
                 ↓
             pending_reschedule
                 ↓
@@ -2281,23 +2528,40 @@ class Attendance(models.Model):
                 ↓
             complete_attendance_submitted
 
-    Attendance controls only the individual LEARNER'S outcome
+    Attendance controls only the individual LEARNER'S state
     for that lesson:
 
         pending
         attended
         missed
         excused
+        enrollment_paused
+
+    "pending" means the learner's attendance outcome has not yet
+    been submitted.
+
+    "enrollment_paused" means no attendance outcome is required
+    because the learner's CourseEnrollment is paused for that
+    ClassSession.
 
     Rescheduling does NOT create a new Attendance record.
 
     The existing Attendance record remains attached to the same
-    ClassSession and normally remains status="scheduled" until
+    ClassSession and normally remains status="pending" until
     the lesson actually takes place.
 
-    If a future ClassSession is cancelled, untouched scheduled
+    If a future ClassSession is cancelled, untouched pending
     Attendance placeholders are deleted because no learner attendance
     outcome can exist for a lesson that never takes place.
+
+    If a learner's CourseEnrollment is paused, applicable future
+    pending Attendance records become status="enrollment_paused".
+
+    If the CourseEnrollment later becomes active again, applicable
+    future enrollment_paused Attendance records return to "pending".
+
+    Historical Attendance outcomes are never overwritten by an
+    enrollment status change.
     """
 
     # ---------------------------------------------------------
@@ -2308,12 +2572,14 @@ class Attendance(models.Model):
     STATUS_ATTENDED = "attended"
     STATUS_MISSED = "missed"
     STATUS_EXCUSED = "excused"
+    STATUS_ENROLLMENT_PAUSED = "enrollment_paused"
 
     ATTENDANCE_STATUS_CHOICES = [
         (STATUS_PENDING, "Pending"),
         (STATUS_ATTENDED, "Attended"),
         (STATUS_MISSED, "Missed"),
         (STATUS_EXCUSED, "Excused"),
+        (STATUS_ENROLLMENT_PAUSED, "Enrollment paused"),
     ]
 
 
@@ -2397,21 +2663,38 @@ class Attendance(models.Model):
 
 
     # ---------------------------------------------------------
+    # SAVE
+    # ---------------------------------------------------------
+
+    def save(self, *args, **kwargs):
+        """
+        Save the learner's Attendance state and then allow the
+        parent ClassSession to synchronize its lifecycle status.
+
+        If the lesson has already ended and every Attendance record
+        is in a state that no longer requires teacher action, the
+        ClassSession can become complete_attendance_submitted
+        automatically.
+        """
+        super().save(*args, **kwargs)
+
+        self.class_session.synchronize_status_after_end()
+
+
+    # ---------------------------------------------------------
     # HELPERS
     # ---------------------------------------------------------
 
     @property
     def was_punctual(self):
         """
-        Returns True only when the learner attended
+        Return True only when the learner attended
         and arrived on time.
         """
-
         return (
             self.status == self.STATUS_ATTENDED
             and self.minutes_late == 0
         )
-
 
 
 class BankHoliday(models.Model):
