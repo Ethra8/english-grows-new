@@ -621,6 +621,7 @@ div:has(> .student-action-btn) {
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     letter-spacing: 0.1em;
+    z-index: 1;
 }
 /* ** END LEVEL PILL ***************************************/
 

@@ -47,6 +47,9 @@ msgstr "Activo"
 msgid "Paused"
 msgstr "Pausado"
 
+msgid "Attendance not yet submitted for"
+msgstr "Asistencia pendiente de registro para"
+
 #: .\courses\models.py:74
 #: .\profiles\templates\profiles\student\my_learning_progress.html:163
 #: .\profiles\templates\profiles\teacher\teacher_student_detail.html:192
@@ -1447,7 +1450,7 @@ msgstr "Inicio"
 #: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:35
 #: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:37
 msgid "Class List"
-msgstr "Lista Clases"
+msgstr "Clases"
 
 #: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:54
 

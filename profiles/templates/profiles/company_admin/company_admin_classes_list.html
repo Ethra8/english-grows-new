@@ -30,9 +30,9 @@
             <strong>{{ class_filter_counts.upcoming.all }}</strong>
         </button>
 
-        <button type="button" class="classes-status-tab" data-status-tab="completed" aria-selected="false" aria-label="{% trans 'Past Classes' %}">
+        <button type="button" class="classes-status-tab" data-status-tab="past" aria-selected="false" aria-label="{% trans 'Past Classes' %}">
             <span>{% trans 'Held' context 'classes list' %}</span>
-            <strong>{{ class_filter_counts.completed.all }}</strong>
+            <strong>{{ class_filter_counts.past.all }}</strong>
         </button>
     </nav>
 
@@ -75,36 +75,36 @@
     </section>
 
     <!-- PAST CLASSES -->
-    <section class="classes-status-panel" data-status-panel="completed" hidden>
+    <section class="classes-status-panel" data-status-panel="past" hidden>
         <div class="classes-filter-buttons">
             <button type="button" class="classes-filter-btn active" data-filter="today">
                 <span>{% trans 'Today' %}</span>
-                <strong>{{ class_filter_counts.completed.today }}</strong>
+                <strong>{{ class_filter_counts.past.today }}</strong>
             </button>
             <button type="button" class="classes-filter-btn" data-filter="weekly">
                 <span>{% trans 'This Week' %}</span>
-                <strong>{{ class_filter_counts.completed.weekly }}</strong>
+                <strong>{{ class_filter_counts.past.weekly }}</strong>
             </button>
             <button type="button" class="classes-filter-btn" data-filter="monthly">
                 <span>{% trans 'This Month' %}</span>
-                <strong>{{ class_filter_counts.completed.monthly }}</strong>
+                <strong>{{ class_filter_counts.past.monthly }}</strong>
             </button>
             <button type="button" class="classes-filter-btn" data-filter="all">
                 <span>{% trans 'All' context 'classes list' %}</span>
-                <strong>{{ class_filter_counts.completed.all }}</strong>
+                <strong>{{ class_filter_counts.past.all }}</strong>
             </button>
         </div>
 
         <select class="mobile-filter-select classes-panel-select" aria-label="Filter past classes">
-            <option value="today">{% trans 'Today' %}: {{ class_filter_counts.completed.today }}</option>
-            <option value="weekly">{% trans 'This Week' %}: {{ class_filter_counts.completed.weekly }}</option>
-            <option value="monthly">{% trans 'This Month' %}: {{ class_filter_counts.completed.monthly }}</option>
-            <option value="all">{% trans 'All' context 'classes list' %}: {{ class_filter_counts.completed.all }}</option>
+            <option value="today">{% trans 'Today' %}: {{ class_filter_counts.past.today }}</option>
+            <option value="weekly">{% trans 'This Week' %}: {{ class_filter_counts.past.weekly }}</option>
+            <option value="monthly">{% trans 'This Month' %}: {{ class_filter_counts.past.monthly }}</option>
+            <option value="all">{% trans 'All' context 'classes list' %}: {{ class_filter_counts.past.all }}</option>
         </select>
 
         <div class="assigned-classes-list">
             {% for session in sessions %}
-                {% if session.class_status_group == "completed" %}
+                {% if session.class_status_group == "past" %}
                     {% include "profiles/includes/company_admin/company_admin_class_session_row.html" %}
                 {% endif %}
             {% endfor %}

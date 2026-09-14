@@ -1992,7 +1992,6 @@ def teacher_dashboard(request):
     )
 
 
-
 @login_required
 def teacher_classes_list(request):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -2006,13 +2005,17 @@ def teacher_classes_list(request):
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
 
-    start_of_month = today.replace(day=1)
-
     sessions = (
         ClassSession.objects
         .filter(
             course__teacher=request.user,
             course__status="active",
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ],
         )
         .select_related(
             "course",
@@ -2046,27 +2049,36 @@ def teacher_classes_list(request):
         session_date = timezone.localdate(session.start_time)
 
         # --------------------------------------------------
-        # TIME-BASED CLASSIFICATION
+        # UI GROUP
+        #
+        # Upcoming:
+        # scheduled/rescheduled sessions still in the future.
+        #
+        # Past:
+        # class held, regardless of whether attendance has
+        # already been submitted.
         # --------------------------------------------------
+        if (
+            session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+            and session.start_time > now
+        ):
+            session.class_status_group = "upcoming"
 
-        is_upcoming = session.start_time > now
-        is_past = session.start_time <= now
+        elif session.status in [
+            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        ]:
+            session.class_status_group = "past"
 
-        # Keep these only if the template uses them
-        session.is_upcoming = is_upcoming
-
-        # --------------------------------------------------
-        # WORKFLOW STATUS
-        # --------------------------------------------------
-
-        session.is_completed = (
-            session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        )
+        else:
+            session.class_status_group = None
 
         # --------------------------------------------------
         # DATE FILTERS
         # --------------------------------------------------
-
         session.is_today = session_date == today
 
         session.is_this_week = (
@@ -2079,46 +2091,21 @@ def teacher_classes_list(request):
         )
 
         # --------------------------------------------------
-        # FRONT-END STATUS GROUP
+        # COUNTS
         # --------------------------------------------------
+        if session.class_status_group:
+            counts = class_filter_counts[session.class_status_group]
 
-        if is_past:
-            session.class_status_group = "past"
-        else:
-            session.class_status_group = "upcoming"
-
-        # --------------------------------------------------
-        # UPCOMING COUNTS
-        # --------------------------------------------------
-
-        if is_upcoming:
-            class_filter_counts["upcoming"]["all"] += 1
+            counts["all"] += 1
 
             if session.is_today:
-                class_filter_counts["upcoming"]["today"] += 1
+                counts["today"] += 1
 
             if session.is_this_week:
-                class_filter_counts["upcoming"]["weekly"] += 1
+                counts["weekly"] += 1
 
             if session.is_this_month:
-                class_filter_counts["upcoming"]["monthly"] += 1
-
-        # --------------------------------------------------
-        # PAST COUNTS
-        # --------------------------------------------------
-
-        if is_past:
-            class_filter_counts["past"]["all"] += 1
-
-            if session.is_today:
-                class_filter_counts["past"]["today"] += 1
-
-            if session.is_this_week:
-                class_filter_counts["past"]["weekly"] += 1
-
-            if session.is_this_month:
-                class_filter_counts["past"]["monthly"] += 1
-
+                counts["monthly"] += 1
 
     context = {
         "sessions": sessions,
@@ -8079,6 +8066,12 @@ def company_admin_classes_list(request):
         .filter(
             course__company=company,
             course__status="active",
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ],
         )
         .select_related(
             "course",
@@ -8101,7 +8094,7 @@ def company_admin_classes_list(request):
             "monthly": 0,
             "all": 0,
         },
-        "completed": {
+        "past": {
             "today": 0,
             "weekly": 0,
             "monthly": 0,
@@ -8112,18 +8105,37 @@ def company_admin_classes_list(request):
     for session in sessions:
         session_date = timezone.localdate(session.start_time)
 
-        session.is_upcoming = (
+        # ---------------------------------------------------------
+        # UI GROUP
+        #
+        # Upcoming:
+        # scheduled/rescheduled sessions still in the future.
+        #
+        # Past:
+        # class held, regardless of whether attendance has
+        # already been submitted.
+        # ---------------------------------------------------------
+        if (
             session.status in [
                 ClassSession.STATUS_SCHEDULED,
                 ClassSession.STATUS_RESCHEDULED,
             ]
             and session.start_time > now
-        )
+        ):
+            session.class_status_group = "upcoming"
 
-        session.is_completed = (
-            session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        )
+        elif session.status in [
+            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        ]:
+            session.class_status_group = "past"
 
+        else:
+            session.class_status_group = None
+
+        # ---------------------------------------------------------
+        # DATE FILTERS
+        # ---------------------------------------------------------
         session.is_today = session_date == today
 
         session.is_this_week = (
@@ -8134,41 +8146,29 @@ def company_admin_classes_list(request):
             session_date.year == today.year
             and session_date.month == today.month
         )
+        # ---------------------------------------------------------
+        # SUBMISSION STATUS 
+        # ---------------------------------------------------------
+        session.attendance_submitted = (
+            session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        )
 
-        if session.status == ClassSession.STATUS_PENDING_RESCHEDULE:
-            session.class_status_group = "pending_reschedule"
-        elif session.is_completed:
-            session.class_status_group = "completed"
-        elif session.is_upcoming:
-            session.class_status_group = "upcoming"
-        else:
-            # Scheduled/rescheduled but not future and not completed:
-            # still outstanding until explicitly completed.
-            session.class_status_group = "in_progress"
+        # ---------------------------------------------------------
+        # COUNTS
+        # ---------------------------------------------------------
+        if session.class_status_group:
+            counts = class_filter_counts[session.class_status_group]
 
-        if session.is_upcoming:
-            class_filter_counts["upcoming"]["all"] += 1
-
-            if session.is_today:
-                class_filter_counts["upcoming"]["today"] += 1
-
-            if session.is_this_week:
-                class_filter_counts["upcoming"]["weekly"] += 1
-
-            if session.is_this_month:
-                class_filter_counts["upcoming"]["monthly"] += 1
-
-        if session.is_completed:
-            class_filter_counts["completed"]["all"] += 1
+            counts["all"] += 1
 
             if session.is_today:
-                class_filter_counts["completed"]["today"] += 1
+                counts["today"] += 1
 
             if session.is_this_week:
-                class_filter_counts["completed"]["weekly"] += 1
+                counts["weekly"] += 1
 
             if session.is_this_month:
-                class_filter_counts["completed"]["monthly"] += 1
+                counts["monthly"] += 1
 
     context = {
         "profile": profile,
@@ -8181,10 +8181,8 @@ def company_admin_classes_list(request):
     return render(
         request,
         "profiles/company_admin/company_admin_classes_list.html",
-        context
+        context,
     )
-
-
 
 
 # =========================================================
