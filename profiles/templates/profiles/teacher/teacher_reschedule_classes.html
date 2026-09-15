@@ -1,6 +1,5 @@
 {% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
 {% load date_extras %}
 
 {% block extra_title %}| Reschedule Classes {% endblock %}
@@ -9,6 +8,7 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/reschedule_modal.css' %}">
 {% endblock %}
 
 
@@ -98,14 +98,8 @@
             <!-- PANEL HEADER -->
 
             <div class="reschedule-page-panel-header">
-
-                <h2>
-                    <i class="fa-solid fa-clock-rotate-left mr-3"></i>
-                    Pending Reschedule
-                </h2>
-
+                <h2>Pending Reschedule</h2>
             </div>
-
 
             <!-- PANEL LIST -->
 
@@ -120,46 +114,33 @@
                         ====================================== -->
 
                         <div class="reschedule-page-main-info">
-
                             <!-- COURSE / SESSION -->
-
                             <div class="reschedule-page-class-info">
-
                                 <h3>
                                     {{ session.course.name }}
-
-                                    <span class="text-white">
-                                        - Lesson {{ session.class_number }}
-                                    </span>
+                                    <span> - Lesson {{ session.class_number }}</span>
                                 </h3>
 
-
-                                <p>
-                                    <i class="fa-solid fa-calendar-day mr-1"></i>
-
-                                    {{ session.start_time|date:"D, j M" }}
-
-                                    |
-
-                                    {{ session.start_time|time:"H:i" }}
-                                    -
-                                    {{ session.end_time|time:"H:i" }}
-                                </p>
-
-
-                                <span class="status-badge pending-reschedule mt-2">
-                                    <i class="fa-solid fa-clock-rotate-left mr-2"></i>
-                                    Pending Reschedule
-                                </span>
-
+                                <div class="d-flex align-items-center flex-row">
+                                    <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="22" class="mr-2 mb-1">
+                                    <p>{{ session.start_time|date:"D, j M" }}
+                                        |
+                                        {{ session.start_time|time:"H:i" }}
+                                        -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p>
+                                </div>
                             </div>
-
                         </div>
-                            <!-- LEVEL -->
-                            <div class="reschedule-page-level">
-                                <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
-                                    {{ session.course.course_level|default:"Pending" }} </span>
-                            </div>
+                        <!-- LEVEL -->
+                        <div class="reschedule-page-level">
+                            <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+                                {{ session.course.course_level|default:"Pending" }} </span>
+                        </div>
+
+                        <span class="status-badge pending-reschedule">
+                            Pending Reschedule
+                        </span>
 
 
                         <!-- =====================================
@@ -167,15 +148,9 @@
                         ====================================== -->
 
                         <div class="reschedule-page-action">
-
-                            <a
-                                href="{% url 'profiles:reschedule_class_detail' session.id %}"
-                                class="reschedule-page-action-btn"
-                            >
-                                <i class="fa-solid fa-calendar-plus mr-2"></i>
-
+                            <a href="{% url 'profiles:reschedule_class_detail' session.id %}" class="reschedule-page-action-btn">
+                                <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2 mb-1">
                                 Choose new time
-
                                 <img src="{% static 'icons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
                             </a>
 
@@ -209,16 +184,9 @@
         >
 
             <!-- PANEL HEADER -->
-
             <div class="reschedule-page-panel-header">
-
-                <h2>
-                    <i class="fa-solid fa-calendar-check mr-3"></i>
-                    Rescheduled Classes
-                </h2>
-
+                <h2>Rescheduled Classes</h2>
             </div>
-
 
             <!-- =================================================
                  RESCHEDULED FILTERS
@@ -281,18 +249,18 @@
                                 <h3>{{ session.course.name }}
                                     <small>- Lesson {{ session.class_number }}</small></h3>
 
+                                <div class="d-flex align-items-center flex-row">
+                                    <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2 mb-1">
+                                    <p>
+                                        {{ session.start_time|date:"D, j M" }}
 
-                                <p>
-                                    <i class="fa-solid fa-calendar-day mr-1"></i>
+                                        |
 
-                                    {{ session.start_time|date:"D, j M" }}
-
-                                    |
-
-                                    {{ session.start_time|time:"H:i" }}
-                                    -
-                                    {{ session.end_time|time:"H:i" }}
-                                </p>
+                                        {{ session.start_time|time:"H:i" }}
+                                        -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p>
+                                </div>    
 
                             </div>
 
@@ -313,15 +281,18 @@
                                 {% endif %}
 
                                 <span class="status-badge rescheduled">
-                                    <i class="fa-solid fa-calendar-check mr-2"></i>Rescheduled</span>
+                                    <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2">
+                                    Rescheduled
+                                </span>
 
                             {% else %}
 
                                 <span class="status-badge completed">Past</span>
 
                                 <span class="status-badge rescheduled">
-                                    <i class="fa-solid fa-calendar-check mr-2"></i>
-                                    Rescheduled</span>
+                                    <img src="{% static 'icons/calendar_check_teal_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2">
+                                    Rescheduled
+                                </span>
 
                             {% endif %}
                         </div>
@@ -343,7 +314,7 @@
                                     data-class-date="{{ session.start_time|date:'D, j M' }}"
                                     data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
                                 >
-                                    <i class="fa-solid fa-rotate-right mr-2"></i>
+                                    <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="" width="22" class="mr-2">
 
                                     Reschedule Again
 
@@ -445,10 +416,7 @@
 
 
 {% block postloadjs %}
-
     {{ block.super }}
     <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
-
     <script type="text/javascript" src="{% static 'profiles/js/features/classes/reschedule_page.js' %}"></script>
-
 {% endblock %}

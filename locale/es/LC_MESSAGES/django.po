@@ -763,7 +763,7 @@ msgstr "Horario"
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:117
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:121
 msgid "Start & End Dates"
-msgstr "Fechas de Inicio y Finalización"
+msgstr "Fechas de Inicio y Fin"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:126
 #: .\profiles\templates\profiles\student\my_course.html:322

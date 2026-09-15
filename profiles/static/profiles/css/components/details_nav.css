@@ -58,11 +58,11 @@
     position: relative;
     flex: 0 0 auto;
     height: 62px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
-    font-weight: 550;
+    font-weight: 600;
 }
 
 .details-page__navigation nav.student-detail-tabs a {

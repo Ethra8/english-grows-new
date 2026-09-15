@@ -30,7 +30,7 @@
         <hr>
     </header>
 
-    <div class="wrapper-assigned-courses-small-cards">
+    <!-- <div class="wrapper-assigned-courses-small-cards">
         <div class="card">
             <div class="card-header"><span><img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">Active</span></div>
             <div class="card-body">{{ active_courses }}</div>
@@ -55,7 +55,7 @@
             <div class="card-header"><span><i class="fa-solid fa-folder-tree mr-2"></i>All Courses</span></div>
             <div class="card-body">{{ courses|length }}</div>
         </div>
-    </div>
+    </div> -->
 
     <div class="wrapper-assigned-courses-panel">
         <div class="assigned-courses-panel">
@@ -103,14 +103,158 @@
 
                     </div>
   
-                    <select id="courseStatusFilter" class="course-status-select">
-                        <option value="active" selected>Active</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="paused">Paused</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="completed">Completed</option>
-                        <option value="all">All Status</option>
-                    </select>
+                    <!-- SMALL DEVICES FORM -->
+                    <form
+                        id="courseStatusFilterForm"
+                        class="course-status-filter-form"
+                        aria-label="{% trans 'Filter courses by status' %}"
+                    >
+                        <input
+                            type="hidden"
+                            id="courseStatusFilter"
+                            name="status"
+                            value="active"
+                        >
+
+                        <div class="course-status-dropdown">
+
+                            <button
+                                type="button"
+                                id="courseStatusDropdownToggle"
+                                class="course-status-dropdown-toggle"
+                                aria-expanded="false"
+                                aria-controls="courseStatusDropdownMenu"
+                            >
+                                <span
+                                    id="courseStatusDropdownCurrent"
+                                    class="course-status-dropdown-current"
+                                >
+                                    {% trans 'Active' context 'assigned courses' %}
+                                </span>
+
+                                <span class="course-status-dropdown-meta">
+                                    <span
+                                        id="courseStatusDropdownCount"
+                                        class="course-status-dropdown-count"
+                                    >
+                                        {{ active_courses }}
+                                    </span>
+
+                                    <span
+                                        class="course-status-dropdown-chevron"
+                                        aria-hidden="true"
+                                    >
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </span>
+                            </button>
+
+                            <div
+                                id="courseStatusDropdownMenu"
+                                class="course-status-dropdown-menu"
+                                hidden
+                            >
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option active"
+                                    data-status="active"
+                                    data-label="{% trans 'Active' context 'assigned courses' %}"
+                                    data-count="{{ active_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'Active' context 'assigned courses' %}
+                                    </span>
+
+                                    <span>
+                                        {{ active_courses }}
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option"
+                                    data-status="confirmed"
+                                    data-label="{% trans 'Confirmed' context 'assigned courses' %}"
+                                    data-count="{{ confirmed_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'Confirmed' context 'assigned courses' %}
+                                    </span>
+
+                                    <span>
+                                        {{ confirmed_courses }}
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option"
+                                    data-status="paused"
+                                    data-label="{% trans 'Paused' context 'assigned courses' %}"
+                                    data-count="{{ paused_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'Paused' context 'assigned courses' %}
+                                    </span>
+
+                                    <span>
+                                        {{ paused_courses }}
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option"
+                                    data-status="cancelled"
+                                    data-label="{% trans 'Cancelled' context 'assigned courses' %}"
+                                    data-count="{{ cancelled_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'Cancelled' context 'assigned courses' %}
+                                    </span>
+
+                                    <span>
+                                        {{ cancelled_courses }}
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option"
+                                    data-status="completed"
+                                    data-label="{% trans 'Completed' context 'assigned courses' %}"
+                                    data-count="{{ completed_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'Completed' context 'assigned courses' %}
+                                    </span>
+
+                                    <span>
+                                        {{ completed_courses }}
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="course-status-dropdown-option"
+                                    data-status="all"
+                                    data-label="{% trans 'All Status' %}"
+                                    data-count="{{ total_courses }}"
+                                >
+                                    <span>
+                                        {% trans 'All Status' %}
+                                    </span>
+
+                                    <span>
+                                        {{ total_courses }}
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </form>
                 </div>            
             </div>
 

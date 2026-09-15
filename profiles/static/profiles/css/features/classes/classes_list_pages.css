@@ -466,7 +466,7 @@
     max-width: 100%;
     min-height: 72px;
     margin: 0;
-    padding: 0.65rem 0.6rem;
+    padding: 0.65rem 1.2rem 0.65rem 0.6rem;
     border: 0;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.34);
     background: transparent;
@@ -484,7 +484,6 @@
     min-width: 880px;
 }
 
-/* Held row: attendance drill-down column. */
 .assigned-class-row.class-row--past {
     grid-template-columns:
         minmax(360px, 1.25fr)
@@ -494,6 +493,18 @@
         minmax(95px, 0.35fr);
     min-width: 986px;
 }
+
+.teacher-assigned-classes-list .assigned-class-row.class-row--upcoming,
+.teacher-assigned-classes-list .assigned-class-row.class-row--past {
+    grid-template-columns:
+        minmax(360px, 1.25fr)
+        76px
+        minmax(280px, 1fr)
+        minmax(145px, 0.65fr)
+        minmax(195px, 0.85fr);
+    min-width: 1146px;
+} 
+
 
 /* Existing teacher row structure retained until teacher HTML is migrated. */
 .teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--past) {
@@ -691,7 +702,7 @@
 }
 
 .class-list-student-num {
-    border-right: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    /* border-right: 1px solid rgba(var(--color-teal-rgb), 0.18); */
     padding: 0 30%;
     justify-content: center;
 }
@@ -753,7 +764,12 @@
     justify-content: center;
     height: 68%;
     padding-left: 0.3rem;
-    border-left: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    /* border-left: 1px solid rgba(var(--color-teal-rgb), 0.18); */
+}
+
+.teacher-assigned-classes-list .class-row-action {
+    justify-content: flex-end;
+    gap: 0.35rem;
 }
 
 .class-attendance-link {

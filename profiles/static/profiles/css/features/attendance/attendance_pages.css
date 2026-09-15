@@ -40,13 +40,27 @@
     background: rgba(var(--color-tropical-teal-rgb), 0.35);
 }
 
-.take-attendance-save-btn:hover { color: var(--color-whitesmoke); background: rgba(var(--color-tropical-teal-rgb), 0.45); text-decoration: none; }
+.take-attendance-save-btn:hover { 
+    color: var(--color-whitesmoke); 
+    background: rgba(var(--color-tropical-teal-rgb), 0.45); 
+    text-decoration: none; 
+}
 
-.take-attendance-cancel-btn { color: #fb3636; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(192, 1, 1, 0.35); }
+.take-attendance-cancel-btn { 
+    color: #fb3636;
+    border: 1px solid rgba(255, 255, 255, 0.35); 
+    background: rgba(192, 1, 1, 0.35); 
+}
 
-.take-attendance-cancel-btn:hover { color: var(--color-whitesmoke); background: rgba(192, 1, 1, 0.7); text-decoration: none; }
+.take-attendance-cancel-btn:hover { 
+    color: var(--color-whitesmoke); 
+    background: rgba(192, 1, 1, 0.7); 
+    text-decoration: none; 
+}
 
-.attendance-radio-pill input:checked + .status-pill { border: 1px solid var(--color-whitesmoke); }
+.attendance-radio-pill input:checked + .status-pill { 
+    border: 3px solid var(--color-navy); 
+}
 
 .mark-all-actions {
     display: flex;

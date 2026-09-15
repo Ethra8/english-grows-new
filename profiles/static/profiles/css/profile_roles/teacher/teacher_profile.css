@@ -7,76 +7,6 @@ h2 {
 }
 
 
-/* MODAL: Confirm Reschedule Action on Class List */
-.reschedule-modal-overlay,
-.reschedule-page-modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(0, 20, 25, 0.75);
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-.reschedule-modal-overlay.is-visible,
-.reschedule-page-modal-overlay.is-visible {
-    display: flex;
-}
-
-.reschedule-modal-box,
-.reschedule-page-modal {
-    max-width: 520px;
-    width: 100%;
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
-    border-radius: 22px;
-    padding: 2rem;
-    color: var(--color-navy);
-    background: var(--color-whitesmoke);
-}
-
-.reschedule-modal-class-name,
-.reschedule-page-modal-class-name {
-    color: var(--color-teal);
-    font-weight: 600;
-    font-size: 1.2rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid lightgrey;
-}
-
-.reschedule-modal-actions,
-.reschedule-page-modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-}
-
-.reschedule-modal-cancel,
-.reschedule-modal-confirm,
-.reschedule-page-modal-cancel,
-.reschedule-page-modal-confirm {
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem 1.4rem;
-    cursor: pointer;
-}
-
-.reschedule-modal-cancel,
-.reschedule-page-modal-cancel {
-    background: rgb(191, 48, 48);
-    color: var(--color-whitesmoke);
-}
-
-.reschedule-modal-confirm,
-.reschedule-page-modal-confirm {
-    background: var(--color-teal);
-    color: var(--color-whitesmoke);
-    font-weight: 700;
-}
-
-
 /* COURSE STUDENTS LIST **************************************/
 
 .course-details-page .student-row-parent {
@@ -98,10 +28,10 @@ h2 {
     font-weight: 500;
 }
 
-.teacher-reschedule-page .course-list-group-name p .text-white {
+/* .teacher-reschedule-page .course-list-group-name p .text-white {
     font-weight: 300 !important;
     font-size: 1rem;
-}
+} */
 
 
 /*** Courses/Classes FILTER BY STATUS: **************************|
@@ -538,7 +468,7 @@ h2 {
 .reschedule-page-tab {
     display: flex;
     align-items: center;
-    justify-content: center;
+    text-align: start;    
     gap: 0.75rem;
     min-width: 210px;
     padding: 0.75rem 1.5rem;
@@ -594,8 +524,7 @@ h2 {
 ===================================================== */
 
 .reschedule-page-panels,
-.reschedule-page-panel,
-.reschedule-page-list {
+.reschedule-page-panel {
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -631,6 +560,7 @@ h2 {
 .reschedule-page-panel-header h2 {
     margin: 0;
     font-weight: 400;
+    padding-left: 1.5rem;
 }
 
 .reschedule-page-panel-header i {
@@ -761,8 +691,8 @@ h2 {
 .reschedule-page-class-info h3 {
     margin: 0 0 0.35rem;
     color: var(--color-navy);
-    font-family: "Big Shoulders Display", sans-serif;
-    font-size: 1.5rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: 0.005em;
     transition: all 0.2s ease;
@@ -772,9 +702,11 @@ h2 {
     font-weight: 600;
 }
 
-.reschedule-page-class-info h3 .text-white {
-    font-weight: 300;
+.reschedule-page-class-info h3 span {
+    font-weight: 500;
     font-size: 1rem;
+    font-family: "Montserrat", sans-serif;
+    color: var(--color-slate);
 }
 
 .reschedule-page-class-info p {
@@ -795,8 +727,8 @@ h2 {
 }
 
 .reschedule-page-row .status-badge.rescheduled {
-    background: var(--color-teal);
-    color: var(--color-whitesmoke);
+    background: rgba(var(--color-teal-rgb), 0.25);
+    color: var(--color-teal);
 }
 
 .reschedule-page-row .status-badge.pending-reschedule {
@@ -846,6 +778,16 @@ h2 {
 }
 
 
+.teacher-reschedule-detail-page form .btn-course-details {
+    background: rgba(var(--color-frozen-water-rgb), 0.95);
+    color: var(--color-navy);
+    width: 100%;
+    font-weight: 500;
+}
+
+.teacher-reschedule-detail-page form .btn-course-details:hover {
+    background: rgba(var(--color-tropical-teal-rgb), 1);
+}
 /* =====================================================
    EMPTY STATES
 ===================================================== */
@@ -875,11 +817,14 @@ h2 {
 
 
 /* =====================================================
-   DETAIL PAGE
+   RESCHEDULE CLASS DETAIL Page
 ===================================================== */
 
 .teacher-reschedule-detail-page form {
-    background-color: var(--color-navy);
+    background-color: rgba(var(--color-teal-rgb), 0.25);
+    color: var(--color-navy);
+    font-weight: 550;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.45);
     padding: 1rem;
     border-radius: 8px;
     width: 320px;
@@ -1195,9 +1140,9 @@ h2 {
      * Date/time is displayed in the dedicated top pill on mobile,
      * so the desktop date/time paragraph is hidden.
      */
-    .reschedule-page-class-info p {
+    /* .reschedule-page-class-info p {
         display: none;
-    }
+    } */
 
     /* STATUS */
     .reschedule-page-status {
@@ -1525,8 +1470,7 @@ h2 {
 .learner-reschedule-page,
 .employee-reschedule-page,
 .reschedule-page-panels,
-.reschedule-page-panel,
-.reschedule-page-list {
+.reschedule-page-panel {
     width: 100%;
     max-width: 100%;
     min-width: 0;

@@ -240,7 +240,30 @@
         </div>
 
     </header> 
-        
+
+    <div class="programme-details-card">
+
+        <h3 class="mb-3">{% trans 'Programme Focus' %}</h3>
+
+        {% if not course.programmes.all %}
+            <p class="ml-2 mr-2 mt-4 mb-2 text-muted">{% trans 'No programme focus has been assigned to this course yet.' %}</p>
+        {% else %}
+        <div class="programme-focus-grid programme-grid--{{ course.programmes.count }}">
+            {% for programme in course.programmes.all %}
+                <div class="programme-focus-item">
+                    {% if programme.icon %}
+                        <span class="programme-icon programme-icon--{{ programme.slug }}">
+                            <img src="{{ programme.icon.url }}" alt="" aria-hidden="true">
+                        </span>                            
+                    {% endif %}
+                    <span>{{ programme.name }}</span>
+                </div>
+            {% endfor %}
+        </div>    
+        {% endif %}
+    </div>
+    
+
     <div class="wrapper-my-course-card w-100">
 
         <div class="my-course-card">

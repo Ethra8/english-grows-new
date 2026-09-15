@@ -272,7 +272,7 @@
 
 /* if class_session has already past */
 #teacher .today-class-row.today-class-row-past {
-    background: rgba(var(--color-whitesmoke-rgb), 0.6);
+    background: rgba(var(--color-whitesmoke-rgb), 0.95);
 }
 
 .today-time {

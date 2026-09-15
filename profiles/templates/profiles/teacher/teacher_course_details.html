@@ -81,6 +81,27 @@
         </div>
 
     </div> -->
+    <div class="programme-details-card">
+
+        <h3 class="mb-3">{% trans 'Programme Focus' %}</h3>
+
+        {% if not course.programmes.all %}
+            <p class="ml-2 mr-2 mt-4 mb-2 text-muted">{% trans 'No programme focus has been assigned to this course yet.' %}</p>
+        {% else %}
+        <div class="programme-focus-grid programme-grid--{{ course.programmes.count }}">
+            {% for programme in course.programmes.all %}
+                <div class="programme-focus-item">
+                    {% if programme.icon %}
+                        <span class="programme-icon programme-icon--{{ programme.slug }}">
+                            <img src="{{ programme.icon.url }}" alt="" aria-hidden="true">
+                        </span>                            
+                    {% endif %}
+                    <span>{{ programme.name }}</span>
+                </div>
+            {% endfor %}
+        </div>    
+        {% endif %}
+    </div>
 
     <div class="course-details-three-col">
         <!-- LEFT COLUMN -->
@@ -135,7 +156,7 @@
                         {% if course.has_short_final_class %}
                             <div id="short-final-class" class="detail-row">
                                 <div>
-                                    <img src="{% static 'icons/warning_yellow_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                    <img src="{% static 'icons/warning_yellow_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1 ml-2">
                                 </div>
                                 <div>
                                     <strong>{% trans 'Last Class Duration' %}</strong>
@@ -199,46 +220,36 @@
             </div>
 
             <!-- RIGHT COLUMN -->
-            <div class="course-progress-card">
-                
-                <h3>{% trans 'Progress' %}</h3>
-                <div class="course-detail-grid">
-                    <div class="course-detail-item">
+        <div class="course-progress-card">
 
-                        <div class="detail-row">
-                            <div class="metric-icon"
-                                style="--percentage: {{ completion_percentage|default:0 }};">
-                                <span class="progress-ring"></span>
-                                <img src="{% static 'icons/meta_courses_teal_icon.png' %}" alt="" width="34" aria-hidden="true" class="mb-1">
-                            </div>
-                            <div>
-                                <strong>{% trans 'Progress' %}</strong>
-                                <span>{{ completion_percentage }} % <small>{% trans 'completed' %}</small></span>                                
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <div>
-                                <img src="{% static 'icons/completed_hours_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
-                            </div>
-                            <div>
-                                <strong>{% trans 'Hours Done' %}</strong>
-                                <span>{{ past_held_hours|clean_decimal }} / {{ course.total_hours|clean_decimal }} h.</span>
-                            </div>
-                        </div>
+            <h3>{% trans 'General Progress' context 'course details page' %}</h3>
 
-                        <div class="detail-row">
-                            <div>
-                                <img src="{% static 'icons/classes_completed_icons.png' %}" alt="" width="32" aria-hidden="true" class="mb-1">
-                            </div>
-                            <div>
-                                <strong>{% trans 'Class Sessions Held' %}</strong>
-                                <span>{{ past_held_classes|default:"0" }} / {{ course.number_of_classes }}</span>
-                            </div>
-                        </div>
+            <div class="course-ring-layout">
 
-                    </div>                
+                <div class="progress-ring" style="--percentage: {{ completion_percentage|default:0 }};">
+                    <div class="progress-ring-inner">
+                        <strong>{{ completion_percentage|default:0 }}%</strong>
+                        <span>{% trans 'delivered' context 'course details page' %}</span>
+                    </div>
                 </div>
+
+                <div class="student-stat-list">
+
+                    <div class="detail-row">
+                        <strong>{% trans 'Hours delivered' context 'course details page' %}</strong>
+                        <span>{{ past_held_hours_display }} / {{ course.total_hours|clean_decimal }} h.</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>{% trans 'Classes held' context 'course details page' %}</strong>
+                        <span>{{ past_held_classes|default:"0" }} / {{ course.number_of_classes }}</span>
+                    </div>
+
+                </div>
+
             </div>
+
+        </div>
             <!-- <div class="course-materials-card">
                 <h3><i class="fa-solid fa-folder-open mr-3"></i>
                     Course Materials</h3>

@@ -1,0 +1,68 @@
+/* MODAL: Confirm Reschedule Action on Class List */
+.reschedule-modal-overlay,
+.reschedule-page-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 20, 25, 0.75);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.reschedule-modal-overlay.is-visible,
+.reschedule-page-modal-overlay.is-visible {
+    display: flex;
+}
+
+.reschedule-modal-box,
+.reschedule-page-modal {
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
+    border-radius: 22px;
+    padding: 2rem;
+    color: var(--color-navy);
+    background: var(--color-whitesmoke);
+}
+
+.reschedule-modal-class-name,
+.reschedule-page-modal-class-name {
+    color: var(--color-teal);
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid lightgrey;
+}
+
+.reschedule-modal-actions,
+.reschedule-page-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.reschedule-modal-cancel,
+.reschedule-modal-confirm,
+.reschedule-page-modal-cancel,
+.reschedule-page-modal-confirm {
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.4rem;
+    cursor: pointer;
+}
+
+.reschedule-modal-cancel,
+.reschedule-page-modal-cancel {
+    background: rgb(191, 48, 48);
+    color: var(--color-whitesmoke);
+}
+
+.reschedule-modal-confirm,
+.reschedule-page-modal-confirm {
+    background: var(--color-teal);
+    color: var(--color-whitesmoke);
+    font-weight: 700;
+}
