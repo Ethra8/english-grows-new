@@ -41,6 +41,58 @@ class CourseType(models.Model):
         return self.name
 
 
+
+class Programme(models.Model):
+    """
+    Reusable training programme category that defines the broad
+    learning focus of a course.
+
+    Initial programme examples:
+    - Meetings & Negotiations
+    - Presentations & Speeches
+    - Business English Communication
+    - Email & Written Communication
+    - Everyday General English
+    - Cambridge Exams Preparation
+
+    A course can be linked to multiple programmes so that training
+    can be combined and adapted to the organisation's objectives.
+    """
+    name = models.CharField(
+        max_length=120,
+        unique=True
+    )
+
+    slug = models.SlugField(
+        max_length=140,
+        unique=True
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    icon = models.ImageField(
+        upload_to="programme_icons/",
+        blank=True,
+        null=True
+    )
+    
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    order = models.PositiveSmallIntegerField(
+        default=0
+    )
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
 # MODEL LOGIC and FUNCTIONALITIES
 # 
 # class Course 
@@ -145,6 +197,12 @@ class Course(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default="confirmed"
+    )
+
+    programmes = models.ManyToManyField(
+        Programme,
+        blank=True,
+        related_name="courses"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

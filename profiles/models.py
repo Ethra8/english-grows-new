@@ -251,51 +251,23 @@ class LearningGoal(models.Model):
 
 
 class StudentAcademicProfile(models.Model):
+    """
+    Persistent learner-wide academic information.
 
-    LEARNING_GOAL_CHOICES = [
-        ("conversation", "Conversation Fluency"),
-        ("grammar_accuracy", "Grammar Accuracy"),
-        ("vocabulary", "Vocabulary Building"),
-        ("pronunciation", "Pronunciation"),
-        ("listening", "Listening Confidence"),
-        ("business_english", "Business English"),
-        ("emails", "Professional Emails"),
-        ("meetings", "Meetings"),
-        ("presentations", "Presentations"),
-        ("exam_prep", "Exam Preparation"),
-    ]
+    Course-specific data such as target level, learning objective,
+    participation, attendance and teacher observations belong to
+    their respective course/enrollment/review models.
 
-    SKILL_AREA_CHOICES = [
-        ("speaking", "Speaking"),
-        ("listening", "Listening"),
-        ("reading", "Reading"),
-        ("writing", "Writing"),
-        ("grammar", "Grammar"),
-        ("vocabulary", "Vocabulary"),
-        ("pronunciation", "Pronunciation"),
-        ("fluency", "Fluency"),
-        ("accuracy", "Accuracy"),
-        ("confidence", "Confidence"),
-    ]
+    Current level is read from UserProfile.
+
+    Strengths and development areas are derived from the student's
+    skills and subskills assessment data rather than stored here.
+    """
 
     student = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name="academic_profile"
-    )
-
-    current_level = models.CharField(
-        max_length=10,
-        choices=UserProfile.LEVEL_CHOICES,
-        blank=True,
-        null=True
-    )
-
-    target_level = models.CharField(
-        max_length=10,
-        choices=UserProfile.LEVEL_CHOICES,
-        blank=True,
-        null=True
     )
 
     learning_goals = models.ManyToManyField(
@@ -304,41 +276,10 @@ class StudentAcademicProfile(models.Model):
         related_name="student_academic_profiles"
     )
 
-    strengths = models.JSONField(
-        default=list,
-        blank=True
-    )
-
-    weaknesses = models.JSONField(
-        default=list,
-        blank=True
-    )   
-    
-    teacher_notes = models.TextField(blank=True)
-
-    participation = models.CharField(
-        max_length=20,
-        choices=[
-            ("excellent", "Excellent"),
-            ("good", "Good"),
-            ("average", "Average"),
-            ("needs_support", "Needs Support"),
-        ],
+    next_review_date = models.DateField(
         blank=True,
         null=True
     )
-
-    risk_status = models.CharField(
-        max_length=20,
-        choices=[
-            ("low", "Low"),
-            ("medium", "Medium"),
-            ("high", "High"),
-        ],
-        default="low"
-    )
-
-    next_review_date = models.DateField(blank=True, null=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 

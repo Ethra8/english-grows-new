@@ -11,6 +11,7 @@ from django.http import JsonResponse
 
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
+from django.utils.formats import date_format
 
 from django.forms import inlineformset_factory
 from django.urls import reverse
@@ -2769,7 +2770,7 @@ def build_skill_progress_chart_data(student, course):
     chart_dates = sorted(daily_scores.keys())
 
     chart_labels = [
-        date.strftime("%d/%m/%y")
+        date_format(date, "j M")
         for date in chart_dates
     ]
 
@@ -2933,7 +2934,7 @@ def build_overall_skill_progress_chart_data(student, course):
 
 
         chart_labels.append(
-            date.strftime("%d/%m/%y")
+            date_format(date, "j M")
         )
 
         overall_scores.append(

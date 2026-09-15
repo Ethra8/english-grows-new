@@ -1,5 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
+from django.db.models import Q
+
 from crispy_forms.helper import FormHelper
 
 from .models import (
@@ -112,55 +114,34 @@ class TeacherProfileForm(forms.ModelForm):
 
 
 class StudentAcademicProfileForm(forms.ModelForm):
-    strengths = forms.MultipleChoiceField(
-        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
-    weaknesses = forms.MultipleChoiceField(
-        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
     class Meta:
         model = StudentAcademicProfile
         fields = [
-            "current_level",
-            "target_level",
             "learning_goals",
-            "strengths",
-            "weaknesses",
-            "teacher_notes",
-            "participation",
-            "risk_status",
             "next_review_date",
         ]
 
         widgets = {
             "learning_goals": forms.CheckboxSelectMultiple,
-            "next_review_date": forms.DateInput(
-                attrs={
-                    "type": "date",
-                }
-            ),
-            "teacher_notes": forms.Textarea(
-                attrs={
-                    "rows": 2,
-                }
-            ),
+            "next_review_date": forms.DateInput(attrs={"type": "date"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["learning_goals"].queryset = (
-            LearningGoal.objects.filter(
-                is_active=True,
-            )
-        )
+        selected_goals = self.instance.learning_goals.values_list(
+            "pk",
+            flat=True,
+        ) if self.instance.pk else []
 
+        self.fields["learning_goals"].queryset = (
+            LearningGoal.objects
+            .filter(
+                Q(is_active=True) |
+                Q(pk__in=selected_goals)
+            )
+            .distinct()
+        )
 
 # ---------------------------------------------------------
 # SKILL ASSESSMENT

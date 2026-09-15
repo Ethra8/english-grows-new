@@ -287,6 +287,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
 
                 x: {
+                    alignToPixels: true,
+                    
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                        padding: 8,
+
+                        font: {
+                            size: 12,
+                            weight: "500"
+                        }
+                    },
+                    
                     title: {
                         display: false
                     }
@@ -381,11 +394,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dataset.tension = 0.2;
         dataset.fill = false;
+        // Tropical Teal: #16AFB5
+        dataset.borderColor = "#16AFB5";
         dataset.borderWidth = 2.5;
+
+        dataset.pointBackgroundColor = "#16AFB5";
+        dataset.pointBorderColor = "#16AFB5";
         dataset.pointRadius = 5;
+
+        dataset.pointHoverBackgroundColor = "#16AFB5";
+        dataset.pointHoverBorderColor = "#16AFB5";
         dataset.pointHoverRadius = 7;
     });
-
 
     // ---------------------------------------------------------
     // CREATE CHART
@@ -420,6 +440,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
 
                 x: {
+                    alignToPixels: true,
+                    
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                        padding: 8,
+
+                        font: {
+                            size: 12,
+                            weight: "500"
+                        }
+                    },
+                    
                     title: {
                         display: false
                     }

@@ -590,34 +590,10 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 # STUDENT ACADEMIC PROFILE ====================================================
 
-class StudentAcademicProfileAdminForm(forms.ModelForm):
-    strengths = forms.MultipleChoiceField(
-        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
-    weaknesses = forms.MultipleChoiceField(
-        choices=StudentAcademicProfile.SKILL_AREA_CHOICES,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
-    class Meta:
-        model = StudentAcademicProfile
-        fields = "__all__"
-
-
 @admin.register(StudentAcademicProfile)
 class StudentAcademicProfileAdmin(admin.ModelAdmin):
-    form = StudentAcademicProfileAdminForm
-
     list_display = (
         "student",
-        "current_level",
-        "target_level",
-        "participation",
-        "risk_status",
         "next_review_date",
         "updated_at",
     )

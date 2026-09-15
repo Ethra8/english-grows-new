@@ -208,7 +208,7 @@ addresses.
    DETAIL ROWS
 ========================================================= */
 
-.detail-row {
+.detail-row{
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -216,9 +216,67 @@ addresses.
     min-width: 0;
     gap: 0.5rem;
     padding: 0.75rem 0;
-    border-bottom:
-        1px solid rgba(var(--color-teal-rgb), 0.1);
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.1);
     box-sizing: border-box;
+}
+
+.programme-focus-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    min-width: 0;
+    gap: 1rem;
+    /* border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.1); */
+    box-sizing: border-box;
+    padding: 0.5rem 1rem;
+    color: rgba(var(--color-navy-rgb), 1);
+    font-weight: 500;
+}
+
+.programme-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 56px;
+    background-color: rgba(var(--color-teal-rgb), 0.85);
+    border-radius: 50%;
+}
+
+.programme-icon img {
+    width: var(--programme-icon-size, 34px);
+    height: var(--programme-icon-size, 34px);
+    object-fit: contain;
+    display: block;
+}
+
+.programme-icon--business-english-communication {
+    --programme-icon-size: 40px;
+    padding-bottom: 0.15rem;
+}
+
+.programme-icon--email-written-communication {
+    --programme-icon-size: 41px;
+}
+
+.programme-icon--business-trips-general-english {
+    --programme-icon-size: 40px;
+    padding-bottom: 0.15rem;
+}
+
+.programme-icon--meetings-negotiations {
+    --programme-icon-size: 40px;
+}
+
+.programme-icon--presentations-speeches {
+    --programme-icon-size: 40px;
+}
+
+.programme-icon--cambridge-exams-preparation {
+    --programme-icon-size: 36px;
 }
 
 
@@ -252,7 +310,8 @@ remain vertically centred.*/
     padding: 0.75rem 1rem;
 }
 
-.detail-row:last-child {
+.detail-row:last-child,
+.programme-focus-item:last-child {
     border-bottom: none;
 }
 
@@ -311,6 +370,7 @@ remain vertically centred.*/
    COURSE CARDS
 ========================================================= */
 
+.programme-details-card,
 .course-details-card,
 .course-info-card,
 .course-progress-card,
@@ -329,7 +389,6 @@ remain vertically centred.*/
     box-sizing: border-box;
 }
 
-
 .course-materials-card {
     display: flex;
     justify-content: space-between;
@@ -342,12 +401,20 @@ remain vertically centred.*/
     height: 365px;
 }
 
+.programme-details-card {
+    margin-top: 3.5rem;
+}
 
+.programme-focus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    gap: 1rem;
+}
 
 /* =========================================================
    CARD HEADERS
 ========================================================= */
-
+.programme-details-card h3,
 .course-details-card h3,
 .course-info-card h3,
 .course-progress-card h3 {
@@ -361,11 +428,27 @@ remain vertically centred.*/
     font-size: 1.5rem;
     letter-spacing: 0.05em;
     font-weight: 500;
-    padding: 0 1.5rem;
+    padding: 0 1.5rem 0 3.5rem;
     border-radius: 999px;
     height: 46px;
     margin-bottom: 0;
     overflow: hidden;
+}
+
+/* Programme details card */
+.programme-details-card h3::after {
+    content: "";
+    position: absolute;
+    top: 69%;
+    left: 0;
+    width: 70px;
+    height: 70px;
+    transform: translateY(-50%) rotate(-12deg);
+    background-image: url(/static/icons/course_programme_focus.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.12;
 }
 
 
@@ -374,15 +457,15 @@ remain vertically centred.*/
     content: "";
     position: absolute;
     top: 69%;
-    right: 2%;
-    width: 65px;
-    height: 65px;
+    left: 0;
+    width: 60px;
+    height: 60px;
     transform: translateY(-50%) rotate(-12deg);
     background-image: url(/static/icons/meta_calendar_circle_turquoise.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.15;
+    opacity: 0.12;
 }
 
 
@@ -391,7 +474,7 @@ remain vertically centred.*/
     content: "";
     position: absolute;
     top: 69%;
-    right: 2%;
+    left: 0;
     width: 70px;
     height: 70px;
     transform: translateY(-50%) rotate(-12deg);
@@ -399,7 +482,7 @@ remain vertically centred.*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.15;
+    opacity: 0.12;
 }
 
 
@@ -408,15 +491,15 @@ remain vertically centred.*/
     content: "";
     position: absolute;
     top: 69%;
-    right: 2%;
-    width: 65px;
-    height: 65px;
+    left: 0;
+    width: 60px;
+    height: 60px;
     transform: translateY(-50%) rotate(-12deg);
     background-image: url(/static/icons/dashboard_meta_main_courses_icon.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.07;
+    opacity: 0.12;
 }
 
 
@@ -431,6 +514,19 @@ remain vertically centred.*/
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+
+
+@media (max-width: 1399.98px) {
+
+    .programme-focus-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(300px, 1fr));
+        gap: 1rem;
+    }
+
+}
+
 
 
 @media (max-width: 1199.98px) {
@@ -515,6 +611,12 @@ remain vertically centred.*/
         padding:
             0.15rem 1rem
             0.15rem 0.25rem;
+    }
+
+    .programme-focus-grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(300px, 1fr));
+        gap: 1rem;
     }
 
 }

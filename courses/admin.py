@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
+from django.utils.html import format_html
+
 from django.forms.models import BaseInlineFormSet
 
 from .models import (
@@ -10,6 +12,7 @@ from .models import (
     ClassSession,
     Attendance,
     BankHoliday,
+    Programme,
 )
 
 from courses.utils.course_dates import calculate_course_end_date
@@ -34,6 +37,63 @@ class CourseTypeAdmin(admin.ModelAdmin):
         "description",
     )
 
+
+@admin.register(Programme)
+class ProgrammeAdmin(admin.ModelAdmin):
+
+    @admin.display(description="Icon")
+    def icon_preview(self, obj):
+        if not obj.icon:
+            return "—"
+
+        return format_html(
+            '''
+            <span style="
+                width: 46px;
+                height: 46px;
+                padding: 3px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: #006B7D;
+                vertical-align: middle;
+            ">
+                <img
+                    src="{}"
+                    alt=""
+                    style="
+                        width: 40px;
+                        height: 40px;
+                        object-fit: contain;
+                    "
+                >
+            </span>
+            ''',
+            obj.icon.url,
+        )
+    
+    list_display = (
+        "icon_preview",
+        "name",
+        "slug",
+        "is_active",
+        "order",
+    )
+
+    list_editable = (
+        "is_active",
+        "order",
+    )
+
+    prepopulated_fields = {
+        "slug": ("name",),
+    }
+
+    search_fields = (
+        "name",
+        "description",
+    )
 
 # -------------------------------------------------------------------------
 # COURSE ENROLLMENT INLINE FORMSET
@@ -160,6 +220,7 @@ class CourseAdmin(admin.ModelAdmin):
     fields = (
         "name",
         "course_type",
+        "programmes",
         "course_level",
         "status",
         "total_hours",
@@ -184,6 +245,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "course_type",
+        "programmes",
         "company",
         "start_date",
         "course_level",
@@ -206,6 +268,9 @@ class CourseAdmin(admin.ModelAdmin):
         "teacher",
     )
 
+    filter_horizontal = (
+        "programmes",
+    )
     # Manual "Generate class sessions" action removed.
     #
     # ClassSessions + initial Attendance records are generated

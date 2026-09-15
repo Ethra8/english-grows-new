@@ -2051,7 +2051,10 @@ msgstr "Desarrollado y diseñado por Edna T.M."
 #: .\templates\includes\mobile_top_header.html:120
 #: .\templates\includes\mobile_top_header.html:128
 
-#| msgid "My Platform"
+
+msgid "Programme Focus"
+msgstr "Programa"
+
 msgid "Platform"
 msgstr "Mi Plataforma"
 
