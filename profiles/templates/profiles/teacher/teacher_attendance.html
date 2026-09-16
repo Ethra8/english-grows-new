@@ -13,7 +13,12 @@
 
 {% block profile_content %}
 
-<section class="teacher-attendance-page profile-page notranslate" translate="no">
+<section
+    class="teacher-attendance-page profile-page notranslate"
+    translate="no"
+    data-attendance-page
+    data-default-filter="pending"
+>
     <div class="overlay-globe"></div>
     <div class="overlay-mist"></div>
 
@@ -55,10 +60,19 @@
                 <div class="attendance-list-header-filter">
                     <h2 id="attendanceListTitle">Pending Attendance</h2>
 
-                    <div class="attendance-tools">
+                <div class="attendance-tools">
+                    <label for="attendanceDateFilter" class="sr-only">{% trans "Filter by date" %}</label>
+
+                    <div class="attendance-date-input">
                         <input type="date" id="attendanceDateFilter">
-                        <input type="text" id="attendanceSearchInput" placeholder="Search class or group...">
+                        <button type="button" class="attendance-date-picker-btn" aria-label="{% trans 'Choose date' %}">
+                            <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" aria-hidden="true">
+                        </button>
                     </div>
+
+                    <label for="attendanceSearchInput" class="sr-only">{% trans "Find employee" %}</label>
+                    <input type="text" id="attendanceSearchInput" placeholder="Seach class or group">
+                </div>            
                 </div>
 
                 <div class="attendance-list">
@@ -132,5 +146,5 @@
 
 {% block postloadjs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'profiles/js/profile_roles/teacher.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/features/attendance/attendance_pages.js' %}"></script>    
 {% endblock %}

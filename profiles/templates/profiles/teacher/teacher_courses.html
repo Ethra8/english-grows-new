@@ -300,15 +300,7 @@
                     </div>
 
                     <div class="course-list-student-num">
-                        <div class="icon">
-                            {% if course.enrollments.count == 1 %}
-                                <i class="fa-solid fa-user"></i>
-                            {% elif course.enrollments.count == 2 %}
-                                <i class="fa-solid fa-people-arrows"></i>
-                            {% else %}
-                                <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
-                            {% endif %}
-                        </div>
+                        <img src="{% static 'icons/class_list_users_icon.png' %}" alt="" aria-hidden="true" width="26">
                         <strong>{{ course.enrollments.count }}</strong>   
                     </div>
 

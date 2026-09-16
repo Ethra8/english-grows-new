@@ -55,3 +55,91 @@ document.addEventListener("DOMContentLoaded", function () {
         attendanceCard.style.height = "";
     });
 });
+
+
+// ATTENDANCE FILTER FORM 
+// For ROLES: 
+// - Company Admin: company_admin_course_attendance
+// - Teacher: teacher_attendance
+
+document.querySelectorAll(".attendance-row[data-url]").forEach(row => {
+    row.addEventListener("click", event => {
+        if (event.target.closest("a, button, input, select")) return;
+        window.location.href = row.dataset.url;
+    });
+});
+
+
+document.querySelectorAll('.attendance-date-picker-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const input = button.previousElementSibling;
+
+        if (typeof input.showPicker === 'function') {
+            input.showPicker();
+        } else {
+            input.focus();
+            input.click();
+        }
+    });
+});
+
+
+// ATTENDANCE FILTERS for both Teacher & Admin
+document.addEventListener("DOMContentLoaded", function () {
+    const page = document.querySelector("[data-attendance-page]");
+    if (!page) return;
+
+    const filterButtons = page.querySelectorAll(".attendance-filter-btn");
+    const rows = page.querySelectorAll(".attendance-row");
+    const searchInput = page.querySelector("#attendanceSearchInput");
+    const dateInput = page.querySelector("#attendanceDateFilter");
+    const noResultsMessage = page.querySelector("#attendanceNoResults");
+    const listTitle = page.querySelector("#attendanceListTitle");
+
+    let activeFilter = page.dataset.defaultFilter || "completed";
+
+    function applyFilters() {
+        const searchValue = searchInput ? searchInput.value.trim().toLowerCase() : "";
+        const selectedDate = dateInput ? dateInput.value : "";
+        let visibleCount = 0;
+
+        rows.forEach(function (row) {
+            const rowStatus = row.dataset.status || "";
+            const rowDate = row.dataset.date || "";
+            const rowSearch = (row.dataset.search || "").toLowerCase();
+
+            const matchesStatus = activeFilter === "all" || rowStatus === activeFilter;
+            const matchesDate = !selectedDate || rowDate === selectedDate;
+            const matchesSearch = !searchValue || rowSearch.includes(searchValue);
+            const shouldShow = matchesStatus && matchesDate && matchesSearch;
+
+            row.classList.toggle("course-hidden", !shouldShow);
+            if (shouldShow) visibleCount++;
+        });
+
+        if (noResultsMessage) {
+            noResultsMessage.classList.toggle("d-none", visibleCount > 0);
+        }
+
+        if (listTitle) {
+            const activeButton = [...filterButtons].find(button => button.dataset.filter === activeFilter);
+            if (activeButton?.dataset.listTitle) listTitle.textContent = activeButton.dataset.listTitle;
+        }
+    }
+
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            activeFilter = this.dataset.filter;
+
+            filterButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            applyFilters();
+        });
+    });
+
+    searchInput?.addEventListener("input", applyFilters);
+    dateInput?.addEventListener("change", applyFilters);
+
+    applyFilters();
+});

@@ -103,7 +103,8 @@
         </div>
         <div class="attendance-detail-list">
 
-        {% for attendance in attendances %}
+        {% for enrollment in enrollments %}
+        {% with attendance=enrollment.attendance_record %}
             <div class="attendance-detail-row">
 
                 <div class="student-main-info">
@@ -145,9 +146,12 @@
                 </div>
 
             </div>
-        {% empty %}
-            <p class="attendance-empty-message">No attendance has been registered for this session yet.</p>
-        {% endfor %}
+            {% endwith %}
+            {% empty %}
+                <p class="attendance-empty-message">
+                    {% trans 'No students are enrolled in this course.' %}
+                </p>
+            {% endfor %}        
         </div>
 
     </div>

@@ -2426,16 +2426,10 @@ def teacher_course_details(request, course_id):
 
 @login_required
 def teacher_course_attendance(request, course_id):
-    profile = get_object_or_404(
-        UserProfile,
-        user=request.user,
-    )
+    profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
-
-    now = timezone.now()
-
 
     # ---------------------------------------------------------
     # COURSE
@@ -2446,78 +2440,159 @@ def teacher_course_attendance(request, course_id):
         teacher=request.user,
     )
 
-
     # ---------------------------------------------------------
     # AVAILABLE COURSES
     #
-    # Used by the shared course selector in
-    # course_details_header.html.
+    # Used by the shared course selector.
     # ---------------------------------------------------------
     available_courses = (
         Course.objects
-        .filter(
-            teacher=request.user,
-        )
+        .filter(teacher=request.user)
         .select_related(
             "course_type",
             "company",
         )
-        .order_by(
-            "name",
-        )
+        .order_by("name")
     )
 
+    # ---------------------------------------------------------
+    # HELD CLASS COUNTS
+    #
+    # held_classes:
+    # Class has been held, attendance still pending.
+    #
+    # attendance_submitted_classes:
+    # Class has been held and attendance submitted.
+    #
+    # total_classes_held:
+    # Both states combined.
+    # ---------------------------------------------------------
+    held_classes = course.class_sessions.filter(
+        status=ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+    ).count()
+
+    attendance_submitted_classes = course.class_sessions.filter(
+        status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+    ).count()
+
+    total_classes_held = (
+        held_classes
+        + attendance_submitted_classes
+    )
 
     # ---------------------------------------------------------
-    # CLASS SESSIONS
+    # SUBMITTED ATTENDANCE RECORDS
     #
-    # Attendance history includes past sessions that are
-    # scheduled, rescheduled or completed.
+    # Only genuinely submitted attendance belongs in the
+    # attendance-record history list.
     # ---------------------------------------------------------
-    class_sessions = (
+    submitted_class_sessions = (
         course.class_sessions
         .filter(
-            start_time__lt=now,
-            status__in=[
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_RESCHEDULED,
-                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            ],
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
         )
         .annotate(
             attended_count=Count(
                 "attendance_records",
-                filter=Q(
-                    attendance_records__status="attended",
-                ),
+                filter=Q(attendance_records__status="attended"),
+                distinct=True,
             ),
             missed_count=Count(
                 "attendance_records",
-                filter=Q(
-                    attendance_records__status="missed",
-                ),
+                filter=Q(attendance_records__status="missed"),
+                distinct=True,
             ),
             excused_count=Count(
                 "attendance_records",
+                filter=Q(attendance_records__status="excused"),
+                distinct=True,
+            ),
+            registered_count=Count(
+                "attendance_records",
                 filter=Q(
-                    attendance_records__status="excused",
+                    attendance_records__status__in=[
+                        "attended",
+                        "missed",
+                        "excused",
+                    ],
                 ),
+                distinct=True,
             ),
         )
-        .order_by(
-            "-start_time",
+        .prefetch_related(
+            "attendance_records__student",
+            "attendance_records__student__profile",
         )
+        .order_by("-start_time")
     )
 
+    # ---------------------------------------------------------
+    # SESSION ATTENDANCE DATA
+    #
+    # Adds:
+    # - attendance_percentage
+    # - employee_search_text
+    #
+    # Also builds the overall course attendance rate.
+    # ---------------------------------------------------------
+    total_attended = 0
+    total_registered = 0
+
+    for session in submitted_class_sessions:
+        session.attendance_percentage = (
+            round(
+                session.attended_count
+                / session.registered_count
+                * 100
+            )
+            if session.registered_count
+            else 0
+        )
+
+        total_attended += session.attended_count
+        total_registered += session.registered_count
+
+        search_parts = []
+
+        for attendance in session.attendance_records.all():
+            student = attendance.student
+
+            search_parts.extend([
+                student.first_name or "",
+                student.last_name or "",
+                student.email or "",
+                student.username or "",
+            ])
+
+        session.employee_search_text = " ".join(
+            part for part in search_parts if part
+        ).lower()
+
+    # ---------------------------------------------------------
+    # OVERALL ATTENDANCE RATE
+    # ---------------------------------------------------------
+    average_attendance = (
+        round(
+            total_attended
+            / total_registered
+            * 100
+        )
+        if total_registered
+        else 0
+    )
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
+        "profile": profile,
         "course": course,
         "available_courses": available_courses,
-        "class_sessions": class_sessions,
+        "held_classes": held_classes,
+        "attendance_submitted_classes": attendance_submitted_classes,
+        "total_classes_held": total_classes_held,
+        "average_attendance": average_attendance,
+        "submitted_class_sessions": submitted_class_sessions,
         "active_section": "attendance",
     }
 
@@ -5062,7 +5137,6 @@ def teacher_take_attendance(request, session_id):
     )
 
 
-
 @login_required
 def teacher_attendance_detail(request, session_id):
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -5070,6 +5144,9 @@ def teacher_attendance_detail(request, session_id):
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # CLASS SESSION / COURSE
+    # ---------------------------------------------------------
     class_session = get_object_or_404(
         ClassSession.objects.select_related(
             "course",
@@ -5083,9 +5160,36 @@ def teacher_attendance_detail(request, session_id):
 
     course = class_session.course
 
-    attendances = list(
-        Attendance.objects
-        .filter(class_session=class_session)
+    # ---------------------------------------------------------
+    # AVAILABLE COURSES
+    #
+    # Used by the shared course selector.
+    # ---------------------------------------------------------
+    available_courses = (
+        Course.objects
+        .filter(teacher=request.user)
+        .select_related(
+            "course_type",
+            "company",
+        )
+        .order_by("name")
+    )
+
+    # ---------------------------------------------------------
+    # ALL COURSE ENROLLMENTS
+    #
+    # Enrollment status must NOT determine whether a student
+    # appears in historical course/session lists.
+    #
+    # Includes:
+    # - active
+    # - paused
+    # - completed
+    # - cancelled
+    # ---------------------------------------------------------
+    enrollments = list(
+        CourseEnrollment.objects
+        .filter(course=course)
         .select_related(
             "student",
             "student__profile",
@@ -5097,48 +5201,66 @@ def teacher_attendance_detail(request, session_id):
         )
     )
 
-    enrollments_by_student_id = {
-        enrollment.student_id: enrollment
-        for enrollment in CourseEnrollment.objects.filter(
-            course=class_session.course,
-            student_id__in=[
-                attendance.student_id
-                for attendance in attendances
-            ],
+    # ---------------------------------------------------------
+    # ATTENDANCE RECORDS FOR THIS SESSION
+    # ---------------------------------------------------------
+    attendances_by_student_id = {
+        attendance.student_id: attendance
+        for attendance in (
+            Attendance.objects
+            .filter(class_session=class_session)
+            .select_related(
+                "student",
+                "student__profile",
+            )
         )
     }
 
-    for attendance in attendances:
-        attendance.enrollment = enrollments_by_student_id.get(
-            attendance.student_id
+    # Attach the relevant attendance record to each enrollment.
+    # Missing attendance remains None rather than removing the
+    # student from the list.
+    for enrollment in enrollments:
+        enrollment.attendance_record = attendances_by_student_id.get(
+            enrollment.student_id
         )
 
+    # ---------------------------------------------------------
+    # ATTENDANCE COUNTS
+    # ---------------------------------------------------------
+    attendance_records = [
+        enrollment.attendance_record
+        for enrollment in enrollments
+        if enrollment.attendance_record
+    ]
+
     attended_count = sum(
-        1 for attendance in attendances
+        1 for attendance in attendance_records
         if attendance.status == "attended"
     )
 
     missed_count = sum(
-        1 for attendance in attendances
+        1 for attendance in attendance_records
         if attendance.status == "missed"
     )
 
     excused_count = sum(
-        1 for attendance in attendances
+        1 for attendance in attendance_records
         if attendance.status == "excused"
     )
 
-    total_count = len(attendances)
+    total_count = len(attendance_records)
 
     context = {
         "profile": profile,
         "class_session": class_session,
         "course": course,
-        "attendances": attendances,
+        "available_courses": available_courses,
+        "enrollments": enrollments,
         "attended_count": attended_count,
         "missed_count": missed_count,
         "excused_count": excused_count,
         "total_count": total_count,
+        "active_section": "attendance",
     }
 
     return render(
@@ -5146,6 +5268,7 @@ def teacher_attendance_detail(request, session_id):
         "profiles/teacher/teacher_attendance_detail.html",
         context,
     )
+
 
 
 # SET A CLASS IN CLASS_LIST Page
