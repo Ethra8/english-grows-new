@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             year: 'Year',
 
             joinClass: 'Join class',
+            startClass: 'Start class',
             groupDetails: 'Group details',
             lesson: 'Lesson',
 
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             year: 'Año',
 
             joinClass: 'Conectarse',
+            startClass: 'Empezar',
             groupDetails: 'Detalles',
             lesson: 'Clase',
 
@@ -59,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             year: 'Any',
 
             joinClass: 'Conectar-se',
+            startClass: 'Comerçar',
             groupDetails: 'Detalls',
             lesson: 'Classe',
 
@@ -74,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             year: 'Année',
 
             joinClass: 'Se connecter',
+            startClass: 'Commencer',
             groupDetails: 'Détails du groupe',
             lesson: 'Cours',
 
@@ -525,8 +529,9 @@ document.addEventListener('DOMContentLoaded', function () {
         ) {
 
             return {
-                label:
-                    labels.joinClass,
+                label: userRole === 'teacher'
+                    ? labels.startClass
+                    : labels.joinClass,
 
                 href:
                     meetingLink,
