@@ -80,7 +80,7 @@
                     {% trans "Attendance" %}
                 </a>
 
-                <a href="{% url 'profiles:student_needs_analysis' course_id=course.id enrollment_id=enrollment.id %}"
+                <a href="{% url 'profiles:teacher_student_needs_analysis' course_id=course.id enrollment_id=enrollment.id %}"
                    class="{% if active_section == 'needs_analysis' %}active{% endif %}"
                    {% if active_section == "needs_analysis" %}aria-current="page"{% endif %}>
                     {% trans "Learning Needs" %}
