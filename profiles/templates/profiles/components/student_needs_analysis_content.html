@@ -1,0 +1,171 @@
+{% load i18n %}
+
+<section class="student-needs-analysis mt-5">
+
+    <header class="student-needs-analysis__header">
+        <div class="student-needs-analysis__heading">
+            <h2>{% trans "Learning Needs" %}</h2>
+            <p>{% trans "Course" %}: {{ course.name }}</p>
+        </div>
+
+        <span class="needs-analysis-status needs-analysis-status--{{ needs_analysis.status }}">
+            {{ needs_analysis.get_status_display }}
+        </span>
+    </header>
+
+
+    <div class="student-needs-analysis__content">
+
+        {% if needs_analysis.status == "pending" %}
+
+            {% if can_edit %}
+
+                <div class="student-needs-analysis__intro">
+                    <p>
+                        {% trans "Tell us about how you use English, the situations that are most important to you, and what you would most like to improve." %}
+                    </p>
+                    <p>
+                        {% trans "Your answers will help your teacher understand your learning needs and adapt the course where appropriate." %}
+                    </p>
+                </div>
+
+                <form method="post" class="student-needs-analysis__form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-errors" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+
+                    {# ---------------------------------------------------- #}
+                    {# QUESTIONNAIRE                                      #}
+                    {#                                                    #}
+                    {# Actual questionnaire sections/fields will go here. #}
+                    {# ---------------------------------------------------- #}
+
+                    {% for field in form.visible_fields %}
+                        <div class="needs-analysis-field {% if field.errors %}needs-analysis-field--error{% endif %}">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span aria-hidden="true">*</span>
+                                {% endif %}
+                            </label>
+
+                            {% if field.help_text %}
+                                <p class="needs-analysis-field__help">
+                                    {{ field.help_text }}
+                                </p>
+                            {% endif %}
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="needs-analysis-field__errors" role="alert">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+
+                    <div class="student-needs-analysis__actions">
+                        <button type="submit" class="btn-primary">
+                            {% trans "Submit Learning Needs" %}
+                        </button>
+                    </div>
+
+                </form>
+
+            {% else %}
+
+                <div class="student-needs-analysis__empty-state">
+                    <h3>{% trans "Learning Needs pending" %}</h3>
+                    <p>
+                        {% trans "The learner has not submitted their Learning Needs questionnaire yet." %}
+                    </p>
+                </div>
+
+            {% endif %}
+
+
+        {% else %}
+
+            <div class="student-needs-analysis__summary">
+
+                <div class="student-needs-analysis__summary-header">
+                    <div>
+                        <h3>{% trans "Submitted Learning Needs" %}</h3>
+
+                        {% if needs_analysis.submitted_at %}
+                            <p>
+                                {% trans "Submitted" %}:
+                                {{ needs_analysis.submitted_at|date:"j M Y" }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                {# ---------------------------------------------------- #}
+                {# READ-ONLY ANSWERS                                   #}
+                {#                                                    #}
+                {# Once questionnaire fields are defined, the         #}
+                {# learner's answers will be displayed here.          #}
+                {# ---------------------------------------------------- #}
+
+                <div class="student-needs-analysis__answers">
+
+                    {% for field in form.visible_fields %}
+                        <div class="needs-analysis-answer">
+                            <p class="needs-analysis-answer__question">
+                                {{ field.label }}
+                            </p>
+
+                            <p class="needs-analysis-answer__value">
+                                {% if field.value %}
+                                    {{ field.value }}
+                                {% else %}
+                                    <span class="needs-analysis-answer__empty">
+                                        {% trans "Not provided" %}
+                                    </span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                {% if needs_analysis.status == "reviewed" and needs_analysis.reviewed_at %}
+                    <div class="student-needs-analysis__review-status">
+                        <p>
+                            {% trans "Reviewed" %}:
+                            {{ needs_analysis.reviewed_at|date:"j M Y" }}
+                        </p>
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            {% if can_review %}
+                <div class="student-needs-analysis__review">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="mark_reviewed">
+
+                        <button type="submit" class="btn-primary">
+                            {% trans "Mark as Reviewed" %}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</section>

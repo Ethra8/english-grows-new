@@ -8,7 +8,6 @@ urlpatterns = [
     
     path("profile_settings/", views.profile_settings, name="profile_settings"),
 
-
     # STUDENT PAGES    
     path("student/dashboard/", views.student_dashboard, name="student_dashboard"),
     path("student/my_course/", views.my_course, name="my_course"),
@@ -17,6 +16,7 @@ urlpatterns = [
     path("student/my_learning_progress/", views.my_learning_progress, name="my_learning_progress"),
     path("student/my_attendance/", views.my_attendance, name="my_attendance"),
     path("student/my_skills/", views.my_skills, name="my_skills"),
+    path("student/my-learning-needs/", views.my_needs_analysis, name="my_needs_analysis"),
     path("student/my_learning_progress/assessment/", views.my_learning_progress_assessment, name="my_learning_progress_assessment"),
 
 
@@ -41,6 +41,7 @@ urlpatterns = [
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/attendance/<int:attendance_id>/update/", views.update_student_attendance_status, name="update_student_attendance_status"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/academic-profile/", views.student_academic_profile_settings, name="student_academic_profile_settings"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/skills/", views.student_skills_overview, name="student_skills_overview"),
+    path("teacher/course/<int:course_id>/student/<int:enrollment_id>/learning-needs/", views.teacher_student_needs_analysis, name="teacher_student_needs_analysis"),
     path("teacher/student-skill/<int:skill_assessment_id>/edit/", views.teacher_edit_student_skill, name="teacher_edit_student_skill"),
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/assessment_notes", views.teacher_student_assessment_notes, name="teacher_student_assessment_notes"),
     # Teacher RESCHEDULE
@@ -66,7 +67,7 @@ urlpatterns = [
     path("company-admin/employees/<int:student_id>/attendance/", views.company_admin_student_attendance_record, name="company_admin_student_attendance_record"),
     path("company-admin/employees/<int:student_id>/skills/", views.company_admin_student_skills_overview, name="company_admin_student_skills_overview"),
     path("company-admin/employees/<int:student_id>/assessment/", views.company_admin_student_teacher_notes, name="company_admin_student_teacher_notes"),
-    path("company-admin/classes/", views.company_admin_classes_list, name="company_admin_classes_list"),
+    path("company-admin/student/<int:student_id>/learning-needs/", views.company_admin_student_needs_analysis, name="company_admin_student_needs_analysis"),    path("company-admin/classes/", views.company_admin_classes_list, name="company_admin_classes_list"),
     path("company-admin/employees/", views.company_admin_employees_list, name="company_admin_employees_list"),
     path("company-admin/calendar/", views.company_admin_calendar, name="company_admin_calendar"),
     path("company-admin/calendar/events/", views.company_admin_calendar_events, name="company_admin_calendar_events"),

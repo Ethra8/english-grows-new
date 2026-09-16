@@ -1,0 +1,32 @@
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
+{% load date_extras %}
+{% load course_extras %}
+
+
+{% block extra_title %}| Student Needs Analysis{% endblock %}
+
+
+{% block details_page_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/student_needs_analysis.css' %}">
+{% endblock %}
+
+
+{% block details_page_shell_class %}student-detail-page{% endblock %}
+
+
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" %}
+{% endblock %}
+
+
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" %}
+{% endblock %}
+
+
+{% block details_content %}
+    {% include "profiles/components/student_needs_analysis_content.html" %}
+{% endblock %}

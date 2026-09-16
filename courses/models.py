@@ -1623,11 +1623,16 @@ class CourseEnrollment(models.Model):
     # ENROLLMENT STATUS
     # ---------------------------------------------------------
 
+    STATUS_ACTIVE = "active"
+    STATUS_PAUSED = "paused"
+    STATUS_COMPLETED = "completed"
+    STATUS_CANCELLED = "cancelled"
+
     ENROLLMENT_STATUS_CHOICES = [
-        ("active", "Active"),
-        ("paused", "Paused"),
-        ("completed", "Completed"),
-        ("cancelled", "Cancelled"),
+        (STATUS_ACTIVE, "Active"),
+        (STATUS_PAUSED, "Paused"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_CANCELLED, "Cancelled"),
     ]
 
 
@@ -1659,7 +1664,7 @@ class CourseEnrollment(models.Model):
     status = models.CharField(
         max_length=20,
         choices=ENROLLMENT_STATUS_CHOICES,
-        default="active"
+        default=STATUS_ACTIVE
     )
 
     target_level = models.CharField(
@@ -1688,6 +1693,7 @@ class CourseEnrollment(models.Model):
             "course",
             "student"
         ]
+
 
     # ---------------------------------------------------------
     # SAVE
@@ -1723,21 +1729,21 @@ class CourseEnrollment(models.Model):
         super().save(*args, **kwargs)
 
         became_paused = (
-            self.status == "paused"
-            and old_status != "paused"
+            self.status == self.STATUS_PAUSED
+            and old_status != self.STATUS_PAUSED
         )
 
         became_active = (
-            self.status == "active"
+            self.status == self.STATUS_ACTIVE
             and (
                 is_new
-                or old_status != "active"
+                or old_status != self.STATUS_ACTIVE
             )
         )
 
         became_cancelled = (
-            self.status == "cancelled"
-            and old_status != "cancelled"
+            self.status == self.STATUS_CANCELLED
+            and old_status != self.STATUS_CANCELLED
         )
 
         if became_paused:
@@ -1762,6 +1768,7 @@ class CourseEnrollment(models.Model):
 
         if became_cancelled:
             self.cancel_remaining_attendance_records()
+
 
     # ---------------------------------------------------------
     # PAUSE REMAINING ATTENDANCE
@@ -1862,6 +1869,7 @@ class CourseEnrollment(models.Model):
 
         return future_count + pending_reschedule_count
 
+
     # ---------------------------------------------------------
     # CANCEL REMAINING ATTENDANCE
     # ---------------------------------------------------------
@@ -1876,7 +1884,7 @@ class CourseEnrollment(models.Model):
 
         pending_reschedule:
         - always affected because the lesson has not taken place,
-        even when its original scheduled time is already past
+          even when its original scheduled time is already past
 
         Deleted:
         - pending
@@ -1913,7 +1921,8 @@ class CourseEnrollment(models.Model):
         ).delete()
 
         return future_deleted + pending_reschedule_deleted
-    
+
+
     # ---------------------------------------------------------
     # CREATE MISSING ATTENDANCE
     # ---------------------------------------------------------
@@ -1930,7 +1939,7 @@ class CourseEnrollment(models.Model):
 
         pending_reschedule:
         - always included because the lesson has not taken place,
-        even when its original scheduled time is already past
+          even when its original scheduled time is already past
 
         Excluded:
         - scheduled/rescheduled lessons that have already started
@@ -1969,6 +1978,7 @@ class CourseEnrollment(models.Model):
                     "status": Attendance.STATUS_PENDING,
                 }
             )
+
 
     # ---------------------------------------------------------
     # STRING REPRESENTATION
@@ -2120,6 +2130,7 @@ class CourseEnrollment(models.Model):
             .count()
         )
 
+
     @property
     def upcoming_classes(self):
         """
@@ -2226,6 +2237,7 @@ class CourseEnrollment(models.Model):
             + self.classes_excused
         )
 
+
     # ---------------------------------------------------------
     # ATTENDANCE PERCENTAGE
     # ---------------------------------------------------------
@@ -2254,6 +2266,7 @@ class CourseEnrollment(models.Model):
             ) * 100
         )
 
+
     # ---------------------------------------------------------
     # LOW ATTENDANCE WARNING
     # ---------------------------------------------------------
@@ -2276,6 +2289,7 @@ class CourseEnrollment(models.Model):
             return False
 
         return self.attendance_percentage < 75
+
 
     # ---------------------------------------------------------
     # SAFE ENROLLMENT DELETION
@@ -2343,6 +2357,50 @@ class CourseEnrollment(models.Model):
             ).delete()
 
             return super().delete(*args, **kwargs)
+
+
+
+class StudentNeedsAnalysis(models.Model):
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        SUBMITTED = "submitted", "Submitted"
+        REVIEWED = "reviewed", "Reviewed"
+
+    enrollment = models.OneToOneField(
+        CourseEnrollment,
+        on_delete=models.CASCADE,
+        related_name="needs_analysis",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+
+    # Questionnaire responses...
+
+    submitted_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+    reviewed_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        verbose_name = "Student needs analysis"
+        verbose_name_plural = "Student needs analysis"
+
+    def __str__(self):
+        return (
+            f"Needs Analysis - "
+            f"{self.enrollment.student} - "
+            f"{self.enrollment.course}"
+        )
 
 
 

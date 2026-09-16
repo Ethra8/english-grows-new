@@ -2058,6 +2058,11 @@ msgstr "Programa"
 msgid "Platform"
 msgstr "Mi Plataforma"
 
+msgid "Learning Goals"
+msgstr "Objetivos"
+
+
+
 #~ msgid "My Profile"
 #~ msgstr "Mi Perfil"
 

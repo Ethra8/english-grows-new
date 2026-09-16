@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField, Exists, OuterRef
 from django.db.models.functions import Coalesce, Concat, Lower, NullIf, Trim
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
 
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
@@ -34,7 +34,7 @@ from profiles.utils.time_formating import (
 
 from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
 from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
-from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
+from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance, StudentNeedsAnalysis
 
 
 User = get_user_model()
@@ -1614,6 +1614,116 @@ def my_learning_progress_assessment(request):
         context,
     )
 
+
+@login_required
+def my_needs_analysis(request):
+
+    # ---------------------------------------------------------
+    # ROLE
+    # ---------------------------------------------------------
+    profile = request.user.profile
+
+    if profile.role not in {
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    }:
+        return redirect("home")
+
+
+    # ---------------------------------------------------------
+    # ENROLLMENTS
+    #
+    # Build the course selector from this student's enrollments.
+    # The Needs Analysis belongs to the enrollment, not directly
+    # to the student.
+    # ---------------------------------------------------------
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(student=request.user)
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .order_by("course__name")
+    )
+
+    if not enrollments.exists():
+        return redirect("profiles:profile")
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE / ENROLLMENT
+    # ---------------------------------------------------------
+    course_id = request.GET.get("course")
+
+    if course_id:
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=course_id,
+        )
+    else:
+        enrollment = enrollments.first()
+
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # NEEDS ANALYSIS
+    #
+    # One Needs Analysis exists per CourseEnrollment.
+    # Newly created analyses begin as PENDING.
+    # ---------------------------------------------------------
+    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+        enrollment=enrollment,
+    )
+
+
+    # ---------------------------------------------------------
+    # EDIT PERMISSION
+    #
+    # The learner may edit only while the analysis is pending.
+    #
+    # Once submitted, the answers become read-only.
+    # ---------------------------------------------------------
+    can_edit = (
+        needs_analysis.status ==
+        StudentNeedsAnalysis.Status.PENDING
+    )
+
+
+    # ---------------------------------------------------------
+    # STUDENT STATUS
+    #
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = (
+        enrollment.status == CourseEnrollment.STATUS_ACTIVE
+        and course.status == "active"
+    )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
+    context = {
+        "student": request.user,
+        "course": course,
+        "enrollment": enrollment,
+        "enrollments": enrollments,
+        "needs_analysis": needs_analysis,
+        "can_edit": can_edit,
+        "can_review": False,
+        "user_currently_enrolled": user_currently_enrolled,
+        "active_section": "needs_analysis",
+    }
+
+    return render(
+        request,
+        "profiles/student/student_needs_analysis.html",
+        context,
+    )
 
 
 # ***********************************************|
@@ -4648,6 +4758,140 @@ def teacher_edit_student_skill(request, skill_assessment_id):
     return render(
         request,
         "profiles/teacher/teacher_edit_student_skill.html",
+        context,
+    )
+
+
+
+@login_required
+def teacher_student_needs_analysis(request, course_id, enrollment_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+
+    # ---------------------------------------------------------
+    # ENROLLMENT
+    #
+    # Restrict access to enrollments belonging to a course
+    # taught by the logged-in teacher.
+    # ---------------------------------------------------------
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        ),
+        id=enrollment_id,
+        course_id=course_id,
+        course__teacher=request.user,
+    )
+
+    student = enrollment.student
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # AVAILABLE ENROLLMENTS
+    #
+    # Used by the shared student course selector.
+    # Only include courses taught by this teacher.
+    # ---------------------------------------------------------
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            course__teacher=request.user,
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+        )
+        .order_by("course__name")
+    )
+
+
+    # ---------------------------------------------------------
+    # NEEDS ANALYSIS
+    #
+    # One Needs Analysis belongs to one CourseEnrollment.
+    # ---------------------------------------------------------
+    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+        enrollment=enrollment,
+    )
+
+
+    # ---------------------------------------------------------
+    # MARK AS REVIEWED
+    #
+    # Teacher never edits the learner's questionnaire responses.
+    # The only POST action available here is reviewing a
+    # previously submitted Needs Analysis.
+    # ---------------------------------------------------------
+    if request.method == "POST":
+        if request.POST.get("action") != "mark_reviewed":
+            return HttpResponseBadRequest()
+
+        if needs_analysis.status != StudentNeedsAnalysis.Status.SUBMITTED:
+            return HttpResponseForbidden(
+                "Only submitted needs analyses can be reviewed."
+            )
+
+        needs_analysis.status = StudentNeedsAnalysis.Status.REVIEWED
+        needs_analysis.reviewed_at = timezone.now()
+        needs_analysis.save(
+            update_fields=(
+                "status",
+                "reviewed_at",
+            )
+        )
+
+        return redirect(
+            "profiles:teacher_student_needs_analysis",
+            course_id=course.id,
+            enrollment_id=enrollment.id,
+        )
+
+
+    # ---------------------------------------------------------
+    # STUDENT STATUS
+    #
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = (
+        enrollment.status == CourseEnrollment.STATUS_ACTIVE
+        and course.status == "active"
+    )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
+    context = {
+        "student": student,
+        "course": course,
+        "enrollment": enrollment,
+        "enrollments": enrollments,
+        "needs_analysis": needs_analysis,
+        "can_edit": False,
+        "can_review": (
+            needs_analysis.status ==
+            StudentNeedsAnalysis.Status.SUBMITTED
+        ),
+        "user_currently_enrolled": user_currently_enrolled,
+        "active_section": "needs_analysis",
+    }
+
+    return render(
+        request,
+        "profiles/teacher/student_needs_analysis.html",
         context,
     )
 
@@ -7974,6 +8218,112 @@ def company_admin_student_skills_overview(request, student_id):
         context,
     )
 
+
+@login_required
+def company_admin_student_needs_analysis(request, student_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user
+    )
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
+        return redirect("home")
+
+
+    # ---------------------------------------------------------
+    # STUDENT
+    #
+    # Restrict access to students belonging to the same company
+    # as the logged-in Company Admin.
+    # ---------------------------------------------------------
+    student = get_object_or_404(
+        User.objects.select_related("profile"),
+        id=student_id,
+        profile__company=profile.company,
+    )
+
+
+    # ---------------------------------------------------------
+    # AVAILABLE ENROLLMENTS
+    #
+    # Used by the shared student course selector.
+    # Only include courses belonging to this company.
+    # ---------------------------------------------------------
+    enrollments = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            course__company=profile.company,
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__teacher",
+        )
+        .order_by("course__name")
+    )
+
+    if not enrollments.exists():
+        return redirect("profiles:company_admin_employees")
+
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE / ENROLLMENT
+    # ---------------------------------------------------------
+    course_id = request.GET.get("course")
+
+    if course_id:
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=course_id,
+        )
+    else:
+        enrollment = enrollments.first()
+
+    course = enrollment.course
+
+
+    # ---------------------------------------------------------
+    # NEEDS ANALYSIS
+    #
+    # Company Admin has read-only access.
+    # ---------------------------------------------------------
+    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+        enrollment=enrollment,
+    )
+
+
+    # ---------------------------------------------------------
+    # STUDENT STATUS
+    #
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = (
+        enrollment.status == CourseEnrollment.STATUS_ACTIVE
+        and course.status == "active"
+    )
+
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
+    context = {
+        "student": student,
+        "course": course,
+        "enrollment": enrollment,
+        "enrollments": enrollments,
+        "needs_analysis": needs_analysis,
+        "can_edit": False,
+        "can_review": False,
+        "user_currently_enrolled": user_currently_enrolled,
+        "active_section": "needs_analysis",
+    }
+
+    return render(
+        request,
+        "profiles/company_admin/student_needs_analysis.html",
+        context,
+    )
 
 
 @login_required
