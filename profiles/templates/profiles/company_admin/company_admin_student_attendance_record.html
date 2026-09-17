@@ -235,9 +235,11 @@
 
                                                         <div class="absence-status">
                                                             {% if absence.status == "missed" %}
-                                                                <span class="status-dot missed"></span> {% trans 'Missed' %}
+                                                                <span class="status-dot missed"></span> {% trans 'Missed' context 'absence student record' %}
                                                             {% elif absence.status == "excused" %}
-                                                                <span class="status-dot excused"></span> {% trans 'Excused' %}
+                                                                <span class="status-dot excused"></span> {% trans 'Excused' context 'absence student record' %}
+                                                            {% else %}
+                                                                <span class="status-dot pending"></span> {{ absence.status|title }}
                                                             {% endif %}
                                                         </div>
                                                     </div>

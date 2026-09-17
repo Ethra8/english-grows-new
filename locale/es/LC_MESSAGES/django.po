@@ -1220,10 +1220,13 @@ msgstr "Ausencia"
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:219
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:78
 
-#| msgctxt "excused singular"
-#| msgid "Excused"
+msgctxt "absence student record"
+msgid "Missed"
+msgstr "Sin justificar"
+
+msgctxt "absence student record"
 msgid "Excused"
-msgstr "Justificante"
+msgstr "Justificada"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:230
 #: .\profiles\templates\profiles\student\my_attendance.html:228

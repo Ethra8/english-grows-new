@@ -735,7 +735,7 @@ However, if every assigned learner is `enrollment_paused` when a scheduled/resch
 The model therefore distinguishes:
 
 ```text
-attendance_records_submitted
+attendance_requirements_resolved
 → Does every Attendance row require no further teacher action?
 
 all_attendance_enrollment_paused
@@ -1743,7 +1743,7 @@ all assigned learners enrollment_paused
 → ClassSession pending_reschedule
 ```
 
-`ClassSession.attendance_records_submitted` answers:
+`ClassSession.attendance_requirements_resolved` answers:
 
 > Does every Attendance row now represent a state requiring no further teacher attendance action?
 
@@ -1900,7 +1900,7 @@ Attendance records submitted during a still-running lesson are also excluded fro
 
 This prevents future, paused, or still-running lesson obligations from distorting historical attendance statistics while still allowing teachers to submit attendance during the lesson.
 
-`CourseEnrollment.eligible_sessions` uses existing Attendance relationships as the source of truth for which lessons were actually assigned to that learner. This avoids reconstructing learner participation from mutable lesson dates.
+`CourseEnrollment.assigned_sessions` uses existing Attendance relationships as the source of truth for which lessons were actually assigned to that learner. This avoids reconstructing learner participation from mutable lesson dates.
 
 ---
 
@@ -2783,9 +2783,9 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Canonical Attendance statuses are `pending`, `attended`, `missed`, `excused`, and `enrollment_paused`.
 - `pending` means teacher attendance action is still required.
 - `enrollment_paused` is an operational non-obligation state, not an attendance outcome.
-- `attendance_records_submitted` treats `attended`, `missed`, `excused`, and `enrollment_paused` as states that require no further teacher attendance action.
+- `attendance_requirements_resolved` treats `attended`, `missed`, `excused`, and `enrollment_paused` as states that require no further teacher attendance action.
 - `all_attendance_enrollment_paused` separately identifies the no-learner-expected edge case.
-- `attendance_records_submitted` can be true before the lesson ends; `attendance_is_submitted` becomes true only when the parent ClassSession reaches `complete_attendance_submitted`.
+- `attendance_requirements_resolved` can be true before the lesson ends; `attendance_is_submitted` becomes true only when the parent ClassSession reaches `complete_attendance_submitted`.
 - `Attendance.save()` allows the parent ClassSession to synchronize its lifecycle after the learner row is saved.
 - Attendance-rate calculations use finalized `attended`, `missed`, and `excused` outcomes from parent sessions in `complete_attendance_submitted`.
 - `pending` and `enrollment_paused` are excluded from attendance percentage calculations.

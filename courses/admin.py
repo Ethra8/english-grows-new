@@ -459,8 +459,8 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         "target_level",
         "enrolled_at",
         "total_assigned_classes",
-        "classes_attended",
-        "classes_missed",
+        "attended_classes",
+        "missed_classes",
         "attendance_percentage",
     )
 
@@ -487,9 +487,9 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
     readonly_fields = (
         "enrolled_at",
         "total_assigned_classes",
-        "classes_attended",
-        "classes_missed",
-        "classes_excused",
+        "attended_classes",
+        "missed_classes",
+        "excused_classes",
         "total_absences",
         "attendance_percentage",
         "has_low_attendance_warning",

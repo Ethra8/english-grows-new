@@ -1,11 +1,11 @@
 def build_enrollment_attendance_summary(enrollment):
-    attendance_submitted_classes = enrollment.complete_attendance_submitted_classes
+    metrics = enrollment.attendance_metrics
 
     return {
-        "attended_count": enrollment.classes_attended,
-        "missed_count": enrollment.classes_missed,
-        "excused_count": enrollment.classes_excused,
-        "total_attendance_records": attendance_submitted_classes,
-        "attendance_submitted_classes": attendance_submitted_classes,
-        "attendance_percentage": enrollment.attendance_percentage,
+        "attended_count": metrics["attended_classes"],
+        "missed_count": metrics["missed_classes"],
+        "excused_count": metrics["excused_classes"],
+        "total_attendance_records": metrics["total_submitted_attendance_records"],
+        "attendance_submitted_classes": enrollment.complete_attendance_submitted_classes,
+        "attendance_percentage": metrics["attendance_percentage"],
     }

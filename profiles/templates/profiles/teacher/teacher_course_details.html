@@ -70,13 +70,13 @@
 
         <div class="course-meta-card metric-card meta-completion">
             <div class="metric-icon"
-                style="--percentage: {{ completion_percentage|default:0 }};">
+                style="--percentage: {{ delivery_percentage|default:0 }};">
                 <span class="progress-ring"></span>
                 <img src="{% static 'icons/overall_assessment_turquoise_icon.png' %}" alt="" width="34" aria-hidden="true" class="mb-1">
             </div>
             <div class="course-meta-text">
                 <strong>{% trans 'Progress' %}</strong>
-                <span>{{ completion_percentage }} % <small>{% trans 'completed' %}</small></span>
+                <span>{{ delivery_percentage }} % <small>{% trans 'completed' %}</small></span>
             </div>
         </div>
 
@@ -88,7 +88,7 @@
         {% if not course.programmes.all %}
             <p class="ml-2 mr-2 mt-4 mb-2 text-muted">{% trans 'No programme focus has been assigned to this course yet.' %}</p>
         {% else %}
-        <div class="programme-focus-grid programme-grid--{{ course.programmes.count }}">
+        <header class="programme-focus-grid programme-grid--{{ course.programmes.count }}">
             {% for programme in course.programmes.all %}
                 <div class="programme-focus-item">
                     {% if programme.icon %}
@@ -99,7 +99,7 @@
                     <span>{{ programme.name }}</span>
                 </div>
             {% endfor %}
-        </div>    
+        </header>    
         {% endif %}
     </div>
 
@@ -226,9 +226,9 @@
 
             <div class="course-ring-layout">
 
-                <div class="progress-ring" style="--percentage: {{ completion_percentage|default:0 }};">
+                <div class="progress-ring" style="--percentage: {{ delivery_percentage|default:0 }};">
                     <div class="progress-ring-inner">
-                        <strong>{{ completion_percentage|default:0 }}%</strong>
+                        <strong>{{ delivery_percentage|default:0 }}%</strong>
                         <span>{% trans 'delivered' context 'course details page' %}</span>
                     </div>
                 </div>
@@ -237,12 +237,12 @@
 
                     <div class="detail-row">
                         <strong>{% trans 'Hours delivered' context 'course details page' %}</strong>
-                        <span>{{ past_held_hours_display }} / {{ course.total_hours|clean_decimal }} h.</span>
+                        <span>{{ held_hours_display }} / {{ course.total_hours|clean_decimal }} h.</span>
                     </div>
 
                     <div class="detail-row">
                         <strong>{% trans 'Classes held' context 'course details page' %}</strong>
-                        <span>{{ past_held_classes|default:"0" }} / {{ course.number_of_classes }}</span>
+                        <span>{{ held_classes|default:"0" }} / {{ course.number_of_classes }}</span>
                     </div>
 
                 </div>

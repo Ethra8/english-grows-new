@@ -184,9 +184,9 @@
 
             <div class="course-ring-layout">
 
-                <div class="progress-ring" style="--percentage: {{ completion_percentage|default:0 }};">
+                <div class="progress-ring" style="--percentage: {{ delivery_percentage|default:0 }};">
                     <div class="progress-ring-inner">
-                        <strong>{{ completion_percentage|default:0 }}%</strong>
+                        <strong>{{ delivery_percentage|default:0 }}%</strong>
                         <span>{% trans 'delivered' context 'course details page' %}</span>
                     </div>
                 </div>

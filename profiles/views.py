@@ -289,7 +289,7 @@ def my_course(request):
     # DEFAULT COURSE DETAIL VALUES
     # ---------------------------------------------------------
     formatted_timetable = []
-    completion_percentage = 0
+    delivery_percentage = 0
     past_held_classes = 0
     past_held_minutes = 0
     past_held_hours_display = "0 min"
@@ -311,8 +311,8 @@ def my_course(request):
         # Course completion remains independent from
         # attendance-submission state.
         # -----------------------------------------------------
-        completion_percentage = (
-            course.completion_percentage
+        delivery_percentage = (
+            course.delivery_percentage
         )
 
         # -----------------------------------------------------
@@ -373,7 +373,7 @@ def my_course(request):
 
         # Course Details page
         "formatted_timetable": formatted_timetable,
-        "completion_percentage": completion_percentage,
+        "delivery_percentage": delivery_percentage,
         "past_held_classes": past_held_classes,
         "past_held_minutes": past_held_minutes,
         "past_held_hours_display": past_held_hours_display,
@@ -757,6 +757,8 @@ def my_learning_progress(request):
     student = request.user
     student_profile = student.profile
 
+    ClassSession.transition_past_sessions()
+
     user_currently_enrolled = CourseEnrollment.objects.filter(
         student=student,
         status="active",
@@ -766,6 +768,7 @@ def my_learning_progress(request):
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
     # Helper in profiles/utils/enrollments.py
+    #
     # Historical courses remain accessible.
     #
     # Order:
@@ -793,27 +796,16 @@ def my_learning_progress(request):
     )
 
     # ---------------------------------------------------------
-    # GET SELECTED COURSE FROM URL
-    #
-    # Example:
-    # /profiles/student/my_learning_progress/?course=4
+    # SELECTED COURSE
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-
-    # ---------------------------------------------------------
-    # COURSE SELECTED IN URL
-    # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
             enrollments,
             course_id=selected_course_id,
         )
 
-
-    # ---------------------------------------------------------
-    # NO COURSE SELECTED IN URL
-    # ---------------------------------------------------------
     else:
         # Because the queryset is already ordered by lifecycle
         # priority, this naturally prefers:
@@ -821,63 +813,86 @@ def my_learning_progress(request):
         # active -> confirmed -> paused -> completed -> cancelled
         enrollment = enrollments.first()
 
-        # If a default course exists, redirect to the canonical
-        # URL so the currently displayed course is explicit.
+        # Redirect to canonical URL so the selected course
+        # is always explicit.
         if enrollment:
             return redirect(
                 f"{request.path}?course={enrollment.course_id}"
             )
 
-
     # ---------------------------------------------------------
     # NO ENROLLMENTS
     # ---------------------------------------------------------
     if not enrollment:
+        context = {
+            "student": student,
+            "student_profile": student_profile,
+            "user_currently_enrolled": user_currently_enrolled,
+
+            "enrollments": enrollments,
+            "enrollment": None,
+            "course": None,
+
+            # Attendance
+            "attended_count": 0,
+            "missed_count": 0,
+            "excused_count": 0,
+            "total_attendance_records": 0,
+            "attendance_percentage": 0,
+            "recent_attendance": [],
+
+            # Attendance hours
+            "attended_minutes": 0,
+            "attended_hours": Decimal("0"),
+            "attended_hours_display": format_minutes_duration(0),
+            "submitted_minutes": 0,
+            "submitted_hours": Decimal("0"),
+            "submitted_hours_display": format_minutes_duration(0),
+
+            # Course-level delivery
+            "course_total_hours": Decimal("0"),
+            "course_total_hours_display": format_minutes_duration(0),
+            "held_course_minutes": 0,
+            "held_course_hours_numeric": Decimal("0"),
+            "held_course_hours_display": format_minutes_duration(0),
+
+            # Learner general progress
+            "total_classes": 0,
+            "held_classes": 0,
+            "attendance_pending_classes": 0,
+            "attendance_submitted_classes": 0,
+            "remaining_classes": 0,
+            "delivery_percentage": 0,
+
+            # Assigned delivery hours
+            "total_hours": Decimal("0"),
+            "total_hours_display": format_hours_duration(Decimal("0")),
+            "held_hours": Decimal("0"),
+            "held_hours_display": format_hours_duration(Decimal("0")),
+            "remaining_hours": Decimal("0"),
+            "remaining_hours_display": format_hours_duration(Decimal("0")),
+
+            # Temporary class aliases
+            "completed_classes": 0,
+
+            # Skills
+            "overall_skill_chart_data": {
+                "labels": [],
+                "datasets": [],
+            },
+            "overall_average_score": None,
+        }
+
         return render(
             request,
             "profiles/student/my_learning_progress.html",
-            {
-                "student": student,
-                "student_profile": student_profile,
-
-                "user_currently_enrolled": user_currently_enrolled,
-                # Full queryset for selector
-                "enrollments": enrollments,
-
-                # No selected enrollment/course
-                "enrollment": None,
-                "course": None,
-
-                # Skills
-                "overall_skill_chart_data": {
-                    "labels": [],
-                    "datasets": [],
-                },
-                "overall_average_score": None,
-
-                # Attendance
-                "attended_count": 0,
-                "missed_count": 0,
-                "excused_count": 0,
-                "total_attendance_records": 0,
-                "attendance_percentage": 0,
-                "recent_attendance": [],
-                "delivery_percentage": 0,
-
-                # Progress
-                "completed_classes": 0,
-                "remaining_classes": 0,
-                "total_classes": 0,
-                "completion_percentage": 0,
-            },
+            context,
         )
-
 
     # ---------------------------------------------------------
     # SELECTED / DEFAULT COURSE
     # ---------------------------------------------------------
     course = enrollment.course
-
 
     # ---------------------------------------------------------
     # SKILLS PROGRESS GRAPH
@@ -891,32 +906,11 @@ def my_learning_progress(request):
         )
     )
 
-
     # ---------------------------------------------------------
     # CURRENT OVERALL SKILLS AVERAGE
     #
-    # Calculate the learner's CURRENT overall skill score
-    # for the selected course.
-    #
-    # Each StudentSkillAssessment already exposes:
-    #
-    #     assessment.average_score
-    #
-    # on a 0-10 scale.
-    #
-    # The overall score is therefore:
-    #
-    #     Speaking
-    #   + Reading
-    #   + Writing
-    #   + Listening
-    #   ----------------
-    #          4
-    #
-    # IMPORTANT:
-    # Only display an overall score when all four skills have
-    # a valid current score. This avoids presenting a misleading
-    # "overall" average based on only one, two or three skills.
+    # Only display an overall score when every expected skill
+    # has a valid current score.
     # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
@@ -924,55 +918,41 @@ def my_learning_progress(request):
             student=student,
             course=course,
         )
-        .prefetch_related(
-            "subskill_assessments",
-        )
+        .prefetch_related("subskill_assessments")
     )
 
-
-    current_skill_scores = []
-
-    for assessment in skill_assessments:
-
-        score = assessment.average_score
-
-        if score is not None:
-            current_skill_scores.append(
-                score
-            )
-
+    current_skill_scores = [
+        assessment.average_score
+        for assessment in skill_assessments
+        if assessment.average_score is not None
+    ]
 
     expected_skill_count = len(
         StudentSkillAssessment.SKILL_AREA_CHOICES
     )
 
-
-    if (
-        len(current_skill_scores)
-        == expected_skill_count
-    ):
-        overall_average_score = round(
+    overall_average_score = (
+        round(
             sum(current_skill_scores)
             / expected_skill_count,
             1,
         )
-
-    else:
-        overall_average_score = None
-
+        if len(current_skill_scores) == expected_skill_count
+        else None
+    )
 
     # ---------------------------------------------------------
-    # ATTENDANCE
+    # FINAL ATTENDANCE
     #
-    # Historical course status does not matter.
-    # We are explicitly retrieving records for the selected
-    # student + selected course.
+    # Attendance metrics use ONLY ClassSessions whose
+    # attendance has been fully submitted.
     # ---------------------------------------------------------
     attendances = (
         Attendance.objects
         .filter(
             student=student,
             class_session__course=course,
+            class_session__status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
             status__in=[
                 Attendance.STATUS_ATTENDED,
                 Attendance.STATUS_MISSED,
@@ -983,148 +963,206 @@ def my_learning_progress(request):
             "class_session",
             "class_session__course",
         )
-        .order_by(
-            "-class_session__start_time"
-        )
+        .order_by("-class_session__start_time")
     )
 
+    total_attendance_records = attendances.count()
+    attended_count = attendances.filter(
+        status=Attendance.STATUS_ATTENDED
+    ).count()
+    missed_count = attendances.filter(
+        status=Attendance.STATUS_MISSED
+    ).count()
+    excused_count = attendances.filter(
+        status=Attendance.STATUS_EXCUSED
+    ).count()
+
+    attendance_percentage = enrollment.attendance_percentage
+
     # ---------------------------------------------------------
-    # ATTENDANCE COUNTS
-    # All counts extracted from helper build_attendance_summary
-    # Helper in pofiles/utils/attendance.py
+    # ATTENDANCE HOURS
+    #
+    # submitted_hours:
+    # Duration of all assigned sessions whose attendance has
+    # been fully submitted.
+    #
+    # attended_hours:
+    # Duration of submitted sessions actually attended by
+    # this learner.
     # ---------------------------------------------------------
-    attendance_summary = build_enrollment_attendance_summary(
-        enrollment
+    submitted_sessions = [
+        attendance.class_session
+        for attendance in attendances
+    ]
+
+    submitted_minutes = get_session_minutes(
+        submitted_sessions
     )
-    # ---------------------------------------------------------
-    # ATTENDED HOURS
-    # Calculate the actual duration of every class the learner
-    # attended. This correctly supports sessions with different
-    # durations, including a shorter final class.
-    # ---------------------------------------------------------
-    attended_sessions = (
+
+    submitted_hours = (
+        Decimal(submitted_minutes)
+        / Decimal("60")
+    )
+
+    submitted_hours_display = format_minutes_duration(
+        submitted_minutes
+    )
+
+    attended_sessions = [
         attendance.class_session
         for attendance in attendances
         if attendance.status == Attendance.STATUS_ATTENDED
-    )
+    ]
 
     attended_minutes = get_session_minutes(
         attended_sessions
     )
 
-    # Decimal version, useful if you ever need calculations.
-    attended_hours = attended_minutes / 60
+    attended_hours = (
+        Decimal(attended_minutes)
+        / Decimal("60")
+    )
 
-    # Human-friendly display.
     attended_hours_display = format_minutes_duration(
         attended_minutes
     )
 
     # ---------------------------------------------------------
-    # LEARNER General Progress
+    # LEARNER GENERAL PROGRESS
     #
     # Held = attendance pending + attendance submitted.
     # ---------------------------------------------------------
     total_classes = enrollment.total_assigned_classes
     held_classes = enrollment.total_held_classes
-    attendance_pending_classes = enrollment.held_attendance_pending_classes
-    attendance_submitted_classes = enrollment.complete_attendance_submitted_classes
+    attendance_pending_classes = (
+        enrollment.held_attendance_pending_classes
+    )
+    attendance_submitted_classes = (
+        enrollment.complete_attendance_submitted_classes
+    )
     remaining_classes = enrollment.remaining_classes
 
     delivery_percentage = (
-        round(held_classes / total_classes * 100)
+        round(
+            held_classes
+            / total_classes
+            * 100
+        )
         if total_classes else 0
     )
 
     # ---------------------------------------------------------
-    # COMPLETED COURSE HOURS
+    # COURSE-LEVEL HOURS DELIVERED
     #
-    # Total duration of all COMPLETED class sessions for the
-    # selected course, regardless of this learner's attendance.
+    # Delivery includes BOTH held lifecycle states:
+    #
+    # - held, attendance pending
+    # - held, attendance submitted
     # ---------------------------------------------------------
-    completed_course_sessions = (
-        course.class_sessions
-        .filter(
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+    held_course_sessions = course.class_sessions.filter(
+        status__in=[
+            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        ]
+    )
+
+    held_course_minutes = get_session_minutes(
+        held_course_sessions
+    )
+
+    held_course_hours_numeric = (
+        Decimal(held_course_minutes)
+        / Decimal("60")
+    )
+
+    held_course_hours_display = format_minutes_duration(
+        held_course_minutes
+    )
+
+    # ---------------------------------------------------------
+    # ORIGINAL COURSE HOURS
+    # ---------------------------------------------------------
+    course_total_hours = course.total_hours or 0
+    course_total_minutes = round(
+        float(course_total_hours)
+        * 60
+    )
+
+    course_total_hours_display = format_minutes_duration(
+        course_total_minutes
+    )
+
+    # ---------------------------------------------------------
+    # TOTAL ASSIGNED HOURS
+    #
+    # Based on the sessions actually assigned to this learner,
+    # rather than the generic course total.
+    # ---------------------------------------------------------
+    assigned_session_list = list(
+        enrollment.assigned_sessions
+    )
+
+    assigned_minutes = get_session_minutes(
+        assigned_session_list
+    )
+
+    total_hours = (
+        Decimal(assigned_minutes)
+        / Decimal("60")
+    )
+
+    # ---------------------------------------------------------
+    # ASSIGNED HOURS DELIVERED
+    #
+    # Includes BOTH held lifecycle states.
+    # ---------------------------------------------------------
+    held_assigned_sessions = list(
+        enrollment.assigned_sessions.filter(
+            status__in=[
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ]
         )
     )
 
-    completed_minutes = get_session_minutes(
-        completed_course_sessions
+    held_assigned_minutes = get_session_minutes(
+        held_assigned_sessions
     )
 
-    # Numeric version if needed elsewhere.
-    completed_hours = completed_minutes / 60
-
-    # Human-friendly display.
-    completed_hours_display = format_minutes_duration(
-        completed_minutes
+    held_hours = (
+        Decimal(held_assigned_minutes)
+        / Decimal("60")
     )
 
-
-    # ---------------------------------------------------------
-    # TOTAL COURSE HOURS
-    # ---------------------------------------------------------
-    total_hours = course.total_hours or 0
-
-    total_minutes = round(
-        float(total_hours) * 60
+    remaining_hours = max(
+        total_hours - held_hours,
+        Decimal("0"),
     )
 
-    total_hours_display = format_minutes_duration(
-        total_minutes
+    total_hours_display = format_hours_duration(
+        total_hours
     )
 
-
-    # ---------------------------------------------------------
-    # COURSE PROGRESS
-    #
-    # Use the selected enrollment rather than generic course
-    # totals, so progress reflects the sessions actually
-    # assigned to this learner.
-    # ---------------------------------------------------------
-    completed_classes = (
-        enrollment.total_completed_classes
+    held_hours_display = format_hours_duration(
+        held_hours
     )
 
-    total_classes = (
-        enrollment.total_assigned_classes
+    remaining_hours_display = format_hours_duration(
+        remaining_hours
     )
-
-    remaining_classes = (
-        enrollment.upcoming_classes
-    )
-
-
-    # ---------------------------------------------------------
-    # COMPLETION %
-    # ---------------------------------------------------------
-    completion_percentage = (
-        round(
-            (completed_classes / total_classes) * 100
-        )
-        if total_classes > 0
-        else 0
-    )
-
 
     # ---------------------------------------------------------
     # RECENT ATTENDANCE
     # ---------------------------------------------------------
-    recent_attendance = (
-        attendances
-        .order_by(
-            "-class_session__start_time"
-        )[:5]
-    )
-
+    recent_attendance = attendances[:5]
 
     # ---------------------------------------------------------
     # COURSE TIMETABLE
-    # Helper def in utils/courses.py
+    # Helper in profiles/utils/courses.py
     # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
-
+    formatted_timetable = build_formatted_timetable(
+        course
+    )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -1132,12 +1170,12 @@ def my_learning_progress(request):
     context = {
         "student": student,
         "student_profile": student_profile,
-
         "user_currently_enrolled": user_currently_enrolled,
-        # ALL enrollments -> selector
+
+        # Course selector
         "enrollments": enrollments,
 
-        # ONE selected enrollment/course
+        # Selected enrollment / course
         "enrollment": enrollment,
         "course": course,
 
@@ -1145,30 +1183,47 @@ def my_learning_progress(request):
         "formatted_timetable": formatted_timetable,
 
         # Attendance
-        # All vars (**) of attendance_summary extracted
-        # from helper build_attendance_summary
-        # in profiles/utils/attendance.py
-        **attendance_summary,
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
         "recent_attendance": recent_attendance,
 
         # Attendance hours
         "attended_minutes": attended_minutes,
         "attended_hours": attended_hours,
         "attended_hours_display": attended_hours_display,
+        "submitted_minutes": submitted_minutes,
+        "submitted_hours": submitted_hours,
+        "submitted_hours_display": submitted_hours_display,
+
+        # Course-level delivery
+        "course_total_hours": course_total_hours,
+        "course_total_hours_display": course_total_hours_display,
+        "held_course_minutes": held_course_minutes,
+        "held_course_hours_numeric": held_course_hours_numeric,
+        "held_course_hours_display": held_course_hours_display,
+
+        # Learner general progress
+        "total_classes": total_classes,
+        "held_classes": held_classes,
+        "attendance_pending_classes": attendance_pending_classes,
+        "attendance_submitted_classes": attendance_submitted_classes,
+        "remaining_classes": remaining_classes,
+        "delivery_percentage": delivery_percentage,
+
+        # Assigned delivery hours
         "total_hours": total_hours,
         "total_hours_display": total_hours_display,
+        "held_hours": held_hours,
+        "held_hours_display": held_hours_display,
+        "remaining_hours": remaining_hours,
+        "remaining_hours_display": remaining_hours_display,
 
-        # Completed course hours
-        "completed_minutes": completed_minutes,
-        "completed_hours": completed_hours,
-        "completed_hours_display": completed_hours_display,
+        # Temporary class aliases
+        "completed_classes": held_classes,
 
-        # Progress
-        "completed_classes": completed_classes,
-        "remaining_classes": remaining_classes,
-        "total_classes": total_classes,
-        "completion_percentage": completion_percentage,
-        "delivery_percentage": delivery_percentage,
         # Skills
         "overall_skill_chart_data": overall_skill_chart_data,
         "overall_average_score": overall_average_score,
@@ -2364,7 +2419,6 @@ def teacher_courses(request):
 
 @login_required
 def teacher_course_details(request, course_id):
-
     profile = get_object_or_404(
         UserProfile,
         user=request.user,
@@ -2372,7 +2426,6 @@ def teacher_course_details(request, course_id):
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
-
 
     # ---------------------------------------------------------
     # AVAILABLE COURSES FOR SELECTOR
@@ -2394,11 +2447,11 @@ def teacher_course_details(request, course_id):
         )
         .annotate(
             status_order=Case(
-                When(status="active", then=Value(1)),
-                When(status="confirmed", then=Value(2)),
-                When(status="paused", then=Value(3)),
-                When(status="completed", then=Value(4)),
-                When(status="cancelled", then=Value(5)),
+                When(status=Course.STATUS_ACTIVE, then=Value(1)),
+                When(status=Course.STATUS_CONFIRMED, then=Value(2)),
+                When(status=Course.STATUS_PAUSED, then=Value(3)),
+                When(status=Course.STATUS_COMPLETED, then=Value(4)),
+                When(status=Course.STATUS_CANCELLED, then=Value(5)),
                 default=Value(99),
                 output_field=IntegerField(),
             )
@@ -2417,6 +2470,7 @@ def teacher_course_details(request, course_id):
 
     # ---------------------------------------------------------
     # CURRENT COURSE
+    #
     # Course remains accessible regardless of status,
     # provided it belongs to this teacher.
     # ---------------------------------------------------------
@@ -2426,7 +2480,22 @@ def teacher_course_details(request, course_id):
     )
 
     # ---------------------------------------------------------
+    # SESSION LIFECYCLE
+    #
+    # Synchronize only the selected Course.
+    #
+    # The final ClassSession transition may also complete the
+    # Course and its active enrollments, so refresh afterwards.
+    # ---------------------------------------------------------
+    ClassSession.transition_past_sessions(
+        course=course
+    )
+
+    course.refresh_from_db()
+
+    # ---------------------------------------------------------
     # ALL ENROLLMENTS
+    #
     # Keep historical enrollment records visible regardless
     # of enrollment status.
     #
@@ -2447,11 +2516,26 @@ def teacher_course_details(request, course_id):
         )
         .annotate(
             status_order=Case(
-                When(status="active", then=Value(1)),
-                When(status="confirmed", then=Value(2)),
-                When(status="paused", then=Value(3)),
-                When(status="completed", then=Value(4)),
-                When(status="cancelled", then=Value(5)),
+                When(
+                    status=CourseEnrollment.STATUS_ACTIVE,
+                    then=Value(1),
+                ),
+                When(
+                    status=CourseEnrollment.STATUS_CONFIRMED,
+                    then=Value(2),
+                ),
+                When(
+                    status=CourseEnrollment.STATUS_PAUSED,
+                    then=Value(3),
+                ),
+                When(
+                    status=CourseEnrollment.STATUS_COMPLETED,
+                    then=Value(4),
+                ),
+                When(
+                    status=CourseEnrollment.STATUS_CANCELLED,
+                    then=Value(5),
+                ),
                 default=Value(99),
                 output_field=IntegerField(),
             )
@@ -2463,6 +2547,7 @@ def teacher_course_details(request, course_id):
             "student__username",
         )
     )
+
     # ---------------------------------------------------------
     # CLASS SESSIONS
     # ---------------------------------------------------------
@@ -2472,87 +2557,76 @@ def teacher_course_details(request, course_id):
         .order_by("start_time")
     )
 
-
     # ---------------------------------------------------------
-    # COURSE PROGRESS
+    # COURSE DELIVERY
+    #
+    # Course owns all whole-course lifecycle calculations.
+    #
+    # Held means explicitly:
+    # - held_attendance_pending
+    # - complete_attendance_submitted
+    #
+    # It does NOT simply mean end_time has passed.
     # ---------------------------------------------------------
     total_classes = course.total_sessions
-    completed_classes = course.completed_sessions
+    held_classes = course.total_held_sessions
+    attendance_pending_classes = (
+        course.held_attendance_pending_sessions
+    )
+    attendance_submitted_classes = (
+        course.complete_attendance_submitted_sessions
+    )
     remaining_classes = course.remaining_sessions
-    completion_percentage = course.completion_percentage
-
+    delivery_percentage = course.delivery_percentage
 
     # ---------------------------------------------------------
-    # HELD CLASSES
+    # COURSE DELIVERY HOURS
     #
-    # Chronological definition:
-    #
-    # A class has been held when its end_time is in the past.
-    #
-    # Pending-reschedule lessons are excluded because they have
-    # not genuinely taken place at their currently stored slot.
+    # Course owns delivered duration calculations.
     # ---------------------------------------------------------
-    now = timezone.now()
-
-    held_classes = (
-        course.class_sessions
-        .filter(
-            end_time__lt=now,
-        )
-        .exclude(
-            status=ClassSession.STATUS_PENDING_RESCHEDULE,
-        )
+    held_minutes = course.held_minutes
+    held_hours = course.held_hours
+    held_hours_display = format_minutes_duration(
+        held_minutes
     )
-
-    past_held_classes = held_classes.count()
-
-
-    # ---------------------------------------------------------
-    # HOURS DELIVERED
-    # ---------------------------------------------------------
-    held_classes = course.class_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-        ]
-    )
-
-    past_held_minutes = get_session_minutes(held_classes)
-    past_held_hours = Decimal(past_held_minutes) / Decimal("60")
-    past_held_hours_display = format_minutes_duration(past_held_minutes)
 
     # ---------------------------------------------------------
     # AVERAGE COURSE ATTENDANCE
+    #
+    # Each CourseEnrollment owns its own attendance population
+    # and attendance percentage.
+    #
+    # The average across learners is page-level aggregation, so
+    # it remains appropriately in the view.
     # ---------------------------------------------------------
     attendance_percentages = []
 
     for enrollment in enrollments:
-        total_completed = (
-            enrollment.total_completed_classes
-        )
+        attendance_metrics = enrollment.attendance_metrics
 
-        if total_completed > 0:
+        if (
+            attendance_metrics[
+                "total_submitted_attendance_records"
+            ] > 0
+        ):
             attendance_percentages.append(
-                (
-                    enrollment.classes_attended
-                    / total_completed
-                ) * 100
+                attendance_metrics["attendance_percentage"]
             )
 
-    if attendance_percentages:
-        average_attendance = round(
+    average_attendance = (
+        round(
             sum(attendance_percentages)
             / len(attendance_percentages)
         )
-    else:
-        average_attendance = 0
-
+        if attendance_percentages else 0
+    )
 
     # ---------------------------------------------------------
     # COURSE TIMETABLE
     # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
-
+    formatted_timetable = build_formatted_timetable(
+        course
+    )
 
     # ---------------------------------------------------------
     # GROUP EMAIL LIST
@@ -2567,14 +2641,13 @@ def teacher_course_details(request, course_id):
         student_emails
     )
 
-
-
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "profile": profile,
-        # component course details nav
+
+        # Component course details nav
         "active_section": "overview",
 
         # Course selector
@@ -2587,17 +2660,19 @@ def teacher_course_details(request, course_id):
         "enrollments": enrollments,
         "sessions": sessions,
 
-        # Progress
+        # Course delivery
         "total_classes": total_classes,
-        "completed_classes": completed_classes,
+        "held_classes": held_classes,
+        "attendance_pending_classes": attendance_pending_classes,
+        "attendance_submitted_classes": attendance_submitted_classes,
         "remaining_classes": remaining_classes,
-        "completion_percentage": completion_percentage,
+        "delivery_percentage": delivery_percentage,
 
-        # Chronological progress
-        "past_held_classes": held_classes.count(),
-        "past_held_minutes": past_held_minutes,
-        "past_held_hours": past_held_hours,
-        "past_held_hours_display": past_held_hours_display,
+        # Course delivery hours
+        "held_minutes": held_minutes,
+        "held_hours": held_hours,
+        "held_hours_display": held_hours_display,
+
         # Attendance
         "average_attendance": average_attendance,
 
@@ -2606,6 +2681,13 @@ def teacher_course_details(request, course_id):
 
         # Group email
         "bcc_student_emails": bcc_student_emails,
+
+        # Temporary compatibility aliases
+        "completed_classes": attendance_submitted_classes,
+        "past_held_classes": held_classes,
+        "past_held_minutes": held_minutes,
+        "past_held_hours": held_hours,
+        "past_held_hours_display": held_hours_display,
     }
 
     return render(
@@ -2633,80 +2715,103 @@ def teacher_course_attendance(request, course_id):
     )
 
     # ---------------------------------------------------------
+    # SESSION LIFECYCLE
+    #
+    # Synchronize only the selected Course.
+    #
+    # The final ClassSession transition may also complete the
+    # Course and its active enrollments, so refresh afterwards.
+    # ---------------------------------------------------------
+    ClassSession.transition_past_sessions(course=course)
+    course.refresh_from_db()
+
+    # ---------------------------------------------------------
     # AVAILABLE COURSES
     #
     # Used by the shared course selector.
+    #
+    # Keep selector ordering consistent with the established
+    # Course lifecycle order:
+    # active -> confirmed -> paused -> completed -> cancelled.
     # ---------------------------------------------------------
     available_courses = (
         Course.objects
         .filter(teacher=request.user)
+        .annotate(
+            status_order=Case(
+                When(status=Course.STATUS_ACTIVE, then=Value(1)),
+                When(status=Course.STATUS_CONFIRMED, then=Value(2)),
+                When(status=Course.STATUS_PAUSED, then=Value(3)),
+                When(status=Course.STATUS_COMPLETED, then=Value(4)),
+                When(status=Course.STATUS_CANCELLED, then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
         .select_related(
             "course_type",
             "company",
         )
-        .order_by("name")
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
 
     # ---------------------------------------------------------
-    # HELD CLASS COUNTS
+    # COURSE ATTENDANCE LIFECYCLE TOTALS
     #
-    # held_classes:
-    # Class has been held, attendance still pending.
-    #
-    # attendance_submitted_classes:
-    # Class has been held and attendance submitted.
-    #
-    # total_classes_held:
-    # Both states combined.
+    # Course owns whole-course delivery/session calculations.
     # ---------------------------------------------------------
-    held_classes = course.class_sessions.filter(
-        status=ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-    ).count()
-
-    attendance_submitted_classes = course.class_sessions.filter(
-        status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-    ).count()
-
-    total_classes_held = (
-        held_classes
-        + attendance_submitted_classes
+    held_classes = course.held_attendance_pending_sessions
+    attendance_submitted_classes = (
+        course.complete_attendance_submitted_sessions
     )
+    total_classes_held = course.total_held_sessions
 
     # ---------------------------------------------------------
-    # SUBMITTED ATTENDANCE RECORDS
+    # SUBMITTED ATTENDANCE SESSIONS
     #
-    # Only genuinely submitted attendance belongs in the
-    # attendance-record history list.
+    # Only ClassSessions whose attendance workflow is complete
+    # belong in the submitted-attendance history.
+    #
+    # Session-level attendance counts remain query annotations
+    # because ClassSession does not currently own group-level
+    # attendance metrics.
     # ---------------------------------------------------------
     submitted_class_sessions = (
         course.class_sessions
         .filter(
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
         )
         .annotate(
             attended_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="attended"),
+                filter=Q(
+                    attendance_records__status=Attendance.STATUS_ATTENDED
+                ),
                 distinct=True,
             ),
             missed_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="missed"),
+                filter=Q(
+                    attendance_records__status=Attendance.STATUS_MISSED
+                ),
                 distinct=True,
             ),
             excused_count=Count(
                 "attendance_records",
-                filter=Q(attendance_records__status="excused"),
+                filter=Q(
+                    attendance_records__status=Attendance.STATUS_EXCUSED
+                ),
                 distinct=True,
             ),
             registered_count=Count(
                 "attendance_records",
                 filter=Q(
-                    attendance_records__status__in=[
-                        "attended",
-                        "missed",
-                        "excused",
-                    ],
+                    attendance_records__status__in=(
+                        Attendance.FINAL_OUTCOME_STATUSES
+                    )
                 ),
                 distinct=True,
             ),
@@ -2719,13 +2824,10 @@ def teacher_course_attendance(request, course_id):
     )
 
     # ---------------------------------------------------------
-    # SESSION ATTENDANCE DATA
+    # SESSION ATTENDANCE DISPLAY DATA
     #
-    # Adds:
-    # - attendance_percentage
-    # - employee_search_text
-    #
-    # Also builds the overall course attendance rate.
+    # These values package each submitted session for this page.
+    # They are not canonical Course calculations.
     # ---------------------------------------------------------
     total_attended = 0
     total_registered = 0
@@ -2737,31 +2839,29 @@ def teacher_course_attendance(request, course_id):
                 / session.registered_count
                 * 100
             )
-            if session.registered_count
-            else 0
+            if session.registered_count else 0
         )
 
         total_attended += session.attended_count
         total_registered += session.registered_count
 
-        search_parts = []
-
-        for attendance in session.attendance_records.all():
-            student = attendance.student
-
-            search_parts.extend([
-                student.first_name or "",
-                student.last_name or "",
-                student.email or "",
-                student.username or "",
-            ])
-
         session.employee_search_text = " ".join(
-            part for part in search_parts if part
+            part
+            for attendance in session.attendance_records.all()
+            for part in (
+                attendance.student.first_name or "",
+                attendance.student.last_name or "",
+                attendance.student.email or "",
+                attendance.student.username or "",
+            )
+            if part
         ).lower()
 
     # ---------------------------------------------------------
-    # OVERALL ATTENDANCE RATE
+    # OVERALL COURSE ATTENDANCE RATE
+    #
+    # This is an aggregate over the submitted Attendance records
+    # displayed on this page, not a Course lifecycle calculation.
     # ---------------------------------------------------------
     average_attendance = (
         round(
@@ -2769,8 +2869,7 @@ def teacher_course_attendance(request, course_id):
             / total_registered
             * 100
         )
-        if total_registered
-        else 0
+        if total_registered else 0
     )
 
     # ---------------------------------------------------------
@@ -2780,11 +2879,14 @@ def teacher_course_attendance(request, course_id):
         "profile": profile,
         "course": course,
         "available_courses": available_courses,
+
         "held_classes": held_classes,
         "attendance_submitted_classes": attendance_submitted_classes,
         "total_classes_held": total_classes_held,
+
         "average_attendance": average_attendance,
         "submitted_class_sessions": submitted_class_sessions,
+
         "active_section": "attendance",
     }
 
@@ -2917,18 +3019,18 @@ def teacher_course_students_list(request, course_id):
     now = timezone.now()
 
     total_classes = course.total_sessions
-    completed_classes = course.completed_sessions
+    completed_classes = course.complete_attendance_submitted_sessions
     remaining_classes = course.remaining_sessions
-    completion_percentage = course.completion_percentage
+    delivery_percentage = course.delivery_percentage
 
     attendance_percentages = []
 
     for enrollment in enrollments:
-        total_completed = enrollment.total_completed_classes
+        total_completed = enrollment.complete_attendance_submitted_classes
 
         if total_completed > 0:
             attendance_percentages.append(
-                (enrollment.classes_attended / total_completed) * 100
+                (enrollment.attended_classes / total_completed) * 100
             )
 
     average_attendance = 0
@@ -2967,7 +3069,7 @@ def teacher_course_students_list(request, course_id):
         "total_classes": total_classes,
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
-        "completion_percentage": completion_percentage,
+        "delivery_percentage": delivery_percentage,
         "average_attendance": average_attendance,
 
         "formatted_timetable": formatted_timetable,
@@ -3273,7 +3375,6 @@ def build_skill_note_display(skill_assessment):
 
 @login_required
 def teacher_student_detail(request, course_id, enrollment_id):
-
     # ---------------------------------------------------------
     # ORIGINAL COURSE / ENROLLMENT
     #
@@ -3288,8 +3389,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
     )
 
     original_enrollment = get_object_or_404(
-        CourseEnrollment.objects
-        .select_related(
+        CourseEnrollment.objects.select_related(
             "student",
             "student__profile",
             "course",
@@ -3301,36 +3401,17 @@ def teacher_student_detail(request, course_id, enrollment_id):
         course=original_course,
     )
 
-
     # ---------------------------------------------------------
     # STUDENT
     # ---------------------------------------------------------
     student = original_enrollment.student
     student_profile = student.profile
-
-    # Explicit learner account status.
-    #
-    # This is User.is_active and is completely independent
-    # from CourseEnrollment.status and Course.status.
     student_is_active = student.is_active
-
-    user_currently_enrolled = CourseEnrollment.objects.filter(
-        student=student,
-        status="active",
-        course__status="active",
-    ).exists()
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
-    # HElper in profles/utils/enrollments.py
-    # Historical courses remain accessible.
     #
-    # Order:
-    # 1. Active
-    # 2. Confirmed
-    # 3. Paused
-    # 4. Completed
-    # 5. Cancelled
+    # Historical courses remain accessible.
     # ---------------------------------------------------------
     enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
@@ -3347,172 +3428,133 @@ def teacher_student_detail(request, course_id, enrollment_id):
     )
 
     # ---------------------------------------------------------
-    # SELECTED COURSE FROM QUERY STRING
-    #
-    # Example:
-    #
-    # ?course=8
+    # SELECTED COURSE
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-
     if selected_course_id:
-
         enrollment = get_object_or_404(
             enrollments,
             course_id=selected_course_id,
         )
-
     else:
-
         enrollment = original_enrollment
 
-
-    # ---------------------------------------------------------
-    # CURRENT COURSE
-    # ---------------------------------------------------------
     course = enrollment.course
 
+    # ---------------------------------------------------------
+    # SESSION LIFECYCLE
+    #
+    # Synchronize only the selected Course.
+    #
+    # The final ClassSession transition may also complete the
+    # Course and its active enrollments, so refresh both objects
+    # before reading their calculated properties.
+    # ---------------------------------------------------------
+    ClassSession.transition_past_sessions(course=course)
+
+    course.refresh_from_db()
+    enrollment.refresh_from_db()
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status=Course.STATUS_ACTIVE,
+    ).exists()
 
     # ---------------------------------------------------------
-    # ATTENDANCE
+    # FINAL ATTENDANCE
+    #
+    # CourseEnrollment owns the canonical submitted-attendance
+    # population and all attendance calculations.
+    #
+    # Ordering/select_related here is presentation/query
+    # preparation only.
     # ---------------------------------------------------------
     attendances = (
-        Attendance.objects
-        .filter(
-            student=student,
-            class_session__course=course,
-            status__in=[
-                Attendance.STATUS_ATTENDED,
-                Attendance.STATUS_MISSED,
-                Attendance.STATUS_EXCUSED,
-            ],
-        )
-        .select_related(
-            "class_session"
-        )
-        .order_by(
-            "-class_session__start_time"
-        )
+        enrollment.submitted_attendances
+        .select_related("class_session")
+        .order_by("-class_session__start_time")
     )
 
+    attendance_metrics = enrollment.attendance_metrics
+
+    total_attendance_records = attendance_metrics[
+        "total_submitted_attendance_records"
+    ]
+    attended_count = attendance_metrics["attended_classes"]
+    missed_count = attendance_metrics["missed_classes"]
+    excused_count = attendance_metrics["excused_classes"]
+    attendance_percentage = attendance_metrics["attendance_percentage"]
 
     # ---------------------------------------------------------
-    # ATTENDANCE COUNTS
-    # Helper extracts all data and vars in dictionary
-    # in profiles/utils/attendance.py
-    # ---------------------------------------------------------
-    attendance_summary = build_enrollment_attendance_summary(
-        enrollment
-    )
-    # ---------------------------------------------------------
-    # COURSE PROGRESS
-    # ---------------------------------------------------------
-    completed_classes = (
-        enrollment.total_completed_classes
-    )
-
-    total_classes = (
-        enrollment.total_assigned_classes
-    )
-
-    remaining_classes = (
-        enrollment.upcoming_classes
-    )
-
-
-    # ---------------------------------------------------------
-    # COMPLETION %
-    # ---------------------------------------------------------
-    completion_percentage = (
-        round(
-            (
-                completed_classes
-                / total_classes
-            )
-            * 100
-        )
-        if total_classes > 0
-        else 0
-    )
-
-
-    # ---------------------------------------------------------
-    # ATTENDED HOURS
+    # ATTENDANCE HOURS
     #
-    # Actual duration of classes the learner attended.
+    # CourseEnrollment owns submitted and attended durations.
     # ---------------------------------------------------------
-    attended_sessions = (
-        attendance.class_session
-        for attendance in attendances
-        if attendance.status == Attendance.STATUS_ATTENDED
+    submitted_minutes = enrollment.submitted_minutes
+    submitted_hours = enrollment.submitted_hours
+    submitted_hours_display = format_minutes_duration(
+        submitted_minutes
     )
 
-    attended_minutes = get_session_minutes(
-        attended_sessions
-    )
-
-    attended_hours = (
-        attended_minutes / 60
-    )
-
+    attended_minutes = enrollment.attended_minutes
+    attended_hours = enrollment.attended_hours
     attended_hours_display = format_minutes_duration(
         attended_minutes
     )
 
-
     # ---------------------------------------------------------
-    # COMPLETED COURSE HOURS
+    # LEARNER GENERAL PROGRESS
     #
-    # Total duration of all completed sessions for the course,
-    # regardless of attendance status.
+    # CourseEnrollment owns all learner delivery calculations.
     # ---------------------------------------------------------
-    completed_course_sessions = (
-        course.class_sessions
-        .filter(
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-        )
+    total_classes = enrollment.total_assigned_classes
+    held_classes = enrollment.total_held_classes
+    attendance_pending_classes = (
+        enrollment.held_attendance_pending_classes
     )
-
-
-    completed_minutes = get_session_minutes(
-        completed_course_sessions
+    attendance_submitted_classes = (
+        enrollment.complete_attendance_submitted_classes
     )
-
-    completed_hours = (
-        completed_minutes / 60
-    )
-
-    completed_hours_display = format_minutes_duration(
-        completed_minutes
-    )
-
+    remaining_classes = enrollment.remaining_classes
+    delivery_percentage = enrollment.delivery_percentage
 
     # ---------------------------------------------------------
-    # TOTAL COURSE HOURS
+    # COURSE-LEVEL DELIVERY
+    #
+    # Course owns whole-course duration and delivery calculations.
     # ---------------------------------------------------------
-    total_hours = (
-        course.total_hours or 0
+    course_total_hours = course.total_hours or 0
+    course_total_minutes = course.total_minutes
+    course_total_hours_display = format_minutes_duration(
+        course_total_minutes
     )
 
-
-    total_minutes = round(
-        float(total_hours)
-        * 60
+    held_course_minutes = course.held_minutes
+    held_course_hours_numeric = course.held_hours
+    held_course_hours_display = format_minutes_duration(
+        held_course_minutes
     )
 
-    total_hours_display = format_minutes_duration(
-        total_minutes
-    )
+    # ---------------------------------------------------------
+    # ASSIGNED DELIVERY HOURS
+    #
+    # CourseEnrollment owns learner-specific assigned, held and
+    # remaining delivery durations.
+    # ---------------------------------------------------------
+    total_hours = enrollment.total_assigned_hours
+    held_hours = enrollment.held_hours
+    remaining_hours = enrollment.remaining_hours
 
+    total_hours_display = format_hours_duration(total_hours)
+    held_hours_display = format_hours_duration(held_hours)
+    remaining_hours_display = format_hours_duration(remaining_hours)
 
     # ---------------------------------------------------------
     # RECENT ATTENDANCE
     # ---------------------------------------------------------
-    recent_attendance = (
-        attendances[:5]
-    )
-
+    recent_attendance = attendances[:5]
 
     # ---------------------------------------------------------
     # CURRENT SKILL ASSESSMENTS
@@ -3523,57 +3565,30 @@ def teacher_student_detail(request, course_id, enrollment_id):
             student=student,
             course=course,
         )
-        .prefetch_related(
-            "subskill_assessments"
-        )
-        .order_by(
-            "skill"
-        )
+        .prefetch_related("subskill_assessments")
+        .order_by("skill")
     )
 
-
-    # ---------------------------------------------------------
-    # CURRENT OVERALL SKILLS AVERAGE
-    # ---------------------------------------------------------
-    current_skill_scores = []
-
-    for skill_assessment in skill_assessments:
-
-        score = (
-            skill_assessment.average_score
-        )
-
-        if score is not None:
-
-            current_skill_scores.append(
-                score
-            )
-
+    current_skill_scores = [
+        skill_assessment.average_score
+        for skill_assessment in skill_assessments
+        if skill_assessment.average_score is not None
+    ]
 
     expected_skill_count = len(
         StudentSkillAssessment.SKILL_AREA_CHOICES
     )
 
-
-    if (
-        len(current_skill_scores)
-        == expected_skill_count
-    ):
-
-        overall_average_score = round(
+    overall_average_score = (
+        round(
             sum(current_skill_scores)
             / expected_skill_count,
             1,
         )
+        if len(current_skill_scores) == expected_skill_count
+        else None
+    )
 
-    else:
-
-        overall_average_score = None
-
-
-    # ---------------------------------------------------------
-    # OVERALL SKILLS PROGRESS GRAPH
-    # ---------------------------------------------------------
     overall_skill_chart_data = (
         build_overall_skill_progress_chart_data(
             student=student,
@@ -3581,26 +3596,19 @@ def teacher_student_detail(request, course_id, enrollment_id):
         )
     )
 
-
     # ---------------------------------------------------------
     # COURSE TIMETABLE
-    #
-    # Groups slots sharing the same start/end time.
     # ---------------------------------------------------------
     formatted_timetable = build_formatted_timetable(course)
-
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
-
         # Student
         "student": student,
         "student_profile": student_profile,
-
         "user_currently_enrolled": user_currently_enrolled,
-        # Explicit Django User.is_active value
         "student_is_active": student_is_active,
 
         # Course selector
@@ -3617,39 +3625,52 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "formatted_timetable": formatted_timetable,
 
         # Attendance
-        # from helper build_attendance_summary in 
-        # profiles/utils/attendance.py
-        # Extracts attended, missed, excused,
-        # total resolved attendance, attendance %
-        **attendance_summary,
+        "attended_count": attended_count,
+        "missed_count": missed_count,
+        "excused_count": excused_count,
+        "total_attendance_records": total_attendance_records,
+        "attendance_percentage": attendance_percentage,
         "recent_attendance": recent_attendance,
 
         # Attendance hours
         "attended_minutes": attended_minutes,
         "attended_hours": attended_hours,
         "attended_hours_display": attended_hours_display,
+        "submitted_minutes": submitted_minutes,
+        "submitted_hours": submitted_hours,
+        "submitted_hours_display": submitted_hours_display,
 
-        # Completed course hours
-        "completed_minutes": completed_minutes,
-        "completed_hours": completed_hours,
-        "completed_hours_display": completed_hours_display,
+        # Course-level delivery
+        "course_total_hours": course_total_hours,
+        "course_total_hours_display": course_total_hours_display,
+        "held_course_minutes": held_course_minutes,
+        "held_course_hours_numeric": held_course_hours_numeric,
+        "held_course_hours_display": held_course_hours_display,
 
-        # Total course hours
+        # Learner general progress
+        "total_classes": total_classes,
+        "held_classes": held_classes,
+        "attendance_pending_classes": attendance_pending_classes,
+        "attendance_submitted_classes": attendance_submitted_classes,
+        "remaining_classes": remaining_classes,
+        "delivery_percentage": delivery_percentage,
+
+        # Assigned delivery hours
         "total_hours": total_hours,
         "total_hours_display": total_hours_display,
+        "held_hours": held_hours,
+        "held_hours_display": held_hours_display,
+        "remaining_hours": remaining_hours,
+        "remaining_hours_display": remaining_hours_display,
 
-        # Course progress
-        "completed_classes": completed_classes,
-        "remaining_classes": remaining_classes,
-        "total_classes": total_classes,
-        "completion_percentage": completion_percentage,
+        # Temporary compatibility aliases
+        "completed_classes": attendance_submitted_classes,
 
         # Skills
         "skill_assessments": skill_assessments,
         "overall_average_score": overall_average_score,
         "overall_skill_chart_data": overall_skill_chart_data,
     }
-
 
     return render(
         request,
@@ -3934,7 +3955,7 @@ def student_attendance_record(request, course_id, enrollment_id):
     # These are based on the CURRENT selected enrollment.
     # ---------------------------------------------------------
     completed_classes = (
-        enrollment.total_completed_classes
+        enrollment.complete_attendance_submitted_classes
     )
 
     total_classes = (
@@ -3942,7 +3963,7 @@ def student_attendance_record(request, course_id, enrollment_id):
     )
 
     remaining_classes = (
-        enrollment.upcoming_classes
+        enrollment.remaining_classes
     )
 
 
@@ -3967,7 +3988,7 @@ def student_attendance_record(request, course_id, enrollment_id):
     # ---------------------------------------------------------
     # COMPLETION %
     # ---------------------------------------------------------
-    completion_percentage = (
+    delivery_percentage = (
         round(
             (
                 completed_classes
@@ -4273,8 +4294,8 @@ def student_attendance_record(request, course_id, enrollment_id):
             total_classes
         ),
 
-        "completion_percentage": (
-            completion_percentage
+        "delivery_percentage": (
+            delivery_percentage
         ),
     }
 
@@ -5433,7 +5454,7 @@ def teacher_take_attendance(request, session_id):
                 request,
                 "Attendance saved and lesson marked as completed."
             )
-        elif class_session.attendance_records_submitted:
+        elif class_session.attendance_requirements_resolved:
             messages.success(
                 request,
                 "Attendance saved. The lesson will be completed automatically after it ends."
@@ -6366,15 +6387,23 @@ def company_admin_all_courses_attendance(request):
         return redirect("home")
 
     # ---------------------------------------------------------
-    # SESSION LIFECYCLE / FILTERS
+    # COMPANY COURSES
     # ---------------------------------------------------------
-    ClassSession.transition_past_sessions()
-    now = timezone.now()
+    company_courses = Course.objects.filter(company=company)
 
-    held_statuses = {
-        ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-        ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-    }
+    # ---------------------------------------------------------
+    # SESSION LIFECYCLE
+    #
+    # Synchronize only Courses belonging to this company.
+    # ClassSession remains responsible for lifecycle transitions.
+    # ---------------------------------------------------------
+    for company_course in company_courses.only("pk"):
+        ClassSession.transition_past_sessions(course=company_course)
+
+    # ---------------------------------------------------------
+    # FILTERS
+    # ---------------------------------------------------------
+    now = timezone.now()
 
     attendance_session_statuses = [
         ClassSession.STATUS_SCHEDULED,
@@ -6389,21 +6418,38 @@ def company_admin_all_courses_attendance(request):
     parsed_date = parse_date(selected_date) if selected_date else None
 
     # ---------------------------------------------------------
-    # COMPANY COURSES / ENROLLMENTS
+    # COMPANY SUMMARY
     # ---------------------------------------------------------
-    company_courses = Course.objects.filter(company=company)
     total_company_courses_count = company_courses.count()
-    active_company_courses_count = company_courses.filter(status="active").count()
+    active_company_courses_count = company_courses.filter(
+        status="active"
+    ).count()
 
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS
+    #
+    # Used for current employee counts on non-completed Courses.
+    # ---------------------------------------------------------
     enrollment_queryset = (
         CourseEnrollment.objects
-        .filter(status="active")
-        .select_related("student", "student__profile")
-        .order_by("student__first_name", "student__last_name", "student__email")
+        .filter(status=CourseEnrollment.STATUS_ACTIVE)
+        .select_related(
+            "student",
+            "student__profile",
+        )
+        .order_by(
+            "student__first_name",
+            "student__last_name",
+            "student__email",
+        )
     )
 
     # ---------------------------------------------------------
     # CLASS SESSIONS
+    #
+    # The queryset is deliberately filterable by date.
+    # Attendance records are prefetched once and later aggregated
+    # only for submitted ClassSessions.
     # ---------------------------------------------------------
     class_session_queryset = (
         ClassSession.objects
@@ -6414,8 +6460,15 @@ def company_admin_all_courses_attendance(request):
                 "attendance_records",
                 queryset=(
                     Attendance.objects
-                    .select_related("student", "student__profile")
-                    .order_by("student__first_name", "student__last_name", "student__email")
+                    .select_related(
+                        "student",
+                        "student__profile",
+                    )
+                    .order_by(
+                        "student__first_name",
+                        "student__last_name",
+                        "student__email",
+                    )
                 ),
             )
         )
@@ -6423,17 +6476,32 @@ def company_admin_all_courses_attendance(request):
     )
 
     if parsed_date:
-        class_session_queryset = class_session_queryset.filter(start_time__date=parsed_date)
+        class_session_queryset = class_session_queryset.filter(
+            start_time__date=parsed_date
+        )
 
     # ---------------------------------------------------------
     # FILTERABLE COURSE QUERYSET
     # ---------------------------------------------------------
     courses = (
         company_courses
-        .select_related("course_type", "company", "teacher", "teacher__profile")
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+            "teacher__profile",
+        )
         .prefetch_related(
-            Prefetch("enrollments", queryset=enrollment_queryset, to_attr="active_enrollments"),
-            Prefetch("class_sessions", queryset=class_session_queryset, to_attr="attendance_class_sessions"),
+            Prefetch(
+                "enrollments",
+                queryset=enrollment_queryset,
+                to_attr="active_enrollments",
+            ),
+            Prefetch(
+                "class_sessions",
+                queryset=class_session_queryset,
+                to_attr="attendance_class_sessions",
+            ),
         )
         .annotate(
             status_priority=Case(
@@ -6446,7 +6514,10 @@ def company_admin_all_courses_attendance(request):
                 output_field=IntegerField(),
             )
         )
-        .order_by("status_priority", "name")
+        .order_by(
+            "status_priority",
+            "name",
+        )
     )
 
     if course_search:
@@ -6470,8 +6541,12 @@ def company_admin_all_courses_attendance(request):
             last_name_search = " ".join(employee_parts[1:])
 
             employee_query |= (
-                Q(enrollments__student__first_name__icontains=first_name_search)
-                & Q(enrollments__student__last_name__icontains=last_name_search)
+                Q(
+                    enrollments__student__first_name__icontains=first_name_search
+                )
+                & Q(
+                    enrollments__student__last_name__icontains=last_name_search
+                )
             )
 
         courses = courses.filter(employee_query).distinct()
@@ -6484,6 +6559,10 @@ def company_admin_all_courses_attendance(request):
 
     # ---------------------------------------------------------
     # BUILD COURSE LIST
+    #
+    # Canonical lifecycle meaning comes from ClassSession.
+    # Aggregation remains here because these values respect the
+    # page's optional date/search filters.
     # ---------------------------------------------------------
     all_courses_list = []
     global_employee_ids = set()
@@ -6498,27 +6577,40 @@ def company_admin_all_courses_attendance(request):
 
     for course in courses:
         active_enrollments = course.active_enrollments
-        global_employee_ids.update(enrollment.student_id for enrollment in active_enrollments)
+
+        global_employee_ids.update(
+            enrollment.student_id
+            for enrollment in active_enrollments
+        )
 
         class_sessions = course.attendance_class_sessions
 
+        # -----------------------------------------------------
+        # FILTER-SCOPED SESSION GROUPS
+        #
+        # ClassSession properties own lifecycle interpretation.
+        # -----------------------------------------------------
         held_class_sessions = [
-            session for session in class_sessions
-            if session.status in held_statuses
+            session
+            for session in class_sessions
+            if session.is_held
         ]
 
         pending_attendance_sessions = [
-            session for session in held_class_sessions
-            if session.status == ClassSession.STATUS_HELD_ATTENDANCE_PENDING
+            session
+            for session in held_class_sessions
+            if session.attendance_is_pending
         ]
 
         submitted_class_sessions = [
-            session for session in held_class_sessions
-            if session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            session
+            for session in held_class_sessions
+            if session.attendance_is_submitted
         ]
 
         future_class_sessions = [
-            session for session in class_sessions
+            session
+            for session in class_sessions
             if session.status in {
                 ClassSession.STATUS_SCHEDULED,
                 ClassSession.STATUS_RESCHEDULED,
@@ -6527,46 +6619,74 @@ def company_admin_all_courses_attendance(request):
         ]
 
         # -----------------------------------------------------
-        # ATTENDANCE COUNTS
+        # FILTER-SCOPED ATTENDANCE COUNTS
+        #
+        # Attendance owns the canonical final outcome statuses.
+        # Only genuine outcomes from submitted lessons count.
         # -----------------------------------------------------
         attended_count = 0
         missed_count = 0
         excused_count = 0
 
         for class_session in submitted_class_sessions:
-            attendance_records = list(class_session.attendance_records.all())
+            final_attendance_records = [
+                attendance
+                for attendance in class_session.attendance_records.all()
+                if attendance.status in Attendance.FINAL_OUTCOME_STATUSES
+            ]
 
             attended_count += sum(
                 attendance.status == Attendance.STATUS_ATTENDED
-                for attendance in attendance_records
+                for attendance in final_attendance_records
             )
 
             missed_count += sum(
                 attendance.status == Attendance.STATUS_MISSED
-                for attendance in attendance_records
+                for attendance in final_attendance_records
             )
 
             excused_count += sum(
                 attendance.status == Attendance.STATUS_EXCUSED
-                for attendance in attendance_records
+                for attendance in final_attendance_records
             )
 
+        # -----------------------------------------------------
+        # FILTER-SCOPED DELIVERY COUNTS
+        #
+        # These deliberately use the already-filtered session list
+        # rather than whole-Course model totals.
+        # -----------------------------------------------------
         held_classes_count = len(held_class_sessions)
         pending_submission_count = len(pending_attendance_sessions)
         submitted_classes_count = len(submitted_class_sessions)
 
-        total_final_attendance_records = attended_count + missed_count + excused_count
+        total_final_attendance_records = (
+            attended_count
+            + missed_count
+            + excused_count
+        )
 
         attendance_rate = (
-            round(attended_count / total_final_attendance_records * 100)
+            round(
+                attended_count
+                / total_final_attendance_records
+                * 100
+            )
             if total_final_attendance_records else 0
         )
 
         submission_rate = (
-            round(submitted_classes_count / held_classes_count * 100)
+            round(
+                submitted_classes_count
+                / held_classes_count
+                * 100
+            )
             if held_classes_count else 0
         )
 
+        # -----------------------------------------------------
+        # DISPLAY-SPECIFIC SESSION SELECTION
+        # -----------------------------------------------------
         last_class = max(
             held_class_sessions,
             key=lambda session: session.start_time,
@@ -6580,26 +6700,32 @@ def company_admin_all_courses_attendance(request):
         )
 
         # -----------------------------------------------------
-        # TEMPLATE ATTRIBUTES
+        # EMPLOYEE COUNT
+        #
+        # For completed Courses there may no longer be active
+        # enrollments, so use the final submitted lesson roster.
         # -----------------------------------------------------
         if course.status == "completed":
-            last_class_session = max(
-                (
-                    session for session in class_sessions
-                    if session.status == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-                ),
+            last_submitted_class = max(
+                submitted_class_sessions,
                 key=lambda session: session.start_time,
                 default=None,
             )
 
             course.employee_count = (
-                last_class_session.attendance_records.count()
-                if last_class_session
+                last_submitted_class.attendance_records.count()
+                if last_submitted_class
                 else 0
             )
         else:
             course.employee_count = len(active_enrollments)
 
+        # -----------------------------------------------------
+        # TEMPLATE ATTRIBUTES
+        #
+        # These package the filtered data for the template.
+        # They do not replace canonical model properties.
+        # -----------------------------------------------------
         course.held_classes_count = held_classes_count
         course.pending_submission_count = pending_submission_count
         course.submitted_classes_count = submitted_classes_count
@@ -6618,15 +6744,22 @@ def company_admin_all_courses_attendance(request):
 
         all_courses_list.append(course)
 
+        # -----------------------------------------------------
+        # GLOBAL FILTERED TOTALS
+        # -----------------------------------------------------
         global_held_classes += held_classes_count
         global_pending_attendance_classes += pending_submission_count
         global_submitted_classes += submitted_classes_count
+
         global_attended_count += attended_count
         global_missed_count += missed_count
         global_excused_count += excused_count
 
     # ---------------------------------------------------------
     # GLOBAL SUMMARY
+    #
+    # These are aggregates across the currently filtered Course
+    # collection, so they correctly belong to this view.
     # ---------------------------------------------------------
     filtered_company_courses_count = len(all_courses_list)
 
@@ -6638,13 +6771,21 @@ def company_admin_all_courses_attendance(request):
 
     if global_total_attendance_records:
         global_attendance_rate = round(
-            global_attended_count / global_total_attendance_records * 100
+            global_attended_count
+            / global_total_attendance_records
+            * 100
         )
+
         global_missed_rate = round(
-            global_missed_count / global_total_attendance_records * 100
+            global_missed_count
+            / global_total_attendance_records
+            * 100
         )
+
         global_excused_rate = round(
-            global_excused_count / global_total_attendance_records * 100
+            global_excused_count
+            / global_total_attendance_records
+            * 100
         )
     else:
         global_attendance_rate = 0
@@ -6657,26 +6798,34 @@ def company_admin_all_courses_attendance(request):
     context = {
         "profile": profile,
         "company": company,
+
         "all_courses_list": all_courses_list,
+
         "filtered_company_courses_count": filtered_company_courses_count,
         "total_company_courses_count": total_company_courses_count,
         "active_company_courses_count": active_company_courses_count,
         "total_active_employees": len(global_employee_ids),
+
         "total_held_classes": global_held_classes,
         "total_pending_attendance_classes": global_pending_attendance_classes,
         "total_submitted_classes": global_submitted_classes,
+
         "global_attended_count": global_attended_count,
         "global_missed_count": global_missed_count,
         "global_excused_count": global_excused_count,
+
         "global_attendance_rate": global_attendance_rate,
         "global_missed_rate": global_missed_rate,
         "global_excused_rate": global_excused_rate,
-        "total_past_classes": global_held_classes,  # Temporary compatibility alias.
+
+        # Temporary compatibility alias.
+        "total_past_classes": global_held_classes,
+
         "selected_date": selected_date,
         "course_search": course_search,
         "employee_search": employee_search,
     }
-
+    
     return render(
         request,
         "profiles/company_admin/company_admin_all_courses_attendance.html",
@@ -6769,7 +6918,7 @@ def company_admin_course_details(request, course_id):
     held_classes_count = held_classes.count()
     attendance_submitted_classes = course.complete_attendance_submitted_sessions
     remaining_classes = course.remaining_sessions
-    completion_percentage = course.completion_percentage
+    delivery_percentage = course.delivery_percentage
 
     # ---------------------------------------------------------
     # HOURS DELIVERED
@@ -6870,7 +7019,7 @@ def company_admin_course_details(request, course_id):
         "held_classes_count": held_classes_count,
         "attendance_submitted_classes": attendance_submitted_classes,
         "remaining_classes": remaining_classes,
-        "completion_percentage": completion_percentage,
+        "delivery_percentage": delivery_percentage,
 
         # Compatibility with current template
         "past_held_classes": held_classes_count,
@@ -6989,7 +7138,7 @@ def company_admin_course_students_list(request, course_id):
     attendance_pending_classes = course.held_attendance_pending_sessions
     attendance_submitted_classes = course.complete_attendance_submitted_sessions
     remaining_classes = course.remaining_sessions
-    completion_percentage = course.completion_percentage
+    delivery_percentage = course.delivery_percentage
 
     # ---------------------------------------------------------
     # AVERAGE ATTENDANCE
@@ -7046,7 +7195,7 @@ def company_admin_course_students_list(request, course_id):
         "attendance_pending_classes": attendance_pending_classes,
         "attendance_submitted_classes": attendance_submitted_classes,
         "remaining_classes": remaining_classes,
-        "completion_percentage": completion_percentage,
+        "delivery_percentage": delivery_percentage,
 
         "average_attendance": average_attendance,
         "formatted_timetable": formatted_timetable,
@@ -7074,9 +7223,6 @@ def company_admin_course_attendance(request, course_id):
     if not company:
         return redirect("home")
 
-    # Keep stale scheduled/rescheduled sessions aligned with the lifecycle.
-    ClassSession.transition_past_sessions()
-
     # ---------------------------------------------------------
     # AVAILABLE COURSES
     # ---------------------------------------------------------
@@ -7095,43 +7241,67 @@ def company_admin_course_attendance(request, course_id):
             ),
             enrollment_count=Count("enrollments", distinct=True),
         )
-        .select_related("course_type", "company", "teacher")
-        .order_by("status_order", "name")
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
 
-    course = get_object_or_404(available_courses, id=course_id)
+    course = get_object_or_404(
+        available_courses,
+        id=course_id,
+    )
+
+    # ---------------------------------------------------------
+    # SYNCHRONIZE SELECTED COURSE
+    #
+    # Keep stale scheduled/rescheduled sessions aligned with the
+    # lifecycle without scanning unrelated Courses.
+    #
+    # The final session transition may also complete the Course
+    # and its active enrollments, so refresh the Course afterwards.
+    # ---------------------------------------------------------
+    ClassSession.transition_past_sessions(
+        course=course
+    )
+
+    course.refresh_from_db()
 
     # ---------------------------------------------------------
     # ENROLLMENTS
     #
-    # Completed enrollments remain relevant for completed courses.
+    # Active and completed enrollments remain relevant to the
+    # Course attendance overview.
     # ---------------------------------------------------------
     enrollments = (
         course.enrollments
-        .filter(status__in=["active", "completed"])
-        .select_related("student", "student__profile")
+        .filter(
+            status__in=[
+                CourseEnrollment.STATUS_ACTIVE,
+                CourseEnrollment.STATUS_COMPLETED,
+            ]
+        )
+        .select_related(
+            "student",
+            "student__profile",
+        )
     )
-
-    # ---------------------------------------------------------
-    # FINAL ATTENDANCE OUTCOMES
-    # ---------------------------------------------------------
-    final_attendance_statuses = [
-        Attendance.STATUS_ATTENDED,
-        Attendance.STATUS_MISSED,
-        Attendance.STATUS_EXCUSED,
-    ]
 
     # ---------------------------------------------------------
     # SUBMITTED ATTENDANCE SESSIONS
     #
-    # Only terminal ClassSessions belong in this list.
-    # Held sessions still awaiting attendance are NOT submitted.
+    # Only ClassSessions whose attendance workflow is complete
+    # belong in this list.
     # ---------------------------------------------------------
     submitted_class_sessions = (
-        ClassSession.objects
+        course.class_sessions
         .filter(
-            course=course,
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
         )
         .select_related(
             "course",
@@ -7147,15 +7317,20 @@ def company_admin_course_attendance(request, course_id):
     )
 
     # ---------------------------------------------------------
-    # SESSION ATTENDANCE DATA
+    # SESSION ATTENDANCE DISPLAY DATA
     #
-    # Only final Attendance outcomes are included.
+    # ClassSession owns lesson lifecycle state.
+    # Attendance owns the canonical genuine outcome statuses.
+    #
+    # These values are attached only to package each session for
+    # this particular page/table. They are not canonical Course
+    # or CourseEnrollment calculations.
     # ---------------------------------------------------------
     for class_session in submitted_class_sessions:
         attendance_records = [
             attendance
             for attendance in class_session.attendance_records.all()
-            if attendance.status in final_attendance_statuses
+            if attendance.status in Attendance.FINAL_OUTCOME_STATUSES
         ]
 
         attended_count = sum(
@@ -7173,19 +7348,25 @@ def company_admin_course_attendance(request, course_id):
             for attendance in attendance_records
         )
 
-        registered_count = len(attendance_records)
-        attendance_total = registered_count
-
-        class_session.attendance_percentage = (
-            round(attended_count / attendance_total * 100)
-            if attendance_total else 0
-        )
+        attendance_total = len(attendance_records)
 
         class_session.attended_count = attended_count
         class_session.missed_count = missed_count
         class_session.excused_count = excused_count
-        class_session.registered_count = registered_count
         class_session.attendance_total = attendance_total
+
+        # Temporary display compatibility if the template still
+        # expects registered_count.
+        class_session.registered_count = attendance_total
+
+        class_session.attendance_percentage = (
+            round(
+                attended_count
+                / attendance_total
+                * 100
+            )
+            if attendance_total else 0
+        )
 
         class_session.employee_search_text = " ".join(
             f"{attendance.student.get_full_name()} "
@@ -7196,30 +7377,56 @@ def company_admin_course_attendance(request, course_id):
 
     # ---------------------------------------------------------
     # COURSE ATTENDANCE LIFECYCLE TOTALS
+    #
+    # Course owns all whole-course delivery/session counts.
     # ---------------------------------------------------------
     total_classes_held = course.total_held_sessions
-    held_attendance_pending_classes = course.held_attendance_pending_sessions
-    attendance_submitted_classes = course.complete_attendance_submitted_sessions
+    held_attendance_pending_classes = (
+        course.held_attendance_pending_sessions
+    )
+    attendance_submitted_classes = (
+        course.complete_attendance_submitted_sessions
+    )
 
+    # ---------------------------------------------------------
+    # ATTENDANCE SUBMISSION %
+    #
+    # This is a page-specific ratio:
+    # submitted attendance workflows / all lessons already held.
+    # ---------------------------------------------------------
     attendance_submission_percentage = (
-        round(attendance_submitted_classes / total_classes_held * 100)
+        round(
+            attendance_submitted_classes
+            / total_classes_held
+            * 100
+        )
         if total_classes_held else 0
     )
 
     # ---------------------------------------------------------
     # COURSE AVERAGE ATTENDANCE
     #
-    # Enrollment.attendance_percentage already uses only
-    # COMPLETE_ATTENDANCE_SUBMITTED ClassSessions.
+    # CourseEnrollment owns each learner's submitted-attendance
+    # population and attendance percentage.
+    #
+    # Retrieve attendance_metrics once per enrollment so the view
+    # does not independently recount or recalculate learner data.
     # ---------------------------------------------------------
-    attendance_percentages = [
-        enrollment.attendance_percentage
-        for enrollment in enrollments
-        if enrollment.complete_attendance_submitted_classes > 0
-    ]
+    attendance_percentages = []
+
+    for enrollment in enrollments:
+        attendance_metrics = enrollment.attendance_metrics
+
+        if attendance_metrics["total_submitted_attendance_records"] > 0:
+            attendance_percentages.append(
+                attendance_metrics["attendance_percentage"]
+            )
 
     average_attendance = (
-        round(sum(attendance_percentages) / len(attendance_percentages))
+        round(
+            sum(attendance_percentages)
+            / len(attendance_percentages)
+        )
         if attendance_percentages else 0
     )
 
@@ -7267,7 +7474,9 @@ def company_admin_course_attendance_detail(request, class_session_id):
     # CLASS SESSION
     #
     # This page represents FINAL submitted attendance only.
-    # Held sessions still awaiting attendance do not belong here.
+    #
+    # ClassSession owns the lesson lifecycle, so only a session
+    # explicitly marked complete_attendance_submitted belongs here.
     # ---------------------------------------------------------
     class_session = get_object_or_404(
         ClassSession.objects.select_related(
@@ -7283,17 +7492,20 @@ def company_admin_course_attendance_detail(request, class_session_id):
     # ---------------------------------------------------------
     # FINAL ATTENDANCE OUTCOMES
     #
-    # Only finalized Attendance records belong on this page.
+    # Attendance owns the canonical definition of a genuine
+    # finalized learner outcome:
+    #
+    # - attended
+    # - missed
+    # - excused
+    #
+    # pending and enrollment_paused are therefore excluded.
     # ---------------------------------------------------------
-    final_attendance_statuses = [
-        Attendance.STATUS_ATTENDED,
-        Attendance.STATUS_MISSED,
-        Attendance.STATUS_EXCUSED,
-    ]
-
     attendances = (
         class_session.attendance_records
-        .filter(status__in=final_attendance_statuses)
+        .filter(
+            status__in=Attendance.FINAL_OUTCOME_STATUSES
+        )
         .select_related(
             "student",
             "student__profile",
@@ -7306,25 +7518,43 @@ def company_admin_course_attendance_detail(request, class_session_id):
     )
 
     # ---------------------------------------------------------
-    # ATTENDANCE COUNTS
+    # ATTENDANCE METRICS
+    #
+    # ClassSession currently does not expose group-level attendance
+    # counts/rate, so calculate them once here from the canonical
+    # finalized Attendance population.
     # ---------------------------------------------------------
-    attended_count = attendances.filter(
-        status=Attendance.STATUS_ATTENDED
-    ).count()
+    attendance_metrics = attendances.aggregate(
+        total_count=Count("id"),
+        attended_count=Count(
+            "id",
+            filter=Q(status=Attendance.STATUS_ATTENDED),
+        ),
+        missed_count=Count(
+            "id",
+            filter=Q(status=Attendance.STATUS_MISSED),
+        ),
+        excused_count=Count(
+            "id",
+            filter=Q(status=Attendance.STATUS_EXCUSED),
+        ),
+    )
 
-    missed_count = attendances.filter(
-        status=Attendance.STATUS_MISSED
-    ).count()
+    total_count = attendance_metrics["total_count"] or 0
+    attended_count = attendance_metrics["attended_count"] or 0
+    missed_count = attendance_metrics["missed_count"] or 0
+    excused_count = attendance_metrics["excused_count"] or 0
 
-    excused_count = attendances.filter(
-        status=Attendance.STATUS_EXCUSED
-    ).count()
+    attendance_percentage = (
+        round(attended_count / total_count * 100)
+        if total_count else 0
+    )    
 
-    total_count = attended_count + missed_count + excused_count
+    total_count = attendance_metrics["total_count"] or 0
+    attended_count = attendance_metrics["attended_count"] or 0
+    missed_count = attendance_metrics["missed_count"] or 0
+    excused_count = attendance_metrics["excused_count"] or 0
 
-    # ---------------------------------------------------------
-    # ATTENDANCE RATE
-    # ---------------------------------------------------------
     attendance_percentage = (
         round(attended_count / total_count * 100)
         if total_count else 0
@@ -7339,6 +7569,7 @@ def company_admin_course_attendance_detail(request, class_session_id):
         "course": class_session.course,
         "class_session": class_session,
         "attendances": attendances,
+
         "total_count": total_count,
         "attended_count": attended_count,
         "missed_count": missed_count,
@@ -7365,8 +7596,6 @@ def company_admin_student_detail(request, student_id):
 
     if not company:
         return redirect("home")
-
-    ClassSession.transition_past_sessions()
 
     # ---------------------------------------------------------
     # EMPLOYEE
@@ -7465,7 +7694,6 @@ def company_admin_student_detail(request, student_id):
 
             # Temporary compatibility aliases
             "completed_classes": 0,
-            "completion_percentage": 0,
             "completed_hours": Decimal("0"),
             "completed_hours_display": format_minutes_duration(0),
 
@@ -7484,6 +7712,19 @@ def company_admin_student_detail(request, student_id):
 
     course = enrollment.course
 
+    # Keep lifecycle synchronization scoped to the selected Course.
+    # The final transition may also complete the Course and its active
+    # enrollments, so refresh the selected objects and enrollment flag.
+    ClassSession.transition_past_sessions(course=course)
+    course.refresh_from_db()
+    enrollment.refresh_from_db()
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
+
     # ---------------------------------------------------------
     # SKILLS CHART
     # ---------------------------------------------------------
@@ -7495,62 +7736,33 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     # FINAL ATTENDANCE
     #
-    # Attendance metrics use ONLY ClassSessions whose
-    # attendance has been fully submitted.
+    # CourseEnrollment owns the canonical submitted-attendance
+    # population and all derived attendance metrics.
     # ---------------------------------------------------------
-    attendances = (
-        Attendance.objects
-        .filter(
-            student=student,
-            class_session__course=course,
-            class_session__status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            status__in=[
-                Attendance.STATUS_ATTENDED,
-                Attendance.STATUS_MISSED,
-                Attendance.STATUS_EXCUSED,
-            ],
-        )
-        .select_related("class_session")
-        .order_by("-class_session__start_time")
-    )
+    attendances = enrollment.submitted_attendances
+    attendance_metrics = enrollment.attendance_metrics
 
-    total_attendance_records = attendances.count()
-    attended_count = attendances.filter(status=Attendance.STATUS_ATTENDED).count()
-    missed_count = attendances.filter(status=Attendance.STATUS_MISSED).count()
-    excused_count = attendances.filter(status=Attendance.STATUS_EXCUSED).count()
-    attendance_percentage = enrollment.attendance_percentage
+    total_attendance_records = attendance_metrics[
+        "total_submitted_attendance_records"
+    ]
+    attended_count = attendance_metrics["attended_classes"]
+    missed_count = attendance_metrics["missed_classes"]
+    excused_count = attendance_metrics["excused_classes"]
+    attendance_percentage = attendance_metrics["attendance_percentage"]
 
     # ---------------------------------------------------------
     # ATTENDANCE HOURS
-    #
-    # Numerator:
-    # duration of submitted sessions actually attended.
-    #
-    # Denominator:
-    # duration of ALL submitted sessions assigned to this
-    # employee, matching the attendance-rate population.
     # ---------------------------------------------------------
-    submitted_sessions = [
-        attendance.class_session
-        for attendance in attendances
-    ]
-
-    submitted_minutes = get_session_minutes(submitted_sessions)
-    submitted_hours = Decimal(submitted_minutes) / Decimal("60")
+    submitted_minutes = enrollment.submitted_minutes
+    submitted_hours = enrollment.submitted_hours
     submitted_hours_display = format_minutes_duration(submitted_minutes)
 
-    attended_sessions = [
-        attendance.class_session
-        for attendance in attendances
-        if attendance.status == Attendance.STATUS_ATTENDED
-    ]
-
-    attended_minutes = get_session_minutes(attended_sessions)
-    attended_hours = Decimal(attended_minutes) / Decimal("60")
+    attended_minutes = enrollment.attended_minutes
+    attended_hours = enrollment.attended_hours
     attended_hours_display = format_minutes_duration(attended_minutes)
 
     # ---------------------------------------------------------
-    # LEARNER General Progress
+    # LEARNER GENERAL PROGRESS
     #
     # Held = attendance pending + attendance submitted.
     # ---------------------------------------------------------
@@ -7559,59 +7771,25 @@ def company_admin_student_detail(request, student_id):
     attendance_pending_classes = enrollment.held_attendance_pending_classes
     attendance_submitted_classes = enrollment.complete_attendance_submitted_classes
     remaining_classes = enrollment.remaining_classes
-
-    delivery_percentage = (
-        round(held_classes / total_classes * 100)
-        if total_classes else 0
-    )
+    delivery_percentage = enrollment.delivery_percentage
 
     # ---------------------------------------------------------
-    # COURSE-LEVEL HOURS DELIVERED
-    #
-    # Delivery includes BOTH held lifecycle states.
+    # COURSE-LEVEL DELIVERY
     # ---------------------------------------------------------
-    held_course_sessions = course.class_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-        ]
-    )
-
-    held_course_minutes = get_session_minutes(held_course_sessions)
-    held_course_hours_numeric = Decimal(held_course_minutes) / Decimal("60")
+    held_course_minutes = course.held_minutes
+    held_course_hours_numeric = course.held_hours
     held_course_hours_display = format_minutes_duration(held_course_minutes)
 
-    # ---------------------------------------------------------
-    # ORIGINAL COURSE HOURS
-    # ---------------------------------------------------------
-    course_total_hours = course.total_hours or 0
-    course_total_minutes = round(float(course_total_hours) * 60)
+    course_total_hours = course.total_hours or Decimal("0")
+    course_total_minutes = course.total_minutes
     course_total_hours_display = format_minutes_duration(course_total_minutes)
 
     # ---------------------------------------------------------
-    # TOTAL ASSIGNED HOURS
+    # ASSIGNED DELIVERY HOURS
     # ---------------------------------------------------------
-    assigned_session_list = list(enrollment.eligible_sessions)
-    assigned_minutes = get_session_minutes(assigned_session_list)
-    total_hours = Decimal(assigned_minutes) / Decimal("60")
-
-    # ---------------------------------------------------------
-    # ASSIGNED HOURS DELIVERED
-    #
-    # Delivery includes BOTH held lifecycle states.
-    # ---------------------------------------------------------
-    held_assigned_sessions = list(
-        enrollment.eligible_sessions.filter(
-            status__in=[
-                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            ]
-        )
-    )
-
-    held_assigned_minutes = get_session_minutes(held_assigned_sessions)
-    held_hours = Decimal(held_assigned_minutes) / Decimal("60")
-    remaining_hours = max(total_hours - held_hours, Decimal("0"))
+    total_hours = enrollment.total_assigned_hours
+    held_hours = enrollment.held_hours
+    remaining_hours = enrollment.remaining_hours
 
     total_hours_display = format_hours_duration(total_hours)
     held_hours_display = format_hours_duration(held_hours)
@@ -7723,8 +7901,7 @@ def company_admin_student_detail(request, student_id):
         "remaining_hours_display": remaining_hours_display,
 
         # Temporary compatibility aliases
-        "completed_classes": held_classes,
-        "completion_percentage": delivery_percentage,
+        "completed_classes": attendance_submitted_classes,
 
         # IMPORTANT:
         # Existing attendance template expects completed_hours_display.
@@ -7758,8 +7935,6 @@ def company_admin_student_attendance_record(request, student_id):
 
     if not company:
         return redirect("home")
-
-    ClassSession.transition_past_sessions()
 
     held_statuses = [
         ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
@@ -7868,7 +8043,6 @@ def company_admin_student_attendance_record(request, student_id):
             # Temporary compatibility aliases
             "completed_classes": 0,
             "course_completed_classes": 0,
-            "completion_percentage": 0,
             "completed_hours_display": format_minutes_duration(0),
         }
 
@@ -7880,27 +8054,27 @@ def company_admin_student_attendance_record(request, student_id):
 
     course = enrollment.course
 
+    # Keep lifecycle synchronization scoped to the selected Course.
+    # The final transition may also complete the Course and its active
+    # enrollments, so refresh the selected objects and enrollment flag.
+    ClassSession.transition_past_sessions(course=course)
+    course.refresh_from_db()
+    enrollment.refresh_from_db()
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status="active",
+        course__status="active",
+    ).exists()
+
     # ---------------------------------------------------------
     # SUBMITTED ATTENDANCE RECORDS
     #
-    # Attendance metrics use ONLY ClassSessions whose
-    # attendance has been finalized.
+    # CourseEnrollment owns the canonical submitted-attendance
+    # population and all derived attendance metrics.
     # ---------------------------------------------------------
-    attendances = (
-        Attendance.objects
-        .filter(
-            student=student,
-            class_session__course=course,
-            class_session__status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            status__in=[
-                Attendance.STATUS_ATTENDED,
-                Attendance.STATUS_MISSED,
-                Attendance.STATUS_EXCUSED,
-            ],
-        )
-        .select_related("class_session", "class_session__course")
-        .order_by("-class_session__start_time")
-    )
+    attendances = enrollment.submitted_attendances
+    attendance_metrics = enrollment.attendance_metrics
 
     recent_absences = attendances.filter(
         status__in=[
@@ -7909,44 +8083,28 @@ def company_admin_student_attendance_record(request, student_id):
         ]
     )
 
-    total_attendance_records = attendances.count()
-    attended_count = attendances.filter(status=Attendance.STATUS_ATTENDED).count()
-    missed_count = attendances.filter(status=Attendance.STATUS_MISSED).count()
-    excused_count = attendances.filter(status=Attendance.STATUS_EXCUSED).count()
-    total_absences = missed_count + excused_count
-    attendance_percentage = enrollment.attendance_percentage
+    total_attendance_records = attendance_metrics[
+        "total_submitted_attendance_records"
+    ]
+    attended_count = attendance_metrics["attended_classes"]
+    missed_count = attendance_metrics["missed_classes"]
+    excused_count = attendance_metrics["excused_classes"]
+    total_absences = attendance_metrics["total_absences"]
+    attendance_percentage = attendance_metrics["attendance_percentage"]
 
     # ---------------------------------------------------------
     # ATTENDANCE HOURS
-    #
-    # Denominator:
-    # ALL submitted-attendance sessions assigned to this
-    # employee.
-    #
-    # Numerator:
-    # Those submitted sessions where this employee attended.
     # ---------------------------------------------------------
-    submitted_sessions = [
-        attendance.class_session
-        for attendance in attendances
-    ]
-
-    submitted_minutes = get_session_minutes(submitted_sessions)
-    submitted_hours = Decimal(submitted_minutes) / Decimal("60")
+    submitted_minutes = enrollment.submitted_minutes
+    submitted_hours = enrollment.submitted_hours
     submitted_hours_display = format_minutes_duration(submitted_minutes)
 
-    attended_sessions = [
-        attendance.class_session
-        for attendance in attendances
-        if attendance.status == Attendance.STATUS_ATTENDED
-    ]
-
-    attended_minutes = get_session_minutes(attended_sessions)
-    attended_hours = Decimal(attended_minutes) / Decimal("60")
+    attended_minutes = enrollment.attended_minutes
+    attended_hours = enrollment.attended_hours
     attended_hours_display = format_minutes_duration(attended_minutes)
 
     # ---------------------------------------------------------
-    # EMPLOYEE-SPECIFIC General Progress
+    # EMPLOYEE-SPECIFIC GENERAL PROGRESS
     #
     # Held = attendance pending + attendance submitted.
     # ---------------------------------------------------------
@@ -7955,11 +8113,7 @@ def company_admin_student_attendance_record(request, student_id):
     attendance_pending_classes = enrollment.held_attendance_pending_classes
     attendance_submitted_classes = enrollment.complete_attendance_submitted_classes
     remaining_classes = enrollment.remaining_classes
-
-    delivery_percentage = (
-        round(held_classes / total_classes * 100)
-        if total_classes else 0
-    )
+    delivery_percentage = enrollment.delivery_percentage
 
     # ---------------------------------------------------------
     # COURSE-WIDE DELIVERY
@@ -7986,15 +8140,11 @@ def company_admin_student_attendance_record(request, student_id):
     # ---------------------------------------------------------
     # HOURS DELIVERED TO THIS EMPLOYEE
     #
-    # Delivery includes BOTH held lifecycle states.
-    # This is separate from submitted attendance hours.
+    # CourseEnrollment owns learner-level held delivery.
+    # This remains separate from submitted attendance hours.
     # ---------------------------------------------------------
-    held_assigned_sessions = enrollment.eligible_sessions.filter(
-        status__in=held_statuses
-    )
-
-    held_minutes = get_session_minutes(held_assigned_sessions)
-    held_hours = Decimal(held_minutes) / Decimal("60")
+    held_minutes = enrollment.held_minutes
+    held_hours = enrollment.held_hours
     held_hours_display = format_minutes_duration(held_minutes)
 
     # ---------------------------------------------------------
@@ -8061,9 +8211,8 @@ def company_admin_student_attendance_record(request, student_id):
         "recent_absences": recent_absences,
 
         # Temporary compatibility aliases
-        "completed_classes": held_classes,
-        "course_completed_classes": course_held_classes,
-        "completion_percentage": delivery_percentage,
+        "completed_classes": attendance_submitted_classes,
+        "course_completed_classes": course_attendance_submitted_classes,
 
         # Existing templates using completed_hours_display should
         # receive submitted attendance hours, NOT all held hours.
