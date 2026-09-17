@@ -3,6 +3,8 @@
 
 
 <div class="course-header-wrapper">
+    <div class="course-header-background" aria-hidden="true"></div>
+    
     <div class="course-selector-wrapper">
         {% if request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
             {% include "profiles/components/course_selector.html" with selector_mode="student" selector_items=enrollments course=course %}
@@ -13,47 +15,49 @@
         {% endif %}
     </div>
 
-    <div class="course-header-info">
-        <h1>{{ course.name|default:"Course Name" }}</h1>
+    <div class="course-header-visual">
+        <div class="course-header-info">
+            <h1>{{ course.name|default:"Course Name" }}</h1>
 
-        <h2>
-            <span class="course-type">
-                <img src="{% static 'icons/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
-                {{ course.course_type.name|default:"Course Type" }}
-            </span>
+            <h2>
+                <span class="course-type">
+                    <img src="{% static 'icons/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
+                    {{ course.course_type.name|default:"Course Type" }}
+                </span>
 
-            <span>|</span>
+                <span>|</span>
 
-            <span class="course-type">
-                <img src="{% static 'icons/course_total_hours_navy_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
-                {{ course.total_hours|clean_decimal }} h.
-            </span>
-        </h2>
-    </div>
-
-
-    <div class="course-header-level">
-        <div class="level-pill">
-            <span class="current-level-label">{% trans 'Level' %}</span>
-            <span class="current-level-value">{{ course.course_level|default:"Pending" }}</span>
+                <span class="course-type">
+                    <img src="{% static 'icons/course_total_hours_navy_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
+                    {{ course.total_hours|clean_decimal }} h.
+                </span>
+            </h2>
         </div>
 
-        <span class="status-badge status-course">
 
-            {% if course.status == 'confirmed' %}
-                <img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-            {% elif course.status == 'active' %}
-                <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-            {% elif course.status == 'completed' %}
-                <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="14" aria-hidden="true" class="mr-2 ml-1">
-            {% elif course.status == 'paused' %}
-                <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
-            {% elif course.status == 'cancelled' %}
-                <i class="fa-regular fa-circle-xmark mr-2"></i>
-            {% endif %}
+        <div class="course-header-level">
+            <div class="level-pill">
+                <span class="current-level-label">{% trans 'Level' %}</span>
+                <span class="current-level-value">{{ course.course_level|default:"Pending" }}</span>
+            </div>
 
-            {{ course.get_status_display|default:"In progress" }}
+            <span class="status-badge status-course">
 
-        </span>
+                {% if course.status == 'confirmed' %}
+                    <img src="{% static 'icons/course_status_confirmed_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                {% elif course.status == 'active' %}
+                    <img src="{% static 'icons/course_status_active_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                {% elif course.status == 'completed' %}
+                    <img src="{% static 'icons/course_status_completed_icon.png' %}" alt="" width="14" aria-hidden="true" class="mr-2 ml-1">
+                {% elif course.status == 'paused' %}
+                    <img src="{% static 'icons/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                {% elif course.status == 'cancelled' %}
+                    <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% endif %}
+
+                {{ course.get_status_display|default:"In progress" }}
+
+            </span>
+        </div>
     </div>
 </div>

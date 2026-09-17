@@ -1,5 +1,5 @@
 .profile-dashboard img {
-    opacity: 0.72;
+    opacity: 0.42;
 }
 
 .profile-dashboard .dashboard-meta-cards strong img,
@@ -12,7 +12,7 @@
 }
 
 .profile-dashboard .training-overview .header img {
-    opacity: 0.85;
+    opacity: 0.42;
 }
 
 .dashboard-cards-grid {

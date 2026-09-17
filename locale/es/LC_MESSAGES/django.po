@@ -2007,11 +2007,11 @@ msgstr ""
 
 #: .\templates\base.html:69
 msgid "Skip to main content"
-msgstr ""
+msgstr "Salta al contenido principal"
 
 #: .\templates\base.html:79
 msgid "Go to the home page"
-msgstr ""
+msgstr "Ir a pagína de inicio"
 
 #: .\templates\base.html:176 .\templates\base.html:186
 #: .\templates\base.html:196 .\templates\base.html:206
@@ -2020,7 +2020,7 @@ msgstr "Mi Plataforma"
 
 #: .\templates\base.html:228 .\templates\includes\mobile_top_header.html:149
 msgid "Login"
-msgstr ""
+msgstr "Conectarse"
 
 #: .\templates\base.html:340
 
@@ -2071,6 +2071,8 @@ msgstr "Exámenes Cambridge"
 msgid "Enrolled on"
 msgstr "Fecha de Inscripción"
 
+msgid "No programme focus has been assigned to this course yet."
+msgstr "Este curso todavía no tiene los programas asignados."
 
 #~ msgid "My Profile"
 #~ msgstr "Mi Perfil"
