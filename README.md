@@ -84,6 +84,15 @@ The application follows Django's Model-Template-View architecture and is current
 
 Each app contains the relevant combination of ***models***, ***views***, ***URLs***, ***templates***, ***forms***, static assets, and supporting logic required for its area of responsibility.
 
+Moreover, the site is consistent with its business logic:
+
+- The **model** should calculate
+- The **helper** should package
+- The **view** should orchestrate
+- The **template** should display
+
+---
+
 ## USER ROLES
 
 User authentication is handled using Django's authentication system together with **django-allauth**. Application-specific user information and role-based behaviour are managed through the `UserProfile` model.
@@ -101,7 +110,6 @@ Access to platform functionality and data is controlled according to the authent
 
 ## HOME App
 
----
 
 The `home` app is responsible primarily for the public-facing area of EnglishGrows and serves as the entry point to the platform.
 
@@ -119,8 +127,6 @@ The Home app is intentionally kept separate from the teaching-management functio
 ---
 
 ## PROFILES App
-
----
 
 The `profiles` app contains most of the user-facing platform experience.
 
@@ -157,8 +163,6 @@ Instead, role-based access is determined through the user's profile.
 ---
 
 ### LEARNER / EMPLOYEE AREA
-
----
 
 Learners have access to a dedicated learning area containing information specific to their own current and historical course enrolments.
 
@@ -202,8 +206,6 @@ The learner calendar applies a related but slightly different rule: current `sch
 ---
 
 ### TEACHER AREA
-
----
 
 Teachers have a dedicated operational dashboard for managing the courses and learners assigned to them.
 
@@ -269,8 +271,6 @@ The teacher dashboard provides operational summaries for current teaching activi
 
 ### COMPANY ADMIN AREA
 
----
-
 Company administrators have a dedicated B2B management area allowing them to monitor the training delivered to employees belonging to their organisation.
 
 Principal functionality includes:
@@ -316,8 +316,6 @@ This prevents cross-company data exposure while allowing an authorised company r
 ---
 
 ### ROLE-BASED ACCESS CONTROL
-
----
 
 Role-based views validate the authenticated user's `UserProfile` before exposing protected information.
 
