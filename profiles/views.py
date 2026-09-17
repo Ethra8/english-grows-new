@@ -226,7 +226,7 @@ def my_course(request):
     student = request.user
     profile = get_object_or_404(
         UserProfile,
-        user=request.user
+        user=student,
     )
 
     if profile.role not in [
@@ -237,12 +237,11 @@ def my_course(request):
 
     # ---------------------------------------------------------
     # ALL ENROLLMENTS
-    # Helper in profiles/utils/enrollments.py
     #
     # Historical courses remain accessible regardless of
     # CourseEnrollment status or Course status.
     #
-    # Course status order:
+    # Order:
     # 1. Active
     # 2. Confirmed
     # 3. Paused
@@ -261,22 +260,21 @@ def my_course(request):
         .select_related(
             "course",
             "course__teacher",
+            "course__teacher__profile",
             "course__course_type",
             "course__company",
+        )
+        .prefetch_related(
+            "course__programmes",
+            "course__timetable_slots",
         )
     )
 
     # ---------------------------------------------------------
-    # GET SELECTED COURSE FROM URL
-    #
-    # Example:
-    # /profiles/student/course-details-page/?course=4
+    # SELECTED ENROLLMENT / COURSE
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-    # ---------------------------------------------------------
-    # DETERMINE WHICH ENROLLMENT / COURSE TO DISPLAY
-    # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
             enrollments,
@@ -285,67 +283,79 @@ def my_course(request):
     else:
         enrollment = enrollments.first()
 
-    # ---------------------------------------------------------
-    # SELECTED COURSE
-    # ---------------------------------------------------------
     course = enrollment.course if enrollment else None
-    enrollment_status = enrollment.status if enrollment else None
 
     # ---------------------------------------------------------
-    # TIMETABLE
-    # Must come from the SELECTED course.
+    # DEFAULT COURSE DETAIL VALUES
     # ---------------------------------------------------------
-    timetable_slots = None
+    formatted_timetable = []
+    completion_percentage = 0
+    past_held_classes = 0
+    past_held_minutes = 0
+    past_held_hours_display = "0 min"
 
-    if enrollment:
-        timetable_slots = (
-            course.timetable_slots
-            .all()
-            .order_by(
-                "day_of_week",
-                "start_time",
+    if course:
+        # -----------------------------------------------------
+        # FORMATTED TIMETABLE
+        #
+        # Shared helper also used by the other Course Details
+        # views.
+        # -----------------------------------------------------
+        formatted_timetable = build_formatted_timetable(
+            course
+        )
+
+        # -----------------------------------------------------
+        # GENERAL COURSE PROGRESS
+        #
+        # Course completion remains independent from
+        # attendance-submission state.
+        # -----------------------------------------------------
+        completion_percentage = (
+            course.completion_percentage
+        )
+
+        # -----------------------------------------------------
+        # PAST / HELD CLASSES
+        #
+        # A class is considered held once end_time has passed.
+        #
+        # Attendance submission is a separate concern.
+        #
+        # Exclude:
+        # - cancelled sessions
+        # - pending-reschedule sessions
+        # -----------------------------------------------------
+        held_sessions = (
+            course.class_sessions
+            .filter(
+                end_time__lt=timezone.now(),
+            )
+            .exclude(
+                status__in=[
+                    ClassSession.STATUS_CANCELLED,
+                    ClassSession.STATUS_PENDING_RESCHEDULE,
+                ]
             )
         )
 
-    # ---------------------------------------------------------
-    # NEXT / CURRENT CLASS
-    #
-    # Only available when:
-    # - the learner's enrollment is active
-    # - the Course is active or confirmed
-    # - the ClassSession is scheduled or rescheduled
-    # - the ClassSession has not yet ended
-    #
-    # A lesson remains available while it is in progress.
-    # ClassSession temporal "past" logic is based on end_time,
-    # not start_time.
-    #
-    # pending_reschedule sessions are deliberately excluded
-    # because they do not yet represent a valid teaching slot.
-    #
-    # Historical, paused, completed or cancelled enrollments /
-    # Courses must not expose a next/current class.
-    # ---------------------------------------------------------
-    next_class = None
+        past_held_classes = held_sessions.count()
 
-    if (
-        enrollment
-        and enrollment.status == "active"
-        and course.status in ["active", "confirmed"]
-    ):
-        now = timezone.now()
+        # -----------------------------------------------------
+        # DELIVERED HOURS
+        #
+        # Use the actual duration of the held sessions rather
+        # than multiplying by the standard class duration,
+        # because the final class may be shorter.
+        # -----------------------------------------------------
+        past_held_minutes = get_session_minutes(
+            held_sessions
+        )
 
-        next_class = (
-            course.class_sessions
-            .filter(
-                end_time__gt=now,
-                status__in=[
-                    ClassSession.STATUS_SCHEDULED,
-                    ClassSession.STATUS_RESCHEDULED,
-                ],
+        past_held_hours_display = (
+            format_minutes_duration(
+                past_held_minutes
             )
-            .order_by("start_time")
-            .first()
         )
 
     # ---------------------------------------------------------
@@ -354,25 +364,28 @@ def my_course(request):
     context = {
         "profile": profile,
 
-        # ALL enrollments -> course selector
+        # All historical enrollments -> course selector
         "enrollments": enrollments,
 
-        # ONE selected enrollment/course -> page content
+        # Selected learner/course relationship
         "enrollment": enrollment,
         "course": course,
 
-        # Component course detail nav -> active tab
-        "active_section": "overview",
+        # Course Details page
+        "formatted_timetable": formatted_timetable,
+        "completion_percentage": completion_percentage,
+        "past_held_classes": past_held_classes,
+        "past_held_minutes": past_held_minutes,
+        "past_held_hours_display": past_held_hours_display,
 
-        "enrollment_status": enrollment_status,
-        "timetable_slots": timetable_slots,
-        "next_class": next_class,
+        # Course detail nav
+        "active_section": "overview",
     }
 
     return render(
         request,
         "profiles/student/my_course.html",
-        context
+        context,
     )
 
 
@@ -849,6 +862,7 @@ def my_learning_progress(request):
                 "total_attendance_records": 0,
                 "attendance_percentage": 0,
                 "recent_attendance": [],
+                "delivery_percentage": 0,
 
                 # Progress
                 "completed_classes": 0,
@@ -1006,6 +1020,21 @@ def my_learning_progress(request):
         attended_minutes
     )
 
+    # ---------------------------------------------------------
+    # LEARNER General Progress
+    #
+    # Held = attendance pending + attendance submitted.
+    # ---------------------------------------------------------
+    total_classes = enrollment.total_assigned_classes
+    held_classes = enrollment.total_held_classes
+    attendance_pending_classes = enrollment.held_attendance_pending_classes
+    attendance_submitted_classes = enrollment.complete_attendance_submitted_classes
+    remaining_classes = enrollment.remaining_classes
+
+    delivery_percentage = (
+        round(held_classes / total_classes * 100)
+        if total_classes else 0
+    )
 
     # ---------------------------------------------------------
     # COMPLETED COURSE HOURS
@@ -1139,7 +1168,7 @@ def my_learning_progress(request):
         "remaining_classes": remaining_classes,
         "total_classes": total_classes,
         "completion_percentage": completion_percentage,
-
+        "delivery_percentage": delivery_percentage,
         # Skills
         "overall_skill_chart_data": overall_skill_chart_data,
         "overall_average_score": overall_average_score,
@@ -1314,6 +1343,55 @@ def my_attendance(request):
         )
     )
 
+    # ---------------------------------------------------------
+    # ATTENDED HOURS
+    # Calculate the actual duration of every class the learner
+    # attended. This correctly supports sessions with different
+    # durations, including a shorter final class.
+    # ---------------------------------------------------------
+    attended_sessions = (
+        attendance.class_session
+        for attendance in recent_attendance
+        if attendance.status == Attendance.STATUS_ATTENDED
+    )
+
+    attended_minutes = get_session_minutes(
+        attended_sessions
+    )
+
+    # Decimal version, useful if you ever need calculations.
+    attended_hours = attended_minutes / 60
+
+    # Human-friendly display.
+    attended_hours_display = format_minutes_duration(
+        attended_minutes
+    )
+
+    # ---------------------------------------------------------
+    # COMPLETED COURSE HOURS
+    #
+    # Total duration of all COMPLETED class sessions for the
+    # selected course, regardless of this learner's attendance.
+    # ---------------------------------------------------------
+    completed_course_sessions = (
+        course.class_sessions
+        .filter(
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        )
+    )
+
+    completed_minutes = get_session_minutes(
+        completed_course_sessions
+    )
+
+    # Numeric version if needed elsewhere.
+    completed_hours = completed_minutes / 60
+
+    # Human-friendly display.
+    completed_hours_display = format_minutes_duration(
+        completed_minutes
+    )
+
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -1339,6 +1417,10 @@ def my_attendance(request):
         # Attendance
         "recent_attendance": recent_attendance,
         "recent_absences": recent_absences,
+        "attended_hours_display": attended_hours_display,
+
+        "completed_minutes": completed_minutes,
+        "completed_hours_display" : completed_hours_display,
     }
 
     return render(

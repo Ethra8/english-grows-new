@@ -245,6 +245,21 @@ msgstr "registros de asistencia"
 msgid "registered attendance"
 msgstr "asistencia registrada"
 
+msgctxt "course attendance stats singular"
+msgid "class record"
+msgstr "clase registrada"
+
+msgctxt "course attendance stats plural"
+msgid "class records"
+msgstr "clases registradas"
+
+msgctxt "course attendance stats singular"
+msgid "in records"
+msgstr "registrada"
+
+msgctxt "course attendance stats plural"
+msgid "in records"
+msgstr "registradas"
 
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:48
@@ -733,8 +748,6 @@ msgstr "Inscripciones"
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:45
 #: .\profiles\templates\profiles\teacher\teacher_course_students_list.html:44
 
-#| msgctxt "metacards singular"
-#| msgid "enrolled"
 msgid "enrolled"
 msgstr "inscrito"
 
@@ -1193,7 +1206,7 @@ msgstr "ausencias"
 #: .\profiles\templates\profiles\student\my_attendance.html:198
 #: .\profiles\templates\profiles\teacher\teacher_student_attendance_record.html:197
 msgid "Absence Record"
-msgstr "Historial Ausencias"
+msgstr "Historial de Ausencias"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_attendance_record.html:220
 #: .\profiles\templates\profiles\student\my_attendance.html:218
@@ -2008,33 +2021,22 @@ msgstr ""
 
 #: .\templates\base.html:340
 
-#| msgid "Company"
+
 msgid "Companies"
-msgstr "Empresa"
+msgstr "Empresas"
 
-#: .\templates\base.html:347
-
-#| msgid "Online professional"
 msgid "Professionals"
-msgstr "Formación de Inglés Online"
+msgstr "Profesionales"
 
-#: .\templates\base.html:354
-msgid "Exam Candidates"
-msgstr ""
-
-#: .\templates\base.html:365
 msgid "About"
-msgstr ""
+msgstr "Sobre mí"
 
-#: .\templates\base.html:372
 msgid "Contact"
 msgstr "Contacto"
 
-#: .\templates\base.html:383
 msgid "Privacy Policy"
 msgstr "Política de Privacidad"
 
-#: .\templates\base.html:390
 msgid "Terms & Cons"
 msgstr "Términos y Condiciones"
 
@@ -2042,7 +2044,6 @@ msgstr "Términos y Condiciones"
 msgid "All rights reserved"
 msgstr "Reservados todos los derechos"
 
-#: .\templates\base.html:436
 msgid "Developed & designed by Edna T.M."
 msgstr "Desarrollado y diseñado por Edna T.M."
 
@@ -2053,7 +2054,7 @@ msgstr "Desarrollado y diseñado por Edna T.M."
 
 
 msgid "Programme Focus"
-msgstr "Programa"
+msgstr "Enfoque del Programa"
 
 msgid "Platform"
 msgstr "Mi Plataforma"
@@ -2061,6 +2062,11 @@ msgstr "Mi Plataforma"
 msgid "Learning Goals"
 msgstr "Objetivos"
 
+msgid "Cambridge Exams"
+msgstr "Exámenes Cambridge"
+
+msgid "Enrolled on"
+msgstr "Fecha de Inscripción"
 
 
 #~ msgid "My Profile"
@@ -2107,9 +2113,6 @@ msgstr "Objetivos"
 #~ msgid "Review"
 #~ msgstr "Revisar"
 
-#~ msgctxt "learner enrollment status"
-#~ msgid "Enrolled"
-#~ msgstr "inscrito"
 
 #~ msgctxt "learner enrollment status"
 #~ msgid "Inactive"

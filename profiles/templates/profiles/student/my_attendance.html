@@ -2,24 +2,29 @@
 {% load static i18n %}
 {% load date_extras %}
 
-{% block extra_title %}| Attendance{% endblock %}
+{% block extra_title %}| My Attendance{% endblock %}
 
 {% block details_page_css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'profiles/css/features/attendance/attendance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/details_nav.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_details_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/courses/course_header.css' %}">
 {% endblock %}
 
-{% block details_page_shell_class %}student-detail-page{% endblock %}
+{% block details_page_shell_class %}course-details-page{% endblock %}
 
-{% block details_page_background %}{% endblock %}
+{% block details_page_background %}
+{% endblock %}
 
 {% block details_header %}
-    {% include "profiles/components/student_details_header.html" with show_email=False show_user_role=False show_company=False %}
+    {% include "profiles/components/course_details_header.html" with course=course enrollments=enrollments %}
 {% endblock %}
 
 {% block details_nav %}
-    {% include "profiles/components/student_details_nav.html" with active_section="attendance" nav_role="student" %}
+    {% include "profiles/components/course_details_nav.html" %}
 {% endblock %}
+
 
 {% block details_content %}
 
@@ -76,9 +81,9 @@
                         <span>{{ enrollment.classes_attended|default:"0" }} / {{ enrollment.total_completed_classes|default:"0" }} 
                             <small class="ml-2">
                                 {% if enrollment.total_completed_classes == 1 %}
-                                    {% trans 'class' %}
+                                    {% trans 'class record' context 'course attendance stats singular' %}
                                 {% elif enrollment.total_completed_classes > 1 or enrollment.total_completed_classes == 0 %}
-                                    {% trans 'classes' %}
+                                    {% trans 'class records' context 'course attendance stats plural' %}
                                 {% endif %}
                             </small>
                         </span>
@@ -91,7 +96,15 @@
                     </div>
                     <div class="item-text">
                         <strong>{% trans 'Hours Attended' %}:</strong>
-                        <span>{{ attended_hours_display|default:"0" }} / {{ completed_hours_display|default:"0" }}</span>
+                        <span>{{ attended_hours_display|default:"0" }} / {{ completed_hours_display|default:"0" }}
+                            <small class="ml-2">
+                                {% if completed_minutes == 60 %}
+                                    {% trans 'in records' context 'course attendance stats singular' %}
+                                {% elif completed_minutes > 60 or completed_minutes == 0 %}
+                                    {% trans 'in records' context 'course attendance stats plural' %}
+                                {% endif %}
+                            </small>
+                        </span>
                     </div>
                 </div>
 

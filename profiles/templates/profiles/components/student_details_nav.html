@@ -49,12 +49,6 @@
                     {% trans "Skills" %}
                 </a>
 
-                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}"
-                   class="{% if active_section == 'attendance' %}active{% endif %}"
-                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
-                    {% trans "Attendance" %}
-                </a>
-
                 <a href="{% url 'profiles:my_needs_analysis' %}?course={{ course.id }}"
                    class="{% if active_section == 'needs_analysis' %}active{% endif %}"
                    {% if active_section == "needs_analysis" %}aria-current="page"{% endif %}>

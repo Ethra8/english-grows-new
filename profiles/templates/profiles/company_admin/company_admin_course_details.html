@@ -132,7 +132,7 @@
                         </div>
                         <div class="detail-row">
                             <div>
-                                <img src="{% static 'icons/start_date_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
+                                <img src="{% static 'icons/calendar_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2 mb-1">
                             </div>
                             <div>
                                 <strong>{% trans 'Start & End Dates' %}</strong>
@@ -164,8 +164,8 @@
 
                         <div class="detail-row">
                             <div>
-                                {% if active_enrollment.course.teacher.profile.profile_photo %} 
-                                    <img src="{{ enrollment.course.teacher.profile.profile_photo.url }}" alt="{{ enrollment.course.teacher.get_full_name }}">
+                                {% if course.teacher.profile.profile_photo %} 
+                                    <img src="{{ course.teacher.profile.profile_photo.url }}" alt="" width="60" aria-hidden="true" class="mr-2">
                                 {% else %}
                                     <img src="{% static 'icons/teacher_teal_icon.png' %}" alt="" width="24" aria-hidden="true" class="mr-2 mb-1">                                   
                                 {% endif %}

@@ -341,7 +341,10 @@
    ABSENCE RECORDS / ACCORDION
    ============================================================= */
 
-.wrapper-attendance-accordion { width: 100%; }
+.wrapper-attendance-accordion { 
+    width: 100%;
+    padding: 0;
+}
 
 #parentAbsenceHeading {
     background-color: rgba(var(--color-steel-rgb), 0.1);

@@ -7,7 +7,6 @@
 
 {% block details_page_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/skills_progress_chart.css' %}">
 {% endblock %}
 
@@ -40,9 +39,14 @@
                             <a href="{% url 'profiles:my_skills' %}?course={{ course.id }}">
 
                                 <h2>
-                                    <span>{% trans "Progress Assessed" %}
+                                    <span>
+                                        {% trans 'Progress Assessed' %}
+                                        {% if overall_average_score %}
+                                            <span class="header-score">{{ overall_average_score }} / 10</span>
+                                        {% else %}
+                                            <span class="header-score">- / 10</span>
+                                        {% endif %}
                                     </span>
-
                                     <img src="{% static 'icons/arrow_right_thin_whitesmoke_icon.png' %}" alt="" width="42" aria-hidden="true" class="card-header-arrow">
                                 </h2>
 
@@ -61,187 +65,77 @@
 
             </div>
 
+        <div class="student-detail-card-grid">
 
-            <div class="student-detail-card-grid">
-
-                <article class="student-detail-card">
-
-                    <div>
-
-                        <div class="course-info-detail-card">
-
-                            <a href="{% url 'profiles:my_course' %}?course={{ course.id }}">
-                                <h2>
-                                    {% if enrollments|length > 1 %}
-                                        {% trans "Course Info" %}
-                                    {% else %}
-                                        {{ course.name }}
-                                    {% endif %}
-
-                                    <img src="{% static 'icons/arrow_right_thin_whitesmoke_icon.png' %}" alt="" width="42" aria-hidden="true" class="card-header-arrow">
-                                </h2>
-                            </a>
-
-                            <span class="status-badge status-course">
-
-                                {% if course.status == "confirmed" %}
-
-                                    <img
-                                        src="{% static 'icons/course_status_confirmed_teal_icon.png' %}"
-                                        alt=""
-                                        width="22"
-                                        aria-hidden="true"
-                                        class="mr-2"
-                                    >
-
-                                {% elif course.status == "active" %}
-
-                                    <img
-                                        src="{% static 'icons/course_status_active_teal_icon.png' %}"
-                                        alt=""
-                                        width="22"
-                                        aria-hidden="true"
-                                        class="mr-2"
-                                    >
-
-                                {% elif course.status == "completed" %}
-
-                                    <img
-                                        src="{% static 'icons/course_status_completed_teal_icon.png' %}"
-                                        alt=""
-                                        width="18"
-                                        aria-hidden="true"
-                                        class="mr-2"
-                                    >
-
-                                {% elif course.status == "paused" %}
-
-                                    <img
-                                        src="{% static 'icons/course_status_paused_teal_icon.png' %}"
-                                        alt=""
-                                        width="22"
-                                        aria-hidden="true"
-                                        class="mr-2"
-                                    >
-
-                                {% elif course.status == "cancelled" %}
-
-                                    <i
-                                        class="fa-regular fa-circle-xmark mr-2"
-                                        aria-hidden="true">
-                                    </i>
-
+            <!-- General Progress -->
+            <article class="student-detail-card">
+                <div>
+                    <div class="course-info-detail-card">
+                        <a href="{% url 'profiles:my_course' %}?course={{ course.id }}">
+                            <h2>
+                                {% if enrollments|length > 1 %}
+                                    {% trans 'Course Info' %}
+                                {% else %}
+                                    {{ course.name }}
                                 {% endif %}
+                                <img src="{% static 'icons/arrow_right_thin_whitesmoke_icon.png' %}" alt="" width="42" aria-hidden="true" class="card-header-arrow">
+                            </h2>
+                        </a>
 
-                                {{ course.get_status_display|default:"none" }}
-
-                            </span>
-
-                        </div>
-
+                        <span class="status-badge status-course">
+                            {% if course.status == 'confirmed' %}
+                                <img src="{% static 'icons/course_status_confirmed_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                            {% elif course.status == 'active' %}
+                                <img src="{% static 'icons/course_status_active_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                            {% elif course.status == 'completed' %}
+                                <img src="{% static 'icons/course_status_completed_teal_icon.png' %}" alt="" width="18" aria-hidden="true" class="mr-2">
+                            {% elif course.status == 'paused' %}
+                                <img src="{% static 'icons/course_status_paused_teal_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
+                            {% elif course.status == 'cancelled' %}
+                                <i class="fa-regular fa-circle-xmark mr-2" aria-hidden="true"></i>
+                            {% endif %}
+                            {{ course.get_status_display|default:"none" }}
+                        </span>
                     </div>
+                </div>
 
+                <div class="current-course-block">
+                    <div class="d-flex flex-column">
+                        <div class="student-ring-layout">
 
-                    <div class="current-course-block">
+                            <div class="progress-ring" style="--percentage: {{ delivery_percentage }};">
+                                <div class="progress-ring-inner">
+                                    <strong>{{ delivery_percentage }}%</strong>
+                                    <span>{% trans 'delivered' context 'course details page' %}</span>
+                                </div>
+                            </div>
 
-                        <div class="d-flex flex-column">
+                            <div class="student-stat-list">
 
-                            <div class="student-ring-layout">
-
-                                <div
-                                    class="progress-ring"
-                                    style="--percentage: {{ completion_percentage }};"
-                                >
-
-                                    <div class="progress-ring-inner">
-
-                                        <strong>
-                                            {{ completion_percentage }}%
-                                        </strong>
-
-                                        <span>
-                                            {% trans "Completed" %}
-                                        </span>
-
-                                    </div>
-
+                                <div class="detail-row">
+                                    <strong>{% trans 'Dates' %}</strong>
+                                    <span>{{ course.start_date|date:"j M"|default:"?" }} - {{ course.end_date|date:"j M 'y"|default:"?" }}</span>
                                 </div>
 
-
-                                <div class="student-stat-list">
-
-                                    <div class="detail-row">
-
-                                        {% if course.status == "completed" or course.status == "confirmed" %}
-
-                                            <strong>
-                                                {% trans "Dates" %}
-                                            </strong>
-
-                                            <span>
-                                                {{ course.start_date|date:"j M"|default:"?" }}
-                                                -
-                                                {{ course.end_date|date:"j M 'y"|default:"?" }}
-                                            </span>
-
-                                        {% elif course.status == "active" %}
-
-                                            <strong>
-                                                {% trans "Timetable" %}
-                                            </strong>
-
-                                            <span>
-
-                                                {% if formatted_timetable %}
-
-                                                    {% for timetable in formatted_timetable %}
-
-                                                        {{ timetable.days }}
-                                                        <br>
-                                                        {{ timetable.start }} - {{ timetable.end }}
-
-                                                        {% if not forloop.last %}
-                                                            <br>
-                                                        {% endif %}
-
-                                                    {% endfor %}
-
-                                                {% else %}
-
-                                                    {% trans "Pending" %}
-
-                                                {% endif %}
-
-                                            </span>
-
+                                <div class="detail-row">
+                                    <strong>{% trans 'Timetable' %}</strong>
+                                    <span>
+                                        {% if formatted_timetable %}
+                                            {% for timetable in formatted_timetable %}
+                                                {{ timetable.days }}<br>
+                                                {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {% trans 'Pending' %}
                                         {% endif %}
-
-                                    </div>
-
-
-                                    <div class="detail-row">
-
-                                        <strong>
-                                            {% trans "Completed Lessons" %}:
-                                        </strong>
-
-                                        <span>
-                                            {{ completed_classes }} / {{ total_classes }}
-                                        </span>
-
-                                    </div>
-
+                                    </span>
                                 </div>
 
                             </div>
-
                         </div>
-
                     </div>
-
-                </article>
-
-
+                </div>
+            </article>
 
                 <article class="student-detail-card">
 

@@ -35,7 +35,6 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2rem;
     align-items: start;
-
     width: 100%;
     max-width: 100%;
 }
@@ -55,7 +54,6 @@ addresses.
     gap: 1.2rem;
     min-width: 0;
 }
-
 
 /* =========================================================
    COURSE DETAIL ITEM
@@ -247,8 +245,8 @@ addresses.
 }
 
 .programme-icon img {
-    width: var(--programme-icon-size, 34px);
-    height: var(--programme-icon-size, 34px);
+    width: var(--programme-icon-size, 42px);
+    height: var(--programme-icon-size, 42px);
     object-fit: contain;
     display: block;
 }
@@ -278,6 +276,8 @@ addresses.
 .programme-icon--cambridge-exams-preparation {
     --programme-icon-size: 36px;
 }
+
+
 
 
 /* =========================================================
@@ -403,6 +403,8 @@ remain vertically centred.*/
 
 .programme-details-card {
     margin-top: 3.5rem;
+    background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.1), rgba(var(--color-teal-rgb), 0.2));
+    z-index: 2;
 }
 
 .programme-focus-grid {
@@ -412,6 +414,17 @@ remain vertically centred.*/
     align-items: center;
     align-content: center;
 }
+
+.course-details-page header.programme-focus-grid > div {
+    display: flex;
+    flex-direction: row;
+    background: var(--color-whitesmoke);
+    padding: 0.75rem;
+    border-radius: 8px;
+    opacity: 1;
+    z-index: 2;
+}
+
 
 .programme-grid--1 {
     grid-template-columns: 1fr;
