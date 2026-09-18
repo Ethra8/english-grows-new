@@ -47,14 +47,16 @@
 
 
 /* email */
-.student-detail-page .details-page__header a,
+.student-detail-page .details-page__header a span,
 .student-detail-page .details-page__header p {
     color: var(--color_frozen-water);
-    font-size: 1.1rem;
     font-weight: 400;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: 0 0 0.75rem;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.9rem;
 }
 
 
@@ -114,20 +116,41 @@
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
-.details-page__header .student-details-header h1,
-.details-page__header .student-details-header p {
-    min-width: 0;
-    max-width: 100%;
-}
-
 .details-page__header .student-details-header h1 {
     color: var(--color-whitesmoke);
     margin-bottom: 0;
     font-size: clamp(2.2rem, 2.5vw, 2.8rem);
+    min-width: 0;
+    max-width: 100%;
 }
 
-.details-page__header .student-details-header a:hover {
-    color: var(--color-tropical-teal);
+
+/* IDENTITY */
+.student-details-header__identity {
+    min-width: 0;
+}
+
+.student-details-header__email,
+.student-details-header__email span{
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    color: var(--color_frozen-water);
+}
+
+.student-details-header__email a {
+    display: block;
+}
+
+.student-details-header__email a span:hover {
+    color: var(--color-pearlaqua);
+}
+
+.student-details-header__email img {
+    rotate: calc(12deg);
 }
 
 .profile-user-role span,
@@ -140,6 +163,7 @@
     max-height: 42px;
     padding-top: 0.2rem;
 }
+
 
 /* DIV WITH LEVEL ************/
 .student-detail-page .details-page__header .header-level {
@@ -382,10 +406,10 @@
     font-weight: 500;
 }
 
-.student-details-header a span:hover {
+/* .student-details-header a span:hover {
     color: var(--color-teal);
     font-weight: 600;
-}
+} */
 
 /*****************************************|
 |**** STUDENT DETAIL Page *****************|
@@ -720,15 +744,16 @@
         height: 200px;
     }
     
-    .details-page__header .student-details-header > div:last-child {
+    .details-page__header .student-details-header__identity {
         padding: 0;
-        min-width: fit-content;
-        max-width: fit-content;
+        width: 70%;
+        min-width: 0;
+        max-width: 70%;
     }
-
+    
     .details-page__header .student-details-header p a {
         margin: 1rem auto 1rem;
-        text-align: center;
+        /* text-align: center; */
     }
 
     .student-detail-page .wrapper-attendance-summary-card {

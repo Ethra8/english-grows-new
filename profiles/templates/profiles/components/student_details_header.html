@@ -27,10 +27,13 @@
             <h1 class="student-details-header__name">{{ student.get_full_name|default:student.username }}</h1>
         
             {% if show_email %}
-                <p><a href="mailto:{{ student.email }}">
-                    {{ student.email }}</a>
-                </p>
-            {% endif %}    
+                <p class="student-details-header__email">
+                    <a href="mailto:{{ student.email }}">
+                        <img src="{% static 'icons/send_email_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-2">
+                        <span>{{ student.email }}</span>
+                    </a>
+                </p>            
+                {% endif %}    
 
             {% if show_user_role %}
                 <div class="profile-user-role">
