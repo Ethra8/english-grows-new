@@ -2,7 +2,7 @@
 
 English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
 
-The application combines course management, automated lesson scheduling, attendance tracking, learner assessment, progress monitoring and role-specific interfaces within a single relational data architecture.
+The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, progress monitoring and role-specific interfaces within a single relational data architecture.
 
 ---
 
@@ -13,7 +13,9 @@ The application combines course management, automated lesson scheduling, attenda
   - [Home App](#home-app)
   - [Profiles App](#profiles-app)
     - [User Profile & Role Management](#user-profile--role-management)
+    - [Academic Profile](#academic-profile)
     - [Learner / Employee Area](#learner--employee-area)
+    - [Learning Needs / Student Needs Analysis](#learning-needs--student-needs-analysis)
     - [Teacher Area](#teacher-area)
     - [Company Admin Area](#company-admin-area)
     - [Role-Based Access Control](#role-based-access-control)
@@ -53,6 +55,8 @@ The application combines course management, automated lesson scheduling, attenda
   - [Authentication vs. Application Profile](#authentication-vs-application-profile)
   - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
   - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
+  - [Course-Scoped Learner Detail Navigation](#course-scoped-learner-detail-navigation)
+  - [Needs Analysis vs. Teacher Assessment](#needs-analysis-vs-teacher-assessment)
   - [Current Assessment vs. Assessment History](#current-assessment-vs-assessment-history)
   - [Shared Data, Role-Specific Presentation](#shared-data-role-specific-presentation)
 
@@ -110,7 +114,6 @@ Access to platform functionality and data is controlled according to the authent
 
 ## HOME App
 
-
 The `home` app is responsible primarily for the public-facing area of EnglishGrows and serves as the entry point to the platform.
 
 ### Main responsibilities
@@ -137,6 +140,8 @@ The app includes functionality for:
 - **Learners**
 - **Teachers**
 - **Company administrators**
+- **Student academic profiles**
+- **Course-scoped Learning Needs / Student Needs Analysis**
 
 The same underlying course, attendance, and assessment data is presented differently depending on the authenticated user's permissions and responsibilities.
 
@@ -162,46 +167,656 @@ Instead, role-based access is determined through the user's profile.
 
 ---
 
+### ACADEMIC PROFILE
+
+`StudentAcademicProfile` stores learner-level academic planning information that belongs to the learner rather than to one individual Course.
+
+The model is intentionally compact. It stores:
+
+- the learner through a one-to-one `student` relationship;
+- selected `learning_goals`;
+- `next_review_date`;
+- `updated_at`.
+
+`learning_goals` are managed through reusable `LearningGoal` records rather than being stored as repeated free text.
+
+The Academic Profile deliberately avoids duplicating data that already has a canonical owner elsewhere in the application.
+
+Current information is assembled from the appropriate sources:
+
+```text
+Current CEFR level
+→ UserProfile
+
+Target level / Course objective
+→ CourseEnrollment / Course context
+
+Strengths / development areas
+→ StudentSkillAssessment + StudentSubSkillAssessment
+
+Learning goals / next review
+→ StudentAcademicProfile
+```
+
+This means the Academic Profile acts as an **academic overview and planning layer**, while the underlying models remain responsible for their own data.
+
+Assessment data remains Course-specific and is not copied into `StudentAcademicProfile`.
+
+The Django Admin presents Academic Profile information together with the learner's Course → Skill → Subskill assessment structure so that assessment editing remains connected to the learner while still saving through the canonical assessment models.
+
+---
+
 ### LEARNER / EMPLOYEE AREA
 
-Learners have access to a dedicated learning area containing information specific to their own current and historical course enrolments.
+Learners have access to a dedicated learning area containing information specific to their own current and historical Course enrolments.
 
 Principal functionality includes:
 
 - **Learner dashboard**
 - **My Course**
-- **My Attendance**
+- **Course-scoped inner navigation**
+- **Learning Needs questionnaire**
+- **Course-specific Attendance record**
 - **My Calendar**
 - **My Learning Progress**
 - **Skill overview**
 - **Detailed skill progress graphs**
 - **Teacher assessment feedback**
-- **My Course selector when more than one lifetime course enrolment exists**
-- **Upcoming-class information**
+- **My Course selector when more than one lifetime Course enrolment exists**
+- **Upcoming/current-class information**
 - **Attendance and absence history**
-- **Course completion information**
+- **Course delivery / completion information**
 - **Account settings**
 
-The **My Course** page remains accessible across the learner's own course history rather than being limited to active training only.
+The learner's detailed Course information is organised around the selected `CourseEnrollment`.
 
-Its course selector is built from **all `CourseEnrollment` records belonging to the authenticated learner**, regardless of either:
+The shared learner-detail inner navigation follows the selected Course context:
 
-- the `CourseEnrollment.status`; or
+```text
+Overview
+   ↓
+Learning Needs
+   ↓
+Skills
+   ↓
+Attendance
+```
+
+Detailed Attendance therefore belongs to **My Course** rather than acting as a separate top-level learner destination.
+
+This reflects the underlying business meaning:
+
+```text
+Attendance
+→ participation in one selected Course
+
+Learning Progress
+→ development of the learner's skills and objectives
+```
+
+The selected Course context is preserved through:
+
+```text
+?course=<course_id>
+```
+
+and the selected enrolment is always resolved from the authenticated learner's own `CourseEnrollment` queryset.
+
+A learner therefore cannot manipulate the query parameter to access a Course in which they have never been enrolled.
+
+#### Lifetime Course access
+
+The **My Course** area remains accessible across the learner's complete Course history rather than being limited to active training only.
+
+Its Course selector is built from **all `CourseEnrollment` records belonging to the authenticated learner**, regardless of either:
+
+- `CourseEnrollment.status`; or
 - the parent `Course.status`.
 
-The selector therefore supports active, paused, completed and cancelled historical enrolments, as well as courses in their corresponding lifecycle states.
+The selector therefore supports current and historical enrolments, including Courses that are:
 
-The selector is displayed only when the learner has **more than one lifetime enrolment**. If the learner has only one enrolment in total, the selector is omitted because there is no alternative course context to select.
+```text
+Active
+Confirmed
+Paused
+Completed
+Cancelled
+```
 
-The selected course is passed through the `?course=<id>` query parameter and is resolved from the authenticated learner's own enrolment queryset. A learner therefore cannot use the query parameter to access a course in which they have never been enrolled.
+Course contexts are ordered by lifecycle priority:
 
-Operational information remains context-sensitive. A historical Course can still be reviewed through **My Course**, while next/current-class information is exposed only when the selected enrolment is active and the Course is active or confirmed.
+```text
+Active
+   ↓
+Confirmed
+   ↓
+Paused
+   ↓
+Completed
+   ↓
+Cancelled
+```
 
-The next/current-class query uses the lesson's `end_time`, not only its `start_time`. A lesson that has started but has not yet ended therefore remains available as the learner's current class.
+For completed Courses, the newest `end_date` is shown first.
 
-Only `scheduled` and `rescheduled` ClassSessions are valid next/current teaching slots. `pending_reschedule`, held, complete and cancelled lessons are not presented as a future class.
+For the other lifecycle states, Courses are ordered alphabetically by Course name.
 
-The learner calendar applies a related but slightly different rule: current `scheduled`/`rescheduled` teaching is limited to active enrolment + active Course context, while historical `held_attendance_pending` and `complete_attendance_submitted` lessons remain visible across the learner's own Course history.
+The selector is displayed only when the learner has **more than one lifetime enrolment**. If the learner has only one enrolment in total, the selector is omitted because there is no alternative Course context to select.
+
+#### Current / upcoming class
+
+Operational information remains context-sensitive.
+
+Historical Courses can still be reviewed through My Course, while next/current-class information is exposed only when:
+
+```text
+CourseEnrollment.status == active
+
+AND
+
+Course.status in {active, confirmed}
+
+AND
+
+ClassSession.status in {scheduled, rescheduled}
+
+AND
+
+ClassSession.end_time > now
+```
+
+Using `end_time` rather than only `start_time` means a lesson that has already started but has not yet finished remains available as the learner's current class.
+
+`pending_reschedule`, held, complete and cancelled lessons are not presented as future/current teaching slots.
+
+#### Course overview delivery metrics
+
+The Course overview keeps **lesson delivery** separate from **Attendance submission**.
+
+An ended lesson can contribute to the learner's past/delivered Course picture even when Attendance is still awaiting teacher action.
+
+For the Course overview, ended teaching is based on the lesson's actual stored time and excludes lessons that are not valid delivered appointments:
+
+```text
+end_time < now
+
+EXCLUDING
+
+cancelled
+pending_reschedule
+```
+
+Delivered hours are calculated from the actual duration of the relevant stored `ClassSession` records:
+
+```text
+end_time - start_time
+```
+
+rather than by multiplying a standard class duration by a class count.
+
+This preserves:
+
+- shorter final lessons;
+- legitimately rescheduled lesson durations;
+- any other valid stored duration that differs from the Course default.
+
+Attendance submission remains a separate concept and must not be used as a proxy for Course delivery.
+
+#### Learner Attendance inside My Course
+
+The learner Attendance record now sits inside the **My Course inner navigation** and is always scoped to the selected `CourseEnrollment`.
+
+The learner can review:
+
+- assigned classes;
+- held classes;
+- classes with finalized Attendance;
+- attended classes;
+- missed classes;
+- excused absences;
+- Attendance percentage;
+- delivered / held hours;
+- finalized Attendance hours;
+- learner-attended hours;
+- remaining assigned teaching;
+- detailed finalized Attendance records.
+
+Historical Course Attendance remains reviewable because the selected enrolment may itself be historical.
+
+The Attendance page consumes the canonical model-owned `CourseEnrollment` metrics rather than rebuilding the same calculations independently in the view.
+
+The learner calendar applies a related but slightly different rule: current `scheduled` / `rescheduled` teaching is limited to active enrolment + active Course context, while historical `held_attendance_pending` and `complete_attendance_submitted` lessons remain visible across the learner's own Course history.
+
+---
+
+### LEARNING NEEDS / STUDENT NEEDS ANALYSIS
+
+The `StudentNeedsAnalysis` feature captures the learner's own Course-specific communication needs, confidence, priorities and learning preferences before or during training.
+
+It belongs to the `profiles` app because it represents learner-specific academic/profile information, while its scope is defined by one `CourseEnrollment`.
+
+The relationship is:
+
+```text
+CourseEnrollment
+      │
+      │ 1 : 0..1
+      ▼
+StudentNeedsAnalysis
+```
+
+The database relationship is implemented as a `OneToOneField` from `StudentNeedsAnalysis` to `CourseEnrollment` with:
+
+```text
+related_name="needs_analysis"
+```
+
+This allows the same learner to complete a different Needs Analysis for each Course enrolment without turning the questionnaire into a global permanent property of the user.
+
+The role-specific views use `get_or_create()` for the selected enrolment, so a `pending` record may exist before the learner has answered anything.
+
+For that reason, model response fields permit the empty pending state, while the Django form enforces the required answers at submission time.
+
+The current implementation uses a dedicated `StudentNeedsAnalysisForm(forms.Form)` rather than a `ModelForm`.
+
+The learner view therefore:
+
+```text
+model data
+→ form initial values
+
+valid POST
+→ form.cleaned_data
+→ StudentNeedsAnalysis fields
+→ save
+```
+
+This keeps workflow control explicit in the view while the model remains the persistent source of truth.
+
+#### Workflow
+
+The canonical workflow statuses are:
+
+```text
+pending
+   ↓
+submitted
+   ↓
+reviewed
+```
+
+Their responsibilities are deliberately separated:
+
+| Status | Learner / Employee | Teacher | Company Admin |
+| :--- | :--- | :--- | :--- |
+| `pending` | May complete and submit | Read-only pending state | Read-only pending state |
+| `submitted` | Read-only | Read-only + may mark reviewed | Read-only |
+| `reviewed` | Read-only | Read-only | Read-only |
+
+Learners can edit only while:
+
+```text
+status == pending
+```
+
+The learner submits the questionnaire through one final POST.
+
+On successful validation:
+
+```text
+status
+→ submitted
+
+submitted_at
+→ current timestamp
+```
+
+Once submitted, the learner cannot edit or resubmit the record.
+
+A teacher may subsequently mark a submitted Needs Analysis as reviewed:
+
+```text
+submitted
+   ↓
+reviewed
+
+reviewed_at
+→ current timestamp
+```
+
+Company administrators have read-only access within their own Company boundary.
+
+The shared content template uses **capability/state flags** such as:
+
+```text
+can_edit
+can_review
+status
+```
+
+rather than hard-coding role names throughout the questionnaire presentation.
+
+This keeps one shared questionnaire/report component usable by:
+
+- learner / employee;
+- teacher;
+- company administrator.
+
+Role-specific views remain responsible for access control and Course/enrolment scoping.
+
+#### Questionnaire structure
+
+The editable questionnaire is presented as a six-step horizontal wizard:
+
+```text
+1. Your English
+   ↓
+2. Your Communication
+   ↓
+3. Your Confidence
+   ↓
+4. Challenges & Priorities
+   ↓
+5. How You Learn
+   ↓
+6. Anything Else?
+```
+
+All six visual steps remain inside **one Django form**.
+
+The browser moves horizontally between client-side panels, but Django receives:
+
+```text
+ONE complete POST
+```
+
+only when the learner submits the final step.
+
+This avoids fragmenting one Needs Analysis across multiple database writes or separate URLs.
+
+The wizard provides Back / Continue navigation while Django remains the final authority for form validation.
+
+Client-side navigation supports the workflow without becoming the source of truth:
+
+```text
+current step
+→ validate required browser controls
+→ unlock next step
+→ move track horizontally
+
+previously reached step
+→ may be revisited
+
+future unreached step
+→ remains disabled
+```
+
+If the final Django POST is rejected, the wizard can reopen the first panel containing a server-rendered field error rather than always returning the learner to Step 1.
+
+The wizard height is synchronized to the currently visible panel so hidden steps do not create a long vertically stacked page.
+
+#### Current questionnaire data
+
+The current Needs Analysis stores:
+
+**1. Your English**
+
+- `english_use_frequency`
+- `communication_situations`
+
+**2. Your Communication**
+
+- `communication_partners`
+- `accent_exposure`
+- `accent_exposure_other`
+
+**3. Your Confidence**
+
+- `speaking_confidence`
+- `listening_confidence`
+- `reading_confidence`
+- `writing_confidence`
+
+**4. Challenges & Priorities**
+
+- `priority_areas`
+- `course_goal`
+
+**5. How You Learn**
+
+- `learning_preferences`
+
+**6. Anything Else?**
+
+- `preferred_topics`
+- `additional_information`
+
+The questionnaire deliberately avoids collecting questions that do not change teaching decisions or that create unnecessary duplication.
+
+For example:
+
+- the former generic `biggest_challenges` free-text question was removed because the structured priorities plus optional specific goal provide clearer, quicker information;
+- learner correction preference was removed because correction timing depends on the professional requirements of the teaching activity rather than acting as a learner-selected methodology setting;
+- the questionnaire is not used as a writing assessment.
+
+If writing ability needs to be assessed, that belongs to the dedicated teacher assessment architecture rather than being inferred from a hurried needs-analysis response.
+
+#### English-use frequency
+
+Current frequency choices are intentionally concise:
+
+```text
+Every day
+Several times a week
+Occasionally
+Rarely or never
+```
+
+#### Communication situations
+
+Current communication situations are:
+
+```text
+Meetings and video calls
+Phone calls
+Presentations
+Emails, reports and documents
+Customer communication
+Networking
+Other
+```
+
+The options are deliberately consolidated so the form remains quick to complete and does not imply technical-language programmes that are not currently offered.
+
+#### Communication partners
+
+Current communication-partner categories are:
+
+```text
+Colleagues and internal teams
+Managers
+Customers
+External partners
+Other
+```
+
+`Managers` remains separate because upward communication can imply different levels of formality, diplomacy and register.
+
+Overly granular distinctions such as supplier vs. partner are avoided where they do not materially improve the pedagogical picture.
+
+#### Accent / English-variety exposure
+
+Accent exposure is collected separately from communication-partner type because it informs listening practice more directly.
+
+Current structured choices include:
+
+```text
+English accents from England
+Scottish English
+Irish English
+American English
+Indian English
+International / non-native English accents
+Other
+```
+
+The learner may select several values.
+
+When `Other` is selected, `accent_exposure_other` provides the specific additional variety, for example:
+
+```text
+Australian
+South African
+Welsh
+```
+
+Form validation requires this free-text value when `Other` is selected.
+
+The client-side wizard also hides the supplementary **Other accents** input until the `Other` checkbox is selected.
+
+If `Other` is not selected, the supplementary value is cleared rather than being retained as stale hidden data.
+
+The aim is **listening exposure and comprehension**, not requiring learners to imitate multiple accents.
+
+#### Confidence
+
+Confidence is self-reported separately for:
+
+```text
+Speaking
+Listening
+Reading
+Writing
+```
+
+Each value is stored as an integer from `1` to `5`:
+
+| Value | Display label |
+| :---: | :--- |
+| `1` | Not confident yet |
+| `2` | Slightly confident |
+| `3` | Fairly confident |
+| `4` | Confident |
+| `5` | Very confident |
+
+Read-only reporting combines the numeric and descriptive value, for example:
+
+```text
+3 / 5 — Fairly confident
+```
+
+This self-reported confidence information remains separate from teacher-assessed skill performance.
+
+#### Priority areas
+
+Learners select up to three priority areas from:
+
+```text
+Speaking
+Listening
+Reading
+Writing
+Grammar accuracy
+Vocabulary
+Pronunciation
+Fluency
+Confidence when communicating
+```
+
+Server-side form validation enforces:
+
+```text
+maximum selected priorities = 3
+```
+
+The optional `course_goal` then gives the learner one concise opportunity to specify something concrete they would like to do more confidently or effectively.
+
+This avoids requiring multiple overlapping long-form answers.
+
+#### Learning preferences
+
+Learning preferences are optional and use structured choices so the learner can answer quickly.
+
+Current options are:
+
+```text
+Conversation and discussion
+Role plays and real-life situations
+Structured exercises
+Grammar practice
+Vocabulary practice
+Listening activities
+Reading activities
+Writing activities
+Real-world materials
+Projects and practical tasks
+```
+
+These answers inform activity selection without transferring professional teaching-method decisions to the learner.
+
+#### Anything else
+
+The final step keeps only concise optional free-text opportunities:
+
+```text
+preferred_topics
+→ topics, situations or types of English the learner would particularly like to work on
+
+additional_information
+→ anything else the learner would like the teacher to know
+```
+
+These fields are deliberately optional so the questionnaire remains quick to complete.
+
+#### Stored values vs. displayed values
+
+Multiple-choice answers are stored using stable internal values, for example:
+
+```text
+written_communication
+customer_communication
+internal
+american
+role_plays
+```
+
+These codes are appropriate for database and application logic but are not shown directly to users.
+
+The form provides display helpers that convert stored values back to their human-readable labels for submitted/reviewed reports.
+
+For example:
+
+```text
+['presentations', 'written_communication']
+```
+
+is displayed as:
+
+```text
+Presentations, Emails, reports and documents
+```
+
+`accent_exposure_other` is presented as part of the main accent answer:
+
+```text
+Scottish English, American English
+Other accents: Australian
+```
+
+rather than appearing as a separate generic "Please specify" question.
+
+The form's display helpers provide:
+
+```text
+choice_labels(...)
+confidence_display(...)
+```
+
+for learner, teacher and company-admin read-only views.
+
+The shared report displays the question label above each human-readable answer and keeps supplementary accent text visually grouped with the main accent question.
+
+The submitted report therefore acts as a human-readable summary rather than exposing internal database codes.
 
 ---
 
@@ -224,6 +839,8 @@ Principal functionality includes:
 - **Subskill assessment**
 - **Assessment notes**
 - **Learner progress graphs**
+- **Student Learning Needs review**
+- **Mark submitted Learning Needs as reviewed**
 - **Class rescheduling**
 - **Calendar**
 - **Course and learner progress reporting**
@@ -267,6 +884,24 @@ For alphabetical sorting, the displayed learner identity is used. The learner's 
 
 The teacher dashboard provides operational summaries for current teaching activity, including active courses, students, upcoming/held sessions, and attendance information.
 
+The teacher class list keeps **temporal lesson state** separate from **Attendance-submission state**.
+
+A lesson whose `end_time` has passed belongs to the past/held operational view even when Attendance has not yet been finalized.
+
+The interface therefore distinguishes:
+
+```text
+Past / held lesson
+→ lesson time has ended
+
+Attendance submitted
+→ ClassSession lifecycle has reached complete_attendance_submitted
+```
+
+A past lesson may consequently remain actionable because Attendance is still pending.
+
+Attendance-submitted rows expose the relevant detail action, while held lessons still awaiting Attendance use a pending indicator instead of pretending the workflow is complete.
+
 ---
 
 ### COMPANY ADMIN AREA
@@ -287,6 +922,7 @@ Principal functionality includes:
 - **Employee skill development**
 - **Employee assessment information**
 - **Employee progress graphs**
+- **Employee Learning Needs (read-only)**
 - **Company class calendar**
 
 Company administrators can only access information associated with their own `Company`.
@@ -312,6 +948,12 @@ Within the same status, courses are ordered alphabetically by course name.
 Historical `CourseEnrollment` records also remain available on the relevant course learner/detail pages so that completed, paused, or cancelled participation remains visible for reporting and review.
 
 This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, learning outcomes, and historical training records.
+
+Company administrators can also review an employee's Course-specific submitted Learning Needs inside the same student-detail architecture.
+
+They cannot edit the learner questionnaire or mark it reviewed.
+
+Company class/session lists use the same separation between **past/held teaching** and **Attendance finalization** as the teacher interface, so a lesson can be historically past while still showing Attendance as pending.
 
 ---
 
@@ -339,6 +981,23 @@ attendance and assessment data
 ```
 
 Historical visibility does not weaken role boundaries: status determines whether a record is current or historical, while teacher assignment, company ownership, and learner ownership continue to determine whether the authenticated user is authorised to access it.
+
+The same boundary applies to Learning Needs:
+
+```text
+Learner / Employee
+→ own CourseEnrollment Needs Analysis
+→ edit only while pending
+
+Teacher
+→ Needs Analysis for learners on assigned Courses
+→ read-only
+→ may mark submitted analysis reviewed
+
+Company Administrator
+→ Needs Analysis for employees inside own Company
+→ read-only
+```
 
 ---
 
@@ -515,6 +1174,40 @@ This ensures that course status reflects **actual teaching delivery and finalize
 
 Once `ClassSession` records exist, the actual final session is also the operational source of truth for `Course.end_date`. The course end date is synchronized from the final stored lesson rather than being treated as a permanently fixed theoretical date.
 
+`Course` also exposes canonical delivery metrics derived from its actual stored ClassSessions.
+
+These include:
+
+```text
+total_sessions
+held_attendance_pending_sessions
+complete_attendance_submitted_sessions
+total_held_sessions
+remaining_sessions
+total_minutes
+held_minutes
+held_hours
+delivery_percentage
+```
+
+For Course-level delivery, a held lesson is one whose lifecycle is:
+
+```text
+held_attendance_pending
+OR
+complete_attendance_submitted
+```
+
+`held_minutes` / `held_hours` sum the actual duration of those stored sessions:
+
+```text
+ClassSession.end_time - ClassSession.start_time
+```
+
+rather than multiplying a default class duration by a count.
+
+This keeps Course delivery accurate when the final lesson is shorter or a valid rescheduled lesson has a different stored duration.
+
 ---
 
 ### Course Enrolment
@@ -607,6 +1300,67 @@ CourseEnrollment = one learner's membership in one course
 ClassSession     = one lesson lifecycle
 Attendance       = one learner's state/outcome for that lesson
 ```
+
+`CourseEnrollment` exposes the canonical learner-specific Course-delivery and Attendance metrics used by learner, teacher and company-admin views.
+
+The current API includes class counts such as:
+
+```text
+total_assigned_classes
+total_held_classes
+held_attendance_pending_classes
+complete_attendance_submitted_classes
+remaining_classes
+```
+
+and duration metrics such as:
+
+```text
+total_assigned_minutes / total_assigned_hours
+held_minutes / held_hours
+remaining_minutes / remaining_hours
+submitted_minutes / submitted_hours
+attended_minutes / attended_hours
+```
+
+The terms are intentionally distinct:
+
+```text
+held
+→ the assigned lesson was delivered / reached a held lifecycle state
+
+submitted
+→ Attendance for that assigned lesson has been fully finalized
+
+attended
+→ this learner has a finalized attended outcome
+```
+
+The architecture therefore avoids the ambiguous term:
+
+```text
+completed_hours
+```
+
+because "completed" can otherwise be confused with lesson delivery, Attendance submission, learner attendance, or Course completion.
+
+All hour totals are derived from the **actual stored duration of the relevant ClassSession records** rather than a theoretical default duration.
+
+This preserves shorter final lessons and valid rescheduled durations.
+
+`CourseEnrollment.attendance_metrics` provides the canonical finalized learner Attendance summary, including:
+
+```text
+attended_classes
+missed_classes
+excused_classes
+total_submitted_attendance_records
+attendance_percentage
+```
+
+Views consume these model-owned calculations directly.
+
+A helper layer is used only when it adds meaningful reusable packaging rather than merely renaming existing model properties.
 
 Deleting an enrolment does **not** delete the course's `ClassSession` records because those lessons belong to the shared course schedule and may also belong to other learners.
 
@@ -1282,6 +2036,26 @@ These lifecycle distinctions ensure that:
 - `pending_reschedule` remains part of the teaching obligation;
 - course completion cannot occur until every ClassSession has reached `complete_attendance_submitted`.
 
+Operational class-list presentation follows the same separation.
+
+The **Past / Held** grouping is temporal and is not synonymous with Attendance submission.
+
+A lesson can therefore appear in the past/held list while still carrying:
+
+```text
+held_attendance_pending
+```
+
+The label **completed** is reserved for the finalized lifecycle meaning represented by:
+
+```text
+complete_attendance_submitted
+```
+
+rather than being used for every lesson whose time has passed.
+
+This prevents the interface from hiding lessons that were delivered but still require teacher Attendance action.
+
 ---
 
 ### Automatic Class Session Status Synchronisation
@@ -1818,6 +2592,8 @@ Attendance data provides a shared source of information for the three principal 
 
 #### Learners
 
+The detailed learner Attendance record is Course-specific and is accessed from the selected Course's **inner navigation** rather than from a separate standalone learner Attendance destination.
+
 Learners can review their own:
 
 - **Attendance history**
@@ -1825,7 +2601,13 @@ Learners can review their own:
 - **Attended classes**
 - **Missed classes**
 - **Excused absences**
-- **Individual lesson records**
+- **Held / delivered classes**
+- **Classes with finalized Attendance**
+- **Remaining assigned classes**
+- **Held, submitted, attended and remaining hours**
+- **Individual finalized lesson records**
+
+The selected `CourseEnrollment` remains the scope of every learner Attendance calculation, including historical Courses selected through `?course=<id>`.
 
 #### Teachers
 
@@ -1851,6 +2633,24 @@ Company administrators can review:
 - **Company-wide training participation**
 
 Attendance reporting deliberately distinguishes **lesson delivery** from **attendance finalization**.
+
+The reporting layer also distinguishes Course / enrolment delivery hours from learner Attendance hours:
+
+```text
+held_hours
+→ actual duration of held assigned lessons
+
+submitted_hours
+→ actual duration of assigned lessons whose Attendance is finalized
+
+attended_hours
+→ actual duration of finalized lessons the learner attended
+
+remaining_hours
+→ actual duration still outstanding from the learner's assigned teaching
+```
+
+These values are derived from stored ClassSession durations and are not reconstructed from a standard theoretical class length.
 
 A lesson counts as held for delivery purposes when its ClassSession status is:
 
@@ -1900,6 +2700,43 @@ This prevents future, paused, or still-running lesson obligations from distortin
 
 `CourseEnrollment.assigned_sessions` uses existing Attendance relationships as the source of truth for which lessons were actually assigned to that learner. This avoids reconstructing learner participation from mutable lesson dates.
 
+`CourseEnrollment.submitted_attendances` represents finalized learner Attendance records associated with parent sessions in:
+
+```text
+complete_attendance_submitted
+```
+
+and with genuine learner outcomes:
+
+```text
+attended
+missed
+excused
+```
+
+The architecture separates metric ownership by level:
+
+```text
+Course
+→ Course-wide delivery counts / held time / delivery percentage
+
+CourseEnrollment
+→ learner assignment / held-submitted-attended time / Attendance metrics
+
+View
+→ request orchestration, filtering, sorting and presentation packaging
+```
+
+Before reading selected-Course Attendance data, a view may call the scoped model synchronizer:
+
+```text
+ClassSession.transition_past_sessions(course=course)
+```
+
+so any stale ended `scheduled` / `rescheduled` lessons are brought into the canonical lifecycle before metrics are presented.
+
+This does not duplicate lifecycle logic in the view; it invokes the same model-owned rules used by the production management command and Cron Job.
+
 ---
 
 ## Learning Assessment & Progress
@@ -1909,6 +2746,10 @@ This prevents future, paused, or still-running lesson obligations from distortin
 The assessment architecture tracks both a learner's **current language-skill performance** and the **historical development of those skills over time**.
 
 Assessment is course-specific.
+
+The assessment system is deliberately separate from the learner's `StudentNeedsAnalysis`.
+
+The Needs Analysis records self-reported context, confidence and priorities; the assessment models record teacher-evaluated performance.
 
 A learner can therefore have different skill assessments in different courses rather than having one global assessment attached permanently to their user account.
 
@@ -2363,6 +3204,9 @@ Administrators can manage data including:
 - **Class sessions**
 - **Attendance**
 - **Bank holidays**
+- **Learning goals**
+- **Student academic profiles**
+- **Student Learning Needs / Needs Analysis**
 - **Skill assessments**
 - **Subskill assessments**
 - **Assessment snapshots**
@@ -2463,6 +3307,60 @@ other learners' Attendance
 
 Bulk deletion is deliberately disabled in the dedicated CourseEnrollment Admin so this exceptional correction remains an individual deliberate action.
 
+#### Student Academic Profile & assessment management
+
+`StudentAcademicProfile` is managed as the learner-level academic overview rather than duplicating Course-specific assessment state.
+
+The Admin presentation can organise assessment information by:
+
+```text
+Student
+   ↓
+Course
+   ↓
+Skill
+   ↓
+Subskill
+```
+
+Subskill ratings still save through the canonical `StudentSubSkillAssessment` model so genuine rating changes continue to create the appropriate historical assessment snapshots.
+
+The standalone current assessment models therefore remain the source of truth even when their controls are surfaced inside the Academic Profile administration experience.
+
+The standalone `StudentSkillAssessment` Admin screen is not used as a separate primary editing destination; assessment editing is surfaced through the learner Academic Profile while saving the canonical assessment/subskill records.
+
+#### Student Needs Analysis Admin
+
+`StudentNeedsAnalysisAdmin` mirrors the learner questionnaire's logical structure so submitted data remains easy to inspect administratively.
+
+The Admin list focuses on:
+
+```text
+Student
+Course
+Status
+Submitted at
+Reviewed at
+```
+
+and supports filtering by workflow status and Course plus searching by learner identity and Course name.
+
+The edit layout is grouped into:
+
+```text
+Enrollment / Workflow
+1. Your English
+2. Your Communication
+3. Your Confidence
+4. Challenges & Priorities
+5. How You Learn
+6. Anything Else
+```
+
+`submitted_at` and `reviewed_at` are read-only workflow timestamps.
+
+The Admin does not replace the role-based user workflow; it provides controlled inspection/administration over the same `StudentNeedsAnalysis` record.
+
 #### ClassSession and Attendance protection
 
 Generated `ClassSession` records are not manually added or deleted through the standard Admin configuration. They represent the Course's generated lesson identity and history.
@@ -2503,6 +3401,9 @@ LESSON DELIVERY & ATTENDANCE
 └── Attendance
 
 LEARNING & ASSESSMENT
+├── LearningGoal
+├── StudentAcademicProfile
+├── StudentNeedsAnalysis
 ├── StudentSkillAssessment
 ├── StudentSubSkillAssessment
 ├── StudentSkillAssessmentSnapshot
@@ -2520,6 +3421,8 @@ The architecture distinguishes between:
 - **Recurring scheduling rules**
 - **Actual lesson instances**
 - **Attendance outcomes**
+- **Learner academic planning**
+- **Course-specific learner needs analysis**
 - **Current learner assessment**
 - **Detailed assessment history**
 - **Formal term-based assessment history**
@@ -2629,6 +3532,43 @@ erDiagram
         datetime recorded_at
     }
 
+    LEARNING_GOAL {
+        bigint id PK
+        varchar name
+        varchar slug
+        boolean is_active
+        integer order
+    }
+
+    STUDENT_ACADEMIC_PROFILE {
+        bigint id PK
+        bigint student_id FK
+        date next_review_date
+        datetime updated_at
+    }
+
+    STUDENT_NEEDS_ANALYSIS {
+        bigint id PK
+        bigint enrollment_id FK
+        varchar status
+        varchar english_use_frequency
+        json communication_situations
+        json communication_partners
+        json accent_exposure
+        varchar accent_exposure_other
+        smallint speaking_confidence
+        smallint listening_confidence
+        smallint reading_confidence
+        smallint writing_confidence
+        json priority_areas
+        text course_goal
+        json learning_preferences
+        text preferred_topics
+        text additional_information
+        datetime submitted_at
+        datetime reviewed_at
+    }
+
     STUDENT_SKILL_ASSESSMENT {
         bigint id PK
         bigint student_id FK
@@ -2675,6 +3615,11 @@ erDiagram
     USER ||--o{ COURSE_ENROLLMENT : "enrols"
     COURSE ||--o{ COURSE_ENROLLMENT : "has learners"
 
+    USER ||--o| STUDENT_ACADEMIC_PROFILE : "has academic profile"
+    STUDENT_ACADEMIC_PROFILE }o--o{ LEARNING_GOAL : "selects goals"
+
+    COURSE_ENROLLMENT ||--o| STUDENT_NEEDS_ANALYSIS : "has needs analysis"
+
     COURSE ||--o{ CLASS_SESSION : "contains"
 
     CLASS_SESSION ||--o{ ATTENDANCE : "records"
@@ -2695,6 +3640,10 @@ The ERD highlights several important architectural decisions.
 `CourseEnrollment` acts as an association entity between users and courses rather than using a simple direct many-to-many relationship.
 
 Likewise, `Attendance` acts as the relationship between a learner and a specific lesson.
+
+`StudentAcademicProfile` stores learner-level academic planning without duplicating Course-specific assessment data.
+
+`StudentNeedsAnalysis` is attached one-to-one to `CourseEnrollment`, which makes the learner's self-reported needs Course-specific and historically separable across different enrolments.
 
 Assessment history is deliberately separated from current assessment state through the two snapshot models:
 
@@ -2789,6 +3738,38 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - `pending` and `enrollment_paused` are excluded from attendance percentage calculations.
 - The current attendance denominator includes `excused` together with `attended` and `missed`.
 - Low-attendance warnings are suppressed until at least one finalized learner outcome exists.
+- Course-level delivery metrics are owned by `Course`; learner-specific delivery/Attendance metrics are owned by `CourseEnrollment`.
+- Held, submitted, attended and remaining hour totals use actual stored ClassSession durations rather than theoretical default duration multiplication.
+- `completed_hours` is deliberately avoided as an ambiguous metric name; the system distinguishes `held_hours`, `submitted_hours`, and `attended_hours`.
+- Learner detailed Attendance remains scoped to the selected CourseEnrollment and is exposed inside the My Course inner navigation.
+
+#### Academic Profile
+
+- Each learner can have at most one `StudentAcademicProfile`.
+- `StudentAcademicProfile` stores learner-level planning data rather than duplicating Course-specific assessment records.
+- Current CEFR level remains owned by `UserProfile`.
+- Course target/objective information remains owned by `CourseEnrollment` / Course context.
+- Strengths and development areas are derived from the canonical skill/subskill assessment models.
+- Learning goals are reusable `LearningGoal` records connected through the Academic Profile.
+
+#### Learning Needs / Student Needs Analysis
+
+- Each `CourseEnrollment` can have at most one `StudentNeedsAnalysis`.
+- The Needs Analysis is Course-enrolment-specific rather than a global user property.
+- Canonical workflow statuses are `pending`, `submitted`, and `reviewed`.
+- Learners / employees can edit only while the record is `pending`.
+- A valid learner submission changes the record to `submitted` and stores `submitted_at`.
+- Once submitted, the learner's answers become read-only.
+- Teachers have read-only access to learners on their assigned Courses and may mark a submitted analysis `reviewed`.
+- Review stores `reviewed_at`.
+- Company administrators have read-only access only for employees / enrolments inside their own Company.
+- Communication situations, communication partners, accent exposure, priority areas and learning preferences are stored as structured multi-value data.
+- Confidence values are constrained to the integer range `1–5`.
+- Priority areas are limited to a maximum of three selections by server-side form validation.
+- Selecting `Other` for accent exposure requires `accent_exposure_other`.
+- `accent_exposure_other` is supplementary data for the accent question rather than an independent questionnaire question.
+- Internal choice codes are converted to human-readable labels before read-only display.
+- Needs Analysis self-reporting remains separate from teacher assessment and is not used as a writing diagnostic.
 
 #### Assessment
 
@@ -2803,7 +3784,7 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - `StudentSkillTermSnapshot` stores formal periodic assessment checkpoints.
 - A term label can occur only once for each skill assessment.
 
-Together, these constraints help ensure that the database remains a consistent **single source of truth** for Course delivery, learner assignment, Attendance, lifecycle state, assessment and historical progress.
+Together, these constraints help ensure that the database remains a consistent **single source of truth** for Course delivery, learner assignment, Attendance, lifecycle state, academic planning, Learning Needs, assessment and historical progress.
 
 ---
 
@@ -2829,6 +3810,9 @@ UserProfile
         ▼
 Role-specific Dashboard / Navigation
         │
+        ├── StudentAcademicProfile
+        │       └── learner-level academic planning
+        │
         ▼
 Courses
         │
@@ -2841,19 +3825,19 @@ Courses
         │       └── Class Duration
         │
         ├── Enrolments
-        │       └── Students / Employees
+        │       ├── Students / Employees
+        │       └── StudentNeedsAnalysis
         │
-        └── Class Sessions
-                │
-                ├── Attendance
-                ├── Rescheduling
-                ├── Lesson Information
-                └── Course Progress
-                        │
-                        ├── Skill Assessment
-                        ├── Subskill Assessment
-                        ├── Teacher Notes
-                        └── Assessment Snapshots
+        ├── Class Sessions
+        │       ├── Attendance
+        │       ├── Rescheduling
+        │       └── Lesson Information
+        │
+        └── Course-specific Learning Progress
+                ├── Skill Assessment
+                ├── Subskill Assessment
+                ├── Teacher Notes
+                └── Assessment Snapshots
 ```
 
 The Django views act as the intermediary between the database and the user interface. Each view retrieves only the information relevant to the authenticated user's role and, where appropriate, further restricts access by teacher, company, Course or student.
@@ -2862,7 +3846,7 @@ For example:
 
 - A **teacher** may access only Courses assigned to them and the students enrolled in those Courses.
 - A **company administrator** may access employees and Courses belonging to their own company.
-- A **student or employee** may access only their own enrolments, Attendance records, assessments and Course information.
+- A **student or employee** may access only their own enrolments, Attendance records, Needs Analysis, assessments and Course information.
 
 The application maintains a **single source of truth at model/database level** while role-specific views orchestrate which subset of that truth should be presented.
 
@@ -2909,6 +3893,50 @@ CourseEnrollment → cancelled
         └── remaining operational pending/enrollment_paused
                 → deleted
 ```
+
+### Learning Needs workflow
+
+```text
+CourseEnrollment selected
+        │
+        ▼
+StudentNeedsAnalysis
+        │
+        ├── status = pending
+        │       │
+        │       └── learner / employee completes
+        │           six-step client-side wizard
+        │
+        ▼
+ONE final POST
+        │
+        ▼
+StudentNeedsAnalysisForm
+        │
+        ├── validates required fields
+        ├── validates max three priorities
+        ├── validates Other accent detail
+        └── returns cleaned structured values
+        │
+        ▼
+StudentNeedsAnalysis
+        │
+        ├── answers saved
+        ├── status → submitted
+        └── submitted_at set
+        │
+        ├── learner / company admin → read-only
+        │
+        └── teacher may mark reviewed
+                │
+                ▼
+          status → reviewed
+          reviewed_at set
+```
+
+The same submitted data is rendered for different roles through one shared content component, while each role-specific view controls access and capabilities.
+
+Human-readable report values are produced from the form's canonical choice definitions rather than exposing the stored internal codes.
 
 ### ClassSession end-time lifecycle
 
@@ -2987,11 +4015,14 @@ Erroneous CourseEnrollment
 Role-specific views then determine how current and historical data is exposed:
 
 - **Learner / Employee — My Course:** all lifetime enrolments belonging to the authenticated learner can provide Course context; the selector appears only when more than one lifetime enrolment exists.
+- **Learner / Employee — Course inner navigation:** Overview, Learning Needs, Skills and Attendance remain tied to the same selected Course / enrolment context.
+- **Learner / Employee — Attendance:** detailed Attendance is Course-scoped inside My Course and consumes canonical `CourseEnrollment` delivery / Attendance metrics.
+- **Learner / Employee — Learning Needs:** the learner may edit only their own pending Needs Analysis and sees a read-only report after submission.
 - **Learner / Employee — Calendar:** current `scheduled`/`rescheduled` teaching comes from active enrolment + active Course context, while historical held/complete lessons remain visible across the learner's own Course history.
-- **Teacher:** assigned Courses and their relevant historical enrolments remain accessible regardless of status on Course-detail/learner pages.
-- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary.
+- **Teacher:** assigned Courses and their relevant historical enrolments remain accessible regardless of status on Course-detail/learner pages; submitted learner Needs Analyses can be reviewed and marked reviewed.
+- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary; employee Needs Analyses are read-only.
 
-Attendance, ClassSession lifecycle state and assessment data then contribute to the progress information displayed throughout the platform.
+Attendance, ClassSession lifecycle state, Learning Needs, Academic Profile data and assessment data then contribute to the Course-specific and learner-development information displayed throughout the platform.
 
 ---
 
@@ -3227,6 +4258,108 @@ This architecture supports both historical integrity and administrative correcti
 
 ---
 
+### Course-Scoped Learner Detail Navigation
+
+Learner detail information is organised around a **selected Course / CourseEnrollment context** rather than being split into unrelated standalone pages.
+
+The shared student-detail shell provides a consistent identity/header area and inner navigation while role-specific views determine what the current user may access.
+
+For learners / employees, the selected Course context connects:
+
+```text
+Overview
+   ↓
+Learning Needs
+   ↓
+Skills
+   ↓
+Attendance
+```
+
+The Course selector and `?course=<id>` query parameter preserve that context across these pages.
+
+This architecture is particularly important for Attendance.
+
+Attendance is not treated as a global learner property because every Attendance row belongs to a learner's participation in a specific ClassSession, and those ClassSessions belong to a specific Course.
+
+The detailed learner Attendance record therefore sits inside **My Course**.
+
+```text
+Learner
+   │
+   ├── CourseEnrollment A
+   │       ├── Overview
+   │       ├── Learning Needs
+   │       ├── Skills
+   │       └── Attendance
+   │
+   └── CourseEnrollment B
+           ├── Overview
+           ├── Learning Needs
+           ├── Skills
+           └── Attendance
+```
+
+This prevents Attendance from being confused with general learning progress.
+
+The distinction is:
+
+```text
+COURSE PARTICIPATION
+→ Course overview
+→ Attendance
+→ Course-specific Learning Needs
+
+LEARNER DEVELOPMENT
+→ Skill assessment
+→ Progress graphs
+→ Objectives / pedagogical development
+```
+
+Historical Course contexts remain selectable because Course-specific records retain meaning after active teaching ends.
+
+The same shared student-detail structure is reused for teacher and company-admin views, while access remains restricted by teacher assignment or Company ownership.
+
+---
+
+### Needs Analysis vs. Teacher Assessment
+
+The platform deliberately separates **learner self-reporting** from **teacher assessment**.
+
+`StudentNeedsAnalysis` answers questions such as:
+
+```text
+How often does the learner use English?
+In which situations?
+With whom?
+Which accents / varieties do they hear?
+How confident do they feel?
+What would they most like to improve?
+Which learning activities help them?
+```
+
+`StudentSkillAssessment` and `StudentSubSkillAssessment`, by contrast, represent professional teacher evaluation of actual language performance.
+
+```text
+StudentNeedsAnalysis
+→ learner perspective
+→ needs, context, confidence, priorities
+
+StudentSkillAssessment
+→ teacher perspective
+→ observed / assessed performance
+```
+
+The two systems may inform teaching together, but they do not overwrite or calculate one another.
+
+Self-reported confidence is therefore not interpreted as a CEFR level or skill score.
+
+Likewise, free-text Needs Analysis answers are not treated as an implicit writing assessment.
+
+This separation avoids turning learner preferences or self-perception into pseudo-assessment data and keeps teacher evaluation within the dedicated assessment architecture.
+
+---
+
 ### Current Assessment vs. Assessment History
 
 ---
@@ -3313,6 +4446,21 @@ A teacher may record or modify an assessment, while a student can only view thei
 Similarly, a company administrator can review employee progress but does not receive the same teaching controls as the teacher.
 
 This architecture reduces duplicated business logic and ensures that different areas of the platform remain synchronised because they are reading from the same underlying records.
+
+`StudentNeedsAnalysis` follows the same principle.
+
+```text
+                    StudentNeedsAnalysis
+                             │
+                ┌────────────┼────────────┐
+                │            │            │
+                ▼            ▼            ▼
+             Learner      Teacher     Company Admin
+              edit         review        read-only
+           while pending   submitted
+```
+
+The content component is shared, while view-provided capability flags such as `can_edit` and `can_review` determine which actions are exposed.
 
 ---
 
@@ -3841,6 +4989,24 @@ Key responsive behaviours include:
 - charts constrained to their parent container.
 
 The main content area uses flexible sizing together with `min-width: 0` where necessary so that charts, tables and long content cannot force the page outside its intended layout.
+
+The Learning Needs questionnaire also uses a responsive wizard pattern.
+
+On wider screens, each wizard step occupies one full horizontal panel and JavaScript moves the track between panels using horizontal translation.
+
+Only one step is visible at a time:
+
+```text
+Step 1 | Step 2 | Step 3 | Step 4 | Step 5 | Step 6
+  ▲
+visible viewport
+```
+
+The six panels still belong to one Django form and one final submission.
+
+At narrower widths, multi-column question layouts collapse while the wizard preserves the same logical step order.
+
+Reduced-motion preferences are respected by allowing the transition animation to be disabled without changing the underlying workflow.
 
 Responsive behaviour is therefore considered part of the component architecture rather than being added as a separate mobile-only interface.
 
