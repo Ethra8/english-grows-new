@@ -210,6 +210,9 @@ class Course(models.Model):
     class Meta:
         ordering = ["-created_at", "name"]
 
+    def __str__(self):
+        return self.name
+
 
     def save(self, *args, **kwargs):
         """
