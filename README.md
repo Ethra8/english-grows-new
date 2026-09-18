@@ -591,15 +591,7 @@ The current Needs Analysis stores:
 - `preferred_topics`
 - `additional_information`
 
-The questionnaire deliberately avoids collecting questions that do not change teaching decisions or that create unnecessary duplication.
-
-For example:
-
-- the former generic `biggest_challenges` free-text question was removed because the structured priorities plus optional specific goal provide clearer, quicker information;
-- learner correction preference was removed because correction timing depends on the professional requirements of the teaching activity rather than acting as a learner-selected methodology setting;
-- the questionnaire is not used as a writing assessment.
-
-If writing ability needs to be assessed, that belongs to the dedicated teacher assessment architecture rather than being inferred from a hurried needs-analysis response.
+---
 
 #### English-use frequency
 
