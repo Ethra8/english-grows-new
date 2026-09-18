@@ -2670,50 +2670,6 @@ class CourseEnrollment(models.Model):
 
 
 
-class StudentNeedsAnalysis(models.Model):
-
-    class Status(models.TextChoices):
-        PENDING = "pending", "Pending"
-        SUBMITTED = "submitted", "Submitted"
-        REVIEWED = "reviewed", "Reviewed"
-
-    enrollment = models.OneToOneField(
-        CourseEnrollment,
-        on_delete=models.CASCADE,
-        related_name="needs_analysis",
-    )
-
-    status = models.CharField(
-        max_length=20,
-        choices=Status.choices,
-        default=Status.PENDING,
-    )
-
-    # Questionnaire responses...
-
-    submitted_at = models.DateTimeField(
-        blank=True,
-        null=True,
-    )
-
-    reviewed_at = models.DateTimeField(
-        blank=True,
-        null=True,
-    )
-
-    class Meta:
-        verbose_name = "Student needs analysis"
-        verbose_name_plural = "Student needs analysis"
-
-    def __str__(self):
-        return (
-            f"Needs Analysis - "
-            f"{self.enrollment.student} - "
-            f"{self.enrollment.course}"
-        )
-
-
-
 class ClassSession(models.Model):
     """
     One scheduled lesson for a specific course.

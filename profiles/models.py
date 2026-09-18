@@ -7,12 +7,14 @@ from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from django.utils.translation import gettext_lazy as _
 
 from decimal import Decimal, ROUND_HALF_UP
 
-from courses.models import Course
+from courses.models import Course, CourseEnrollment
 
 
 class Company(models.Model):
@@ -248,6 +250,162 @@ class LearningGoal(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class StudentNeedsAnalysis(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        SUBMITTED = "submitted", "Submitted"
+        REVIEWED = "reviewed", "Reviewed"
+
+    # ---------------------------------------------------------
+    # ENROLLMENT / WORKFLOW
+    # ---------------------------------------------------------
+    enrollment = models.OneToOneField(
+        CourseEnrollment,
+        on_delete=models.CASCADE,
+        related_name="needs_analysis",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+
+    # ---------------------------------------------------------
+    # ENGLISH USE
+    # ---------------------------------------------------------
+    english_use_frequency = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+
+    communication_situations = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+
+    # ---------------------------------------------------------
+    # COMMUNICATION
+    # ---------------------------------------------------------
+    communication_partners = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    accent_exposure = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    accent_exposure_other = models.CharField(
+        max_length=150,
+        blank=True,
+    )   
+    # ---------------------------------------------------------
+    # CONFIDENCE
+    #
+    # Values:
+    # 1 = Not confident yet
+    # 2 = Slightly confident
+    # 3 = Fairly confident
+    # 4 = Confident
+    # 5 = Very confident
+    # ---------------------------------------------------------
+    speaking_confidence = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5),
+        ],
+    )
+
+    listening_confidence = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5),
+        ],
+    )
+
+    reading_confidence = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5),
+        ],
+    )
+
+    writing_confidence = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5),
+        ],
+    )
+
+    # ---------------------------------------------------------
+    # CHALLENGES & PRIORITIES
+    # ---------------------------------------------------------
+    priority_areas = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    course_goal = models.TextField(
+        blank=True,
+    )
+
+    # ---------------------------------------------------------
+    # LEARNING PREFERENCES
+    # ---------------------------------------------------------
+    learning_preferences = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    # ---------------------------------------------------------
+    # ADDITIONAL INFORMATION
+    # ---------------------------------------------------------
+    preferred_topics = models.TextField(
+        blank=True,
+    )
+
+    additional_information = models.TextField(
+        blank=True,
+    )
+
+    # ---------------------------------------------------------
+    # SUBMISSION / REVIEW
+    # ---------------------------------------------------------
+    submitted_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+    reviewed_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+
+    class Meta:
+        verbose_name = "Student needs analysis"
+        verbose_name_plural = "Student needs analysis"
+
+
+    def __str__(self):
+        return (
+            f"Needs Analysis - "
+            f"{self.enrollment.student} - "
+            f"{self.enrollment.course}"
+        )
 
 
 class StudentAcademicProfile(models.Model):

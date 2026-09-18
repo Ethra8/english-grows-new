@@ -22,7 +22,6 @@ from datetime import timedelta, datetime, time
 import calendar
 from decimal import Decimal, ROUND_HALF_UP
 
-from profiles.utils.attendance import build_enrollment_attendance_summary
 from profiles.utils.courses import build_formatted_timetable
 from profiles.utils.enrollments import order_enrollments_by_course_status
 from profiles.utils.skills import build_student_skill_cards
@@ -32,9 +31,27 @@ from profiles.utils.time_formating import (
     get_session_minutes,
 )
 
-from .models import UserProfile, TeacherProfile, StudentAcademicProfile, StudentSkillAssessment, StudentSubSkillAssessment, SUBSKILLS, StudentSkillAssessmentSnapshot
-from .forms import UserProfileForm, TeacherProfileForm, StudentAcademicProfileForm, StudentSkillAssessmentForm, StudentSubSkillAssessmentFormSet
-from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance, StudentNeedsAnalysis
+from .models import (
+    UserProfile, 
+    TeacherProfile, 
+    StudentAcademicProfile, 
+    StudentSkillAssessment, 
+    StudentSubSkillAssessment, 
+    SUBSKILLS,
+    StudentSkillAssessmentSnapshot, 
+    StudentNeedsAnalysis,
+)
+
+from .forms import (
+    UserProfileForm,
+    TeacherProfileForm,
+    StudentAcademicProfileForm,
+    StudentSkillAssessmentForm,
+    StudentSubSkillAssessmentFormSet,
+    StudentNeedsAnalysisForm,
+)
+
+from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, Attendance
 
 
 User = get_user_model()
@@ -1770,9 +1787,8 @@ def my_needs_analysis(request):
     # ---------------------------------------------------------
     # ENROLLMENTS
     #
-    # Build the course selector from this student's enrollments.
-    # The Needs Analysis belongs to the enrollment, not directly
-    # to the student.
+    # The Needs Analysis belongs to the CourseEnrollment,
+    # not directly to the student.
     # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
@@ -1812,7 +1828,7 @@ def my_needs_analysis(request):
     # One Needs Analysis exists per CourseEnrollment.
     # Newly created analyses begin as PENDING.
     # ---------------------------------------------------------
-    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
         enrollment=enrollment,
     )
 
@@ -1820,14 +1836,97 @@ def my_needs_analysis(request):
     # ---------------------------------------------------------
     # EDIT PERMISSION
     #
-    # The learner may edit only while the analysis is pending.
-    #
-    # Once submitted, the answers become read-only.
+    # Learners may edit/submit only while PENDING.
+    # Once submitted, the questionnaire becomes read-only.
     # ---------------------------------------------------------
     can_edit = (
         needs_analysis.status ==
         StudentNeedsAnalysis.Status.PENDING
     )
+
+
+    # ---------------------------------------------------------
+    # FORM INITIAL DATA
+    #
+    # StudentNeedsAnalysisForm is currently a forms.Form,
+    # therefore saved model values are supplied explicitly.
+    #
+    # This also allows the same form definition to provide
+    # labels and values for the read-only shared template.
+    # ---------------------------------------------------------
+    form_initial = {
+        "english_use_frequency": needs_analysis.english_use_frequency,
+        "communication_situations": needs_analysis.communication_situations,
+        "communication_partners": needs_analysis.communication_partners,
+        "accent_exposure": needs_analysis.accent_exposure,
+        "accent_exposure_other": needs_analysis.accent_exposure_other,
+        "speaking_confidence": needs_analysis.speaking_confidence,
+        "listening_confidence": needs_analysis.listening_confidence,
+        "reading_confidence": needs_analysis.reading_confidence,
+        "writing_confidence": needs_analysis.writing_confidence,
+        "priority_areas": needs_analysis.priority_areas,
+        "course_goal": needs_analysis.course_goal,
+        "learning_preferences": needs_analysis.learning_preferences,
+        "preferred_topics": needs_analysis.preferred_topics,
+        "additional_information": needs_analysis.additional_information,
+    }
+
+
+    # ---------------------------------------------------------
+    # FORM SUBMISSION
+    # ---------------------------------------------------------
+    if (
+        request.method == "POST"
+        and request.POST.get("action") == "submit_needs_analysis"
+    ):
+
+        # Do not trust the template alone to protect a submitted
+        # questionnaire. Reject any later/manual POST request.
+        if not can_edit:
+            return redirect(
+                f"{request.path}?course={course.id}"
+            )
+
+        form = StudentNeedsAnalysisForm(
+            request.POST,
+        )
+
+        if form.is_valid():
+            data = form.cleaned_data
+
+            needs_analysis.english_use_frequency = data["english_use_frequency"]
+            needs_analysis.communication_situations = data["communication_situations"]
+            needs_analysis.communication_partners = data["communication_partners"]
+
+            needs_analysis.accent_exposure = data["accent_exposure"]
+            needs_analysis.accent_exposure_other = data["accent_exposure_other"]
+
+            needs_analysis.speaking_confidence = data["speaking_confidence"]
+            needs_analysis.listening_confidence = data["listening_confidence"]
+            needs_analysis.reading_confidence = data["reading_confidence"]
+            needs_analysis.writing_confidence = data["writing_confidence"]
+
+            needs_analysis.priority_areas = data["priority_areas"]
+            needs_analysis.course_goal = data["course_goal"]
+
+            needs_analysis.learning_preferences = data["learning_preferences"]
+
+            needs_analysis.preferred_topics = data["preferred_topics"]
+            needs_analysis.additional_information = data["additional_information"]
+
+            needs_analysis.status = StudentNeedsAnalysis.Status.SUBMITTED
+            needs_analysis.submitted_at = timezone.now()
+
+            needs_analysis.save()
+
+            return redirect(
+                f"{request.path}?course={course.id}"
+            )
+
+    else:
+        form = StudentNeedsAnalysisForm(
+            initial=form_initial,
+        )
 
 
     # ---------------------------------------------------------
@@ -1840,27 +1939,87 @@ def my_needs_analysis(request):
         and course.status == "active"
     )
 
+    # SUBMITTED FORM LABELS & ANSWERS DISPLAY
+    english_use_frequency_labels = form.choice_labels(
+        "english_use_frequency",
+        needs_analysis.english_use_frequency,
+    )
 
+    communication_situation_labels = form.choice_labels(
+        "communication_situations",
+        needs_analysis.communication_situations,
+    )
+
+    communication_partner_labels = form.choice_labels(
+        "communication_partners",
+        needs_analysis.communication_partners,
+    )
+
+    accent_exposure_labels = form.choice_labels(
+        "accent_exposure",
+        needs_analysis.accent_exposure,
+        exclude_values={"other"},
+    )
+
+    priority_area_labels = form.choice_labels(
+        "priority_areas",
+        needs_analysis.priority_areas,
+    )
+
+    learning_preference_labels = form.choice_labels(
+        "learning_preferences",
+        needs_analysis.learning_preferences,
+    )
+
+    speaking_confidence_display = form.confidence_display(
+        needs_analysis.speaking_confidence,
+    )
+
+    listening_confidence_display = form.confidence_display(
+        needs_analysis.listening_confidence,
+    )
+
+    reading_confidence_display = form.confidence_display(
+        needs_analysis.reading_confidence,
+    )
+
+    writing_confidence_display = form.confidence_display(
+        needs_analysis.writing_confidence,
+    )
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "student": request.user,
+        "student_profile": profile,
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
         "needs_analysis": needs_analysis,
+        "form": form,
         "can_edit": can_edit,
         "can_review": False,
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
+
+        "english_use_frequency_labels": english_use_frequency_labels,
+        "communication_situation_labels": communication_situation_labels,
+        "communication_partner_labels": communication_partner_labels,
+        "accent_exposure_labels": accent_exposure_labels,
+        "priority_area_labels": priority_area_labels,
+        "learning_preference_labels": learning_preference_labels,
+        "speaking_confidence_display": speaking_confidence_display,
+        "listening_confidence_display": listening_confidence_display,
+        "reading_confidence_display": reading_confidence_display,
+        "writing_confidence_display": writing_confidence_display,
     }
 
     return render(
         request,
-        "profiles/student/student_needs_analysis.html",
+        "profiles/student/my_needs_analysis.html",
         context,
     )
+
 
 
 # ***********************************************|
@@ -4900,7 +5059,8 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
     student = enrollment.student
     course = enrollment.course
 
-
+    student_profile = student.profile
+    
     # ---------------------------------------------------------
     # AVAILABLE ENROLLMENTS
     #
@@ -4973,12 +5133,76 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         and course.status == "active"
     )
 
+    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
+        enrollment=enrollment,
+    )
+
+    # ---------------------------------------------------------
+    # FORM
+    #
+    # Company admin does not edit the questionnaire.
+    # The form is used here for field labels, choice labels,
+    # and human-readable display values.
+    # ---------------------------------------------------------
+    form = StudentNeedsAnalysisForm()
+
+
+    # ---------------------------------------------------------
+    # HUMAN-READABLE DISPLAY VALUES
+    # ---------------------------------------------------------
+    english_use_frequency_labels = form.choice_labels(
+        "english_use_frequency",
+        needs_analysis.english_use_frequency,
+    )
+
+    communication_situation_labels = form.choice_labels(
+        "communication_situations",
+        needs_analysis.communication_situations,
+    )
+
+    communication_partner_labels = form.choice_labels(
+        "communication_partners",
+        needs_analysis.communication_partners,
+    )
+
+    accent_exposure_labels = form.choice_labels(
+        "accent_exposure",
+        needs_analysis.accent_exposure,
+        exclude_values={"other"},
+    )
+
+    priority_area_labels = form.choice_labels(
+        "priority_areas",
+        needs_analysis.priority_areas,
+    )
+
+    learning_preference_labels = form.choice_labels(
+        "learning_preferences",
+        needs_analysis.learning_preferences,
+    )
+
+    speaking_confidence_display = form.confidence_display(
+        needs_analysis.speaking_confidence,
+    )
+
+    listening_confidence_display = form.confidence_display(
+        needs_analysis.listening_confidence,
+    )
+
+    reading_confidence_display = form.confidence_display(
+        needs_analysis.reading_confidence,
+    )
+
+    writing_confidence_display = form.confidence_display(
+        needs_analysis.writing_confidence,
+    )
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "student": student,
+        "student_profile": student_profile,
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
@@ -4990,11 +5214,22 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         ),
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
+
+        "english_use_frequency_labels": english_use_frequency_labels,
+        "communication_situation_labels": communication_situation_labels,
+        "communication_partner_labels": communication_partner_labels,
+        "accent_exposure_labels": accent_exposure_labels,
+        "priority_area_labels": priority_area_labels,
+        "learning_preference_labels": learning_preference_labels,
+        "speaking_confidence_display": speaking_confidence_display,
+        "listening_confidence_display": listening_confidence_display,
+        "reading_confidence_display": reading_confidence_display,
+        "writing_confidence_display": writing_confidence_display,
     }
 
     return render(
         request,
-        "profiles/teacher/student_needs_analysis.html",
+        "profiles/teacher/teacher_student_needs_analysis.html",
         context,
     )
 
@@ -8454,7 +8689,7 @@ def company_admin_student_skills_overview(request, student_id):
 def company_admin_student_needs_analysis(request, student_id):
     profile = get_object_or_404(
         UserProfile,
-        user=request.user
+        user=request.user,
     )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
@@ -8472,6 +8707,8 @@ def company_admin_student_needs_analysis(request, student_id):
         id=student_id,
         profile__company=profile.company,
     )
+
+    student_profile = student.profile
 
 
     # ---------------------------------------------------------
@@ -8519,8 +8756,74 @@ def company_admin_student_needs_analysis(request, student_id):
     #
     # Company Admin has read-only access.
     # ---------------------------------------------------------
-    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
         enrollment=enrollment,
+    )
+
+
+    # ---------------------------------------------------------
+    # FORM
+    #
+    # Company Admin does not edit the questionnaire.
+    #
+    # The form is still required by the shared read-only
+    # template because it provides:
+    #
+    # - question labels
+    # - choice labels
+    # - confidence display labels
+    # ---------------------------------------------------------
+    form = StudentNeedsAnalysisForm()
+
+
+    # ---------------------------------------------------------
+    # HUMAN-READABLE DISPLAY VALUES
+    # ---------------------------------------------------------
+    english_use_frequency_labels = form.choice_labels(
+        "english_use_frequency",
+        needs_analysis.english_use_frequency,
+    )
+
+    communication_situation_labels = form.choice_labels(
+        "communication_situations",
+        needs_analysis.communication_situations,
+    )
+
+    communication_partner_labels = form.choice_labels(
+        "communication_partners",
+        needs_analysis.communication_partners,
+    )
+
+    accent_exposure_labels = form.choice_labels(
+        "accent_exposure",
+        needs_analysis.accent_exposure,
+        exclude_values={"other"},
+    )
+
+    priority_area_labels = form.choice_labels(
+        "priority_areas",
+        needs_analysis.priority_areas,
+    )
+
+    learning_preference_labels = form.choice_labels(
+        "learning_preferences",
+        needs_analysis.learning_preferences,
+    )
+
+    speaking_confidence_display = form.confidence_display(
+        needs_analysis.speaking_confidence,
+    )
+
+    listening_confidence_display = form.confidence_display(
+        needs_analysis.listening_confidence,
+    )
+
+    reading_confidence_display = form.confidence_display(
+        needs_analysis.reading_confidence,
+    )
+
+    writing_confidence_display = form.confidence_display(
+        needs_analysis.writing_confidence,
     )
 
 
@@ -8540,21 +8843,39 @@ def company_admin_student_needs_analysis(request, student_id):
     # ---------------------------------------------------------
     context = {
         "student": student,
+        "student_profile": student_profile,
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
+
         "needs_analysis": needs_analysis,
+        "form": form,
+
+        "english_use_frequency_labels": english_use_frequency_labels,
+        "communication_situation_labels": communication_situation_labels,
+        "communication_partner_labels": communication_partner_labels,
+        "accent_exposure_labels": accent_exposure_labels,
+        "priority_area_labels": priority_area_labels,
+        "learning_preference_labels": learning_preference_labels,
+
+        "speaking_confidence_display": speaking_confidence_display,
+        "listening_confidence_display": listening_confidence_display,
+        "reading_confidence_display": reading_confidence_display,
+        "writing_confidence_display": writing_confidence_display,
+
         "can_edit": False,
         "can_review": False,
+
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
     }
 
     return render(
         request,
-        "profiles/company_admin/student_needs_analysis.html",
+        "profiles/company_admin/company_admin_student_needs_analysis.html",
         context,
     )
+
 
 
 @login_required

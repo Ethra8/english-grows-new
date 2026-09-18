@@ -650,3 +650,17 @@ remain vertically centred.*/
     }
 
 }
+
+
+
+@media (max-width: 576px) {
+
+    .course-details-page {
+        padding: 0 3% 70px;
+    }
+
+    .course-details-page header h1 {
+        padding: 0;
+    }
+
+}

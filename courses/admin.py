@@ -9,7 +9,6 @@ from .models import (
     Course,
     CourseTimetableSlot,
     CourseEnrollment,
-    StudentNeedsAnalysis,
     ClassSession,
     Attendance,
     BankHoliday,
@@ -534,41 +533,6 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         return actions
 
 
-@admin.register(StudentNeedsAnalysis)
-class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
-    list_display = (
-        "student",
-        "course",
-        "status",
-        "submitted_at",
-        "reviewed_at",
-    )
-
-    list_filter = (
-        "status",
-        "enrollment__course",
-    )
-
-    search_fields = (
-        "enrollment__student__username",
-        "enrollment__student__first_name",
-        "enrollment__student__last_name",
-        "enrollment__student__email",
-        "enrollment__course__name",
-    )
-
-    readonly_fields = (
-        "submitted_at",
-        "reviewed_at",
-    )
-
-    @admin.display(description="Student")
-    def student(self, obj):
-        return obj.enrollment.student
-
-    @admin.display(description="Course")
-    def course(self, obj):
-        return obj.enrollment.course
 
 # -------------------------------------------------------------------------
 # ATTENDANCE INLINE

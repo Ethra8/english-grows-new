@@ -13,7 +13,7 @@
     box-sizing: border-box;
 }
 
-.student-detail-page header {
+.student-detail-page .details-page__header {
     position: relative;
     overflow: hidden;
     color: var(--color-whitesmoke);
@@ -32,7 +32,7 @@
     box-shadow: 0 0.75rem 2rem rgba(var(--color-shadow-rgb), 0.18);
 }
 
-.student-detail-page header::before {
+.student-detail-page .details-page__header::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -47,8 +47,8 @@
 
 
 /* email */
-.student-detail-page header a,
-.student-detail-page header p {
+.student-detail-page .details-page__header a,
+.student-detail-page .details-page__header p {
     color: var(--color_frozen-water);
     font-size: 1.1rem;
     font-weight: 400;
@@ -60,7 +60,7 @@
 
 /* HEADER STUDENT DETAILS **************
 ** student-details-header ******************/
-header .student-details-header {
+.details-page__header .student-details-header {
     display: flex;
     align-items: center;
     gap: 4rem;
@@ -69,7 +69,7 @@ header .student-details-header {
     min-width: 0;
 }
 
-header .student-avatar-large {
+.details-page__header .student-avatar-large {
     position: relative;
     width: 135px;
     height: 135px;
@@ -83,17 +83,17 @@ header .student-avatar-large {
     margin: 0 auto;
 }
 
-header .student-avatar-large img {
+.details-page__header .student-avatar-large img {
     border-radius: 50%;
 }
 
 /* when no profile_photo, user icon displays */
-header .student-avatar-large i {
+.details-page__header .student-avatar-large i {
     font-size: 46px;
 }
 
 /* AVATAR STATUS DOT - PROFILE STATUS - My-Progress/Student details pages**********************/
-header .avatar-status-dot {
+.details-page__header .avatar-status-dot {
     position: absolute;
     right: 7%;
     bottom: 8%;
@@ -105,28 +105,28 @@ header .avatar-status-dot {
     z-index: 10;
 }
 
-header .student-avatar-large.avatar-active .avatar-status-dot {
+.details-page__header .student-avatar-large.avatar-active .avatar-status-dot {
     background-color: var(--color-active-dot);
 }
 
-header .student-avatar-large.avatar-inactive .avatar-status-dot {
+.details-page__header .student-avatar-large.avatar-inactive .avatar-status-dot {
     background-color: var(--color-inactive-dot);
 }
 /* END OF AVATAR STATUS DOT - PROFILE STATUS **************/
 
-header .student-details-header h1,
-header .student-details-header p {
+.details-page__header .student-details-header h1,
+.details-page__header .student-details-header p {
     min-width: 0;
     max-width: 100%;
 }
 
-header .student-details-header h1 {
+.details-page__header .student-details-header h1 {
     color: var(--color-whitesmoke);
     margin-bottom: 0;
     font-size: clamp(2.2rem, 2.5vw, 2.8rem);
 }
 
-header .student-details-header a:hover {
+.details-page__header .student-details-header a:hover {
     color: var(--color-tropical-teal);
 }
 
@@ -142,7 +142,7 @@ header .student-details-header a:hover {
 }
 
 /* DIV WITH LEVEL ************/
-.student-detail-page header .header-level {
+.student-detail-page .details-page__header .header-level {
     margin: 1.2rem auto 0;
     min-width: max-content;
     width: 100%;
@@ -628,16 +628,16 @@ header .student-details-header a:hover {
 
 @media (max-width: 1499.98px) {
 
-    .student-detail-page header {
+    .student-detail-page hea.details-page__headerder {
         flex-direction: column;
         align-items: start;
     }
 
-    header .student-details-header {
+    .details-page__header .student-details-header {
         gap: 4rem;
     }
 
-    .student-detail-page header::before {
+    .student-detail-page .details-page__header::before {
         background-position: right -180px top 60px;
     }
 
@@ -656,7 +656,7 @@ header .student-details-header a:hover {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .student-detail-page header::before {
+    .student-detail-page .details-page__header::before {
         background-position: right -240px top 60px;
     }
 
@@ -666,7 +666,7 @@ header .student-details-header a:hover {
 
 @media (max-width: 1199.98px) {
 
-    .student-detail-page header::before {
+    .student-detail-page .details-page__header::before {
         background-position: right -320px top 60px;
     }
 
@@ -680,7 +680,7 @@ header .student-details-header a:hover {
         padding: 20px 3% 70px;
     }
 
-    .student-detail-page header h1 {
+    .student-detail-page .details-page__header h1 {
         font-size: 2.6rem;
     }
 
@@ -700,11 +700,11 @@ header .student-details-header a:hover {
         margin: 0 auto;
     }
 
-    .student-detail-page header {
+    .student-detail-page .details-page__header {
         padding: 0;
     }
 
-    header .student-details-header {
+    .details-page__header .student-details-header {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -720,13 +720,13 @@ header .student-details-header a:hover {
         height: 200px;
     }
     
-    header .student-details-header > div:last-child {
+    .details-page__header .student-details-header > div:last-child {
         padding: 0;
         min-width: fit-content;
         max-width: fit-content;
     }
 
-    header .student-details-header p a {
+    .details-page__header .student-details-header p a {
         margin: 1rem auto 1rem;
         text-align: center;
     }
@@ -765,25 +765,18 @@ header .student-details-header a:hover {
         padding: 0px 3% 70px;
     }
 
-    header .student-details-header {
+    .details-page__header .student-details-header {
         align-items: center;
         justify-content: center !important;
         padding: 1.5rem 0.5rem;
     }
 
-    .student-detail-page header::before {
+    .student-detail-page .details-page__header::before {
         background-position: right -440px top 60px;
         opacity: 0.02; /* adjust only globe opacity */
     }
 
     /* *** MY COURSE Page ******************************** */
-    .course-details-page {
-        padding: 0 3% 70px;
-    }
-
-    .course-details-page header h1 {
-        padding: 0;
-    }
 
     .detail-row {
         gap: 0.25rem;

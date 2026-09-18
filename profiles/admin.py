@@ -7,6 +7,7 @@ from django.utils.html import format_html, format_html_join
 from .models import (
     Company,
     UserProfile,
+    StudentNeedsAnalysis,
     StudentAcademicProfile,
     LearningGoal,
     StudentSkillAssessment,
@@ -251,8 +252,122 @@ class UserProfileAdmin(admin.ModelAdmin):
     get_email.short_description = "Email"
 
 
-# STUDENT ACADEMIC PROFILE ====================================================
 
+
+@admin.register(StudentNeedsAnalysis)
+class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
+    list_display = (
+        "student",
+        "course",
+        "status",
+        "submitted_at",
+        "reviewed_at",
+    )
+
+    list_filter = (
+        "status",
+        "enrollment__course",
+    )
+
+    search_fields = (
+        "enrollment__student__username",
+        "enrollment__student__first_name",
+        "enrollment__student__last_name",
+        "enrollment__student__email",
+        "enrollment__course__name",
+    )
+
+    list_select_related = (
+        "enrollment__student",
+        "enrollment__course",
+    )
+
+    readonly_fields = (
+        "submitted_at",
+        "reviewed_at",
+    )
+
+    fieldsets = (
+        (
+            "Enrollment / Workflow",
+            {
+                "fields": (
+                    "enrollment",
+                    "status",
+                    "submitted_at",
+                    "reviewed_at",
+                ),
+            },
+        ),
+        (
+            "1. Your English",
+            {
+                "fields": (
+                    "english_use_frequency",
+                    "communication_situations",
+                ),
+            },
+        ),
+        (
+            "2. Your Communication",
+            {
+                "fields": (
+                    "communication_partners",
+                    "accent_exposure",
+                    "accent_exposure_other",
+                ),
+            },
+        ),
+        (
+            "3. Your Confidence",
+            {
+                "fields": (
+                    "speaking_confidence",
+                    "listening_confidence",
+                    "reading_confidence",
+                    "writing_confidence",
+                ),
+            },
+        ),
+        (
+            "4. Challenges & Priorities",
+            {
+                "fields": (
+                    "priority_areas",
+                    "course_goal",
+                ),
+            },
+        ),
+        (
+            "5. How You Learn",
+            {
+                "fields": (
+                    "learning_preferences",
+                ),
+            },
+        ),
+        (
+            "6. Anything Else",
+            {
+                "fields": (
+                    "preferred_topics",
+                    "additional_information",
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description="Student")
+    def student(self, obj):
+        return obj.enrollment.student
+
+    @admin.display(description="Course")
+    def course(self, obj):
+        return obj.enrollment.course
+
+
+
+# STUDENT ACADEMIC PROFILE ====================================================
 @admin.register(StudentAcademicProfile)
 class StudentAcademicProfileAdmin(admin.ModelAdmin):
     list_display = (
