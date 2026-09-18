@@ -1,0 +1,14 @@
+.results tbody tr:has(.low-attendance-warning) th,
+.results tbody tr:has(.low-attendance-warning) td {
+    background: #fff1f1;
+}
+
+.results tbody tr:has(.low-attendance-warning):hover th,
+.results tbody tr:has(.low-attendance-warning):hover td {
+    background: #ffe5e5;
+}
+
+.low-attendance-warning {
+    color: #d32f2f;
+    font-weight: 700;
+}

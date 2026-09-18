@@ -1,23 +1,27 @@
 from django.contrib import admin
+
+from django.contrib.admin.views.main import ChangeList
+from django.forms.models import BaseInlineFormSet
 from django.utils import timezone
 from django.utils.html import format_html
 
-from django.forms.models import BaseInlineFormSet
+from django.db.models import BooleanField, Case, Count, F, Q, Value, When
 
 from .models import (
     CourseType,
+    Programme,
+    BankHoliday,
     Course,
     CourseTimetableSlot,
     CourseEnrollment,
     ClassSession,
     Attendance,
-    BankHoliday,
-    Programme,
 )
-
 from courses.utils.course_dates import calculate_course_end_date
 
-
+# -------------------------------------------------------------------------
+# REFERENCE / CONFIGURATION ADMINS
+# -------------------------------------------------------------------------
 @admin.register(CourseType)
 class CourseTypeAdmin(admin.ModelAdmin):
     list_display = (
@@ -40,6 +44,27 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Programme)
 class ProgrammeAdmin(admin.ModelAdmin):
+    list_display = (
+        "icon_preview",
+        "name",
+        "slug",
+        "is_active",
+        "order",
+    )
+
+    list_editable = (
+        "is_active",
+        "order",
+    )
+
+    prepopulated_fields = {
+        "slug": ("name",),
+    }
+
+    search_fields = (
+        "name",
+        "description",
+    )
 
     @admin.display(description="Icon")
     def icon_preview(self, obj):
@@ -72,27 +97,46 @@ class ProgrammeAdmin(admin.ModelAdmin):
             ''',
             obj.icon.url,
         )
-    
+
+
+@admin.register(BankHoliday)
+class BankHolidayAdmin(admin.ModelAdmin):
     list_display = (
-        "icon_preview",
-        "name",
-        "slug",
+        "title",
+        "start_date",
+        "end_date",
         "is_active",
-        "order",
     )
 
-    list_editable = (
+    list_filter = (
         "is_active",
-        "order",
+        "start_date",
     )
-
-    prepopulated_fields = {
-        "slug": ("name",),
-    }
 
     search_fields = (
-        "name",
-        "description",
+        "title",
+    )
+
+    ordering = (
+        "start_date",
+    )
+
+
+# -------------------------------------------------------------------------
+# COURSE ADMIN
+# -------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
+# COURSE TIMETABLE INLINE
+# -------------------------------------------------------------------------
+class CourseTimetableSlotInline(admin.TabularInline):
+    model = CourseTimetableSlot
+    extra = 1
+
+    fields = (
+        "day_of_week",
+        "start_time",
+        "end_time",
     )
 
 # -------------------------------------------------------------------------
@@ -178,31 +222,8 @@ class CourseEnrollmentInline(admin.TabularInline):
         return request.user.is_superuser
 
 
-# -------------------------------------------------------------------------
-# COURSE TIMETABLE INLINE
-# -------------------------------------------------------------------------
-class CourseTimetableSlotInline(admin.TabularInline):
-    model = CourseTimetableSlot
-    extra = 1
-
-    fields = (
-        "day_of_week",
-        "start_time",
-        "end_time",
-    )
-
-
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-
-    @admin.display(description="Class Duration")
-    def class_duration_display(self, obj):
-        return obj.class_duration_display
-
-    @admin.display(description="Final Class Duration")
-    def final_class_duration_display(self, obj):
-        return obj.final_class_duration_display
-
     list_display = (
         "name",
         "course_type",
@@ -271,6 +292,20 @@ class CourseAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "programmes",
     )
+
+    inlines = (
+        CourseTimetableSlotInline,
+        CourseEnrollmentInline,
+    )
+
+    @admin.display(description="Class Duration")
+    def class_duration_display(self, obj):
+        return obj.class_duration_display
+
+    @admin.display(description="Final Class Duration")
+    def final_class_duration_display(self, obj):
+        return obj.final_class_duration_display
+
     # Manual "Generate class sessions" action removed.
     #
     # ClassSessions + initial Attendance records are generated
@@ -410,12 +445,32 @@ class CourseAdmin(admin.ModelAdmin):
         if course.class_sessions.exists():
             course.sync_end_date_from_sessions()
 
-    inlines = (
-        CourseTimetableSlotInline,
-        CourseEnrollmentInline,
-    )
 
 
+class LowAttendanceWarningFilter(admin.SimpleListFilter):
+    title = "low attendance warning"
+    parameter_name = "low_attendance_warning"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", "Yes"),
+            ("no", "No"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            return queryset.filter(admin_low_attendance_warning=True)
+
+        if self.value() == "no":
+            return queryset.filter(admin_low_attendance_warning=False)
+
+        return queryset
+
+
+
+# -------------------------------------------------------------------------
+# COURSE ENROLLMENT ADMIN
+# -------------------------------------------------------------------------
 class CourseEnrollmentCourseFilter(admin.SimpleListFilter):
     """
     Filter CourseEnrollments by course name.
@@ -449,23 +504,30 @@ class CourseEnrollmentCourseFilter(admin.SimpleListFilter):
         return queryset
 
 
+
+class CourseEnrollmentChangeList(ChangeList):
+    def _get_default_ordering(self):
+        return (
+            "-admin_low_attendance_warning",
+            "-enrolled_at",
+        )
+
+
 @admin.register(CourseEnrollment)
 class CourseEnrollmentAdmin(admin.ModelAdmin):
     list_display = (
         "student",
         "course_name",
         "status",
-        "target_level",
-        "enrolled_at",
-        "total_assigned_classes",
-        "attended_classes",
-        "missed_classes",
+        "low_attendance_warning",
         "attendance_percentage",
+        "enrolled_at",
     )
 
     list_filter = (
         "status",
-        CourseEnrollmentCourseFilter,
+        LowAttendanceWarningFilter,
+        CourseEnrollmentCourseFilter,        
         "course__course_type",
         "enrolled_at",
     )
@@ -494,12 +556,28 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         "has_low_attendance_warning",
     )
 
+    class Media:
+        css = {
+            "all": ("courses/css/admin/admin_course_enrollment.css",)
+        }
+
+    def get_changelist(self, request, **kwargs):
+        return CourseEnrollmentChangeList
+
+
     @admin.display(
-        description="Course",
-        ordering="course__name",
+        description="Low attendance warning",
+        ordering="admin_low_attendance_warning",
     )
-    def course_name(self, obj):
-        return obj.course.name
+    def low_attendance_warning(self, obj):
+        if obj.admin_low_attendance_warning:
+            return format_html(
+                '<strong class="low-attendance-warning">{}</strong>',
+                "Yes",
+            )
+
+        return "No"
+
 
     def has_delete_permission(self, request, obj=None):
         """
@@ -532,8 +610,65 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
         actions.pop("delete_selected", None)
         return actions
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+
+        submitted_filter = Q(
+            student__attendance_records__class_session__course_id=F("course_id"),
+            student__attendance_records__class_session__status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            student__attendance_records__status__in=Attendance.FINAL_OUTCOME_STATUSES,
+        )
+
+        return (
+            queryset
+            .annotate(
+                admin_submitted_count=Count(
+                    "student__attendance_records",
+                    filter=submitted_filter,
+                    distinct=True,
+                ),
+                admin_attended_count=Count(
+                    "student__attendance_records",
+                    filter=submitted_filter & Q(
+                        student__attendance_records__status=Attendance.STATUS_ATTENDED,
+                    ),
+                    distinct=True,
+                ),
+            )
+            .annotate(
+                admin_low_attendance_score=(
+                    200 * F("admin_attended_count")
+                    - 149 * F("admin_submitted_count")
+                )
+            )
+            .annotate(
+                admin_low_attendance_warning=Case(
+                    When(
+                        admin_submitted_count__gt=0,
+                        admin_low_attendance_score__lte=0,
+                        then=Value(True),
+                    ),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                )
+            )
+            .order_by(
+                "-admin_low_attendance_warning",
+                "-enrolled_at",
+            )
+        )
+
+    @admin.display(
+        description="Course",
+        ordering="course__name",
+    )
+    def course_name(self, obj):
+        return obj.course.name
 
 
+# -------------------------------------------------------------------------
+# CLASS SESSION ADMIN
+# -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
 # ATTENDANCE INLINE
 # -------------------------------------------------------------------------
@@ -684,7 +819,9 @@ class ClassSessionAdmin(admin.ModelAdmin):
 
         return start_time.strftime("%d/%m/%Y %H:%M")
 
-
+# -------------------------------------------------------------------------
+# ATTENDANCE ADMIN
+# -------------------------------------------------------------------------
 class AttendanceCourseFilter(admin.SimpleListFilter):
     """
     Filter Attendance records by course.
@@ -728,6 +865,30 @@ class AttendanceCourseFilter(admin.SimpleListFilter):
         return queryset
 
 
+class AttendanceClassStatusFilter(admin.SimpleListFilter):
+    """
+    Filter Attendance records by the lifecycle status of their ClassSession.
+
+    Attendance.status and ClassSession.status describe different things:
+    - Attendance status = learner outcome for that lesson
+    - Class status = lifecycle state of the lesson itself
+    """
+
+    title = "class status"
+    parameter_name = "class_status"
+
+    def lookups(self, request, model_admin):
+        return ClassSession._meta.get_field("status").choices
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                class_session__status=self.value()
+            )
+
+        return queryset
+
+
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = (
@@ -735,12 +896,14 @@ class AttendanceAdmin(admin.ModelAdmin):
         "course_name",
         "class_session_display",
         "session_datetime",
-        "status",
+        "class_session_status",
+        "attendance_status",
         "was_punctual",
     )
 
     list_filter = (
         "status",
+        AttendanceClassStatusFilter,
         AttendanceCourseFilter,
         "recorded_at",
     )
@@ -756,6 +919,7 @@ class AttendanceAdmin(admin.ModelAdmin):
     fields = (
         "student",
         "class_session",
+        "class_session_status",
         "status",
         "minutes_late",
         "notes",
@@ -766,6 +930,7 @@ class AttendanceAdmin(admin.ModelAdmin):
     readonly_fields = (
         "student",
         "class_session",
+        "class_session_status",
         "recorded_at",
         "was_punctual",
     )
@@ -850,25 +1015,25 @@ class AttendanceAdmin(admin.ModelAdmin):
 
         return start_time.strftime("%d/%m/%Y %H:%M")
 
-
-@admin.register(BankHoliday)
-class BankHolidayAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "start_date",
-        "end_date",
-        "is_active",
+    # ----------------------------------------
+    # CLASS SESSION STATUS
+    # e.g. Scheduled / Pending reschedule /
+    # Rescheduled / Completed
+    # ----------------------------------------
+    @admin.display(
+        description="Class status",
+        ordering="class_session__status",
     )
+    def class_session_status(self, obj):
+        return obj.class_session.get_status_display()
 
-    list_filter = (
-        "is_active",
-        "start_date",
+    # ----------------------------------------
+    # ATTENDANCE STATUS
+    # e.g. Pending / Attended / Missed / Excused
+    # ----------------------------------------
+    @admin.display(
+        description="Attendance status",
+        ordering="status",
     )
-
-    search_fields = (
-        "title",
-    )
-
-    ordering = (
-        "start_date",
-    )
+    def attendance_status(self, obj):
+        return obj.get_status_display()
