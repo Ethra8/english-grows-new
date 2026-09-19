@@ -114,13 +114,13 @@
                                     <a href="{% url 'profiles:teacher_attendance_detail' session.id %}" class="btn-course-details">
                                         <i class="fa-regular fa-eye mr-2"></i>
                                         Review
-                                        <img src="{% static 'icons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
+                                        <img src="{% static 'icons/custom/chevrons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
                                     </a>
                                 {% else %}
                                     <a href="{% url 'profiles:teacher_take_attendance' session.id %}" class="btn-course-details">
                                         <i class="fa-solid fa-clipboard-list mr-2"></i>
                                         Record
-                                        <img src="{% static 'icons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
+                                        <img src="{% static 'icons/custom/chevrons/chevron_right_teal_icon.png' %}" alt="" width="12" height="14" class="ml-2">
                                     </a>
                                 {% endif %}
                             </div>

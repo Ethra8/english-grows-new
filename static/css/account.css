@@ -6,6 +6,16 @@
     box-shadow: 0 1px 3px 0 #cfd7df;
 }
 
+.email-change-card h3 {
+    font-size: 1.5rem;
+}
+
+.wrapper-two-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
 .allauth-form-inner-content .btn-cancel {
     width: 100%;
     /* max-width: 320px;  */
@@ -15,7 +25,7 @@
     color: var(--color-whitesmoke);
     text-transform: uppercase;
     padding: 0.5rem 1rem;
-    border: outset 1px #5ff0fc;
+    border: 1px outset rgba(var(--color-teal-rgb), 0.7);
     box-shadow: 0 1px 3px 0 #484a4d;    
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -32,10 +42,10 @@
     border-radius: 5px;
     font-size: 1.1rem;
     background: var(--color-navy);
-   color: var(--color-whitesmoke);
+    color: var(--color-whitesmoke);
     text-transform: uppercase;
     padding: 0.5rem 1rem;
-    border: outset 1px #5ff0fc;
+    border: 1px outset rgba(var(--color-teal-rgb), 0.7);
     box-shadow: 0 1px 3px 0 #484a4d;    
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -75,8 +85,9 @@
 .form-group input:not([class='qty-input']),
 .form-group textarea,
 .allauth-form-inner-content input:not([type='checkbox']) {
-    border-color: var(--color-navy);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.7);
     border-radius: 5px;
+    padding: 0.15rem 0.45rem;
 }
 
 #id_remember,
@@ -137,4 +148,11 @@
         max-width: 100% !important; 
     }
 
+}
+
+@media (max-width: 467px) {
+
+    .wrapper-two-buttons {
+        flex-direction: column;
+    }
 }

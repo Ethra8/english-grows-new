@@ -1,0 +1,115 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}
+    {% trans "Account Email" context 'change email page' %}
+{% endblock head_title %}
+
+{% block inner_content %}
+
+    {% if not emailaddresses %}
+        {% include "account/snippets/warn_no_email.html" %}
+    {% endif %}
+
+    <div class="email-change-card">
+
+        <p class="email-change-intro">
+            {% trans "Your email address is used to authenticate and access your account." %}
+        </p>
+
+        {% if current_emailaddress %}
+            <div class="email-change-group">
+                <label for="current_email">{% trans "Current email address" %}</label>
+                <input id="current_email"
+                       class="email-change-input email-change-input--readonly"
+                       type="email"
+                       value="{{ current_emailaddress.email }}"
+                       readonly
+                       aria-readonly="true">
+            </div>
+        {% endif %}
+
+        {% if new_emailaddress %}
+            <div class="email-change-group email-change-pending">
+                <label for="new_email">
+                    {% if current_emailaddress %}
+                        {% trans "Pending email address" %}
+                    {% else %}
+                        {% trans "Current email address" %}
+                    {% endif %}
+                </label>
+
+                <input id="new_email"
+                       class="email-change-input email-change-input--readonly"
+                       type="email"
+                       value="{{ new_emailaddress.email }}"
+                       readonly
+                       aria-readonly="true">
+
+                <p class="email-change-status">
+                    {% trans "This email address is still pending verification." %}
+                </p>
+
+                <div class="email-change-actions">
+                    <button class="btn account-action-btn"
+                            form="pending-email"
+                            type="submit"
+                            name="action_send">
+                        {% trans "Re-send verification" %}
+                    </button>
+
+                    {% if current_emailaddress %}
+                        <button class="btn account-action-btn account-action-btn--secondary"
+                                form="pending-email"
+                                type="submit"
+                                name="action_remove">
+                            {% trans "Cancel change" %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <h3 class="mt-5 mb-3">{% trans "Change your email?" %}</h3>
+        <form method="post"
+              action="{% url 'account_email' %}"
+              class="email-change-form">
+            {% csrf_token %}
+                <p class="email-change-status">
+                    {% trans "If you want to change the email linked to your account, include your new email in the following box:" %}
+                </p>
+
+            <div class="email-change-group">
+                <label for="{{ form.email.id_for_label }}">
+                    {% trans "New email address" %}
+                </label>
+
+                {{ form.email }}
+
+                {% if form.email.errors %}
+                    <div class="email-change-errors">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button class="btn account-action-btn mt-4"
+                    name="action_add"
+                    type="submit">
+                {% trans "Change email" %}
+            </button>
+        </form>
+
+    </div>
+
+    {% if new_emailaddress %}
+        <form id="pending-email"
+              method="post"
+              action="{% url 'account_email' %}"
+              hidden>
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ new_emailaddress.email }}">
+        </form>
+    {% endif %}
+
+{% endblock inner_content %}

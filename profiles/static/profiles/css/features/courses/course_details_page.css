@@ -474,7 +474,7 @@ remain vertically centred.*/
     width: 70px;
     height: 70px;
     transform: translateY(-50%) rotate(-12deg);
-    background-image: url(/static/icons/course_programme_focus.png);
+    background-image: url(/static/icons/custom/course/course_programme/course_programme_focus.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

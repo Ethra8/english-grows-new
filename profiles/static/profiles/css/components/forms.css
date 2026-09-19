@@ -45,8 +45,17 @@
     width: 32px;
     margin-left: .5rem;
 }
-/* ********************************************* */
 
+/* wrapper for update email btn  */
+.profile-email-actions {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+/* ********************************************* */
 
 .account-settings-form {
     background-color: var(--color-mist);

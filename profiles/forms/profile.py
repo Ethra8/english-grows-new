@@ -1,6 +1,7 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, Div, HTML
 
 from ..models import (
     UserProfile,
@@ -20,7 +21,7 @@ class UserProfileForm(forms.ModelForm):
     )
 
     email = forms.EmailField(
-        required=True,
+        required=False,
     )
 
     class Meta:
@@ -45,9 +46,6 @@ class UserProfileForm(forms.ModelForm):
             self.fields["first_name"].initial = self.user.first_name
             self.fields["last_name"].initial = self.user.last_name
             self.fields["email"].initial = self.user.email
-
-        self.helper = FormHelper()
-        self.helper.form_method = "POST"
 
         placeholders = {
             "first_name": "First name",
@@ -80,16 +78,57 @@ class UserProfileForm(forms.ModelForm):
             if field_name != "profile_photo":
                 field.label = False
 
+        self.fields["email"].widget.attrs.update({
+            "readonly": True,
+            "aria-readonly": "true",
+        })
+
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.form_tag = False
+
+        self.helper.layout = Layout(
+            Div(
+                HTML(
+                    """
+                    <p class="profile-email-info">
+                        <strong>Your account is linked to the email address below</strong>, which is used
+                        for authentication and login. To change it, you will need to verify
+                        your new email address using the verification email we send you.
+                    </p>
+                    """
+                ),
+                Field("email"),
+                HTML(
+                    """
+                    <div class="profile-email-actions">
+                        <a href="{% url 'account_email' %}"
+                           class="btn btn-update text-uppercase">
+                            Edit email
+                            <span aria-hidden="true" class="ml-2">&rarr;</span>
+                        </a>
+                    </div>
+                    """
+                ),
+                css_class="profile-email-field",
+            ),
+
+            Field("first_name"),
+            Field("last_name"),
+            Field("native_language"),
+            Field("country"),
+            Field("profile_photo"),
+        )
+
     def save(self, commit=True):
         profile = super().save(commit=False)
 
         if self.user:
             self.user.first_name = self.cleaned_data.get("first_name")
             self.user.last_name = self.cleaned_data.get("last_name")
-            self.user.email = self.cleaned_data.get("email")
 
             if commit:
-                self.user.save()
+                self.user.save(update_fields=["first_name", "last_name"])
                 profile.save()
 
         elif commit:
@@ -105,4 +144,3 @@ class TeacherProfileForm(forms.ModelForm):
             "bio",
             "specialties",
         ]
-

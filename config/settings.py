@@ -188,6 +188,8 @@ else:
     ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
+ACCOUNT_CHANGE_EMAIL = True
+
 # Email configuration
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

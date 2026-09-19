@@ -82,7 +82,7 @@
                                 <a href="{% url 'profiles:company_admin_course_attendance_detail' submitted_class_session.id %}" class="attendance-class-link">
                                     <div class="attendance-class-info">
                                         <strong>{% trans 'Lesson' %} {{ submitted_class_session.class_number }}</strong>
-                                        <img class="attendance-session-arrow" src="{% static 'icons/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="36">
+                                        <img class="attendance-session-arrow" src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="36">
                                     </div>
                                 </a>    
                             </div>
@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="class-list-attendance-rate">
-                                <div class="icon"><img src="{% static 'icons/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16"></div>
+                                <div class="icon"><img src="{% static 'icons/custom/attendance/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16"></div>
                                 <div>
                                     <strong>{% trans 'Attendance' %}</strong><br>
                                     <span>{{ submitted_class_session.attendance_percentage }}%</span>

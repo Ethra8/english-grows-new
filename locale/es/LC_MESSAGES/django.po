@@ -1774,7 +1774,7 @@ msgstr "Asistido"
 
 #: .\templates\account\email.html:6
 msgid "E-mail Addresses"
-msgstr ""
+msgstr "Emails Asociados a Tu Cuenta"
 
 #: .\templates\account\email.html:11
 msgid "The following e-mail addresses are associated with your account:"
@@ -1848,9 +1848,46 @@ msgid ""
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
+#: .\templates\account\email_change.html
+msgctxt "change email page"
+msgid "Account Email"
+msgstr "Email de la Cuenta"
+
+msgid "Your email address is used to authenticate and access your account."
+msgstr "Tu dirección de correo electrónico se utiliza para autenticarte y acceder a tu cuenta."
+
+msgid "Current email address"
+msgstr "Dirección de correo electrónico actual"
+
+msgid "Pending email address"
+msgstr "Dirección de correo electrónico pendiente"
+
+msgid "This email address is still pending verification."
+msgstr "Esta dirección de correo electrónico aún está pendiente de verificación."
+
+msgid "Re-send verification"
+msgstr "Reenviar verificación"
+
+msgid "Cancel change"
+msgstr "Cancelar cambio"
+
+msgid "Change your email?"
+msgstr "¿Quieres cambiar tu correo electrónico?"
+
+msgid "If you want to change the email linked to your account, include your new email in the following box:"
+msgstr "Si quieres cambiar el correo electrónico vinculado a tu cuenta, introduce tu nueva dirección de correo electrónico en el siguiente campo:"
+
+msgid "New email address"
+msgstr "Nueva dirección de correo electrónico"
+
+msgid "Change email"
+msgstr "Cambiar correo electrónico"
+
+
+
 #: .\templates\account\login.html:7
 msgid "Sign in to your account"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: .\templates\account\login.html:13
 msgid ""
@@ -1868,11 +1905,11 @@ msgstr ""
 
 #: .\templates\account\login.html:22
 msgid "sign up"
-msgstr ""
+msgstr "Registrarse"
 
 #: .\templates\account\login.html:40
 msgid "Sign In"
-msgstr ""
+msgstr "Iniciar Sesión"
 
 #: .\templates\account\login.html:46
 #: .\templates\account\password_change.html:14
@@ -1880,18 +1917,20 @@ msgid "Forgot Password?"
 msgstr "¿Contraseña olvidada?"
 
 #: .\templates\account\logout.html:8 .\templates\account\logout.html:21
+msgctxt "logout title"
 msgid "Log Out"
-msgstr "Desconectarse"
+msgstr "Cierre de Sesión"
+
+msgid "Log Out"
+msgstr "Salir"
 
 #: .\templates\account\logout.html:12
 msgid "Are you sure you want to log out?"
-msgstr "Estás seguro/a que quieres desconectarte"
+msgstr "Por favor, confirma el cierre de sesión:"
 
 #: .\templates\account\logout.html:25
-
-#| msgid "Cancelled"
 msgid "Cancel"
-msgstr "Cancelado"
+msgstr "Cancelar"
 
 #: .\templates\account\password_change.html:6
 #: .\templates\account\password_change.html:13
@@ -1922,14 +1961,11 @@ msgstr "Resetear contraseña"
 
 #: .\templates\account\password_reset_done.html:14
 msgid "We have sent you an e-mail. If you have not received it please check your spam folder. Otherwise contact us if you do not receive it in a few minutes."
-msgstr ""
+msgstr "Se te ha enviado un eamil. Si no lo recibes brevemente, por favor, revisa tu carpeta de correo indeseado. Si aún así no lo has recibido pasados unos minutos, ponte en contacto."
 
 #: .\templates\account\password_reset_from_key.html:11
-msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
-"a>."
-msgstr ""
+msgid "The password reset link was invalid, possibly because it has already been used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</a>."
+msgstr "El enlace para restablecer la contraseña no es válido, posiblemente porque ya se ha utilizado. Solicita un <a href=\"%(passwd_reset_url)s\">nuevo restablecimiento de contraseña</a>."
 
 #: .\templates\account\password_reset_from_key.html:16
 msgid "change password"
@@ -1953,13 +1989,15 @@ msgstr "Crea tu cuenta"
 
 #: .\templates\account\signup.html:16
 msgid "Sign Up"
-msgstr "Regístrate"
+msgstr "Registrarse"
 
 #: .\templates\account\signup.html:19
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">log in</a>."
 msgstr ""
+"¿Ya tienes una cuenta? Entonces, <a href=\"%(login_url)s\">inicia sesión</a>."
+
 
 #: .\templates\account\signup_closed.html:5
 msgid "Sign Up Closed"
@@ -1981,6 +2019,11 @@ msgid ""
 "your main inbox, check your spam folder. Please contact us if you do not "
 "receive the verification e-mail within a few minutes."
 msgstr ""
+"Te hemos enviado un correo electrónico de verificación. Sigue el enlace "
+"proporcionado para completar el proceso de registro. Si no ves el correo "
+"de verificación en tu bandeja de entrada principal, comprueba la carpeta "
+"de correo no deseado o spam. Ponte en contacto con nosotros si no recibes "
+"el correo de verificación en unos minutos."
 
 #: .\templates\account\verified_email_required.html:11
 msgid ""
@@ -1988,6 +2031,9 @@ msgid ""
 "you are who you claim to be. For this purpose, we require that you\n"
 "verify ownership of your e-mail address. "
 msgstr ""
+"Esta parte del sitio requiere que verifiquemos que\n"
+"eres quien afirmas ser. Para ello, necesitamos que\n"
+"verifiques que eres el titular de tu dirección de correo electrónico. "
 
 #: .\templates\account\verified_email_required.html:15
 msgid ""
@@ -1997,6 +2043,11 @@ msgid ""
 "Otherwise\n"
 "contact us if you do not receive it within a few minutes."
 msgstr ""
+"Te hemos enviado un correo electrónico de\n"
+"verificación. Haz clic en el enlace incluido en ese correo. Si no ves "
+"el correo de verificación en tu bandeja de entrada principal, comprueba "
+"la carpeta de correo no deseado o spam. Si aun así\n"
+"no lo recibes en unos minutos, ponte en contacto con nosotros."
 
 #: .\templates\account\verified_email_required.html:19
 #, python-format
@@ -2004,14 +2055,16 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
+"<strong>Nota:</strong> aún puedes <a href=\"%(email_url)s\">cambiar tu "
+"dirección de correo electrónico</a>."
 
 #: .\templates\base.html:69
 msgid "Skip to main content"
-msgstr "Salta al contenido principal"
+msgstr "Saltar a contenido principal"
 
 #: .\templates\base.html:79
 msgid "Go to the home page"
-msgstr "Ir a pagína de inicio"
+msgstr "Ir a página de inicio"
 
 #: .\templates\base.html:176 .\templates\base.html:186
 #: .\templates\base.html:196 .\templates\base.html:206

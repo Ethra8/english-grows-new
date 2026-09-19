@@ -51,12 +51,12 @@
         <a href="{% url 'profiles:company_admin_courses' %}" aria-label="{% trans 'View all courses' %}">
             <div class="meta-card meta-courses">
                 <div>
-                    <img src="{% static 'icons/course_turquoise_icon.png' %}" alt="" aria-hidden="true" width="50">
+                    <img src="{% static 'icons/custom/meta_cards/course_icon.png' %}" alt="" aria-hidden="true" width="50">
                 </div>
                 <div class="meta-text">
                     <strong>
                         {% trans 'Active Courses' %}
-                        <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                        <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
                     </strong>
                     <span>{{ active_company_courses_count }} / {{ total_company_courses_count }}</span>
                 </div>
@@ -71,7 +71,7 @@
                 <div class="meta-text">
                     <strong>
                         {% trans 'Employees' context 'dashboard metacards' %}
-                        <img src="{% static 'icons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                        <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
                     </strong>
                     <span>
                         {{ total_active_employees|default:"0" }}
@@ -237,7 +237,7 @@
                             <div class="attendance-class-info">
                                 <div class="attendance-class-name">
                                     <strong>{{ course.name }}</strong>
-                                    <img class="arrow" src="{% static 'icons/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true">
+                                    <img class="arrow" src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true">
                                 </div>
                                 <span>
                                     <img src="{% static 'icons/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="16" class="mr-1 mb-1">
@@ -259,7 +259,7 @@
                             </div>
 
                             <div class="course-attendance-cell submitted-cell">
-                                <img src="{% static 'icons/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16" class="mr-2 mb-1">
+                                <img src="{% static 'icons/custom/attendance/clipboard_attendance_class_list.png' %}" alt="" aria-hidden="true" width="16" class="mr-2 mb-1">
                                 <div>
                                     <strong>{{ course.submitted_classes_count }} / {{ course.past_classes_count }}</strong>
                                     <small>{{ course.submission_rate }}%</small>

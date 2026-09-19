@@ -34,7 +34,7 @@
                     <span class="class-course-link-line">
                         <strong>{{ session.course.name }}</strong>
                         <img
-                            src="{% static 'icons/arrow_right_thin_teal_icon.png' %}"
+                            src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}"
                             alt=""
                             aria-hidden="true"
                             width="32"
@@ -105,15 +105,15 @@
                 aria-label="{{ attendance_label }}"
                 title="{{ attendance_label }}"
             >
-                <img src="{% static 'icons/clipboard_attendance_class_list.png'%}" alt="" aria-hidden="true" width="18" class="ml-3">
-                <img src="{% static 'icons/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="24" class="ml-2">
+                <img src="{% static 'icons/custom/attendance/clipboard_attendance_class_list.png'%}" alt="" aria-hidden="true" width="18" class="ml-3">
+                <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true" width="24" class="ml-2">
             </a>
         </div>
     
     {% elif session.class_status_group == "past" and not session.attendance_submitted %}
         <div class="class-row-action">
             <span class="class-attendance-link class-attendance-link--disabled" role="img" aria-label="{{ attendance_pending_label }}">
-                <img src="{% static 'icons/clipboard_attendance_pending_teal_icon.png'%}" alt="" aria-hidden="true" width="18" class="">
+                <img src="{% static 'icons/custom/attendance/custom/attendance/clipboard_attendance_pending_teal_icon.png'%}" alt="" aria-hidden="true" width="18" class="">
             </span>    
         </div>    
     {% endif %}
