@@ -15,10 +15,8 @@ def hours_duration(value):
 
 @register.filter
 def clean_decimal(value):
-    if value is None:
+    if value in (None, ""):
         return ""
-
     if value == int(value):
         return int(value)
-
     return value
