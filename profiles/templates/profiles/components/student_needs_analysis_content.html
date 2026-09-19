@@ -33,10 +33,10 @@
 
     <div class="student-needs-analysis__content">
 
-        {% if not needs_analysis or needs_analysis.status == "pending" %}
+        {% if not enrollment or needs_analysis.status == "pending" %}
 
             <!-- LEARNER / EMPLOYEE — EDITABLE QUESTIONNAIRE -->
-            {% if can_edit %}
+            {% if not enrollment or can_edit %}
 
                 <div class="student-needs-analysis__intro">
 
@@ -753,7 +753,7 @@
                                         {% trans "Back" %}
                                     </button>
 
-                                    {% if needs_analysis %}
+                                    {% if enrollment and can_edit %}
                                         <button type="submit" class="btn-primary">
                                             {% trans "Submit Learning Needs" %}
                                             <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
