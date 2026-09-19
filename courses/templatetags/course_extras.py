@@ -4,9 +4,10 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def clean_decimal(value):
-    if value is None:
+    if value in (None, ""):
         return ""
 
     if value == int(value):

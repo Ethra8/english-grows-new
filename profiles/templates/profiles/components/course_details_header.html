@@ -17,8 +17,13 @@
 
     <div class="course-header-visual">
         <div class="course-header-info">
-            <h1>{{ course.name|default:"Course Name" }}</h1>
-
+            <h1>
+                {% if course %}
+                    {{ course.name }}
+                {% else %}
+                    {% trans "Course Name" %}
+                {% endif %}
+            </h1>
             <h2>
                 <span class="course-type">
                     <img src="{% static 'icons/custom/course/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
@@ -29,7 +34,11 @@
 
                 <span class="course-type">
                     <img src="{% static 'icons/custom/course/course_total_hours_navy_icon.png' %}" alt="" aria-hidden="true" width="24" class="mr-2 mb-1">
-                    {{ course.total_hours|clean_decimal }} h.
+                    {% if course %}
+                        {{ course.total_hours|clean_decimal }} h.
+                    {% else %}
+                        —
+                    {% endif %}
                 </span>
             </h2>
         </div>
@@ -53,10 +62,15 @@
                     <img src="{% static 'icons/custom/course/course_status/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% elif course.status == 'cancelled' %}
                     <i class="fa-regular fa-circle-xmark mr-2"></i>
+                {% else %}
+                    <img src="{% static 'icons/custom/course/course_status/course_status_paused_navy_icon.png' %}" alt="" width="22" aria-hidden="true" class="mr-2">
                 {% endif %}
 
-                {{ course.get_status_display|default:"In progress" }}
-
+                {% if course %}
+                    {{ course.get_status_display }}
+                {% else %}
+                    {% trans "Not enrolled" %}
+                {% endif %}
             </span>
         </div>
     </div>

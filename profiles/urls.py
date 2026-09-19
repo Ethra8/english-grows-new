@@ -72,6 +72,19 @@ urlpatterns = [
     path("company-admin/calendar/", views.company_admin_calendar, name="company_admin_calendar"),
     path("company-admin/calendar/events/", views.company_admin_calendar_events, name="company_admin_calendar_events"),
     path("company_admin/profile_settings/", views.company_admin_profile_settings, name='company_admin_profile_settings'),
-    
+
+
+
+    # Teacher COURSE DETAILS - no course yet
+    path("teacher/courses/overview/", views.teacher_course_details, name="teacher_course_details_empty"),
+    path("teacher/courses/attendance/", views.teacher_course_attendance, name="teacher_course_attendance_empty"),
+    path("teacher/courses/enrollments/", views.teacher_course_students_list, name="teacher_course_students_list_empty"),
+    path("teacher/courses/assessment/", views.teacher_course_assessment, name="teacher_course_assessment_empty"),
+    path("teacher/courses/<int:course_id>/assessment/", views.teacher_course_assessment, name="teacher_course_assessment"),
+    # Company Admin COURSE DETAILS - no course yet
+    path("company-admin/courses/overview/", views.company_admin_course_details, name="company_admin_course_details_empty"),
+    path("company-admin/courses/attendance/", views.company_admin_course_attendance, name="company_admin_course_attendance_empty"),
+    path("company-admin/courses/students/", views.company_admin_course_students_list, name="company_admin_course_students_list_empty"),
+
 ]
 

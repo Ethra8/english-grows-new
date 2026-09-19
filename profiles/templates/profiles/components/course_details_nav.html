@@ -1,67 +1,113 @@
 {% load i18n %}
 
 <div class="details-nav-wrapper notranslate" translate="no">
-
     <nav class="course-detail-tabs" aria-label="{% trans 'Course details navigation' %}">
-
         <div class="wrapper-links-inner-nav">
 
             {% if request.user.profile.role == "company_admin" %}
 
-                <a href="{% url 'profiles:company_admin_course_details' course.id %}"
-                   class="{% if active_section == 'overview' %}active{% endif %}"
-                   {% if active_section == "overview" %}aria-current="page"{% endif %}>
-                    {% trans "Overview" context 'course detail tabs' %}
-                </a>
+                {% if course %}
+                    <a href="{% url 'profiles:company_admin_course_details' course.id %}"
+                       class="{% if active_section == 'overview' %}active{% endif %}"
+                       {% if active_section == "overview" %}aria-current="page"{% endif %}>
+                        {% trans "Overview" context 'course detail tabs' %}
+                    </a>
 
-                <a href="{% url 'profiles:company_admin_course_students_list' course.id %}"
-                   class="{% if active_section == 'enrollments' %}active{% endif %}"
-                   {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
-                    {% trans "Enrollments" context 'course detail tabs' %}
-                </a>
+                    <a href="{% url 'profiles:company_admin_course_students_list' course.id %}"
+                       class="{% if active_section == 'enrollments' %}active{% endif %}"
+                       {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
+                        {% trans "Enrollments" context 'course detail tabs' %}
+                    </a>
 
-                <a href="{% url 'profiles:company_admin_course_attendance' course.id %}"
-                   class="{% if active_section == 'attendance' %}active{% endif %}"
-                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
-                    {% trans "Attendance" context 'course detail tabs' %}
-                </a>
+                    <a href="{% url 'profiles:company_admin_course_attendance' course.id %}"
+                       class="{% if active_section == 'attendance' %}active{% endif %}"
+                       {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                        {% trans "Attendance" context 'course detail tabs' %}
+                    </a>
+
+                {% else %}
+                    <a href="{% url 'profiles:company_admin_course_details_empty' %}"
+                       class="{% if active_section == 'overview' %}active{% endif %}"
+                       {% if active_section == "overview" %}aria-current="page"{% endif %}>
+                        {% trans "Overview" context 'course detail tabs' %}
+                    </a>
+
+                    <a href="{% url 'profiles:company_admin_course_students_list_empty' %}"
+                       class="{% if active_section == 'enrollments' %}active{% endif %}"
+                       {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
+                        {% trans "Enrollments" context 'course detail tabs' %}
+                    </a>
+
+                    <a href="{% url 'profiles:company_admin_course_attendance_empty' %}"
+                       class="{% if active_section == 'attendance' %}active{% endif %}"
+                       {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                        {% trans "Attendance" context 'course detail tabs' %}
+                    </a>
+                {% endif %}
 
 
             {% elif request.user.profile.role == "teacher" %}
 
-                <a href="{% url 'profiles:teacher_course_details' course.id %}"
-                   class="{% if active_section == 'overview' %}active{% endif %}"
-                   {% if active_section == "overview" %}aria-current="page"{% endif %}>
-                    {% trans "Overview" context 'course detail tabs' %}
-                </a>
+                {% if course %}
+                    <a href="{% url 'profiles:teacher_course_details' course.id %}"
+                       class="{% if active_section == 'overview' %}active{% endif %}"
+                       {% if active_section == "overview" %}aria-current="page"{% endif %}>
+                        {% trans "Overview" context 'course detail tabs' %}
+                    </a>
 
-                <a href="{% url 'profiles:teacher_course_students_list' course.id %}"
-                   class="{% if active_section == 'enrollments' %}active{% endif %}"
-                   {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
-                    {% trans "Enrollments" context 'course detail tabs' %}
-                </a>
+                    <a href="{% url 'profiles:teacher_course_students_list' course.id %}"
+                       class="{% if active_section == 'enrollments' %}active{% endif %}"
+                       {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
+                        {% trans "Enrollments" context 'course detail tabs' %}
+                    </a>
 
-                <a href="{% url 'profiles:teacher_course_attendance' course.id %}"
-                   class="{% if active_section == 'attendance' %}active{% endif %}"
-                   {% if active_section == "attendance" %}aria-current="page"{% endif %}>
-                    {% trans "Attendance" context 'course detail tabs' %}
-                </a>
+                    <a href="{% url 'profiles:teacher_course_attendance' course.id %}"
+                       class="{% if active_section == 'attendance' %}active{% endif %}"
+                       {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                        {% trans "Attendance" context 'course detail tabs' %}
+                    </a>
 
-                <a href="{% url 'profiles:teacher_course_attendance' course.id %}"
-                   class="{% if active_section == 'assessment' %}active{% endif %}"
-                   {% if active_section == "assessment" %}aria-current="page"{% endif %}>
-                    {% trans "Assessment" context 'course detail tabs' %}
-                </a>
+                    <a href="{% url 'profiles:teacher_course_assessment' course.id %}"
+                    class="{% if active_section == 'assessment' %}active{% endif %}"
+                    {% if active_section == "assessment" %}aria-current="page"{% endif %}>
+                        {% trans "Assessment" context 'course detail tabs' %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'profiles:teacher_course_details_empty' %}"
+                       class="{% if active_section == 'overview' %}active{% endif %}"
+                       {% if active_section == "overview" %}aria-current="page"{% endif %}>
+                        {% trans "Overview" context 'course detail tabs' %}
+                    </a>
+
+                    <a href="{% url 'profiles:teacher_course_students_list_empty' %}"
+                       class="{% if active_section == 'enrollments' %}active{% endif %}"
+                       {% if active_section == "enrollments" %}aria-current="page"{% endif %}>
+                        {% trans "Enrollments" context 'course detail tabs' %}
+                    </a>
+
+                    <a href="{% url 'profiles:teacher_course_attendance_empty' %}"
+                       class="{% if active_section == 'attendance' %}active{% endif %}"
+                       {% if active_section == "attendance" %}aria-current="page"{% endif %}>
+                        {% trans "Attendance" context 'course detail tabs' %}
+                    </a>
+
+                    <a href="{% url 'profiles:teacher_course_assessment_empty' %}"
+                    class="{% if active_section == 'assessment' %}active{% endif %}"
+                    {% if active_section == "assessment" %}aria-current="page"{% endif %}>
+                        {% trans "Assessment" context 'course detail tabs' %}
+                    </a>
+                {% endif %}
+
 
             {% elif request.user.profile.role == "learner" or request.user.profile.role == "employee" %}
 
-                <a href="{% url 'profiles:my_course' %}?course={{ course.id }}"
+                <a href="{% url 'profiles:my_course' %}{% if course %}?course={{ course.id }}{% endif %}"
                    class="{% if active_section == 'overview' %}active{% endif %}"
                    {% if active_section == "overview" %}aria-current="page"{% endif %}>
                     {% trans "Overview" context 'course detail tabs' %}
                 </a>
 
-                <a href="{% url 'profiles:my_attendance' %}?course={{ course.id }}"
+                <a href="{% url 'profiles:my_attendance' %}{% if course %}?course={{ course.id }}{% endif %}"
                    class="{% if active_section == 'attendance' %}active{% endif %}"
                    {% if active_section == "attendance" %}aria-current="page"{% endif %}>
                     {% trans "Attendance" context 'course detail tabs' %}
@@ -70,7 +116,5 @@
             {% endif %}
 
         </div>
-
     </nav>
-
 </div>

@@ -143,11 +143,19 @@ def student_dashboard(request):
     ]:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # CURRENT ACTIVE ENROLLMENT
+    #
+    # A learner is currently enrolled only when BOTH:
+    # - CourseEnrollment is active
+    # - Course is active
+    # ---------------------------------------------------------
     active_enrollment = (
         CourseEnrollment.objects
         .filter(
             student=request.user,
-            status="active",
+            status=CourseEnrollment.STATUS_ACTIVE,
+            course__status="active",
         )
         .select_related(
             "course",
@@ -158,6 +166,9 @@ def student_dashboard(request):
         .first()
     )
 
+    # ---------------------------------------------------------
+    # NEXT CLASS
+    # ---------------------------------------------------------
     next_class = None
 
     if active_enrollment:
@@ -175,6 +186,9 @@ def student_dashboard(request):
             .first()
         )
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": user_profile,
         "active_enrollment": active_enrollment,
@@ -186,6 +200,7 @@ def student_dashboard(request):
         "profiles/student/student_dashboard.html",
         context,
     )
+
 
 
 @login_required
@@ -766,6 +781,12 @@ def my_learning_progress(request):
     student = request.user
     student_profile = student.profile
 
+    if student_profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
     ClassSession.transition_past_sessions()
 
     user_currently_enrolled = CourseEnrollment.objects.filter(
@@ -841,6 +862,9 @@ def my_learning_progress(request):
             "enrollments": enrollments,
             "enrollment": None,
             "course": None,
+
+            # Timetable
+            "formatted_timetable": [],
 
             # Attendance
             "attended_count": 0,
@@ -1254,6 +1278,15 @@ def my_attendance(request):
         user=request.user
     )
 
+    # ---------------------------------------------------------
+    # ROLE
+    # ---------------------------------------------------------
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
     student = request.user
     student_profile = profile
 
@@ -1300,7 +1333,6 @@ def my_attendance(request):
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-
     # ---------------------------------------------------------
     # DETERMINE WHICH ENROLLMENT / COURSE TO DISPLAY
     # ---------------------------------------------------------
@@ -1319,7 +1351,6 @@ def my_attendance(request):
     else:
         enrollment = enrollments.first()
 
-
     # ---------------------------------------------------------
     # COURSE CURRENTLY BEING DISPLAYED
     # ---------------------------------------------------------
@@ -1329,9 +1360,11 @@ def my_attendance(request):
         else None
     )
 
-
     # ---------------------------------------------------------
     # NO ENROLLMENTS
+    #
+    # Keep the normal Attendance page accessible and provide
+    # the same structural context with empty/default data.
     # ---------------------------------------------------------
     if not enrollment:
         return render(
@@ -1343,7 +1376,11 @@ def my_attendance(request):
                 # Shared student header
                 "student": student,
                 "student_profile": student_profile,
+                "user_currently_enrolled": user_currently_enrolled,
                 "course": None,
+
+                # Component course detail nav
+                "active_section": "attendance",
 
                 # Course selector
                 "enrollments": enrollments,
@@ -1354,9 +1391,13 @@ def my_attendance(request):
                 # Attendance
                 "recent_attendance": [],
                 "recent_absences": [],
+                "attended_hours_display": format_minutes_duration(0),
+
+                # Completed course hours
+                "completed_minutes": 0,
+                "completed_hours_display": format_minutes_duration(0),
             }
         )
-
 
     # ---------------------------------------------------------
     # ATTENDED CLASSES
@@ -1380,7 +1421,6 @@ def my_attendance(request):
             "-class_session__start_time"
         )
     )
-
 
     # ---------------------------------------------------------
     # ABSENCES
@@ -1456,7 +1496,6 @@ def my_attendance(request):
         completed_minutes
     )
 
-
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
@@ -1466,10 +1505,10 @@ def my_attendance(request):
         # Shared student header
         "student": student,
         "student_profile": student_profile,
-
-        "user_currently_enrolled": user_currently_enrolled,    
+        "user_currently_enrolled": user_currently_enrolled,
         "course": course,
-        # component course detail nav (active tab)
+
+        # Component course detail nav
         "active_section": "attendance",
 
         # ALL enrollments -> course selector
@@ -1483,8 +1522,9 @@ def my_attendance(request):
         "recent_absences": recent_absences,
         "attended_hours_display": attended_hours_display,
 
+        # Completed course hours
         "completed_minutes": completed_minutes,
-        "completed_hours_display" : completed_hours_display,
+        "completed_hours_display": completed_hours_display,
     }
 
     return render(
@@ -1494,13 +1534,17 @@ def my_attendance(request):
     )
 
 
-
 @login_required
 def my_skills(request):
     student = request.user
-    student_profile = get_object_or_404(UserProfile, user=student)
+    student_profile = get_object_or_404(
+        UserProfile,
+        user=student,
+    )
 
-    # Only learner roles can access this page.
+    # ---------------------------------------------------------
+    # ROLE
+    # ---------------------------------------------------------
     if student_profile.role not in [
         UserProfile.ROLE_EMPLOYEE,
         UserProfile.ROLE_INDIVIDUAL_LEARNER,
@@ -1513,8 +1557,12 @@ def my_skills(request):
         course__status="active",
     ).exists()
 
-    # All enrollments remain available, including historical courses.
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Historical courses remain accessible.
     # Helper in profiles/utils/enrollments.py
+    # ---------------------------------------------------------
     enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(student=student)
@@ -1526,7 +1574,21 @@ def my_skills(request):
         )
     )
 
-    # Resolve the selected course.
+    # ---------------------------------------------------------
+    # ACADEMIC PROFILE
+    #
+    # Belongs to the student rather than to a particular Course,
+    # so it remains available even when there is no enrollment.
+    # ---------------------------------------------------------
+    academic_profile = getattr(
+        student,
+        "academic_profile",
+        None,
+    )
+
+    # ---------------------------------------------------------
+    # SELECTED COURSE / ENROLLMENT
+    # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
     if selected_course_id:
@@ -1538,9 +1600,16 @@ def my_skills(request):
         enrollment = enrollments.first()
 
         if enrollment:
-            return redirect(f"{request.path}?course={enrollment.course_id}")
+            return redirect(
+                f"{request.path}?course={enrollment.course_id}"
+            )
 
-    # Student has no enrollments yet.
+    # ---------------------------------------------------------
+    # NO ENROLLMENTS
+    #
+    # Keep the normal Skills page accessible and provide
+    # empty/default data for its cards, notes and chart.
+    # ---------------------------------------------------------
     if not enrollment:
         return render(
             request,
@@ -1550,21 +1619,39 @@ def my_skills(request):
                 "student_profile": student_profile,
                 "user_currently_enrolled": user_currently_enrolled,
                 "active_section": "skills",
+
+                # Course selector
                 "enrollments": enrollments,
                 "enrollment": None,
                 "course": None,
+
+                # Skills
                 "skills": [],
-                "skill_notes": [],
+                "skill_notes": StudentSkillAssessment.objects.none(),
                 "skill_note_display": [],
-                "academic_profile": None,
-                "chart_data": {"labels": [], "datasets": []},
+
+                # Academic profile
+                "academic_profile": academic_profile,
+
+                # Chart
+                "chart_data": {
+                    "labels": [],
+                    "datasets": [],
+                },
+
+                # Levels
                 "level_choices": UserProfile.LEVEL_CHOICES,
             },
         )
 
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
     course = enrollment.course
 
-    # Shared skill-card data.
+    # ---------------------------------------------------------
+    # SHARED SKILL CARD DATA
+    # ---------------------------------------------------------
     skill_assessments, skills = build_student_skill_cards(
         student=student,
         course=course,
@@ -1576,33 +1663,53 @@ def my_skills(request):
         for assessment in skill_assessments
     ]
 
+    # ---------------------------------------------------------
+    # SKILL NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
-        .filter(student=student, course=course)
+        .filter(
+            student=student,
+            course=course,
+        )
         .exclude(teacher_notes="")
         .order_by("skill")
     )
 
-    academic_profile = getattr(student, "academic_profile", None)
-
+    # ---------------------------------------------------------
+    # CHART DATA
+    # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
         student=student,
         course=course,
     )
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "student": student,
         "student_profile": student_profile,
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "skills",
+
+        # Course selector
         "enrollments": enrollments,
         "enrollment": enrollment,
         "course": course,
+
+        # Skills
         "skills": skills,
-        "academic_profile": academic_profile,
-        "chart_data": chart_data,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
+
+        # Academic profile
+        "academic_profile": academic_profile,
+
+        # Chart
+        "chart_data": chart_data,
+
+        # Levels
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
@@ -1613,7 +1720,6 @@ def my_skills(request):
     )
 
 
-
 @login_required
 def my_learning_progress_assessment(request):
     profile = get_object_or_404(
@@ -1621,7 +1727,9 @@ def my_learning_progress_assessment(request):
         user=request.user,
     )
 
-    # Only learners can access this page
+    # ---------------------------------------------------------
+    # ROLE
+    # ---------------------------------------------------------
     if profile.role not in [
         UserProfile.ROLE_INDIVIDUAL_LEARNER,
         UserProfile.ROLE_EMPLOYEE,
@@ -1631,70 +1739,60 @@ def my_learning_progress_assessment(request):
     student = request.user
     student_profile = profile
 
+    # ---------------------------------------------------------
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Separate from the selected Course.
+    # A learner may be viewing a historical Course while still
+    # having another currently active enrollment.
+    # ---------------------------------------------------------
     user_currently_enrolled = CourseEnrollment.objects.filter(
         student=student,
-        status="active",
+        status=CourseEnrollment.STATUS_ACTIVE,
         course__status="active",
     ).exists()
-    # =========================================================
-    # ALL ACTIVE ENROLLMENTS
-    # Used by the course selector
-    # =========================================================
 
-    active_enrollments = (
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS
+    #
+    # Historical Courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
+    # ---------------------------------------------------------
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
+        .filter(student=student)
         .select_related(
             "course",
             "course__teacher",
             "course__course_type",
+            "course__company",
         )
-        .filter(
-            student=student,
-            status="active",
-            course__status="active",
-        )
-        .order_by("-enrolled_at")
     )
 
-
-    # =========================================================
-    # SELECT CURRENT COURSE
-    # =========================================================
-
+    # ---------------------------------------------------------
+    # SELECTED COURSE / ENROLLMENT
+    # ---------------------------------------------------------
     requested_course_id = request.GET.get("course")
 
-
     if requested_course_id:
-        # Use the course explicitly selected in ?course=
-        #
-        # Security:
-        # student=student ensures a learner cannot access
-        # another student's enrollment by changing the ID.
         enrollment = get_object_or_404(
-            CourseEnrollment.objects.select_related(
-                "course",
-                "course__teacher",
-                "course__course_type",
-                "student",
-                "student__profile",
-            ),
-            student=student,
+            enrollments,
             course_id=requested_course_id,
         )
-
     else:
-        # No course supplied in URL:
-        # default to the most recent ACTIVE enrollment.
-        enrollment = active_enrollments.first()
-
+        enrollment = enrollments.first()
 
     course = enrollment.course if enrollment else None
 
-
-    # =========================================================
+    # ---------------------------------------------------------
     # SKILL ASSESSMENTS
-    # =========================================================
-
+    # ---------------------------------------------------------
     if course:
         skill_assessments = (
             StudentSkillAssessment.objects
@@ -1705,21 +1803,17 @@ def my_learning_progress_assessment(request):
             .prefetch_related("subskill_assessments")
             .order_by("skill")
         )
-
     else:
         skill_assessments = StudentSkillAssessment.objects.none()
-
 
     skill_note_display = [
         build_skill_note_display(skill_assessment)
         for skill_assessment in skill_assessments
     ]
 
-
-    # =========================================================
+    # ---------------------------------------------------------
     # TEACHER NOTES
-    # =========================================================
-
+    # ---------------------------------------------------------
     if course:
         skill_notes = (
             StudentSkillAssessment.objects
@@ -1730,35 +1824,42 @@ def my_learning_progress_assessment(request):
             .exclude(teacher_notes="")
             .order_by("skill")
         )
-
     else:
         skill_notes = StudentSkillAssessment.objects.none()
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
         "student": student,
         "student_profile": student_profile,
-
         "user_currently_enrolled": user_currently_enrolled,
-        # All active courses — for selector
-        "active_enrollments": active_enrollments,
 
-        # Currently selected course
-        "active_enrollment": enrollment,
+        # All historical enrollments -> course selector
+        "enrollments": enrollments,
+
+        # Selected enrollment / course
         "enrollment": enrollment,
         "course": course,
+
+        # Temporary compatibility aliases
+        # Keep these until the corresponding template/component
+        # has been checked and renamed safely.
+        "active_enrollments": enrollments,
+        "active_enrollment": enrollment,
 
         # Assessment
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
     }
 
-
     return render(
         request,
         "profiles/student/my_learning_progress_assessment.html",
         context,
     )
+
 
 
 @login_required
@@ -1775,14 +1876,31 @@ def my_needs_analysis(request):
     }:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Independent of the selected Course.
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=request.user,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
-    # ENROLLMENTS
+    # ALL ENROLLMENTS
     #
     # The Needs Analysis belongs to the CourseEnrollment,
     # not directly to the student.
+    #
+    # A learner with no enrollments may still access the page.
+    # In that case the normal interface is rendered with an
+    # empty/default state.
+    #
+    # Historical Courses remain accessible.
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(student=request.user)
         .select_related(
@@ -1791,12 +1909,7 @@ def my_needs_analysis(request):
             "course__company",
             "course__teacher",
         )
-        .order_by("course__name")
     )
-
-    if not enrollments.exists():
-        return redirect("profiles:profile")
-
 
     # ---------------------------------------------------------
     # SELECTED COURSE / ENROLLMENT
@@ -1811,186 +1924,250 @@ def my_needs_analysis(request):
     else:
         enrollment = enrollments.first()
 
-    course = enrollment.course
-
+    course = enrollment.course if enrollment else None
 
     # ---------------------------------------------------------
-    # NEEDS ANALYSIS
+    # DEFAULT EMPTY-STATE VALUES
     #
-    # One Needs Analysis exists per CourseEnrollment.
-    # Newly created analyses begin as PENDING.
-    # ---------------------------------------------------------
-    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
-        enrollment=enrollment,
-    )
-
-
-    # ---------------------------------------------------------
-    # EDIT PERMISSION
+    # StudentNeedsAnalysis belongs to a CourseEnrollment, so
+    # no model object is created until an enrollment exists.
     #
-    # Learners may edit/submit only while PENDING.
-    # Once submitted, the questionnaire becomes read-only.
+    # The form is still provided so the normal Learning Goals
+    # interface can render.
     # ---------------------------------------------------------
-    can_edit = (
-        needs_analysis.status ==
-        StudentNeedsAnalysis.Status.PENDING
-    )
+    needs_analysis = None
+    can_edit = False
+    form = StudentNeedsAnalysisForm()
 
+    english_use_frequency_labels = []
+    communication_situation_labels = []
+    communication_partner_labels = []
+    accent_exposure_labels = []
+    priority_area_labels = []
+    learning_preference_labels = []
+
+    speaking_confidence_display = ""
+    listening_confidence_display = ""
+    reading_confidence_display = ""
+    writing_confidence_display = ""
 
     # ---------------------------------------------------------
-    # FORM INITIAL DATA
+    # ENROLLMENT-SPECIFIC NEEDS ANALYSIS
+    # ---------------------------------------------------------
+    if enrollment:
+
+        # -----------------------------------------------------
+        # NEEDS ANALYSIS
+        #
+        # One Needs Analysis exists per CourseEnrollment.
+        # Newly created analyses begin as PENDING.
+        # -----------------------------------------------------
+        needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
+            enrollment=enrollment,
+        )
+
+        # -----------------------------------------------------
+        # EDIT PERMISSION
+        #
+        # Learners may edit/submit only while PENDING.
+        # Once submitted, the questionnaire becomes read-only.
+        # -----------------------------------------------------
+        can_edit = (
+            needs_analysis.status ==
+            StudentNeedsAnalysis.Status.PENDING
+        )
+
+        # -----------------------------------------------------
+        # FORM INITIAL DATA
+        #
+        # StudentNeedsAnalysisForm is currently a forms.Form,
+        # therefore saved model values are supplied explicitly.
+        #
+        # This also allows the same form definition to provide
+        # labels and values for the read-only shared template.
+        # -----------------------------------------------------
+        form_initial = {
+            "english_use_frequency": needs_analysis.english_use_frequency,
+            "communication_situations": needs_analysis.communication_situations,
+            "communication_partners": needs_analysis.communication_partners,
+            "accent_exposure": needs_analysis.accent_exposure,
+            "accent_exposure_other": needs_analysis.accent_exposure_other,
+            "speaking_confidence": needs_analysis.speaking_confidence,
+            "listening_confidence": needs_analysis.listening_confidence,
+            "reading_confidence": needs_analysis.reading_confidence,
+            "writing_confidence": needs_analysis.writing_confidence,
+            "priority_areas": needs_analysis.priority_areas,
+            "course_goal": needs_analysis.course_goal,
+            "learning_preferences": needs_analysis.learning_preferences,
+            "preferred_topics": needs_analysis.preferred_topics,
+            "additional_information": needs_analysis.additional_information,
+        }
+
+        # -----------------------------------------------------
+        # FORM SUBMISSION
+        # -----------------------------------------------------
+        if (
+            request.method == "POST"
+            and request.POST.get("action") == "submit_needs_analysis"
+        ):
+
+            # Do not trust the template alone to protect a submitted
+            # questionnaire. Reject any later/manual POST request.
+            if not can_edit:
+                return redirect(
+                    f"{request.path}?course={course.id}"
+                )
+
+            form = StudentNeedsAnalysisForm(
+                request.POST,
+            )
+
+            if form.is_valid():
+                data = form.cleaned_data
+
+                needs_analysis.english_use_frequency = data[
+                    "english_use_frequency"
+                ]
+                needs_analysis.communication_situations = data[
+                    "communication_situations"
+                ]
+                needs_analysis.communication_partners = data[
+                    "communication_partners"
+                ]
+
+                needs_analysis.accent_exposure = data[
+                    "accent_exposure"
+                ]
+                needs_analysis.accent_exposure_other = data[
+                    "accent_exposure_other"
+                ]
+
+                needs_analysis.speaking_confidence = data[
+                    "speaking_confidence"
+                ]
+                needs_analysis.listening_confidence = data[
+                    "listening_confidence"
+                ]
+                needs_analysis.reading_confidence = data[
+                    "reading_confidence"
+                ]
+                needs_analysis.writing_confidence = data[
+                    "writing_confidence"
+                ]
+
+                needs_analysis.priority_areas = data[
+                    "priority_areas"
+                ]
+                needs_analysis.course_goal = data[
+                    "course_goal"
+                ]
+
+                needs_analysis.learning_preferences = data[
+                    "learning_preferences"
+                ]
+
+                needs_analysis.preferred_topics = data[
+                    "preferred_topics"
+                ]
+                needs_analysis.additional_information = data[
+                    "additional_information"
+                ]
+
+                needs_analysis.status = (
+                    StudentNeedsAnalysis.Status.SUBMITTED
+                )
+                needs_analysis.submitted_at = timezone.now()
+
+                needs_analysis.save()
+
+                return redirect(
+                    f"{request.path}?course={course.id}"
+                )
+
+        else:
+            form = StudentNeedsAnalysisForm(
+                initial=form_initial,
+            )
+
+        # -----------------------------------------------------
+        # SUBMITTED FORM LABELS & ANSWERS DISPLAY
+        # -----------------------------------------------------
+        english_use_frequency_labels = form.choice_labels(
+            "english_use_frequency",
+            needs_analysis.english_use_frequency,
+        )
+
+        communication_situation_labels = form.choice_labels(
+            "communication_situations",
+            needs_analysis.communication_situations,
+        )
+
+        communication_partner_labels = form.choice_labels(
+            "communication_partners",
+            needs_analysis.communication_partners,
+        )
+
+        accent_exposure_labels = form.choice_labels(
+            "accent_exposure",
+            needs_analysis.accent_exposure,
+            exclude_values={"other"},
+        )
+
+        priority_area_labels = form.choice_labels(
+            "priority_areas",
+            needs_analysis.priority_areas,
+        )
+
+        learning_preference_labels = form.choice_labels(
+            "learning_preferences",
+            needs_analysis.learning_preferences,
+        )
+
+        speaking_confidence_display = form.confidence_display(
+            needs_analysis.speaking_confidence,
+        )
+
+        listening_confidence_display = form.confidence_display(
+            needs_analysis.listening_confidence,
+        )
+
+        reading_confidence_display = form.confidence_display(
+            needs_analysis.reading_confidence,
+        )
+
+        writing_confidence_display = form.confidence_display(
+            needs_analysis.writing_confidence,
+        )
+
+    # ---------------------------------------------------------
+    # NO-ENROLLMENT POST SAFETY
     #
-    # StudentNeedsAnalysisForm is currently a forms.Form,
-    # therefore saved model values are supplied explicitly.
-    #
-    # This also allows the same form definition to provide
-    # labels and values for the read-only shared template.
+    # There is no CourseEnrollment to attach a Needs Analysis
+    # to, so a manual POST must not create anything.
     # ---------------------------------------------------------
-    form_initial = {
-        "english_use_frequency": needs_analysis.english_use_frequency,
-        "communication_situations": needs_analysis.communication_situations,
-        "communication_partners": needs_analysis.communication_partners,
-        "accent_exposure": needs_analysis.accent_exposure,
-        "accent_exposure_other": needs_analysis.accent_exposure_other,
-        "speaking_confidence": needs_analysis.speaking_confidence,
-        "listening_confidence": needs_analysis.listening_confidence,
-        "reading_confidence": needs_analysis.reading_confidence,
-        "writing_confidence": needs_analysis.writing_confidence,
-        "priority_areas": needs_analysis.priority_areas,
-        "course_goal": needs_analysis.course_goal,
-        "learning_preferences": needs_analysis.learning_preferences,
-        "preferred_topics": needs_analysis.preferred_topics,
-        "additional_information": needs_analysis.additional_information,
-    }
-
-
-    # ---------------------------------------------------------
-    # FORM SUBMISSION
-    # ---------------------------------------------------------
-    if (
+    elif (
         request.method == "POST"
         and request.POST.get("action") == "submit_needs_analysis"
     ):
+        return redirect(request.path)
 
-        # Do not trust the template alone to protect a submitted
-        # questionnaire. Reject any later/manual POST request.
-        if not can_edit:
-            return redirect(
-                f"{request.path}?course={course.id}"
-            )
-
-        form = StudentNeedsAnalysisForm(
-            request.POST,
-        )
-
-        if form.is_valid():
-            data = form.cleaned_data
-
-            needs_analysis.english_use_frequency = data["english_use_frequency"]
-            needs_analysis.communication_situations = data["communication_situations"]
-            needs_analysis.communication_partners = data["communication_partners"]
-
-            needs_analysis.accent_exposure = data["accent_exposure"]
-            needs_analysis.accent_exposure_other = data["accent_exposure_other"]
-
-            needs_analysis.speaking_confidence = data["speaking_confidence"]
-            needs_analysis.listening_confidence = data["listening_confidence"]
-            needs_analysis.reading_confidence = data["reading_confidence"]
-            needs_analysis.writing_confidence = data["writing_confidence"]
-
-            needs_analysis.priority_areas = data["priority_areas"]
-            needs_analysis.course_goal = data["course_goal"]
-
-            needs_analysis.learning_preferences = data["learning_preferences"]
-
-            needs_analysis.preferred_topics = data["preferred_topics"]
-            needs_analysis.additional_information = data["additional_information"]
-
-            needs_analysis.status = StudentNeedsAnalysis.Status.SUBMITTED
-            needs_analysis.submitted_at = timezone.now()
-
-            needs_analysis.save()
-
-            return redirect(
-                f"{request.path}?course={course.id}"
-            )
-
-    else:
-        form = StudentNeedsAnalysisForm(
-            initial=form_initial,
-        )
-
-
-    # ---------------------------------------------------------
-    # STUDENT STATUS
-    #
-    # Used by the shared student details header.
-    # ---------------------------------------------------------
-    user_currently_enrolled = (
-        enrollment.status == CourseEnrollment.STATUS_ACTIVE
-        and course.status == "active"
-    )
-
-    # SUBMITTED FORM LABELS & ANSWERS DISPLAY
-    english_use_frequency_labels = form.choice_labels(
-        "english_use_frequency",
-        needs_analysis.english_use_frequency,
-    )
-
-    communication_situation_labels = form.choice_labels(
-        "communication_situations",
-        needs_analysis.communication_situations,
-    )
-
-    communication_partner_labels = form.choice_labels(
-        "communication_partners",
-        needs_analysis.communication_partners,
-    )
-
-    accent_exposure_labels = form.choice_labels(
-        "accent_exposure",
-        needs_analysis.accent_exposure,
-        exclude_values={"other"},
-    )
-
-    priority_area_labels = form.choice_labels(
-        "priority_areas",
-        needs_analysis.priority_areas,
-    )
-
-    learning_preference_labels = form.choice_labels(
-        "learning_preferences",
-        needs_analysis.learning_preferences,
-    )
-
-    speaking_confidence_display = form.confidence_display(
-        needs_analysis.speaking_confidence,
-    )
-
-    listening_confidence_display = form.confidence_display(
-        needs_analysis.listening_confidence,
-    )
-
-    reading_confidence_display = form.confidence_display(
-        needs_analysis.reading_confidence,
-    )
-
-    writing_confidence_display = form.confidence_display(
-        needs_analysis.writing_confidence,
-    )
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "student": request.user,
         "student_profile": profile,
+
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
+
         "needs_analysis": needs_analysis,
         "form": form,
+
         "can_edit": can_edit,
         "can_review": False,
+
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
 
@@ -2000,6 +2177,7 @@ def my_needs_analysis(request):
         "accent_exposure_labels": accent_exposure_labels,
         "priority_area_labels": priority_area_labels,
         "learning_preference_labels": learning_preference_labels,
+
         "speaking_confidence_display": speaking_confidence_display,
         "listening_confidence_display": listening_confidence_display,
         "reading_confidence_display": reading_confidence_display,
@@ -2028,7 +2206,9 @@ def teacher_dashboard(request):
     today = timezone.localdate()
     now = timezone.now()
 
-    # --- DATE RANGES ----------
+    # ---------------------------------------------------------
+    # DATE RANGES
+    # ---------------------------------------------------------
 
     # Today
     start_of_day = timezone.make_aware(
@@ -2051,11 +2231,15 @@ def teacher_dashboard(request):
 
     # Month
     start_of_month_date = today.replace(day=1)
+
     last_day_of_month = calendar.monthrange(
         today.year,
         today.month,
     )[1]
-    end_of_month_date = today.replace(day=last_day_of_month)
+
+    end_of_month_date = today.replace(
+        day=last_day_of_month
+    )
 
     start_of_month = timezone.make_aware(
         datetime.combine(start_of_month_date, time.min)
@@ -2064,7 +2248,116 @@ def teacher_dashboard(request):
         datetime.combine(end_of_month_date, time.max)
     )
 
-    # --- COURSES ---------
+    # ---------------------------------------------------------
+    # HELPERS
+    # ---------------------------------------------------------
+
+    def get_percentage(value, total):
+        if total == 0:
+            return 0
+
+        return round(
+            (value / total) * 100
+        )
+
+    def get_period_metrics(sessions):
+        """
+        Teacher dashboard reporting logic.
+
+        Held:
+            Lesson has actually finished.
+
+        Upcoming:
+            Lesson has not started yet.
+
+        Attendance submitted:
+            ClassSession lifecycle is explicitly
+            COMPLETE_ATTENDANCE_SUBMITTED.
+
+        Attendance pending:
+            Held lesson whose attendance workflow has not yet
+            reached COMPLETE_ATTENDANCE_SUBMITTED.
+
+        Attendance rate:
+            Attended / all final Attendance records belonging
+            only to fully submitted ClassSessions.
+        """
+
+        session_list = list(sessions)
+
+        total_sessions = len(session_list)
+
+        held_sessions = [
+            session
+            for session in session_list
+            if session.end_time < now
+        ]
+
+        upcoming_sessions = [
+            session
+            for session in session_list
+            if session.start_time >= now
+        ]
+
+        submitted_sessions = [
+            session
+            for session in session_list
+            if (
+                session.status
+                == ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            )
+        ]
+
+        held_count = len(held_sessions)
+        upcoming_count = len(upcoming_sessions)
+        attendance_submitted_count = len(submitted_sessions)
+
+        attendance_pending_count = max(
+            held_count - attendance_submitted_count,
+            0,
+        )
+
+        submitted_session_ids = [
+            session.id
+            for session in submitted_sessions
+        ]
+
+        attendance_records = Attendance.objects.filter(
+            class_session_id__in=submitted_session_ids,
+            status__in=[
+                Attendance.STATUS_ATTENDED,
+                Attendance.STATUS_MISSED,
+                Attendance.STATUS_EXCUSED,
+            ],
+        )
+
+        total_attendance_records = attendance_records.count()
+
+        attended_records = attendance_records.filter(
+            status=Attendance.STATUS_ATTENDED,
+        ).count()
+
+        return {
+            "total_sessions": total_sessions,
+            "held_sessions": held_count,
+            "held_percentage": get_percentage(
+                held_count,
+                total_sessions,
+            ),
+            "upcoming_sessions": upcoming_count,
+            "attendance_submitted_sessions":
+                attendance_submitted_count,
+            "attendance_pending_sessions":
+                attendance_pending_count,
+            "attendance_rate": get_percentage(
+                attended_records,
+                total_attendance_records,
+            ),
+        }
+
+    # ---------------------------------------------------------
+    # COURSES
+    # ---------------------------------------------------------
 
     courses = (
         Course.objects
@@ -2085,7 +2378,9 @@ def teacher_dashboard(request):
         status="active"
     ).count()
 
-    # --- TODAY'S SESSIONS -----------
+    # ---------------------------------------------------------
+    # TODAY'S SESSIONS
+    # ---------------------------------------------------------
 
     todays_sessions = (
         ClassSession.objects
@@ -2112,7 +2407,9 @@ def teacher_dashboard(request):
         .order_by("start_time")
     )
 
-    # --- WEEKLY / MONTHLY SESSIONS ----------
+    # ---------------------------------------------------------
+    # WEEKLY SESSIONS
+    # ---------------------------------------------------------
 
     weekly_sessions = (
         ClassSession.objects
@@ -2129,8 +2426,12 @@ def teacher_dashboard(request):
             start_time__lte=end_of_week,
         )
         .select_related("course")
-        .prefetch_related("attendance_records")
+        .order_by("start_time")
     )
+
+    # ---------------------------------------------------------
+    # MONTHLY SESSIONS
+    # ---------------------------------------------------------
 
     monthly_sessions = (
         ClassSession.objects
@@ -2147,163 +2448,24 @@ def teacher_dashboard(request):
             start_time__lte=end_of_month,
         )
         .select_related("course")
-        .prefetch_related("attendance_records")
+        .order_by("start_time")
     )
 
-    # --- HELPER ------------
+    # ---------------------------------------------------------
+    # WEEKLY / MONTHLY METRICS
+    # ---------------------------------------------------------
 
-    def get_percentage(value, total):
-        if total == 0:
-            return 0
-
-        return round((value / total) * 100)
-
-    # === WEEKLY DATA =======
-
-    total_weekly_sessions = weekly_sessions.count()
-
-    # A class is considered HELD when its end time has passed.
-    held_weekly_sessions = weekly_sessions.filter(
-        end_time__lt=now,
-    ).count()
-
-    upcoming_weekly_sessions = weekly_sessions.filter(
-        start_time__gte=now,
-    ).count()
-
-    held_weekly_percentage = get_percentage(
-        held_weekly_sessions,
-        total_weekly_sessions,
+    weekly_metrics = get_period_metrics(
+        weekly_sessions
     )
 
-    # --- WEEKLY ATTENDANCE SUBMISSION ---------
-
-    weekly_held_sessions = weekly_sessions.filter(
-        end_time__lt=now,
+    monthly_metrics = get_period_metrics(
+        monthly_sessions
     )
 
-    weekly_attendance_submitted_sessions = (
-        weekly_held_sessions
-        .filter(
-            attendance_records__status__in=[
-                Attendance.STATUS_ATTENDED,
-                Attendance.STATUS_MISSED,
-                Attendance.STATUS_EXCUSED,
-            ]
-        )
-        .distinct()
-        .count()
-    )
-
-    weekly_attendance_pending_sessions = max(
-        held_weekly_sessions
-        - weekly_attendance_submitted_sessions,
-        0,
-    )
-
-    # --- WEEKLY ATTENDANCE RATE -------------
-
-    weekly_attendance_records = Attendance.objects.filter(
-        class_session__course__teacher=request.user,
-        class_session__course__status="active",
-        class_session__start_time__gte=start_of_week,
-        class_session__start_time__lte=end_of_week,
-        class_session__end_time__lt=now,
-        status__in=[
-            Attendance.STATUS_ATTENDED,
-            Attendance.STATUS_MISSED,
-            Attendance.STATUS_EXCUSED,
-        ],
-    )
-
-    weekly_total_attendance_records = (
-        weekly_attendance_records.count()
-    )
-
-    weekly_attended_records = (
-        weekly_attendance_records
-        .filter(status=Attendance.STATUS_ATTENDED)
-        .count()
-    )
-
-    weekly_attendance_rate = get_percentage(
-        weekly_attended_records,
-        weekly_total_attendance_records,
-    )
-
-    # === MONTHLY DATA ==========
-
-    total_monthly_sessions = monthly_sessions.count()
-
-    held_monthly_sessions = monthly_sessions.filter(
-        end_time__lt=now,
-    ).count()
-
-    upcoming_monthly_sessions = monthly_sessions.filter(
-        start_time__gte=now,
-    ).count()
-
-    held_monthly_percentage = get_percentage(
-        held_monthly_sessions,
-        total_monthly_sessions,
-    )
-
-    # --- MONTHLY ATTENDANCE SUBMISSION ---------
-
-    monthly_held_sessions = monthly_sessions.filter(
-        end_time__lt=now,
-    )
-
-    monthly_attendance_submitted_sessions = (
-        monthly_held_sessions
-        .filter(
-            attendance_records__status__in=[
-                Attendance.STATUS_ATTENDED,
-                Attendance.STATUS_MISSED,
-                Attendance.STATUS_EXCUSED,
-            ]
-        )
-        .distinct()
-        .count()
-    )
-
-    monthly_attendance_pending_sessions = max(
-        held_monthly_sessions
-        - monthly_attendance_submitted_sessions,
-        0,
-    )
-
-    # --- MONTHLY ATTENDANCE RATE -----------
-
-    monthly_attendance_records = Attendance.objects.filter(
-        class_session__course__teacher=request.user,
-        class_session__course__status="active",
-        class_session__start_time__gte=start_of_month,
-        class_session__start_time__lte=end_of_month,
-        class_session__end_time__lt=now,
-        status__in=[
-            Attendance.STATUS_ATTENDED,
-            Attendance.STATUS_MISSED,
-            Attendance.STATUS_EXCUSED,
-        ],
-    )
-
-    monthly_total_attendance_records = (
-        monthly_attendance_records.count()
-    )
-
-    monthly_attended_records = (
-        monthly_attendance_records
-        .filter(status=Attendance.STATUS_ATTENDED)
-        .count()
-    )
-
-    monthly_attendance_rate = get_percentage(
-        monthly_attended_records,
-        monthly_total_attendance_records,
-    )
-
-    # === GENERAL DATA ===============
+    # ---------------------------------------------------------
+    # GENERAL DATA
+    # ---------------------------------------------------------
 
     total_students = (
         courses
@@ -2316,12 +2478,19 @@ def teacher_dashboard(request):
         .count()
     )
 
-    # --- GENERAL ATTENDANCE RATE -------------
+    # ---------------------------------------------------------
+    # GENERAL ATTENDANCE RATE
+    #
+    # Only Attendance records belonging to sessions whose
+    # attendance workflow is fully submitted are included.
+    # ---------------------------------------------------------
 
     attendance_records = Attendance.objects.filter(
         class_session__course__teacher=request.user,
         class_session__course__status="active",
-        class_session__end_time__lt=now,
+        class_session__status=(
+            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        ),
         status__in=[
             Attendance.STATUS_ATTENDED,
             Attendance.STATUS_MISSED,
@@ -2340,7 +2509,9 @@ def teacher_dashboard(request):
         total_attendance_records,
     )
 
-    # === CONTEXT ==========
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
 
     context = {
         "profile": profile,
@@ -2354,34 +2525,48 @@ def teacher_dashboard(request):
         "total_attendance_rate": total_attendance_rate,
 
         # Weekly
-        "total_weekly_sessions": total_weekly_sessions,
-        "held_weekly_sessions": held_weekly_sessions,
-        "held_weekly_percentage": held_weekly_percentage,
-        "upcoming_weekly_sessions": upcoming_weekly_sessions,
+        "total_weekly_sessions":
+            weekly_metrics["total_sessions"],
+
+        "held_weekly_sessions":
+            weekly_metrics["held_sessions"],
+
+        "held_weekly_percentage":
+            weekly_metrics["held_percentage"],
+
+        "upcoming_weekly_sessions":
+            weekly_metrics["upcoming_sessions"],
 
         "weekly_attendance_submitted_sessions":
-            weekly_attendance_submitted_sessions,
+            weekly_metrics["attendance_submitted_sessions"],
 
         "weekly_attendance_pending_sessions":
-            weekly_attendance_pending_sessions,
+            weekly_metrics["attendance_pending_sessions"],
 
         "weekly_attendance_rate":
-            weekly_attendance_rate,
+            weekly_metrics["attendance_rate"],
 
         # Monthly
-        "total_monthly_sessions": total_monthly_sessions,
-        "held_monthly_sessions": held_monthly_sessions,
-        "held_monthly_percentage": held_monthly_percentage,
-        "upcoming_monthly_sessions": upcoming_monthly_sessions,
+        "total_monthly_sessions":
+            monthly_metrics["total_sessions"],
+
+        "held_monthly_sessions":
+            monthly_metrics["held_sessions"],
+
+        "held_monthly_percentage":
+            monthly_metrics["held_percentage"],
+
+        "upcoming_monthly_sessions":
+            monthly_metrics["upcoming_sessions"],
 
         "monthly_attendance_submitted_sessions":
-            monthly_attendance_submitted_sessions,
+            monthly_metrics["attendance_submitted_sessions"],
 
         "monthly_attendance_pending_sessions":
-            monthly_attendance_pending_sessions,
+            monthly_metrics["attendance_pending_sessions"],
 
         "monthly_attendance_rate":
-            monthly_attendance_rate,
+            monthly_metrics["attendance_rate"],
     }
 
     return render(
@@ -2389,6 +2574,7 @@ def teacher_dashboard(request):
         "profiles/teacher/teacher_dashboard.html",
         context,
     )
+
 
 
 @login_required
@@ -2569,7 +2755,7 @@ def teacher_courses(request):
 
 
 @login_required
-def teacher_course_details(request, course_id):
+def teacher_course_details(request, course_id=None):
     profile = get_object_or_404(
         UserProfile,
         user=request.user,
@@ -2598,11 +2784,11 @@ def teacher_course_details(request, course_id):
         )
         .annotate(
             status_order=Case(
-                When(status=Course.STATUS_ACTIVE, then=Value(1)),
-                When(status=Course.STATUS_CONFIRMED, then=Value(2)),
-                When(status=Course.STATUS_PAUSED, then=Value(3)),
-                When(status=Course.STATUS_COMPLETED, then=Value(4)),
-                When(status=Course.STATUS_CANCELLED, then=Value(5)),
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
                 default=Value(99),
                 output_field=IntegerField(),
             )
@@ -2622,175 +2808,220 @@ def teacher_course_details(request, course_id):
     # ---------------------------------------------------------
     # CURRENT COURSE
     #
-    # Course remains accessible regardless of status,
-    # provided it belongs to this teacher.
+    # Existing ID-based route:
+    # - load the requested Course
+    #
+    # No-course route:
+    # - if the teacher already has courses, redirect to the
+    #   first Course in selector order
+    # - if the teacher has no courses, keep course=None and
+    #   render the normal Course Details interface with
+    #   empty/default data
     # ---------------------------------------------------------
-    course = get_object_or_404(
-        available_courses,
-        id=course_id,
-    )
+    course = None
 
-    # ---------------------------------------------------------
-    # SESSION LIFECYCLE
-    #
-    # Synchronize only the selected Course.
-    #
-    # The final ClassSession transition may also complete the
-    # Course and its active enrollments, so refresh afterwards.
-    # ---------------------------------------------------------
-    ClassSession.transition_past_sessions(
-        course=course
-    )
-
-    course.refresh_from_db()
-
-    # ---------------------------------------------------------
-    # ALL ENROLLMENTS
-    #
-    # Keep historical enrollment records visible regardless
-    # of enrollment status.
-    #
-    # Order:
-    # 1. Active
-    # 2. Confirmed
-    # 3. Paused
-    # 4. Completed
-    # 5. Cancelled
-    #
-    # Then alphabetically by student name.
-    # ---------------------------------------------------------
-    enrollments = (
-        course.enrollments
-        .select_related(
-            "student",
-            "student__profile",
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
         )
-        .annotate(
-            status_order=Case(
-                When(
-                    status=CourseEnrollment.STATUS_ACTIVE,
-                    then=Value(1),
-                ),
-                When(
-                    status=CourseEnrollment.STATUS_CONFIRMED,
-                    then=Value(2),
-                ),
-                When(
-                    status=CourseEnrollment.STATUS_PAUSED,
-                    then=Value(3),
-                ),
-                When(
-                    status=CourseEnrollment.STATUS_COMPLETED,
-                    then=Value(4),
-                ),
-                When(
-                    status=CourseEnrollment.STATUS_CANCELLED,
-                    then=Value(5),
-                ),
-                default=Value(99),
-                output_field=IntegerField(),
-            )
-        )
-        .order_by(
-            "status_order",
-            "student__first_name",
-            "student__last_name",
-            "student__username",
-        )
-    )
+    else:
+        first_course = available_courses.first()
 
-    # ---------------------------------------------------------
-    # CLASS SESSIONS
-    # ---------------------------------------------------------
-    sessions = (
-        course.class_sessions
-        .all()
-        .order_by("start_time")
-    )
-
-    # ---------------------------------------------------------
-    # COURSE DELIVERY
-    #
-    # Course owns all whole-course lifecycle calculations.
-    #
-    # Held means explicitly:
-    # - held_attendance_pending
-    # - complete_attendance_submitted
-    #
-    # It does NOT simply mean end_time has passed.
-    # ---------------------------------------------------------
-    total_classes = course.total_sessions
-    held_classes = course.total_held_sessions
-    attendance_pending_classes = (
-        course.held_attendance_pending_sessions
-    )
-    attendance_submitted_classes = (
-        course.complete_attendance_submitted_sessions
-    )
-    remaining_classes = course.remaining_sessions
-    delivery_percentage = course.delivery_percentage
-
-    # ---------------------------------------------------------
-    # COURSE DELIVERY HOURS
-    #
-    # Course owns delivered duration calculations.
-    # ---------------------------------------------------------
-    held_minutes = course.held_minutes
-    held_hours = course.held_hours
-    held_hours_display = format_minutes_duration(
-        held_minutes
-    )
-
-    # ---------------------------------------------------------
-    # AVERAGE COURSE ATTENDANCE
-    #
-    # Each CourseEnrollment owns its own attendance population
-    # and attendance percentage.
-    #
-    # The average across learners is page-level aggregation, so
-    # it remains appropriately in the view.
-    # ---------------------------------------------------------
-    attendance_percentages = []
-
-    for enrollment in enrollments:
-        attendance_metrics = enrollment.attendance_metrics
-
-        if (
-            attendance_metrics[
-                "total_submitted_attendance_records"
-            ] > 0
-        ):
-            attendance_percentages.append(
-                attendance_metrics["attendance_percentage"]
+        if first_course:
+            return redirect(
+                "profiles:teacher_course_details",
+                course_id=first_course.id,
             )
 
-    average_attendance = (
-        round(
-            sum(attendance_percentages)
-            / len(attendance_percentages)
+    # ---------------------------------------------------------
+    # DEFAULT EMPTY-STATE VALUES
+    #
+    # These allow a teacher with no courses to access and view
+    # the complete Course Details interface safely.
+    # ---------------------------------------------------------
+    enrollments = CourseEnrollment.objects.none()
+    sessions = ClassSession.objects.none()
+
+    total_classes = 0
+    held_classes = 0
+    attendance_pending_classes = 0
+    attendance_submitted_classes = 0
+    remaining_classes = 0
+    delivery_percentage = 0
+
+    held_minutes = 0
+    held_hours = 0
+    held_hours_display = format_minutes_duration(0)
+
+    average_attendance = 0
+    formatted_timetable = []
+    bcc_student_emails = ""
+
+    # ---------------------------------------------------------
+    # COURSE-SPECIFIC DATA
+    # ---------------------------------------------------------
+    if course:
+        # -----------------------------------------------------
+        # SESSION LIFECYCLE
+        #
+        # Synchronize only the selected Course.
+        #
+        # The final ClassSession transition may also complete
+        # the Course and its active enrollments, so refresh
+        # afterwards.
+        # -----------------------------------------------------
+        ClassSession.transition_past_sessions(
+            course=course
         )
-        if attendance_percentages else 0
-    )
 
-    # ---------------------------------------------------------
-    # COURSE TIMETABLE
-    # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(
-        course
-    )
+        course.refresh_from_db()
 
-    # ---------------------------------------------------------
-    # GROUP EMAIL LIST
-    # ---------------------------------------------------------
-    student_emails = [
-        enrollment.student.email
-        for enrollment in enrollments
-        if enrollment.student.email
-    ]
+        # -----------------------------------------------------
+        # ALL ENROLLMENTS
+        #
+        # Keep historical enrollment records visible regardless
+        # of enrollment status.
+        #
+        # Order:
+        # 1. Active
+        # 2. Confirmed
+        # 3. Paused
+        # 4. Completed
+        # 5. Cancelled
+        #
+        # Then alphabetically by student name.
+        # -----------------------------------------------------
+        enrollments = (
+            course.enrollments
+            .select_related(
+                "student",
+                "student__profile",
+            )
+            .annotate(
+                status_order=Case(
+                    When(
+                        status=CourseEnrollment.STATUS_ACTIVE,
+                        then=Value(1),
+                    ),
+                    When(
+                        status=CourseEnrollment.STATUS_PAUSED,
+                        then=Value(3),
+                    ),
+                    When(
+                        status=CourseEnrollment.STATUS_COMPLETED,
+                        then=Value(4),
+                    ),
+                    When(
+                        status=CourseEnrollment.STATUS_CANCELLED,
+                        then=Value(5),
+                    ),
+                    default=Value(99),
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by(
+                "status_order",
+                "student__first_name",
+                "student__last_name",
+                "student__username",
+            )
+        )
 
-    bcc_student_emails = ",".join(
-        student_emails
-    )
+        # -----------------------------------------------------
+        # CLASS SESSIONS
+        # -----------------------------------------------------
+        sessions = (
+            course.class_sessions
+            .all()
+            .order_by("start_time")
+        )
+
+        # -----------------------------------------------------
+        # COURSE DELIVERY
+        #
+        # Course owns all whole-course lifecycle calculations.
+        #
+        # Held means explicitly:
+        # - held_attendance_pending
+        # - complete_attendance_submitted
+        #
+        # It does NOT simply mean end_time has passed.
+        # -----------------------------------------------------
+        total_classes = course.total_sessions
+        held_classes = course.total_held_sessions
+        attendance_pending_classes = (
+            course.held_attendance_pending_sessions
+        )
+        attendance_submitted_classes = (
+            course.complete_attendance_submitted_sessions
+        )
+        remaining_classes = course.remaining_sessions
+        delivery_percentage = course.delivery_percentage
+
+        # -----------------------------------------------------
+        # COURSE DELIVERY HOURS
+        #
+        # Course owns delivered duration calculations.
+        # -----------------------------------------------------
+        held_minutes = course.held_minutes
+        held_hours = course.held_hours
+        held_hours_display = format_minutes_duration(
+            held_minutes
+        )
+
+        # -----------------------------------------------------
+        # AVERAGE COURSE ATTENDANCE
+        #
+        # Each CourseEnrollment owns its own attendance
+        # population and attendance percentage.
+        #
+        # The average across learners is page-level aggregation,
+        # so it remains appropriately in the view.
+        # -----------------------------------------------------
+        attendance_percentages = []
+
+        for enrollment in enrollments:
+            attendance_metrics = enrollment.attendance_metrics
+
+            if (
+                attendance_metrics[
+                    "total_submitted_attendance_records"
+                ] > 0
+            ):
+                attendance_percentages.append(
+                    attendance_metrics[
+                        "attendance_percentage"
+                    ]
+                )
+
+        average_attendance = (
+            round(
+                sum(attendance_percentages)
+                / len(attendance_percentages)
+            )
+            if attendance_percentages else 0
+        )
+
+        # -----------------------------------------------------
+        # COURSE TIMETABLE
+        # -----------------------------------------------------
+        formatted_timetable = build_formatted_timetable(
+            course
+        )
+
+        # -----------------------------------------------------
+        # GROUP EMAIL LIST
+        # -----------------------------------------------------
+        student_emails = [
+            enrollment.student.email
+            for enrollment in enrollments
+            if enrollment.student.email
+        ]
+
+        bcc_student_emails = ",".join(
+            student_emails
+        )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -2850,51 +3081,40 @@ def teacher_course_details(request, course_id):
 
 
 @login_required
-def teacher_course_attendance(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def teacher_course_attendance(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
-
-    # ---------------------------------------------------------
-    # COURSE
-    # ---------------------------------------------------------
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        teacher=request.user,
-    )
-
-    # ---------------------------------------------------------
-    # SESSION LIFECYCLE
-    #
-    # Synchronize only the selected Course.
-    #
-    # The final ClassSession transition may also complete the
-    # Course and its active enrollments, so refresh afterwards.
-    # ---------------------------------------------------------
-    ClassSession.transition_past_sessions(course=course)
-    course.refresh_from_db()
 
     # ---------------------------------------------------------
     # AVAILABLE COURSES
     #
     # Used by the shared course selector.
     #
-    # Keep selector ordering consistent with the established
-    # Course lifecycle order:
-    # active -> confirmed -> paused -> completed -> cancelled.
+    # Include ALL courses belonging to this teacher regardless
+    # of lifecycle status.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
     # ---------------------------------------------------------
     available_courses = (
         Course.objects
         .filter(teacher=request.user)
         .annotate(
             status_order=Case(
-                When(status=Course.STATUS_ACTIVE, then=Value(1)),
-                When(status=Course.STATUS_CONFIRMED, then=Value(2)),
-                When(status=Course.STATUS_PAUSED, then=Value(3)),
-                When(status=Course.STATUS_COMPLETED, then=Value(4)),
-                When(status=Course.STATUS_CANCELLED, then=Value(5)),
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
                 default=Value(99),
                 output_field=IntegerField(),
             )
@@ -2910,134 +3130,212 @@ def teacher_course_attendance(request, course_id):
     )
 
     # ---------------------------------------------------------
-    # COURSE ATTENDANCE LIFECYCLE TOTALS
+    # CURRENT COURSE
     #
-    # Course owns whole-course delivery/session calculations.
+    # Existing ID-based route:
+    # - load the requested Course
+    #
+    # No-course route:
+    # - if the teacher already has courses, redirect to the
+    #   first Course in selector order
+    # - if the teacher has no courses, keep course=None and
+    #   render the normal Course Attendance interface with
+    #   empty/default data
     # ---------------------------------------------------------
-    held_classes = course.held_attendance_pending_sessions
-    attendance_submitted_classes = (
-        course.complete_attendance_submitted_sessions
-    )
-    total_classes_held = course.total_held_sessions
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:teacher_course_attendance",
+                course_id=first_course.id,
+            )
 
     # ---------------------------------------------------------
-    # SUBMITTED ATTENDANCE SESSIONS
+    # DEFAULT EMPTY-STATE VALUES
     #
-    # Only ClassSessions whose attendance workflow is complete
-    # belong in the submitted-attendance history.
-    #
-    # Session-level attendance counts remain query annotations
-    # because ClassSession does not currently own group-level
-    # attendance metrics.
+    # These values allow a teacher with no assigned courses to
+    # access the complete Course Attendance page and navigation.
     # ---------------------------------------------------------
+    held_classes = 0
+    attendance_submitted_classes = 0
+    total_classes_held = 0
+    average_attendance = 0
+
     submitted_class_sessions = (
-        course.class_sessions
-        .filter(
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        )
-        .annotate(
-            attended_count=Count(
-                "attendance_records",
-                filter=Q(
-                    attendance_records__status=Attendance.STATUS_ATTENDED
-                ),
-                distinct=True,
-            ),
-            missed_count=Count(
-                "attendance_records",
-                filter=Q(
-                    attendance_records__status=Attendance.STATUS_MISSED
-                ),
-                distinct=True,
-            ),
-            excused_count=Count(
-                "attendance_records",
-                filter=Q(
-                    attendance_records__status=Attendance.STATUS_EXCUSED
-                ),
-                distinct=True,
-            ),
-            registered_count=Count(
-                "attendance_records",
-                filter=Q(
-                    attendance_records__status__in=(
-                        Attendance.FINAL_OUTCOME_STATUSES
-                    )
-                ),
-                distinct=True,
-            ),
-        )
-        .prefetch_related(
-            "attendance_records__student",
-            "attendance_records__student__profile",
-        )
-        .order_by("-start_time")
+        ClassSession.objects.none()
     )
 
     # ---------------------------------------------------------
-    # SESSION ATTENDANCE DISPLAY DATA
-    #
-    # These values package each submitted session for this page.
-    # They are not canonical Course calculations.
+    # COURSE-SPECIFIC DATA
     # ---------------------------------------------------------
-    total_attended = 0
-    total_registered = 0
+    if course:
+        # -----------------------------------------------------
+        # SESSION LIFECYCLE
+        #
+        # Synchronize only the selected Course.
+        #
+        # The final ClassSession transition may also complete
+        # the Course and its active enrollments, so refresh
+        # afterwards.
+        # -----------------------------------------------------
+        ClassSession.transition_past_sessions(
+            course=course
+        )
 
-    for session in submitted_class_sessions:
-        session.attendance_percentage = (
+        course.refresh_from_db()
+
+        # -----------------------------------------------------
+        # COURSE ATTENDANCE LIFECYCLE TOTALS
+        #
+        # Course owns whole-course delivery/session
+        # calculations.
+        # -----------------------------------------------------
+        held_classes = (
+            course.held_attendance_pending_sessions
+        )
+
+        attendance_submitted_classes = (
+            course.complete_attendance_submitted_sessions
+        )
+
+        total_classes_held = (
+            course.total_held_sessions
+        )
+
+        # -----------------------------------------------------
+        # SUBMITTED ATTENDANCE SESSIONS
+        #
+        # Only ClassSessions whose attendance workflow is
+        # complete belong in the submitted-attendance history.
+        #
+        # Session-level attendance counts remain query
+        # annotations because ClassSession does not currently
+        # own group-level attendance metrics.
+        # -----------------------------------------------------
+        submitted_class_sessions = (
+            course.class_sessions
+            .filter(
+                status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            )
+            .annotate(
+                attended_count=Count(
+                    "attendance_records",
+                    filter=Q(
+                        attendance_records__status=Attendance.STATUS_ATTENDED
+                    ),
+                    distinct=True,
+                ),
+                missed_count=Count(
+                    "attendance_records",
+                    filter=Q(
+                        attendance_records__status=Attendance.STATUS_MISSED
+                    ),
+                    distinct=True,
+                ),
+                excused_count=Count(
+                    "attendance_records",
+                    filter=Q(
+                        attendance_records__status=Attendance.STATUS_EXCUSED
+                    ),
+                    distinct=True,
+                ),
+                registered_count=Count(
+                    "attendance_records",
+                    filter=Q(
+                        attendance_records__status__in=(
+                            Attendance.FINAL_OUTCOME_STATUSES
+                        )
+                    ),
+                    distinct=True,
+                ),
+            )
+            .prefetch_related(
+                "attendance_records__student",
+                "attendance_records__student__profile",
+            )
+            .order_by("-start_time")
+        )
+
+        # -----------------------------------------------------
+        # SESSION ATTENDANCE DISPLAY DATA
+        #
+        # These values package each submitted session for this
+        # particular page. They are not canonical Course
+        # calculations.
+        # -----------------------------------------------------
+        total_attended = 0
+        total_registered = 0
+
+        for session in submitted_class_sessions:
+            session.attendance_percentage = (
+                round(
+                    session.attended_count
+                    / session.registered_count
+                    * 100
+                )
+                if session.registered_count else 0
+            )
+
+            total_attended += session.attended_count
+            total_registered += session.registered_count
+
+            session.employee_search_text = " ".join(
+                part
+                for attendance in session.attendance_records.all()
+                for part in (
+                    attendance.student.first_name or "",
+                    attendance.student.last_name or "",
+                    attendance.student.email or "",
+                    attendance.student.username or "",
+                )
+                if part
+            ).lower()
+
+        # -----------------------------------------------------
+        # OVERALL COURSE ATTENDANCE RATE
+        #
+        # Aggregate over the submitted Attendance records
+        # displayed on this page.
+        # -----------------------------------------------------
+        average_attendance = (
             round(
-                session.attended_count
-                / session.registered_count
+                total_attended
+                / total_registered
                 * 100
             )
-            if session.registered_count else 0
+            if total_registered else 0
         )
-
-        total_attended += session.attended_count
-        total_registered += session.registered_count
-
-        session.employee_search_text = " ".join(
-            part
-            for attendance in session.attendance_records.all()
-            for part in (
-                attendance.student.first_name or "",
-                attendance.student.last_name or "",
-                attendance.student.email or "",
-                attendance.student.username or "",
-            )
-            if part
-        ).lower()
-
-    # ---------------------------------------------------------
-    # OVERALL COURSE ATTENDANCE RATE
-    #
-    # This is an aggregate over the submitted Attendance records
-    # displayed on this page, not a Course lifecycle calculation.
-    # ---------------------------------------------------------
-    average_attendance = (
-        round(
-            total_attended
-            / total_registered
-            * 100
-        )
-        if total_registered else 0
-    )
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "profile": profile,
+
+        # Current Course
         "course": course,
+
+        # Course selector
         "available_courses": available_courses,
 
+        # Attendance lifecycle
         "held_classes": held_classes,
         "attendance_submitted_classes": attendance_submitted_classes,
         "total_classes_held": total_classes_held,
 
+        # Attendance
         "average_attendance": average_attendance,
         "submitted_class_sessions": submitted_class_sessions,
 
+        # Component Course Details nav
         "active_section": "attendance",
     }
 
@@ -3048,25 +3346,113 @@ def teacher_course_attendance(request, course_id):
     )
 
 
-
 @login_required
-def teacher_course_students_list(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def teacher_course_assessment(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
     # ---------------------------------------------------------
-    # CURRENT COURSE
-    #
-    # Accessible regardless of status, provided it belongs
-    # to this teacher.
+    # AVAILABLE COURSES
     # ---------------------------------------------------------
-    course = get_object_or_404(
-        Course,
-        id=course_id,
-        teacher=request.user
+    available_courses = (
+        Course.objects
+        .filter(teacher=request.user)
+        .annotate(
+            status_order=Case(
+                When(status="active", then=Value(1)),
+                When(status="confirmed", then=Value(2)),
+                When(status="paused", then=Value(3)),
+                When(status="completed", then=Value(4)),
+                When(status="cancelled", then=Value(5)),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+        .select_related(
+            "course_type",
+            "company",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
+
+    # ---------------------------------------------------------
+    # CURRENT COURSE
+    # ---------------------------------------------------------
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:teacher_course_assessment",
+                course_id=first_course.id,
+            )
+
+    # ---------------------------------------------------------
+    # DEFAULT EMPTY-STATE VALUES
+    # ---------------------------------------------------------
+    enrollments = CourseEnrollment.objects.none()
+
+    # ---------------------------------------------------------
+    # COURSE-SPECIFIC DATA
+    # ---------------------------------------------------------
+    if course:
+        enrollments = (
+            course.enrollments
+            .select_related(
+                "student",
+                "student__profile",
+            )
+            .order_by(
+                "student__first_name",
+                "student__last_name",
+                "student__username",
+            )
+        )
+
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
+    context = {
+        "profile": profile,
+        "course": course,
+        "available_courses": available_courses,
+        "enrollments": enrollments,
+
+        # Component Course Details nav
+        "active_section": "assessment",
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_course_assessment.html",
+        context,
+    )
+
+
+@login_required
+def teacher_course_students_list(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
 
     # ---------------------------------------------------------
     # AVAILABLE COURSES
@@ -3103,135 +3489,226 @@ def teacher_course_students_list(request, course_id):
     )
 
     # ---------------------------------------------------------
-    # ENROLLMENTS / SORTING
+    # CURRENT COURSE
     #
-    # Historical enrollments remain visible regardless of
-    # enrollment status.
+    # Existing ID-based route:
+    # - load the requested Course
     #
-    # Name sorting uses:
-    # - first name + last name when available
-    # - username when no name has been provided
+    # No-course route:
+    # - if the teacher already has courses, redirect to the
+    #   first Course in selector order
+    # - if the teacher has no courses, keep course=None and
+    #   render the normal Enrollments interface with
+    #   empty/default data
+    # ---------------------------------------------------------
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:teacher_course_students_list",
+                course_id=first_course.id,
+            )
+
+    # ---------------------------------------------------------
+    # SORTING
     # ---------------------------------------------------------
     sort_by = request.GET.get("sort", "name")
 
-    enrollments = (
-        course.enrollments
-        .select_related("student", "student__profile")
-        .annotate(
-            level_order=Case(
-                When(student__profile__current_level="A1", then=Value(1)),
-                When(student__profile__current_level="A2", then=Value(2)),
-                When(student__profile__current_level="B1.1", then=Value(3)),
-                When(student__profile__current_level="B1.2", then=Value(4)),
-                When(student__profile__current_level="B2.1", then=Value(5)),
-                When(student__profile__current_level="B2.2", then=Value(6)),
-                When(student__profile__current_level="C1.1", then=Value(7)),
-                When(student__profile__current_level="C1.2", then=Value(8)),
-                When(student__profile__current_level="C2", then=Value(9)),
-                default=Value(10),
-                output_field=IntegerField(),
-            ),
-            sort_name=Lower(
-                Coalesce(
-                    NullIf(
-                        Trim(
-                            Concat(
-                                F("student__first_name"),
-                                Value(" "),
-                                F("student__last_name"),
-                            )
-                        ),
-                        Value(""),
-                    ),
-                    F("student__username"),
-                )
-            ),
-        )
-    )
-
-    if sort_by == "level":
-        enrollments = enrollments.order_by(
-            "level_order",
-            "sort_name",
-        )
-    else:
+    if sort_by not in ["name", "level"]:
         sort_by = "name"
-        enrollments = enrollments.order_by(
-            "sort_name",
-        )
 
+    # ---------------------------------------------------------
+    # DEFAULT EMPTY-STATE VALUES
+    #
+    # These allow a teacher with no assigned courses to access
+    # the complete Course Enrollments interface safely.
+    # ---------------------------------------------------------
+    enrollments = CourseEnrollment.objects.none()
+    sessions = ClassSession.objects.none()
 
-    sessions = (
-        course.class_sessions
-        .all()
-        .order_by("start_time")
-    )
-
-    now = timezone.now()
-
-    total_classes = course.total_sessions
-    completed_classes = course.complete_attendance_submitted_sessions
-    remaining_classes = course.remaining_sessions
-    delivery_percentage = course.delivery_percentage
-
-    attendance_percentages = []
-
-    for enrollment in enrollments:
-        total_completed = enrollment.complete_attendance_submitted_classes
-
-        if total_completed > 0:
-            attendance_percentages.append(
-                (enrollment.attended_classes / total_completed) * 100
-            )
-
+    total_classes = 0
+    completed_classes = 0
+    remaining_classes = 0
+    delivery_percentage = 0
     average_attendance = 0
 
-    if attendance_percentages:
-        average_attendance = round(
-            sum(attendance_percentages) / len(attendance_percentages)
+    formatted_timetable = []
+    bcc_student_emails = ""
+
+    # ---------------------------------------------------------
+    # COURSE-SPECIFIC DATA
+    # ---------------------------------------------------------
+    if course:
+        # -----------------------------------------------------
+        # ENROLLMENTS / SORTING
+        #
+        # Historical enrollments remain visible regardless of
+        # enrollment status.
+        #
+        # Name sorting uses:
+        # - first name + last name when available
+        # - username when no name has been provided
+        # -----------------------------------------------------
+        enrollments = (
+            course.enrollments
+            .select_related(
+                "student",
+                "student__profile",
+            )
+            .annotate(
+                level_order=Case(
+                    When(student__profile__current_level="A1", then=Value(1)),
+                    When(student__profile__current_level="A2", then=Value(2)),
+                    When(student__profile__current_level="B1.1", then=Value(3)),
+                    When(student__profile__current_level="B1.2", then=Value(4)),
+                    When(student__profile__current_level="B2.1", then=Value(5)),
+                    When(student__profile__current_level="B2.2", then=Value(6)),
+                    When(student__profile__current_level="C1.1", then=Value(7)),
+                    When(student__profile__current_level="C1.2", then=Value(8)),
+                    When(student__profile__current_level="C2", then=Value(9)),
+                    default=Value(10),
+                    output_field=IntegerField(),
+                ),
+                sort_name=Lower(
+                    Coalesce(
+                        NullIf(
+                            Trim(
+                                Concat(
+                                    F("student__first_name"),
+                                    Value(" "),
+                                    F("student__last_name"),
+                                )
+                            ),
+                            Value(""),
+                        ),
+                        F("student__username"),
+                    )
+                ),
+            )
+        )
+
+        if sort_by == "level":
+            enrollments = enrollments.order_by(
+                "level_order",
+                "sort_name",
+            )
+        else:
+            enrollments = enrollments.order_by(
+                "sort_name",
+            )
+
+        # -----------------------------------------------------
+        # CLASS SESSIONS / GENERAL PROGRESS
+        # -----------------------------------------------------
+        sessions = (
+            course.class_sessions
+            .all()
+            .order_by("start_time")
+        )
+
+        total_classes = course.total_sessions
+        completed_classes = (
+            course.complete_attendance_submitted_sessions
+        )
+        remaining_classes = course.remaining_sessions
+        delivery_percentage = course.delivery_percentage
+
+        # -----------------------------------------------------
+        # AVERAGE ATTENDANCE
+        # -----------------------------------------------------
+        attendance_percentages = []
+
+        for enrollment in enrollments:
+            total_completed = (
+                enrollment.complete_attendance_submitted_classes
+            )
+
+            if total_completed > 0:
+                attendance_percentages.append(
+                    (
+                        enrollment.attended_classes
+                        / total_completed
+                    )
+                    * 100
+                )
+
+        if attendance_percentages:
+            average_attendance = round(
+                sum(attendance_percentages)
+                / len(attendance_percentages)
+            )
+
+        # -----------------------------------------------------
+        # COURSE TIMETABLE
+        # -----------------------------------------------------
+        formatted_timetable = (
+            build_formatted_timetable(
+                course
+            )
+        )
+
+        # -----------------------------------------------------
+        # GROUP EMAIL
+        # -----------------------------------------------------
+        student_emails = [
+            enrollment.student.email
+            for enrollment in enrollments
+            if enrollment.student.email
+        ]
+
+        bcc_student_emails = ",".join(
+            student_emails
         )
 
     # ---------------------------------------------------------
-    # COURSE TIMETABLE
+    # CONTEXT
     # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
-
-    # ---------------------------------------------------------
-    # GROUP EMAIL
-    # ---------------------------------------------------------
-    student_emails = [
-        enrollment.student.email
-        for enrollment in enrollments
-        if enrollment.student.email
-    ]
-
-    bcc_student_emails = ",".join(student_emails)
-
     context = {
         "profile": profile,
         "course": course,
+
+        # Course selector
         "available_courses": available_courses,
+
+        # Enrollments
         "enrollments": enrollments,
         "sort_by": sort_by,
+
+        # Sessions
         "sessions": sessions,
-        # component course detail nav (active tab)
+
+        # Component course detail nav
         "active_section": "enrollments",
+
         # Progress timeline data
         "total_classes": total_classes,
         "completed_classes": completed_classes,
         "remaining_classes": remaining_classes,
         "delivery_percentage": delivery_percentage,
+
+        # Attendance
         "average_attendance": average_attendance,
 
+        # Timetable / email
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
+
+        # Form/display choices
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
     return render(
         request,
         "profiles/teacher/teacher_course_students_list.html",
-        context
+        context,
     )
 
 
@@ -3610,7 +4087,7 @@ def teacher_student_detail(request, course_id, enrollment_id):
     user_currently_enrolled = CourseEnrollment.objects.filter(
         student=student,
         status=CourseEnrollment.STATUS_ACTIVE,
-        course__status=Course.STATUS_ACTIVE,
+        course__status="active",
     ).exists()
 
     # ---------------------------------------------------------
@@ -5021,17 +5498,16 @@ def teacher_edit_student_skill(request, skill_assessment_id):
 def teacher_student_needs_analysis(request, course_id, enrollment_id):
     profile = get_object_or_404(
         UserProfile,
-        user=request.user
+        user=request.user,
     )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
-
     # ---------------------------------------------------------
     # ENROLLMENT
     #
-    # Restrict access to enrollments belonging to a course
+    # Restrict access to enrollments belonging to a Course
     # taught by the logged-in teacher.
     # ---------------------------------------------------------
     enrollment = get_object_or_404(
@@ -5049,17 +5525,35 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
     )
 
     student = enrollment.student
+    student_profile = student.profile
     course = enrollment.course
 
-    student_profile = student.profile
-    
     # ---------------------------------------------------------
-    # AVAILABLE ENROLLMENTS
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Independent of the selected Course.
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
+
+    # ---------------------------------------------------------
+    # ALL ENROLLMENTS FOR THIS STUDENT + THIS TEACHER
     #
     # Used by the shared student course selector.
-    # Only include courses taught by this teacher.
+    # Historical Courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
     # ---------------------------------------------------------
-    enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
@@ -5068,20 +5562,19 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         .select_related(
             "course",
             "course__course_type",
+            "course__teacher",
+            "course__company",
         )
-        .order_by("course__name")
     )
-
 
     # ---------------------------------------------------------
     # NEEDS ANALYSIS
     #
     # One Needs Analysis belongs to one CourseEnrollment.
     # ---------------------------------------------------------
-    needs_analysis, created = StudentNeedsAnalysis.objects.get_or_create(
+    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
         enrollment=enrollment,
     )
-
 
     # ---------------------------------------------------------
     # MARK AS REVIEWED
@@ -5114,30 +5607,14 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
             enrollment_id=enrollment.id,
         )
 
-
-    # ---------------------------------------------------------
-    # STUDENT STATUS
-    #
-    # Used by the shared student details header.
-    # ---------------------------------------------------------
-    user_currently_enrolled = (
-        enrollment.status == CourseEnrollment.STATUS_ACTIVE
-        and course.status == "active"
-    )
-
-    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
-        enrollment=enrollment,
-    )
-
     # ---------------------------------------------------------
     # FORM
     #
-    # Company admin does not edit the questionnaire.
-    # The form is used here for field labels, choice labels,
-    # and human-readable display values.
+    # Teacher does not edit the questionnaire.
+    # The form is used for field labels, choice labels and
+    # human-readable display values.
     # ---------------------------------------------------------
     form = StudentNeedsAnalysisForm()
-
 
     # ---------------------------------------------------------
     # HUMAN-READABLE DISPLAY VALUES
@@ -5198,12 +5675,16 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
+
         "needs_analysis": needs_analysis,
+        "form": form,
+
         "can_edit": False,
         "can_review": (
             needs_analysis.status ==
             StudentNeedsAnalysis.Status.SUBMITTED
         ),
+
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
 
@@ -5213,6 +5694,7 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         "accent_exposure_labels": accent_exposure_labels,
         "priority_area_labels": priority_area_labels,
         "learning_preference_labels": learning_preference_labels,
+
         "speaking_confidence_display": speaking_confidence_display,
         "listening_confidence_display": listening_confidence_display,
         "reading_confidence_display": reading_confidence_display,
@@ -5227,17 +5709,34 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
 
 
 
+@login_required
 def teacher_student_assessment_notes(request, course_id, enrollment_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
+    # ---------------------------------------------------------
+    # COURSE
+    #
+    # Restrict access to Courses belonging to the logged-in
+    # teacher.
+    # ---------------------------------------------------------
     course = get_object_or_404(
         Course,
         id=course_id,
+        teacher=request.user,
     )
 
+    # ---------------------------------------------------------
+    # ENROLLMENT
+    #
+    # The Enrollment must belong to the selected teacher-owned
+    # Course.
+    # ---------------------------------------------------------
     enrollment = get_object_or_404(
         CourseEnrollment.objects.select_related(
             "student",
@@ -5260,6 +5759,9 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
     # Django User account status
     student_is_active = student.is_active
 
+    # ---------------------------------------------------------
+    # SKILL ASSESSMENTS
+    # ---------------------------------------------------------
     skill_assessments = (
         StudentSkillAssessment.objects
         .filter(
@@ -5277,6 +5779,9 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
 
     skills = []
 
+    # ---------------------------------------------------------
+    # TEACHER NOTES
+    # ---------------------------------------------------------
     skill_notes = (
         StudentSkillAssessment.objects
         .filter(
@@ -5287,10 +5792,14 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
         .order_by("skill")
     )
 
+    # ---------------------------------------------------------
+    # CONTEXT
+    # ---------------------------------------------------------
     context = {
         "profile": profile,
 
         "user_currently_enrolled": user_currently_enrolled,
+
         # Django User account status
         "student_is_active": student_is_active,
 
@@ -5298,9 +5807,11 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
         "enrollment": enrollment,
         "student": student,
         "student_profile": student_profile,
+
         "skills": skills,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
+
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
@@ -5311,63 +5822,72 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
     )
 
 
-
 # TEACHER CALENDAR PAGE
+@login_required
+def company_admin_calendar(request):
+    profile = get_object_or_404(
+        UserProfile.objects.select_related("company"),
+        user=request.user,
+    )
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN or not profile.company:
+        return redirect("home")
+
+    courses = (
+        Course.objects
+        .filter(company=profile.company)
+        .select_related("course_type", "company", "teacher", "teacher__profile")
+        .order_by("name")
+    )
+
+    return render(
+        request,
+        "profiles/company_admin/company_admin_calendar.html",
+        {
+            "profile": profile,
+            "company": profile.company,
+            "courses": courses,
+        },
+    )
+
 @login_required
 def teacher_calendar(request):
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
-    
+
     courses = (
         Course.objects
         .filter(teacher=request.user)
-        .select_related(
-            "course_type",
-            "company",
-            "teacher",
-        )
+        .select_related("course_type", "company", "teacher")
         .order_by("name")
     )
 
-    context = {
-        "profile": profile,
-        "courses": courses,
-    }
-
-    return render(request, "profiles/teacher/teacher_calendar.html", context)
-
-
-# Create Calendar EVENTS
-@login_required
-def teacher_calendar_events(request):
-    """
-    Calendar events for teacher profiles.
-
-    Teacher action:
-
-    - meeting link exists
-        -> Join class
-
-    - no meeting link
-        -> Group details
-    """
-
-    profile = get_object_or_404(
-        UserProfile,
-        user=request.user,
+    return render(
+        request,
+        "profiles/teacher/teacher_calendar.html",
+        {
+            "profile": profile,
+            "courses": courses,
+        },
     )
 
+
+@login_required
+def teacher_calendar_events(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
     if profile.role != UserProfile.ROLE_TEACHER:
-        return JsonResponse(
-            [],
-            safe=False,
-        )
+        return JsonResponse([], safe=False)
 
     start = request.GET.get("start")
     end = request.GET.get("end")
+    now = timezone.now()
 
+    # Current/upcoming: scheduled, rescheduled.
+    # Historical: held_attendance_pending, complete_attendance_submitted.
+    # Excluded: pending_reschedule, cancelled.
     sessions = (
         ClassSession.objects
         .filter(
@@ -5379,152 +5899,233 @@ def teacher_calendar_events(request):
                 ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
             ],
         )
-        .select_related(
-            "course",
-        )
-        .order_by(
-            "start_time"
-        )
+        .select_related("course")
+        .order_by("start_time")
     )
 
-    bank_holidays = (
-        BankHoliday.objects
-        .filter(
-            is_active=True,
-        )
-        .order_by(
-            "start_date"
-        )
-    )
+    bank_holidays = BankHoliday.objects.filter(is_active=True).order_by("start_date")
 
     if start and end:
         start_datetime = parse_datetime(start)
         end_datetime = parse_datetime(end)
 
         if start_datetime and end_datetime:
-
             sessions = sessions.filter(
                 start_time__gte=start_datetime,
                 start_time__lt=end_datetime,
             )
-
             bank_holidays = (
                 bank_holidays
-                .filter(
-                    start_date__lt=end_datetime.date()
-                )
+                .filter(start_date__lt=end_datetime.date())
                 .filter(
                     Q(end_date__isnull=True)
-                    | Q(
-                        end_date__gte=start_datetime.date()
-                    )
+                    | Q(end_date__gte=start_datetime.date())
                 )
             )
 
     events = []
 
     for session in sessions:
+        status_class = {
+            "confirmed": "course-confirmed-event",
+            "paused": "course-paused-event",
+            "cancelled": "course-cancelled-event",
+        }.get(session.course.status, "")
 
-        status_class = ""
+        is_past = (
+            session.end_time <= now
+            if session.end_time
+            else session.start_time < now
+        )
 
-        if session.course.status == "confirmed":
-            status_class = (
-                "course-confirmed-event"
-            )
-
-        elif session.course.status == "paused":
-            status_class = (
-                "course-paused-event"
-            )
-
-        elif session.course.status == "cancelled":
-            status_class = (
-                "course-cancelled-event"
-            )
+        is_joinable = (
+            not is_past
+            and session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+        )
 
         events.append({
-            "id":
-                session.id,
-
-            "title":
-                session.title,
-
-            "start":
-                session.start_time.isoformat(),
-
-            "end": (
-                session.end_time.isoformat()
-                if session.end_time
-                else None
-            ),
-
-            "className":
-                status_class,
-
+            "id": session.id,
+            "title": session.title,
+            "start": session.start_time.isoformat(),
+            "end": session.end_time.isoformat() if session.end_time else None,
+            "className": status_class,
             "extendedProps": {
-                "type":
-                    "class_session",
-
-                "course":
-                    session.course.name,
-
-                "course_status":
-                    session.course.status,
-
-                "class_number":
-                    session.class_number,
-
-                "meeting_link": get_calendar_meeting_link(session),
-
-                "group_details_url":
-                    reverse(
-                        "profiles:teacher_course_details",
-                        args=[
-                            session.course.id
-                        ],
-                    ),
+                "type": "class_session",
+                "course": session.course.name,
+                "course_status": session.course.status,
+                "class_number": session.class_number,
+                "status": session.status,
+                "is_past": is_past,
+                "meeting_link": (
+                    get_calendar_meeting_link(session)
+                    if is_joinable else None
+                ),
+                "group_details_url": reverse(
+                    "profiles:teacher_course_details",
+                    args=[session.course.id],
+                ),
             },
         })
 
     for holiday in bank_holidays:
-
         event = {
-            "id":
-                f"holiday-{holiday.id}",
-
-            "title":
-                holiday.title,
-
-            "start":
-                holiday.start_date.isoformat(),
-
-            "allDay":
-                True,
-
-            "display":
-                "block",
-
-            "className":
-                "bank-holiday-event",
-
-            "extendedProps": {
-                "type":
-                    "bank_holiday",
-            },
+            "id": f"holiday-{holiday.id}",
+            "title": holiday.title,
+            "start": holiday.start_date.isoformat(),
+            "allDay": True,
+            "display": "block",
+            "className": "bank-holiday-event",
+            "extendedProps": {"type": "bank_holiday"},
         }
 
         if holiday.end_date:
-            event["end"] = (
-                holiday.end_date
-                + timedelta(days=1)
-            ).isoformat()
+            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
 
         events.append(event)
 
-    return JsonResponse(
-        events,
-        safe=False,
+    return JsonResponse(events, safe=False)
+
+
+# =========================================================
+# COMPANY ADMIN CALENDAR EVENTS
+# =========================================================
+
+@login_required
+def company_admin_calendar_events(request):
+    profile = get_object_or_404(
+        UserProfile.objects.select_related("company"),
+        user=request.user,
     )
+
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN or not profile.company:
+        return JsonResponse([], safe=False)
+
+    start = request.GET.get("start")
+    end = request.GET.get("end")
+    now = timezone.now()
+
+    # Current/upcoming: scheduled, rescheduled.
+    # Historical: held_attendance_pending, complete_attendance_submitted.
+    # Excluded: pending_reschedule, cancelled.
+    sessions = (
+        ClassSession.objects
+        .filter(
+            course__company=profile.company,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ],
+        )
+        .select_related(
+            "course",
+            "course__teacher",
+            "course__teacher__profile",
+            "course__company",
+        )
+        .order_by("start_time")
+    )
+
+    bank_holidays = BankHoliday.objects.filter(is_active=True).order_by("start_date")
+
+    # FullCalendar visible range.
+    if start and end:
+        start_datetime = parse_datetime(start)
+        end_datetime = parse_datetime(end)
+
+        if start_datetime and end_datetime:
+            sessions = sessions.filter(
+                start_time__gte=start_datetime,
+                start_time__lt=end_datetime,
+            )
+            bank_holidays = (
+                bank_holidays
+                .filter(start_date__lt=end_datetime.date())
+                .filter(
+                    Q(end_date__isnull=True)
+                    | Q(end_date__gte=start_datetime.date())
+                )
+            )
+
+    events = []
+
+    for session in sessions:
+        status_class = {
+            "confirmed": "course-confirmed-event",
+            "paused": "course-paused-event",
+            "cancelled": "course-cancelled-event",
+        }.get(session.course.status, "")
+
+        teacher = session.course.teacher
+        teacher_name = (
+            teacher.get_full_name() or teacher.email
+            if teacher
+            else "Not assigned"
+        )
+
+        # Temporal state is separate from lifecycle state.
+        is_past = (
+            session.end_time <= now
+            if session.end_time
+            else session.start_time < now
+        )
+
+        # Historical held sessions remain visible but are not joinable.
+        is_joinable = (
+            not is_past
+            and session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+        )
+
+        events.append({
+            "id": session.id,
+            "title": session.title,
+            "start": session.start_time.isoformat(),
+            "end": session.end_time.isoformat() if session.end_time else None,
+            "className": status_class,
+            "extendedProps": {
+                "type": "class_session",
+                "course": session.course.name,
+                "course_status": session.course.status,
+                "class_number": session.class_number,
+                "status": session.status,
+                "is_past": is_past,
+                "meeting_link": (
+                    get_calendar_meeting_link(session)
+                    if is_joinable else None
+                ),
+                "teacher": teacher_name,
+                "group_details_url": reverse(
+                    "profiles:company_admin_course_details",
+                    args=[session.course.id],
+                ),
+            },
+        })
+
+    for holiday in bank_holidays:
+        event = {
+            "id": f"holiday-{holiday.id}",
+            "title": holiday.title,
+            "start": holiday.start_date.isoformat(),
+            "allDay": True,
+            "display": "block",
+            "className": "bank-holiday-event",
+            "extendedProps": {"type": "bank_holiday"},
+        }
+
+        if holiday.end_date:
+            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
+
+        events.append(event)
+
+    return JsonResponse(events, safe=False)
+
 
 
 
@@ -5873,6 +6474,14 @@ def mark_class_pending_reschedule(request, session_id):
 
 @login_required
 def teacher_reschedule_classes(request):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
     now = timezone.now()
 
     pending_sessions = (
@@ -5911,9 +6520,10 @@ def teacher_reschedule_classes(request):
         request,
         "profiles/teacher/teacher_reschedule_classes.html",
         {
+            "profile": profile,
             "pending_sessions": pending_sessions,
             "rescheduled_sessions": rescheduled_sessions,
-        }
+        },
     )
 
 
@@ -6098,7 +6708,6 @@ def company_admin_dashboard(request):
         datetime.combine(end_of_month_date, time.max)
     )
 
-
     # ---------------------------------------------------------
     # HELPERS
     # ---------------------------------------------------------
@@ -6117,7 +6726,6 @@ def company_admin_dashboard(request):
             (value / total) * 100
         )
 
-
     def get_period_metrics(sessions):
         """
         Dashboard reporting logic:
@@ -6129,11 +6737,12 @@ def company_admin_dashboard(request):
             Session has not started yet.
 
         Attendance submitted:
-            Session is already held AND every attendance
-            record attached to that session has been resolved.
+            ClassSession lifecycle is explicitly
+            COMPLETE_ATTENDANCE_SUBMITTED.
 
         Attendance rate:
-            Attended / all resolved attendance records.
+            Attended / resolved Attendance records belonging
+            only to fully submitted ClassSessions.
         """
 
         session_list = list(sessions)
@@ -6148,7 +6757,6 @@ def company_admin_dashboard(request):
         total_resolved_attendance_records = 0
         attended_records = 0
 
-
         for session in session_list:
 
             # -----------------------------
@@ -6161,41 +6769,37 @@ def company_admin_dashboard(request):
             elif session.start_time >= now:
                 upcoming_sessions.append(session)
 
+            # -----------------------------
+            # ATTENDANCE SUBMITTED
+            #
+            # ClassSession.status owns this lifecycle state.
+            # Do not reconstruct submission from Attendance rows.
+            # -----------------------------
 
-            # Attendance submission only matters
-            # after the class has actually happened.
-            if session.end_time >= now:
+            if (
+                session.status
+                != ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            ):
                 continue
 
+            attendance_submitted_sessions += 1
+
+            # -----------------------------
+            # ATTENDANCE RATE
+            #
+            # Only fully submitted ClassSessions contribute to
+            # attendance reporting.
+            # -----------------------------
 
             attendance_records = list(
                 session.attendance_records.all()
             )
-
-            # No attendance rows means attendance
-            # cannot be considered submitted.
-            if not attendance_records:
-                continue
-
 
             resolved_records = [
                 attendance
                 for attendance in attendance_records
                 if attendance.status in resolved_attendance_statuses
             ]
-
-
-            # -----------------------------
-            # ATTENDANCE SUBMITTED
-            # -----------------------------
-
-            if len(resolved_records) == len(attendance_records):
-                attendance_submitted_sessions += 1
-
-
-            # -----------------------------
-            # ATTENDANCE RATE
-            # -----------------------------
 
             total_resolved_attendance_records += len(
                 resolved_records
@@ -6206,7 +6810,6 @@ def company_admin_dashboard(request):
                 for attendance in resolved_records
                 if attendance.status == Attendance.STATUS_ATTENDED
             )
-
 
         held_count = len(held_sessions)
         upcoming_count = len(upcoming_sessions)
@@ -6256,7 +6859,6 @@ def company_admin_dashboard(request):
                 attended_records,
         }
 
-
     # ---------------------------------------------------------
     # COURSES
     # ---------------------------------------------------------
@@ -6279,7 +6881,6 @@ def company_admin_dashboard(request):
     active_courses = courses.filter(
         status="active"
     ).count()
-
 
     # ---------------------------------------------------------
     # TODAY'S CLASSES
@@ -6312,7 +6913,6 @@ def company_admin_dashboard(request):
         .order_by("start_time")
     )
 
-
     # ---------------------------------------------------------
     # WEEKLY CLASSES
     # ---------------------------------------------------------
@@ -6339,7 +6939,6 @@ def company_admin_dashboard(request):
         )
         .order_by("start_time")
     )
-
 
     # ---------------------------------------------------------
     # MONTHLY CLASSES
@@ -6368,7 +6967,6 @@ def company_admin_dashboard(request):
         .order_by("start_time")
     )
 
-
     # ---------------------------------------------------------
     # PERIOD METRICS
     # ---------------------------------------------------------
@@ -6380,7 +6978,6 @@ def company_admin_dashboard(request):
     monthly_metrics = get_period_metrics(
         monthly_sessions
     )
-
 
     # ---------------------------------------------------------
     # ACTIVE EMPLOYEES
@@ -6399,12 +6996,11 @@ def company_admin_dashboard(request):
         .count()
     )
 
-
     # ---------------------------------------------------------
     # OVERALL ATTENDANCE RATE
     #
-    # Only resolved records belonging to classes that
-    # have actually finished are included.
+    # Attendance reporting uses only ClassSessions whose
+    # attendance workflow has been fully submitted.
     # ---------------------------------------------------------
 
     attendance_records = (
@@ -6412,7 +7008,7 @@ def company_admin_dashboard(request):
         .filter(
             class_session__course__company=company,
             class_session__course__status="active",
-            class_session__end_time__lt=now,
+            class_session__status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
             status__in=[
                 Attendance.STATUS_ATTENDED,
                 Attendance.STATUS_MISSED,
@@ -6438,7 +7034,6 @@ def company_admin_dashboard(request):
         total_attendance_records,
     )
 
-
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
@@ -6454,7 +7049,6 @@ def company_admin_dashboard(request):
         "active_courses": active_courses,
         "total_students": total_students,
         "total_attendance_rate": total_attendance_rate,
-
 
         # -------------------------
         # WEEKLY
@@ -6486,7 +7080,6 @@ def company_admin_dashboard(request):
 
         "weekly_attendance_rate":
             weekly_metrics["attendance_rate"],
-
 
         # -------------------------
         # MONTHLY
@@ -6525,6 +7118,7 @@ def company_admin_dashboard(request):
         "profiles/company_admin/company_admin_dashboard.html",
         context,
     )
+
 
 
 @login_required
@@ -7062,8 +7656,11 @@ def company_admin_all_courses_attendance(request):
 
 
 @login_required
-def company_admin_course_details(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_course_details(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -7090,144 +7687,258 @@ def company_admin_course_details(request, course_id):
                 output_field=IntegerField(),
             )
         )
-        .select_related("course_type", "company", "teacher")
-        .order_by("status_order", "name")
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by(
+            "status_order",
+            "name",
+        )
     )
 
     # ---------------------------------------------------------
     # CURRENT COURSE
+    #
+    # Existing ID-based route:
+    # - load the requested Course
+    #
+    # No-course route:
+    # - if the company already has courses, redirect to the
+    #   first Course in selector order
+    # - if the company has no courses, keep course=None and
+    #   render the normal Course Details interface with
+    #   empty/default data
     # ---------------------------------------------------------
-    course = get_object_or_404(available_courses, id=course_id)
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:company_admin_course_details",
+                course_id=first_course.id,
+            )
 
     # ---------------------------------------------------------
-    # ENROLLMENTS
+    # DEFAULT EMPTY-STATE VALUES
+    #
+    # These allow a company admin whose company has no courses
+    # to access the complete Course Details interface safely.
     # ---------------------------------------------------------
-    enrollments = (
-        course.enrollments
-        .select_related("student", "student__profile")
-        .annotate(
-            status_order=Case(
-                When(status="active", then=Value(1)),
-                When(status="paused", then=Value(2)),
-                When(status="completed", then=Value(3)),
-                When(status="cancelled", then=Value(4)),
-                default=Value(99),
-                output_field=IntegerField(),
+    enrollments = CourseEnrollment.objects.none()
+    sessions = ClassSession.objects.none()
+
+    total_classes = 0
+    held_classes_count = 0
+    attendance_submitted_classes = 0
+    remaining_classes = 0
+    delivery_percentage = 0
+
+    past_held_minutes = 0
+    past_held_hours = Decimal("0.00")
+    past_held_hours_display = format_minutes_duration(0)
+
+    average_attendance = 0
+    average_group_assessment_score = None
+    average_group_assessment_percentage = 0
+
+    formatted_timetable = []
+    bcc_student_emails = ""
+
+    # ---------------------------------------------------------
+    # COURSE-SPECIFIC DATA
+    # ---------------------------------------------------------
+    if course:
+        # -----------------------------------------------------
+        # ENROLLMENTS
+        # -----------------------------------------------------
+        enrollments = (
+            course.enrollments
+            .select_related(
+                "student",
+                "student__profile",
+            )
+            .annotate(
+                status_order=Case(
+                    When(status="active", then=Value(1)),
+                    When(status="paused", then=Value(2)),
+                    When(status="completed", then=Value(3)),
+                    When(status="cancelled", then=Value(4)),
+                    default=Value(99),
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by(
+                "status_order",
+                "student__first_name",
+                "student__last_name",
+                "student__username",
             )
         )
-        .order_by(
-            "status_order",
-            "student__first_name",
-            "student__last_name",
-            "student__username",
+
+        # -----------------------------------------------------
+        # CLASS SESSIONS
+        # -----------------------------------------------------
+        sessions = (
+            course.class_sessions
+            .all()
+            .order_by("start_time")
         )
-    )
 
-    # ---------------------------------------------------------
-    # CLASS SESSIONS
-    # ---------------------------------------------------------
-    sessions = course.class_sessions.all().order_by("start_time")
+        # -----------------------------------------------------
+        # GENERAL PROGRESS
+        #
+        # Held = physically delivered, regardless of whether
+        # attendance has already been submitted.
+        # -----------------------------------------------------
+        held_classes = (
+            course.class_sessions
+            .filter(
+                status__in=[
+                    ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                    ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+                ]
+            )
+        )
 
-    # ---------------------------------------------------------
-    # General Progress
-    #
-    # Held = physically delivered, regardless of whether
-    # attendance has already been submitted.
-    # ---------------------------------------------------------
-    held_classes = course.class_sessions.filter(
-        status__in=[
-            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        total_classes = course.total_sessions
+        held_classes_count = held_classes.count()
+        attendance_submitted_classes = (
+            course.complete_attendance_submitted_sessions
+        )
+        remaining_classes = course.remaining_sessions
+        delivery_percentage = course.delivery_percentage
+
+        # -----------------------------------------------------
+        # HOURS DELIVERED
+        # -----------------------------------------------------
+        past_held_minutes = get_session_minutes(
+            held_classes
+        )
+
+        past_held_hours = (
+            Decimal(past_held_minutes)
+            / Decimal("60")
+        ).quantize(
+            Decimal("0.01")
+        )
+
+        past_held_hours_display = (
+            format_minutes_duration(
+                past_held_minutes
+            )
+        )
+
+        # -----------------------------------------------------
+        # AVERAGE COURSE ATTENDANCE
+        #
+        # Only sessions whose attendance has been submitted
+        # contribute to learner attendance percentages.
+        # -----------------------------------------------------
+        attendance_percentages = [
+            enrollment.attendance_percentage
+            for enrollment in enrollments
+            if enrollment.complete_attendance_submitted_classes > 0
         ]
-    )
 
-    total_classes = course.total_sessions
-    held_classes_count = held_classes.count()
-    attendance_submitted_classes = course.complete_attendance_submitted_sessions
-    remaining_classes = course.remaining_sessions
-    delivery_percentage = course.delivery_percentage
-
-    # ---------------------------------------------------------
-    # HOURS DELIVERED
-    # ---------------------------------------------------------
-    past_held_minutes = get_session_minutes(held_classes)
-    past_held_hours = (
-        Decimal(past_held_minutes) / Decimal("60")
-    ).quantize(Decimal("0.01"))
-
-    past_held_hours_display = format_minutes_duration(past_held_minutes)
-
-    # ---------------------------------------------------------
-    # AVERAGE COURSE ATTENDANCE
-    #
-    # Only sessions whose attendance has been submitted
-    # contribute to learner attendance percentages.
-    # ---------------------------------------------------------
-    attendance_percentages = [
-        enrollment.attendance_percentage
-        for enrollment in enrollments
-        if enrollment.complete_attendance_submitted_classes > 0
-    ]
-
-    average_attendance = (
-        round(sum(attendance_percentages) / len(attendance_percentages))
-        if attendance_percentages else 0
-    )
-
-    # ---------------------------------------------------------
-    # TIMETABLE
-    # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
-
-    # ---------------------------------------------------------
-    # GROUP EMAIL
-    # ---------------------------------------------------------
-    student_emails = [
-        enrollment.student.email
-        for enrollment in enrollments
-        if enrollment.student.email
-    ]
-
-    bcc_student_emails = ",".join(student_emails)
-
-    # ---------------------------------------------------------
-    # AVERAGE GROUP SKILL ASSESSMENT
-    # ---------------------------------------------------------
-    enrolled_student_ids = list(
-        enrollments.values_list("student_id", flat=True)
-    )
-
-    skill_assessments = (
-        StudentSkillAssessment.objects
-        .filter(
-            course=course,
-            student_id__in=enrolled_student_ids,
+        average_attendance = (
+            round(
+                sum(attendance_percentages)
+                / len(attendance_percentages)
+            )
+            if attendance_percentages else 0
         )
-        .prefetch_related("subskill_assessments")
-    )
 
-    assessed_skill_scores = []
+        # -----------------------------------------------------
+        # TIMETABLE
+        # -----------------------------------------------------
+        formatted_timetable = (
+            build_formatted_timetable(
+                course
+            )
+        )
 
-    for skill_assessment in skill_assessments:
-        subskills = list(skill_assessment.subskill_assessments.all())
+        # -----------------------------------------------------
+        # GROUP EMAIL
+        # -----------------------------------------------------
+        student_emails = [
+            enrollment.student.email
+            for enrollment in enrollments
+            if enrollment.student.email
+        ]
 
-        if not subskills:
-            continue
+        bcc_student_emails = ",".join(
+            student_emails
+        )
 
-        score = skill_assessment.average_score
+        # -----------------------------------------------------
+        # AVERAGE GROUP SKILL ASSESSMENT
+        # -----------------------------------------------------
+        enrolled_student_ids = list(
+            enrollments.values_list(
+                "student_id",
+                flat=True,
+            )
+        )
 
-        if score is not None:
-            assessed_skill_scores.append(score)
+        skill_assessments = (
+            StudentSkillAssessment.objects
+            .filter(
+                course=course,
+                student_id__in=enrolled_student_ids,
+            )
+            .prefetch_related(
+                "subskill_assessments"
+            )
+        )
 
-    average_group_assessment_score = (
-        round(sum(assessed_skill_scores) / len(assessed_skill_scores), 1)
-        if assessed_skill_scores else None
-    )
+        assessed_skill_scores = []
 
-    average_group_assessment_percentage = (
-        round((average_group_assessment_score / 10) * 100)
-        if average_group_assessment_score is not None else 0
-    )
+        for skill_assessment in skill_assessments:
+            subskills = list(
+                skill_assessment
+                .subskill_assessments
+                .all()
+            )
+
+            if not subskills:
+                continue
+
+            score = skill_assessment.average_score
+
+            if score is not None:
+                assessed_skill_scores.append(
+                    score
+                )
+
+        average_group_assessment_score = (
+            round(
+                sum(assessed_skill_scores)
+                / len(assessed_skill_scores),
+                1,
+            )
+            if assessed_skill_scores else None
+        )
+
+        average_group_assessment_percentage = (
+            round(
+                (
+                    average_group_assessment_score
+                    / 10
+                )
+                * 100
+            )
+            if average_group_assessment_score is not None
+            else 0
+        )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -7237,7 +7948,11 @@ def company_admin_course_details(request, course_id):
         "company": company,
         "course": course,
         "active_section": "overview",
+
+        # Course selector
         "available_courses": available_courses,
+
+        # Course learners / sessions
         "enrollments": enrollments,
         "sessions": sessions,
 
@@ -7261,6 +7976,7 @@ def company_admin_course_details(request, course_id):
         "average_group_assessment_score": average_group_assessment_score,
         "average_group_assessment_percentage": average_group_assessment_percentage,
 
+        # Timetable / group email
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
     }
@@ -7272,10 +7988,12 @@ def company_admin_course_details(request, course_id):
     )
 
 
-
 @login_required
-def company_admin_course_students_list(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_course_students_list(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -7305,99 +8023,206 @@ def company_admin_course_students_list(request, course_id):
                 output_field=IntegerField(),
             )
         )
-        .select_related("course_type", "company", "teacher")
-        .order_by("status_order", "name")
-    )
-
-    course = get_object_or_404(available_courses, id=course_id)
-
-    # ---------------------------------------------------------
-    # ENROLLMENTS
-    # ---------------------------------------------------------
-    active_course_enrollment = CourseEnrollment.objects.filter(
-        student_id=OuterRef("student_id"),
-        status="active",
-        course__status="active",
-    )
-
-    all_status_enrollments = (
-        course.enrollments
-        .select_related("student", "student__profile")
-        .annotate(
-            sort_name=Lower(
-                Coalesce(
-                    NullIf("student__first_name", Value("")),
-                    "student__username",
-                )
-            ),
-            user_currently_enrolled=Exists(active_course_enrollment),
+        .select_related(
+            "course_type",
+            "company",
+            "teacher",
+        )
+        .order_by(
+            "status_order",
+            "name",
         )
     )
 
-    all_status_enrollments_count = all_status_enrollments.count()
-    currently_active_enrollments_count = all_status_enrollments.filter(status="active").count()
+    # ---------------------------------------------------------
+    # CURRENT COURSE
+    #
+    # Existing ID-based route:
+    # - load the requested Course
+    #
+    # No-course route:
+    # - if the company already has courses, redirect to the
+    #   first Course in selector order
+    # - if the company has no courses, keep course=None and
+    #   render the normal Enrollments interface with
+    #   empty/default data
+    # ---------------------------------------------------------
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:company_admin_course_students_list",
+                course_id=first_course.id,
+            )
 
     # ---------------------------------------------------------
     # SORTING
     # ---------------------------------------------------------
     sort_by = request.GET.get("sort", "name")
 
-    if sort_by == "level":
-        all_status_enrollments = all_status_enrollments.order_by(
-            "student__profile__current_level",
-            "sort_name",
-            "student__last_name",
-        )
-    else:
+    if sort_by not in ["name", "level"]:
         sort_by = "name"
-        all_status_enrollments = all_status_enrollments.order_by(
-            "sort_name",
-            "student__last_name",
+
+    # ---------------------------------------------------------
+    # DEFAULT EMPTY-STATE VALUES
+    #
+    # These allow a company admin whose company has no courses
+    # to access the complete Enrollments interface safely.
+    # ---------------------------------------------------------
+    all_status_enrollments = CourseEnrollment.objects.none()
+    all_status_enrollments_count = 0
+    currently_active_enrollments_count = 0
+
+    sessions = ClassSession.objects.none()
+
+    total_classes = 0
+    held_classes = 0
+    attendance_pending_classes = 0
+    attendance_submitted_classes = 0
+    remaining_classes = 0
+    delivery_percentage = 0
+
+    average_attendance = 0
+    formatted_timetable = []
+    bcc_student_emails = ""
+
+    # ---------------------------------------------------------
+    # COURSE-SPECIFIC DATA
+    # ---------------------------------------------------------
+    if course:
+        # -----------------------------------------------------
+        # ENROLLMENTS
+        # -----------------------------------------------------
+        active_course_enrollment = (
+            CourseEnrollment.objects
+            .filter(
+                student_id=OuterRef("student_id"),
+                status="active",
+                course__status="active",
+            )
         )
 
-    # ---------------------------------------------------------
-    # CLASS SESSIONS / General Progress
-    # ---------------------------------------------------------
-    sessions = course.class_sessions.all().order_by("start_time")
+        all_status_enrollments = (
+            course.enrollments
+            .select_related(
+                "student",
+                "student__profile",
+            )
+            .annotate(
+                sort_name=Lower(
+                    Coalesce(
+                        NullIf(
+                            "student__first_name",
+                            Value(""),
+                        ),
+                        "student__username",
+                    )
+                ),
+                user_currently_enrolled=Exists(
+                    active_course_enrollment
+                ),
+            )
+        )
 
-    total_classes = course.total_sessions
-    held_classes = course.total_held_sessions
-    attendance_pending_classes = course.held_attendance_pending_sessions
-    attendance_submitted_classes = course.complete_attendance_submitted_sessions
-    remaining_classes = course.remaining_sessions
-    delivery_percentage = course.delivery_percentage
+        all_status_enrollments_count = (
+            all_status_enrollments.count()
+        )
 
-    # ---------------------------------------------------------
-    # AVERAGE ATTENDANCE
-    #
-    # Only enrollments with submitted attendance contribute.
-    # ---------------------------------------------------------
-    attendance_percentages = [
-        enrollment.attendance_percentage
-        for enrollment in all_status_enrollments
-        if enrollment.complete_attendance_submitted_classes > 0
-    ]
+        currently_active_enrollments_count = (
+            all_status_enrollments
+            .filter(status="active")
+            .count()
+        )
 
-    average_attendance = (
-        round(sum(attendance_percentages) / len(attendance_percentages))
-        if attendance_percentages else 0
-    )
+        # -----------------------------------------------------
+        # SORTING
+        # -----------------------------------------------------
+        if sort_by == "level":
+            all_status_enrollments = (
+                all_status_enrollments
+                .order_by(
+                    "student__profile__current_level",
+                    "sort_name",
+                    "student__last_name",
+                )
+            )
+        else:
+            all_status_enrollments = (
+                all_status_enrollments
+                .order_by(
+                    "sort_name",
+                    "student__last_name",
+                )
+            )
 
-    # ---------------------------------------------------------
-    # COURSE TIMETABLE
-    # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
+        # -----------------------------------------------------
+        # CLASS SESSIONS / GENERAL PROGRESS
+        # -----------------------------------------------------
+        sessions = (
+            course.class_sessions
+            .all()
+            .order_by("start_time")
+        )
 
-    # ---------------------------------------------------------
-    # EMAIL ALL STUDENTS
-    # ---------------------------------------------------------
-    student_emails = [
-        enrollment.student.email
-        for enrollment in all_status_enrollments
-        if enrollment.student.email
-    ]
+        total_classes = course.total_sessions
+        held_classes = course.total_held_sessions
+        attendance_pending_classes = (
+            course.held_attendance_pending_sessions
+        )
+        attendance_submitted_classes = (
+            course.complete_attendance_submitted_sessions
+        )
+        remaining_classes = course.remaining_sessions
+        delivery_percentage = course.delivery_percentage
 
-    bcc_student_emails = ",".join(student_emails)
+        # -----------------------------------------------------
+        # AVERAGE ATTENDANCE
+        #
+        # Only enrollments with submitted attendance contribute.
+        # -----------------------------------------------------
+        attendance_percentages = [
+            enrollment.attendance_percentage
+            for enrollment in all_status_enrollments
+            if enrollment.complete_attendance_submitted_classes > 0
+        ]
+
+        average_attendance = (
+            round(
+                sum(attendance_percentages)
+                / len(attendance_percentages)
+            )
+            if attendance_percentages else 0
+        )
+
+        # -----------------------------------------------------
+        # COURSE TIMETABLE
+        # -----------------------------------------------------
+        formatted_timetable = (
+            build_formatted_timetable(
+                course
+            )
+        )
+
+        # -----------------------------------------------------
+        # EMAIL ALL STUDENTS
+        # -----------------------------------------------------
+        student_emails = [
+            enrollment.student.email
+            for enrollment in all_status_enrollments
+            if enrollment.student.email
+        ]
+
+        bcc_student_emails = ",".join(
+            student_emails
+        )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -7407,12 +8232,16 @@ def company_admin_course_students_list(request, course_id):
         "company": company,
         "course": course,
         "active_section": "enrollments",
+
+        # Course selector
         "available_courses": available_courses,
 
+        # Enrollments
         "all_status_enrollments": all_status_enrollments,
         "all_status_enrollments_count": all_status_enrollments_count,
         "currently_active_enrollments_count": currently_active_enrollments_count,
 
+        # Sessions / sorting
         "sessions": sessions,
         "sort_by": sort_by,
 
@@ -7424,9 +8253,12 @@ def company_admin_course_students_list(request, course_id):
         "remaining_classes": remaining_classes,
         "delivery_percentage": delivery_percentage,
 
+        # Attendance / timetable / email
         "average_attendance": average_attendance,
         "formatted_timetable": formatted_timetable,
         "bcc_student_emails": bcc_student_emails,
+
+        # Form/display choices
         "level_choices": UserProfile.LEVEL_CHOICES,
     }
 
@@ -7439,8 +8271,11 @@ def company_admin_course_students_list(request, course_id):
 
 
 @login_required
-def company_admin_course_attendance(request, course_id):
-    profile = get_object_or_404(UserProfile, user=request.user)
+def company_admin_course_attendance(request, course_id=None):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -7479,183 +8314,237 @@ def company_admin_course_attendance(request, course_id):
         )
     )
 
-    course = get_object_or_404(
-        available_courses,
-        id=course_id,
-    )
+    # ---------------------------------------------------------
+    # CURRENT COURSE
+    #
+    # Existing ID-based route:
+    # - load the requested Course
+    #
+    # No-course route:
+    # - if the company already has courses, redirect to the
+    #   first Course in selector order
+    # - if the company has no courses, keep course=None and
+    #   render the normal Course Attendance interface with
+    #   empty/default data
+    # ---------------------------------------------------------
+    course = None
+
+    if course_id is not None:
+        course = get_object_or_404(
+            available_courses,
+            id=course_id,
+        )
+    else:
+        first_course = available_courses.first()
+
+        if first_course:
+            return redirect(
+                "profiles:company_admin_course_attendance",
+                course_id=first_course.id,
+            )
 
     # ---------------------------------------------------------
-    # SYNCHRONIZE SELECTED COURSE
+    # DEFAULT EMPTY-STATE VALUES
     #
-    # Keep stale scheduled/rescheduled sessions aligned with the
-    # lifecycle without scanning unrelated Courses.
-    #
-    # The final session transition may also complete the Course
-    # and its active enrollments, so refresh the Course afterwards.
+    # These allow a company admin whose company has no courses
+    # to access the complete Course Attendance interface safely.
     # ---------------------------------------------------------
-    ClassSession.transition_past_sessions(
-        course=course
-    )
+    enrollments = CourseEnrollment.objects.none()
+    submitted_class_sessions = ClassSession.objects.none()
 
-    course.refresh_from_db()
+    total_classes_held = 0
+    held_attendance_pending_classes = 0
+    attendance_submitted_classes = 0
+    attendance_submission_percentage = 0
+    average_attendance = 0
 
     # ---------------------------------------------------------
-    # ENROLLMENTS
-    #
-    # Active and completed enrollments remain relevant to the
-    # Course attendance overview.
+    # COURSE-SPECIFIC DATA
     # ---------------------------------------------------------
-    enrollments = (
-        course.enrollments
-        .filter(
-            status__in=[
-                CourseEnrollment.STATUS_ACTIVE,
-                CourseEnrollment.STATUS_COMPLETED,
+    if course:
+        # -----------------------------------------------------
+        # SYNCHRONIZE SELECTED COURSE
+        #
+        # Keep stale scheduled/rescheduled sessions aligned
+        # with the lifecycle without scanning unrelated Courses.
+        #
+        # The final session transition may also complete the
+        # Course and its active enrollments, so refresh the
+        # Course afterwards.
+        # -----------------------------------------------------
+        ClassSession.transition_past_sessions(
+            course=course
+        )
+
+        course.refresh_from_db()
+
+        # -----------------------------------------------------
+        # ENROLLMENTS
+        #
+        # Active and completed enrollments remain relevant to
+        # the Course attendance overview.
+        # -----------------------------------------------------
+        enrollments = (
+            course.enrollments
+            .filter(
+                status__in=[
+                    CourseEnrollment.STATUS_ACTIVE,
+                    CourseEnrollment.STATUS_COMPLETED,
+                ]
+            )
+            .select_related(
+                "student",
+                "student__profile",
+            )
+        )
+
+        # -----------------------------------------------------
+        # SUBMITTED ATTENDANCE SESSIONS
+        #
+        # Only ClassSessions whose attendance workflow is
+        # complete belong in this list.
+        # -----------------------------------------------------
+        submitted_class_sessions = (
+            course.class_sessions
+            .filter(
+                status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+            )
+            .select_related(
+                "course",
+                "course__course_type",
+                "course__teacher",
+            )
+            .prefetch_related(
+                "attendance_records",
+                "attendance_records__student",
+                "attendance_records__student__profile",
+            )
+            .order_by("-start_time")
+        )
+
+        # -----------------------------------------------------
+        # SESSION ATTENDANCE DISPLAY DATA
+        #
+        # ClassSession owns lesson lifecycle state.
+        # Attendance owns the canonical genuine outcome
+        # statuses.
+        #
+        # These values are attached only to package each
+        # session for this particular page/table. They are not
+        # canonical Course or CourseEnrollment calculations.
+        # -----------------------------------------------------
+        for class_session in submitted_class_sessions:
+            attendance_records = [
+                attendance
+                for attendance in class_session.attendance_records.all()
+                if attendance.status in Attendance.FINAL_OUTCOME_STATUSES
             ]
-        )
-        .select_related(
-            "student",
-            "student__profile",
-        )
-    )
 
-    # ---------------------------------------------------------
-    # SUBMITTED ATTENDANCE SESSIONS
-    #
-    # Only ClassSessions whose attendance workflow is complete
-    # belong in this list.
-    # ---------------------------------------------------------
-    submitted_class_sessions = (
-        course.class_sessions
-        .filter(
-            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-        )
-        .select_related(
-            "course",
-            "course__course_type",
-            "course__teacher",
-        )
-        .prefetch_related(
-            "attendance_records",
-            "attendance_records__student",
-            "attendance_records__student__profile",
-        )
-        .order_by("-start_time")
-    )
+            attended_count = sum(
+                attendance.status == Attendance.STATUS_ATTENDED
+                for attendance in attendance_records
+            )
 
-    # ---------------------------------------------------------
-    # SESSION ATTENDANCE DISPLAY DATA
-    #
-    # ClassSession owns lesson lifecycle state.
-    # Attendance owns the canonical genuine outcome statuses.
-    #
-    # These values are attached only to package each session for
-    # this particular page/table. They are not canonical Course
-    # or CourseEnrollment calculations.
-    # ---------------------------------------------------------
-    for class_session in submitted_class_sessions:
-        attendance_records = [
-            attendance
-            for attendance in class_session.attendance_records.all()
-            if attendance.status in Attendance.FINAL_OUTCOME_STATUSES
-        ]
+            missed_count = sum(
+                attendance.status == Attendance.STATUS_MISSED
+                for attendance in attendance_records
+            )
 
-        attended_count = sum(
-            attendance.status == Attendance.STATUS_ATTENDED
-            for attendance in attendance_records
-        )
+            excused_count = sum(
+                attendance.status == Attendance.STATUS_EXCUSED
+                for attendance in attendance_records
+            )
 
-        missed_count = sum(
-            attendance.status == Attendance.STATUS_MISSED
-            for attendance in attendance_records
+            attendance_total = len(attendance_records)
+
+            class_session.attended_count = attended_count
+            class_session.missed_count = missed_count
+            class_session.excused_count = excused_count
+            class_session.attendance_total = attendance_total
+
+            # Temporary display compatibility if the template
+            # still expects registered_count.
+            class_session.registered_count = attendance_total
+
+            class_session.attendance_percentage = (
+                round(
+                    attended_count
+                    / attendance_total
+                    * 100
+                )
+                if attendance_total else 0
+            )
+
+            class_session.employee_search_text = " ".join(
+                f"{attendance.student.get_full_name()} "
+                f"{attendance.student.username} "
+                f"{attendance.student.email}"
+                for attendance in attendance_records
+            )
+
+        # -----------------------------------------------------
+        # COURSE ATTENDANCE LIFECYCLE TOTALS
+        #
+        # Course owns all whole-course delivery/session counts.
+        # -----------------------------------------------------
+        total_classes_held = course.total_held_sessions
+
+        held_attendance_pending_classes = (
+            course.held_attendance_pending_sessions
         )
 
-        excused_count = sum(
-            attendance.status == Attendance.STATUS_EXCUSED
-            for attendance in attendance_records
+        attendance_submitted_classes = (
+            course.complete_attendance_submitted_sessions
         )
 
-        attendance_total = len(attendance_records)
-
-        class_session.attended_count = attended_count
-        class_session.missed_count = missed_count
-        class_session.excused_count = excused_count
-        class_session.attendance_total = attendance_total
-
-        # Temporary display compatibility if the template still
-        # expects registered_count.
-        class_session.registered_count = attendance_total
-
-        class_session.attendance_percentage = (
+        # -----------------------------------------------------
+        # ATTENDANCE SUBMISSION %
+        #
+        # This is a page-specific ratio:
+        # submitted attendance workflows / all lessons held.
+        # -----------------------------------------------------
+        attendance_submission_percentage = (
             round(
-                attended_count
-                / attendance_total
+                attendance_submitted_classes
+                / total_classes_held
                 * 100
             )
-            if attendance_total else 0
+            if total_classes_held else 0
         )
 
-        class_session.employee_search_text = " ".join(
-            f"{attendance.student.get_full_name()} "
-            f"{attendance.student.username} "
-            f"{attendance.student.email}"
-            for attendance in attendance_records
-        )
+        # -----------------------------------------------------
+        # COURSE AVERAGE ATTENDANCE
+        #
+        # CourseEnrollment owns each learner's submitted-
+        # attendance population and attendance percentage.
+        #
+        # Retrieve attendance_metrics once per enrollment so
+        # the view does not independently recount or
+        # recalculate learner data.
+        # -----------------------------------------------------
+        attendance_percentages = []
 
-    # ---------------------------------------------------------
-    # COURSE ATTENDANCE LIFECYCLE TOTALS
-    #
-    # Course owns all whole-course delivery/session counts.
-    # ---------------------------------------------------------
-    total_classes_held = course.total_held_sessions
-    held_attendance_pending_classes = (
-        course.held_attendance_pending_sessions
-    )
-    attendance_submitted_classes = (
-        course.complete_attendance_submitted_sessions
-    )
+        for enrollment in enrollments:
+            attendance_metrics = enrollment.attendance_metrics
 
-    # ---------------------------------------------------------
-    # ATTENDANCE SUBMISSION %
-    #
-    # This is a page-specific ratio:
-    # submitted attendance workflows / all lessons already held.
-    # ---------------------------------------------------------
-    attendance_submission_percentage = (
-        round(
-            attendance_submitted_classes
-            / total_classes_held
-            * 100
-        )
-        if total_classes_held else 0
-    )
+            if (
+                attendance_metrics[
+                    "total_submitted_attendance_records"
+                ] > 0
+            ):
+                attendance_percentages.append(
+                    attendance_metrics[
+                        "attendance_percentage"
+                    ]
+                )
 
-    # ---------------------------------------------------------
-    # COURSE AVERAGE ATTENDANCE
-    #
-    # CourseEnrollment owns each learner's submitted-attendance
-    # population and attendance percentage.
-    #
-    # Retrieve attendance_metrics once per enrollment so the view
-    # does not independently recount or recalculate learner data.
-    # ---------------------------------------------------------
-    attendance_percentages = []
-
-    for enrollment in enrollments:
-        attendance_metrics = enrollment.attendance_metrics
-
-        if attendance_metrics["total_submitted_attendance_records"] > 0:
-            attendance_percentages.append(
-                attendance_metrics["attendance_percentage"]
+        average_attendance = (
+            round(
+                sum(attendance_percentages)
+                / len(attendance_percentages)
             )
-
-    average_attendance = (
-        round(
-            sum(attendance_percentages)
-            / len(attendance_percentages)
+            if attendance_percentages else 0
         )
-        if attendance_percentages else 0
-    )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -7665,15 +8554,20 @@ def company_admin_course_attendance(request, course_id):
         "company": company,
         "course": course,
         "active_section": "attendance",
+
+        # Course selector
         "available_courses": available_courses,
 
+        # Submitted attendance sessions
         "submitted_class_sessions": submitted_class_sessions,
 
+        # Attendance lifecycle
         "total_classes_held": total_classes_held,
         "held_attendance_pending_classes": held_attendance_pending_classes,
         "attendance_submitted_classes": attendance_submitted_classes,
         "attendance_submission_percentage": attendance_submission_percentage,
 
+        # Course attendance
         "average_attendance": average_attendance,
     }
 
@@ -7873,6 +8767,10 @@ def company_admin_student_detail(request, student_id):
 
     # ---------------------------------------------------------
     # NO ENROLLMENTS
+    #
+    # Keep the normal employee Overview page accessible and
+    # provide the same structural context with empty/default
+    # values.
     # ---------------------------------------------------------
     if not enrollment:
         context = {
@@ -7886,6 +8784,9 @@ def company_admin_student_detail(request, student_id):
             "enrollment": None,
             "course": None,
             "level_choices": UserProfile.LEVEL_CHOICES,
+
+            # Timetable
+            "formatted_timetable": [],
 
             # Attendance
             "attended_count": 0,
@@ -7902,6 +8803,13 @@ def company_admin_student_detail(request, student_id):
             "submitted_minutes": 0,
             "submitted_hours": Decimal("0"),
             "submitted_hours_display": format_minutes_duration(0),
+
+            # Course-level delivery
+            "course_total_hours": Decimal("0"),
+            "course_total_hours_display": format_minutes_duration(0),
+            "held_course_minutes": 0,
+            "held_course_hours_numeric": Decimal("0"),
+            "held_course_hours_display": format_minutes_duration(0),
 
             # General Progress
             "held_classes": 0,
@@ -7926,7 +8834,10 @@ def company_admin_student_detail(request, student_id):
 
             # Skills
             "overall_average_score": None,
-            "overall_skill_chart_data": {"labels": [], "datasets": []},
+            "overall_skill_chart_data": {
+                "labels": [],
+                "datasets": [],
+            },
             "chart_data": None,
             "skill_note_display": [],
         }
@@ -7937,6 +8848,9 @@ def company_admin_student_detail(request, student_id):
             context,
         )
 
+    # ---------------------------------------------------------
+    # SELECTED COURSE
+    # ---------------------------------------------------------
     course = enrollment.course
 
     # Keep lifecycle synchronization scoped to the selected Course.
@@ -8005,11 +8919,15 @@ def company_admin_student_detail(request, student_id):
     # ---------------------------------------------------------
     held_course_minutes = course.held_minutes
     held_course_hours_numeric = course.held_hours
-    held_course_hours_display = format_minutes_duration(held_course_minutes)
+    held_course_hours_display = format_minutes_duration(
+        held_course_minutes
+    )
 
     course_total_hours = course.total_hours or Decimal("0")
     course_total_minutes = course.total_minutes
-    course_total_hours_display = format_minutes_duration(course_total_minutes)
+    course_total_hours_display = format_minutes_duration(
+        course_total_minutes
+    )
 
     # ---------------------------------------------------------
     # ASSIGNED DELIVERY HOURS
@@ -8051,7 +8969,11 @@ def company_admin_student_detail(request, student_id):
     )
 
     overall_average_score = (
-        round(sum(current_skill_scores) / expected_skill_count, 1)
+        round(
+            sum(current_skill_scores)
+            / expected_skill_count,
+            1,
+        )
         if len(current_skill_scores) == expected_skill_count
         else None
     )
@@ -8061,15 +8983,19 @@ def company_admin_student_detail(request, student_id):
         for skill_assessment in skill_assessments
     ]
 
-    overall_skill_chart_data = build_overall_skill_progress_chart_data(
-        student=student,
-        course=course,
+    overall_skill_chart_data = (
+        build_overall_skill_progress_chart_data(
+            student=student,
+            course=course,
+        )
     )
 
     # ---------------------------------------------------------
     # TIMETABLE
     # ---------------------------------------------------------
-    formatted_timetable = build_formatted_timetable(course)
+    formatted_timetable = build_formatted_timetable(
+        course
+    )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -8148,7 +9074,6 @@ def company_admin_student_detail(request, student_id):
         "profiles/company_admin/company_admin_student_detail.html",
         context,
     )
-
 
 
 @login_required
@@ -8677,6 +9602,8 @@ def company_admin_student_skills_overview(request, student_id):
     )
 
 
+
+
 @login_required
 def company_admin_student_needs_analysis(request, student_id):
     profile = get_object_or_404(
@@ -8687,6 +9614,10 @@ def company_admin_student_needs_analysis(request, student_id):
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
 
+    company = profile.company
+
+    if not company:
+        return redirect("home")
 
     # ---------------------------------------------------------
     # STUDENT
@@ -8697,23 +9628,36 @@ def company_admin_student_needs_analysis(request, student_id):
     student = get_object_or_404(
         User.objects.select_related("profile"),
         id=student_id,
-        profile__company=profile.company,
+        profile__company=company,
     )
 
     student_profile = student.profile
 
+    # ---------------------------------------------------------
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Independent of the selected Course.
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
 
     # ---------------------------------------------------------
     # AVAILABLE ENROLLMENTS
     #
     # Used by the shared student course selector.
     # Only include courses belonging to this company.
+    #
+    # Historical enrollments remain accessible.
     # ---------------------------------------------------------
     enrollments = (
         CourseEnrollment.objects
         .filter(
             student=student,
-            course__company=profile.company,
+            course__company=company,
         )
         .select_related(
             "course",
@@ -8722,10 +9666,6 @@ def company_admin_student_needs_analysis(request, student_id):
         )
         .order_by("course__name")
     )
-
-    if not enrollments.exists():
-        return redirect("profiles:company_admin_employees")
-
 
     # ---------------------------------------------------------
     # SELECTED COURSE / ENROLLMENT
@@ -8740,102 +9680,105 @@ def company_admin_student_needs_analysis(request, student_id):
     else:
         enrollment = enrollments.first()
 
-    course = enrollment.course
-
-
-    # ---------------------------------------------------------
-    # NEEDS ANALYSIS
-    #
-    # Company Admin has read-only access.
-    # ---------------------------------------------------------
-    needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
-        enrollment=enrollment,
-    )
-
+    course = enrollment.course if enrollment else None
 
     # ---------------------------------------------------------
-    # FORM
+    # DEFAULT EMPTY-STATE VALUES
     #
-    # Company Admin does not edit the questionnaire.
+    # StudentNeedsAnalysis belongs to a CourseEnrollment, so no
+    # model object is created until an enrollment exists.
     #
-    # The form is still required by the shared read-only
-    # template because it provides:
-    #
-    # - question labels
-    # - choice labels
-    # - confidence display labels
+    # The form remains available because the shared read-only
+    # template uses it for labels and display structure.
     # ---------------------------------------------------------
+    needs_analysis = None
     form = StudentNeedsAnalysisForm()
 
+    english_use_frequency_labels = []
+    communication_situation_labels = []
+    communication_partner_labels = []
+    accent_exposure_labels = []
+    priority_area_labels = []
+    learning_preference_labels = []
+
+    speaking_confidence_display = ""
+    listening_confidence_display = ""
+    reading_confidence_display = ""
+    writing_confidence_display = ""
 
     # ---------------------------------------------------------
-    # HUMAN-READABLE DISPLAY VALUES
+    # ENROLLMENT-SPECIFIC NEEDS ANALYSIS
     # ---------------------------------------------------------
-    english_use_frequency_labels = form.choice_labels(
-        "english_use_frequency",
-        needs_analysis.english_use_frequency,
-    )
+    if enrollment:
+        # -----------------------------------------------------
+        # NEEDS ANALYSIS
+        #
+        # Company Admin has read-only access.
+        # -----------------------------------------------------
+        needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
+            enrollment=enrollment,
+        )
 
-    communication_situation_labels = form.choice_labels(
-        "communication_situations",
-        needs_analysis.communication_situations,
-    )
+        # -----------------------------------------------------
+        # HUMAN-READABLE DISPLAY VALUES
+        # -----------------------------------------------------
+        english_use_frequency_labels = form.choice_labels(
+            "english_use_frequency",
+            needs_analysis.english_use_frequency,
+        )
 
-    communication_partner_labels = form.choice_labels(
-        "communication_partners",
-        needs_analysis.communication_partners,
-    )
+        communication_situation_labels = form.choice_labels(
+            "communication_situations",
+            needs_analysis.communication_situations,
+        )
 
-    accent_exposure_labels = form.choice_labels(
-        "accent_exposure",
-        needs_analysis.accent_exposure,
-        exclude_values={"other"},
-    )
+        communication_partner_labels = form.choice_labels(
+            "communication_partners",
+            needs_analysis.communication_partners,
+        )
 
-    priority_area_labels = form.choice_labels(
-        "priority_areas",
-        needs_analysis.priority_areas,
-    )
+        accent_exposure_labels = form.choice_labels(
+            "accent_exposure",
+            needs_analysis.accent_exposure,
+            exclude_values={"other"},
+        )
 
-    learning_preference_labels = form.choice_labels(
-        "learning_preferences",
-        needs_analysis.learning_preferences,
-    )
+        priority_area_labels = form.choice_labels(
+            "priority_areas",
+            needs_analysis.priority_areas,
+        )
 
-    speaking_confidence_display = form.confidence_display(
-        needs_analysis.speaking_confidence,
-    )
+        learning_preference_labels = form.choice_labels(
+            "learning_preferences",
+            needs_analysis.learning_preferences,
+        )
 
-    listening_confidence_display = form.confidence_display(
-        needs_analysis.listening_confidence,
-    )
+        speaking_confidence_display = form.confidence_display(
+            needs_analysis.speaking_confidence,
+        )
 
-    reading_confidence_display = form.confidence_display(
-        needs_analysis.reading_confidence,
-    )
+        listening_confidence_display = form.confidence_display(
+            needs_analysis.listening_confidence,
+        )
 
-    writing_confidence_display = form.confidence_display(
-        needs_analysis.writing_confidence,
-    )
+        reading_confidence_display = form.confidence_display(
+            needs_analysis.reading_confidence,
+        )
 
-
-    # ---------------------------------------------------------
-    # STUDENT STATUS
-    #
-    # Used by the shared student details header.
-    # ---------------------------------------------------------
-    user_currently_enrolled = (
-        enrollment.status == CourseEnrollment.STATUS_ACTIVE
-        and course.status == "active"
-    )
-
+        writing_confidence_display = form.confidence_display(
+            needs_analysis.writing_confidence,
+        )
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
+        "profile": profile,
+        "company": company,
+
         "student": student,
         "student_profile": student_profile,
+
         "course": course,
         "enrollment": enrollment,
         "enrollments": enrollments,
@@ -8885,7 +9828,6 @@ def company_admin_student_teacher_notes(request, student_id):
     if not company:
         return redirect("home")
 
-
     # ---------------------------------------------------------
     # GET EMPLOYEE
     # ---------------------------------------------------------
@@ -8897,25 +9839,34 @@ def company_admin_student_teacher_notes(request, student_id):
 
     student_profile = student.profile
 
+    # ---------------------------------------------------------
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Independent of the selected Course.
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
     user_currently_enrolled = CourseEnrollment.objects.filter(
         student=student,
         status="active",
         course__status="active",
     ).exists()
 
-
     # ---------------------------------------------------------
-    # GET ACTIVE ENROLLMENTS
+    # ALL ENROLLMENTS
     #
-    # Used for the course selector and to ensure the employee
-    # belongs to one of this company's active courses.
+    # Historical Courses remain accessible.
+    #
+    # Order:
+    # 1. Active
+    # 2. Confirmed
+    # 3. Paused
+    # 4. Completed
+    # 5. Cancelled
     # ---------------------------------------------------------
-    active_enrollments = (
+    enrollments = order_enrollments_by_course_status(
         CourseEnrollment.objects
         .filter(
             student=student,
-            status="active",
-            course__status="active",
             course__company=company,
         )
         .select_related(
@@ -8924,9 +9875,7 @@ def company_admin_student_teacher_notes(request, student_id):
             "course__course_type",
             "course__company",
         )
-        .order_by("course__name")
     )
-
 
     # ---------------------------------------------------------
     # GET SELECTED COURSE FROM URL
@@ -8936,21 +9885,22 @@ def company_admin_student_teacher_notes(request, student_id):
     # ---------------------------------------------------------
     selected_course_id = request.GET.get("course")
 
-
     # ---------------------------------------------------------
     # DETERMINE SELECTED ENROLLMENT
     # ---------------------------------------------------------
     if selected_course_id:
         enrollment = get_object_or_404(
-            active_enrollments,
+            enrollments,
             course_id=selected_course_id,
         )
     else:
-        enrollment = active_enrollments.first()
-
+        enrollment = enrollments.first()
 
     # ---------------------------------------------------------
-    # NO ACTIVE ENROLLMENT
+    # NO ENROLLMENTS
+    #
+    # Keep the normal Assessment page accessible with empty
+    # data when the employee has never been enrolled.
     # ---------------------------------------------------------
     if not enrollment:
         context = {
@@ -8959,13 +9909,21 @@ def company_admin_student_teacher_notes(request, student_id):
 
             "student": student,
             "student_profile": student_profile,
+            "user_currently_enrolled": user_currently_enrolled,
 
-            "active_enrollments": active_enrollments,
+            # Course selector
+            "enrollments": enrollments,
+
+            # Temporary compatibility alias
+            "active_enrollments": enrollments,
+
+            # No selected enrollment / course
             "enrollment": None,
             "course": None,
 
+            # Assessment
             "skills": [],
-            "skill_notes": [],
+            "skill_notes": StudentSkillAssessment.objects.none(),
             "skill_note_display": [],
         }
 
@@ -8975,12 +9933,10 @@ def company_admin_student_teacher_notes(request, student_id):
             context,
         )
 
-
     # ---------------------------------------------------------
     # SELECTED COURSE
     # ---------------------------------------------------------
     course = enrollment.course
-
 
     # ---------------------------------------------------------
     # SKILL ASSESSMENTS
@@ -8997,7 +9953,6 @@ def company_admin_student_teacher_notes(request, student_id):
         .order_by("skill")
     )
 
-
     # ---------------------------------------------------------
     # DISPLAY-FRIENDLY SKILL NOTES
     # ---------------------------------------------------------
@@ -9006,15 +9961,12 @@ def company_admin_student_teacher_notes(request, student_id):
         for skill_assessment in skill_assessments
     ]
 
-
     # ---------------------------------------------------------
     # SKILLS
     #
-    # Your original view passed an empty list, so this remains
-    # unchanged unless the template actually needs skill data.
+    # Original behaviour retained.
     # ---------------------------------------------------------
     skills = []
-
 
     # ---------------------------------------------------------
     # TEACHER NOTES
@@ -9029,7 +9981,6 @@ def company_admin_student_teacher_notes(request, student_id):
         .order_by("skill")
     )
 
-
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
@@ -9039,15 +9990,19 @@ def company_admin_student_teacher_notes(request, student_id):
 
         "student": student,
         "student_profile": student_profile,
-
         "user_currently_enrolled": user_currently_enrolled,
+
         # Course selector
-        "active_enrollments": active_enrollments,
+        "enrollments": enrollments,
+
+        # Temporary compatibility alias
+        "active_enrollments": enrollments,
 
         # Selected enrollment / course
         "enrollment": enrollment,
         "course": course,
 
+        # Assessment
         "skills": skills,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
@@ -9265,7 +10220,25 @@ def company_admin_calendar_events(request):
 
     start = request.GET.get("start")
     end = request.GET.get("end")
+    now = timezone.now()
 
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    #
+    # Visible lifecycle states:
+    #
+    # Current / upcoming:
+    # - scheduled
+    # - rescheduled
+    #
+    # Historical:
+    # - held_attendance_pending
+    # - complete_attendance_submitted
+    #
+    # Excluded:
+    # - pending_reschedule
+    # - cancelled
+    # ---------------------------------------------------------
     sessions = (
         ClassSession.objects
         .filter(
@@ -9273,6 +10246,7 @@ def company_admin_calendar_events(request):
             status__in=[
                 ClassSession.STATUS_SCHEDULED,
                 ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
                 ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
             ],
         )
@@ -9291,6 +10265,9 @@ def company_admin_calendar_events(request):
         .order_by("start_date")
     )
 
+    # ---------------------------------------------------------
+    # FULLCALENDAR DATE RANGE
+    # ---------------------------------------------------------
     if start and end:
         start_datetime = parse_datetime(start)
         end_datetime = parse_datetime(end)
@@ -9312,6 +10289,9 @@ def company_admin_calendar_events(request):
 
     events = []
 
+    # ---------------------------------------------------------
+    # CLASS SESSION EVENTS
+    # ---------------------------------------------------------
     for session in sessions:
         status_class = ""
 
@@ -9331,6 +10311,35 @@ def company_admin_calendar_events(request):
         else:
             teacher_name = "Not assigned"
 
+        # -----------------------------------------------------
+        # TEMPORAL STATE
+        #
+        # Lifecycle state and temporal state remain separate.
+        # -----------------------------------------------------
+        is_past = (
+            session.end_time <= now
+            if session.end_time
+            else session.start_time < now
+        )
+
+        # -----------------------------------------------------
+        # JOINABILITY
+        #
+        # Only genuine current/upcoming teaching slots expose
+        # a meeting link.
+        #
+        # Held attendance-pending and attendance-submitted
+        # sessions remain visible historically but are no
+        # longer joinable.
+        # -----------------------------------------------------
+        is_joinable = (
+            not is_past
+            and session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+        )
+
         events.append({
             "id": session.id,
             "title": session.title,
@@ -9346,7 +10355,19 @@ def company_admin_calendar_events(request):
                 "course": session.course.name,
                 "course_status": session.course.status,
                 "class_number": session.class_number,
-                "meeting_link": get_calendar_meeting_link(session),
+
+                # Lifecycle and chronology exposed separately.
+                "status": session.status,
+                "is_past": is_past,
+
+                # Only current/upcoming scheduled/rescheduled
+                # lessons may expose a meeting link.
+                "meeting_link": (
+                    get_calendar_meeting_link(session)
+                    if is_joinable
+                    else None
+                ),
+
                 "teacher": teacher_name,
 
                 "group_details_url": reverse(
@@ -9356,6 +10377,9 @@ def company_admin_calendar_events(request):
             },
         })
 
+    # ---------------------------------------------------------
+    # BANK HOLIDAYS
+    # ---------------------------------------------------------
     for holiday in bank_holidays:
         event = {
             "id": f"holiday-{holiday.id}",
@@ -9377,6 +10401,7 @@ def company_admin_calendar_events(request):
         events.append(event)
 
     return JsonResponse(events, safe=False)
+
 
 
 
