@@ -34,7 +34,7 @@
                 <div class="skills-chart-header">
                     <h2>{% trans 'Skills Progress' %}</h2>
 
-                    {% if not skills %}
+                    {% if not has_skill_assessment %}
                         <p class="skills-assessment-pending">{% trans 'Pending assessment' %}</p>
                     {% endif %}
                 </div>
@@ -50,8 +50,7 @@
 
     <div>
 
-        {% if skills %}
-            {% for skill in skills %}
+        {% for skill in skills %}
 
             <article class="skill-card">
 
@@ -168,8 +167,7 @@
 
             </article>
 
-            {% endfor %}
-        {% endif %}
+        {% endfor %}
 
     </div>
 
@@ -180,9 +178,7 @@
 {% block postloadjs %}
     {{ block.super }}
 
-    {% if chart_data %}
-        {{ chart_data|json_script:"skills-chart-data" }}
-    {% endif %}
+    {{ chart_data|json_script:"skills-chart-data" }}
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript" src="{% static 'profiles/js/components/skills_progress_chart.js' %}"></script>

@@ -1607,10 +1607,51 @@ def my_skills(request):
     # ---------------------------------------------------------
     # NO ENROLLMENTS
     #
-    # Keep the normal Skills page accessible and provide
-    # empty/default data for its cards, notes and chart.
+    # Keep the normal Skills page accessible.
+    #
+    # No assessment DB records are created. We only package the
+    # four canonical skill areas so the normal empty cards render.
     # ---------------------------------------------------------
     if not enrollment:
+        skill_areas = [
+            ("listening", "Listening"),
+            ("reading", "Reading"),
+            ("speaking", "Speaking"),
+            ("writing", "Writing"),
+        ]
+
+        skills = []
+
+        for skill_value, skill_name in skill_areas:
+            subskills = [
+                {
+                    "value": value,
+                    "name": label,
+                    "assessment": None,
+                    "is_assessed": False,
+                    "rating": None,
+                    "percentage": None,
+                }
+                for value, label in SUBSKILLS.get(skill_value, [])
+            ]
+
+            skills.append({
+                "assessment": None,
+                "assessment_id": None,
+                "skill_value": skill_value,
+                "name": skill_name,
+                "icon": None,
+                "score": None,
+                "subskills": subskills,
+                "assessed_subskills_count": 0,
+                "total_subskills_count": len(subskills),
+                "strengths": [],
+                "confident": [],
+                "required_standard": [],
+                "developing": [],
+                "needs_work": [],
+            })
+
         return render(
             request,
             "profiles/student/my_skills.html",
@@ -1619,31 +1660,18 @@ def my_skills(request):
                 "student_profile": student_profile,
                 "user_currently_enrolled": user_currently_enrolled,
                 "active_section": "skills",
-
-                # Course selector
                 "enrollments": enrollments,
                 "enrollment": None,
                 "course": None,
-
-                # Skills
-                "skills": [],
+                "skills": skills,
+                "has_skill_assessment": False,
                 "skill_notes": StudentSkillAssessment.objects.none(),
                 "skill_note_display": [],
-
-                # Academic profile
                 "academic_profile": academic_profile,
-
-                # Chart
-                "chart_data": {
-                    "labels": [],
-                    "datasets": [],
-                },
-
-                # Levels
+                "chart_data": {"labels": [], "datasets": []},
                 "level_choices": UserProfile.LEVEL_CHOICES,
             },
         )
-
     # ---------------------------------------------------------
     # SELECTED COURSE
     # ---------------------------------------------------------
@@ -1656,6 +1684,11 @@ def my_skills(request):
         student=student,
         course=course,
         build_skill_note_display=build_skill_note_display,
+    )
+
+    has_skill_assessment = any(
+        skill["assessed_subskills_count"] > 0
+        for skill in skills
     )
 
     skill_note_display = [
@@ -1700,6 +1733,7 @@ def my_skills(request):
 
         # Skills
         "skills": skills,
+        "has_skill_assessment": has_skill_assessment,
         "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
 
