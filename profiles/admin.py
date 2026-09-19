@@ -1,8 +1,17 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django import forms
+from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseRedirect
+from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
+
+from allauth.account.models import EmailAddress
+from allauth.account.internal.flows.email_verification import (
+    send_verification_email_to_address,
+)
 
 from .models import (
     Company,
@@ -17,11 +26,162 @@ from .models import (
 
 from courses.models import CourseEnrollment
 
+
+
 User = get_user_model()
 
 
-# USER PROFILE INLINE ==========================================================
+def get_pending_email_address(user):
+    """
+    Return a genuine pending replacement email.
 
+    An account's original unverified primary email is excluded,
+    because that is not an email-change request.
+    """
+    if not user or not user.pk:
+        return None
+
+    return (
+        EmailAddress.objects
+        .filter(user=user, verified=False)
+        .exclude(email__iexact=user.email)
+        .order_by("pk")
+        .last()
+    )
+
+
+# Custom admin creation form that requires a unique email address
+# and assigns role/company before email verification is sent.
+class CustomAdminUserCreationForm(AdminUserCreationForm):
+    email = forms.EmailField(required=True)
+
+    role = forms.ChoiceField(
+        choices=UserProfile.ROLE_CHOICES,
+        initial=UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        required=True,
+    )
+
+    company = forms.ModelChoiceField(
+        queryset=Company.objects.order_by("name"),
+        required=False,
+        empty_label="— No company —",
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if (
+            User.objects.filter(email__iexact=email).exists()
+            or EmailAddress.objects.filter(email__iexact=email).exists()
+        ):
+            raise forms.ValidationError(
+                "A user with this email address already exists."
+            )
+
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if (
+            cleaned_data.get("role") in [
+                UserProfile.ROLE_EMPLOYEE,
+                UserProfile.ROLE_COMPANY_ADMIN,
+            ]
+            and not cleaned_data.get("company")
+        ):
+            self.add_error(
+                "company",
+                "Company is required for employees and company administrators.",
+            )
+
+        return cleaned_data
+
+
+class PendingEmailWidget(forms.EmailInput):
+    """
+    Display the pending email field together with a resend button
+    when an email change is already awaiting verification.
+    """
+
+    resend_url = None
+
+    def render(self, name, value, attrs=None, renderer=None):
+        email_input = super().render(name, value, attrs, renderer)
+
+        if not self.resend_url:
+            return email_input
+
+        return format_html(
+            '<div style="display:flex;align-items:center;gap:10px;">'
+            '{}'
+            '<button type="submit" class="button" formaction="{}" '
+            'formmethod="post" formnovalidate>'
+            'Resend verification email'
+            '</button>'
+            '</div>',
+            email_input,
+            self.resend_url,
+        )
+
+
+class CustomAdminUserChangeForm(UserChangeForm):
+    pending_email = forms.EmailField(
+        required=False,
+        label="New email pending verification",
+        help_text=(
+            "Enter a replacement email and save. "
+            "The current email remains active until the new address is verified."
+        ),
+        widget=PendingEmailWidget,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        pending = get_pending_email_address(self.instance)
+
+        if pending:
+            self.fields["pending_email"].initial = pending.email
+
+            opts = self.instance._meta
+            self.fields["pending_email"].widget.resend_url = reverse(
+                f"admin:{opts.app_label}_{opts.model_name}"
+                "_resend_email_verification",
+                args=[self.instance.pk],
+            )
+
+    def clean_pending_email(self):
+        email = (
+            self.cleaned_data.get("pending_email") or ""
+        ).strip().lower()
+
+        if not email:
+            return ""
+
+        if email == (self.instance.email or "").strip().lower():
+            raise forms.ValidationError(
+                "The new email must be different from the current email."
+            )
+
+        if (
+            User.objects
+            .filter(email__iexact=email)
+            .exclude(pk=self.instance.pk)
+            .exists()
+            or EmailAddress.objects
+            .filter(email__iexact=email)
+            .exclude(user=self.instance)
+            .exists()
+        ):
+            raise forms.ValidationError(
+                "A user with this email address already exists."
+            )
+
+        return email
+
+
+# USER PROFILE INLINE ==========================================================
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
@@ -46,7 +206,41 @@ class UserProfileInline(admin.StackedInline):
 # USER ADMIN ==================================================================
 
 class CustomUserAdmin(UserAdmin):
+    add_form = CustomAdminUserCreationForm
+    form = CustomAdminUserChangeForm
     inlines = (UserProfileInline,)
+
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "role",
+                    "company",
+                    "usable_password",
+                    "password1",
+                    "password2",
+                ),
+            },
+        ),
+    )
+
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            "Email change",
+            {
+                "fields": ("pending_email",),
+                "description": (
+                    "The current email remains active until the replacement "
+                    "email has been verified."
+                ),
+            },
+        ),
+    )
 
     list_display = (
         "username",
@@ -89,12 +283,144 @@ class CustomUserAdmin(UserAdmin):
         "username",
     )
 
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super().get_readonly_fields(request, obj)
+
+        if obj:
+            return (*readonly_fields, "email")
+
+        return readonly_fields
+
+    def get_urls(self):
+        urls = super().get_urls()
+        opts = self.model._meta
+
+        custom_urls = [
+            path(
+                "<path:object_id>/resend-email-verification/",
+                self.admin_site.admin_view(
+                    self.resend_email_verification
+                ),
+                name=(
+                    f"{opts.app_label}_{opts.model_name}"
+                    "_resend_email_verification"
+                ),
+            ),
+        ]
+
+        return custom_urls + urls
+
+    def resend_email_verification(self, request, object_id):
+        user = self.get_object(request, object_id)
+
+        if user is None:
+            raise Http404("User does not exist.")
+
+        if not self.has_change_permission(request, user):
+            raise PermissionDenied
+
+        opts = self.model._meta
+        change_url = reverse(
+            f"admin:{opts.app_label}_{opts.model_name}_change",
+            args=[user.pk],
+        )
+
+        if request.method != "POST":
+            return HttpResponseRedirect(change_url)
+
+        pending = get_pending_email_address(user)
+
+        if not pending:
+            self.message_user(
+                request,
+                "There is no pending email address to verify.",
+                level=messages.WARNING,
+            )
+            return HttpResponseRedirect(change_url)
+
+        posted_email = (
+            request.POST.get("pending_email") or ""
+        ).strip().lower()
+
+        if posted_email and posted_email != pending.email.lower():
+            self.message_user(
+                request,
+                "The pending email field contains unsaved changes. "
+                "Save the new email before resending verification.",
+                level=messages.WARNING,
+            )
+            return HttpResponseRedirect(change_url)
+
+        sent = send_verification_email_to_address(
+            request,
+            pending,
+        )
+
+        if not sent:
+            self.message_user(
+                request,
+                "The verification email was not resent because the "
+                "resend cooldown is still active. Please try again later.",
+                level=messages.WARNING,
+            )
+
+        return HttpResponseRedirect(change_url)
+
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        if not change:
+            # The User post_save signal has already created UserProfile.
+            # Assign role/company before sending email verification.
+            profile, _ = UserProfile.objects.get_or_create(user=obj)
+            profile.role = form.cleaned_data["role"]
+            profile.company = form.cleaned_data.get("company")
+            profile.save()
+
+            email_address = EmailAddress.objects.add_email(
+                request=request,
+                user=obj,
+                email=obj.email,
+                confirm=False,
+            )
+
+            email_address.set_as_primary()
+
+            send_verification_email_to_address(
+                request,
+                email_address,
+                signup=True,
+            )
+
+            return
+
+        pending_email = form.cleaned_data.get("pending_email")
+        current_pending = get_pending_email_address(obj)
+
+        if (
+            pending_email
+            and (
+                not current_pending
+                or current_pending.email.lower()
+                != pending_email.lower()
+            )
+        ):
+            EmailAddress.objects.add_new_email(
+                request=request,
+                user=obj,
+                email=pending_email,
+                send_verification=True,
+            )
+
+
     def current_level(self, obj):
         if hasattr(obj, "profile") and obj.profile.current_level:
             return obj.profile.current_level
         return "-"
 
     current_level.short_description = "Current Level"
+
 
     def get_role(self, obj):
         if hasattr(obj, "profile") and obj.profile.role:
@@ -103,6 +429,7 @@ class CustomUserAdmin(UserAdmin):
 
     get_role.short_description = "Role"
     get_role.admin_order_field = "profile__role"
+
 
     def get_company(self, obj):
         if hasattr(obj, "profile") and obj.profile.company:

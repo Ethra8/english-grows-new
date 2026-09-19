@@ -51,7 +51,7 @@
         <a href="{% url 'profiles:company_admin_courses' %}" aria-label="{% trans 'View all courses' %}">
             <div class="meta-card meta-courses">
                 <div>
-                    <img src="{% static 'icons/custom/meta_cards/course_icon.png' %}" alt="" aria-hidden="true" width="50">
+                    <img src="{% static 'icons/custom/meta_cards_headers/course_icon.png' %}" alt="" aria-hidden="true" width="50">
                 </div>
                 <div class="meta-text">
                     <strong>
@@ -240,7 +240,7 @@
                                     <img class="arrow" src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" aria-hidden="true">
                                 </div>
                                 <span>
-                                    <img src="{% static 'icons/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="16" class="mr-1 mb-1">
+                                    <img src="{% static 'icons/custom/course/course_type_solid_icon.png' %}" alt="" aria-hidden="true" width="16" class="mr-1 mb-1">
                                     {{ course.course_type.name|default:"Course type pending" }}
                                 </span>
                                 <small class="course-list-status">

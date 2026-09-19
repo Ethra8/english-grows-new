@@ -191,13 +191,7 @@ def student_dashboard(request):
 @login_required
 def profile_settings(request):
     profile_user = request.user
-
     profile = get_object_or_404(UserProfile, user=profile_user)
-
-    # Security: only allow the user themselves or teachers/admins
-    if profile_user != request.user:
-        if request.user.profile.role != "teacher" and not request.user.is_staff:
-            return redirect("home")
 
     if request.method == "POST":
         form = UserProfileForm(
@@ -209,12 +203,6 @@ def profile_settings(request):
 
         if form.is_valid():
             form.save()
-
-            profile_user.first_name = form.cleaned_data["first_name"]
-            profile_user.last_name = form.cleaned_data["last_name"]
-            profile_user.email = form.cleaned_data["email"]
-            profile_user.save()
-
             return redirect("profiles:profile_settings")
 
     else:
@@ -229,7 +217,11 @@ def profile_settings(request):
         "profile_user": profile_user,
     }
 
-    return render(request, "profiles/profile_settings.html", context)
+    return render(
+        request,
+        "profiles/profile_settings.html",
+        context,
+    )
 
     
 
@@ -5934,7 +5926,7 @@ def teacher_profile_settings(request):
     if user_profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
-    teacher_profile, created = TeacherProfile.objects.get_or_create(
+    teacher_profile, _ = TeacherProfile.objects.get_or_create(
         user=request.user
     )
 
@@ -9612,7 +9604,6 @@ def company_admin_employees_list(request):
 
 
 
-# TEACHER PROFILE SETTINGS
 @login_required
 def company_admin_profile_settings(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)

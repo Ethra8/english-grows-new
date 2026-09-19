@@ -1850,8 +1850,8 @@ msgstr ""
 
 #: .\templates\account\email_change.html
 msgctxt "change email page"
-msgid "Account Email"
-msgstr "Email de la Cuenta"
+msgid "Account Email Settings"
+msgstr "Configuración de Email"
 
 msgid "Your email address is used to authenticate and access your account."
 msgstr "Tu dirección de correo electrónico se utiliza para autenticarte y acceder a tu cuenta."
