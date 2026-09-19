@@ -13,10 +13,17 @@
             <h2>{% trans "Learning Needs" %}</h2>
 
             <div class="needs-analysis-hero__meta">
-                <span>{% trans "Course" %}: {{ course.name }}</span>
+                <span>
+                    {% trans "Course" %}:
+                    {% if course %}{{ course.name }}{% else %}{% trans "Not assigned" %}{% endif %}
+                </span>
 
-                <span class="needs-analysis-status needs-analysis-status--{{ needs_analysis.status }}">
-                    {{ needs_analysis.get_status_display }}
+                <span class="needs-analysis-status{% if needs_analysis %} needs-analysis-status--{{ needs_analysis.status }}{% endif %}">
+                    {% if needs_analysis %}
+                        {{ needs_analysis.get_status_display }}
+                    {% else %}
+                        {% trans "Pending" %}
+                    {% endif %}
                 </span>
             </div>
         </div>
@@ -26,7 +33,7 @@
 
     <div class="student-needs-analysis__content">
 
-        {% if needs_analysis.status == "pending" %}
+        {% if not needs_analysis or needs_analysis.status == "pending" %}
 
             <!-- LEARNER / EMPLOYEE — EDITABLE QUESTIONNAIRE -->
             {% if can_edit %}
@@ -718,14 +725,25 @@
 
 
                                 <!-- REVIEW / SUBMIT -->
-                                <div class="student-needs-analysis__submit-message">
-                                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                                {% if needs_analysis %}
 
-                                    <p>
-                                        {% trans "Please review your answers carefully before submitting. Once submitted, you will no longer be able to edit them." %}
-                                    </p>
-                                </div>
+                                    <div class="student-needs-analysis__submit-message">
+                                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                                        <p>
+                                            {% trans "Please review your answers carefully before submitting. Once submitted, you will no longer be able to edit them." %}
+                                        </p>
+                                    </div>
 
+                                {% else %}
+
+                                    <div class="student-needs-analysis__submit-message">
+                                        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                        <p>
+                                            {% trans "You can review the Learning Needs questionnaire now. It will become available for completion and submission once a course has been assigned." %}
+                                        </p>
+                                    </div>
+
+                                {% endif %}
 
                                 <!-- FINAL STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions">
@@ -735,13 +753,14 @@
                                         {% trans "Back" %}
                                     </button>
 
-                                    <button type="submit" class="btn-primary">
-                                        {% trans "Submit Learning Needs" %}
-                                        <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
-                                    </button>
+                                    {% if needs_analysis %}
+                                        <button type="submit" class="btn-primary">
+                                            {% trans "Submit Learning Needs" %}
+                                            <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
+                                        </button>
+                                    {% endif %}
 
                                 </div>
-
                             </div>
 
 
