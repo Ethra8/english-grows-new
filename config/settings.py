@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'allauth',
     'allauth.account',
+    # Edit email templates in admin panel
+    "django_ckeditor_5",
 
     "storages",    
     
@@ -71,6 +73,7 @@ INSTALLED_APPS = [
     'home',
     'profiles',
     'courses',
+    "communications",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
@@ -167,6 +170,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 SITE_ID = 1
 
+SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
+
 AUTHENTICATION_BACKENDS = [
     # Keeps normal Django admin login working
     'django.contrib.auth.backends.ModelBackend',
@@ -205,6 +210,24 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     "English Grows <info@englishgrows.com>",
 )
+
+# Django app which allows to edit email template in admin panel
+CKEDITOR_5_CONFIGS = {
+    "email": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "undo",
+            "redo",
+        ],
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/

@@ -9637,7 +9637,6 @@ def company_admin_student_skills_overview(request, student_id):
 
 
 
-
 @login_required
 def company_admin_student_needs_analysis(request, student_id):
     profile = get_object_or_404(
@@ -9656,7 +9655,7 @@ def company_admin_student_needs_analysis(request, student_id):
     # ---------------------------------------------------------
     # STUDENT
     #
-    # Restrict access to students belonging to the same company
+    # Restrict access to users belonging to the same company
     # as the logged-in Company Admin.
     # ---------------------------------------------------------
     student = get_object_or_404(
@@ -9666,6 +9665,16 @@ def company_admin_student_needs_analysis(request, student_id):
     )
 
     student_profile = student.profile
+
+    # ---------------------------------------------------------
+    # SELF PARTICIPANT
+    #
+    # A Company Admin may also be enrolled in company training.
+    # In that case their platform role remains Company Admin,
+    # but they may edit learner-owned data in their OWN
+    # participant record.
+    # ---------------------------------------------------------
+    is_self = student.id == request.user.id
 
     # ---------------------------------------------------------
     # CURRENT ENROLLMENT STATUS
@@ -9681,9 +9690,6 @@ def company_admin_student_needs_analysis(request, student_id):
 
     # ---------------------------------------------------------
     # AVAILABLE ENROLLMENTS
-    #
-    # Used by the shared student course selector.
-    # Only include courses belonging to this company.
     #
     # Historical enrollments remain accessible.
     # ---------------------------------------------------------
@@ -9718,14 +9724,9 @@ def company_admin_student_needs_analysis(request, student_id):
 
     # ---------------------------------------------------------
     # DEFAULT EMPTY-STATE VALUES
-    #
-    # StudentNeedsAnalysis belongs to a CourseEnrollment, so no
-    # model object is created until an enrollment exists.
-    #
-    # The form remains available because the shared read-only
-    # template uses it for labels and display structure.
     # ---------------------------------------------------------
     needs_analysis = None
+    can_edit = False
     form = StudentNeedsAnalysisForm()
 
     english_use_frequency_labels = []
@@ -9744,14 +9745,129 @@ def company_admin_student_needs_analysis(request, student_id):
     # ENROLLMENT-SPECIFIC NEEDS ANALYSIS
     # ---------------------------------------------------------
     if enrollment:
-        # -----------------------------------------------------
-        # NEEDS ANALYSIS
-        #
-        # Company Admin has read-only access.
-        # -----------------------------------------------------
         needs_analysis, _ = StudentNeedsAnalysis.objects.get_or_create(
             enrollment=enrollment,
         )
+
+        # -----------------------------------------------------
+        # EDIT PERMISSION
+        #
+        # Company Admin normally has read-only access.
+        #
+        # Exception:
+        # if the Company Admin is viewing THEIR OWN participant
+        # record, they may complete their own pending Needs
+        # Analysis while that CourseEnrollment is active.
+        # -----------------------------------------------------
+        can_edit = (
+            is_self
+            and enrollment.status == CourseEnrollment.STATUS_ACTIVE
+            and needs_analysis.status == StudentNeedsAnalysis.Status.PENDING
+        )
+
+        # -----------------------------------------------------
+        # FORM INITIAL DATA
+        # -----------------------------------------------------
+        form_initial = {
+            "english_use_frequency": needs_analysis.english_use_frequency,
+            "communication_situations": needs_analysis.communication_situations,
+            "communication_partners": needs_analysis.communication_partners,
+            "accent_exposure": needs_analysis.accent_exposure,
+            "accent_exposure_other": needs_analysis.accent_exposure_other,
+            "speaking_confidence": needs_analysis.speaking_confidence,
+            "listening_confidence": needs_analysis.listening_confidence,
+            "reading_confidence": needs_analysis.reading_confidence,
+            "writing_confidence": needs_analysis.writing_confidence,
+            "priority_areas": needs_analysis.priority_areas,
+            "course_goal": needs_analysis.course_goal,
+            "learning_preferences": needs_analysis.learning_preferences,
+            "preferred_topics": needs_analysis.preferred_topics,
+            "additional_information": needs_analysis.additional_information,
+        }
+
+        # -----------------------------------------------------
+        # FORM SUBMISSION
+        # -----------------------------------------------------
+        if (
+            request.method == "POST"
+            and request.POST.get("action") == "submit_needs_analysis"
+        ):
+            # Protect against manually crafted POST requests.
+            if not can_edit:
+                return redirect(
+                    f"{request.path}?course={course.id}"
+                )
+
+            form = StudentNeedsAnalysisForm(
+                request.POST,
+            )
+
+            if form.is_valid():
+                data = form.cleaned_data
+
+                needs_analysis.english_use_frequency = data[
+                    "english_use_frequency"
+                ]
+                needs_analysis.communication_situations = data[
+                    "communication_situations"
+                ]
+                needs_analysis.communication_partners = data[
+                    "communication_partners"
+                ]
+
+                needs_analysis.accent_exposure = data[
+                    "accent_exposure"
+                ]
+                needs_analysis.accent_exposure_other = data[
+                    "accent_exposure_other"
+                ]
+
+                needs_analysis.speaking_confidence = data[
+                    "speaking_confidence"
+                ]
+                needs_analysis.listening_confidence = data[
+                    "listening_confidence"
+                ]
+                needs_analysis.reading_confidence = data[
+                    "reading_confidence"
+                ]
+                needs_analysis.writing_confidence = data[
+                    "writing_confidence"
+                ]
+
+                needs_analysis.priority_areas = data[
+                    "priority_areas"
+                ]
+                needs_analysis.course_goal = data[
+                    "course_goal"
+                ]
+
+                needs_analysis.learning_preferences = data[
+                    "learning_preferences"
+                ]
+
+                needs_analysis.preferred_topics = data[
+                    "preferred_topics"
+                ]
+                needs_analysis.additional_information = data[
+                    "additional_information"
+                ]
+
+                needs_analysis.status = (
+                    StudentNeedsAnalysis.Status.SUBMITTED
+                )
+                needs_analysis.submitted_at = timezone.now()
+
+                needs_analysis.save()
+
+                return redirect(
+                    f"{request.path}?course={course.id}"
+                )
+
+        else:
+            form = StudentNeedsAnalysisForm(
+                initial=form_initial,
+            )
 
         # -----------------------------------------------------
         # HUMAN-READABLE DISPLAY VALUES
@@ -9804,6 +9920,15 @@ def company_admin_student_needs_analysis(request, student_id):
         )
 
     # ---------------------------------------------------------
+    # NO-ENROLLMENT POST SAFETY
+    # ---------------------------------------------------------
+    elif (
+        request.method == "POST"
+        and request.POST.get("action") == "submit_needs_analysis"
+    ):
+        return redirect(request.path)
+
+    # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
@@ -9820,6 +9945,10 @@ def company_admin_student_needs_analysis(request, student_id):
         "needs_analysis": needs_analysis,
         "form": form,
 
+        "is_self": is_self,
+        "can_edit": can_edit,
+        "can_review": False,
+
         "english_use_frequency_labels": english_use_frequency_labels,
         "communication_situation_labels": communication_situation_labels,
         "communication_partner_labels": communication_partner_labels,
@@ -9832,9 +9961,6 @@ def company_admin_student_needs_analysis(request, student_id):
         "reading_confidence_display": reading_confidence_display,
         "writing_confidence_display": writing_confidence_display,
 
-        "can_edit": False,
-        "can_review": False,
-
         "user_currently_enrolled": user_currently_enrolled,
         "active_section": "needs_analysis",
     }
@@ -9844,6 +9970,7 @@ def company_admin_student_needs_analysis(request, student_id):
         "profiles/company_admin/company_admin_student_needs_analysis.html",
         context,
     )
+
 
 
 
@@ -10052,6 +10179,10 @@ def company_admin_student_teacher_notes(request, student_id):
 
 @login_required
 def company_admin_classes_list(request):
+    '''
+    Displays list of classes (past & upcoming)
+     of all company courses status=active
+    '''
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
@@ -10459,6 +10590,25 @@ def company_admin_employees_list(request):
     if sort_by not in ["status", "name", "level"]:
         sort_by = "status"
 
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLED COMPANY ADMINS
+    #
+    # A Company Admin remains a Company Admin, but if they also
+    # have an active CourseEnrollment in one of their company's
+    # courses, they are also treated as a training participant.
+    # ---------------------------------------------------------
+    active_company_admin_ids = (
+        CourseEnrollment.objects
+        .filter(
+            course__company=company,
+            student__profile__company=company,
+            student__profile__role=UserProfile.ROLE_COMPANY_ADMIN,
+            status=CourseEnrollment.STATUS_ACTIVE,
+        )
+        .values_list("student_id", flat=True)
+    )
+
     # ---------------------------------------------------------
     # ALL COMPANY EMPLOYEES
     #
@@ -10468,9 +10618,13 @@ def company_admin_employees_list(request):
     # ---------------------------------------------------------
     employee_profiles = (
         UserProfile.objects
+        .filter(company=company)
         .filter(
-            company=company,
-            role=UserProfile.ROLE_EMPLOYEE,
+            Q(role=UserProfile.ROLE_EMPLOYEE)
+            | Q(
+                role=UserProfile.ROLE_COMPANY_ADMIN,
+                user_id__in=active_company_admin_ids,
+            )
         )
         .select_related("user")
         .order_by(
@@ -10478,8 +10632,7 @@ def company_admin_employees_list(request):
             "user__last_name",
             "user__email",
         )
-    )
-
+)
     # ---------------------------------------------------------
     # ALL COMPANY ENROLLMENTS
     # ---------------------------------------------------------
@@ -10488,7 +10641,10 @@ def company_admin_employees_list(request):
         .filter(
             course__company=company,
             student__profile__company=company,
-            student__profile__role=UserProfile.ROLE_EMPLOYEE,
+        )
+        .filter(
+            Q(student__profile__role=UserProfile.ROLE_EMPLOYEE)
+            | Q(student_id__in=active_company_admin_ids)
         )
         .select_related(
             "student",
@@ -10647,6 +10803,7 @@ def company_admin_employees_list(request):
         "profile": profile,
         "company": company,
         "employees": employees,
+        "active_company_admin_ids": active_company_admin_ids,
         "total_employees": len(employees),
 
         "active_employees": active_employees,    

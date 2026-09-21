@@ -242,10 +242,17 @@
     min-width: 0;
 }
 
+.needs-analysis-accent-other label {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
 #id_accent_exposure_other {
     border-radius: 5px;
+    font-size: 0.9rem;
     width: 100%;
     height: 41.59px;
+    padding: 0.25rem 0.5rem;
     background: rgba(var(--color-teal-rgb), .055);
     border-color: rgba(var(--color-teal-rgb), .46);
     color: var(--color-navy);
@@ -324,7 +331,7 @@
     justify-content: center;
     gap: .55rem;
     min-width: 0;
-    padding: .25rem;
+    padding: .5rem;
     border: 0;
     background: transparent;
     color: var(--color-cool-steel);
@@ -347,6 +354,7 @@
 .needs-analysis-progress__item.active {
     color: var(--color-navy);
     font-weight: 600;
+    background: rgba(var(--color-teal-rgb), 0.15);
 }
 
 .needs-analysis-progress__number {

@@ -15,6 +15,7 @@ urlpatterns = [
     path('profiles/', include('profiles.urls')),
     path('courses/', include('courses.urls')),
     path('', include('home.urls')),
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
 ]
 
 if settings.DEBUG:
