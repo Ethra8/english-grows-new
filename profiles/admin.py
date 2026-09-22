@@ -24,6 +24,8 @@ from .models import (
     SUBSKILLS,
 )
 
+from .forms import StudentNeedsAnalysisForm
+
 from courses.models import CourseEnrollment
 
 
@@ -583,6 +585,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(StudentNeedsAnalysis)
 class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
+
     list_display = (
         "student",
         "course",
@@ -590,6 +593,8 @@ class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
         "submitted_at",
         "reviewed_at",
     )
+
+    actions = ["reset_selected_to_pending"]
 
     list_filter = (
         "status",
@@ -657,40 +662,203 @@ class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "4. Challenges & Priorities",
+            "4. Your Priorities",
             {
                 "fields": (
                     "priority_areas",
-                    "course_goal",
                 ),
             },
         ),
         (
-            "5. How You Learn",
+            "5. Anything Else?",
             {
                 "fields": (
-                    "learning_preferences",
-                ),
-            },
-        ),
-        (
-            "6. Anything Else",
-            {
-                "fields": (
-                    "preferred_topics",
                     "additional_information",
                 ),
             },
         ),
     )
 
+    # ---------------------------------------------------------
+    # READ-ONLY DISPLAY FIELD MAPPING
+    #
+    # Replace stored values with human-readable answers
+    # once the questionnaire has been submitted.
+    # ---------------------------------------------------------
+    DISPLAY_FIELDS = {
+        "english_use_frequency": "english_use_frequency_display",
+        "communication_situations": "communication_situations_display",
+        "communication_partners": "communication_partners_display",
+        "accent_exposure": "accent_exposure_display",
+        "speaking_confidence": "speaking_confidence_display",
+        "listening_confidence": "listening_confidence_display",
+        "reading_confidence": "reading_confidence_display",
+        "writing_confidence": "writing_confidence_display",
+        "priority_areas": "priority_areas_display",
+    }
+
+    # ---------------------------------------------------------
+    # DYNAMIC FIELDSETS
+    #
+    # Pending: original editable fields.
+    # Submitted/Reviewed: human-readable display methods.
+    # ---------------------------------------------------------
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        if obj is None or obj.status == "pending":
+            return fieldsets
+
+        return tuple(
+            (
+                title,
+                {
+                    **options,
+                    "fields": tuple(
+                        self.DISPLAY_FIELDS.get(field, field)
+                        for field in options["fields"]
+                    ),
+                },
+            )
+            for title, options in fieldsets
+        )
+
+    def get_readonly_fields(self, request, obj=None):
+        return (
+            *super().get_readonly_fields(request, obj),
+            *self.DISPLAY_FIELDS.values(),
+        )
+
+    # ---------------------------------------------------------
+    # DISPLAY HELPERS
+    #
+    # Reuse the canonical choices from StudentNeedsAnalysisForm.
+    # No duplicated choice mappings in Admin.
+    # ---------------------------------------------------------
+    def _choice_list(self, obj, field_name):
+        form = StudentNeedsAnalysisForm()
+
+        labels = form.choice_labels(
+            field_name,
+            getattr(obj, field_name),
+        )
+
+        if not labels:
+            return "—"
+
+        items = format_html_join(
+            "",
+            '<li style="display:list-item; list-style-type:disc;">{}</li>',
+            ((label,) for label in labels),
+        )
+
+        return format_html(
+            '<ul style="list-style-type:disc; margin:0; padding-left:1.5rem;">{}</ul>',
+            items,
+        )
+
+    def _choice_value(self, obj, field_name):
+        form = StudentNeedsAnalysisForm()
+
+        labels = form.choice_labels(
+            field_name,
+            getattr(obj, field_name),
+        )
+
+        return ", ".join(labels) if labels else "—"
+
+    def _confidence_value(self, obj, field_name):
+        form = StudentNeedsAnalysisForm()
+
+        return form.confidence_display(
+            getattr(obj, field_name),
+        ) or "—"
+
+    # ---------------------------------------------------------
+    # 1. YOUR ENGLISH
+    # ---------------------------------------------------------
+    @admin.display(description="English use frequency")
+    def english_use_frequency_display(self, obj):
+        return self._choice_value(obj, "english_use_frequency")
+
+    @admin.display(description="Communication situations")
+    def communication_situations_display(self, obj):
+        return self._choice_list(obj, "communication_situations")
+
+    # ---------------------------------------------------------
+    # 2. YOUR COMMUNICATION
+    # ---------------------------------------------------------
+    @admin.display(description="Communication partners")
+    def communication_partners_display(self, obj):
+        return self._choice_list(obj, "communication_partners")
+
+    @admin.display(description="Accent exposure")
+    def accent_exposure_display(self, obj):
+        return self._choice_list(obj, "accent_exposure")
+
+    # ---------------------------------------------------------
+    # 3. YOUR CONFIDENCE
+    # ---------------------------------------------------------
+    @admin.display(description="Speaking confidence")
+    def speaking_confidence_display(self, obj):
+        return self._confidence_value(obj, "speaking_confidence")
+
+    @admin.display(description="Listening confidence")
+    def listening_confidence_display(self, obj):
+        return self._confidence_value(obj, "listening_confidence")
+
+    @admin.display(description="Reading confidence")
+    def reading_confidence_display(self, obj):
+        return self._confidence_value(obj, "reading_confidence")
+
+    @admin.display(description="Writing confidence")
+    def writing_confidence_display(self, obj):
+        return self._confidence_value(obj, "writing_confidence")
+
+    # ---------------------------------------------------------
+    # 4. CHALLENGES & PRIORITIES
+    # ---------------------------------------------------------
+    @admin.display(description="Priority areas")
+    def priority_areas_display(self, obj):
+        return self._choice_list(obj, "priority_areas")
+
+    # ---------------------------------------------------------
+    # 5. HOW YOU LEARN
+    # ---------------------------------------------------------
+
+    # ---------------------------------------------------------
+    # LIST DISPLAY
+    # ---------------------------------------------------------
     @admin.display(description="Student")
     def student(self, obj):
         return obj.enrollment.student
 
-    @admin.display(description="Course")
+    @admin.display(description="Course", ordering="enrollment__course__name")
     def course(self, obj):
-        return obj.enrollment.course
+        return obj.enrollment.course.name
+
+    # ---------------------------------------------------------
+    # RESET NEEDS ANALYSIS
+    # ---------------------------------------------------------
+    @admin.action(description="Reset selected Needs Analyses to Pending")
+    def reset_selected_to_pending(self, request, queryset):
+        count = 0
+
+        for needs_analysis in queryset:
+            needs_analysis.reset_to_pending()
+            count += 1
+
+        self.message_user(
+            request,
+            f"{count} Needs Analysis record(s) reset to Pending.",
+            messages.SUCCESS,
+        )
+
+    # ---------------------------------------------------------
+    # PREVENT PERMANENT DELETION
+    # ---------------------------------------------------------
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 

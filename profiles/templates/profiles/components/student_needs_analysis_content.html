@@ -4,7 +4,6 @@
 
     <!-- SHARED HERO — ALL ROLES -->
     <header class="needs-analysis-hero">
-
         <div class="needs-analysis-hero__icon" aria-hidden="true">
             <i class="fa-solid fa-bullseye"></i>
         </div>
@@ -27,19 +26,16 @@
                 </span>
             </div>
         </div>
-
     </header>
-
 
     <div class="student-needs-analysis__content">
 
-        {% if not enrollment or needs_analysis.status == "pending" %}
+        {% if not enrollment or not needs_analysis or needs_analysis.status == "pending" %}
 
-            <!-- LEARNER / EMPLOYEE — EDITABLE QUESTIONNAIRE -->
+            <!-- LEARNER / EMPLOYEE — EDITABLE QUESTIONNAIRE OR PREVIEW -->
             {% if not enrollment or can_edit %}
 
                 <div class="student-needs-analysis__intro">
-
                     <div class="student-needs-analysis__intro-icon" aria-hidden="true">
                         <i class="fa-regular fa-lightbulb"></i>
                     </div>
@@ -48,98 +44,52 @@
                         <h3>{% trans "Tell us about your learning needs" %}</h3>
 
                         <p>
-                            {% trans "Your answers will help your teacher understand how you use English, what you find challenging, and what you would most like to improve." %}
+                            {% trans "Your answers will help your teacher understand how you use English, how confident you feel, and which communication situations you would most like to focus on." %}
                         </p>
 
                         <p>
                             {% trans "There are no right or wrong answers. Please choose the options that best reflect your experience and priorities." %}
                         </p>
                     </div>
-
                 </div>
-
 
                 <!-- LEARNER PROGRESS NAVIGATION -->
                 <nav class="needs-analysis-progress" aria-label="{% trans 'Learning Needs sections' %}">
 
-                    <button
-                        type="button"
-                        id="needsTabEnglish"
-                        class="needs-analysis-progress__item active"
-                        data-step="0"
-                        aria-controls="needsStepEnglish"
-                        aria-current="step"
-                    >
+                    <button type="button" id="needsTabEnglish" class="needs-analysis-progress__item active"
+                            data-step="0" aria-controls="needsStepEnglish" aria-current="step">
                         <span class="needs-analysis-progress__number">1</span>
                         <span class="needs-analysis-progress__label">{% trans "Your English" %}</span>
                     </button>
 
-                    <button
-                        type="button"
-                        id="needsTabCommunication"
-                        class="needs-analysis-progress__item"
-                        data-step="1"
-                        aria-controls="needsStepCommunication"
-                        disabled
-                    >
+                    <button type="button" id="needsTabCommunication" class="needs-analysis-progress__item"
+                            data-step="1" aria-controls="needsStepCommunication" disabled>
                         <span class="needs-analysis-progress__number">2</span>
                         <span class="needs-analysis-progress__label">{% trans "Your Communication" %}</span>
                     </button>
 
-                    <button
-                        type="button"
-                        id="needsTabConfidence"
-                        class="needs-analysis-progress__item"
-                        data-step="2"
-                        aria-controls="needsStepConfidence"
-                        disabled
-                    >
+                    <button type="button" id="needsTabConfidence" class="needs-analysis-progress__item"
+                            data-step="2" aria-controls="needsStepConfidence" disabled>
                         <span class="needs-analysis-progress__number">3</span>
                         <span class="needs-analysis-progress__label">{% trans "Your Confidence" %}</span>
                     </button>
 
-                    <button
-                        type="button"
-                        id="needsTabPriorities"
-                        class="needs-analysis-progress__item"
-                        data-step="3"
-                        aria-controls="needsStepPriorities"
-                        disabled
-                    >
+                    <button type="button" id="needsTabPriorities" class="needs-analysis-progress__item"
+                            data-step="3" aria-controls="needsStepPriorities" disabled>
                         <span class="needs-analysis-progress__number">4</span>
-                        <span class="needs-analysis-progress__label">{% trans "Challenges & Priorities" %}</span>
+                        <span class="needs-analysis-progress__label">{% trans "Your Priorities" %}</span>
                     </button>
 
-                    <button
-                        type="button"
-                        id="needsTabLearning"
-                        class="needs-analysis-progress__item"
-                        data-step="4"
-                        aria-controls="needsStepLearning"
-                        disabled
-                    >
+                    <button type="button" id="needsTabAdditional" class="needs-analysis-progress__item"
+                            data-step="4" aria-controls="needsStepAdditional" disabled>
                         <span class="needs-analysis-progress__number">5</span>
-                        <span class="needs-analysis-progress__label">{% trans "How You Learn" %}</span>
-                    </button>
-
-                    <button
-                        type="button"
-                        id="needsTabAdditional"
-                        class="needs-analysis-progress__item"
-                        data-step="5"
-                        aria-controls="needsStepAdditional"
-                        disabled
-                    >
-                        <span class="needs-analysis-progress__number">6</span>
                         <span class="needs-analysis-progress__label">{% trans "Anything Else?" %}</span>
                     </button>
 
                 </nav>
 
-
                 <form method="post" class="student-needs-analysis__form" id="needsAnalysisForm">
                     {% csrf_token %}
-
                     <input type="hidden" name="action" value="submit_needs_analysis">
 
                     {% if form.non_field_errors %}
@@ -148,35 +98,27 @@
                         </div>
                     {% endif %}
 
-
                     <!-- WIZARD -->
                     <div class="needs-analysis-wizard" id="needsAnalysisWizard">
-
                         <div class="needs-analysis-wizard__track">
 
-
                             <!-- 1. YOUR ENGLISH -->
-                            <div
-                                id="needsStepEnglish"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="0"
-                                aria-labelledby="needsTabEnglish"
-                            >
+                            <div id="needsStepEnglish" class="needs-analysis-wizard__page"
+                                 data-step-panel="0" aria-labelledby="needsTabEnglish">
 
                                 <section class="needs-analysis-card">
-
                                     <header class="needs-analysis-card__header">
                                         <span class="needs-analysis-card__number">1</span>
 
                                         <div>
                                             <h3>{% trans "Your English" %}</h3>
-                                            <p>{% trans "Tell us how and where you currently use English." %}</p>
+                                            <p>{% trans "Tell us how often you use English and where you use or expect to use it." %}</p>
                                         </div>
                                     </header>
 
-
                                     <div class="needs-analysis-card__content needs-analysis-grid needs-analysis-grid--english">
 
+                                        <!-- ENGLISH USE FREQUENCY -->
                                         <fieldset class="needs-analysis-field {% if form.english_use_frequency.errors %}needs-analysis-field--error{% endif %}">
                                             <legend>
                                                 {{ form.english_use_frequency.label }}
@@ -194,7 +136,7 @@
                                             {% endif %}
                                         </fieldset>
 
-
+                                        <!-- COMMUNICATION SITUATIONS -->
                                         <fieldset class="needs-analysis-field {% if form.communication_situations.errors %}needs-analysis-field--error{% endif %}">
                                             <legend>
                                                 {{ form.communication_situations.label }}
@@ -213,33 +155,23 @@
                                         </fieldset>
 
                                     </div>
-
                                 </section>
-
 
                                 <!-- STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions needs-analysis-step-actions--end">
-
                                     <button type="button" class="needs-analysis-next">
                                         {% trans "Continue" %}
                                         <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                     </button>
-
                                 </div>
 
                             </div>
 
-
                             <!-- 2. YOUR COMMUNICATION -->
-                            <div
-                                id="needsStepCommunication"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="1"
-                                aria-labelledby="needsTabCommunication"
-                            >
+                            <div id="needsStepCommunication" class="needs-analysis-wizard__page"
+                                 data-step-panel="1" aria-labelledby="needsTabCommunication">
 
                                 <section class="needs-analysis-card">
-
                                     <header class="needs-analysis-card__header">
                                         <span class="needs-analysis-card__number">2</span>
 
@@ -249,12 +181,10 @@
                                         </div>
                                     </header>
 
-
                                     <div class="needs-analysis-card__content needs-analysis-grid needs-analysis-grid--communication">
 
                                         <!-- COMMUNICATION PARTNERS -->
                                         <fieldset class="needs-analysis-field {% if form.communication_partners.errors %}needs-analysis-field--error{% endif %}">
-
                                             <legend>{{ form.communication_partners.label }}</legend>
 
                                             {% if form.communication_partners.help_text %}
@@ -272,15 +202,11 @@
                                                     {{ form.communication_partners.errors }}
                                                 </div>
                                             {% endif %}
-
                                         </fieldset>
-
 
                                         <!-- ACCENT / ENGLISH VARIETY EXPOSURE -->
                                         <div class="needs-analysis-communication-column">
-
                                             <fieldset class="needs-analysis-field {% if form.accent_exposure.errors or form.accent_exposure_other.errors %}needs-analysis-field--error{% endif %}">
-
                                                 <legend>{{ form.accent_exposure.label }}</legend>
 
                                                 {% if form.accent_exposure.help_text %}
@@ -299,10 +225,8 @@
                                                     </div>
                                                 {% endif %}
 
-
                                                 <!-- OTHER ACCENT / VARIETY -->
                                                 <div class="needs-analysis-accent-other {% if form.accent_exposure_other.errors %}needs-analysis-field--error{% endif %}">
-
                                                     <label for="{{ form.accent_exposure_other.id_for_label }}">
                                                         {% trans "Other accents" %}
                                                     </label>
@@ -314,20 +238,15 @@
                                                             {{ form.accent_exposure_other.errors }}
                                                         </div>
                                                     {% endif %}
-
                                                 </div>
-
                                             </fieldset>
-
                                         </div>
+
                                     </div>
-
                                 </section>
-
 
                                 <!-- STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions">
-
                                     <button type="button" class="needs-analysis-back">
                                         <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
                                         {% trans "Back" %}
@@ -337,22 +256,15 @@
                                         {% trans "Continue" %}
                                         <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                     </button>
-
                                 </div>
 
                             </div>
 
-
                             <!-- 3. YOUR CONFIDENCE -->
-                            <div
-                                id="needsStepConfidence"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="2"
-                                aria-labelledby="needsTabConfidence"
-                            >
+                            <div id="needsStepConfidence" class="needs-analysis-wizard__page"
+                                 data-step-panel="2" aria-labelledby="needsTabConfidence">
 
                                 <section class="needs-analysis-card">
-
                                     <header class="needs-analysis-card__header">
                                         <span class="needs-analysis-card__number">3</span>
 
@@ -362,13 +274,11 @@
                                         </div>
                                     </header>
 
-
                                     <div class="needs-analysis-card__content">
-
                                         <div class="confidence-grid">
 
+                                            <!-- SPEAKING CONFIDENCE -->
                                             <div class="confidence-field {% if form.speaking_confidence.errors %}needs-analysis-field--error{% endif %}">
-
                                                 <label for="{{ form.speaking_confidence.id_for_label }}">
                                                     {{ form.speaking_confidence.label }}
                                                     <span class="required-mark" aria-hidden="true">*</span>
@@ -377,11 +287,7 @@
                                                 {{ form.speaking_confidence }}
 
                                                 <div class="confidence-scale" aria-hidden="true">
-                                                    <span>1</span>
-                                                    <span>2</span>
-                                                    <span>3</span>
-                                                    <span>4</span>
-                                                    <span>5</span>
+                                                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
                                                 </div>
 
                                                 <div class="confidence-scale__labels">
@@ -394,12 +300,10 @@
                                                         {{ form.speaking_confidence.errors }}
                                                     </div>
                                                 {% endif %}
-
                                             </div>
 
-
+                                            <!-- LISTENING CONFIDENCE -->
                                             <div class="confidence-field {% if form.listening_confidence.errors %}needs-analysis-field--error{% endif %}">
-
                                                 <label for="{{ form.listening_confidence.id_for_label }}">
                                                     {{ form.listening_confidence.label }}
                                                     <span class="required-mark" aria-hidden="true">*</span>
@@ -408,11 +312,7 @@
                                                 {{ form.listening_confidence }}
 
                                                 <div class="confidence-scale" aria-hidden="true">
-                                                    <span>1</span>
-                                                    <span>2</span>
-                                                    <span>3</span>
-                                                    <span>4</span>
-                                                    <span>5</span>
+                                                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
                                                 </div>
 
                                                 <div class="confidence-scale__labels">
@@ -425,12 +325,10 @@
                                                         {{ form.listening_confidence.errors }}
                                                     </div>
                                                 {% endif %}
-
                                             </div>
 
-
+                                            <!-- READING CONFIDENCE -->
                                             <div class="confidence-field {% if form.reading_confidence.errors %}needs-analysis-field--error{% endif %}">
-
                                                 <label for="{{ form.reading_confidence.id_for_label }}">
                                                     {{ form.reading_confidence.label }}
                                                     <span class="required-mark" aria-hidden="true">*</span>
@@ -439,11 +337,7 @@
                                                 {{ form.reading_confidence }}
 
                                                 <div class="confidence-scale" aria-hidden="true">
-                                                    <span>1</span>
-                                                    <span>2</span>
-                                                    <span>3</span>
-                                                    <span>4</span>
-                                                    <span>5</span>
+                                                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
                                                 </div>
 
                                                 <div class="confidence-scale__labels">
@@ -456,12 +350,10 @@
                                                         {{ form.reading_confidence.errors }}
                                                     </div>
                                                 {% endif %}
-
                                             </div>
 
-
+                                            <!-- WRITING CONFIDENCE -->
                                             <div class="confidence-field {% if form.writing_confidence.errors %}needs-analysis-field--error{% endif %}">
-
                                                 <label for="{{ form.writing_confidence.id_for_label }}">
                                                     {{ form.writing_confidence.label }}
                                                     <span class="required-mark" aria-hidden="true">*</span>
@@ -470,11 +362,7 @@
                                                 {{ form.writing_confidence }}
 
                                                 <div class="confidence-scale" aria-hidden="true">
-                                                    <span>1</span>
-                                                    <span>2</span>
-                                                    <span>3</span>
-                                                    <span>4</span>
-                                                    <span>5</span>
+                                                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
                                                 </div>
 
                                                 <div class="confidence-scale__labels">
@@ -487,19 +375,14 @@
                                                         {{ form.writing_confidence.errors }}
                                                     </div>
                                                 {% endif %}
-
                                             </div>
 
                                         </div>
-
                                     </div>
-
                                 </section>
-
 
                                 <!-- STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions">
-
                                     <button type="button" class="needs-analysis-back">
                                         <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
                                         {% trans "Back" %}
@@ -509,39 +392,31 @@
                                         {% trans "Continue" %}
                                         <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                     </button>
-
                                 </div>
 
                             </div>
 
-
-                            <!-- 4. CHALLENGES & PRIORITIES -->
-                            <div
-                                id="needsStepPriorities"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="3"
-                                aria-labelledby="needsTabPriorities"
-                            >
+                            <!-- 4. YOUR PRIORITIES -->
+                            <div id="needsStepPriorities" class="needs-analysis-wizard__page"
+                                 data-step-panel="3" aria-labelledby="needsTabPriorities">
 
                                 <section class="needs-analysis-card">
-
                                     <header class="needs-analysis-card__header">
                                         <span class="needs-analysis-card__number">4</span>
 
                                         <div>
-                                            <h3>{% trans "Challenges & Priorities" %}</h3>
-                                            <p>{% trans "Tell us what you find difficult and what matters most to you." %}</p>
+                                            <h3>{% trans "Your Priorities" %}</h3>
+                                            <p>{% trans "Identify the communication situations you would most like to focus on during your course." %}</p>
                                         </div>
                                     </header>
 
-
                                     <div class="needs-analysis-card__content">
 
+                                        <!-- PRIORITY AREAS -->
                                         <fieldset class="needs-analysis-field {% if form.priority_areas.errors %}needs-analysis-field--error{% endif %}">
-
                                             <legend>
                                                 {{ form.priority_areas.label }}
-                                                <span class="required-mark" aria-hidden="true">*</span>
+                                                {% if form.priority_areas.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}
                                             </legend>
 
                                             {% if form.priority_areas.help_text %}
@@ -559,35 +434,13 @@
                                                     {{ form.priority_areas.errors }}
                                                 </div>
                                             {% endif %}
-
                                         </fieldset>
 
-
-                                        <div class="needs-analysis-field needs-analysis-field--spaced needs-analysis-field--textarea {% if form.course_goal.errors %}needs-analysis-field--error{% endif %}">
-
-                                            <label for="{{ form.course_goal.id_for_label }}">
-                                                {{ form.course_goal.label }}
-                                                <span class="required-mark" aria-hidden="true">*</span>
-                                            </label>
-
-                                            {{ form.course_goal }}
-
-                                            {% if form.course_goal.errors %}
-                                                <div class="needs-analysis-field__errors" role="alert">
-                                                    {{ form.course_goal.errors }}
-                                                </div>
-                                            {% endif %}
-
-                                        </div>
-
                                     </div>
-
                                 </section>
-
 
                                 <!-- STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions">
-
                                     <button type="button" class="needs-analysis-back">
                                         <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
                                         {% trans "Back" %}
@@ -597,85 +450,17 @@
                                         {% trans "Continue" %}
                                         <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                     </button>
-
                                 </div>
 
                             </div>
 
-
-                            <!-- 5. HOW YOU LEARN -->
-                            <div
-                                id="needsStepLearning"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="4"
-                                aria-labelledby="needsTabLearning"
-                            >
+                            <!-- 5. ANYTHING ELSE? -->
+                            <div id="needsStepAdditional" class="needs-analysis-wizard__page"
+                                 data-step-panel="4" aria-labelledby="needsTabAdditional">
 
                                 <section class="needs-analysis-card">
-
                                     <header class="needs-analysis-card__header">
                                         <span class="needs-analysis-card__number">5</span>
-
-                                        <div>
-                                            <h3>{% trans "How You Learn" %}</h3>
-                                            <p>{% trans "Help your teacher understand which approaches work best for you." %}</p>
-                                        </div>
-                                    </header>
-
-
-                                    <div class="needs-analysis-card__content">
-
-                                        <fieldset class="needs-analysis-field {% if form.learning_preferences.errors %}needs-analysis-field--error{% endif %}">
-
-                                            <legend>{{ form.learning_preferences.label }}</legend>
-
-                                            <div class="needs-analysis-options needs-analysis-options--grid">
-                                                {{ form.learning_preferences }}
-                                            </div>
-
-                                            {% if form.learning_preferences.errors %}
-                                                <div class="needs-analysis-field__errors" role="alert">
-                                                    {{ form.learning_preferences.errors }}
-                                                </div>
-                                            {% endif %}
-
-                                        </fieldset>
-
-                                    </div>
-
-                                </section>
-
-
-                                <!-- STEP NAVIGATION -->
-                                <div class="needs-analysis-step-actions">
-
-                                    <button type="button" class="needs-analysis-back">
-                                        <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
-                                        {% trans "Back" %}
-                                    </button>
-
-                                    <button type="button" class="needs-analysis-next">
-                                        {% trans "Continue" %}
-                                        <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- 6. ADDITIONAL INFORMATION -->
-                            <div
-                                id="needsStepAdditional"
-                                class="needs-analysis-wizard__page"
-                                data-step-panel="5"
-                                aria-labelledby="needsTabAdditional"
-                            >
-
-                                <section class="needs-analysis-card">
-
-                                    <header class="needs-analysis-card__header">
-                                        <span class="needs-analysis-card__number">6</span>
 
                                         <div>
                                             <h3>{% trans "Anything Else?" %}</h3>
@@ -683,28 +468,10 @@
                                         </div>
                                     </header>
 
-
                                     <div class="needs-analysis-card__content needs-analysis-grid needs-analysis-grid--additional">
 
-                                        <div class="needs-analysis-field needs-analysis-field--textarea {% if form.preferred_topics.errors %}needs-analysis-field--error{% endif %}">
-
-                                            <label for="{{ form.preferred_topics.id_for_label }}">
-                                                {{ form.preferred_topics.label }}
-                                            </label>
-
-                                            {{ form.preferred_topics }}
-
-                                            {% if form.preferred_topics.errors %}
-                                                <div class="needs-analysis-field__errors" role="alert">
-                                                    {{ form.preferred_topics.errors }}
-                                                </div>
-                                            {% endif %}
-
-                                        </div>
-
-
+                                        <!-- ADDITIONAL INFORMATION -->
                                         <div class="needs-analysis-field needs-analysis-field--textarea {% if form.additional_information.errors %}needs-analysis-field--error{% endif %}">
-
                                             <label for="{{ form.additional_information.id_for_label }}">
                                                 {{ form.additional_information.label }}
                                             </label>
@@ -716,13 +483,10 @@
                                                     {{ form.additional_information.errors }}
                                                 </div>
                                             {% endif %}
-
                                         </div>
 
                                     </div>
-
                                 </section>
-
 
                                 <!-- REVIEW / SUBMIT -->
                                 {% if needs_analysis %}
@@ -731,6 +495,15 @@
                                         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                                         <p>
                                             {% trans "Please review your answers carefully before submitting. Once submitted, you will no longer be able to edit them." %}
+                                        </p>
+                                    </div>
+
+                                {% elif enrollment %}
+
+                                    <div class="student-needs-analysis__submit-message">
+                                        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                        <p>
+                                            {% trans "Your Learning Needs questionnaire is not yet available for submission. Please contact your course administrator." %}
                                         </p>
                                     </div>
 
@@ -747,51 +520,40 @@
 
                                 <!-- FINAL STEP NAVIGATION -->
                                 <div class="needs-analysis-step-actions">
-
                                     <button type="button" class="needs-analysis-back">
                                         <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
                                         {% trans "Back" %}
                                     </button>
 
-                                    {% if enrollment and can_edit %}
+                                    {% if enrollment and needs_analysis and can_edit %}
                                         <button type="submit" class="btn-primary">
                                             {% trans "Submit Learning Needs" %}
                                             <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                         </button>
                                     {% endif %}
-
                                 </div>
+
                             </div>
 
-
                         </div>
-
                     </div>
-
                 </form>
-
 
             <!-- TEACHER / COMPANY ADMIN — PENDING -->
             {% else %}
 
                 <div class="student-needs-analysis__empty-state">
-
                     <div class="student-needs-analysis__empty-icon" aria-hidden="true">
                         <i class="fa-regular fa-clock"></i>
                     </div>
 
                     <div>
                         <h3>{% trans "Learning Needs pending" %}</h3>
-
-                        <p>
-                            {% trans "The learner has not submitted their Learning Needs questionnaire yet." %}
-                        </p>
+                        <p>{% trans "The learner has not submitted their Learning Needs questionnaire yet." %}</p>
                     </div>
-
                 </div>
 
             {% endif %}
-
 
         <!-- SUBMITTED / REVIEWED — READ ONLY FOR ALL ROLES -->
         {% else %}
@@ -799,7 +561,6 @@
             <div class="student-needs-analysis__summary">
 
                 <header class="student-needs-analysis__summary-header">
-
                     <div>
                         <h3>{% trans "Submitted Learning Needs" %}</h3>
 
@@ -810,9 +571,7 @@
                             </p>
                         {% endif %}
                     </div>
-
                 </header>
-
 
                 <div class="student-needs-analysis__answers">
 
@@ -831,7 +590,6 @@
                         </div>
                     </article>
 
-
                     <!-- COMMUNICATION SITUATIONS -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
@@ -847,7 +605,6 @@
                         </div>
                     </article>
 
-
                     <!-- COMMUNICATION PARTNERS -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
@@ -862,7 +619,6 @@
                             {% endif %}
                         </div>
                     </article>
-
 
                     <!-- ACCENTS / ENGLISH VARIETIES -->
                     <article class="needs-analysis-answer">
@@ -890,7 +646,6 @@
                         </div>
                     </article>
 
-
                     <!-- SPEAKING CONFIDENCE -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
@@ -906,11 +661,10 @@
                         </div>
                     </article>
 
-
                     <!-- LISTENING CONFIDENCE -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
-                           <span>6</span> {{ form.listening_confidence.label }}
+                            <span>6</span> {{ form.listening_confidence.label }}
                         </p>
 
                         <div class="needs-analysis-answer__value">
@@ -921,7 +675,6 @@
                             {% endif %}
                         </div>
                     </article>
-
 
                     <!-- READING CONFIDENCE -->
                     <article class="needs-analysis-answer">
@@ -938,7 +691,6 @@
                         </div>
                     </article>
 
-
                     <!-- WRITING CONFIDENCE -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
@@ -953,7 +705,6 @@
                             {% endif %}
                         </div>
                     </article>
-
 
                     <!-- PRIORITY AREAS -->
                     <article class="needs-analysis-answer">
@@ -970,64 +721,15 @@
                         </div>
                     </article>
 
-
-                    <!-- COURSE GOAL -->
-                    <article class="needs-analysis-answer">
-                        <p class="needs-analysis-answer__question">
-                            <span>10</span> {{ form.course_goal.label }}
-                        </p>
-
-                        <div class="needs-analysis-answer__value">
-                            {% if needs_analysis.course_goal %}
-                                {{ needs_analysis.course_goal }}
-                            {% else %}
-                                <span class="needs-analysis-answer__empty">{% trans "Not provided" %}</span>
-                            {% endif %}
-                        </div>
-                    </article>
-
-
-                    <!-- LEARNING PREFERENCES -->
-                    <article class="needs-analysis-answer">
-                        <p class="needs-analysis-answer__question">
-                            <span>11</span> {{ form.learning_preferences.label }}
-                        </p>
-
-                        <div class="needs-analysis-answer__value">
-                            {% if learning_preference_labels %}
-                                {{ learning_preference_labels|join:", " }}
-                            {% else %}
-                                <span class="needs-analysis-answer__empty">{% trans "Not provided" %}</span>
-                            {% endif %}
-                        </div>
-                    </article>
-
-
-                    <!-- PREFERRED TOPICS -->
-                    <article class="needs-analysis-answer">
-                        <p class="needs-analysis-answer__question">
-                            <span>12</span> {{ form.preferred_topics.label }}
-                        </p>
-
-                        <div class="needs-analysis-answer__value">
-                            {% if needs_analysis.preferred_topics %}
-                                {{ needs_analysis.preferred_topics }}
-                            {% else %}
-                                <span class="needs-analysis-answer__empty">{% trans "Not provided" %}</span>
-                            {% endif %}
-                        </div>
-                    </article>
-
-
                     <!-- ADDITIONAL INFORMATION -->
                     <article class="needs-analysis-answer">
                         <p class="needs-analysis-answer__question">
-                           <span>13</span> {{ form.additional_information.label }}
+                            <span>10</span> {{ form.additional_information.label }}
                         </p>
 
                         <div class="needs-analysis-answer__value">
                             {% if needs_analysis.additional_information %}
-                                {{ needs_analysis.additional_information }}
+                                {{ needs_analysis.additional_information|linebreaksbr }}
                             {% else %}
                                 <span class="needs-analysis-answer__empty">{% trans "Not provided" %}</span>
                             {% endif %}
@@ -1037,26 +739,20 @@
                 </div>
 
                 {% if needs_analysis.status == "reviewed" and needs_analysis.reviewed_at %}
-
                     <div class="student-needs-analysis__review-status">
                         <i class="fa-solid fa-check" aria-hidden="true"></i>
-
                         <p>
                             {% trans "Reviewed" %}:
                             {{ needs_analysis.reviewed_at|date:"j M Y" }}
                         </p>
                     </div>
-
                 {% endif %}
 
             </div>
 
-
             <!-- TEACHER ONLY — REVIEW ACTION -->
             {% if can_review and needs_analysis.status == "submitted" %}
-
                 <div class="student-needs-analysis__review">
-
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="mark_reviewed">
@@ -1066,13 +762,10 @@
                             {% trans "Mark as Reviewed" %}
                         </button>
                     </form>
-
                 </div>
-
             {% endif %}
 
         {% endif %}
 
     </div>
-
 </section>

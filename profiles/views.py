@@ -2031,9 +2031,6 @@ def my_needs_analysis(request):
             "reading_confidence": needs_analysis.reading_confidence,
             "writing_confidence": needs_analysis.writing_confidence,
             "priority_areas": needs_analysis.priority_areas,
-            "course_goal": needs_analysis.course_goal,
-            "learning_preferences": needs_analysis.learning_preferences,
-            "preferred_topics": needs_analysis.preferred_topics,
             "additional_information": needs_analysis.additional_information,
         }
 
@@ -2096,13 +2093,6 @@ def my_needs_analysis(request):
                     "course_goal"
                 ]
 
-                needs_analysis.learning_preferences = data[
-                    "learning_preferences"
-                ]
-
-                needs_analysis.preferred_topics = data[
-                    "preferred_topics"
-                ]
                 needs_analysis.additional_information = data[
                     "additional_information"
                 ]
@@ -2150,11 +2140,6 @@ def my_needs_analysis(request):
         priority_area_labels = form.choice_labels(
             "priority_areas",
             needs_analysis.priority_areas,
-        )
-
-        learning_preference_labels = form.choice_labels(
-            "learning_preferences",
-            needs_analysis.learning_preferences,
         )
 
         speaking_confidence_display = form.confidence_display(
@@ -5679,11 +5664,6 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         needs_analysis.priority_areas,
     )
 
-    learning_preference_labels = form.choice_labels(
-        "learning_preferences",
-        needs_analysis.learning_preferences,
-    )
-
     speaking_confidence_display = form.confidence_display(
         needs_analysis.speaking_confidence,
     )
@@ -5727,7 +5707,6 @@ def teacher_student_needs_analysis(request, course_id, enrollment_id):
         "communication_partner_labels": communication_partner_labels,
         "accent_exposure_labels": accent_exposure_labels,
         "priority_area_labels": priority_area_labels,
-        "learning_preference_labels": learning_preference_labels,
 
         "speaking_confidence_display": speaking_confidence_display,
         "listening_confidence_display": listening_confidence_display,
@@ -9779,9 +9758,6 @@ def company_admin_student_needs_analysis(request, student_id):
             "reading_confidence": needs_analysis.reading_confidence,
             "writing_confidence": needs_analysis.writing_confidence,
             "priority_areas": needs_analysis.priority_areas,
-            "course_goal": needs_analysis.course_goal,
-            "learning_preferences": needs_analysis.learning_preferences,
-            "preferred_topics": needs_analysis.preferred_topics,
             "additional_information": needs_analysis.additional_information,
         }
 
@@ -9842,13 +9818,6 @@ def company_admin_student_needs_analysis(request, student_id):
                     "course_goal"
                 ]
 
-                needs_analysis.learning_preferences = data[
-                    "learning_preferences"
-                ]
-
-                needs_analysis.preferred_topics = data[
-                    "preferred_topics"
-                ]
                 needs_analysis.additional_information = data[
                     "additional_information"
                 ]
@@ -9896,11 +9865,6 @@ def company_admin_student_needs_analysis(request, student_id):
         priority_area_labels = form.choice_labels(
             "priority_areas",
             needs_analysis.priority_areas,
-        )
-
-        learning_preference_labels = form.choice_labels(
-            "learning_preferences",
-            needs_analysis.learning_preferences,
         )
 
         speaking_confidence_display = form.confidence_display(

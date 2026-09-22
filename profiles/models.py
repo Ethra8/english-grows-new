@@ -274,7 +274,7 @@ class StudentNeedsAnalysis(models.Model):
     )
 
     # ---------------------------------------------------------
-    # ENGLISH USE
+    # 1. ENGLISH USE
     # ---------------------------------------------------------
     english_use_frequency = models.CharField(
         max_length=30,
@@ -288,7 +288,7 @@ class StudentNeedsAnalysis(models.Model):
 
 
     # ---------------------------------------------------------
-    # COMMUNICATION
+    # 2. COMMUNICATION
     # ---------------------------------------------------------
     communication_partners = models.JSONField(
         default=list,
@@ -305,7 +305,7 @@ class StudentNeedsAnalysis(models.Model):
         blank=True,
     )   
     # ---------------------------------------------------------
-    # CONFIDENCE
+    # 3. CONFIDENCE
     #
     # Values:
     # 1 = Not confident yet
@@ -351,32 +351,16 @@ class StudentNeedsAnalysis(models.Model):
     )
 
     # ---------------------------------------------------------
-    # CHALLENGES & PRIORITIES
+    # 4. PRIORITIES
     # ---------------------------------------------------------
     priority_areas = models.JSONField(
         default=list,
         blank=True,
     )
 
-    course_goal = models.TextField(
-        blank=True,
-    )
-
     # ---------------------------------------------------------
-    # LEARNING PREFERENCES
+    # 5. ADDITIONAL INFORMATION
     # ---------------------------------------------------------
-    learning_preferences = models.JSONField(
-        default=list,
-        blank=True,
-    )
-
-    # ---------------------------------------------------------
-    # ADDITIONAL INFORMATION
-    # ---------------------------------------------------------
-    preferred_topics = models.TextField(
-        blank=True,
-    )
-
     additional_information = models.TextField(
         blank=True,
     )
@@ -394,7 +378,6 @@ class StudentNeedsAnalysis(models.Model):
         null=True,
     )
 
-
     class Meta:
         verbose_name = "Student needs analysis"
         verbose_name_plural = "Student needs analysis"
@@ -406,6 +389,46 @@ class StudentNeedsAnalysis(models.Model):
             f"{self.enrollment.student} - "
             f"{self.enrollment.course}"
         )
+
+    # ---------------------------------------------------------
+    # RESET NEEDS ANALYSIS
+    # ---------------------------------------------------------
+    def reset_to_pending(self):
+        self.status = "pending"
+        self.submitted_at = None
+        self.reviewed_at = None
+
+        self.english_use_frequency = ""
+        self.communication_situations = []
+
+        self.communication_partners = []
+        self.accent_exposure = []
+        self.accent_exposure_other = ""
+
+        self.speaking_confidence = None
+        self.listening_confidence = None
+        self.reading_confidence = None
+        self.writing_confidence = None
+
+        self.priority_areas = []
+
+        self.additional_information = ""
+
+        fields = [
+            "status", "submitted_at", "reviewed_at",
+            "english_use_frequency", "communication_situations",
+            "communication_partners", "accent_exposure", "accent_exposure_other",
+            "speaking_confidence", "listening_confidence",
+            "reading_confidence", "writing_confidence",
+            "priority_areas", "additional_information",
+        ]
+
+        # Temporary compatibility if course_goal has not yet been removed.
+        if hasattr(self, "course_goal"):
+            self.course_goal = ""
+            fields.append("course_goal")
+
+        self.save(update_fields=fields)
 
 
 class StudentAcademicProfile(models.Model):

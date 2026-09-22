@@ -146,7 +146,7 @@ class StudentNeedsAnalysisForm(forms.Form):
     )
 
     # -----------------------------------------------------
-    # CONFIDENCE
+    # 3. CONFIDENCE
     #
     # Discrete 1–5 range sliders.
     # -----------------------------------------------------
@@ -212,51 +212,18 @@ class StudentNeedsAnalysisForm(forms.Form):
 
 
     # -----------------------------------------------------
-    # CHALLENGES & PRIORITIES
+    # 4. YOUR PRIORITIES
     # -----------------------------------------------------
     priority_areas = forms.MultipleChoiceField(
-        label=_("Which areas would you most like to improve during this course?"),
+        label=_("Which communication situations would you most like to focus on during this course?"),
         help_text=_("Choose up to three."),
-        choices=PRIORITY_CHOICES,
+        choices=SITUATION_CHOICES,
         widget=forms.CheckboxSelectMultiple,
     )
 
-    course_goal = forms.CharField(
-        label=_(
-            "Is there anything specific you would like to be able "
-            "to do more confidently in English?"
-        ),
-        help_text=_(
-            "For example: contribute more in meetings, write clearer emails, "
-            "or understand calls more easily."
-        ),
-        widget=forms.Textarea(attrs={"rows": 2}),
-        required=False,
-    )
-
     # -----------------------------------------------------
-    # LEARNING PREFERENCES
+    # 6. ADDITIONAL INFORMATION
     # -----------------------------------------------------
-    learning_preferences = forms.MultipleChoiceField(
-        label=_("Which types of activities help you learn best?"),
-        choices=LEARNING_PREFERENCE_CHOICES,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
-
-
-    # -----------------------------------------------------
-    # ADDITIONAL INFORMATION
-    # -----------------------------------------------------
-    preferred_topics = forms.CharField(
-        label=_(
-            "Are there any topics, situations or types of English "
-            "you would particularly like to work on?"
-        ),
-        widget=forms.Textarea(attrs={"rows": 2}),
-        required=False,
-    )
-
     additional_information = forms.CharField(
         label=_("Is there anything else you would like your teacher to know?"),
         widget=forms.Textarea(attrs={"rows": 2}),
