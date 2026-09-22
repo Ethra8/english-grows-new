@@ -2,7 +2,7 @@
 
 English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
 
-The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, progress monitoring and role-specific interfaces within a single relational data architecture.
+The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, progress monitoring, automated learner communications and role-specific interfaces within a single relational data architecture.
 
 ---
 
@@ -35,6 +35,10 @@ The application combines course management, automated lesson scheduling, attenda
     - [Course Cancellation](#course-cancellation)
     - [Attendance](#attendance)
     - [Attendance Reporting](#attendance-reporting)
+  - [Communications App](#communications-app)
+    - [Email Template Management](#email-template-management)
+    - [Email Rendering & Delivery](#email-rendering--delivery)
+    - [Automatic Learning Needs Enrolment Email](#automatic-learning-needs-enrolment-email)
   - [Learning Assessment & Progress](#learning-assessment--progress)
     - [Language Skills Assessed](#language-skills-assessed)
     - [Student Skill Assessment](#student-skill-assessment)
@@ -43,6 +47,8 @@ The application combines course management, automated lesson scheduling, attenda
     - [Term Assessment Snapshots](#term-assessment-snapshots)
   - [Calendar](#calendar)
   - [Django Admin](#django-admin)
+    - [Course Admin Operational Reporting](#course-admin-operational-reporting)
+    - [Global Admin Filter Presentation](#global-admin-filter-presentation)
 
 - [Database Structure — Models](#database-structure--models)
   - [ERD — Entity Relationship Diagram](#erd--entity-relationship-diagram)
@@ -52,6 +58,7 @@ The application combines course management, automated lesson scheduling, attenda
 
 - [Architectural Design Choices](#architectural-design-choices)
   - [Separation of Responsibilities](#separation-of-responsibilities)
+  - [Domain Transactions vs. External Communications](#domain-transactions-vs-external-communications)
   - [Authentication vs. Application Profile](#authentication-vs-application-profile)
   - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
   - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
@@ -80,11 +87,12 @@ The application combines course management, automated lesson scheduling, attenda
 
 EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
 
-The application follows Django's Model-Template-View architecture and is currently organised into three principal custom Django apps:
+The application follows Django's Model-Template-View architecture and is currently organised into four principal custom Django apps:
 
 - **Home**
 - **Profiles**
 - **Courses**
+- **Communications**
 
 Each app contains the relevant combination of ***models***, ***views***, ***URLs***, ***templates***, ***forms***, static assets, and supporting logic required for its area of responsibility.
 
@@ -504,6 +512,32 @@ This keeps one shared questionnaire/report component usable by:
 
 Role-specific views remain responsible for access control and Course/enrolment scoping.
 
+#### Automatic enrolment invitation
+
+The Learning Needs workflow is connected to the Course enrolment lifecycle through the `communications` app.
+
+When a **new `CourseEnrollment` is created already in the active state** for a learner / employee, the application schedules an automatic welcome email after the enrolment transaction commits successfully.
+
+The email contains a Course-specific call-to-action:
+
+```text
+Complete my Learning Needs
+```
+
+The CTA opens the learner's own Needs Analysis in the correct Course context:
+
+```text
+?course=<course_id>
+```
+
+This means the recipient does not need to navigate manually to the questionnaire or guess which Course the request belongs to.
+
+The link does not bypass access control. The destination view still resolves the selected Course from the authenticated learner's own enrolments before exposing or accepting questionnaire data.
+
+The notification is deliberately tied to **creation of a new active enrolment**. Routine later saves of the same `CourseEnrollment` do not resend the welcome email.
+
+Email delivery is an external communication side effect and is not embedded directly inside `CourseEnrollment.save()`. The enrolment remains the domain record; the communications layer reacts to the committed enrolment separately.
+
 #### Questionnaire structure
 
 The editable questionnaire is presented as a six-step horizontal wizard:
@@ -915,6 +949,7 @@ Principal functionality includes:
 - **Employee assessment information**
 - **Employee progress graphs**
 - **Employee Learning Needs (read-only)**
+- **Own participant record when the company administrator is actively enrolled in training**
 - **Company class calendar**
 
 Company administrators can only access information associated with their own `Company`.
@@ -947,6 +982,57 @@ They cannot edit the learner questionnaire or mark it reviewed.
 
 Company class/session lists use the same separation between **past/held teaching** and **Attendance finalization** as the teacher interface, so a lesson can be historically past while still showing Attendance as pending.
 
+#### Company administrators as training participants
+
+Application role and Course participation are deliberately independent concepts.
+
+`UserProfile.role` determines the user's workspace and permissions, while `CourseEnrollment` determines whether that same person participates in a particular Course.
+
+A company administrator can therefore also be a genuine training participant without changing role:
+
+```text
+UserProfile.role = company_admin
+        │
+        ├── continues using Company Admin navigation / permissions
+        │
+        └── may also have CourseEnrollment records
+                │
+                └── participates in training as a learner
+```
+
+The Company Admin employee/performance list applies the following inclusion rule:
+
+```text
+Employee role
+→ included for the Company even with zero Course enrolments
+
+Company Admin role
+→ included as a training participant only while they have
+  an active CourseEnrollment for a Course belonging to that Company
+```
+
+This avoids creating a second account or a multi-role identity model merely because a company administrator also attends training.
+
+When an actively enrolled company administrator qualifies for the participant list:
+
+- their role remains `company_admin`;
+- they continue to use the Company Admin workspace and sidebar;
+- their own participant profile can be opened through the existing Company Admin student-detail architecture;
+- the same Company boundary continues to apply;
+- their CourseEnrollment history remains available through that participant record while the participant is in scope.
+
+A company administrator with no active qualifying enrolment remains a company administrator but is not treated as a current training participant in the employee/performance list.
+
+This separation preserves the distinction between:
+
+```text
+ROLE
+→ what the user is allowed to manage in the application
+
+ENROLMENT
+→ whether the user participates in a particular Course
+```
+
 ---
 
 ### ROLE-BASED ACCESS CONTROL
@@ -963,8 +1049,11 @@ Only courses assigned to that teacher
 
 Company Administrator
     ↓
-Only courses and employees belonging to that company
+Only courses and participants belonging to that company
 (current + historical where the page supports history)
+    +
+Own participant record when the administrator is actively enrolled,
+without changing the administrator's application role
 
 Learner / Employee
     ↓
@@ -973,6 +1062,28 @@ attendance and assessment data
 ```
 
 Historical visibility does not weaken role boundaries: status determines whether a record is current or historical, while teacher assignment, company ownership, and learner ownership continue to determine whether the authenticated user is authorised to access it.
+
+#### Zero-data workspace behaviour
+
+A valid application role is allowed to enter its own role-appropriate workspace even when no Course or enrolment data currently exists.
+
+The platform therefore prefers meaningful empty/default states over redirecting a legitimate user merely because their dataset is empty.
+
+Examples include:
+
+```text
+Learner / Employee with zero enrolments
+→ learner workspace remains valid
+→ Course-specific content shows an empty/default state
+
+Teacher with zero assigned Courses
+→ teacher workspace remains valid
+
+Company Administrator with zero Company Courses / participants
+→ Company Admin workspace remains valid
+```
+
+Object-specific pages and actions can still require a concrete Course, enrolment, ClassSession or other identifier where the operation has no meaning without one.
 
 The same boundary applies to Learning Needs:
 
@@ -1200,6 +1311,32 @@ rather than multiplying a default class duration by a count.
 
 This keeps Course delivery accurate when the final lesson is shorter or a valid rescheduled lesson has a different stored duration.
 
+The canonical model property remains named:
+
+```text
+delivery_percentage
+```
+
+because it represents teaching delivery rather than lifecycle closure.
+
+In Django Admin, however, this same concept is deliberately presented under the business-facing label **Completion**:
+
+```text
+Admin Completion
+= held ClassSessions / total ClassSessions × 100
+```
+
+A Course can therefore correctly show:
+
+```text
+Completion = 100%
+Course status = active
+```
+
+when every lesson has been held but one or more administrative closure actions — principally Attendance finalization — are still outstanding.
+
+The Course lifecycle status remains stricter: automatic `completed` status still requires every ClassSession to reach `complete_attendance_submitted`.
+
 ---
 
 ### Course Enrolment
@@ -1395,6 +1532,8 @@ Enrolment created by mistake
 ---
 
 `CourseEnrollment.save()` detects genuine status transitions and synchronizes only the learner-specific Attendance records affected by that transition.
+
+External learner communication is intentionally kept outside this model lifecycle method. A newly created active enrolment can trigger the Learning Needs welcome email through the `communications` signal/service layer after the database transaction commits, while `CourseEnrollment.save()` remains focused on enrolment, Attendance and scheduling domain rules.
 
 #### Pausing an enrolment
 
@@ -2684,7 +2823,29 @@ because they do not represent finalized learner attendance outcomes.
 
 An `excused` absence remains part of the current denominator policy even though it is distinguished from `missed` in reporting.
 
-Low-attendance warning logic is evaluated only after at least one finalized learner outcome exists. The current warning threshold is below **75%**.
+Learner-level low-attendance reporting is evaluated only when finalized learner outcomes exist. The current warning threshold is below **75%**.
+
+The **Course Admin** warning uses a deliberately stricter maturity rule so that a very early result does not flag an entire Course prematurely.
+
+A Course is eligible for the Admin low-attendance warning only when:
+
+```text
+submitted ClassSessions >= ceil(total ClassSessions × 25%)
+AND
+Course attendance rate < 75%
+```
+
+Course-level Attendance is calculated only from `attended`, `missed` and `excused` records belonging to ClassSessions already in `complete_attendance_submitted`.
+
+The Course Admin percentage is therefore:
+
+```text
+all attended outcomes
+──────────────────────────────────── × 100
+attended + missed + excused outcomes
+```
+
+using only fully submitted ClassSessions.
 
 Attendance records submitted during a still-running lesson are also excluded from finalized reporting until the parent ClassSession itself reaches `complete_attendance_submitted`.
 
@@ -2728,6 +2889,197 @@ ClassSession.transition_past_sessions(course=course)
 so any stale ended `scheduled` / `rescheduled` lessons are brought into the canonical lifecycle before metrics are presented.
 
 This does not duplicate lifecycle logic in the view; it invokes the same model-owned rules used by the production management command and Cron Job.
+
+---
+
+## COMMUNICATIONS App
+
+---
+
+The `communications` app owns reusable outbound application email rather than coupling SMTP delivery directly to Course, profile or enrolment models.
+
+Its responsibilities currently include:
+
+- database-managed email templates;
+- reusable HTML/plain-text email rendering;
+- shared English Grows email presentation;
+- call-to-action insertion;
+- absolute application/static URLs;
+- SMTP delivery;
+- CourseEnrollment-triggered Learning Needs invitations.
+
+This keeps communication concerns independent from the domain models that create the business event.
+
+### Email Template Management
+
+Reusable messages are stored in the `EmailTemplate` model and can be maintained through Django Admin.
+
+The model currently stores:
+
+```text
+name
+key
+subject
+heading
+body_html
+body_text
+is_active
+updated_at
+```
+
+`body_html` is edited with **CKEditor 5**, allowing email content to be maintained administratively without hard-coding the complete message body in Python.
+
+The `key` is a stable unique programmatic identifier generated from the template name using a normalized slug-style value with underscores.
+
+Application code therefore looks up an email by stable key rather than by editable display copy.
+
+The first automated enrolment template is:
+
+```text
+Name
+→ Welcome - Learning Needs Questionnaire
+
+Key
+→ welcome_learning_needs_questionnaire
+
+Subject
+→ Learning Needs Questionnaire | English Grows
+
+Heading
+→ Your Learning Needs
+```
+
+The body supports context variables such as:
+
+```text
+{{ first_name }}
+{{ course_name }}
+```
+
+and a dedicated CTA insertion marker:
+
+```text
+[[CTA]]
+```
+
+Separating template content from sending logic allows copy to evolve without rewriting the business trigger.
+
+### Email Rendering & Delivery
+
+The email service combines three layers:
+
+```text
+EmailTemplate
+→ editable message content
+
+Shared base email shell
+→ brand structure / logo / reusable presentation
+
+Email service
+→ render variables / CTA / multipart delivery
+```
+
+The CTA marker is replaced by the appropriate HTML button/link for the message being sent.
+
+For the Learning Needs invitation, the button label is:
+
+```text
+Complete my Learning Needs
+```
+
+The service uses the canonical `SITE_URL` configuration to build absolute application and static-asset URLs required by email clients.
+
+The English Grows logo is therefore referenced through an absolute static URL rather than a relative browser path.
+
+Delivery uses Django's multipart email support so the message can contain:
+
+```text
+HTML version
++
+plain-text fallback
+```
+
+When no dedicated plain-text body is supplied, the rendered HTML can be reduced to a text fallback rather than requiring a completely separate hard-coded message.
+
+SMTP configuration remains an infrastructure concern and is supplied through application settings/environment configuration rather than being embedded in the template record.
+
+### Automatic Learning Needs Enrolment Email
+
+The first automated communication is connected to creation of an active `CourseEnrollment`.
+
+The implemented flow is:
+
+```text
+New CourseEnrollment saved
+        │
+        ├── created == True
+        └── status == active
+                │
+                ▼
+post_save signal
+                │
+                ▼
+transaction.on_commit(...)
+                │
+                ▼
+send Course-specific Learning Needs email
+                │
+                ▼
+EmailTemplate:
+welcome_learning_needs_questionnaire
+```
+
+Using `transaction.on_commit()` is important because the application should not attempt to send a welcome message for an enrolment whose database transaction later fails.
+
+It also keeps the external side effect separate from the model's own persistence logic.
+
+For learner / employee recipients, the CTA is built for the learner's Course-scoped Needs Analysis and includes:
+
+```text
+?course=<course_id>
+```
+
+The recipient therefore arrives directly in the questionnaire context belonging to the newly created enrolment.
+
+The signal is intentionally **creation-sensitive**:
+
+```text
+new active enrolment
+→ automatic invitation
+
+ordinary later save of same enrolment
+→ no automatic resend
+```
+
+This prevents routine administrative edits from repeatedly sending the welcome message.
+
+The email workflow does not create a second source of truth for Learning Needs. The CTA simply directs the learner to the existing `StudentNeedsAnalysis` workflow, whose access control, pending/submitted/reviewed lifecycle and CourseEnrollment ownership remain unchanged.
+
+The communications architecture can be represented as:
+
+```text
+CourseEnrollment
+        │
+        │ committed business event
+        ▼
+communications signal
+        │
+        ▼
+email service
+        │
+        ├── EmailTemplate
+        ├── shared email shell
+        ├── SITE_URL / static assets
+        └── CTA destination
+                │
+                ▼
+Learner email
+                │
+                ▼
+Course-scoped StudentNeedsAnalysis
+```
+
+This architecture follows the wider project principle that the model owns business state while supporting services handle external delivery concerns.
 
 ---
 
@@ -3202,6 +3554,7 @@ Administrators can manage data including:
 - **Skill assessments**
 - **Subskill assessments**
 - **Assessment snapshots**
+- **Email templates**
 
 Where appropriate, related objects are presented through Django Admin inlines.
 
@@ -3229,6 +3582,104 @@ try_generate_class_sessions()
         ▼
 safe one-time initial generation
 ```
+
+#### Course Admin Operational Reporting
+
+The Course changelist is used as an at-a-glance operational overview rather than merely exposing raw model fields.
+
+Its current reporting columns include:
+
+```text
+Name
+Company
+Type
+Level
+Status
+Completion
+Hours
+Active enrollments
+Attendance
+Teacher
+Start date
+End date
+```
+
+**Completion** is the Admin-facing teaching-delivery metric:
+
+```text
+held ClassSessions
+────────────────── × 100
+total ClassSessions
+```
+
+A held session is one whose lifecycle is:
+
+```text
+held_attendance_pending
+OR
+complete_attendance_submitted
+```
+
+Attendance submission is deliberately irrelevant to this Completion percentage.
+
+This means **Completion can be 100% while Course status is still Active**. That combination communicates that all teaching has been delivered but the stricter Course-closing workflow has not yet finished.
+
+The Course-level **Attendance** column is deliberately different. It uses only learner outcomes from ClassSessions in:
+
+```text
+complete_attendance_submitted
+```
+
+and calculates:
+
+```text
+attended
+──────────────────────────── × 100
+attended + missed + excused
+```
+
+The Course low-attendance warning appears only when both conditions are met:
+
+```text
+submitted ClassSessions >= ceil(total ClassSessions × 25%)
+AND
+attendance < 75%
+```
+
+This prevents a very small number of early submitted lessons from generating a premature whole-Course warning.
+
+The Course list also exposes a custom **Low attendance** Yes/No filter based on the same rule.
+
+When viewing low-attendance Courses, the operational status ordering is:
+
+```text
+Active
+↓
+Paused
+↓
+Completed
+↓
+Cancelled
+```
+
+so currently actionable training appears before historical/closed records.
+
+The Course Admin also restricts the Teacher filter to users whose `UserProfile` role is Teacher and who actually teach at least one Course, rather than listing every application user merely because `Course.teacher` is a foreign key to Django `User`.
+
+Teacher presentation prefers:
+
+```text
+first_name
+→ username as fallback
+```
+
+and Course start/end dates are presented in the compact Admin format:
+
+```text
+dd/mm/yy
+```
+
+The Course detail Admin also exposes operationally useful calculated values such as active enrolments, Completion and Attendance as read-only information rather than editable database fields.
 
 #### Course Admin schedule safety
 
@@ -3353,6 +3804,32 @@ Enrollment / Workflow
 
 The Admin does not replace the role-based user workflow; it provides controlled inspection/administration over the same `StudentNeedsAnalysis` record.
 
+#### Global Admin Filter Presentation
+
+Django Admin changelist filters are configured to start **collapsed by default** across the project.
+
+This is a project-wide interface behaviour rather than a per-model setting.
+
+The customization is applied through the global Admin template/static layer:
+
+```text
+templates/admin/base_site.html
+        │
+        └── loads project Admin JavaScript
+
+static/js/admin/collapse_filters.js
+        │
+        └── removes the open state from #changelist-filter <details>
+```
+
+A project-level `templates/admin/filter.html` override is also available for the standard filter markup.
+
+The JavaScript acts as the global safety net so filters that use different Admin filter templates still begin folded.
+
+Users can expand any individual filter normally when needed.
+
+This reduces vertical noise on data-heavy Admin changelists without requiring repeated configuration in every `ModelAdmin`.
+
 #### ClassSession and Attendance protection
 
 Generated `ClassSession` records are not manually added or deleted through the standard Admin configuration. They represent the Course's generated lesson identity and history.
@@ -3373,7 +3850,7 @@ EnglishGrows uses a **relational database architecture** managed through Django'
 
 **PostgreSQL** is used as the relational database in both development and production environments.
 
-The database architecture is divided into four principal domains:
+The database architecture is divided into five principal domains:
 
 ```text
 IDENTITY & ORGANISATION
@@ -3400,6 +3877,9 @@ LEARNING & ASSESSMENT
 ├── StudentSubSkillAssessment
 ├── StudentSkillAssessmentSnapshot
 └── StudentSkillTermSnapshot
+
+COMMUNICATIONS
+└── EmailTemplate
 ```
 
 This separation prevents unrelated responsibilities from being concentrated in a single model and allows the different areas of the application to evolve independently.
@@ -3418,6 +3898,7 @@ The architecture distinguishes between:
 - **Current learner assessment**
 - **Detailed assessment history**
 - **Formal term-based assessment history**
+- **Reusable outbound communication templates**
 
 ---
 
@@ -3593,6 +4074,18 @@ erDiagram
         date recorded_at
     }
 
+    EMAIL_TEMPLATE {
+        bigint id PK
+        varchar name
+        varchar key
+        varchar subject
+        varchar heading
+        text body_html
+        text body_text
+        boolean is_active
+        datetime updated_at
+    }
+
     USER ||--|| USER_PROFILE : "has profile"
 
     COMPANY o|--o{ USER_PROFILE : "contains members"
@@ -3642,6 +4135,8 @@ Assessment history is deliberately separated from current assessment state throu
 - `StudentSkillAssessmentSnapshot` — detailed change-by-change history
 - `StudentSkillTermSnapshot` — formal periodic assessment history
 
+`EmailTemplate` belongs to the separate communications domain and therefore does not require a direct foreign-key relationship to Course or learner records. Runtime communication context is supplied when the email service renders a particular business event.
+
 ---
 
 ### Key Data-Integrity Rules
@@ -3653,6 +4148,9 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Each authenticated user has one `UserProfile`.
 - A profile may optionally be associated with a `Company`.
 - A company may contain multiple employees and company administrators.
+- A user's `UserProfile.role` and Course participation are independent: a company administrator may also have `CourseEnrollment` records without changing application role.
+- Ordinary employees remain valid Company participants even when they currently have zero enrolments.
+- A company administrator appears in the Company Admin employee/performance participant list only when they have an active qualifying CourseEnrollment for that Company.
 - Corporate courses can be associated with a company.
 - Individual courses do not require a company relationship.
 
@@ -3763,6 +4261,18 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Internal choice codes are converted to human-readable labels before read-only display.
 - Needs Analysis self-reporting remains separate from teacher assessment and is not used as a writing diagnostic.
 
+#### Communications
+
+- Email content is stored in reusable `EmailTemplate` records rather than hard-coded entirely inside sending functions.
+- `EmailTemplate.key` is the stable unique identifier used by application code.
+- Inactive email templates are not intended for automated delivery.
+- Automatic Learning Needs invitation is triggered only for a **newly created active** CourseEnrollment in the implemented learner / employee path.
+- Routine later saves of that enrolment do not automatically resend the welcome message.
+- The enrollment-email side effect is scheduled with `transaction.on_commit()` so communication begins only after the database transaction succeeds.
+- SMTP/email delivery is kept outside `CourseEnrollment.save()`; the model remains responsible for domain state rather than external transport.
+- The Learning Needs CTA preserves Course context using `?course=<course_id>`.
+- The CTA does not bypass role/ownership checks in the destination view.
+
 #### Assessment
 
 - Skill assessments are Course-specific.
@@ -3818,7 +4328,9 @@ Courses
         │
         ├── Enrolments
         │       ├── Students / Employees
-        │       └── StudentNeedsAnalysis
+        │       ├── StudentNeedsAnalysis
+        │       └── committed active-enrolment event
+        │               └── Communications → Learning Needs invitation
         │
         ├── Class Sessions
         │       ├── Attendance
@@ -3885,6 +4397,32 @@ CourseEnrollment → cancelled
         └── remaining operational pending/enrollment_paused
                 → deleted
 ```
+
+### Automatic active-enrolment communication
+
+```text
+New active CourseEnrollment
+        │
+        ▼
+database transaction commits
+        │
+        ▼
+CourseEnrollment post_save signal
+        │
+        ▼
+communications service
+        │
+        ├── load welcome_learning_needs_questionnaire
+        ├── render first_name / course_name
+        ├── build Course-scoped CTA
+        └── send multipart email
+                │
+                ▼
+Learner opens Learning Needs
+?course=<course_id>
+```
+
+The communication is intentionally downstream of the committed enrolment. It does not replace or duplicate `CourseEnrollment` business logic.
 
 ### Learning Needs workflow
 
@@ -4012,7 +4550,7 @@ Role-specific views then determine how current and historical data is exposed:
 - **Learner / Employee — Learning Needs:** the learner may edit only their own pending Needs Analysis and sees a read-only report after submission.
 - **Learner / Employee — Calendar:** current `scheduled`/`rescheduled` teaching comes from active enrolment + active Course context, while historical held/complete lessons remain visible across the learner's own Course history.
 - **Teacher:** assigned Courses and their relevant historical enrolments remain accessible regardless of status on Course-detail/learner pages; submitted learner Needs Analyses can be reviewed and marked reviewed.
-- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary; employee Needs Analyses are read-only.
+- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary; employee Needs Analyses are read-only. A company administrator who is also actively enrolled remains a `company_admin` but can appear as a training participant and open their own participant detail through the Company Admin architecture.
 
 Attendance, ClassSession lifecycle state, Learning Needs, Academic Profile data and assessment data then contribute to the Course-specific and learner-development information displayed throughout the platform.
 
@@ -4061,6 +4599,64 @@ TEMPLATE
   │
   └── Presents the prepared data to the user
 ```
+
+---
+
+### Domain Transactions vs. External Communications
+
+---
+
+The platform deliberately separates **database business state** from **external communication side effects**.
+
+For example, creating an active CourseEnrollment has two related but distinct consequences:
+
+```text
+DOMAIN
+CourseEnrollment
+→ learner becomes a Course participant
+→ model lifecycle handles Attendance / generation rules
+
+COMMUNICATION
+committed new active enrolment
+→ signal/service layer sends Learning Needs invitation
+```
+
+The CourseEnrollment model does not send SMTP email directly.
+
+Instead, the communications layer listens for the relevant saved business event and schedules delivery through:
+
+```text
+transaction.on_commit(...)
+```
+
+This means the database transaction remains authoritative.
+
+An enrolment should never exist only because an email succeeded, and a failed/rolled-back database transaction should not produce a valid-looking welcome message for data that was never committed.
+
+The same separation also improves maintainability:
+
+```text
+MODEL
+→ owns business state
+
+SIGNAL
+→ detects the committed event
+
+EMAIL SERVICE
+→ prepares and sends the communication
+
+EmailTemplate
+→ owns editable message content
+```
+
+This is consistent with the wider project rule:
+
+> **The model should calculate  
+> the helper/service should package  
+> the view should orchestrate  
+> the template should display.**
+
+External delivery therefore remains a supporting service around the domain model rather than becoming hidden persistence logic inside `save()`.
 
 ---
 
@@ -5219,7 +5815,7 @@ Examples include:
 - course teaching progress;
 - held versus remaining classes.
 
-Course delivery progress can therefore be represented through progress bars or completion rings because the value describes held teaching delivered towards a finite total.
+Course delivery progress can therefore be represented through progress bars or completion rings because the value describes held teaching delivered towards a finite total. In Django Admin this same held/total proportion is presented as **Completion**, while the underlying model property remains `delivery_percentage`.
 
 Attendance percentages similarly represent a proportion derived from recorded attendance outcomes.
 
