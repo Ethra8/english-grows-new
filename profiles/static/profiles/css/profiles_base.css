@@ -720,12 +720,6 @@ div:has(> .student-action-btn) {
         width: 100%;
     }
 
-    /******************************************************|
-    |*** ACCOUNT SETTINGS Page ****************************|
-    |******************************************************/
-    .profile-settings-page {
-        padding: 70px 2%;
-    }
 
 }
 
@@ -737,7 +731,5 @@ div:has(> .student-action-btn) {
     .profile-page {
         padding: 30px 4% 70px;
     }
-
-
 
 }

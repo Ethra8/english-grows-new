@@ -40,7 +40,7 @@ class UserProfileForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
-        self.fields["profile_photo"].label = "Profile picture"
+        self.fields["profile_photo"].label = False
 
         if self.user:
             self.fields["first_name"].initial = self.user.first_name
@@ -68,15 +68,16 @@ class UserProfileForm(forms.ModelForm):
                 field.widget.attrs.update({
                     "class": "border-black rounded-0 profile-form-input",
                 })
-
+            elif field_name == "profile_photo":
+                field.widget.attrs.update({
+                    "class": "border-black rounded-0 profile-form-input",
+                    "aria-label": "Profile picture",
+                })
             else:
                 field.widget.attrs.update({
                     "placeholder": placeholders[field_name],
                     "class": "border-black rounded-0 profile-form-input",
                 })
-
-            if field_name != "profile_photo":
-                field.label = False
 
         self.fields["email"].widget.attrs.update({
             "readonly": True,
@@ -89,12 +90,11 @@ class UserProfileForm(forms.ModelForm):
 
         self.helper.layout = Layout(
             Div(
+                HTML('<h2 class="account-settings-section-title">Account email</h2>'),
                 HTML(
                     """
                     <p class="profile-email-info">
-                        <strong>Your account is linked to the email address below</strong>, which is used
-                        for authentication and login. To change it, you will need to verify
-                        your new email address using the verification email we send you.
+                        Your email address is used to sign in. For your security, any change requires verification of your new email address before it can be used.
                     </p>
                     """
                 ),
@@ -103,8 +103,8 @@ class UserProfileForm(forms.ModelForm):
                     """
                     <div class="profile-email-actions">
                         <a href="{% url 'account_email' %}"
-                           class="btn btn-update text-uppercase">
-                            Edit email
+                        class="btn btn-update text-uppercase">
+                            Change email
                             <span aria-hidden="true" class="ml-2">&rarr;</span>
                         </a>
                     </div>
@@ -113,10 +113,16 @@ class UserProfileForm(forms.ModelForm):
                 css_class="profile-email-field",
             ),
 
-            Field("first_name"),
-            Field("last_name"),
-            Field("native_language"),
-            Field("country"),
+            Div(
+                HTML('<h2 class="account-settings-section-title">Personal information</h2>'),
+                Field("first_name"),
+                Field("last_name"),
+                Field("native_language"),
+                Field("country"),
+                css_class="profile-personal-section",
+            ),
+
+            HTML('<h2 class="account-settings-section-title">Profile picture</h2>'),
             Field("profile_photo"),
         )
 

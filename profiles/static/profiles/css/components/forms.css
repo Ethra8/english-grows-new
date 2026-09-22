@@ -15,30 +15,29 @@
 
 /* BUTTON ***************************** */
 .btn-update {
-    border: 1px outset var(--color-teal);
-    color: var(--color-teal);
+    border: 1px solid var(--color-teal);
+    color: var(--color-whitesmoke);
     padding: 0.25rem 0.85rem;
     border-radius: 8px;
     text-decoration: none;
     /* text-transform: capitalize; */
     font-weight: 500;
-    width: max-content;
+    width: 200px;
     max-height: fit-content;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(var(--color-pearlaqua-rgb), 0.1);
+    background: rgba(var(--color-teal-rgb), 0.75);
     align-self:right;
     cursor: pointer;
-    box-shadow: 1px 2px 4px rgba(0, 20, 40, 0.5);
+    box-shadow: 1px 2px 4px rgba(0, 20, 40, 0.25);
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 .btn-update:hover {
-    border: outset 1px rgba(var(--color-pearlaqua-rgb), 0.5);
-    box-shadow: 0 1px 1px 0 #4b4b4b;
-    background: linear-gradient(23deg, rgba(var(--color-navy-rgb), 0.35), rgba(var(--color-pearlaqua-rgb), 0.55));
-    color: var(--color-teal);
+    box-shadow: 0 1px 1px 0 rgba(0, 20, 40, 0.15);
+    background: rgba(var(--color-navy-rgb), 1);
+    color: var(--color-whitesmoke);
 }
 
 .btn-update img {
@@ -54,17 +53,26 @@
     align-items: center;
 }
 
+.profile-email-actions .btn-update {
+    color: var(--color-teal);
+    background: rgba(var(--color-whitesmoke-rgb), 1);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.45);
+}
+
+.profile-email-actions .btn-update:hover {
+    background: rgba(var(--color-teal-rgb), 0.15);
+}
 
 /* ********************************************* */
 
 .account-settings-form {
     background-color: var(--color-mist);
-    padding: 2rem;
+    padding: 1.25rem 1.25rem 2rem;
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.85);
     margin: 0 auto;
     box-shadow: 0 1px 3px 0 var(--color-navy);
     border-radius: 8px;
-    min-width: 100%;
+    max-width: 630px;
     color: var(--color-navy);
     line-height: 1.7;
 }
@@ -78,8 +86,11 @@
     align-self: flex-end;
 }
 
-.account-settings-form label {
+/* ACCOUNT SETTINGS — SECTION HEADINGS */
+.account-settings-form .account-settings-section-title {
+    display: block;
     text-transform: uppercase;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 1.2rem;
     color: var(--color-teal);
@@ -89,6 +100,16 @@
     width: 100%;
 }
 
+.profile-email-field > .account-settings-section-title {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#div_id_first_name {
+    margin-top: 1.5rem;
+}
+
 /* Profile-photo clear checkbox */
 .account-settings-form #div_id_profile_photo input[type="checkbox"] + label {
     display: inline-block;
@@ -96,8 +117,17 @@
     border-top: none;
     padding-top: 0;
     margin: 0 0 0 0.35rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     vertical-align: middle;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+/* profile picture inputs 'currently/change */
+.input-group-text {
+    width: 100px;
+    justify-content: center;
 }
 
 /* Avoid image file name overriding form width */
@@ -113,6 +143,19 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;
+}
+
+#div_id_profile_photo .custom-file > label.custom-file-label {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 .75rem;
+    max-height: 39px;
+    color: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    align-content: center;
 }
 
 #id_specialties_helptext {
@@ -153,6 +196,16 @@ label.form-check-label {
 
     .wrapper-account-settings-form {
         width: 100%;
+    }
+
+}
+
+
+
+@media (max-width: 370px) {
+    
+    .account-settings-form {
+        padding: 1.25rem 0.75rem 2rem;
     }
 
 }
