@@ -1,8 +1,6 @@
 :root {
     /*** BRAND COLOURS **************************************/
-    /* Oxford Blue */
-    /* --color-navy: #0b355f;
-    --color-navy-rgb: 11, 53, 95; */
+    /* Oxford Navy */
     --color-navy: #002D5A;
     --color-navy-rgb: 0, 45, 90;
 
@@ -10,48 +8,37 @@
     --color-teal: #006b7d;
     --color-teal-rgb: 0, 107, 125;
 
-    /* Strong Cyan */
-    /* --color-cyan: #07C0C7;
-    --color-cyan-rgb: 7, 192, 199; */
-
     /* Tropical Teal */
     --color-tropical-teal: #16AFB5;
     --color-tropical-teal-rgb: 22, 175, 181;
 
-    /* Turquoise */
-    /* --color-turquoise: #5ff0df;
-    --color-turquoise-rgb: 95, 240, 223;
- */
     /* Pearl Aqua: #88E7DC */
     --color-pearlaqua: #88E7DC;
     --color-pearlaqua-rgb: 136, 231, 220;
     
-    /* Electric aqua */
-    /* --color-aqua: #5FF5FC;
-    --color-aqua-rgb: 95, 245, 252; */
-
     /* Aquamarine */
     --color-aquamarine: #B5F9DE;
     --color-aquamarine-rgb: 181, 249, 222;
     
-    /* Icy Aqua */
-    /* --color-icy: #C7fff9;
-    --color-icy-rgb: 199, 255, 249; */
-
     /* Frozen Water */
     --color_frozen-water: #E4FFF4;
     --color-frozen-water-rgb: 228, 255, 244;
+
     /* Azure Mist */
     --color-mist: #EDF9F7;
     --color-mist-rgb: 237, 249, 247;
+
     /* Blue Slate */
     --color-slate: #4F6870;
     --color-slate-rgb: 79, 104, 112;
+
     /* Cool Steel */
     --color-steel: #7A949B;
     --color-steel-rgb: 106, 127, 129;
+
     /* Veery light grey */
     --color-grey-mist: #cfdcdc;
+
     /* White Smoke */
     --color-whitesmoke: #F5F5F5;
     --color-whitesmoke-rgb: 245, 245, 245;

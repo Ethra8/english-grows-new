@@ -1,0 +1,58 @@
+{% extends "placement/base.html" %}
+{% load i18n %}
+
+{% block extra_meta %}
+    {{ block.super }}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block title %}{% trans "Your Placement Result" %}{% endblock %}
+
+{% block placement_content %}
+
+<section class="placement-result placement-panel" aria-labelledby="result-title">
+    <span class="placement-eyebrow">ENGLISH GROWS · {% trans "PLACEMENT TEST" %}</span>
+
+    <h1 id="result-title">{% trans "Your placement result" %}</h1>
+
+    {% if attempt.name %}
+        <p>{% blocktrans with name=attempt.name %}Thank you, {{ name }}. Your assessment is complete.{% endblocktrans %}</p>
+    {% else %}
+        <p>{% trans "Thank you for completing your assessment." %}</p>
+    {% endif %}
+
+    <!-- RECOMMENDED COURSE LEVEL -->
+    <div class="placement-result__card">
+        <span class="placement-eyebrow">{% trans "YOUR RECOMMENDED COURSE LEVEL" %}</span>
+
+        <h2>{{ attempt.get_recommended_level_display }}</h2>
+
+        {% if attempt.cefr_reference %}
+            <span class="placement-cefr">
+                {% blocktrans with level=attempt.cefr_reference %}CEFR reference: {{ level }}{% endblocktrans %}
+            </span>
+        {% else %}
+            <span class="placement-cefr">{% trans "Teacher review recommended" %}</span>
+        {% endif %}
+    </div>
+
+    <!-- SCORE -->
+    <p class="placement-result__score">
+        {% blocktrans with score=attempt.score total=total %}Correct answers: {{ score }} / {{ total }}{% endblocktrans %}
+    </p>
+
+    <!-- RESULT EXPLANATION -->
+    <p>
+        {% trans "Your result suggests a suitable starting point based on grammar and vocabulary. Your teacher may confirm or adjust your placement after assessing your communication skills." %}
+    </p>
+
+    <p class="placement-result__small">
+        {% trans "This recommendation is provisional and does not certify an attained CEFR level." %}
+    </p>
+
+    <a class="placement-button placement-button--secondary" href="/">
+        {% trans "Return to English Grows" %}
+    </a>
+</section>
+
+{% endblock %}

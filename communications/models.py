@@ -1,7 +1,10 @@
-from django.db import models
+import uuid
+from datetime import timedelta
 
+from django.conf import settings
+from django.db import models, transaction
+from django.utils import timezone
 from django.utils.text import slugify
-
 from django_ckeditor_5.fields import CKEditor5Field
 
 
@@ -44,7 +47,7 @@ class EmailTemplate(models.Model):
         blank=True,
         help_text="Heading displayed inside the email.",
     )
-    
+
     body_text = models.TextField(
         blank=True,
         help_text="Optional plain-text version of the email.",
@@ -74,3 +77,140 @@ class EmailTemplate(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class MarketingSubscriber(models.Model):
+    """
+    Manages optional marketing subscriptions independently of learner
+    accounts and placement attempts.
+
+    Only confirmed, active subscribers may receive marketing emails.
+    """
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending confirmation"
+        ACTIVE = "active", "Active"
+        UNSUBSCRIBED = "unsubscribed", "Unsubscribed"
+
+    class Source(models.TextChoices):
+        PLACEMENT_TEST = "placement_test", "Placement test"
+        WEBSITE = "website", "Website subscription"
+        ACCOUNT = "account", "Account preferences"
+
+    email = models.EmailField(unique=True)
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="marketing_subscriptions",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+
+    source = models.CharField(
+        max_length=30,
+        choices=Source.choices,
+        default=Source.PLACEMENT_TEST,
+    )
+
+    consent_text = models.TextField(
+        blank=True,
+        help_text="Exact marketing consent wording presented to the subscriber.",
+    )
+
+    requested_at = models.DateTimeField(null=True, blank=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    last_unsubscribed_at = models.DateTimeField(null=True, blank=True)
+
+    confirmation_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    unsubscribe_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["email"]
+        verbose_name = "Marketing subscriber"
+        verbose_name_plural = "Marketing subscribers"
+
+    def save(self, *args, **kwargs):
+        self.email = self.email.strip().casefold()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.email} · {self.get_status_display()}"
+
+    @property
+    def can_receive_marketing(self):
+        return self.status == self.Status.ACTIVE and self.confirmed_at is not None
+
+    @classmethod
+    def request_subscription(cls, *, email, source, consent_text, user=None):
+        """
+        Creates or renews a pending subscription after an explicit opt-in.
+
+        Returns (subscriber, should_send_confirmation).
+
+        Existing active subscriptions are preserved. Repeated requests within
+        ten minutes do not trigger another confirmation email.
+        """
+        email = email.strip().casefold()
+        now = timezone.now()
+
+        if not email or not consent_text.strip():
+            raise ValueError("An email address and consent wording are required.")
+
+        with transaction.atomic():
+            subscriber, _ = cls.objects.select_for_update().get_or_create(email=email)
+
+            if subscriber.status == cls.Status.ACTIVE:
+                return subscriber, False
+
+            if (
+                subscriber.status == cls.Status.PENDING
+                and subscriber.requested_at
+                and now - subscriber.requested_at < timedelta(minutes=10)
+            ):
+                return subscriber, False
+
+            subscriber.status = cls.Status.PENDING
+            subscriber.source = source
+            subscriber.consent_text = consent_text
+            subscriber.requested_at = now
+            subscriber.confirmed_at = None
+            subscriber.confirmation_token = uuid.uuid4()
+
+            if user is not None and user.is_authenticated and (user.email or "").strip().casefold() == email:
+                subscriber.user = user
+
+            subscriber.save()
+
+        return subscriber, True
+
+    def confirm(self):
+        """Activates a pending subscription after valid email confirmation."""
+        if self.status != self.Status.PENDING:
+            return False
+
+        self.status = self.Status.ACTIVE
+        self.confirmed_at = timezone.now()
+        self.unsubscribe_token = uuid.uuid4()
+        self.save(update_fields=["status", "confirmed_at", "unsubscribe_token", "updated_at"])
+        return True
+
+    def unsubscribe(self):
+        """Withdraws the subscription without deleting its consent evidence."""
+        if self.status == self.Status.UNSUBSCRIBED:
+            return False
+
+        self.status = self.Status.UNSUBSCRIBED
+        self.last_unsubscribed_at = timezone.now()
+        self.confirmation_token = uuid.uuid4()
+        self.save(update_fields=["status", "last_unsubscribed_at", "confirmation_token", "updated_at"])
+        return True

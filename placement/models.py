@@ -60,7 +60,7 @@ class PlacementAttempt(models.Model):
         ADVANCED = "advanced", "Advanced"
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="placement_attempts")
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, blank=True, default="")
     email = models.EmailField()
     test_version = models.CharField(max_length=10, default=TEST_VERSION)
     answers = models.JSONField(default=dict, blank=True)
@@ -75,7 +75,7 @@ class PlacementAttempt(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.name} · {self.score}/50"
+        return f"{self.name or self.email} · {self.score if self.score is not None else '—'}/50"
 
     @classmethod
     def placement_for_score(cls, score):
