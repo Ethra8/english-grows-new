@@ -1,0 +1,24 @@
+#result_list th.column-active_enrollments {
+    width: 100px;
+    max-width: 100px;
+}
+
+#result_list th.column-total_hours,
+#result_list th.column-start_date,
+#result_list th.column-end_date {
+    width: 20px;
+    max-width: 20px;
+}
+
+
+#result_list th.column-active_enrollments .text,
+#result_list th.column-active_enrollments .text a,
+#result_list th.column-total_hours .text,
+#result_list th.column-total_hours .text a,
+#result_list th.column-start_date .text,
+#result_list th.column-start_date .text a,
+#result_list th.column-end_date .text,
+#result_list th.column-end_date .text a {
+    white-space: normal;
+    line-height: 1.3;
+}

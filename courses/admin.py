@@ -1,11 +1,27 @@
 from django.contrib import admin
 
 from django.contrib.admin.views.main import ChangeList
+
+from django import forms
 from django.forms.models import BaseInlineFormSet
+
 from django.utils import timezone
 from django.utils.html import format_html
+from django.contrib.auth import get_user_model
+from django.contrib.admin.widgets import AdminDateWidget
 
-from django.db.models import BooleanField, Case, Count, F, Q, Value, When
+from django.db.models import (
+    BooleanField, 
+    Case, 
+    Count, 
+    F,
+    IntegerField, 
+    Q, 
+    Value, 
+    When
+)
+
+from profiles.models import UserProfile
 
 from .models import (
     CourseType,
@@ -17,7 +33,14 @@ from .models import (
     ClassSession,
     Attendance,
 )
+
 from courses.utils.course_dates import calculate_course_end_date
+
+from math import ceil
+
+
+User = get_user_model()
+
 
 # -------------------------------------------------------------------------
 # REFERENCE / CONFIGURATION ADMINS
@@ -222,41 +245,206 @@ class CourseEnrollmentInline(admin.TabularInline):
         return request.user.is_superuser
 
 
+
+class TeacherListFilter(admin.SimpleListFilter):
+    '''
+    Teacher first_name displays on the list
+    Teacher username only as fallback
+    '''
+    title = "teacher"
+    parameter_name = "teacher"
+
+    def lookups(self, request, model_admin):
+        teachers = (
+            User.objects
+            .filter(
+                profile__role=UserProfile.ROLE_TEACHER,
+                courses_taught__isnull=False,
+            )
+            .distinct()
+            .order_by(
+                "first_name",
+                "last_name",
+                "username",
+            )
+        )
+
+        return [
+            (
+                teacher.pk,
+                teacher.get_full_name() or teacher.username,
+            )
+            for teacher in teachers
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(
+                teacher_id=self.value(),
+            )
+
+        return queryset
+
+
+class TeacherChoiceField(forms.ModelChoiceField):
+    '''
+    Inside Course object, teacher first_name displays instead of
+    teacher username 
+    '''
+    def label_from_instance(self, obj):
+        return obj.first_name or obj.username
+
+
+
+class CourseAdminForm(forms.ModelForm):
+    '''
+    For Course object, teacher first_name displays instead of
+    teacher username 
+    '''
+    teacher = TeacherChoiceField(
+        queryset=User.objects.filter(
+            profile__role=UserProfile.ROLE_TEACHER,
+        ).order_by(
+            "first_name",
+            "username",
+        ),
+        required=False,
+    )
+
+    '''
+    For Course object, format start date selected to
+    d/m/yy ; e.g.: 21/12/27 
+    '''
+    start_date = forms.DateField(
+        required=False,
+        input_formats=[
+            "%d/%m/%y",
+            "%d/%m/%Y",
+            "%Y-%m-%d",
+        ],
+        widget=AdminDateWidget(
+            format="%d/%m/%y",
+        ),
+    )
+
+    class Meta:
+        model = Course
+        fields = "__all__"
+
+
+
+
+class LowAttendanceFilter(admin.SimpleListFilter):
+    '''
+    Filter Courses list by low_attendance
+    '''
+    title = "low attendance"
+    parameter_name = "has_low_attendance"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", "Yes"),
+            ("no", "No"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() not in {"yes", "no"}:
+            return queryset
+
+        # Equivalent to:
+        #
+        # submitted_classes >= ceil(total_sessions * 0.25)
+        #
+        # Because submitted_classes is an integer:
+        # submitted_classes * 4 >= total_sessions
+        queryset = queryset.annotate(
+            _resolved_attendance=(
+                F("_attended_count")
+                + F("_missed_count")
+                + F("_excused_count")
+            ),
+            _submitted_threshold_check=F("_submitted_classes") * 4,
+            _attendance_numerator_check=F("_attended_count") * 4,
+            _attendance_denominator_check=(
+                F("_attended_count")
+                + F("_missed_count")
+                + F("_excused_count")
+            ) * 3,
+        )
+
+        low_attendance = Q(
+            _total_sessions__gt=0,
+            _resolved_attendance__gt=0,
+            _submitted_threshold_check__gte=F("_total_sessions"),
+            _attendance_numerator_check__lt=F(
+                "_attendance_denominator_check"
+            ),
+        )
+
+        if self.value() == "yes":
+            queryset = queryset.filter(low_attendance)
+
+            return queryset.annotate(
+                _low_attendance_status_order=Case(
+                    When(status="active", then=Value(1)),
+                    When(status="paused", then=Value(2)),
+                    When(status="completed", then=Value(3)),
+                    When(status="cancelled", then=Value(4)),
+                    default=Value(5),
+                    output_field=IntegerField(),
+                )
+            ).order_by(
+                "_low_attendance_status_order",
+                "name",
+            )
+
+        return queryset.exclude(low_attendance)
+
+
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
+
+    form = CourseAdminForm
+
     list_display = (
         "name",
-        "course_type",
-        "course_level",
-        "status",
-        "total_hours",
-        "class_duration_display",
-        "number_of_classes",
         "company",
-        "teacher",
-        "start_date",
-        "end_date",
+        "course_type_admin",
+        "course_level_admin",
+        "status",
+        "completion_admin",
+        "total_hours_admin",
+        "active_enrollments",
+        "attendance_rate_admin",
+        "teacher_admin",
+        "start_date_admin",
+        "end_date_admin",
     )
 
     fields = (
         "name",
+        "company",
         "course_type",
-        "programmes",
-        "course_level",
         "status",
-        "total_hours",
+        "course_level",
+        "programmes",
+        "active_enrollments",
+        "completion_admin",
+        "attendance_rate_admin",
         "class_duration",
         "class_duration_display",
         "class_duration_source",
         "number_of_classes",
         "final_class_duration_display",
-        "company",
         "teacher",
         "start_date",
         "end_date",
     )
 
     readonly_fields = (
+        "active_enrollments",
+        "completion_admin",
+        "attendance_rate_admin",
         "class_duration_display",
         "final_class_duration_display",
         "number_of_classes",
@@ -265,12 +453,13 @@ class CourseAdmin(admin.ModelAdmin):
 
     list_filter = (
         "status",
+        LowAttendanceFilter,
         "course_type",
         "programmes",
         "company",
         "start_date",
         "course_level",
-        "teacher",
+        TeacherListFilter,
     )
 
     search_fields = (
@@ -286,7 +475,6 @@ class CourseAdmin(admin.ModelAdmin):
     autocomplete_fields = (
         "course_type",
         "company",
-        "teacher",
     )
 
     filter_horizontal = (
@@ -298,6 +486,172 @@ class CourseAdmin(admin.ModelAdmin):
         CourseEnrollmentInline,
     )
 
+
+    # ---------------------------------------------------------
+    # COURSE LIST DISPLAY
+    # ---------------------------------------------------------
+    @admin.display(description="Type", ordering="course_type__name")
+    def course_type_admin(self, obj):
+        return obj.course_type
+
+    @admin.display(description="Level", ordering="course_level")
+    def course_level_admin(self, obj):
+        return obj.course_level
+
+    @admin.display(description="Total Hours", ordering="total_hours")
+    def total_hours_admin(self, obj):
+        return obj.total_hours
+
+    @admin.display(description="Teacher", ordering="teacher__first_name")
+    def teacher_admin(self, obj):
+        if not obj.teacher:
+            return "—"
+
+        return obj.teacher.first_name or obj.teacher.username
+
+
+    @admin.display(description="Start date", ordering="start_date")
+    def start_date_admin(self, obj):
+        return obj.start_date.strftime("%d/%m/%y") if obj.start_date else "—"
+
+    @admin.display(description="End date", ordering="end_date")
+    def end_date_admin(self, obj):
+        return obj.end_date.strftime("%d/%m/%y") if obj.end_date else "—"
+
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                _active_enrollments=Count(
+                    "enrollments",
+                    filter=Q(
+                        enrollments__status=CourseEnrollment.STATUS_ACTIVE,
+                    ),
+                    distinct=True,
+                ),
+                _total_sessions=Count(
+                    "class_sessions",
+                    distinct=True,
+                ),
+                _submitted_classes=Count(
+                    "class_sessions",
+                    filter=Q(
+                        class_sessions__status=(
+                            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                        ),
+                    ),
+                    distinct=True,
+                ),
+                _attended_count=Count(
+                    "class_sessions__attendance_records",
+                    filter=Q(
+                        class_sessions__status=(
+                            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                        ),
+                        class_sessions__attendance_records__status=(
+                            Attendance.STATUS_ATTENDED
+                        ),
+                    ),
+                    distinct=True,
+                ),
+                _missed_count=Count(
+                    "class_sessions__attendance_records",
+                    filter=Q(
+                        class_sessions__status=(
+                            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                        ),
+                        class_sessions__attendance_records__status=(
+                            Attendance.STATUS_MISSED
+                        ),
+                    ),
+                    distinct=True,
+                ),
+                _excused_count=Count(
+                    "class_sessions__attendance_records",
+                    filter=Q(
+                        class_sessions__status=(
+                            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+                        ),
+                        class_sessions__attendance_records__status=(
+                            Attendance.STATUS_EXCUSED
+                        ),
+                    ),
+                    distinct=True,
+                ),
+                _held_sessions=Count(
+                    "class_sessions",
+                    filter=Q(
+                        class_sessions__status__in=[
+                            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+                        ],
+                    ),
+                    distinct=True,
+                ),
+            )
+        )
+
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS DISPLAY
+    # ---------------------------------------------------------
+    @admin.display(description="Active Enrollments", ordering="_active_enrollments")
+    def active_enrollments(self, obj):
+        return obj._active_enrollments
+
+    # ---------------------------------------------------------
+    # COURSE ATTENDANCE DISPLAY
+    # ---------------------------------------------------------
+    @admin.display(description="Attendance")
+    def attendance_rate_admin(self, obj):
+        attended_count = obj._attended_count
+        missed_count = obj._missed_count
+        excused_count = obj._excused_count
+
+        total_final_attendance_records = (
+            attended_count
+            + missed_count
+            + excused_count
+        )
+
+        if not total_final_attendance_records:
+            return "—"
+
+        attendance_rate = round(
+            attended_count
+            / total_final_attendance_records
+            * 100
+        )
+
+        minimum_submitted_classes = ceil(
+            obj._total_sessions * 0.25
+        )
+
+        course_low_attendance = (
+            obj._total_sessions > 0
+            and obj._submitted_classes >= minimum_submitted_classes
+            and attendance_rate < 75
+        )
+
+        if course_low_attendance:
+            return format_html(
+                '<strong title="Course attendance is below the recommended 75%">'
+                '⚠ {}%</strong>',
+                attendance_rate,
+            )
+
+        return f"{attendance_rate}%"
+
+
+    @admin.display(description="Completion")
+    def completion_admin(self, obj):
+        if not obj._total_sessions:
+            return "—"
+
+        return f"{round(obj._held_sessions / obj._total_sessions * 100)}%"
+    
     @admin.display(description="Class Duration")
     def class_duration_display(self, obj):
         return obj.class_duration_display
@@ -306,10 +660,17 @@ class CourseAdmin(admin.ModelAdmin):
     def final_class_duration_display(self, obj):
         return obj.final_class_duration_display
 
-    # Manual "Generate class sessions" action removed.
-    #
+
+    class Media:
+        css = {
+            "all": (
+                "courses/css/admin/course_admin.css",
+            )
+        }
+
     # ClassSessions + initial Attendance records are generated
     # automatically by the model lifecycle once all prerequisites exist.
+    # ----------------------------------------
 
     def save_related(self, request, form, formsets, change):
         """
@@ -364,14 +725,6 @@ class CourseAdmin(admin.ModelAdmin):
         # -------------------------------------------------------------
         # 1. SYNCHRONIZE AUTOMATIC CLASS DURATION
         # -------------------------------------------------------------
-        #
-        # Timetable inline objects have now been saved.
-        #
-        # CourseTimetableSlot already owns schedule synchronization when
-        # a timetable change genuinely occurs. This final calculation
-        # simply guarantees that the stored automatic class duration
-        # reflects the complete final inline state.
-        # -------------------------------------------------------------
         if (
             course.timetable_slots.exists()
             and course.class_duration_source == "auto"
@@ -382,31 +735,10 @@ class CourseAdmin(admin.ModelAdmin):
         # -------------------------------------------------------------
         # 2. EXISTING CLASS SESSIONS
         # -------------------------------------------------------------
-        #
-        # IMPORTANT:
-        #
-        # Do NOT call course.synchronize_future_scheduled_sessions() here.
-        #
-        # An ordinary Admin save must never rebuild the teaching schedule.
-        # Genuine Course/timetable changes are detected and handled by the
-        # corresponding model methods.
-        # -------------------------------------------------------------
         if not course.class_sessions.exists() and operational_course:
 
             # ---------------------------------------------------------
             # 3. CALCULATE EXPECTED END DATE BEFORE INITIAL GENERATION
-            # ---------------------------------------------------------
-            #
-            # No ClassSessions exist yet, so calculate the expected
-            # end_date directly from:
-            #
-            # - start_date
-            # - timetable slots
-            # - number_of_classes
-            # - active BankHoliday records
-            #
-            # Only confirmed/active Courses should establish an
-            # operational teaching schedule.
             # ---------------------------------------------------------
             if (
                 course.start_date
@@ -429,18 +761,10 @@ class CourseAdmin(admin.ModelAdmin):
             # ---------------------------------------------------------
             # 4. FINAL SAFE INITIAL CLASS SESSION GENERATION ATTEMPT
             # ---------------------------------------------------------
-            #
-            # try_generate_class_sessions() contains its own prerequisite
-            # guards, including the no-existing-ClassSessions guard.
-            # ---------------------------------------------------------
             course.try_generate_class_sessions()
 
         # -------------------------------------------------------------
         # 5. FINAL END-DATE SYNCHRONIZATION
-        # -------------------------------------------------------------
-        #
-        # Once ClassSessions exist, their actual final session remains
-        # the operational source of truth for Course.end_date.
         # -------------------------------------------------------------
         if course.class_sessions.exists():
             course.sync_end_date_from_sessions()
