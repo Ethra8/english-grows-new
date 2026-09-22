@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'profiles',
     'courses',
     "communications",
+    "placement",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"

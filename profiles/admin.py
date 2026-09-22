@@ -823,10 +823,6 @@ class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
         return self._choice_list(obj, "priority_areas")
 
     # ---------------------------------------------------------
-    # 5. HOW YOU LEARN
-    # ---------------------------------------------------------
-
-    # ---------------------------------------------------------
     # LIST DISPLAY
     # ---------------------------------------------------------
     @admin.display(description="Student")

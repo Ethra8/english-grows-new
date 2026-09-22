@@ -222,7 +222,7 @@ class StudentNeedsAnalysisForm(forms.Form):
     )
 
     # -----------------------------------------------------
-    # 6. ADDITIONAL INFORMATION
+    # 5. ADDITIONAL INFORMATION
     # -----------------------------------------------------
     additional_information = forms.CharField(
         label=_("Is there anything else you would like your teacher to know?"),
