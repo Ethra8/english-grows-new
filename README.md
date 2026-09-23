@@ -10,11 +10,27 @@ The application combines course management, automated lesson scheduling, attenda
 
 ## 📑 Table of Contents
 
+- [Data Protection & Privacy](#data-protection--privacy)
+  - [Regulatory Framework](#regulatory-framework)
+  - [Core Data Protection Principles](#core-data-protection-principles)
+  - [Lawful Bases and Processing Purposes](#lawful-bases-and-processing-purposes)
+  - [Controller and Processor Responsibilities](#controller-and-processor-responsibilities)
+  - [Role-Based Access to Personal Data](#role-based-access-to-personal-data)
+  - [Privacy by Design and by Default](#privacy-by-design-and-by-default)
+  - [Consent and Employment Relationships](#consent-and-employment-relationships)
+  - [Data Retention and Deletion](#data-retention-and-deletion)
+  - [Data Subject Rights](#data-subject-rights)
+  - [Third-Party Services and Data Processors](#third-party-services-and-data-processors)
+  - [Security and Confidentiality](#security-and-confidentiality)
+  - [Feature-Specific Compliance](#feature-specific-compliance)
+  - [Compliance Documentation Status](#compliance-documentation-status)
+
 - [Site Structure](#site-structure)
   - [User Roles](#user-roles)
 
   - **Django Applications**
     - [Home App](#home-app)
+
     - [Profiles App](#profiles-app)
       - [User Profile & Role Management](#user-profile--role-management)
       - [Academic Profile](#academic-profile)
@@ -25,11 +41,12 @@ The application combines course management, automated lesson scheduling, attenda
         - [Detailed Assessment Snapshots](#detailed-assessment-snapshots)
         - [Term Assessment Snapshots](#term-assessment-snapshots)
       - [Learning Needs / Student Needs Analysis](#learning-needs--student-needs-analysis)
+        - [Data Protection and Employer Access to Learning Needs](#data-protection-and-employer-access-to-learning-needs)
       - [Learner / Employee Area](#learner--employee-area)
       - [Teacher Area](#teacher-area)
       - [Company Admin Area](#company-admin-area)
       - [Role-Based Access Control](#role-based-access-control)
-
+  
     - [Courses App](#courses-app)
       - [Course Types](#course-types)
       - [Course Management](#course-management)
@@ -148,6 +165,152 @@ The application combines course management, automated lesson scheduling, attenda
   - [Placement Test and Version Commands](#placement-test-and-version-commands)
   - [Lesson Lifecycle and Static Assets](#lesson-lifecycle-and-static-assets)
   - [Email Testing Reminder](#email-testing-reminder)
+
+---
+
+# DATA PROTECTION & PRIVACY
+
+English Grows processes personal data in the context of language training, learner assessment, Course administration, attendance, communications, corporate training and related platform functionality.
+
+Data protection requirements are therefore treated as part of the application's architecture rather than as a separate concern applied only after functionality has been implemented.
+
+This section establishes the shared privacy and data-protection principles that apply across the platform.
+
+Feature-specific sections document how those principles are implemented in the corresponding workflow.
+
+---
+## Regulatory Framework
+
+English Grows operates in Spain and its personal-data processing is primarily governed by:
+
+- **Regulation (EU) 2016/679 — General Data Protection Regulation (GDPR)**.
+- **Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)**.
+- Applicable guidance and criteria published by the **Agencia Española de Protección de Datos (AEPD)**.
+- Relevant guidance adopted by the **European Data Protection Board (EDPB)**.
+
+Official sources:
+
+- [GDPR — Regulation (EU) 2016/679, EUR-Lex](https://eur-lex.europa.eu/eli/reg/2016/679/)
+- [LOPDGDD — Ley Orgánica 3/2018, consolidated text, BOE](https://www.boe.es/eli/es/lo/2018/12/05/3/con)
+- [Agencia Española de Protección de Datos — AEPD](https://www.aepd.es/)
+- [European Data Protection Board — EDPB](https://www.edpb.europa.eu/)
+
+The GDPR establishes the general EU framework for processing personal data, while the LOPDGDD supplements and develops that framework within Spanish law.
+
+This README documents the application's technical and organisational approach to these requirements. It does not replace the public Privacy Policy, contractual data-protection documentation or any legal assessment required for a particular processing activity.
+
+---
+## Core Data Protection Principles
+
+English Grows follows the principles established in GDPR Article 5 when designing and operating features that process personal data.
+
+These include:
+
+| Principle | Application within English Grows |
+|---|---|
+| Lawfulness, fairness and transparency | Personal data must be processed under an appropriate legal basis and users must receive clear information about how their data is used. |
+| Purpose limitation | Data collected for one purpose must not automatically be reused for unrelated purposes. |
+| Data minimisation | Features and roles should access only the information necessary for their legitimate function. |
+| Accuracy | Personal and academic records should be capable of being maintained and corrected where necessary. |
+| Storage limitation | Personal information should not be retained indefinitely without a defined purpose. |
+| Integrity and confidentiality | Access must be protected against unauthorised or inappropriate disclosure. |
+| Accountability | English Grows must be able to demonstrate that appropriate privacy and security measures have been considered and implemented. |
+
+Official text:
+
+[GDPR Article 5 — Principles relating to processing of personal data](https://eur-lex.europa.eu/eli/reg/2016/679/)
+
+These principles are applied throughout the platform when deciding:
+
+- which data a feature should collect;
+- which model should own that data;
+- which roles may access it;
+- whether data should be editable or read-only;
+- whether information should be exposed to a corporate client;
+- how long information should be retained;
+- and whether a new processing purpose requires additional review.
+
+---
+## Lawful Bases and Processing Purposes
+
+Every processing activity involving personal data must have a defined purpose and an applicable lawful basis under GDPR Article 6.
+
+Official text:
+
+[GDPR Article 6 — Lawfulness of processing](https://eur-lex.europa.eu/eli/reg/2016/679/)
+
+The appropriate lawful basis may differ according to the processing activity.
+
+Examples within English Grows may include:
+
+- delivery and administration of contracted training services;
+- management of Course enrolments and attendance;
+- learner assessment and academic support;
+- transactional communications necessary to provide the service;
+- compliance with applicable legal obligations;
+- legitimate organisational interests where the corresponding legal requirements are satisfied;
+- consent where consent is appropriate and legally valid.
+
+A lawful basis must not be assumed merely because the information is useful.
+
+The purpose, necessity and legal basis of each material processing activity should be documented before the corresponding feature is treated as fully compliant.
+
+---
+## Controller and Processor Responsibilities
+
+The respective roles of English Grows, individual learners and corporate clients must be determined according to the actual processing activity and contractual relationship.
+
+Depending on the context, English Grows may process personal data:
+
+- for its own purposes as a data controller;
+- on behalf of a corporate client where a processor relationship applies;
+- or within a processing arrangement where the responsibilities of each party must be assessed separately.
+
+These roles must not be inferred solely from who pays for the service.
+
+The applicable controller / processor relationship should be reflected consistently in:
+
+- the Privacy Policy;
+- corporate contracts;
+- data-processing agreements where required;
+- third-party processor documentation;
+- Records of Processing Activities where applicable;
+- and technical access controls.
+
+**Implementation status:** Controller and processor responsibilities for each English Grows processing context remain subject to final legal and contractual review.
+
+---
+## Role-Based Access to Personal Data
+
+Access to personal data is based on the user's legitimate responsibilities within the platform, not merely on the existence of a user account or broad organisational relationship.
+
+The principal application roles are:
+
+- Learner / Employee.
+- Teacher.
+- Company Admin.
+- Authorised English Grows administration.
+
+Different roles require different information.
+
+For example:
+
+```text
+LEARNER
+→ Own personal, academic and Course information.
+
+TEACHER
+→ Academic information required to deliver and assess Courses
+  assigned to that teacher.
+
+COMPANY ADMIN
+→ Information required to administer and monitor corporate training,
+  subject to purpose limitation and data minimisation.
+
+ENGLISH GROWS ADMINISTRATION
+→ Information required for authorised operational, academic,
+  contractual and support responsibilities.
+```
 
 ---
 
@@ -336,6 +499,8 @@ Priority Areas reuse the canonical `SITUATION_CHOICES` defined in `profiles/form
 
 Each skill displays its assessment progress, and the existing rating controls remain available for entering, updating or clearing subskill assessments.
 
+---
+
 ##### Data ownership and historical records
 
 Each Course accordion consolidates the learner's stated needs and teacher-assessed abilities, avoiding separate Course lists for Learning Needs and Skills Assessment.
@@ -379,6 +544,8 @@ Next overall academic review
 
 Learning Needs and assessment records remain Course-specific and are not copied into `StudentAcademicProfile`.
 
+---
+
 #### Learning Needs integration
 
 Each Course's Learning Needs section retrieves the `StudentNeedsAnalysis` associated with its `CourseEnrollment`.
@@ -413,6 +580,8 @@ This avoids maintaining a duplicate catalogue or displaying raw JSON values.
 Pending questionnaires display an appropriate awaiting-submission message rather than exposing unfinished responses or displaying an empty Priority Areas list.
 
 If no Needs Analysis record exists, the Academic Profile also displays an awaiting-submission state.
+
+---
 
 #### Skills Assessment integration
 
@@ -449,6 +618,7 @@ The existing `save_related()` implementation validates Course ownership, skill i
 Blank ratings do not create unnecessary assessment records. Existing ratings can also be cleared without deleting the associated historical assessment structure.
 
 All assessment values continue to be saved through `StudentSkillAssessment` and `StudentSubSkillAssessment`.
+---
 
 #### Historical records and empty states
 
@@ -472,6 +642,7 @@ The Academic Profile supports the following situations:
 | Historical assessment has no enrollment record | Retains the assessment and indicates that the enrollment is unavailable. |
 
 The implementation avoids creating Needs Analysis or assessment records simply because an Admin page is viewed.
+---
 
 #### Architectural principle
 
@@ -885,15 +1056,9 @@ The current Needs Analysis stores:
 **4. Challenges & Priorities**
 
 - `priority_areas`
-- `course_goal`
 
-**5. How You Learn**
+**5. Anything Else?**
 
-- `learning_preferences`
-
-**6. Anything Else?**
-
-- `preferred_topics`
 - `additional_information`
 
 ---
@@ -1006,18 +1171,16 @@ This self-reported confidence information remains separate from teacher-assessed
 
 #### Priority areas
 
-Learners select up to three priority areas from:
+Learners select up to three priority areas from the ***Communication situations*** previously selected:
 
 ```text
-Speaking
-Listening
-Reading
-Writing
-Grammar accuracy
-Vocabulary
-Pronunciation
-Fluency
-Confidence when communicating
+Meetings and video calls
+Phone calls
+Presentations
+Emails, reports and documents
+Customer communication
+Networking
+Other
 ```
 
 Server-side form validation enforces:
@@ -1025,31 +1188,6 @@ Server-side form validation enforces:
 ```text
 maximum selected priorities = 3
 ```
-
-The optional `course_goal` then gives the learner one concise opportunity to specify something concrete they would like to do more confidently or effectively.
-
-This avoids requiring multiple overlapping long-form answers.
-
-#### Learning preferences
-
-Learning preferences are optional and use structured choices so the learner can answer quickly.
-
-Current options are:
-
-```text
-Conversation and discussion
-Role plays and real-life situations
-Structured exercises
-Grammar practice
-Vocabulary practice
-Listening activities
-Reading activities
-Writing activities
-Real-world materials
-Projects and practical tasks
-```
-
-These answers inform activity selection without transferring professional teaching-method decisions to the learner.
 
 #### Anything else
 
@@ -1114,6 +1252,127 @@ for learner, teacher and company-admin read-only views.
 The shared report displays the question label above each human-readable answer and keeps supplementary accent text visually grouped with the main accent question.
 
 The submitted report therefore acts as a human-readable summary rather than exposing internal database codes.
+
+---
+
+#### Data Protection and Employer Access to Learning Needs
+
+`StudentNeedsAnalysis` contains personal information provided directly by the learner to support the delivery and personalisation of their English training.
+
+The questionnaire may include:
+
+- Communication situations and learning priorities.
+- Self-assessed confidence in speaking, listening, reading and writing.
+- Communication partners and accent exposure.
+- Additional free-text information provided by the learner.
+
+Some responses may contain information that the learner is comfortable sharing with their teacher but would not reasonably expect to be disclosed to their employer.
+
+English Grows therefore distinguishes between **academic information required to deliver training** and **administrative information required by a company to manage its employees' training**.
+
+The applicable GDPR principles, lawful bases, consent considerations and official regulatory references are documented in the central [Data Protection & Privacy](#data-protection--privacy) section.
+
+##### Employer Access and Data Minimisation
+
+The fact that a company finances an employee's training does not, by itself, establish that access to every questionnaire response is necessary or legally justified.
+
+Access must be assessed against the specific processing purpose, applicable legal basis and information genuinely required by the employer.
+
+Company Admins may need to know whether an employee has completed the Learning Needs questionnaire as part of the training process. However, they do not automatically require access to the learner's confidence self-assessments, personal explanations or complete questionnaire.
+
+English Grows therefore adopts the following default policy:
+
+**Company Admin access is limited to the questionnaire's submission/completion status.**
+
+The following information is excluded from the default Company Admin view:
+
+- Individual questionnaire answers.
+- Selected communication priorities.
+- Self-assessed confidence ratings.
+- Communication partners and accent exposure.
+- Additional Information entered by the learner.
+- The complete questionnaire record.
+
+Where a corporate client has a specific, justified need for additional information, the proposed disclosure must be assessed separately against the applicable purpose, legal basis and data-minimisation requirements.
+
+##### Role-Based Access Policy
+
+| Role | Permitted access |
+|---|---|
+| Learner / Employee | Own Needs Analysis questionnaire and submitted responses. |
+| Assigned teacher | Full questionnaire for learners enrolled in their assigned Courses, including the review workflow. |
+| Authorised English Grows administration | Access appropriate to internal academic administration and support responsibilities. |
+| Company Admin | Questionnaire submission/completion status only, without access to individual responses. |
+
+Teacher access is Course-scoped. Assignment to one Course does not automatically authorise access to the learner's questionnaire records from unrelated Courses.
+
+The Company Admin's relationship with the employee does not automatically grant access to the academic information available to the assigned teacher.
+
+##### Technical Enforcement
+
+Access restrictions must be enforced server-side through role-aware views and Course/enrollment ownership checks.
+
+Hiding questionnaire content in a template, removing a navigation link or applying CSS restrictions is not sufficient to prevent unauthorised access.
+
+The implementation must ensure that:
+
+- Learners can access only their own questionnaire records.
+- Teachers can access questionnaire records only for learners enrolled in Courses assigned to them.
+- Company Admins can access only the permitted submission/completion status for employees belonging to their company.
+- Direct access to a questionnaire URL cannot bypass the applicable role and ownership checks.
+- Pending questionnaires do not expose unfinished responses through academic summaries.
+- The original questionnaire responses remain read-only after submission, subject to the established review and reset workflows.
+
+The Company Admin's existing Learning Needs route must be restricted at the view level rather than relying exclusively on template presentation.
+
+##### Academic Profile Integration
+
+`StudentNeedsAnalysis` remains the canonical owner of the learner's questionnaire responses.
+
+The `StudentAcademicProfile` Django Admin consolidates Learning Needs and Skills Assessment information within a single accordion for each Course, without duplicating the underlying records.
+
+Within this interface:
+
+- Learning Needs are displayed as read-only information.
+- Submitted and reviewed questionnaires display their selected Priority Areas, Additional Information and submission/review dates.
+- The complete questionnaire remains accessible through its dedicated Admin record.
+- Pending questionnaires do not display unfinished responses.
+- Skill and subskill assessments retain their separate editing and saving logic.
+
+The teacher-facing Academic Overview will reuse the existing records through Course-scoped queries rather than create additional copies of the learner's questionnaire responses.
+
+The Company Admin interface must not reuse the unrestricted teacher-facing academic presentation.
+
+##### Privacy Policy and Transparency
+
+The English Grows Privacy Policy must accurately describe:
+
+- The purposes for which Learning Needs responses are collected.
+- The applicable legal basis for processing.
+- The categories of recipients who may access the information.
+- The distinction between teacher-facing academic information and employer-facing training information.
+- The applicable retention arrangements and data subject rights.
+
+The allocation of controller and processor responsibilities between English Grows and its corporate clients must be established according to the actual processing and contractual arrangements.
+
+See [Data Protection & Privacy](#data-protection--privacy) for the shared legal framework and documentation requirements.
+
+##### Implementation Status
+
+| Requirement | Status |
+|---|---|
+| Course-specific `StudentNeedsAnalysis` model and questionnaire workflow | Implemented |
+| Read-only Learning Needs summary within the Academic Profile Django Admin | Implemented |
+| Suppression of unfinished questionnaire responses in the Admin summary | Implemented |
+| Teacher access restricted to assigned Courses | Existing workflow — authorisation audit required |
+| Company Admin access limited to submission/completion status | Pending implementation |
+| Removal of unrestricted questionnaire access from the existing Company Admin route | Pending implementation |
+| Teacher-facing consolidated Academic Overview | Planned |
+| Privacy Policy alignment with the final access model | Pending review |
+
+**Important:** The Company Admin restriction is an agreed access policy, not yet a verified technical safeguard. The existing view and its corresponding URL must be audited and updated before this requirement can be marked as implemented.
+
+The overarching architectural principle is that **access to personal academic information follows the user's legitimate responsibilities within the training workflow, not merely their general role or organisational relationship**.
 
 ---
 
