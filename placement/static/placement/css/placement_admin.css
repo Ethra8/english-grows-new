@@ -1,0 +1,95 @@
+/* PLACEMENT ATTEMPT REVIEW *************************************/
+.placement-review { width: 100%; max-width: 1050px; }
+
+.placement-review__summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--darkened-bg, #f5f5f5);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: .5rem;
+}
+
+.placement-review__summary strong { color: #006b7d; }
+
+.placement-review__mistakes {
+    margin: 1rem 0 1.5rem;
+    line-height: 1.7;
+}
+
+.placement-review__mistakes a { font-weight: 600; }
+
+.placement-review__questions {
+    display: grid;
+    gap: .65rem;
+}
+
+.placement-review__item {
+    overflow: hidden;
+    scroll-margin-top: 2rem;
+    background: var(--body-bg, #fff);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: .5rem;
+}
+
+.placement-review__item summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .6rem 1rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.placement-review__item summary::-webkit-details-marker { display: none; }
+.placement-review__item summary::after { content: "⌄"; margin-left: auto; font-size: 1.2rem; }
+.placement-review__item[open] summary::after { content: "⌃"; }
+
+.placement-review__number {
+    min-width: 3rem;
+    color: var(--body-fg, #333);
+    font-weight: 700;
+}
+
+.placement-review__level {
+    padding: .25rem .6rem;
+    border-radius: 2rem;
+    background: #edf9f7;
+    color: #006b7d;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.placement-review__status {
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.placement-review__item--correct .placement-review__status { color: #22804e; }
+.placement-review__item--incorrect .placement-review__status,
+.placement-review__item--unanswered .placement-review__status { color: #b42318; }
+
+.placement-review__item--incorrect,
+.placement-review__item--unanswered { border-left: 4px solid #c84b41; }
+
+.placement-review__body {
+    padding: 1.2rem;
+    border-top: 1px solid var(--border-color, #ddd);
+    line-height: 1.65;
+}
+
+.placement-review__body p { margin: 0 0 .65rem; }
+.placement-review__body p:last-child { margin-bottom: 0; }
+
+.placement-review__text {
+    margin-bottom: 1rem !important;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+@media (max-width: 767px) {
+    .placement-review__item summary { padding: .85rem; }
+    .placement-review__body { padding: 1rem; }
+}

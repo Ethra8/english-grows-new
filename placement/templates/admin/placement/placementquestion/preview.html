@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'placement/css/placement_preview.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="placement-preview">
+
+    <div class="placement-preview__toolbar">
+        <div>
+            <span class="placement-preview__eyebrow">ENGLISH GROWS · ADMIN PREVIEW</span>
+            <h1>Placement Test V{{ version }}</h1>
+            <p>{{ question_count }} active questions · Preview only · No answers will be saved</p>
+        </div>
+
+        <a class="placement-preview__back" href="{{ question_bank_url }}">← Back to V{{ version }} question bank</a>
+    </div>
+
+    {% if not bank_complete %}
+        <div class="placement-preview__warning" role="alert">
+            <strong>Incomplete question bank.</strong>
+            This version currently contains {{ question_count }} active questions; a complete test requires
+            {{ expected_count }} consecutively numbered questions, each with four populated options.
+        </div>
+    {% endif %}
+
+    <div class="placement-preview__intro">
+        <span class="placement-preview__eyebrow">ENGLISH GROWS · FREE ENGLISH LEVEL TEST</span>
+        <h2>Free English Level Test Online</h2>
+        <p>Choose the best answer for each question.</p>
+    </div>
+
+    {% for page in pages %}
+        <section class="placement-preview__set" aria-labelledby="preview-set-{{ forloop.counter }}">
+            <h2 id="preview-set-{{ forloop.counter }}">
+                Question set {{ forloop.counter }}
+                <span>{{ page|length }} questions</span>
+            </h2>
+
+            {% for question in page %}
+                <fieldset class="placement-preview__question">
+                    <legend><span>{{ question.number }}.</span> {{ question.text }}</legend>
+
+                    <div class="placement-preview__options">
+                        {% for letter, option in question.options %}
+                            <label class="placement-preview__option">
+                                <input type="radio" name="preview_q{{ question.number }}" disabled>
+                                <span><strong>{{ letter }}.</strong> {{ option }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            {% endfor %}
+        </section>
+    {% empty %}
+        <p>No active questions are available for this version.</p>
+    {% endfor %}
+
+    <p class="placement-preview__footer">
+        Administrative preview only. The correct answers are deliberately excluded from this page.
+    </p>
+
+</div>
+{% endblock %}

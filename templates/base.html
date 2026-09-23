@@ -83,6 +83,7 @@
         <div class="col-9 my-auto py-1 py-lg-0">
 
           <ul class="list-inline list-unstyled text-right my-0">
+            {% block language_selector %}
             <li>
               <form
                   action="{% url 'set_language' %}"
@@ -158,6 +159,8 @@
 
                 </form>            
               </li>
+              {% endblock %}
+
             {% block top_nav_actions %}
 
               {% if request.user.is_authenticated %}

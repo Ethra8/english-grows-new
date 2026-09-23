@@ -1,0 +1,26 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'placement/css/placement_preview.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if preview_versions %}
+        <section class="placement-preview-launcher" aria-label="Placement test versions">
+            <div>
+                <h2>Preview a test version</h2>
+                <p>Review the complete assessment without submitting answers or creating an attempt.</p>
+            </div>
+
+            <div class="placement-preview-launcher__links">
+                {% for item in preview_versions %}
+                    <a href="{{ item.url }}">Preview V{{ item.version }} →</a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}

@@ -3,41 +3,23 @@
 
 {% block title %}{% trans "Free English Level Test Online" %}{% endblock %}
 
-{% block meta_description %}
-{% trans "Take our free 50-question English level test online. Check your grammar and vocabulary, receive a recommended course level and CEFR reference. No registration required." %}
-{% endblock %}
+{% block meta_description %}{% trans "Take our free 50-question English level test online. Check your grammar and vocabulary, receive a recommended course level and CEFR reference. No registration required." %}{% endblock %}
 
 {% block extra_meta %}
     {{ block.super }}
-    {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="alternate" hreflang="en" href="{{ english_url }}">
+    <link rel="alternate" hreflang="es" href="{{ spanish_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ english_url }}">
+
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="English Grows">
     <meta property="og:title" content="{% trans 'Free English Level Test Online | English Grows' %}">
     <meta property="og:description" content="{% trans 'Take our free 50-question English level test and receive your recommended course level. No registration required.' %}">
-    {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}">{% endif %}
+    <meta property="og:url" content="{{ canonical_url }}">
 {% endblock %}
 
-
 {% block placement_content %}
-
-<section class="placement-hero" aria-labelledby="placement-title">
-    <span class="placement-eyebrow">ENGLISH GROWS · {% trans "FREE ENGLISH LEVEL TEST" %}</span>
-
-    <h1 id="placement-title">{% trans "Free English Level Test Online" %}</h1>
-
-    <p>
-        {% trans "Find your starting point with our 50-question grammar and vocabulary assessment. Receive your recommended English course level and CEFR reference by email." %}
-    </p>
-
-    <div class="placement-benefits">
-        <span>✓ {% trans "No registration required" %}</span>
-        <span>✓ {% trans "50 multiple-choice questions" %}</span>
-        <span>✓ {% trans "Personalised course-level recommendation" %}</span>
-    </div>
-
-    <div class="placement-note">
-        {% trans "This assessment recommends a suitable starting course level. It is not a formal certification of English proficiency, and your teacher may confirm your placement." %}
-    </div>
-</section>
 
 <form class="placement-form" method="post" novalidate data-placement-form>
     {% csrf_token %}
@@ -45,110 +27,149 @@
     {{ form.website }}
 
     {% if form.non_field_errors %}
-        <div class="placement-errors" role="alert">{{ form.non_field_errors }}</div>
+        <div class="placement-errors" role="alert" data-form-errors>{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <!-- LEARNER DETAILS -->
-    <section class="placement-panel placement-identity" aria-labelledby="details-title">
-        <h2 id="details-title">{% trans "Your details" %}</h2>
+    <!-- INTRODUCTION -->
+    <div class="placement-intro" data-intro>
 
-        <p>{% trans "Enter your email address to receive your placement result. You do not need to create an account." %}</p>
+        <section class="placement-hero" aria-labelledby="placement-title">
+            <span class="placement-eyebrow">ENGLISH GROWS · {% trans "FREE ENGLISH LEVEL TEST" %}</span>
 
-        <div class="placement-input-grid">
-            <div class="placement-input">
-                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                {{ form.email }}
-                {{ form.email.errors }}
+            <h1 id="placement-title">{% trans "Free English Level Test Online" %}</h1>
+
+            <p>{% trans "Find your starting point with our 50-question grammar and vocabulary assessment. Receive your recommended English course level and CEFR reference by email." %}</p>
+
+            <div class="placement-benefits">
+                <span>✓ {% trans "No registration required" %}</span>
+                <span>✓ {% trans "50 multiple-choice questions" %}</span>
+                <span>✓ {% trans "Personalised course-level recommendation" %}</span>
+            </div>
+
+            <p class="placement-hero__disclaimer">
+                {% trans "This assessment recommends a suitable starting course level. It is not a formal certification of English proficiency, and your teacher may confirm your placement." %}
+            </p>
+        </section>
+
+        <!-- BEFORE YOU BEGIN -->
+        <section class="placement-panel placement-identity" aria-labelledby="details-title">
+            <h2 id="details-title">{% trans "Before you begin" %}</h2>
+
+            <p>{% trans "Enter your email address so we can send you your placement result. No account is required." %}</p>
+
+            <div class="placement-input-grid">
+                <div class="placement-input">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+            </div>
+
+            <!-- PRIVACY INFORMATION -->
+            <div class="placement-note">
+                <strong>{% trans "Privacy information" %}</strong>
+
+                <p>
+                    {% trans "English Grows will use your email address and submitted answers to calculate your placement result and send it to you. A separate copy will be sent to your assigned teacher, where applicable, or otherwise to English Grows for educational follow-up." %}
+                </p>
+
+                <p>{% trans "Completing this assessment does not automatically subscribe you to marketing communications." %}</p>
+
+                {% if privacy_url %}
+                    <a href="{{ privacy_url }}" target="_blank" rel="noopener">
+                        {% trans "Read our complete Privacy Policy" %}
+                    </a>
+                {% endif %}
+            </div>
+
+            <label class="placement-acknowledge">
+                {{ form.acknowledge }}
+                <span>{{ form.acknowledge.label }}</span>
+            </label>
+            {{ form.acknowledge.errors }}
+
+            <!-- OPTIONAL MARKETING SUBSCRIPTION -->
+            <label class="placement-acknowledge">
+                {{ form.marketing_opt_in }}
+                <span>
+                    {{ form.marketing_opt_in.label }}
+                    <small>{% trans "Optional. You can unsubscribe at any time." %}</small>
+                </span>
+            </label>
+            {{ form.marketing_opt_in.errors }}
+
+            <!-- START TEST -->
+            <div class="placement-start">
+                <p class="placement-start__error" role="alert" data-start-error hidden>
+                    {% trans "Enter a valid email address and acknowledge the Privacy Policy to begin." %}
+                </p>
+
+                <button class="placement-button placement-button--start" type="button" data-start hidden>
+                    {% trans "Start the test" %}
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ASSESSMENT: SHOWN AFTER START -->
+    <div class="placement-assessment" data-assessment>
+
+        <h2 class="placement-assessment__heading" tabindex="-1" data-assessment-focus>
+            {% trans "Your English assessment" %}
+        </h2>
+
+        <!-- ASSESSMENT PROGRESS -->
+        <div class="placement-progress"
+             aria-live="polite"
+             data-page-word="{% trans 'Questions' %}"
+             data-of-word="{% trans 'of' %}"
+             data-answered-word="{% trans 'answered' %}"
+             data-submitting-word="{% trans 'Submitting…' %}">
+
+            <span data-progress-label>{% trans "Questions 1–10 of 50" %}</span>
+            <span data-answer-count>0/50 {% trans "answered" %}</span>
+
+            <div class="placement-progress__track">
+                <div data-progress-fill class="placement-progress__fill"></div>
             </div>
         </div>
 
-        <!-- PRIVACY INFORMATION -->
-        <div class="placement-note">
-            <strong>{% trans "Privacy information" %}</strong>
+        <!-- QUESTION GROUPS -->
+        {% for page in pages %}
+            <section class="placement-panel placement-page"
+                     data-page="{{ forloop.counter0 }}"
+                     aria-label="{% blocktrans with number=forloop.counter %}Question set {{ number }}{% endblocktrans %}">
 
-            <p>
-                {% trans "English Grows will use your email address and submitted answers to calculate your placement result and send it to you. A separate copy will be sent to your assigned teacher, where applicable, or otherwise to English Grows for educational follow-up." %}
-            </p>
+                {% for row in page %}
+                    <fieldset class="placement-question" data-question>
+                        <legend>
+                            <span class="placement-number">{{ row.number }}.</span>
+                            {{ row.field.label }}
+                        </legend>
 
-            <p>
-                {% trans "Completing this assessment does not automatically subscribe you to marketing communications." %}
-            </p>
+                        {{ row.field }}
+                        {{ row.field.errors }}
+                    </fieldset>
+                {% endfor %}
+            </section>
+        {% endfor %}
 
-            {% if privacy_url %}
-                <a href="{{ privacy_url }}" target="_blank" rel="noopener">
-                    {% trans "Read our complete Privacy Policy" %}
-                </a>
-            {% endif %}
-        </div>
+        <!-- NAVIGATION -->
+        <nav class="placement-navigation" aria-label="{% trans 'Test navigation' %}" data-navigation>
+            <button class="placement-button placement-button--secondary" type="button" data-prev hidden>
+                {% trans "Previous" %}
+            </button>
 
-        <label class="placement-acknowledge">
-            {{ form.acknowledge }}
-            <span>{{ form.acknowledge.label }}</span>
-        </label>
-        {{ form.acknowledge.errors }}
+            <button class="placement-button" type="button" data-next hidden>
+                {% trans "Next questions" %}
+            </button>
 
-        <!-- OPTIONAL MARKETING SUBSCRIPTION -->
-        <label class="placement-acknowledge">
-            {{ form.marketing_opt_in }}
-            <span>
-                {{ form.marketing_opt_in.label }}
-                <small>{% trans "Optional. You can unsubscribe at any time." %}</small>
-            </span>
-        </label>
-        {{ form.marketing_opt_in.errors }}
-    </section>
-
-    <!-- ASSESSMENT PROGRESS -->
-    <div class="placement-progress"
-         aria-live="polite"
-         data-page-word="{% trans 'Questions' %}"
-         data-of-word="{% trans 'of' %}"
-         data-answered-word="{% trans 'answered' %}"
-         data-submitting-word="{% trans 'Submitting…' %}">
-
-        <span data-progress-label>{% trans "Questions 1–10 of 50" %}</span>
-        <span data-answer-count>0/50 {% trans "answered" %}</span>
-
-        <div class="placement-progress__track">
-            <div data-progress-fill class="placement-progress__fill"></div>
-        </div>
+            <button class="placement-button" type="submit" data-submit>
+                {% trans "See my placement result" %}
+            </button>
+        </nav>
     </div>
-
-    <!-- QUESTION GROUPS -->
-    {% for page in pages %}
-        <section class="placement-panel placement-page"
-                 data-page="{{ forloop.counter0 }}"
-                 aria-label="{% blocktrans with number=forloop.counter %}Question set {{ number }}{% endblocktrans %}">
-
-            {% for row in page %}
-                <fieldset class="placement-question" data-question>
-                    <legend>
-                        <span class="placement-number">{{ row.number }}.</span>
-                        {{ row.field.label }}
-                    </legend>
-
-                    {{ row.field }}
-                    {{ row.field.errors }}
-                </fieldset>
-            {% endfor %}
-
-        </section>
-    {% endfor %}
-
-    <!-- NAVIGATION -->
-    <nav class="placement-navigation" aria-label="{% trans 'Test navigation' %}" data-navigation>
-        <button class="placement-button placement-button--secondary" type="button" data-prev hidden>
-            {% trans "Previous" %}
-        </button>
-
-        <button class="placement-button" type="button" data-next hidden>
-            {% trans "Next questions" %}
-        </button>
-
-        <button class="placement-button" type="submit" data-submit>
-            {% trans "See my placement result" %}
-        </button>
-    </nav>
 </form>
 
 {% endblock %}

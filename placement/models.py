@@ -58,13 +58,14 @@ class PlacementAttempt(models.Model):
         INTERMEDIATE = "intermediate", "Intermediate"
         UPPER_INTERMEDIATE = "upper_intermediate", "Upper-Intermediate"
         ADVANCED = "advanced", "Advanced"
+        PROFICIENCY = "proficiency", "Proficiency"
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="placement_attempts")
     name = models.CharField(max_length=150, blank=True, default="")
     email = models.EmailField()
     test_version = models.CharField(max_length=10, default=TEST_VERSION)
-    answers = models.JSONField(default=dict, blank=True)
-    answer_snapshot = models.JSONField(default=dict, blank=True)
+    answers = models.JSONField(default=dict, blank=True, editable=False)
+    answer_snapshot = models.JSONField(default=dict, blank=True, editable=False)
     score = models.PositiveSmallIntegerField(null=True, blank=True, editable=False, validators=[MaxValueValidator(TOTAL_QUESTIONS)])
     recommended_level = models.CharField(max_length=20, choices=CourseLevel.choices, blank=True, editable=False)
     cefr_reference = models.CharField(max_length=2, blank=True, editable=False)
@@ -82,13 +83,13 @@ class PlacementAttempt(models.Model):
         if type(score) is not int or not 0 <= score <= TOTAL_QUESTIONS:
             raise ValueError("Placement score must be an integer between 0 and 50.")
         bands = (
-            (7, cls.CourseLevel.FOUNDATION, ""),
-            (14, cls.CourseLevel.ELEMENTARY, "A1"),
-            (24, cls.CourseLevel.PRE_INTERMEDIATE, "A2"),
-            (33, cls.CourseLevel.INTERMEDIATE, "B1"),
-            (44, cls.CourseLevel.UPPER_INTERMEDIATE, "B2"),
-            (50, cls.CourseLevel.ADVANCED, "C1"),
-        )
+            (7, cls.CourseLevel.ELEMENTARY, "A1"),
+            (14, cls.CourseLevel.PRE_INTERMEDIATE, "A2"),
+            (24, cls.CourseLevel.INTERMEDIATE, "B1"),
+            (37, cls.CourseLevel.UPPER_INTERMEDIATE, "B2"),
+            (48, cls.CourseLevel.ADVANCED, "C1"),
+            (50, cls.CourseLevel.PROFICIENCY, "C2"),
+        )        
         for maximum, level, cefr in bands:
             if score <= maximum:
                 return level, cefr

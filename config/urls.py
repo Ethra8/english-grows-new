@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -8,15 +7,19 @@ from profiles import views as profile_views
 
 urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
-    
-    path('admin/', admin.site.urls),
+
+    path("admin/", admin.site.urls),
     path("accounts/redirect/", profile_views.login_redirect, name="login_redirect"),
-    path('accounts/', include('allauth.urls')),
-    path('profiles/', include('profiles.urls')),
-    path('courses/', include('courses.urls')),
-    path('', include('home.urls')),
+    path("accounts/", include("allauth.urls")),
+    path("profiles/", include("profiles.urls")),
+    path("courses/", include("courses.urls")),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
-    path('placement-test/', include('placement.urls')),
+
+    # Placement test: English and Spanish URLs
+    path("", include("placement.urls")),
+
+    # Public website
+    path("", include("home.urls")),
 ]
 
 if settings.DEBUG:

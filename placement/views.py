@@ -32,6 +32,12 @@ def _private(response):
     return response
 
 
+def _placement_route(request, page):
+    """Return the placement URL name matching the current language."""
+    language = getattr(request, "LANGUAGE_CODE", "en")
+    return f"placement:{page}_es" if language == "es" else f"placement:{page}"
+
+
 @never_cache
 @require_http_methods(["GET", "POST"])
 def placement_test(request):
@@ -42,40 +48,70 @@ def placement_test(request):
     if request.method == "GET":
         request.session[TOKEN_KEY] = secrets.token_urlsafe(24)
         initial = {"token": request.session[TOKEN_KEY]}
+
         if request.user.is_authenticated:
-            initial.update(name=request.user.get_full_name() or request.user.get_username(), email=request.user.email)
+            initial.update(
+                name=request.user.get_full_name() or request.user.get_username(),
+                email=request.user.email,
+            )
+
         form = PlacementTestForm(questions=questions, initial=initial)
+
     else:
         form = PlacementTestForm(request.POST, questions=questions)
+
         if form.is_valid():
             if not secrets.compare_digest(form.cleaned_data["token"], request.session.get(TOKEN_KEY, "")):
                 form.add_error(None, _("This test session has expired. Reload the page and try again."))
             else:
                 answers = {str(q.number): form.cleaned_data.get(f"q_{q.number}") or None for q in questions}
+
+                name = (
+                    request.user.get_full_name() or request.user.get_username()
+                    if request.user.is_authenticated else ""
+                )
+
+                email = (
+                    request.user.email or form.cleaned_data["email"]
+                    if request.user.is_authenticated else form.cleaned_data["email"]
+                )
+
                 try:
                     with transaction.atomic():
                         attempt = PlacementAttempt(
                             user=request.user if request.user.is_authenticated else None,
-                            name=form.cleaned_data["name"], email=form.cleaned_data["email"],
-                            test_version=TEST_VERSION, answers=answers,
+                            name=name,
+                            email=email,
+                            test_version=TEST_VERSION,
+                            answers=answers,
                         ).grade()
+
                 except ValidationError:
                     form.add_error(None, _("We could not grade your answers. Please try again later."))
+
                 else:
                     request.session.pop(TOKEN_KEY, None)
                     request.session[RESULT_KEY] = attempt.pk
-                    return redirect("placement:result")
+                    return redirect(_placement_route(request, "result"))
 
     rows = [{"number": q.number, "field": form[f"q_{q.number}"]} for q in questions]
     pages = [rows[i:i + 10] for i in range(0, TOTAL_QUESTIONS, 10)]
+
+    site_url = settings.SITE_URL.rstrip("/")
+    english_url = f"{site_url}{reverse('placement:test')}"
+    spanish_url = f"{site_url}{reverse('placement:test_es')}"
+
     context = {
         "form": form,
         "pages": pages,
         "question_count": TOTAL_QUESTIONS,
         "privacy_url": getattr(settings, "PLACEMENT_PRIVACY_URL", ""),
-        "canonical_url": f"{settings.SITE_URL.rstrip('/')}{reverse('placement:test')}",
+        "placement_is_result": False,
+        "english_url": english_url,
+        "spanish_url": spanish_url,
+        "canonical_url": spanish_url if getattr(request, "LANGUAGE_CODE", "en") == "es" else english_url,
     }
-    
+
     return _private(render(request, "placement/test.html", context))
 
 
@@ -83,10 +119,22 @@ def placement_test(request):
 @require_http_methods(["GET"])
 def placement_result(request):
     attempt_id = request.session.get(RESULT_KEY)
+
     if not attempt_id:
-        return redirect("placement:test")
+        return redirect(_placement_route(request, "test"))
+
     attempt = PlacementAttempt.objects.filter(pk=attempt_id, completed_at__isnull=False).first()
-    if attempt is None or (attempt.user_id and (not request.user.is_authenticated or request.user.pk != attempt.user_id)):
+
+    if attempt is None or (
+        attempt.user_id and (
+            not request.user.is_authenticated or request.user.pk != attempt.user_id
+        )
+    ):
         request.session.pop(RESULT_KEY, None)
-        return redirect("placement:test")
-    return _private(render(request, "placement/result.html", {"attempt": attempt, "total": TOTAL_QUESTIONS}))
+        return redirect(_placement_route(request, "test"))
+
+    return _private(render(request, "placement/result.html", {
+        "attempt": attempt,
+        "total": TOTAL_QUESTIONS,
+        "placement_is_result": True,
+    }))
