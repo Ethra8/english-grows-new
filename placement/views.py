@@ -10,6 +10,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
+from communications.models import MarketingSubscriber
 from communications.services import send_placement_result_emails
 
 from .forms import PlacementTestForm
@@ -87,6 +88,15 @@ def placement_test(request):
                             test_version=TEST_VERSION,
                             answers=answers,
                         ).grade()
+
+                        # Optional single opt-in: activate immediately without a confirmation email.
+                        if form.cleaned_data["marketing_opt_in"]:
+                            MarketingSubscriber.subscribe(
+                                email=email,
+                                source=MarketingSubscriber.Source.PLACEMENT_TEST,
+                                consent_text=str(form.fields["marketing_opt_in"].label),
+                                user=request.user if request.user.is_authenticated else None,
+                            )
 
                 except ValidationError:
                     form.add_error(None, _("We could not grade your answers. Please try again later."))

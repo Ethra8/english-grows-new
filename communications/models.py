@@ -84,7 +84,8 @@ class MarketingSubscriber(models.Model):
     Manages optional marketing subscriptions independently of learner
     accounts and placement attempts.
 
-    Only confirmed, active subscribers may receive marketing emails.
+    Explicit marketing consent activates the subscription immediately.
+    Only active subscribers with recorded consent may receive marketing emails.
     """
 
     class Status(models.TextChoices):
@@ -151,58 +152,39 @@ class MarketingSubscriber(models.Model):
         return self.status == self.Status.ACTIVE and self.confirmed_at is not None
 
     @classmethod
-    def request_subscription(cls, *, email, source, consent_text, user=None):
-        """
-        Creates or renews a pending subscription after an explicit opt-in.
+    def subscribe(cls, *, email, source, consent_text, user=None):
+        """Activate a marketing subscription after explicit opt-in."""
+        email = (email or "").strip().casefold()
+        consent_text = (consent_text or "").strip()
 
-        Returns (subscriber, should_send_confirmation).
-
-        Existing active subscriptions are preserved. Repeated requests within
-        ten minutes do not trigger another confirmation email.
-        """
-        email = email.strip().casefold()
-        now = timezone.now()
-
-        if not email or not consent_text.strip():
+        if not email or not consent_text:
             raise ValueError("An email address and consent wording are required.")
+
+        now = timezone.now()
 
         with transaction.atomic():
             subscriber, _ = cls.objects.select_for_update().get_or_create(email=email)
 
-            if subscriber.status == cls.Status.ACTIVE:
-                return subscriber, False
+            # An existing active subscription needs no further action.
+            if subscriber.can_receive_marketing:
+                return subscriber
 
-            if (
-                subscriber.status == cls.Status.PENDING
-                and subscriber.requested_at
-                and now - subscriber.requested_at < timedelta(minutes=10)
-            ):
-                return subscriber, False
+            # Invalidate the previous unsubscribe link when subscribing again.
+            if subscriber.status == cls.Status.UNSUBSCRIBED:
+                subscriber.unsubscribe_token = uuid.uuid4()
 
-            subscriber.status = cls.Status.PENDING
+            subscriber.status = cls.Status.ACTIVE
             subscriber.source = source
             subscriber.consent_text = consent_text
             subscriber.requested_at = now
-            subscriber.confirmed_at = None
-            subscriber.confirmation_token = uuid.uuid4()
+            subscriber.confirmed_at = now
 
             if user is not None and user.is_authenticated and (user.email or "").strip().casefold() == email:
                 subscriber.user = user
 
             subscriber.save()
 
-        return subscriber, True
-
-    def confirm(self):
-        """Activates a pending subscription after valid email confirmation."""
-        if self.status != self.Status.PENDING:
-            return False
-
-        self.status = self.Status.ACTIVE
-        self.confirmed_at = timezone.now()
-        self.unsubscribe_token = uuid.uuid4()
-        self.save(update_fields=["status", "confirmed_at", "unsubscribe_token", "updated_at"])
-        return True
+        return subscriber
 
     def unsubscribe(self):
         """Withdraws the subscription without deleting its consent evidence."""
