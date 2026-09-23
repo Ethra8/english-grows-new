@@ -200,7 +200,7 @@ This README documents the application's technical and organisational approach to
 ---
 ## Core Data Protection Principles
 
-English Grows follows the principles established in GDPR Article 5 when designing and operating features that process personal data.
+English Grows follows the principles established in **GDPR Article 5** when designing and operating features that process personal data.
 
 These include:
 
@@ -216,7 +216,7 @@ These include:
 
 Official text:
 
-[GDPR Article 5 — Principles relating to processing of personal data](https://eur-lex.europa.eu/eli/reg/2016/679/)
+**[GDPR Article 5 — Principles relating to processing of personal data](https://eur-lex.europa.eu/eli/reg/2016/679/)**
 
 These principles are applied throughout the platform when deciding:
 
@@ -231,11 +231,11 @@ These principles are applied throughout the platform when deciding:
 ---
 ## Lawful Bases and Processing Purposes
 
-Every processing activity involving personal data must have a defined purpose and an applicable lawful basis under GDPR Article 6.
+Every processing activity involving personal data must have a defined purpose and an applicable lawful basis under **GDPR Article 6**.
 
 Official text:
 
-[GDPR Article 6 — Lawfulness of processing](https://eur-lex.europa.eu/eli/reg/2016/679/)
+**[GDPR Article 6 — Lawfulness of processing](https://eur-lex.europa.eu/eli/reg/2016/679/)**
 
 The appropriate lawful basis may differ according to the processing activity.
 
@@ -1276,11 +1276,11 @@ The fact that a company finances an employee's training does not, by itself, est
 
 Access must be assessed against the specific processing purpose, applicable legal basis and information genuinely required by the employer.
 
-Company Admins may need to know whether an employee has completed the Learning Needs questionnaire as part of the training process. However, they do not automatically require access to the learner's confidence self-assessments, personal explanations or complete questionnaire.
+Company Admins may need to know whether an employee has submitted the Learning Needs questionnaire as part of the training process. However, they do not automatically require access to the learner's confidence self-assessments, personal explanations or complete questionnaire.
 
 English Grows therefore adopts the following default policy:
 
-**Company Admin access is limited to the questionnaire's submission/completion status.**
+**Company Admin access is limited to the questionnaire's submission status.**
 
 The following information is excluded from the default Company Admin view:
 
@@ -1308,11 +1308,9 @@ The Company Admin's relationship with the employee does not automatically grant 
 
 ##### Technical Enforcement
 
-Access restrictions must be enforced server-side through role-aware views and Course/enrollment ownership checks.
+Access restrictions are enforced server-side through role-aware views and Course/enrollment ownership checks.
 
-Hiding questionnaire content in a template, removing a navigation link or applying CSS restrictions is not sufficient to prevent unauthorised access.
-
-The implementation must ensure that:
+The implementation safely ensures that:
 
 - Learners can access only their own questionnaire records.
 - Teachers can access questionnaire records only for learners enrolled in Courses assigned to them.
@@ -1321,7 +1319,7 @@ The implementation must ensure that:
 - Pending questionnaires do not expose unfinished responses through academic summaries.
 - The original questionnaire responses remain read-only after submission, subject to the established review and reset workflows.
 
-The Company Admin's existing Learning Needs route must be restricted at the view level rather than relying exclusively on template presentation.
+The Company Admin's existing Learning Needs route is restricted at the view level rather than relying on template presentation.
 
 ##### Academic Profile Integration
 
