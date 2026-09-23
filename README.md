@@ -254,11 +254,8 @@ Instead, role-based access is determined through the user's profile.
 The model is intentionally compact. It stores:
 
 - the learner through a one-to-one `student` relationship;
-- selected `learning_goals`;
 - `next_review_date`;
 - `updated_at`.
-
-`learning_goals` are managed through reusable `LearningGoal` records rather than being stored as repeated free text.
 
 The Academic Profile deliberately avoids duplicating data that already has a canonical owner elsewhere in the application.
 
@@ -4687,7 +4684,6 @@ LESSON DELIVERY & ATTENDANCE
 └── Attendance
 
 LEARNING & ASSESSMENT
-├── LearningGoal
 ├── StudentAcademicProfile
 ├── StudentNeedsAnalysis
 ├── StudentSkillAssessment
@@ -4803,7 +4799,6 @@ erDiagram
         datetime enrolled_at
         varchar status
         varchar target_level
-        text learning_objective
     }
 
     CLASS_SESSION {
@@ -5117,7 +5112,7 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Current CEFR level remains owned by `UserProfile`.
 - Course target/objective information remains owned by `CourseEnrollment` / Course context.
 - Strengths and development areas are derived from the canonical skill/subskill assessment models.
-- Learning goals are reusable `LearningGoal` records connected through the Academic Profile.
+
 
 #### Learning Needs / Student Needs Analysis
 
@@ -5743,7 +5738,6 @@ An enrolment can therefore contain Course-specific information such as:
 - enrolment status;
 - enrolment date;
 - target level;
-- learning objective;
 - assigned lesson relationships;
 - Attendance statistics;
 - Course participation.

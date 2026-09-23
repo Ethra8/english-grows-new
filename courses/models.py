@@ -1797,12 +1797,6 @@ class CourseEnrollment(models.Model):
         help_text="Optional target CEFR level, e.g. B2, C1."
     )
 
-    learning_objective = models.TextField(
-        blank=True,
-        help_text="Optional individual or company learning objective."
-    )
-
-
     # ---------------------------------------------------------
     # META
     # ---------------------------------------------------------

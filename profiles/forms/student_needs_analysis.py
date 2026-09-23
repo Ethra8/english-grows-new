@@ -63,22 +63,6 @@ CONFIDENCE_LABELS = {
 }
 
 # ---------------------------------------------------------
-# PRIORITY AREAS
-# ---------------------------------------------------------
-PRIORITY_CHOICES = [
-    ("speaking", _("Speaking")),
-    ("listening", _("Listening")),
-    ("reading", _("Reading")),
-    ("writing", _("Writing")),
-    ("grammar", _("Grammar accuracy")),
-    ("vocabulary", _("Vocabulary")),
-    ("pronunciation", _("Pronunciation")),
-    ("fluency", _("Fluency")),
-    ("confidence", _("Confidence when communicating")),
-]
-
-
-# ---------------------------------------------------------
 # LEARNING PREFERENCES
 # ---------------------------------------------------------
 LEARNING_PREFERENCE_CHOICES = [

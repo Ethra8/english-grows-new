@@ -18,7 +18,6 @@ from .models import (
     UserProfile,
     StudentNeedsAnalysis,
     StudentAcademicProfile,
-    LearningGoal,
     StudentSkillAssessment,
     StudentSubSkillAssessment,
     SUBSKILLS,
@@ -877,7 +876,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
     )
 
     autocomplete_fields = ("student",)
-    filter_horizontal = ("learning_goals",)
 
     readonly_fields = (
         "updated_at",
@@ -890,7 +888,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "student",
-                    "learning_goals",
                     "next_review_date",
                     "updated_at",
                 ),
@@ -1196,26 +1193,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                 update_fields=("rating", "updated_at")
             )
 
-
-# LEARNING GOALS ==============================================================
-
-@admin.register(LearningGoal)
-class LearningGoalAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "slug",
-        "is_active",
-        "order",
-    )
-
-    list_editable = (
-        "is_active",
-        "order",
-    )
-
-    prepopulated_fields = {
-        "slug": ("name",),
-    }
 
 
 # REGISTRATION ================================================================

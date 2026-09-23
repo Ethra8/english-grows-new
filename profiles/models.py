@@ -237,21 +237,6 @@ class TeacherProfile(models.Model):
         return self.user.get_full_name() or self.user.username
 
 
-# TO be able to update learning_goals in student profile
-# ALSO from the Admin Panel
-class LearningGoal(models.Model):
-    name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True)
-    is_active = models.BooleanField(default=True)
-    order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ["order", "name"]
-
-    def __str__(self):
-        return self.name
-
-
 class StudentNeedsAnalysis(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", "Pending"
@@ -449,12 +434,6 @@ class StudentAcademicProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="academic_profile"
-    )
-
-    learning_goals = models.ManyToManyField(
-        LearningGoal,
-        blank=True,
-        related_name="student_academic_profiles"
     )
 
     next_review_date = models.DateField(

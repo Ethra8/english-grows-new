@@ -233,7 +233,6 @@ class CourseEnrollmentInline(admin.TabularInline):
         "student",
         "status",
         "target_level",
-        "learning_objective",
         "enrolled_at",
     )
 
