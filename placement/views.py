@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from communications.models import MarketingSubscriber
 from communications.services import send_placement_result_emails
+from config.turnstile import verify_turnstile
 
 from .forms import PlacementTestForm
 from .models import PlacementAttempt, PlacementQuestion, TEST_VERSION, TOTAL_QUESTIONS
@@ -48,6 +49,8 @@ def placement_test(request):
     if questions is None:
         return HttpResponse(_("The placement test is temporarily unavailable. Please try again later."), status=503)
 
+    turnstile_failed = False
+
     if request.method == "GET":
         request.session[TOKEN_KEY] = secrets.token_urlsafe(24)
         initial = {"token": request.session[TOKEN_KEY]}
@@ -66,50 +69,62 @@ def placement_test(request):
         if form.is_valid():
             if not secrets.compare_digest(form.cleaned_data["token"], request.session.get(TOKEN_KEY, "")):
                 form.add_error(None, _("This test session has expired. Reload the page and try again."))
+
             else:
-                answers = {str(q.number): form.cleaned_data.get(f"q_{q.number}") or None for q in questions}
+                is_test_key = settings.TURNSTILE_SITEKEY == "1x00000000000000000000AA"
 
-                name = (
-                    request.user.get_full_name() or request.user.get_username()
-                    if request.user.is_authenticated else ""
-                )
-
-                email = (
-                    request.user.email or form.cleaned_data["email"]
-                    if request.user.is_authenticated else form.cleaned_data["email"]
-                )
-
-                try:
-                    with transaction.atomic():
-                        attempt = PlacementAttempt(
-                            user=request.user if request.user.is_authenticated else None,
-                            name=name,
-                            email=email,
-                            test_version=TEST_VERSION,
-                            answers=answers,
-                        ).grade()
-
-                        # Optional single opt-in: activate immediately without a confirmation email.
-                        if form.cleaned_data["marketing_opt_in"]:
-                            MarketingSubscriber.subscribe(
-                                email=email,
-                                source=MarketingSubscriber.Source.PLACEMENT_TEST,
-                                consent_text=str(form.fields["marketing_opt_in"].label),
-                                user=request.user if request.user.is_authenticated else None,
-                            )
-
-                except ValidationError:
-                    form.add_error(None, _("We could not grade your answers. Please try again later."))
+                if not verify_turnstile(
+                    request.POST.get("cf-turnstile-response", ""),
+                    expected_hostname=None if is_test_key else ("englishgrows.com", "www.englishgrows.com"),
+                    expected_action=None if is_test_key else "placement",
+                ):
+                    turnstile_failed = True
+                    form.add_error(None, _("Security verification failed. Please try again."))
 
                 else:
-                    request.session.pop(TOKEN_KEY, None)
-                    request.session[RESULT_KEY] = attempt.pk
+                    answers = {str(q.number): form.cleaned_data.get(f"q_{q.number}") or None for q in questions}
 
-                    # The grading transaction has committed. Email delivery cannot
-                    # undo the saved result, and refreshing the result page won't resend.
-                    send_placement_result_emails(attempt)
+                    name = (
+                        request.user.get_full_name() or request.user.get_username()
+                        if request.user.is_authenticated else ""
+                    )
 
-                    return redirect(_placement_route(request, "result"))
+                    email = (
+                        request.user.email or form.cleaned_data["email"]
+                        if request.user.is_authenticated else form.cleaned_data["email"]
+                    )
+
+                    try:
+                        with transaction.atomic():
+                            attempt = PlacementAttempt(
+                                user=request.user if request.user.is_authenticated else None,
+                                name=name,
+                                email=email,
+                                test_version=TEST_VERSION,
+                                answers=answers,
+                            ).grade()
+
+                            # Optional single opt-in: activate immediately without a confirmation email.
+                            if form.cleaned_data["marketing_opt_in"]:
+                                MarketingSubscriber.subscribe(
+                                    email=email,
+                                    source=MarketingSubscriber.Source.PLACEMENT_TEST,
+                                    consent_text=str(form.fields["marketing_opt_in"].label),
+                                    user=request.user if request.user.is_authenticated else None,
+                                )
+
+                    except ValidationError:
+                        form.add_error(None, _("We could not grade your answers. Please try again later."))
+
+                    else:
+                        request.session.pop(TOKEN_KEY, None)
+                        request.session[RESULT_KEY] = attempt.pk
+
+                        # The grading transaction has committed. Email delivery cannot
+                        # undo the saved result, and refreshing the result page won't resend.
+                        send_placement_result_emails(attempt)
+
+                        return redirect(_placement_route(request, "result"))
 
     rows = [{"number": q.number, "field": form[f"q_{q.number}"]} for q in questions]
     pages = [rows[i:i + 10] for i in range(0, TOTAL_QUESTIONS, 10)]
@@ -127,6 +142,8 @@ def placement_test(request):
         "english_url": english_url,
         "spanish_url": spanish_url,
         "canonical_url": spanish_url if getattr(request, "LANGUAGE_CODE", "en") == "es" else english_url,
+        "turnstile_sitekey": settings.TURNSTILE_SITEKEY,
+        "turnstile_failed": turnstile_failed,
     }
 
     return _private(render(request, "placement/test.html", context))

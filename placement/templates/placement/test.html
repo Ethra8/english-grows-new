@@ -21,10 +21,11 @@
 
 {% block placement_content %}
 
-<form class="placement-form" method="post" novalidate data-placement-form>
+<form class="placement-form" method="post" novalidate data-placement-form data-turnstile-failed="{{ turnstile_failed|yesno:'true,false' }}">
     {% csrf_token %}
     {{ form.token }}
     {{ form.website }}
+    <input type="hidden" name="cf-turnstile-response" data-turnstile-response>
 
     {% if form.non_field_errors %}
         <div class="placement-errors" role="alert" data-form-errors>{{ form.non_field_errors }}</div>
@@ -155,6 +156,14 @@
             </section>
         {% endfor %}
 
+        <!-- TURNSTILE: EXECUTED ONLY AT FINAL SUBMISSION -->
+        <div data-turnstile-wrap hidden>
+            <div id="placement-turnstile" data-turnstile data-sitekey="{{ turnstile_sitekey }}"></div>
+            <p class="placement-start__error" role="alert" data-turnstile-error hidden>
+                {% trans "Security verification could not be completed. Please try again." %}
+            </p>
+        </div>
+
         <!-- NAVIGATION -->
         <nav class="placement-navigation" aria-label="{% trans 'Test navigation' %}" data-navigation>
             <button class="placement-button placement-button--secondary" type="button" data-prev hidden>
@@ -175,5 +184,6 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
     <script src="{% static 'placement/js/placement.js' %}" defer></script>
 {% endblock %}

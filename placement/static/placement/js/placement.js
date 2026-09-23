@@ -21,11 +21,21 @@
     const total = form.querySelectorAll('[data-question]').length;
     const submitLabel = submit.textContent;
 
-    if (!intro || !assessment || !start || !email || !acknowledge || !pages.length) return;
+    const security = form.querySelector('[data-turnstile-wrap]');
+    const widget = form.querySelector('[data-turnstile]');
+    const response = form.querySelector('[data-turnstile-response]');
+    const securityError = form.querySelector('[data-turnstile-error]');
+
+    if (!intro || !assessment || !start || !email || !acknowledge || !pages.length ||
+        !security || !widget || !response || !securityError) return;
 
     let current = 0;
     let started = false;
+    let widgetId = null;
+    let verifying = false;
+    let submitting = false;
 
+    const lastPage = pages.length - 1;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function moveToAssessment() {
@@ -33,13 +43,25 @@
         assessment.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
 
+    function resetSubmission(showError = false) {
+        verifying = false;
+        submitting = false;
+        response.value = '';
+        submit.disabled = false;
+        submit.textContent = submitLabel;
+        securityError.hidden = !showError;
+    }
+
     function showPage(index, moveFocus = false) {
-        current = Math.max(0, Math.min(index, pages.length - 1));
+        current = Math.max(0, Math.min(index, lastPage));
 
         pages.forEach((page, i) => { page.hidden = i !== current; });
         prev.hidden = current === 0;
-        next.hidden = current === pages.length - 1;
-        submit.hidden = current !== pages.length - 1;
+        next.hidden = current === lastPage;
+        submit.hidden = current !== lastPage;
+        security.hidden = current !== lastPage;
+
+        if (current !== lastPage && verifying) resetSubmission();
 
         label.textContent = `${progress.dataset.pageWord} ${current * 10 + 1}-${Math.min((current + 1) * 10, total)} ${progress.dataset.ofWord} ${total}`;
 
@@ -91,6 +113,69 @@
         intro.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
 
+    function verifyAndSubmit() {
+        if (!window.turnstile) {
+            resetSubmission(true);
+            return;
+        }
+
+        verifying = true;
+        response.value = '';
+        securityError.hidden = true;
+        submit.disabled = true;
+        submit.textContent = progress.dataset.submittingWord;
+
+        try {
+            if (widgetId === null) {
+                widgetId = window.turnstile.render('#placement-turnstile', {
+                    sitekey: widget.dataset.sitekey,
+                    action: 'placement',
+                    execution: 'execute',
+                    appearance: 'execute',
+                    'response-field': false,
+                    retry: 'never',
+
+                    callback: token => {
+                        if (!verifying || current !== lastPage) return;
+
+                        if (!token) {
+                            resetSubmission(true);
+                            return;
+                        }
+
+                        response.value = token;
+                        verifying = false;
+                        submitting = true;
+                        form.submit();
+                    },
+
+                    'error-callback': errorCode => {
+                        console.warn('Turnstile verification error:', errorCode);
+                        if (!submitting) resetSubmission(true);
+                        return true;
+                    },
+
+                    'expired-callback': () => {
+                        if (!submitting) resetSubmission(true);
+                    },
+
+                    'timeout-callback': () => {
+                        if (!submitting) resetSubmission(true);
+                    },
+                });
+
+            } else {
+                window.turnstile.reset(widgetId);
+            }
+
+            window.turnstile.execute(widgetId);
+
+        } catch (error) {
+            console.error('Turnstile initialization failed:', error);
+            resetSubmission(true);
+        }
+    }
+
     start.addEventListener('click', () => beginTest());
 
     prev.addEventListener('click', () => showPage(current - 1, true));
@@ -99,44 +184,51 @@
     form.addEventListener('change', updateProgress);
 
     form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        if (verifying || submitting) return;
+
         if (!started) {
-            event.preventDefault();
             beginTest();
             return;
         }
 
         if (!email.checkValidity() || !acknowledge.checked) {
-            event.preventDefault();
             returnToIntro();
             validateIntro();
             return;
         }
 
-        if (current !== pages.length - 1) {
-            event.preventDefault();
+        if (current !== lastPage) {
             showPage(current + 1, true);
             return;
         }
 
-        submit.disabled = true;
-        submit.textContent = progress.dataset.submittingWord;
+        verifyAndSubmit();
     });
 
-    window.addEventListener('pageshow', () => {
-        submit.disabled = false;
-        submit.textContent = submitLabel;
+    window.addEventListener('pageshow', event => {
+        if (event.persisted) {
+            resetSubmission();
+            if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
+        }
+
         updateProgress();
     });
 
     const invalidPage = pages.findIndex(page => page.querySelector('.errorlist'));
     const introHasErrors = Boolean(intro.querySelector('.errorlist'));
     const formHasErrors = Boolean(form.querySelector('[data-form-errors]'));
+    const turnstileFailed = form.dataset.turnstileFailed === 'true';
 
     showPage(invalidPage >= 0 ? invalidPage : 0);
     updateProgress();
     start.hidden = false;
 
-    if (invalidPage >= 0 && !introHasErrors && !formHasErrors) {
+    if (turnstileFailed && !introHasErrors) {
+        beginTest(lastPage);
+        securityError.hidden = false;
+    } else if (invalidPage >= 0 && !introHasErrors && !formHasErrors) {
         beginTest(invalidPage);
     } else {
         assessment.hidden = true;
