@@ -8,8 +8,6 @@ The application combines course management, automated lesson scheduling, attenda
 
 ## 📑 Table of Contents
 
-## 📑 Table of Contents
-
 - [Data Protection & Privacy](#data-protection--privacy)
   - [Regulatory Framework](#regulatory-framework)
   - [Core Data Protection Principles](#core-data-protection-principles)
