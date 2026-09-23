@@ -5546,24 +5546,410 @@ Because these purposes are different, the attempt is not reconstructed later fro
 
 # Security
 
-English Grows applies layered security controls across public forms,
-authentication, application access and data processing.
+English Grows applies layered security controls across public forms, authentication, application access and data processing.
 
-Security mechanisms are implemented at the appropriate application
-layer rather than relying exclusively on browser-side validation.
+Security is enforced on the server rather than relying exclusively on browser-side validation. Public form protection combines Django's existing security mechanisms with Cloudflare Turnstile to reduce automated submissions while preserving a straightforward experience for legitimate users.
 
-## Public Form Protection
+---
 
-Public-facing forms incorporate complementary anti-abuse measures
-designed to reduce automated submissions while preserving a smooth
-experience for legitimate users.
+## Public Form Protection — Cloudflare Turnstile
 
-The placement-test workflow includes server-side validation,
-CSRF protection, session-token validation and a non-intrusive
-spam-trap mechanism.
+**Implementation status: Complete — deployed and verified in production.**
 
-Additional bot-verification and rate-limiting controls are developed
-and documented separately as they are introduced.
+English Grows uses **Cloudflare Turnstile (Managed mode)** to protect two publicly accessible workflows:
+
+1. Account registration through `django-allauth`.
+2. The public 50-question English Placement Test.
+
+Both integrations use the same Cloudflare widget configuration and a shared Django verification helper, while maintaining independent form actions and business workflows.
+
+Turnstile is an additional protection layer. It does not replace Django form validation, CSRF protection, application permissions or the placement test's existing session validation.
+
+### Protected forms
+
+| Public form | Turnstile action | Verification point | Protected operation | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| Account signup | `signup` | Before accepting registration | User account creation and the subsequent email-verification workflow | Production verified |
+| English Placement Test | `placement` | Final submission, after the assessment | Grading, attempt persistence, optional marketing subscription and result-email delivery | Production verified |
+
+The two workflows intentionally remain independent: completing the public placement test does not require account registration, and Turnstile verification does not modify the assessment's scoring or marketing-consent rules.
+
+---
+
+### Security architecture
+
+The integration follows a shared server-side verification architecture:
+
+```text
+PUBLIC FORM
+    │
+    ▼
+Cloudflare Turnstile widget
+    │
+    ▼
+Browser obtains verification token
+    │
+    ▼
+Django receives form POST
+    │
+    ├── Existing form / session validation
+    │
+    ▼
+config/turnstile.py
+    │
+    ▼
+Cloudflare Siteverify API
+    │
+    ├── Verification rejected
+    │       │
+    │       └── Reject submission without executing
+    │           the protected business operation
+    │
+    └── Verification accepted
+            │
+            ▼
+        Continue normal Django workflow
+```
+
+The browser-side success indicator is not sufficient authorisation to accept a submission.
+
+Django independently validates the token through Cloudflare's **Siteverify API** before allowing the protected operation to proceed.
+
+The shared helper is located at:
+
+```text
+config/turnstile.py
+```
+
+Its principal entry point is:
+
+```python
+verify_turnstile(...)
+```
+
+The helper validates the submitted token and evaluates Cloudflare's response. Where applicable, it also checks the expected hostname and action.
+
+Verification fails when the token is missing, invalid or rejected by Cloudflare, or when the returned hostname/action does not match the expected configuration.
+
+A verification request failure is treated as a failed verification rather than silently bypassing the security control.
+
+Cloudflare Turnstile tokens are short-lived and single-use. The integration therefore does not treat a previously obtained token as permanent permission to submit a form.
+
+Official documentation:
+
+- [Cloudflare Turnstile — Server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)
+- [Cloudflare Turnstile — Testing](https://developers.cloudflare.com/turnstile/troubleshooting/testing/)
+
+---
+
+### Environment configuration
+
+Turnstile credentials are supplied through environment variables rather than hard-coded into application source files.
+
+The Django settings use:
+
+```python
+TURNSTILE_SITEKEY = os.environ["TURNSTILE_SITEKEY"]
+TURNSTILE_SECRET_KEY = os.environ["TURNSTILE_SECRET_KEY"]
+```
+
+| Environment | Configuration |
+| :--- | :--- |
+| Local development | Cloudflare's official testing credentials |
+| Render production | Real Cloudflare widget site key and secret key |
+| Public widget | Site key only |
+| Server-side Siteverify request | Secret key, never exposed to the browser |
+
+The production `SITE_URL` remains:
+
+```text
+https://englishgrows.com
+```
+
+The production integration accepts the two legitimate website hostnames:
+
+```text
+englishgrows.com
+www.englishgrows.com
+```
+
+Cloudflare hostname configuration uses hostnames, not full page URLs. Individual paths such as `/accounts/signup/` do not need to be registered as separate hostnames.
+
+The integration also validates the relevant Turnstile action so that a successful token intended for one protected workflow is not accepted indiscriminately by another.
+
+**Credential management requirements:**
+
+- Real secret keys must remain in protected environment configuration.
+- Real credentials must not be committed to Git or documented in the README.
+- Local development should use matching Cloudflare testing credentials.
+- A real production site key must not be paired with a dummy testing secret, or vice versa.
+- Changes to environment variables require the relevant application process to load the updated configuration.
+
+The existing production account-signup integration was verified using the real Cloudflare credentials configured in Render.
+
+---
+
+### Account signup integration
+
+The signup integration extends Django-allauth through its supported custom-signup-form mechanism.
+
+Relevant implementation files include:
+
+```text
+config/signup_forms.py
+config/turnstile.py
+config/settings.py
+templates/account/signup.html
+```
+
+The custom signup form preserves the existing allauth registration and validation workflow while requiring a valid Turnstile response.
+
+The existing account-registration requirements remain unchanged:
+
+- Email-based registration.
+- Password validation.
+- Django-allauth account handling.
+- Mandatory email verification in production.
+- Existing account/profile creation workflow.
+
+Turnstile verification is performed before registration is accepted.
+
+The integration does not replace allauth's email-verification mechanism: **bot verification and email ownership verification serve different purposes**.
+
+A successful Turnstile challenge establishes that the submitted request passed the configured anti-abuse verification. Email confirmation remains responsible for verifying access to the registered email address.
+
+#### Production verification
+
+Account registration was tested using accessible email accounts.
+
+The tests confirmed that:
+
+- The production Turnstile challenge completed successfully.
+- Django accepted the corresponding verification.
+- The account-registration workflow continued normally.
+- Verification emails were delivered.
+- Both test accounts were successfully verified through their email-verification links.
+
+One verification email initially appeared missing because the receiving Outlook account had not synchronised its inbox. It subsequently appeared. A separate test email account received its verification message promptly.
+
+This established that the Turnstile integration was not preventing the existing allauth email-verification workflow.
+
+Following deployment, no new automated signup records were observed during the initial monitoring period. This is an observed operational result, not a guarantee that automated registration attempts can never occur.
+
+---
+
+### Public Placement Test integration
+
+The placement test uses Turnstile at the **final submission stage**, rather than requiring verification before the learner starts the assessment.
+
+This is important because the assessment contains 50 questions across five browser-side pages and may take longer than a Turnstile token's validity period.
+
+The widget is therefore executed when the learner requests their result, avoiding reliance on a token obtained at the beginning of the assessment.
+
+Relevant implementation files include:
+
+```text
+placement/views.py
+placement/templates/placement/test.html
+placement/static/placement/js/placement.js
+config/turnstile.py
+```
+
+The protected workflow is:
+
+```text
+Learner opens public Placement Test
+    │
+    ▼
+Email and required Privacy Policy acknowledgement
+    │
+    ▼
+Optional marketing subscription preference
+    │
+    ▼
+Five assessment pages / 50 questions
+    │
+    ▼
+Learner selects "See my placement result"
+    │
+    ▼
+Cloudflare Turnstile verification
+    │
+    ├── Rejected
+    │       ├── Do not grade or save a PlacementAttempt
+    │       ├── Do not initiate marketing subscription
+    │       ├── Do not send result emails
+    │       └── Preserve the submitted answers for retry
+    │
+    └── Accepted
+            │
+            ▼
+        Existing Django validation
+            │
+            ▼
+        PlacementAttempt.grade()
+            │
+            ├── Save attempt and historical answer snapshot
+            │
+            └── Optional marketing subscription
+                    │
+                    ▼
+                Commit transaction
+                    │
+                    ▼
+                Send transactional result emails
+                    │
+                    ▼
+                Display private result page
+```
+
+The placement test retains its existing complementary protections:
+
+- Django CSRF protection.
+- Server-side form and answer validation.
+- Session-token validation.
+- Non-intrusive spam-trap validation.
+- Server-owned grading and recommendation logic.
+- Transactional persistence of the attempt and optional marketing subscription.
+- Private result-page access through the browser session.
+
+The Turnstile layer does not modify the 50-question bank, placement bands, historical answer snapshots or result-email templates.
+
+If verification is rejected, the learner's previously entered answers remain available for a subsequent attempt rather than requiring the entire assessment to be completed again.
+
+---
+
+### Marketing consent remains independent
+
+Turnstile verification and marketing consent are separate operations.
+
+Passing the security challenge does **not** constitute permission to receive promotional communications.
+
+The existing placement form provides an optional `marketing_opt_in` checkbox that is initially unchecked.
+
+The subscription workflow uses **explicit single opt-in**:
+
+| Learner action | Result |
+| :--- | :--- |
+| Does not select marketing opt-in | No marketing subscription operation |
+| Selects marketing opt-in and successfully submits the assessment | `MarketingSubscriber.subscribe()` creates or reactivates an active subscription |
+| Submits an invalid form or fails security verification | The protected placement submission does not proceed |
+| Opens or refreshes the result page | No new subscription or result-email delivery |
+
+Subscription consent is recorded separately from placement answers, including the subscription source, consent wording and relevant timestamps.
+
+The subscription is activated immediately after explicit opt-in; this workflow does not send a separate marketing-confirmation email.
+
+The existing unsubscribe state and token remain part of the `MarketingSubscriber` model.
+
+**Implementation and verification status:** The marketing subscriber workflow has been tested successfully. An explicitly checked placement-test subscription produced the expected active database record.
+
+Marketing subscription remains independent of transactional result delivery: learners receive their requested placement result regardless of whether they agree to receive future marketing communications.
+
+A successful subscription does not itself initiate a marketing campaign.
+
+---
+
+## Verification and Testing
+
+The Turnstile implementation was checked through Django system checks, JavaScript syntax validation, automated Django tests and controlled production browser tests.
+
+Automated verification was performed locally against Django's isolated test database using Cloudflare's documented testing credentials and controlled Siteverify responses.
+
+The external Cloudflare response, grading method, subscription service and outbound email service were mocked where appropriate, allowing the security integration to be tested without creating production records or sending real emails.
+
+### Automated Django tests
+
+Test module:
+
+```text
+placement/test_turnstile.py
+```
+
+Execution command:
+
+```bash
+python manage.py test placement.test_turnstile --verbosity 2
+```
+
+#### Test results
+
+| Test | Expected behaviour | Result |
+| :--- | :--- | :---: |
+| Valid Turnstile token | Accept the submission, persist the attempt and invoke result delivery | [x] PASS |
+| Valid token without marketing consent | Accept the assessment without invoking subscription | [x] PASS |
+| Missing token | Reject submission without calling Cloudflare | [x] PASS |
+| Invalid token | Reject submission without protected business operations | [x] PASS |
+| Expired or previously used token | Reject Cloudflare's `timeout-or-duplicate` response | [x] PASS |
+| Invalid placement-session token | Reject before attempting Cloudflare verification | [x] PASS |
+| Both authorised production hostnames | Accept successful verification for either legitimate hostname | [x] PASS |
+| Unauthorised hostname | Reject verification despite a successful challenge response | [x] PASS |
+| Incorrect Turnstile action | Reject verification for an action belonging to another workflow | [x] PASS |
+| Failed verification and retry | Preserve submitted answers and allow a subsequent valid submission | [x] PASS |
+
+**Automated result: 10 tests executed — 10 passed, 0 failures, 0 errors.**
+
+Django reported no system-check issues and destroyed the temporary test database after execution.
+
+The test database was separate from the normal development and production databases.
+
+These automated tests verified Django's response to controlled Siteverify results. They did not themselves exercise Cloudflare's live challenge, actual SMTP transport or the complete browser JavaScript environment; those integration boundaries were subsequently checked through production testing.
+
+### Production acceptance checklist
+
+| Verification | Result |
+| :--- | :---: |
+| Account signup displays and completes the real Cloudflare Turnstile challenge | [x] |
+| Valid signup verification is accepted by Django | [x] |
+| Account registration proceeds to allauth email verification | [x] |
+| Verification emails are delivered and test accounts can be verified | [x] |
+| Placement assessment navigation works through the five question pages | [x] |
+| Turnstile executes at final placement submission | [x] |
+| Successful placement verification allows the assessment to be processed | [x] |
+| Placement result is generated and displayed | [x] |
+| Transactional placement-result emails are delivered | [x] |
+| Marketing subscriber single-opt-in workflow produces the expected active record | [x] |
+| Django system checks report no issues | [x] |
+| Placement JavaScript syntax check passes | [x] |
+| Automated Turnstile test suite passes all 10 tests | [x] |
+
+**Final status: Cloudflare Turnstile protection for account signup and the public Placement Test is implemented, deployed and successfully verified in production.**
+
+The existing account-verification, assessment-grading, result-email and optional marketing-subscription workflows remain separate and operational.
+
+---
+
+## Operational Notes
+
+### Verification failures
+
+If the Turnstile widget reports success but Django rejects the submission, inspect the server-side verification outcome rather than assuming the browser widget alone establishes validity.
+
+Relevant checks include:
+
+- Whether the matching site and secret keys are configured in the correct environment.
+- Whether the requested hostname is one of the authorised production hostnames.
+- Whether the returned action matches the form being submitted.
+- Whether the token is present, valid and still usable.
+- Whether the Cloudflare Siteverify request succeeded.
+
+The integration should reject a failed verification rather than permit an unverified submission.
+
+### Email delivery
+
+A successful signup verification and a delivered account-verification email are separate stages.
+
+Similarly, a successful placement verification and downstream result-email delivery are separate operations.
+
+If an email appears delayed, inspect the receiving mailbox, spam folder and mail-client synchronisation alongside the application's email logs before concluding that Turnstile caused the delivery issue.
+
+### Future changes
+
+When introducing another public form, reuse the shared server-side verification helper rather than implementing an independent and potentially inconsistent Siteverify routine.
+
+Each additional protected workflow should define its own action and verification point, retain its existing Django validation, and receive appropriate automated tests.
+
+Turnstile reduces automated abuse but does not establish comprehensive protection against every form of malicious traffic. Rate limiting, operational monitoring and other controls may be evaluated separately as requirements evolve; they should not be documented as implemented until they have actually been introduced and verified.
 
 ---
 
