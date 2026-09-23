@@ -10,6 +10,8 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
+from communications.services import send_placement_result_emails
+
 from .forms import PlacementTestForm
 from .models import PlacementAttempt, PlacementQuestion, TEST_VERSION, TOTAL_QUESTIONS
 
@@ -92,6 +94,11 @@ def placement_test(request):
                 else:
                     request.session.pop(TOKEN_KEY, None)
                     request.session[RESULT_KEY] = attempt.pk
+
+                    # The grading transaction has committed. Email delivery cannot
+                    # undo the saved result, and refreshing the result page won't resend.
+                    send_placement_result_emails(attempt)
+
                     return redirect(_placement_route(request, "result"))
 
     rows = [{"number": q.number, "field": form[f"q_{q.number}"]} for q in questions]

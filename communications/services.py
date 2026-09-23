@@ -4,12 +4,14 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.utils.html import strip_tags
+import logging
 
 from .models import EmailTemplate
 
 from django.urls import reverse
 from courses.models import CourseEnrollment
 from profiles.models import UserProfile
+from placement.models import TOTAL_QUESTIONS
 
 
 def _render_template_string(value, context):
@@ -156,3 +158,69 @@ def send_course_enrollment_learning_needs_email(enrollment_id):
         cta_label="Complete my Learning Needs",
         cta_url=learning_goals_url,
     )
+
+
+
+def send_placement_result_emails(attempt):
+    """Email a saved placement result to the learner and relevant staff."""
+    logger = logging.getLogger(__name__)
+
+    name = attempt.name or (
+        attempt.user.get_full_name() or attempt.user.get_username()
+        if attempt.user_id else ""
+    ) or "Learner"
+
+    context = {
+        "first_name": attempt.user.first_name or name.split()[0] if attempt.user_id else name.split()[0],
+        "learner_name": name,
+        "learner_email": attempt.email,
+        "score": attempt.score,
+        "total": TOTAL_QUESTIONS,
+        "recommended_level": attempt.get_recommended_level_display(),
+        "cefr_reference": attempt.cefr_reference,
+        "test_version": attempt.test_version,
+        "completed_at": attempt.completed_at,
+    }
+
+    # One staff message per distinct address. The general inbox is mandatory.
+    staff_recipients = {"info@englishgrows.com": "info@englishgrows.com"}
+
+    if attempt.user_id:
+        teacher_emails = CourseEnrollment.objects.filter(
+            student_id=attempt.user_id,
+            status="active",
+            course__status__in=("active", "confirmed"),
+            course__teacher__isnull=False,
+        ).values_list("course__teacher__email", flat=True)
+
+        for teacher_email in teacher_emails:
+            teacher_email = (teacher_email or "").strip()
+            if teacher_email:
+                staff_recipients.setdefault(teacher_email.casefold(), teacher_email)
+
+    messages = []
+
+    if attempt.email.strip():
+        messages.append(("placement_result_learner", attempt.email.strip()))
+
+    messages.extend(
+        ("placement_test_result_staff", recipient)
+        for recipient in staff_recipients.values()
+    )
+
+    sent = 0
+
+    for template_key, recipient in messages:
+        try:
+            sent += send_template_email(
+                template_key=template_key,
+                recipient=recipient,
+                context=context,
+            )
+        except Exception:
+            logger.exception(
+                "Placement result email failed: attempt=%s, template=%s, recipient=%s",
+                attempt.pk, template_key, recipient,
+            )
+
+    return sent
