@@ -40,10 +40,13 @@ def verify_turnstile(token, *, expected_hostname=None, expected_action=None):
         logger.info("Turnstile verification rejected: %s", result.get("error-codes", []) if isinstance(result, dict) else [])
         return False
 
-    if expected_hostname and result.get("hostname") != expected_hostname:
-        logger.warning("Turnstile hostname mismatch.")
-        return False
+    if expected_hostname:
+        allowed_hostnames = (expected_hostname,) if isinstance(expected_hostname, str) else expected_hostname
 
+        if result.get("hostname") not in allowed_hostnames:
+            logger.warning("Turnstile hostname mismatch: %s", result.get("hostname"))
+            return False
+    
     if expected_action and result.get("action") != expected_action:
         logger.warning("Turnstile action mismatch.")
         return False

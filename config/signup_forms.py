@@ -1,5 +1,3 @@
-from urllib.parse import urlsplit
-
 from allauth.account.forms import SignupForm
 from django import forms
 from django.conf import settings
@@ -28,7 +26,7 @@ class TurnstileSignupForm(SignupForm):
 
         if not verify_turnstile(
             token,
-            expected_hostname=None if is_test_key else urlsplit(settings.SITE_URL).hostname,
+            expected_hostname=None if is_test_key else ("englishgrows.com", "www.englishgrows.com"),
             expected_action=None if is_test_key else "signup",
         ):
             raise forms.ValidationError(
