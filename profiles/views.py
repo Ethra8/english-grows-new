@@ -9618,10 +9618,7 @@ def company_admin_student_skills_overview(request, student_id):
 
 @login_required
 def company_admin_student_needs_analysis(request, student_id):
-    profile = get_object_or_404(
-        UserProfile,
-        user=request.user,
-    )
+    profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_COMPANY_ADMIN:
         return redirect("home")
@@ -9632,10 +9629,7 @@ def company_admin_student_needs_analysis(request, student_id):
         return redirect("home")
 
     # ---------------------------------------------------------
-    # STUDENT
-    #
-    # Restrict access to users belonging to the same company
-    # as the logged-in Company Admin.
+    # STUDENT / COMPANY OWNERSHIP
     # ---------------------------------------------------------
     student = get_object_or_404(
         User.objects.select_related("profile"),
@@ -9644,45 +9638,23 @@ def company_admin_student_needs_analysis(request, student_id):
     )
 
     student_profile = student.profile
-
-    # ---------------------------------------------------------
-    # SELF PARTICIPANT
-    #
-    # A Company Admin may also be enrolled in company training.
-    # In that case their platform role remains Company Admin,
-    # but they may edit learner-owned data in their OWN
-    # participant record.
-    # ---------------------------------------------------------
-    is_self = student.id == request.user.id
-
-    # ---------------------------------------------------------
-    # CURRENT ENROLLMENT STATUS
-    #
-    # Independent of the selected Course.
-    # Used by the shared student details header.
-    # ---------------------------------------------------------
-    user_currently_enrolled = CourseEnrollment.objects.filter(
-        student=student,
-        status=CourseEnrollment.STATUS_ACTIVE,
-        course__status="active",
-    ).exists()
+    is_self = student.pk == request.user.pk
 
     # ---------------------------------------------------------
     # AVAILABLE ENROLLMENTS
     #
+    # Self: own enrollments, including personal Courses.
+    # Employee: only Courses belonging to this company.
     # Historical enrollments remain accessible.
     # ---------------------------------------------------------
+    enrollments = CourseEnrollment.objects.filter(student=student)
+
+    if not is_self:
+        enrollments = enrollments.filter(course__company=company)
+
     enrollments = (
-        CourseEnrollment.objects
-        .filter(
-            student=student,
-            course__company=company,
-        )
-        .select_related(
-            "course",
-            "course__course_type",
-            "course__teacher",
-        )
+        enrollments
+        .select_related("course", "course__course_type", "course__teacher")
         .order_by("course__name")
     )
 
@@ -9692,14 +9664,92 @@ def company_admin_student_needs_analysis(request, student_id):
     course_id = request.GET.get("course")
 
     if course_id:
-        enrollment = get_object_or_404(
-            enrollments,
-            course_id=course_id,
-        )
+        enrollment = get_object_or_404(enrollments, course_id=course_id)
     else:
         enrollment = enrollments.first()
 
     course = enrollment.course if enrollment else None
+
+    # ---------------------------------------------------------
+    # CURRENT ENROLLMENT STATUS
+    #
+    # Used by the shared student details header.
+    # ---------------------------------------------------------
+    active_enrollments = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    )
+
+    if not is_self:
+        active_enrollments = active_enrollments.filter(
+            course__company=company,
+        )
+
+    user_currently_enrolled = active_enrollments.exists()
+
+    # =========================================================
+    # COMPANY ADMIN VIEWING AN EMPLOYEE
+    #
+    # STATUS ONLY — NO QUESTIONNAIRE ACCESS
+    # =========================================================
+    if not is_self:
+
+        # Company Admins cannot submit or modify an employee's
+        # questionnaire, including through manually crafted POSTs.
+        if request.method != "GET":
+            return HttpResponseForbidden(
+                "You cannot modify another learner's Learning Needs."
+            )
+
+        needs_status = None
+
+        if enrollment:
+            # Only determine whether the questionnaire was submitted.
+            # REVIEWED also means the learner has submitted it.
+            #
+            # No questionnaire object, answers, free-text responses
+            # or confidence ratings are retrieved.
+            needs_submitted = StudentNeedsAnalysis.objects.filter(
+                enrollment_id=enrollment.id,
+                status__in=[
+                    StudentNeedsAnalysis.Status.SUBMITTED,
+                    StudentNeedsAnalysis.Status.REVIEWED,
+                ],
+            ).exists()
+
+            needs_status = (
+                "submitted"
+                if needs_submitted
+                else "pending"
+            )
+
+        context = {
+            "profile": profile,
+            "company": company,
+            "student": student,
+            "student_profile": student_profile,
+            "course": course,
+            "enrollment": enrollment,
+            "enrollments": enrollments,
+            "is_self": False,
+            "needs_status": needs_status,
+            "user_currently_enrolled": user_currently_enrolled,
+            "active_section": "needs_analysis",
+        }
+
+        return render(
+            request,
+            "profiles/company_admin/company_admin_student_needs_analysis.html",
+            context,
+        )
+
+    # =========================================================
+    # COMPANY ADMIN VIEWING THEIR OWN LEARNER RECORD
+    #
+    # Full access to their own questionnaire.
+    # Existing learner submission workflow preserved.
+    # =========================================================
 
     # ---------------------------------------------------------
     # DEFAULT EMPTY-STATE VALUES
@@ -9731,16 +9781,11 @@ def company_admin_student_needs_analysis(request, student_id):
         # -----------------------------------------------------
         # EDIT PERMISSION
         #
-        # Company Admin normally has read-only access.
-        #
-        # Exception:
-        # if the Company Admin is viewing THEIR OWN participant
-        # record, they may complete their own pending Needs
-        # Analysis while that CourseEnrollment is active.
+        # Own record + active enrollment + pending questionnaire.
+        # Submitted/reviewed responses remain read-only.
         # -----------------------------------------------------
         can_edit = (
-            is_self
-            and enrollment.status == CourseEnrollment.STATUS_ACTIVE
+            enrollment.status == CourseEnrollment.STATUS_ACTIVE
             and needs_analysis.status == StudentNeedsAnalysis.Status.PENDING
         )
 
@@ -9768,15 +9813,12 @@ def company_admin_student_needs_analysis(request, student_id):
             request.method == "POST"
             and request.POST.get("action") == "submit_needs_analysis"
         ):
-            # Protect against manually crafted POST requests.
             if not can_edit:
-                return redirect(
-                    f"{request.path}?course={course.id}"
+                return HttpResponseForbidden(
+                    "This Learning Needs questionnaire cannot be edited."
                 )
 
-            form = StudentNeedsAnalysisForm(
-                request.POST,
-            )
+            form = StudentNeedsAnalysisForm(request.POST)
 
             if form.is_valid():
                 data = form.cleaned_data
@@ -9790,7 +9832,6 @@ def company_admin_student_needs_analysis(request, student_id):
                 needs_analysis.communication_partners = data[
                     "communication_partners"
                 ]
-
                 needs_analysis.accent_exposure = data[
                     "accent_exposure"
                 ]
@@ -9814,17 +9855,11 @@ def company_admin_student_needs_analysis(request, student_id):
                 needs_analysis.priority_areas = data[
                     "priority_areas"
                 ]
-                needs_analysis.course_goal = data[
-                    "course_goal"
-                ]
-
                 needs_analysis.additional_information = data[
                     "additional_information"
                 ]
 
-                needs_analysis.status = (
-                    StudentNeedsAnalysis.Status.SUBMITTED
-                )
+                needs_analysis.status = StudentNeedsAnalysis.Status.SUBMITTED
                 needs_analysis.submitted_at = timezone.now()
 
                 needs_analysis.save()
@@ -9834,12 +9869,10 @@ def company_admin_student_needs_analysis(request, student_id):
                 )
 
         else:
-            form = StudentNeedsAnalysisForm(
-                initial=form_initial,
-            )
+            form = StudentNeedsAnalysisForm(initial=form_initial)
 
         # -----------------------------------------------------
-        # HUMAN-READABLE DISPLAY VALUES
+        # HUMAN-READABLE DISPLAY VALUES — OWN RECORD ONLY
         # -----------------------------------------------------
         english_use_frequency_labels = form.choice_labels(
             "english_use_frequency",
@@ -9893,12 +9926,11 @@ def company_admin_student_needs_analysis(request, student_id):
         return redirect(request.path)
 
     # ---------------------------------------------------------
-    # CONTEXT
+    # OWN LEARNER RECORD CONTEXT
     # ---------------------------------------------------------
     context = {
         "profile": profile,
         "company": company,
-
         "student": student,
         "student_profile": student_profile,
 
@@ -9909,7 +9941,7 @@ def company_admin_student_needs_analysis(request, student_id):
         "needs_analysis": needs_analysis,
         "form": form,
 
-        "is_self": is_self,
+        "is_self": True,
         "can_edit": can_edit,
         "can_review": False,
 
@@ -9934,8 +9966,6 @@ def company_admin_student_needs_analysis(request, student_id):
         "profiles/company_admin/company_admin_student_needs_analysis.html",
         context,
     )
-
-
 
 
 @login_required

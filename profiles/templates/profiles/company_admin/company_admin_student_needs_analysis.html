@@ -28,9 +28,73 @@
 
 
 {% block details_content %}
-    {% include "profiles/components/student_needs_analysis_content.html" %}
-{% endblock %}
 
+    {% if is_self %}
+
+        {# OWN RECORD — FULL LEARNER ACCESS #}
+        {% include "profiles/components/student_needs_analysis_content.html" %}
+
+    {% else %}
+
+        {# EMPLOYEE RECORD — SUBMISSION STATUS ONLY #}
+
+        <section class="student-needs-analysis mt-5">
+
+            <!-- LEARNING NEEDS HERO -->
+            <header class="needs-analysis-hero">
+
+                <div class="needs-analysis-hero__icon" aria-hidden="true">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+
+                <div class="needs-analysis-hero__identity">
+
+                    <h2>
+                        {% trans "Learning Needs" %}
+
+                        {% if enrollment %}
+                            <span class="needs-analysis-status needs-analysis-status--{{ needs_status }} ml-2">
+                                {% if needs_status == "submitted" %}
+                                    {% trans "Submitted" %}
+                                {% else %}
+                                    {% trans "Pending" %}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    </h2>
+                    <div class="needs-analysis-hero__meta">
+
+                        <span>
+                            {% trans "Course" %}:
+                            {% if course %}
+                                {{ course.name }}
+                            {% else %}
+                                {% trans "Not assigned" %}
+                            {% endif %}
+                        </span>
+
+                    </div>
+                    <div class="needs-analysis-hero__privacy-note">
+                        <img src="{% static 'icons/custom/security/lock_navy_icon.png'%}" alt="" aria-hidden="true" width="18">
+
+                        <span>
+                            {% trans "To protect learner privacy, company administrators can view questionnaire submission status only. Individual responses remain accessible to the learner and authorised academic staff only." %}
+
+                            <a href="#">
+                                {% trans "Learn more in our Privacy Policy" %}
+                                <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png'%}" alt="" aria-hidden="true" width="22">
+                            </a>
+                        </span>
+                    </div>
+                </div>
+
+            </header>
+
+        </section>
+
+    {% endif %}
+
+{% endblock %}
 
 {% block postloadjs %}
     {{ block.super }}

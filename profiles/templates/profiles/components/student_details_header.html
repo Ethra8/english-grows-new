@@ -52,7 +52,7 @@
             {% if show_user_role %}
                 <div class="profile-user-role">
                     <span>
-                        <img src="{% static 'icons/role_user_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2 mb-1">
+                        <img src="{% static 'icons/role_user_icon.png' %}" alt="" aria-hidden="true" width="19" class="mr-2 mb-1">
                         {% if student_profile.role %}
                             {{ student_profile.get_role_display }}
                         {% else %}
@@ -74,7 +74,7 @@
             {% if show_email %}
                 <p class="student-details-header__email">
                     <a href="mailto:{{ student.email }}">
-                        <img src="{% static 'icons/send_email_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-2">
+                        <img src="{% static 'icons/send_email_pearlaqua_icon.png' %}" alt="" aria-hidden="true" width="18" class="mr-2 mt-1">
                         <span>{{ student.email }}</span>
                     </a>
                 </p>            

@@ -39,6 +39,10 @@
     color: var(--color-navy);
     font-size: 1.35rem;
     font-weight: 600;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    gap: 1.15rem;
 }
 
 .needs-analysis-hero__meta {
@@ -50,6 +54,22 @@
     font-size: .88rem;
 }
 
+.needs-analysis-hero__privacy-note {
+    margin-top: 1rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    background-color: rgba(var(--color-teal-rgb), 0.08);
+}
+
+.needs-analysis-hero__privacy-note a {
+    color: var(--color-teal);
+    font-weight: 500;
+}
+
+.needs-analysis-hero__privacy-note a:hover {
+    color: var(--color-tropical-teal);
+}
+
 .needs-analysis-status {
     display: inline-flex;
     align-items: center;
@@ -58,6 +78,8 @@
     font-size: .75rem;
     font-weight: 600;
     line-height: 1;
+    max-height: 26px;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
 }
 
 .needs-analysis-status--pending {
