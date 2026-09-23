@@ -5183,7 +5183,7 @@ The architecture distinguishes between:
 
 ### ERD — Entity Relationship Diagram
 
-The following Entity Relationship Diagram represents the principal database relationships within EnglishGrows:
+The following Entity Relationship Diagram represents the principal database relationships within English Grows:
 
 ```mermaid
 erDiagram
@@ -5283,14 +5283,6 @@ erDiagram
         datetime recorded_at
     }
 
-    LEARNING_GOAL {
-        bigint id PK
-        varchar name
-        varchar slug
-        boolean is_active
-        integer order
-    }
-
     STUDENT_ACADEMIC_PROFILE {
         bigint id PK
         bigint student_id FK
@@ -5312,9 +5304,6 @@ erDiagram
         smallint reading_confidence
         smallint writing_confidence
         json priority_areas
-        text course_goal
-        json learning_preferences
-        text preferred_topics
         text additional_information
         datetime submitted_at
         datetime reviewed_at
@@ -5412,32 +5401,33 @@ erDiagram
     }
 
     USER ||--|| USER_PROFILE : "has profile"
-    USER o|--o{ PLACEMENT_ATTEMPT : "may complete public test"
-    USER o|--o{ MARKETING_SUBSCRIBER : "may have marketing subscriptions"
 
     COMPANY o|--o{ USER_PROFILE : "contains members"
 
     COURSE_TYPE ||--o{ COURSE : "categorises"
 
     USER o|--o{ COURSE : "teaches"
+
     COMPANY o|--o{ COURSE : "owns"
 
     COURSE ||--o{ COURSE_TIMETABLE_SLOT : "defines timetable"
 
     USER ||--o{ COURSE_ENROLLMENT : "enrols"
+
     COURSE ||--o{ COURSE_ENROLLMENT : "has learners"
 
     USER ||--o| STUDENT_ACADEMIC_PROFILE : "has academic profile"
-    STUDENT_ACADEMIC_PROFILE }o--o{ LEARNING_GOAL : "selects goals"
 
     COURSE_ENROLLMENT ||--o| STUDENT_NEEDS_ANALYSIS : "has needs analysis"
 
     COURSE ||--o{ CLASS_SESSION : "contains"
 
     CLASS_SESSION ||--o{ ATTENDANCE : "records"
+
     USER ||--o{ ATTENDANCE : "has attendance"
 
     USER ||--o{ STUDENT_SKILL_ASSESSMENT : "is assessed"
+
     COURSE ||--o{ STUDENT_SKILL_ASSESSMENT : "assessment context"
 
     STUDENT_SKILL_ASSESSMENT ||--o{ STUDENT_SUBSKILL_ASSESSMENT : "contains"
@@ -5445,28 +5435,161 @@ erDiagram
     STUDENT_SKILL_ASSESSMENT ||--o{ STUDENT_SKILL_ASSESSMENT_SNAPSHOT : "tracks changes"
 
     STUDENT_SKILL_ASSESSMENT ||--o{ STUDENT_SKILL_TERM_SNAPSHOT : "tracks terms"
+
+    USER o|--o{ PLACEMENT_ATTEMPT : "may complete public test"
+
+    USER o|--o{ MARKETING_SUBSCRIBER : "may have subscription records"
+
 ```
+
+#### Key Architectural Relationships
 
 The ERD highlights several important architectural decisions.
 
-`CourseEnrollment` acts as an association entity between users and courses rather than using a simple direct many-to-many relationship.
+**CourseEnrollment — Course-specific learner relationship**
 
-Likewise, `Attendance` acts as the relationship between a learner and a specific lesson.
+`CourseEnrollment` acts as an association entity between users and Courses rather than using a simple direct many-to-many relationship.
 
-`StudentAcademicProfile` stores learner-level academic planning without duplicating Course-specific assessment data.
+Each enrollment identifies a particular learner's participation in a particular Course and stores enrollment-specific information, including status and optional target level.
 
-`StudentNeedsAnalysis` is attached one-to-one to `CourseEnrollment`, which makes the learner's self-reported needs Course-specific and historically separable across different enrolments.
+The enrollment relationship is also the ownership context for the learner's Course-specific Needs Analysis.
 
-Assessment history is deliberately separated from current assessment state through the two snapshot models:
+**Attendance — Learner and lesson relationship**
 
-- `StudentSkillAssessmentSnapshot` — detailed change-by-change history
-- `StudentSkillTermSnapshot` — formal periodic assessment history
+`Attendance` acts as the relationship between a learner and a specific `ClassSession`.
 
-`EmailTemplate` belongs to the separate communications domain and therefore does not require a direct foreign-key relationship to Course or learner records. Runtime communication context is supplied when the email service renders a particular business event.
+The attendance record stores the learner's attendance outcome and related information independently of the overall Course or enrollment status.
 
-`MarketingSubscriber` is also part of Communications. Its unique, normalised email identifies the subscription independently of a `PlacementAttempt` or `CourseEnrollment`, and its optional `user` foreign key links a matching authenticated account. A public anonymous visitor can subscribe without being converted into a user account.
+**StudentAcademicProfile — Learner-level academic record**
 
-`PlacementQuestion` and `PlacementAttempt` form the public placement domain. An attempt may link to an authenticated `User`, but anonymous use remains possible. Its question bank is identified through `test_version` and the per-question snapshot rather than a foreign-key relation to mutable question rows. This avoids mistaking current question content for historical submitted content.
+`StudentAcademicProfile` has a one-to-one relationship with `User`.
+
+It stores learner-level academic planning information, including the next review date, without duplicating Course-specific questionnaire responses or assessment records.
+
+The model no longer contains a `learning_goals` many-to-many relationship. The former standalone `LearningGoal` entity has also been removed from the academic architecture.
+
+The Academic Profile Django Admin provides a consolidated presentation of related academic information rather than storing additional copies of it.
+
+The Admin retrieves:
+
+- Courses through the learner's `CourseEnrollment` records.
+- Learning Needs through each enrollment's `StudentNeedsAnalysis`.
+- Skills Assessment through the learner's Course-specific `StudentSkillAssessment` records.
+- Subskill ratings through the corresponding `StudentSubSkillAssessment` records.
+
+These relationships are resolved through the existing models and foreign keys.
+
+**No additional foreign-key relationship between `StudentAcademicProfile` and the Course-specific academic models is required.**
+
+The Academic Profile's unified Course accordions are a presentation and administration feature, not separate database entities.
+
+**StudentNeedsAnalysis — Course-specific learner questionnaire**
+
+`StudentNeedsAnalysis` is attached one-to-one to `CourseEnrollment`.
+
+This makes the learner's self-reported needs Course-specific and historically separable across different enrollments.
+
+The current model stores:
+
+- English-use frequency.
+- Communication situations and partners.
+- Accent exposure.
+- Confidence self-assessments.
+- Priority Areas.
+- Additional Information.
+- Submission and review workflow information.
+
+The former `course_goal`, `learning_preferences` and `preferred_topics` fields are no longer part of the current model structure.
+
+Learning Needs remain the canonical record of the learner's questionnaire responses. The Academic Profile displays these responses without duplicating them.
+
+Access to the questionnaire is subject to the role-specific requirements documented in [Data Protection and Employer Access to Learning Needs](#data-protection-and-employer-access-to-learning-needs).
+
+**StudentSkillAssessment — Current Course-specific assessment**
+
+`StudentSkillAssessment` connects a learner, a Course and an assessed language skill.
+
+Its related `StudentSubSkillAssessment` records store the individual subskill ratings.
+
+This separation allows assessments to be updated independently for each skill and Course while retaining the existing learner and Course relationships.
+
+The Academic Profile Django Admin groups these assessments under the corresponding Course accordion.
+
+Historical assessment Courses remain accessible through their existing assessment records even where the original enrollment is no longer available.
+
+**Assessment snapshots — Historical assessment records**
+
+Assessment history is deliberately separated from the current assessment state through two snapshot models:
+
+- `StudentSkillAssessmentSnapshot` — detailed change-by-change history.
+- `StudentSkillTermSnapshot` — formal periodic assessment history.
+
+The snapshots remain associated with their originating `StudentSkillAssessment` records.
+
+Current ratings and historical assessment records must not be conflated.
+
+**EmailTemplate — Communications domain**
+
+`EmailTemplate` belongs to the separate Communications domain and therefore does not require a direct foreign-key relationship to Course, learner or placement records.
+
+Runtime communication context is supplied when the email service renders a particular business event.
+
+This separation allows the same template infrastructure to support different transactional communication workflows without duplicating Course or learner information inside the template model.
+
+**MarketingSubscriber — Independent marketing subscription**
+
+`MarketingSubscriber` belongs to the Communications domain.
+
+Its unique, normalised email identifies the subscription independently of a `PlacementAttempt`, `CourseEnrollment` or other originating business record.
+
+The optional `user` foreign key links a corresponding authenticated account when one is available.
+
+A public visitor can therefore subscribe to marketing communications without being converted into a registered user.
+
+The current agreed workflow uses **single opt-in**:
+
+- The marketing checkbox is optional and unchecked by default.
+- Only affirmative selection creates or updates the marketing subscription.
+- The subscription is activated immediately upon successful submission.
+- Consent evidence and the subscription source are retained.
+- No pending confirmation step, confirmation link or additional subscription-confirmation email is required.
+- Unsubscribe functionality remains available.
+
+The `confirmation_token` shown in the supplied model structure is not part of the agreed single-opt-in workflow. If the field remains in the Django model, its presence in the ERD documents the existing schema rather than an active double-opt-in requirement.
+
+Marketing consent remains independent of placement-test completion and transactional result delivery.
+
+**PlacementQuestion and PlacementAttempt — Public placement domain**
+
+`PlacementQuestion` and `PlacementAttempt` form the public placement-test domain.
+
+An attempt may link to an authenticated `User`, but anonymous participation remains possible without creating a user account.
+
+The question bank is identified through version information rather than a direct foreign-key relationship from attempts to mutable question rows.
+
+Each attempt stores:
+
+- The version used for the assessment.
+- The learner's submitted answers.
+- A historical snapshot of the questions and answers.
+- The calculated score.
+- The recommended Course level.
+- The associated CEFR reference.
+- Submission and completion timestamps.
+
+The `answer_snapshot` preserves the assessment content used when the learner completed the test, allowing historical attempts to remain interpretable when the live question bank changes.
+
+The Course-level recommendation and CEFR reference are placement outcomes, not formal certification of CEFR attainment.
+
+**Presentation and authorisation are not database relationships**
+
+The ERD represents model relationships, not the full role-based presentation or permissions architecture.
+
+For example, the teacher-facing Academic Overview and the Company Admin's limited training-information view do not require separate copies of the academic records.
+
+Their permitted information is retrieved from the existing models through role-aware, Course-scoped queries.
+
+The corresponding access restrictions must be enforced server-side, as documented in [Data Protection & Privacy](#data-protection--privacy).
 
 ---
 
