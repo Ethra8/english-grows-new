@@ -2,7 +2,7 @@
 
 English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
 
-The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, progress monitoring, automated learner communications and role-specific interfaces within a single relational data architecture.
+The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, a public versioned English placement test, progress monitoring, automated learner communications and role-specific interfaces within a single relational data architecture.
 
 ---
 
@@ -39,6 +39,15 @@ The application combines course management, automated lesson scheduling, attenda
     - [Email Template Management](#email-template-management)
     - [Email Rendering & Delivery](#email-rendering--delivery)
     - [Automatic Learning Needs Enrolment Email](#automatic-learning-needs-enrolment-email)
+  - [Placement App — Public English Level Test](#placement-app--public-english-level-test)
+    - [Purpose and Scope](#placement-purpose-and-scope)
+    - [Question Bank and Versioning](#placement-question-bank-and-versioning)
+    - [Question Distribution and Scoring](#placement-question-distribution-and-scoring)
+    - [Public Assessment Workflow](#placement-public-assessment-workflow)
+    - [Attempt Records and Historical Snapshots](#placement-attempt-records-and-historical-snapshots)
+    - [Placement Django Admin and Review](#placement-django-admin-and-review)
+    - [Version Locks and Safe Cloning](#placement-version-locks-and-safe-cloning)
+    - [Placement Communications — Implementation Status](#placement-communications--implementation-status)
   - [Learning Assessment & Progress](#learning-assessment--progress)
     - [Language Skills Assessed](#language-skills-assessed)
     - [Student Skill Assessment](#student-skill-assessment)
@@ -49,6 +58,7 @@ The application combines course management, automated lesson scheduling, attenda
   - [Django Admin](#django-admin)
     - [Course Admin Operational Reporting](#course-admin-operational-reporting)
     - [Global Admin Filter Presentation](#global-admin-filter-presentation)
+    - [Placement Administration](#placement-administration)
 
 - [Database Structure — Models](#database-structure--models)
   - [ERD — Entity Relationship Diagram](#erd--entity-relationship-diagram)
@@ -66,8 +76,11 @@ The application combines course management, automated lesson scheduling, attenda
   - [Needs Analysis vs. Teacher Assessment](#needs-analysis-vs-teacher-assessment)
   - [Current Assessment vs. Assessment History](#current-assessment-vs-assessment-history)
   - [Shared Data, Role-Specific Presentation](#shared-data-role-specific-presentation)
+  - [Public Placement vs. Course-Specific Assessment](#public-placement-vs-course-specific-assessment)
+  - [Live Question Bank vs. Historical Attempt](#live-question-bank-vs-historical-attempt)
 
 - [Design Choices](#design-choices)
+  - [Placement Test Presentation](#placement-test-presentation)
   - [Colour System](#colour-system)
     - [Colour Architecture](#colour-architecture)
     - [Core Brand / Interface Palette](#core-brand--interface-palette)
@@ -79,6 +92,13 @@ The application combines course management, automated lesson scheduling, attenda
   - [Responsive Design](#responsive-design)
   - [Data Visualisation](#data-visualisation)
 
+- [Dev Commands](#dev-commands)
+  - [Daily Development and Diagnostics](#daily-development-and-diagnostics)
+  - [Database and Migrations](#database-and-migrations)
+  - [Placement Test and Version Commands](#placement-test-and-version-commands)
+  - [Lesson Lifecycle and Static Assets](#lesson-lifecycle-and-static-assets)
+  - [Email Testing Reminder](#email-testing-reminder)
+
 ---
 
 # SITE STRUCTURE
@@ -87,12 +107,13 @@ The application combines course management, automated lesson scheduling, attenda
 
 EnglishGrows has been developed using **Django 6.0.5** with **Python 3.12**.
 
-The application follows Django's Model-Template-View architecture and is currently organised into four principal custom Django apps:
+The application follows Django's Model-Template-View architecture and is currently organised into five principal custom Django apps:
 
 - **Home**
 - **Profiles**
 - **Courses**
 - **Communications**
+- **Placement**
 
 Each app contains the relevant combination of ***models***, ***views***, ***URLs***, ***templates***, ***forms***, static assets, and supporting logic required for its area of responsibility.
 
@@ -132,6 +153,7 @@ The `home` app is responsible primarily for the public-facing area of EnglishGro
 - Contains public-facing informational and marketing content
 - Directs users towards the relevant learning or company-training journey
 - Integrates the public website with the authenticated Django platform
+- Links to the independent public `placement` assessment without absorbing its question-bank or grading logic
 
 The Home app is intentionally kept separate from the teaching-management functionality so that public marketing content and authenticated platform features remain logically independent.
 
@@ -3083,6 +3105,218 @@ This architecture follows the wider project principle that the model owns busine
 
 ---
 
+## PLACEMENT App — Public English Level Test
+
+---
+
+The `placement` app owns the public **English Grows English Level Test**. It is separate from the Course-specific teacher-assessment architecture and can be used before a person has an account or Course enrolment.
+
+It is a versioned, 50-question multiple-choice assessment designed to produce a **provisional course-placement recommendation**, not an official CEFR certificate. Public test presentation, question-bank administration, answer validation, grading and historical attempts remain within this app. The existing `communications` app remains the intended owner of outbound emails.
+
+### Placement Purpose and Scope
+
+The public test is also an acquisition entry point for the English Grows website. It provides an accessible way for prospective learners to obtain an initial placement indication without creating a `CourseEnrollment`, `StudentSkillAssessment` or `StudentNeedsAnalysis` record.
+
+The assessment currently covers **grammar, vocabulary and language use** through multiple-choice questions. It does not directly assess speaking, listening, writing production, pronunciation, interaction or the complete range of CEFR descriptors. A teacher can use its result as initial information alongside a fuller professional assessment.
+
+The public English and Spanish routes are:
+
+```text
+/placement-test/
+/placement-test/result/
+/es/placement-test/
+/es/placement-test/result/
+```
+
+The main test page carries public SEO metadata and language alternatives; a personal result page is not intended for indexing. Public routes and the administrative preview are separate workflows.
+
+### Placement Question Bank and Versioning
+
+The principal question-bank model is `PlacementQuestion`. A question stores:
+
+```text
+version
+number
+text
+option_a / option_b / option_c / option_d
+correct_answer
+area
+language_point
+target_level
+is_active
+```
+
+`correct_answer` identifies A, B, C or D; `area` identifies grammar, vocabulary or language use; `target_level` is an intended A1–C2 question classification. The database prevents duplicate `version + number` combinations. A version is identified by a string on each question, **not by a separate TestVersion database model**.
+
+The current configured constants in `placement/models.py` are:
+
+```python
+TEST_VERSION = "1.1"
+TOTAL_QUESTIONS = 50
+```
+
+`TEST_VERSION` selects the version served to new public test takers. A test is available only when the selected version has **all 50 active questions numbered 1–50, with four populated answer options per question**; an incomplete active bank is not silently served as a shorter test. The model retains other versions as separate records.
+
+Changing the question-bank contents and changing the active public version are separate operations. Copying V1.1 to V1.2 does **not** automatically publish V1.2; that requires a deliberate update to `TEST_VERSION` after the new version has been reviewed.
+
+### Placement Question Distribution and Scoring
+
+The verified V1.1 question distribution is:
+
+| Intended target level | Number of questions | Cumulative questions |
+| :---: | ---: | ---: |
+| A1 | 8 | 8 |
+| A2 | 7 | 15 |
+| B1 | 10 | 25 |
+| B2 | 13 | 38 |
+| C1 | 11 | 49 |
+| C2 | 1 | 50 |
+| **Total** | **50** | **50** |
+
+`PlacementAttempt.grade()` compares the submitted A/B/C/D answers with the correct answer for each of the 50 questions. Each correct answer earns **one point**; the total is an integer from 0 to 50. The current recommendation mapping is held by `PlacementAttempt.placement_for_score()`:
+
+| Total score | Recommended course level | CEFR reference |
+| :---: | :--- | :---: |
+| 0–7 | Elementary | A1 |
+| 8–14 | Pre-Intermediate | A2 |
+| 15–24 | Intermediate | B1 |
+| 25–37 | Upper-Intermediate | B2 |
+| 38–48 | Advanced | C1 |
+| 49–50 | Proficiency | C2 |
+
+These **are placement bands, not proof that the learner answered all questions belonging to any one target level correctly**. The score aggregates answers across the mixed-level bank. In the agreed placement convention, reaching a cumulative boundary recommends the next course level (for example, 8/50 recommends A2). The `Foundation / Teacher review` enum value remains defined but is not assigned by these current bands. This is a provisional pedagogical placement rule, not a psychometrically calibrated CEFR examination.
+
+The scoring function belongs to the model; JavaScript manages the interface and does **not** decide the score or recommended level.
+
+### Placement Public Assessment Workflow
+
+The current public workflow has a preparation stage followed by five sets of ten questions:
+
+```text
+Public test page
+    ↓
+Name / email (pre-filled for authenticated users where available)
+Privacy acknowledgement required
+Optional separate marketing preference
+    ↓
+Start assessment
+    ↓
+Question sets 1–5 (10 questions each)
+    ↓
+One final POST / server-side validation
+    ↓
+PlacementAttempt.grade()
+    ↓
+Saved result / result page
+```
+
+The frontend uses namespaced assets under `placement/static/placement/`, including `css/placement.css` and `js/placement.js`. The public template extends the shared website layout via `placement/base.html`; it does not use the Django Admin preview stylesheet.
+
+The view validates that the selected question bank is complete, creates and verifies a session token, and builds the server-side answer form. Logged-in users may see their stored name/email as initial form values, but **authentication is not a prerequisite**. The result view obtains the completed attempt from the browser session and checks ownership where an attempt is linked to a user. The result response is private/no-store; public result pages are not intended to be indexed.
+
+The optional marketing preference is conceptually separate from the required assessment/privacy acknowledgement. Displaying or collecting a checkbox does **not** itself constitute a working marketing subscription or double-opt-in workflow; see the implementation-status section below.
+
+### Placement Attempt Records and Historical Snapshots
+
+`PlacementAttempt` stores the result of one submitted assessment. It includes:
+
+```text
+user                  optional link to authenticated User
+name / email          submitted learner contact information
+test_version          version served for this attempt
+answers               question number → selected A/B/C/D option
+answer_snapshot       historical question/answer review data
+score                 number of correct responses
+recommended_level     course-placement recommendation
+cefr_reference        associated CEFR reference
+created_at / completed_at
+```
+
+The `answers` JSON holds the submitted choices; it is not a complete question-bank archive. `answer_snapshot` stores the **question text, all four answer choices, selected option, correct option, correctness, intended level and language point at the time of grading**. The snapshot makes an old attempt interpretable if a question is edited later or a newer version is introduced.
+
+`answers` and `answer_snapshot` are `editable=False` model fields. Score, recommendation and completion fields are likewise presented as historical output rather than normal administrative editing controls. `editable=False` removes fields from standard model forms; it is **not** a database-level immutability guarantee against deliberate programmatic writes.
+
+Existing attempts retain their stored score and recommendation when the scoring policy is later changed. A change to `placement_for_score()` is not an automatic regrade or backfill. The current live question bank and a learner's saved attempt snapshot must not be conflated.
+
+### Placement Django Admin and Review
+
+Both `PlacementQuestion` and `PlacementAttempt` are registered in Django Admin.
+
+**Question bank:** the changelist provides version, area, target-level and active-status filters, question-text/language-point search, and an admin-only **Preview V…** launcher. From an attempt, **View V… question bank** opens the question changelist filtered to the attempt's stored version.
+
+**Attempt detail:** sections present Learner, Assessment and Placement result before the question-by-question Answer review. The previous wall of raw JSON is not shown as the primary review interface. The review renders the saved snapshot with:
+
+- a correct/incorrect/unanswered summary;
+- direct links to mistakes;
+- numbered questions and intended levels;
+- learner's chosen option **and its actual text**;
+- correct option **and its actual text**;
+- the language point being tested.
+
+Incorrect and unanswered questions are expanded by default; correct responses can be expanded individually. Styles are scoped to `placement/static/placement/css/placement_admin.css`. The raw `answers` and `answer_snapshot` data remains in the database even though it is not displayed as unformatted JSON in the normal Admin fieldsets.
+
+**Admin-only preview:** each version can be previewed as five sets of ten with its current active questions and four options. The dedicated URL is wrapped by Django Admin's `admin_view()` and checks view permission. It uses:
+
+```text
+placement/templates/admin/placement/placementquestion/change_list.html
+placement/templates/admin/placement/placementquestion/preview.html
+placement/static/placement/css/placement_preview.css
+```
+
+The preview is GET-only, shows no answer key, disables radio controls, has no grading or Submit workflow, and **does not create a PlacementAttempt**. It previews the **current question bank**, whereas an attempt's `answer_snapshot` preserves what that learner actually received.
+
+### Placement Version Locks and Safe Cloning
+
+Question-bank protection is intentionally **conditional**, not permanent:
+
+```python
+def version_is_locked(version):
+    return PlacementAttempt.objects.filter(
+        test_version=version,
+        completed_at__isnull=False,
+    ).exists()
+```
+
+When a version has at least one completed attempt, Django Admin makes its questions view-only and prevents adding questions into that version, changing their text/options/correct answers/level/active state, or deleting them. The `delete_selected` bulk action is also removed from Question Admin. The lock covers the entire version, not just the questions contained in one attempt.
+
+**If all completed attempts for that version are deleted, the Admin lock automatically ceases to apply.** This is deliberate: V1.1 is still under pre-launch refinement, and test-only attempts may be removed to allow further edits. Do **not** add a permanent `FROZEN_TEST_VERSIONS` list. Deleting attempts also deletes their saved assessment history, so this is appropriate only for deliberately disposable records, not a casual way to rewrite a released test.
+
+The lock is an **Admin-level protection**, not a guarantee against direct shell scripts, custom management commands or database changes. It does not automatically switch the live version.
+
+For a future independent question-bank version, use the prepared management command located at:
+
+```text
+placement/management/commands/clone_placement_version.py
+```
+
+The command clones, rather than moves, all 50 active, consecutively numbered source questions into an empty target version. It refuses identical source/target names or a target containing questions and performs the operation transactionally. The existing source records, attempt snapshots and live `TEST_VERSION` remain unchanged.
+
+```bash
+python manage.py clone_placement_version 1.1 1.2
+```
+
+**This is a future-use command, not an instruction to create V1.2 now.** Continue refining V1.1 until you deliberately decide to introduce a new version. Confirm the command file is in the project before running it, and preview/count the cloned V1.2 bank before publishing it.
+
+### Placement Communications — Implementation Status
+
+The public assessment and Admin review are distinct from the **placement-result email workflow**, which is **not yet connected**. The current submission flow grades and saves an attempt, then redirects to the result page; it does not call `communications.services.send_template_email()`.
+
+| Related capability | Current state |
+| :--- | :--- |
+| Logged-in learner email prefill | Implemented |
+| Grade/save and display result | Implemented |
+| Learner result email | **Not yet implemented** |
+| Separate assigned-teacher copy or fallback administrative copy | **Not yet implemented** |
+| Optional marketing subscription persistence / double opt-in | **Not yet implemented** |
+| Placement-specific editable email templates | **To be configured/integrated** |
+| Privacy-policy destination and public wording | **Verify before public launch** |
+
+The existing `communications` service and DB-managed `EmailTemplate` model should be reused when implementation proceeds. A future email process should follow a committed successful result and avoid duplicate sends on result-page refresh; failure to deliver an email should not erase the graded attempt. The optional marketing preference requires its own explicit consent and confirmation workflow rather than silently enrolling a test taker.
+
+The implemented **Learning Needs welcome email** remains a separate, existing workflow and must not be mistaken for a placement-result email. SMTP email is not printed to the terminal by default; Django's console email backend is the development setting used when printing messages there is desired.
+
+---
+
 ## Learning Assessment & Progress
 
 ---
@@ -3555,6 +3789,8 @@ Administrators can manage data including:
 - **Subskill assessments**
 - **Assessment snapshots**
 - **Email templates**
+- **Placement questions and versioned question banks**
+- **Placement attempts and historical answer reviews**
 
 Where appropriate, related objects are presented through Django Admin inlines.
 
@@ -3830,6 +4066,18 @@ Users can expand any individual filter normally when needed.
 
 This reduces vertical noise on data-heavy Admin changelists without requiring repeated configuration in every `ModelAdmin`.
 
+#### Placement Administration
+
+The Placement Admin is separate from Course-specific teacher assessment and exposes a public test's current question bank alongside saved historical attempts.
+
+- **Placement Questions:** search by text/language point; filter by version, area, intended CEFR level and active status; preview a version through an Admin-protected GET-only page.
+- **Placement Attempts:** show learner/contact details, completed date, score, recommended level and CEFR reference, together with a direct filtered question-bank link and complete-test preview link.
+- **Answer review:** readable, collapsible question-by-question records rendered from `answer_snapshot`; incorrect/unanswered responses are expanded and linked from a mistakes summary; raw JSON is not used as the main interface.
+- **Conditional version protection:** an existing completed attempt locks its whole question version against Admin edits/additions/deletion. If all completed attempts for that version are removed, the version becomes editable again; there is no permanent hard-coded freeze.
+- **Cloning:** `clone_placement_version` creates a new independent version without rewriting the source bank or its historical attempts. Cloning does not make that version public automatically.
+
+The live preview reflects current question records; a completed learner's stored snapshot reflects their actual submitted assessment. This distinction is central to preserving assessment history.
+
 #### ClassSession and Attendance protection
 
 Generated `ClassSession` records are not manually added or deleted through the standard Admin configuration. They represent the Course's generated lesson identity and history.
@@ -3850,7 +4098,7 @@ EnglishGrows uses a **relational database architecture** managed through Django'
 
 **PostgreSQL** is used as the relational database in both development and production environments.
 
-The database architecture is divided into five principal domains:
+The database architecture is divided into six principal domains:
 
 ```text
 IDENTITY & ORGANISATION
@@ -3880,6 +4128,10 @@ LEARNING & ASSESSMENT
 
 COMMUNICATIONS
 └── EmailTemplate
+
+PUBLIC PLACEMENT
+├── PlacementQuestion
+└── PlacementAttempt
 ```
 
 This separation prevents unrelated responsibilities from being concentrated in a single model and allows the different areas of the application to evolve independently.
@@ -3899,6 +4151,7 @@ The architecture distinguishes between:
 - **Detailed assessment history**
 - **Formal term-based assessment history**
 - **Reusable outbound communication templates**
+- **Versioned public placement questions and saved assessment attempts**
 
 ---
 
@@ -4086,7 +4339,39 @@ erDiagram
         datetime updated_at
     }
 
+    PLACEMENT_QUESTION {
+        bigint id PK
+        varchar version
+        smallint number
+        text text
+        text option_a
+        text option_b
+        text option_c
+        text option_d
+        varchar correct_answer
+        varchar area
+        varchar language_point
+        varchar target_level
+        boolean is_active
+    }
+
+    PLACEMENT_ATTEMPT {
+        bigint id PK
+        bigint user_id FK
+        varchar name
+        varchar email
+        varchar test_version
+        json answers
+        json answer_snapshot
+        smallint score
+        varchar recommended_level
+        varchar cefr_reference
+        datetime created_at
+        datetime completed_at
+    }
+
     USER ||--|| USER_PROFILE : "has profile"
+    USER o|--o{ PLACEMENT_ATTEMPT : "may complete public test"
 
     COMPANY o|--o{ USER_PROFILE : "contains members"
 
@@ -4136,6 +4421,8 @@ Assessment history is deliberately separated from current assessment state throu
 - `StudentSkillTermSnapshot` — formal periodic assessment history
 
 `EmailTemplate` belongs to the separate communications domain and therefore does not require a direct foreign-key relationship to Course or learner records. Runtime communication context is supplied when the email service renders a particular business event.
+
+`PlacementQuestion` and `PlacementAttempt` form the public placement domain. An attempt may link to an authenticated `User`, but anonymous use remains possible. Its question bank is identified through `test_version` and the per-question snapshot rather than a foreign-key relation to mutable question rows. This avoids mistaking current question content for historical submitted content.
 
 ---
 
@@ -4272,6 +4559,19 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - SMTP/email delivery is kept outside `CourseEnrollment.save()`; the model remains responsible for domain state rather than external transport.
 - The Learning Needs CTA preserves Course context using `?course=<course_id>`.
 - The CTA does not bypass role/ownership checks in the destination view.
+
+#### Public Placement
+
+- Exactly one question number may exist per question-bank version (`version + number` uniqueness).
+- The published version must have 50 active, consecutive questions with all four choices populated.
+- Grading happens on the server and stores a 0–50 result, recommended course level, CEFR reference and a historical answer snapshot.
+- Attempt answer JSON and snapshot are excluded from normal model-form editing.
+- A completed attempt locks its whole question version against mutation through Django Admin; the lock is released if the version has no remaining completed attempts.
+- No permanent version-freeze list is used during V1.1 development.
+- Admin preview never creates an attempt and never exposes the answer key in the rendered preview page.
+- A new cloned version has its own question rows and does not overwrite the source version or change `TEST_VERSION` automatically.
+- An older attempt's stored score and recommendation are not automatically recalculated by a later scoring-code change.
+- The placement result email and marketing double-opt-in workflows remain outstanding; the existing Learning Needs welcome email does not implement them.
 
 #### Assessment
 
@@ -4467,6 +4767,32 @@ StudentNeedsAnalysis
 The same submitted data is rendered for different roles through one shared content component, while each role-specific view controls access and capabilities.
 
 Human-readable report values are produced from the form's canonical choice definitions rather than exposing the stored internal codes.
+
+### Public placement test flow
+
+```text
+Public English Grows placement page
+        │
+        ▼
+Validate 50 active questions for TEST_VERSION
+        │
+        ▼
+Prefilled/entered identity + required acknowledgement
+        │
+        ▼
+Five browser-side question sets / one final POST
+        │
+        ▼
+PlacementTestForm + session-token validation
+        │
+        ▼
+PlacementAttempt.grade() / historical answer_snapshot
+        │
+        ▼
+Saved result → private result page
+```
+
+The question bank is independent of Course enrolment and teacher skill assessment. Changing the active question bank does not rewrite existing snapshots. The placement-result email and marketing-consent processes have not yet been wired into this path.
 
 ### ClassSession end-time lifecycle
 
@@ -5052,6 +5378,28 @@ The content component is shared, while view-provided capability flags such as `c
 
 ---
 
+### Public Placement vs. Course-Specific Assessment
+
+The public `placement` assessment provides an **initial, provisional course recommendation** based on a separate multiple-choice question bank. It is available before a learner is enrolled in a Course. It is not a CEFR certificate and does not assess all four productive/receptive skills.
+
+`StudentSkillAssessment` / `StudentSubSkillAssessment` remain Course-specific professional teacher assessments, with separate current state and progress snapshots. `StudentNeedsAnalysis` remains learner self-reporting for a particular CourseEnrollment. The placement result does not automatically create or overwrite these other records.
+
+```text
+PUBLIC PLACEMENT     → preliminary, versioned 50-question score
+LEARNING NEEDS       → learner-reported needs within an enrolment
+TEACHER ASSESSMENT   → Course-specific skill/subskill evaluation
+```
+
+---
+
+### Live Question Bank vs. Historical Attempt
+
+A versioned `PlacementQuestion` bank is the source for the current public test and the Admin-only preview. A `PlacementAttempt.answer_snapshot` is a historical capture of the learner's actual questions, choices, selected/correct answers and result.
+
+Because these purposes are different, the attempt is not reconstructed later from the current bank. Admin editing is conditionally restricted while completed attempts for that version exist. Once deliberately disposable test attempts have all been removed, the bank may be edited again during development. Creating a later version uses a copy of the question records, not a rename/move of the original version.
+
+---
+
 # Design Choices
 
 ---
@@ -5068,6 +5416,16 @@ The visual system therefore prioritises:
 - responsive behaviour across devices.
 
 Role-specific dashboards and navigation expose the information most relevant to each user while secondary information remains available through dedicated pages.
+
+---
+
+## Placement Test Presentation
+
+---
+
+The public placement test uses the shared English Grows visual identity while remaining independent of the authenticated role dashboards and Django Admin. The test introduction precedes the five question panels; the UI uses ten questions per panel, progress/navigation controls and a separate result view.
+
+The Admin question-bank preview has its own namespaced `placement_preview.css`, and the readable attempt review has `placement_admin.css`; neither stylesheet replaces or should interfere with the public `placement.css`. Question/answer status always has explicit text, not colour alone. Personal result pages are private rather than intended as search-engine landing pages.
 
 ---
 
@@ -5847,3 +6205,98 @@ The overall data visualisation strategy follows several consistent principles:
 8. **Colour reinforces information but never acts as its sole means of communication.**
 
 This approach allows data visualisation to remain consistent with the wider **English Grows design system** while ensuring that each visual element communicates a clear and predictable meaning.
+
+---
+
+# Dev Commands
+
+---
+
+Run the following commands from the **project root containing `manage.py`**, with the project's virtual environment active. The examples are reminders of the command and its purpose, not a replacement for checking the target environment before database-changing operations. Run database-mutating commands against the intended development or production configuration only.
+
+## Daily Development and Diagnostics
+
+| Command | Purpose |
+| :--- | :--- |
+| `python manage.py runserver` | Start the local Django development server. |
+| `python manage.py check` | Run Django's project/system checks after changing Python, Admin or URL configuration. |
+| `python manage.py shell` | Inspect model data or run controlled development queries. |
+| `python manage.py help` | List available management commands, including custom installed commands. |
+| `python manage.py help clone_placement_version` | Check the source/target arguments for the version-cloning command. |
+
+## Database and Migrations
+
+| Command | Purpose |
+| :--- | :--- |
+| `python manage.py makemigrations` | Generate migrations after genuine model/schema changes. |
+| `python manage.py migrate` | Apply pending migrations to the selected database. |
+| `python manage.py showmigrations placement` | See the placement app's migration status. |
+| `python manage.py showmigrations` | Review migration status across apps. |
+
+Changes confined to `placement/admin.py`, Admin templates/CSS, view presentation or management-command code **do not by themselves require migrations**. A model-field change such as adding `editable=False` should still be checked with Django's migration detector; apply any migration it generates as appropriate to the actual project state.
+
+## Placement Test and Version Commands
+
+**Inspect the active question count:**
+
+```bash
+python manage.py shell
+```
+
+```python
+from placement.models import PlacementQuestion, TEST_VERSION, TOTAL_QUESTIONS
+PlacementQuestion.objects.filter(version=TEST_VERSION, is_active=True).count()
+# Expected for a complete live bank: 50
+```
+
+**Clone the complete V1.1 bank into an independent editable V1.2 bank (when deliberately needed):**
+
+```bash
+python manage.py clone_placement_version 1.1 1.2
+```
+
+The command file belongs at `placement/management/commands/clone_placement_version.py`. It copies all 50 active, consecutively numbered questions transactionally and refuses to overwrite an occupied target. It does **not** modify V1.1, erase attempts, or automatically switch the public test to V1.2. Do not run this now just to refine V1.1; first decide that a new version is actually required.
+
+**Before publishing a newly cloned version:**
+
+1. Open Django Admin → Placement Questions; filter to the new version and confirm all 50 questions and correct answers.
+2. Use **Preview V…** to check the complete question-only public-style layout.
+3. Make required changes only in the new version and check the 50 active questions remain consecutive.
+4. Deliberately change `TEST_VERSION` in `placement/models.py` only when the new version is ready to serve; test both language routes and the result page.
+5. Keep existing attempts and their stored version/snapshot intact.
+
+**Edit V1.1 during pre-launch refinement:** it unlocks automatically only when there are no completed V1.1 attempts. If all existing attempts are disposable test records, remove them deliberately through Admin and check the version before editing. There is intentionally **no permanent `FROZEN_TEST_VERSIONS` setting**. Never delete genuine learners' records casually to bypass historical integrity.
+
+**Useful public routes:**
+
+```text
+/placement-test/
+/placement-test/result/
+/es/placement-test/
+/es/placement-test/result/
+```
+
+## Lesson Lifecycle and Static Assets
+
+| Command | Purpose |
+| :--- | :--- |
+| `python manage.py transition_past_sessions` | Apply model-owned post-end-time ClassSession transitions. The production Render Cron Job invokes it every five minutes. |
+| `python manage.py findstatic placement/css/placement.css` | Verify that Django resolves the public placement stylesheet. |
+| `python manage.py findstatic placement/css/placement_admin.css` | Verify the Admin answer-review stylesheet. |
+| `python manage.py findstatic placement/css/placement_preview.css` | Verify the Admin preview stylesheet. |
+| `python manage.py findstatic placement/js/placement.js` | Verify the public placement JavaScript asset. |
+| `python manage.py collectstatic --noinput` | Collect static assets for a deployment configured to serve collected static files. |
+
+The namespaced asset directory is `placement/static/placement/`. Avoid returning to the earlier un-namespaced `placement/static/css/placement.css` path while templates expect `placement/css/placement.css`.
+
+## Email Testing Reminder
+
+The **Learning Needs enrolment email** is already wired through the existing communications service. **Placement result emails and marketing double opt-in are not yet implemented**; a successful test submission cannot trigger an email that has not been connected in the view/service workflow.
+
+With a normal SMTP backend, messages are delivered through the configured transport and are not automatically printed in the development terminal. Django's console backend prints outgoing messages for local inspection when deliberately configured:
+
+```python
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+```
+
+Use that as a local development setting only when appropriate, not as the production delivery configuration. Confirm templates, recipient routing, error handling and optional marketing consent before treating public placement emails as complete.
