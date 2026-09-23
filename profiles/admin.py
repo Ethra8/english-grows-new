@@ -6,6 +6,8 @@ from django import forms
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.urls import path, reverse
+from django.utils import timezone
+from django.utils.formats import date_format
 from django.utils.html import format_html, format_html_join
 
 from allauth.account.models import EmailAddress
@@ -23,7 +25,10 @@ from .models import (
     SUBSKILLS,
 )
 
-from .forms import StudentNeedsAnalysisForm
+from .forms.student_needs_analysis import (
+    StudentNeedsAnalysisForm,
+    SITUATION_CHOICES,
+)
 
 from courses.models import CourseEnrollment
 
@@ -857,6 +862,7 @@ class StudentNeedsAnalysisAdmin(admin.ModelAdmin):
 
 
 
+
 # STUDENT ACADEMIC PROFILE ====================================================
 @admin.register(StudentAcademicProfile)
 class StudentAcademicProfileAdmin(admin.ModelAdmin):
@@ -879,7 +885,7 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         "updated_at",
-        "skills_assessments_editor",
+        "academic_records_editor",
     )
 
     fieldsets = (
@@ -894,50 +900,214 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Skills assessments",
+            "Academic records",
             {
-                "fields": ("skills_assessments_editor",),
+                "classes": ("wide",),
+                "fields": ("academic_records_editor",),
                 "description": (
-                    "Update the student's subskill ratings here. "
-                    "Assessments are grouped by course and skill."
+                    "Course-specific learning needs and skills assessments. "
+                    "Learning Needs are read-only; subskill ratings can be updated here."
                 ),
             },
         ),
     )
 
+    class Media:
+        css = {
+            "all": (
+                "css/base/variables.css",
+                "profiles/css/admin/student_academic_profile.css",
+            )
+        }
+
     # -------------------------------------------------------------------------
-    # SKILLS ASSESSMENT EDITOR
+    # LEARNING NEEDS SUMMARY
     # -------------------------------------------------------------------------
 
-    @admin.display(description="Subskill ratings")
-    def skills_assessments_editor(self, obj):
+    def learning_needs_summary(self, enrollment):
+        """
+        Display the learner's submitted Needs Analysis.
+
+        Questionnaire answers remain read-only and are stored in
+        StudentNeedsAnalysis.
+        """
+
+        # HISTORICAL ASSESSMENT WITHOUT ENROLLMENT
+        if enrollment is None:
+            return format_html(
+                '<p class="academic-needs__empty">{}</p>',
+                "No enrollment record is available for this historical assessment.",
+            )
+
+        needs_analysis = getattr(enrollment, "needs_analysis", None)
+
+        # NO NEEDS ANALYSIS RECORD
+        if needs_analysis is None:
+            return format_html(
+                '<p class="academic-needs__empty">{}</p>',
+                "The learner has not completed their Learning Needs questionnaire.",
+            )
+
+        # PENDING — DO NOT DISPLAY UNFINISHED RESPONSES
+        if needs_analysis.status == needs_analysis.Status.PENDING:
+            return format_html(
+                '<p class="academic-needs__empty">{}</p>',
+                "Awaiting learner submission.",
+            )
+
+        # ---------------------------------------------------------------------
+        # PRIORITY AREAS
+        #
+        # Reuse the original choices from StudentNeedsAnalysisForm.
+        # ---------------------------------------------------------------------
+
+        priorities = needs_analysis.priority_areas or []
+        situation_labels = dict(SITUATION_CHOICES)
+
+        if priorities:
+            priority_badges = format_html_join(
+                "",
+                '<span class="academic-needs__priority">{}</span>',
+                (
+                    (situation_labels.get(value, value),)
+                    for value in priorities
+                    if value
+                ),
+            )
+        else:
+            priority_badges = format_html(
+                '<span class="academic-needs__empty">{}</span>',
+                "No priority areas selected.",
+            )
+
+        # ---------------------------------------------------------------------
+        # ADDITIONAL INFORMATION
+        # ---------------------------------------------------------------------
+
+        additional_information = (
+            needs_analysis.additional_information.strip()
+            if needs_analysis.additional_information
+            else "Not provided."
+        )
+
+        # ---------------------------------------------------------------------
+        # SUBMISSION / REVIEW DATES
+        # ---------------------------------------------------------------------
+
+        dates = []
+
+        if needs_analysis.submitted_at:
+            dates.append(
+                format_html(
+                    '<span><strong>Submitted:</strong> {}</span>',
+                    date_format(
+                        timezone.localtime(needs_analysis.submitted_at),
+                        "j M Y",
+                    ),
+                )
+            )
+
+        if needs_analysis.reviewed_at:
+            dates.append(
+                format_html(
+                    '<span><strong>Reviewed:</strong> {}</span>',
+                    date_format(
+                        timezone.localtime(needs_analysis.reviewed_at),
+                        "j M Y",
+                    ),
+                )
+            )
+
+        dates_html = format_html_join(
+            " · ",
+            "{}",
+            ((item,) for item in dates),
+        )
+
+        # ---------------------------------------------------------------------
+        # FULL QUESTIONNAIRE LINK
+        # ---------------------------------------------------------------------
+
+        questionnaire_url = reverse(
+            f"admin:{needs_analysis._meta.app_label}_{needs_analysis._meta.model_name}_change",
+            args=[needs_analysis.pk],
+        )
+
+        # ---------------------------------------------------------------------
+        # RENDER SUMMARY
+        # ---------------------------------------------------------------------
+
+        return format_html(
+            '<div class="academic-needs__group">'
+                '<span class="academic-needs__label">Priority Areas</span>'
+                '<div class="academic-needs__priorities">{}</div>'
+            '</div>'
+
+            '<div class="academic-needs__group">'
+                '<span class="academic-needs__label">Additional Information</span>'
+                '<p class="academic-needs__information">{}</p>'
+            '</div>'
+
+            '<div class="academic-needs__footer">'
+                '<span class="academic-needs__dates">{}</span>'
+                '<a class="academic-needs__link" href="{}">'
+                    'View full questionnaire ↗'
+                '</a>'
+            '</div>',
+            priority_badges,
+            additional_information,
+            dates_html,
+            questionnaire_url,
+        )
+
+    # -------------------------------------------------------------------------
+    # ACADEMIC RECORDS EDITOR
+    #
+    # ONE COURSE ACCORDION:
+    # - Learning Needs (read-only)
+    # - Skills Assessment (editable)
+    # -------------------------------------------------------------------------
+
+    @admin.display(description="Course academic records")
+    def academic_records_editor(self, obj):
         if not obj or not obj.pk or not obj.student_id:
-            return "Save the academic profile first to manage skills assessments."
+            return "Save the academic profile first to manage academic records."
 
         user = obj.student
 
         # ---------------------------------------------------------------------
-        # COURSES
+        # ENROLLMENTS
         #
-        # Build primarily from enrollments so first-time assessments are shown.
-        # Also retain historical courses that already contain assessment data.
+        # Include all statuses to preserve historical courses.
         # ---------------------------------------------------------------------
-        enrollments = (
+
+        enrollments = list(
             CourseEnrollment.objects
             .filter(student=user)
-            .select_related("course")
+            .select_related("course", "needs_analysis")
             .order_by("course__name", "course_id")
         )
 
-        courses = []
-        seen_course_ids = set()
+        enrollment_by_course = {
+            enrollment.course_id: enrollment
+            for enrollment in enrollments
+        }
 
-        for enrollment in enrollments:
-            if enrollment.course_id not in seen_course_ids:
-                courses.append(enrollment.course)
-                seen_course_ids.add(enrollment.course_id)
+        courses = [
+            enrollment.course
+            for enrollment in enrollments
+        ]
 
-        assessments = (
+        seen_course_ids = set(enrollment_by_course)
+
+        # ---------------------------------------------------------------------
+        # EXISTING ASSESSMENTS
+        #
+        # Retain historical courses with assessment data even if their
+        # enrollment record no longer exists.
+        # ---------------------------------------------------------------------
+
+        assessments = list(
             StudentSkillAssessment.objects
             .filter(student=user)
             .select_related("course")
@@ -965,9 +1135,50 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
         course_blocks = []
 
         # ---------------------------------------------------------------------
-        # COURSE ACCORDION -> SKILL ACCORDION -> SUBSKILL RATINGS
+        # COURSE ACCORDIONS
         # ---------------------------------------------------------------------
+
         for course in courses:
+            enrollment = enrollment_by_course.get(course.id)
+
+            # -----------------------------------------------------------------
+            # LEARNING NEEDS
+            # -----------------------------------------------------------------
+
+            needs_html = self.learning_needs_summary(enrollment)
+
+            needs_analysis = (
+                getattr(enrollment, "needs_analysis", None)
+                if enrollment else None
+            )
+
+            if needs_analysis:
+                needs_status = needs_analysis.status
+                needs_status_label = needs_analysis.get_status_display()
+            elif enrollment:
+                needs_status = "pending"
+                needs_status_label = "Awaiting submission"
+            else:
+                needs_status = "unavailable"
+                needs_status_label = "Unavailable"
+
+            needs_section = format_html(
+                '<section class="academic-panel academic-panel--needs">'
+                    '<header class="academic-panel__header">'
+                        '<h3 class="academic-panel__title">Learning Needs</h3>'
+                        '<span class="academic-needs-status academic-needs-status--{}">{}</span>'
+                    '</header>'
+                    '<div class="academic-panel__body">{}</div>'
+                '</section>',
+                needs_status,
+                needs_status_label,
+                needs_html,
+            )
+
+            # -----------------------------------------------------------------
+            # SKILLS ASSESSMENT
+            # -----------------------------------------------------------------
+
             skill_blocks = []
             complete_skills = 0
             total_skills = 0
@@ -982,6 +1193,7 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
 
                 total_skills += 1
                 existing_subskills = existing.get((course.id, skill_value), {})
+
                 rows = []
                 skill_assessed_count = 0
                 skill_total_count = len(expected_subskills)
@@ -1006,14 +1218,15 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                     ).render(
                         name=field_name,
                         value=current_rating,
-                        attrs={"style": "width:100%;max-width:320px;"},
+                        attrs={"class": "academic-subskill__select"},
                     )
 
                     rows.append(
                         format_html(
-                            '<div style="display:grid;grid-template-columns:minmax(220px,1fr) minmax(260px,320px);'
-                            'gap:16px;align-items:center;padding:8px 0;border-top:1px solid var(--hairline-color);">'
-                            '<span>{}</span><span>{}</span></div>',
+                            '<div class="academic-subskill">'
+                                '<span class="academic-subskill__label">{}</span>'
+                                '<span class="academic-subskill__control">{}</span>'
+                            '</div>',
                             subskill_label,
                             select,
                         )
@@ -1031,13 +1244,19 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                     ((row,) for row in rows),
                 )
 
+                # -------------------------------------------------------------
+                # INDIVIDUAL SKILL ACCORDION
+                # -------------------------------------------------------------
+
                 skill_blocks.append(
                     format_html(
-                        '<details style="margin:8px 0 0;border:1px solid var(--hairline-color);'
-                        'border-radius:6px;background:var(--body-bg);">'
-                        '<summary style="cursor:pointer;padding:10px 12px;font-weight:600;">'
-                        '{} <span style="float:right;font-weight:400;opacity:.7;">{}/{}</span>'
-                        '</summary><div style="padding:0 12px 10px;">{}</div></details>',
+                        '<details class="academic-skill">'
+                            '<summary class="academic-skill__summary">'
+                                '<span class="academic-skill__name">{}</span>'
+                                '<span class="academic-skill__count">{}/{} assessed</span>'
+                            '</summary>'
+                            '<div class="academic-skill__content">{}</div>'
+                        '</details>',
                         skill_label,
                         skill_assessed_count,
                         skill_total_count,
@@ -1051,31 +1270,122 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                 ((block,) for block in skill_blocks),
             )
 
+            # -----------------------------------------------------------------
+            # SKILLS ASSESSMENT PANEL
+            # -----------------------------------------------------------------
+
+            skills_section = format_html(
+                '<section class="academic-panel academic-panel--skills">'
+                    '<header class="academic-panel__header">'
+                        '<h3 class="academic-panel__title">Skills Assessment</h3>'
+                        '<span class="academic-panel__count">'
+                            '{}/{} skills complete · {}/{} subskills assessed'
+                        '</span>'
+                    '</header>'
+                    '<div class="academic-panel__body">{}</div>'
+                '</section>',
+                complete_skills,
+                total_skills,
+                assessed_subskills,
+                total_subskills,
+                skills_html,
+            )
+
+            # -----------------------------------------------------------------
+            # COURSE STATUS BADGE
+            # -----------------------------------------------------------------
+
+            course_status = course.get_status_display()
+
+            status_class = (
+                course.status
+                if course.status in {
+                    "active",
+                    "confirmed",
+                    "paused",
+                    "completed",
+                    "cancelled",
+                }
+                else "default"
+            )
+
+
+            # -----------------------------------------------------------------
+            # COURSE CEFR LEVEL BADGE
+            # -----------------------------------------------------------------
+
+            level_code = str(course.course_level or "").strip().upper()
+            level_family = level_code[:2].lower()
+
+            level_badge = (
+                format_html(
+                    '<span class="academic-course__level academic-course__level--{}">{}</span>',
+                    level_family,
+                    level_code,
+                )
+                if level_family in {"a1", "a2", "b1", "b2", "c1", "c2"}
+                else ""
+            )
+
+            # -----------------------------------------------------------------
+            # ONE COURSE ACCORDION CONTAINING BOTH SECTIONS
+            # -----------------------------------------------------------------
+
             course_blocks.append(
                 format_html(
-                    '<details style="margin:0 0 12px;border:1px solid var(--hairline-color);'
-                    'border-radius:8px;overflow:hidden;">'
-                    '<summary style="cursor:pointer;padding:12px 14px;background:var(--darkened-bg);font-weight:600;">'
-                    '{} <span style="float:right;font-weight:400;opacity:.75;">'
-                    '{}/{} skills complete · {}/{} subskills assessed</span></summary>'
-                    '<div style="padding:8px 14px 14px;">{}</div></details>',
+                    '<details class="academic-course">'
+                        '<summary class="academic-course__summary">'
+
+                            '<span class="academic-course__summary-main">'
+                                '<span class="academic-course__chevron" aria-hidden="true"></span>'
+
+                                '<span class="academic-course__identity">'
+                                    '<span class="academic-course__title">'
+                                        '<span class="academic-course__name">{}</span>'
+                                        '{}'
+                                    '</span>'
+                                    '<span class="academic-course__metrics">'
+                                        '{}/{} skills complete · {}/{} subskills assessed'
+                                    '</span>'
+                                '</span>'
+                            '</span>'
+
+                            '<span class="academic-course__status academic-course__status--{}">{}</span>'
+
+                        '</summary>'
+
+                        '<div class="academic-course__content">'
+                            '{}'
+                            '{}'
+                        '</div>'
+                    '</details>',
                     course.name,
+                    level_badge,
                     complete_skills,
                     total_skills,
                     assessed_subskills,
                     total_subskills,
-                    skills_html,
+                    status_class,
+                    course_status,
+                    needs_section,
+                    skills_section,
                 )
             )
 
-        return format_html_join(
-            "",
-            "{}",
-            ((block,) for block in course_blocks),
+        return format_html(
+            '<div class="academic-records">{}</div>',
+            format_html_join(
+                "",
+                "{}",
+                ((block,) for block in course_blocks),
+            ),
         )
 
     # -------------------------------------------------------------------------
     # SAVE SUBSKILL RATINGS
+    #
+    # Existing saving behaviour is preserved.
+    # Learning Needs remain read-only and are never modified here.
     # -------------------------------------------------------------------------
 
     def save_related(self, request, form, formsets, change):
@@ -1143,6 +1453,13 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             if rating is not None and rating not in allowed_ratings:
                 continue
 
+            # -----------------------------------------------------------------
+            # BLANK RATING
+            #
+            # Do not create assessment records merely because they were
+            # displayed in Admin.
+            # -----------------------------------------------------------------
+
             if rating is None:
                 assessment = (
                     StudentSkillAssessment.objects
@@ -1174,6 +1491,10 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
 
                 continue
 
+            # -----------------------------------------------------------------
+            # FIRST OR EXISTING ASSESSMENT
+            # -----------------------------------------------------------------
+
             assessment, created = StudentSkillAssessment.objects.get_or_create(
                 student=user,
                 course_id=course_id,
@@ -1192,7 +1513,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             subskill_assessment.save(
                 update_fields=("rating", "updated_at")
             )
-
 
 
 # REGISTRATION ================================================================

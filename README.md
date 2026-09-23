@@ -247,41 +247,243 @@ Instead, role-based access is determined through the user's profile.
 
 ---
 
+
 ### ACADEMIC PROFILE
 
-`StudentAcademicProfile` stores learner-level academic planning information that belongs to the learner rather than to one individual Course.
+`StudentAcademicProfile` provides the learner's central academic record, bringing together learning needs and skills assessments across their Courses.
 
-The model is intentionally compact. It stores:
+The model is intentionally compact. It stores only learner-level information:
 
-- the learner through a one-to-one `student` relationship;
-- `next_review_date`;
-- `updated_at`.
+- `student` — a one-to-one relationship with the learner;
+- `next_review_date` — the next overall academic review date;
+- `updated_at` — the date of the latest Academic Profile update.
 
-The Academic Profile deliberately avoids duplicating data that already has a canonical owner elsewhere in the application.
+Course-specific information is retrieved from its canonical source rather than duplicated in `StudentAcademicProfile`.
 
-Current information is assembled from the appropriate sources:
+The Academic Profile does not maintain a separate Learning Goals catalogue or individual learning objective field. The learner's actual priorities are captured through their Course-specific Needs Analysis.
+
+
+#### Academic Profile structure
+
+The Django Admin organises academic information into one accordion per Course. Each Course contains both the learner's Learning Needs and their Skills Assessment.
+
+The interface uses a dedicated stylesheet, `profiles/css/admin/student_academic_profile.css`, and the project's existing brand, CEFR-level and Course-status colour variables.
 
 ```text
-Current CEFR level
+STUDENT ACADEMIC PROFILE
+
+ACADEMIC PROFILE
+├── Student
+├── Next review date
+└── Updated at
+
+ACADEMIC RECORDS
+│
+├── ▾ High Intermediate [GR-001]  [B2]              [Active]
+│   │
+│   ├── Assessment progress
+│   │   └── 4/4 skills complete · 14/14 subskills assessed
+│   │
+│   ├── LEARNING NEEDS                               [Reviewed]
+│   │   ├── Priority Areas
+│   │   │   ├── Meetings and video calls
+│   │   │   └── Presentations
+│   │   ├── Additional Information
+│   │   ├── Submission/review dates
+│   │   └── View full questionnaire ↗
+│   │
+│   └── SKILLS ASSESSMENT
+│       ├── ▸ Speaking                               4/4 assessed
+│       ├── ▸ Listening                              4/4 assessed
+│       ├── ▸ Reading                                3/3 assessed
+│       └── ▸ Writing                                3/3 assessed
+│
+└── ▸ Advanced [GR-002]          [C1]                [Completed]
+    │
+    ├── LEARNING NEEDS
+    └── SKILLS ASSESSMENT
+```
+
+The figures and statuses above are illustrative; the Admin displays the actual values retrieved from the corresponding Course, Needs Analysis and assessment records.
+
+##### Course accordions
+
+Each Course accordion has a maximum width of **850px**, maintaining a compact and readable layout while adapting to smaller screens.
+
+Its header includes:
+
+- A chevron indicating whether the accordion is expanded or collapsed.
+- The Course name.
+- A CEFR-level badge positioned immediately after the Course name.
+- A colour-coded Course-status badge aligned to the right.
+- A secondary line summarising completed skills and assessed subskills.
+
+CEFR badges use the existing `--color-a1` through `--color-c2` variables. The badge colour is determined by the Course's `course_level`, independently of the learner's current level.
+
+Course-status badges use the corresponding `--color-course-status-*` variables for Active, Confirmed, Paused, Completed and Cancelled Courses.
+
+The Course and skill accordions use native HTML `<details>` and `<summary>` elements, with CSS-driven rotating chevrons. No additional JavaScript is required.
+
+##### Course content
+
+Within each expanded Course accordion, two visually distinct sections are displayed:
+
+**Learning Needs** presents the learner's submitted questionnaire information as read-only content, including its workflow status, selected Priority Areas, Additional Information and submission/review dates. A direct link provides access to the complete Needs Analysis record.
+
+Priority Areas reuse the canonical `SITUATION_CHOICES` defined in `profiles/forms/student_needs_analysis.py`, ensuring that the Academic Profile displays the same translatable labels as the learner questionnaire.
+
+**Skills Assessment** retains the editable Course → Skill → Subskill structure, with expandable sections for Speaking, Listening, Reading and Writing.
+
+Each skill displays its assessment progress, and the existing rating controls remain available for entering, updating or clearing subskill assessments.
+
+##### Data ownership and historical records
+
+Each Course accordion consolidates the learner's stated needs and teacher-assessed abilities, avoiding separate Course lists for Learning Needs and Skills Assessment.
+
+Learning Needs remain stored in `StudentNeedsAnalysis`, while skill and subskill ratings remain stored in their canonical assessment models.
+
+The Academic Profile does not duplicate questionnaire responses or assessment data.
+
+All enrollment statuses are included, preserving access to academic information from Active, Paused, Completed and Cancelled Courses. Historical assessment records also remain accessible when their original enrollment is unavailable.
+
+The Admin presentation is handled by `academic_records_editor()`, while the existing `save_related()` implementation continues to validate and save subskill ratings.
+
+
+---
+
+#### Canonical data ownership
+
+Academic information is assembled from the appropriate models:
+
+```text
+Learner's current CEFR level
 → UserProfile
 
-Target level / Course objective
-→ CourseEnrollment / Course context
+Course programmes / training focus
+→ Course
 
-Strengths / development areas
+Individual target level, where applicable
+→ CourseEnrollment
+
+Learning Needs and selected Priority Areas
+→ StudentNeedsAnalysis
+
+Skills and subskill assessments
 → StudentSkillAssessment + StudentSubSkillAssessment
 
-Learning goals / next review
+Next overall academic review
 → StudentAcademicProfile
 ```
 
-This means the Academic Profile acts as an **academic overview and planning layer**, while the underlying models remain responsible for their own data.
+`StudentAcademicProfile` acts as the **central academic overview and planning layer**, while the underlying models remain responsible for storing their own information.
 
-Assessment data remains Course-specific and is not copied into `StudentAcademicProfile`.
+Learning Needs and assessment records remain Course-specific and are not copied into `StudentAcademicProfile`.
 
-The Django Admin presents Academic Profile information together with the learner's Course → Skill → Subskill assessment structure so that assessment editing remains connected to the learner while still saving through the canonical assessment models.
+#### Learning Needs integration
 
----
+Each Course's Learning Needs section retrieves the `StudentNeedsAnalysis` associated with its `CourseEnrollment`.
+
+The Academic Profile displays:
+
+- **Status:** Pending, Submitted or Reviewed.
+- **Priority Areas:** the communication situations selected by the learner.
+- **Additional Information:** the learner's original free-text response.
+- **Submission date:** when the questionnaire was submitted.
+- **Review date:** when the teacher marked the questionnaire as reviewed.
+- **View full questionnaire:** a link to the original Needs Analysis record in Django Admin.
+
+Priority Areas reuse the canonical `SITUATION_CHOICES` defined in `profiles/forms/student_needs_analysis.py`.
+
+The stored JSON values are resolved to their original, translatable questionnaire labels:
+
+| Stored value | Display label |
+|---|---|
+| `meetings_calls` | Meetings and video calls |
+| `phone_calls` | Phone calls |
+| `presentations` | Presentations |
+| `written_communication` | Emails, reports and documents |
+| `customer_communication` | Customer communication |
+| `networking` | Networking |
+| `other` | Other |
+
+This avoids maintaining a duplicate catalogue or displaying raw JSON values.
+
+**Learning Needs are strictly read-only within the Academic Profile.** The learner's original responses remain stored in `StudentNeedsAnalysis` and cannot be modified through the Academic Profile editor.
+
+Pending questionnaires display an appropriate awaiting-submission message rather than exposing unfinished responses or displaying an empty Priority Areas list.
+
+If no Needs Analysis record exists, the Academic Profile also displays an awaiting-submission state.
+
+#### Skills Assessment integration
+
+Each Course's Skills Assessment section retains the existing expandable structure:
+
+```text
+COURSE
+└── SKILLS ASSESSMENT
+    ├── Speaking
+    │   └── Subskill ratings
+    ├── Listening
+    │   └── Subskill ratings
+    ├── Reading
+    │   └── Subskill ratings
+    └── Writing
+        └── Subskill ratings
+```
+
+The Admin displays the complete canonical assessment framework, including subskills that have not yet been assessed.
+
+Assessments can therefore be completed directly from the Academic Profile, even when no previous assessment records exist.
+
+Each Course displays assessment progress:
+
+- Number of fully assessed skills.
+- Total number of available skills.
+- Number of assessed subskills.
+- Total number of available subskills.
+
+An individual skill is considered complete when all its defined subskills have been assessed.
+
+The existing `save_related()` implementation validates Course ownership, skill identifiers, subskill identifiers and permitted ratings before saving.
+
+Blank ratings do not create unnecessary assessment records. Existing ratings can also be cleared without deleting the associated historical assessment structure.
+
+All assessment values continue to be saved through `StudentSkillAssessment` and `StudentSubSkillAssessment`.
+
+#### Historical records and empty states
+
+Academic records are assembled primarily from the learner's Course enrollments, regardless of their current status.
+
+Active, paused, completed and cancelled enrollments remain visible.
+
+Existing assessment records are also considered independently, allowing historical assessment information to remain accessible when its original enrollment is no longer available.
+
+The Academic Profile supports the following situations:
+
+| Situation | Admin behaviour |
+|---|---|
+| Learner has no Courses | Displays an appropriate empty state. |
+| Course has no Needs Analysis record | Displays awaiting-submission information. |
+| Needs Analysis is pending | Displays its status without exposing unfinished responses. |
+| Needs Analysis is submitted | Displays the learner's submitted responses and submission date. |
+| Needs Analysis is reviewed | Displays the submitted responses and review information. |
+| Course has no previous assessments | Displays the complete assessment framework, ready for the first assessment. |
+| Course is completed or cancelled | Preserves its historical academic information. |
+| Historical assessment has no enrollment record | Retains the assessment and indicates that the enrollment is unavailable. |
+
+The implementation avoids creating Needs Analysis or assessment records simply because an Admin page is viewed.
+
+#### Architectural principle
+
+The Academic Profile consolidates information; it does not duplicate ownership of that information.
+
+The separation of responsibilities follows the project's established architectural principle:
+
+**The model calculates; the helper packages; the view or Admin orchestrates; the template displays.**
+
+This keeps the Academic Profile maintainable while allowing the learning questionnaire and assessment workflows to evolve independently.
+
+--- 
 
 ### LEARNER / EMPLOYEE AREA
 

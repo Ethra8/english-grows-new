@@ -1,0 +1,499 @@
+
+/* STUDENT ACADEMIC PROFILE — DJANGO ADMIN ******************************/
+
+/* ADMIN READONLY FIELD: FULL WIDTH ************************************/
+
+.aligned .form-row.field-academic_records_editor > div {
+    display: block;
+    width: 100%;
+    max-width: none;
+}
+
+.aligned .form-row.field-academic_records_editor > div > label {
+    display: none;
+}
+
+.aligned .field-academic_records_editor .readonly {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* COURSE CARD WIDTH ***************************************************/
+
+.academic-course {
+    width: 100%;
+    max-width: 850px;
+    box-sizing: border-box;
+}
+
+/* COURSE ACCORDION ****************************************************/
+
+.academic-course {
+    margin-bottom: 14px;
+    overflow: hidden;
+    background: var(--body-bg, #fff);
+    border: 1px solid var(--hairline-color, #cfdcdc);
+    border-radius: 10px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    width: 100%;
+    max-width: 850px;
+    box-sizing: border-box;
+}
+
+.academic-course:hover {
+    border-color: var(--color-steel, #7A949B);
+}
+
+.academic-course[open] {
+    border-color: var(--color-teal, #006b7d);
+    box-shadow: 0 3px 14px rgba(var(--color-navy-rgb), .06);
+}
+
+.academic-course__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 15px 18px;
+    cursor: pointer;
+    list-style: none;
+    background: var(--darkened-bg, #f5f5f5);
+    transition: background .2s ease;
+}
+
+.academic-course__summary::-webkit-details-marker {
+    display: none;
+}
+
+.academic-course__summary::marker {
+    content: "";
+}
+
+.academic-course__summary:hover,
+.academic-course[open] > .academic-course__summary {
+    background: var(--color-mist, #EDF9F7);
+}
+
+.academic-course__summary:focus-visible,
+.academic-skill__summary:focus-visible {
+    outline: 2px solid var(--color-teal, #006b7d);
+    outline-offset: -2px;
+}
+
+.academic-course__summary-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.academic-course__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.academic-course__name {
+    color: var(--color-navy, #002D5A);
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.academic-course__metrics {
+    color: var(--color-slate, #4F6870);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.academic-course__content {
+    display: grid;
+    gap: 18px;
+    padding: 18px;
+}
+
+
+/* COURSE CHEVRON ******************************************************/
+
+.academic-course__chevron {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-right: 2px solid var(--color-teal, #006b7d);
+    border-bottom: 2px solid var(--color-teal, #006b7d);
+    transform: rotate(45deg);
+    transition: transform .2s ease;
+}
+
+.academic-course[open] > .academic-course__summary .academic-course__chevron {
+    transform: rotate(225deg);
+}
+
+
+/* COURSE STATUS BADGES ************************************************/
+
+.academic-course__status {
+    --status-color: var(--color-steel, #7A949B);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    border: 1px solid color-mix(in srgb, var(--status-color) 45%, white);
+    border-radius: 100px;
+    background: color-mix(in srgb, var(--status-color) 20%, white);
+    color: var(--color-navy, #002D5A);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.academic-course__status--active {
+    --status-color: var(--color-course-status-active);
+}
+
+.academic-course__status--confirmed {
+    --status-color: var(--color-course-status-confirmed);
+}
+
+.academic-course__status--paused {
+    --status-color: var(--color-course-status-paused);
+}
+
+.academic-course__status--completed {
+    --status-color: var(--color-course-status-completed);
+}
+
+.academic-course__status--cancelled {
+    --status-color: var(--color-course-status-cancelled);
+}
+
+
+/* COURSE CEFR LEVEL BADGE **********************************************/
+
+.academic-course__title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: .75rem;
+    row-gap: .35rem;
+}
+
+.academic-course__level {
+    --level-color: var(--color-steel);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    border: 1px solid var(--level-color);
+    border-radius: 100px;
+    background: color-mix(in srgb, var(--level-color) 22%, white);
+    color: var(--color-navy);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+.academic-course__level--a1 { --level-color: var(--color-a1); }
+.academic-course__level--a2 { --level-color: var(--color-a2); }
+.academic-course__level--b1 { --level-color: var(--color-b1); }
+.academic-course__level--b2 { --level-color: var(--color-b2); }
+.academic-course__level--c1 { --level-color: var(--color-c1); }
+.academic-course__level--c2 { --level-color: var(--color-c2); }
+
+
+/* LEARNING NEEDS / SKILLS PANELS **************************************/
+
+.academic-panel {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--hairline-color, #cfdcdc);
+    border-radius: 8px;
+    background: var(--body-bg, #fff);
+}
+
+.academic-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--hairline-color, #cfdcdc);
+}
+
+.academic-panel__title {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: var(--color-navy, #002D5A);
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.academic-panel__body {
+    padding: 16px;
+}
+
+.academic-panel__count {
+    color: var(--color-slate, #4F6870);
+    font-size: 12px;
+}
+
+
+/* LEARNING NEEDS STATUS ***********************************************/
+
+.academic-needs-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--color-whitesmoke, #F5F5F5);
+    color: var(--color-slate, #4F6870);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.academic-needs-status--pending {
+    background: #fff3da;
+    color: #815600;
+}
+
+.academic-needs-status--submitted {
+    background: var(--color-mist, #EDF9F7);
+    color: var(--color-teal, #006b7d);
+}
+
+.academic-needs-status--reviewed {
+    background: var(--color_frozen-water, #E4FFF4);
+    color: var(--color-teal, #006b7d);
+}
+
+.academic-needs-status--unavailable {
+    background: var(--color-whitesmoke, #F5F5F5);
+    color: var(--color-slate, #4F6870);
+}
+
+
+/* LEARNING NEEDS CONTENT **********************************************/
+
+.academic-needs__group {
+    margin-bottom: 20px;
+}
+
+.academic-needs__label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--color-slate, #4F6870);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .035em;
+    text-transform: uppercase;
+}
+
+.academic-needs__priorities {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.academic-needs__priorities > span {
+    display: inline-flex !important;
+    align-items: center;
+    margin: 0 !important;
+    padding: 5px 11px !important;
+    border: 1px solid rgba(var(--color-teal-rgb), .15) !important;
+    border-radius: 100px !important;
+    background: var(--color-mist, #EDF9F7) !important;
+    color: var(--color-teal, #006b7d);
+    font-size: 12px !important;
+    font-weight: 500;
+}
+
+.academic-needs__information {
+    margin: 0;
+    color: var(--body-fg, #333);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.academic-needs__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hairline-color, #cfdcdc);
+}
+
+.academic-needs__dates {
+    color: var(--color-slate, #4F6870);
+    font-size: 11px;
+}
+
+.academic-needs__link {
+    color: var(--color-teal, #006b7d) !important;
+    font-size: 12px;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.academic-needs__link:hover {
+    text-decoration: underline;
+}
+
+
+/* SKILL ACCORDIONS ****************************************************/
+
+.academic-skill {
+    margin-bottom: 8px;
+    overflow: hidden;
+    border: 1px solid var(--hairline-color, #cfdcdc);
+    border-radius: 6px;
+    background: var(--body-bg, #fff);
+}
+
+.academic-skill:last-child {
+    margin-bottom: 0;
+}
+
+.academic-skill__summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .2s ease;
+}
+
+.academic-skill__summary::-webkit-details-marker {
+    display: none;
+}
+
+.academic-skill__summary::marker {
+    content: "";
+}
+
+.academic-skill__summary:hover,
+.academic-skill[open] > .academic-skill__summary {
+    background: var(--color-mist, #EDF9F7);
+}
+
+.academic-skill__summary::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-right: 1.5px solid var(--color-teal, #006b7d);
+    border-bottom: 1.5px solid var(--color-teal, #006b7d);
+    transform: rotate(45deg);
+    transition: transform .2s ease;
+}
+
+.academic-skill[open] > .academic-skill__summary::before {
+    transform: rotate(225deg);
+}
+
+.academic-skill__name {
+    flex: 1;
+    min-width: 0;
+    color: var(--color-navy, #002D5A);
+    font-weight: 600;
+}
+
+.academic-skill__count {
+    color: var(--color-slate, #4F6870);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.academic-skill__content {
+    padding: 4px 14px 14px;
+}
+
+
+/* SUBSKILL RATINGS ****************************************************/
+
+.academic-subskill {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(220px, 320px);
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-top: 1px solid var(--hairline-color, #cfdcdc);
+}
+
+.academic-subskill__label {
+    color: var(--body-fg, #333);
+}
+
+.academic-subskill__control {
+    min-width: 0;
+}
+
+.academic-subskill__select {
+    width: 100%;
+    max-width: 320px;
+}
+
+
+/* RESPONSIVE **********************************************************/
+
+@media (max-width: 767px) {
+    .academic-course__summary {
+        align-items: flex-start;
+        gap: 10px;
+        padding: 13px;
+    }
+
+    .academic-course__content {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .academic-course__status {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .academic-panel__header,
+    .academic-panel__body {
+        padding: 12px;
+    }
+
+    .academic-subskill {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .academic-subskill__select {
+        max-width: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .academic-course,
+    .academic-course__summary,
+    .academic-course__chevron,
+    .academic-skill__summary,
+    .academic-skill__summary::before {
+        transition: none;
+    }
+}
