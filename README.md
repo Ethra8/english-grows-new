@@ -2,7 +2,7 @@
 
 English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
 
-The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, a public versioned English placement test, progress monitoring, automated learner communications and role-specific interfaces within a single relational data architecture.
+The application combines course management, automated lesson scheduling, attendance tracking, learner needs analysis, academic profiling, learner assessment, a public versioned English placement test, progress monitoring, transactional result emails, opt-in marketing subscription records and role-specific interfaces within a single relational data architecture.
 
 ---
 
@@ -39,6 +39,8 @@ The application combines course management, automated lesson scheduling, attenda
     - [Email Template Management](#email-template-management)
     - [Email Rendering & Delivery](#email-rendering--delivery)
     - [Automatic Learning Needs Enrolment Email](#automatic-learning-needs-enrolment-email)
+    - [Placement Result Notifications](#placement-result-notifications)
+    - [Marketing Subscriptions — Single Opt-In](#marketing-subscriptions--single-opt-in)
   - [Placement App — Public English Level Test](#placement-app--public-english-level-test)
     - [Purpose and Scope](#placement-purpose-and-scope)
     - [Question Bank and Versioning](#placement-question-bank-and-versioning)
@@ -69,6 +71,7 @@ The application combines course management, automated lesson scheduling, attenda
 - [Architectural Design Choices](#architectural-design-choices)
   - [Separation of Responsibilities](#separation-of-responsibilities)
   - [Domain Transactions vs. External Communications](#domain-transactions-vs-external-communications)
+  - [Transactional Placement Emails vs. Optional Marketing](#transactional-placement-emails-vs-optional-marketing)
   - [Authentication vs. Application Profile](#authentication-vs-application-profile)
   - [Course Configuration vs. Lesson Delivery](#course-configuration-vs-lesson-delivery)
   - [Enrolment vs. User Identity](#enrolment-vs-user-identity)
@@ -2928,7 +2931,9 @@ Its responsibilities currently include:
 - call-to-action insertion;
 - absolute application/static URLs;
 - SMTP delivery;
-- CourseEnrollment-triggered Learning Needs invitations.
+- CourseEnrollment-triggered Learning Needs invitations;
+- placement-result notifications for learners and relevant staff;
+- consent-based marketing subscriber records and unsubscribe state.
 
 This keeps communication concerns independent from the domain models that create the business event.
 
@@ -2983,6 +2988,15 @@ and a dedicated CTA insertion marker:
 ```text
 [[CTA]]
 ```
+
+The placement-result workflow also uses two active, independently editable templates:
+
+| Template name | Exact database key | Recipient |
+| :--- | :--- | :--- |
+| Placement Test Result Learner | `placement_result_learner` | Learner |
+| Placement Test Result Staff | `placement_test_result_staff` | English Grows and assigned teacher(s) |
+
+The staff subject may contain `{{ learner_email }}`, which is rendered from the saved attempt. Placement templates can also render the learner name, score, total questions, recommended course level, CEFR reference and, for staff, test version/completion date. Their bodies are edited as formatted content in CKEditor 5; no result-specific `[[CTA]]` is required.
 
 Separating template content from sending logic allows copy to evolve without rewriting the business trigger.
 
@@ -3103,6 +3117,52 @@ Course-scoped StudentNeedsAnalysis
 
 This architecture follows the wider project principle that the model owns business state while supporting services handle external delivery concerns.
 
+### Placement Result Notifications
+
+A successful new placement-test POST calls `communications.services.send_placement_result_emails(attempt)` **after** the grading/database transaction commits and after the result is recorded in the browser session. Opening or refreshing the result page does not invoke the service again.
+
+The service builds a rendering context from the saved `PlacementAttempt`, including the learner's name/email, score, total (50), recommended course level, CEFR reference, test version and completion timestamp. It sends through the existing DB-backed `EmailTemplate` renderer and shared branded HTML/plain-text email shell.
+
+| Recipient | Template key | Routing rule |
+| :--- | :--- | :--- |
+| Learner | `placement_result_learner` | Saved attempt email address |
+| General inbox | `placement_test_result_staff` | `info@englishgrows.com` |
+| Assigned teacher(s) | `placement_test_result_staff` | Non-empty teacher emails from the learner's active enrolments on active/confirmed Courses |
+
+Staff email addresses are trimmed, case-normalised for comparison and deduplicated. A teacher whose email is `info@englishgrows.com` does **not** cause a second staff message to that inbox. The learner's personal result message remains separate from the staff notification. Anonymous public test takers have no account-linked teacher lookup, but still receive their own result and trigger the general inbox copy.
+
+Each sending attempt is wrapped in an individual exception handler that logs a delivery failure without rolling back an already committed assessment. SMTP transport does not print full emails to the development terminal; the console backend can be enabled deliberately for local inspection.
+
+**Verification:** the placement-result email workflow has been tested successfully in production. This confirmation applies to transactional result emails, not to the separately added marketing subscription path.
+
+### Marketing Subscriptions — Single Opt-In
+
+`MarketingSubscriber` owns marketing permission independently from `PlacementAttempt`, `CourseEnrollment` and the user's login account. Its email field is unique and normalised with whitespace trimming and `casefold()`. It may optionally link to the matching authenticated `User`; public visitors do not need to register.
+
+The learner sees a distinct, optional `marketing_opt_in` checkbox on the placement-test introduction. It is `required=False` and `initial=False`. Privacy acknowledgement is required for assessment processing, but **does not imply marketing consent**.
+
+On a valid placement-test submission, within the same database transaction as `PlacementAttempt.grade()`, the view calls `MarketingSubscriber.subscribe()` **only when `form.cleaned_data["marketing_opt_in"]` is true**. The call uses the email chosen for the attempt, `Source.PLACEMENT_TEST`, and the exact rendered form-label wording as `consent_text`.
+
+```text
+Successful placement POST
+    ├── grade and save PlacementAttempt
+    ├── marketing_opt_in checked?
+    │       ├── no  → no marketing action
+    │       └── yes → create/reactivate MarketingSubscriber immediately as active
+    └── commit transaction
+            └── send transactional result emails (regardless of marketing choice)
+```
+
+**Single opt-in is intentional.** The subscription is activated immediately from an explicit affirmative selection. There is no pending confirmation stage, additional marketing-confirmation email or confirmation link in this placement workflow. An unchecked checkbox does not create or change a marketing record.
+
+The model retains `requested_at` and `confirmed_at` for compatibility and consent evidence: both receive the opt-in timestamp, and `confirmed_at` means *affirmative form consent*, **not** verification through an email link. `consent_text` stores the checkbox wording and `source` identifies the placement test. A pre-existing active subscriber is left unchanged; a previously unsubscribed person can opt in again explicitly, at which point a fresh `unsubscribe_token` invalidates older unsubscribe links.
+
+`can_receive_marketing` requires `status == active` and a non-null `confirmed_at`. `unsubscribe()` changes status to `unsubscribed` and records `last_unsubscribed_at` while preserving consent evidence. Existing legacy `pending` status and `confirmation_token` fields remain in the model for now; they are **not used to require email confirmation** in this single-opt-in path. Do not remove these fields without checking existing migrations, admin, URLs and other references.
+
+The subscriber record and its consent state are separate from permission to send the required placement-result email. Creating a subscriber does **not** itself send marketing campaigns. A public unsubscribe URL/email integration is not established by the supplied model alone and should be checked before sending marketing campaigns.
+
+**Verification:** the code is wired and `python manage.py check` reported zero errors; the new marketing database flow is undergoing end-to-end submission testing and should not yet be described as production-verified.
+
 ---
 
 ## PLACEMENT App — Public English Level Test
@@ -3113,7 +3173,7 @@ The English Grows Placement Test has been carefully curated with reference to th
 
 The `placement` app owns the public **English Grows English Level Test**. It is separate from the Course-specific teacher-assessment architecture and can be used before a person has an account or Course enrolment.
 
-It is a versioned, 50-question multiple-choice assessment designed to produce a **provisional course-placement recommendation**, not an official CEFR certificate. Public test presentation, question-bank administration, answer validation, grading and historical attempts remain within this app. The existing `communications` app remains the intended owner of outbound emails.
+It is a versioned, 50-question multiple-choice assessment designed to produce a **provisional course-placement recommendation**, not an official CEFR certificate. Public test presentation, question-bank administration, answer validation, grading and historical attempts remain within this app. The `communications` app owns outbound email delivery and independent marketing subscriber records.
 
 ### Placement Purpose and Scope
 
@@ -3207,16 +3267,22 @@ Question sets 1–5 (10 questions each)
     ↓
 One final POST / server-side validation
     ↓
-PlacementAttempt.grade()
+Within one database transaction:
+  PlacementAttempt.grade()
+  + optional active MarketingSubscriber (only if checked)
     ↓
-Saved result / result page
+Commit and save result in browser session
+    ↓
+Send learner + deduplicated staff result emails
+    ↓
+Private result page
 ```
 
 The frontend uses namespaced assets under `placement/static/placement/`, including `css/placement.css` and `js/placement.js`. The public template extends the shared website layout via `placement/base.html`; it does not use the Django Admin preview stylesheet.
 
 The view validates that the selected question bank is complete, creates and verifies a session token, and builds the server-side answer form. Logged-in users may see their stored name/email as initial form values, but **authentication is not a prerequisite**. The result view obtains the completed attempt from the browser session and checks ownership where an attempt is linked to a user. The result response is private/no-store; public result pages are not intended to be indexed.
 
-The optional marketing preference is conceptually separate from the required assessment/privacy acknowledgement. Displaying or collecting a checkbox does **not** itself constitute a working marketing subscription or double-opt-in workflow; see the implementation-status section below.
+The optional marketing preference is separate from the required assessment/privacy acknowledgement. Selecting the unchecked-by-default box now calls the `MarketingSubscriber` single-opt-in method during a successful submission; it is not needed for assessment grading or transactional result delivery. No additional subscription-confirmation email is sent. End-to-end persistence is still being tested.
 
 ### Placement Attempt Records and Historical Snapshots
 
@@ -3301,22 +3367,33 @@ python manage.py clone_placement_version 1.1 1.2
 
 ### Placement Communications — Implementation Status
 
-The public assessment and Admin review are distinct from the **placement-result email workflow**, which is **not yet connected**. The current submission flow grades and saves an attempt, then redirects to the result page; it does not call `communications.services.send_template_email()`.
+The successful public test submission saves the graded `PlacementAttempt` and, following commit, sends transactional result emails through `send_placement_result_emails(attempt)`. The result view itself never sends email, so refreshing it does not resend notifications.
 
 | Related capability | Current state |
 | :--- | :--- |
 | Logged-in learner email prefill | Implemented |
 | Grade/save and display result | Implemented |
-| Learner result email | **Not yet implemented** |
-| Separate assigned-teacher copy or fallback administrative copy | **Not yet implemented** |
-| Optional marketing subscription persistence / double opt-in | **Not yet implemented** |
-| Placement-specific editable email templates | **To be configured/integrated** |
-| Privacy-policy destination and public wording | **Verify before public launch** |
+| Learner result email | **Implemented; verified in production** |
+| General inbox staff copy to `info@englishgrows.com` | **Implemented; verified in production** |
+| Assigned-teacher staff copies with deduplicated addresses | **Implemented; verified in production** |
+| Placement-specific editable email templates | **Configured and used** |
+| Optional marketing subscription, single opt-in | **Implemented in code; end-to-end database verification in progress** |
+| Marketing double opt-in / confirmation email | **Intentionally not part of this workflow** |
+| Public unsubscribe endpoint and campaign delivery | **Not established by the supplied model/view code; verify separately** |
+| Privacy-policy destination and public wording | **Verify against the deployed site before launch** |
 
-The existing `communications` service and DB-managed `EmailTemplate` model should be reused when implementation proceeds. A future email process should follow a committed successful result and avoid duplicate sends on result-page refresh; failure to deliver an email should not erase the graded attempt. The optional marketing preference requires its own explicit consent and confirmation workflow rather than silently enrolling a test taker.
+The exact active EmailTemplate keys are:
 
-The implemented **Learning Needs welcome email** remains a separate, existing workflow and must not be mistaken for a placement-result email. SMTP email is not printed to the terminal by default; Django's console email backend is the development setting used when printing messages there is desired.
+```text
+placement_result_learner
+placement_test_result_staff
+```
 
+The saved attempt supplies the learner name/email, score out of 50, recommended course level, CEFR reference, version and completion timestamp. The general inbox always receives the staff notification; matching teacher emails are obtained from active enrolments on active/confirmed Courses, then deduplicated to avoid duplicate staff delivery. Each outgoing message is attempted independently, and logged delivery failures do not erase the stored result.
+
+`marketing_opt_in` is an independent optional Boolean on `PlacementTestForm`, initially unchecked. If explicitly selected on a valid POST, `MarketingSubscriber.subscribe()` creates or reactivates a record as **active immediately** and records the source, exact consent wording and timestamp. If unchecked, no marketing operation occurs. There is no pending confirmation, marketing confirmation email or confirmation link. A previously unsubscribed person may explicitly subscribe again; the model regenerates the unsubscribe token. Existing active records are preserved without unnecessary changes.
+
+The marketing subscriber write shares the assessment's `transaction.atomic()` block; outbound result emails occur only after commit. Existing model fields named `confirmed_at` and `confirmation_token` are retained for compatibility. Here `confirmed_at` records affirmative form consent, not a clicked verification link. Subscription persistence is still awaiting the user's end-to-end test despite `python manage.py check` reporting zero configuration errors. The working Learning Needs welcome email remains a separate workflow.
 ---
 
 ## Learning Assessment & Progress
@@ -3791,6 +3868,7 @@ Administrators can manage data including:
 - **Subskill assessments**
 - **Assessment snapshots**
 - **Email templates**
+- **Marketing subscribers and recorded opt-in consent**
 - **Placement questions and versioned question banks**
 - **Placement attempts and historical answer reviews**
 
@@ -4080,6 +4158,8 @@ The Placement Admin is separate from Course-specific teacher assessment and expo
 
 The live preview reflects current question records; a completed learner's stored snapshot reflects their actual submitted assessment. This distinction is central to preserving assessment history.
 
+`MarketingSubscriber` is also exposed in the Communications area of Django Admin, independently of placement attempts. A checked marketing opt-in should produce an active subscriber with source `placement_test`, stored consent wording and recorded timestamps. This new persistence path is currently being tested.
+
 #### ClassSession and Attendance protection
 
 Generated `ClassSession` records are not manually added or deleted through the standard Admin configuration. They represent the Course's generated lesson identity and history.
@@ -4129,7 +4209,8 @@ LEARNING & ASSESSMENT
 └── StudentSkillTermSnapshot
 
 COMMUNICATIONS
-└── EmailTemplate
+├── EmailTemplate
+└── MarketingSubscriber
 
 PUBLIC PLACEMENT
 ├── PlacementQuestion
@@ -4153,6 +4234,7 @@ The architecture distinguishes between:
 - **Detailed assessment history**
 - **Formal term-based assessment history**
 - **Reusable outbound communication templates**
+- **Optional marketing subscriptions and consent evidence**
 - **Versioned public placement questions and saved assessment attempts**
 
 ---
@@ -4341,6 +4423,22 @@ erDiagram
         datetime updated_at
     }
 
+    MARKETING_SUBSCRIBER {
+        bigint id PK
+        varchar email UK
+        bigint user_id FK
+        varchar status
+        varchar source
+        text consent_text
+        datetime requested_at
+        datetime confirmed_at
+        datetime last_unsubscribed_at
+        uuid confirmation_token
+        uuid unsubscribe_token
+        datetime created_at
+        datetime updated_at
+    }
+
     PLACEMENT_QUESTION {
         bigint id PK
         varchar version
@@ -4374,6 +4472,7 @@ erDiagram
 
     USER ||--|| USER_PROFILE : "has profile"
     USER o|--o{ PLACEMENT_ATTEMPT : "may complete public test"
+    USER o|--o{ MARKETING_SUBSCRIBER : "may have marketing subscriptions"
 
     COMPANY o|--o{ USER_PROFILE : "contains members"
 
@@ -4423,6 +4522,8 @@ Assessment history is deliberately separated from current assessment state throu
 - `StudentSkillTermSnapshot` — formal periodic assessment history
 
 `EmailTemplate` belongs to the separate communications domain and therefore does not require a direct foreign-key relationship to Course or learner records. Runtime communication context is supplied when the email service renders a particular business event.
+
+`MarketingSubscriber` is also part of Communications. Its unique, normalised email identifies the subscription independently of a `PlacementAttempt` or `CourseEnrollment`, and its optional `user` foreign key links a matching authenticated account. A public anonymous visitor can subscribe without being converted into a user account.
 
 `PlacementQuestion` and `PlacementAttempt` form the public placement domain. An attempt may link to an authenticated `User`, but anonymous use remains possible. Its question bank is identified through `test_version` and the per-question snapshot rather than a foreign-key relation to mutable question rows. This avoids mistaking current question content for historical submitted content.
 
@@ -4561,6 +4662,14 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - SMTP/email delivery is kept outside `CourseEnrollment.save()`; the model remains responsible for domain state rather than external transport.
 - The Learning Needs CTA preserves Course context using `?course=<course_id>`.
 - The CTA does not bypass role/ownership checks in the destination view.
+- The placement-result email service is invoked only after a successful grading transaction, not by opening the result page.
+- The learner result template is `placement_result_learner`; the staff template is `placement_test_result_staff`.
+- `info@englishgrows.com` receives the staff notification; assigned teachers are included through qualifying active enrolments, with case-insensitive staff-recipient deduplication.
+- Individual SMTP failures are logged and do not roll back a committed assessment.
+- The optional marketing checkbox does not govern transactional assessment-result delivery.
+- A marketing subscriber is created/reactivated as active only after explicit opt-in; an unchecked box triggers no marketing action.
+- Marketing consent wording, source and timestamp are recorded independently of placement answers; re-opt-in after unsubscribe rotates the old unsubscribe token.
+- The model's obsolete pending/confirmation-token fields remain for compatibility but are not used for a double-opt-in placement flow.
 
 #### Public Placement
 
@@ -4573,7 +4682,8 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Admin preview never creates an attempt and never exposes the answer key in the rendered preview page.
 - A new cloned version has its own question rows and does not overwrite the source version or change `TEST_VERSION` automatically.
 - An older attempt's stored score and recommendation are not automatically recalculated by a later scoring-code change.
-- The placement result email and marketing double-opt-in workflows remain outstanding; the existing Learning Needs welcome email does not implement them.
+- Placement-result emails are wired and verified in production; result-page refresh does not resend them.
+- Optional single-opt-in marketing persistence is wired into successful grading, but the new database flow is awaiting end-to-end verification.
 
 #### Assessment
 
@@ -4791,10 +4901,21 @@ PlacementTestForm + session-token validation
 PlacementAttempt.grade() / historical answer_snapshot
         │
         ▼
-Saved result → private result page
+Optional explicit marketing_opt_in?
+        ├── yes → MarketingSubscriber active + consent recorded
+        └── no  → no marketing action
+        ▼
+Commit saved result
+        ▼
+send_placement_result_emails(attempt)
+        ├── learner result
+        ├── info@englishgrows.com staff result
+        └── unique assigned teacher email(s), where applicable
+        ▼
+Private result page (no resend on refresh)
 ```
 
-The question bank is independent of Course enrolment and teacher skill assessment. Changing the active question bank does not rewrite existing snapshots. The placement-result email and marketing-consent processes have not yet been wired into this path.
+The question bank is independent of Course enrolment and teacher skill assessment. Changing the active question bank does not rewrite existing snapshots. Following the successful database commit, the existing email service sends the learner result and deduplicated staff notifications. An explicitly checked optional marketing preference creates or reactivates an active `MarketingSubscriber` within the grading transaction; an unchecked preference does nothing. Result-page refresh does not resend emails.
 
 ### ClassSession end-time lifecycle
 
@@ -4985,6 +5106,24 @@ This is consistent with the wider project rule:
 > the template should display.**
 
 External delivery therefore remains a supporting service around the domain model rather than becoming hidden persistence logic inside `save()`.
+
+### Transactional Placement Emails vs. Optional Marketing
+
+The placement test separates **the email necessary to return a requested assessment result** from **consent to receive future promotional content**. Both are associated with an email address, but they are different operations and have different eligibility rules.
+
+```text
+PlacementAttempt saved
+    └── transactional result email → learner + relevant staff
+        (does not require marketing consent)
+
+Optional marketing_opt_in explicitly checked
+    └── MarketingSubscriber.subscribe() → active immediately
+        (no confirmation email; unchecked means no action)
+```
+
+The subscription and grading records are committed together in the same database transaction. Result email delivery follows the commit and is handled by `communications.services` independently. The marketing model stores consent wording, source and timestamps, and provides an unsubscribe state/token. These records must not be conflated with the pedagogical assessment or with an active CourseEnrollment.
+
+Existing `pending` and `confirmation_token` database fields do not mean double opt-in is in use for this placement workflow. The subscriber model has been retained without a field-removal migration while other references are checked. An unsubscribe token/method alone does not establish a public unsubscribe route; that separate integration should be verified before marketing campaigns are sent.
 
 ---
 
@@ -6293,7 +6432,9 @@ The namespaced asset directory is `placement/static/placement/`. Avoid returning
 
 ## Email Testing Reminder
 
-The **Learning Needs enrolment email** is already wired through the existing communications service. **Placement result emails and marketing double opt-in are not yet implemented**; a successful test submission cannot trigger an email that has not been connected in the view/service workflow.
+The **Learning Needs enrolment email** and **placement-result emails** are both wired through the communications service. Production testing has confirmed the learner, general-inbox and assigned-teacher placement notifications. The two placement template keys are `placement_result_learner` and `placement_test_result_staff`.
+
+The optional marketing checkbox now calls the single-opt-in subscriber method during a successful placement submission; a checked box should create/reactivate an active subscription immediately, while an unchecked box does nothing. **No marketing confirmation email is sent.** The marketing persistence path still requires its own end-to-end database test; `python manage.py check` returning zero errors is not proof of that flow.
 
 With a normal SMTP backend, messages are delivered through the configured transport and are not automatically printed in the development terminal. Django's console backend prints outgoing messages for local inspection when deliberately configured:
 
@@ -6301,4 +6442,4 @@ With a normal SMTP backend, messages are delivered through the configured transp
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ```
 
-Use that as a local development setting only when appropriate, not as the production delivery configuration. Confirm templates, recipient routing, error handling and optional marketing consent before treating public placement emails as complete.
+Use the console backend as a local development setting only, not as the production transport. For production SMTP, check real recipient inboxes and server error logs. Do not confuse successful transactional email delivery with marketing opt-in verification; inspect the Marketing subscribers Admin record after a new checked/unchecked submission.
