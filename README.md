@@ -8,59 +8,90 @@ The application combines course management, automated lesson scheduling, attenda
 
 ## 📑 Table of Contents
 
+## 📑 Table of Contents
+
 - [Site Structure](#site-structure)
   - [User Roles](#user-roles)
-  - [Home App](#home-app)
-  - [Profiles App](#profiles-app)
-    - [User Profile & Role Management](#user-profile--role-management)
-    - [Academic Profile](#academic-profile)
-    - [Learner / Employee Area](#learner--employee-area)
-    - [Learning Needs / Student Needs Analysis](#learning-needs--student-needs-analysis)
-    - [Teacher Area](#teacher-area)
-    - [Company Admin Area](#company-admin-area)
-    - [Role-Based Access Control](#role-based-access-control)
-  - [Courses App](#courses-app)
-    - [Course Types](#course-types)
-    - [Course Management](#course-management)
-    - [Course Enrolment](#course-enrolment)
-    - [Course Enrolment Lifecycle](#course-enrolment-lifecycle)
-    - [Course Timetable](#course-timetable)
-    - [Bank Holidays & Course Scheduling](#bank-holidays--course-scheduling)
-    - [Class Session Generation](#class-session-generation)
-    - [Safe Future Schedule Synchronisation](#safe-future-schedule-synchronisation)
-    - [Class Session Lifecycle](#class-session-lifecycle)
-    - [Automatic Class Session Status Synchronisation](#automatic-class-session-status-synchronisation)
-    - [Rescheduling a Class Lesson](#rescheduling-a-class-lesson)
-    - [Course Pause](#course-pause)
-    - [Course Cancellation](#course-cancellation)
-    - [Attendance](#attendance)
-    - [Attendance Reporting](#attendance-reporting)
-  - [Communications App](#communications-app)
-    - [Email Template Management](#email-template-management)
-    - [Email Rendering & Delivery](#email-rendering--delivery)
-    - [Automatic Learning Needs Enrolment Email](#automatic-learning-needs-enrolment-email)
-    - [Placement Result Notifications](#placement-result-notifications)
-    - [Marketing Subscriptions — Single Opt-In](#marketing-subscriptions--single-opt-in)
-  - [Placement App — Public English Level Test](#placement-app--public-english-level-test)
-    - [Purpose and Scope](#placement-purpose-and-scope)
-    - [Question Bank and Versioning](#placement-question-bank-and-versioning)
-    - [Question Distribution and Scoring](#placement-question-distribution-and-scoring)
-    - [Public Assessment Workflow](#placement-public-assessment-workflow)
-    - [Attempt Records and Historical Snapshots](#placement-attempt-records-and-historical-snapshots)
-    - [Placement Django Admin and Review](#placement-django-admin-and-review)
-    - [Version Locks and Safe Cloning](#placement-version-locks-and-safe-cloning)
-    - [Placement Communications — Implementation Status](#placement-communications--implementation-status)
-  - [Learning Assessment & Progress](#learning-assessment--progress)
-    - [Language Skills Assessed](#language-skills-assessed)
-    - [Student Skill Assessment](#student-skill-assessment)
-    - [Student Subskill Assessment](#student-subskill-assessment)
-    - [Detailed Assessment Snapshots](#detailed-assessment-snapshots)
-    - [Term Assessment Snapshots](#term-assessment-snapshots)
-  - [Calendar](#calendar)
-  - [Django Admin](#django-admin)
-    - [Course Admin Operational Reporting](#course-admin-operational-reporting)
-    - [Global Admin Filter Presentation](#global-admin-filter-presentation)
-    - [Placement Administration](#placement-administration)
+
+  - **Django Applications**
+    - [Home App](#home-app)
+    - [Profiles App](#profiles-app)
+      - [User Profile & Role Management](#user-profile--role-management)
+      - [Academic Profile](#academic-profile)
+      - [Learning Assessment & Progress](#learning-assessment--progress)
+        - [Language Skills Assessed](#language-skills-assessed)
+        - [Student Skill Assessment](#student-skill-assessment)
+        - [Student Subskill Assessment](#student-subskill-assessment)
+        - [Detailed Assessment Snapshots](#detailed-assessment-snapshots)
+        - [Term Assessment Snapshots](#term-assessment-snapshots)
+      - [Learning Needs / Student Needs Analysis](#learning-needs--student-needs-analysis)
+      - [Learner / Employee Area](#learner--employee-area)
+      - [Teacher Area](#teacher-area)
+      - [Company Admin Area](#company-admin-area)
+      - [Role-Based Access Control](#role-based-access-control)
+
+    - [Courses App](#courses-app)
+      - [Course Types](#course-types)
+      - [Course Management](#course-management)
+      - [Course Enrolment](#course-enrolment)
+      - [Course Enrolment Lifecycle](#course-enrolment-lifecycle)
+      - [Course Timetable](#course-timetable)
+      - [Bank Holidays & Course Scheduling](#bank-holidays--course-scheduling)
+      - [Class Session Generation](#class-session-generation)
+      - [Safe Future Schedule Synchronisation](#safe-future-schedule-synchronisation)
+      - [Class Session Lifecycle](#class-session-lifecycle)
+      - [Automatic Class Session Status Synchronisation](#automatic-class-session-status-synchronisation)
+      - [Rescheduling a Class Lesson](#rescheduling-a-class-lesson)
+      - [Course Pause](#course-pause)
+      - [Course Cancellation](#course-cancellation)
+      - [Attendance](#attendance)
+      - [Attendance Reporting](#attendance-reporting)
+
+    - [Communications App](#communications-app)
+      - [Email Template Management](#email-template-management)
+      - [Email Rendering & Delivery](#email-rendering--delivery)
+      - [Automatic Learning Needs Enrolment Email](#automatic-learning-needs-enrolment-email)
+      - [Placement Result Notifications](#placement-result-notifications)
+      - [Marketing Subscriptions — Single Opt-In](#marketing-subscriptions--single-opt-in)
+
+    - [Placement App — Public English Level Test](#placement-app--public-english-level-test)
+      - [Purpose and Scope](#placement-purpose-and-scope)
+      - [Question Bank and Versioning](#placement-question-bank-and-versioning)
+      - [Question Distribution and Scoring](#placement-question-distribution-and-scoring)
+      - [Public Assessment Workflow](#placement-public-assessment-workflow)
+      - [Attempt Records and Historical Snapshots](#placement-attempt-records-and-historical-snapshots)
+      - [Placement Django Admin and Review](#placement-django-admin-and-review)
+      - [Version Locks and Safe Cloning](#placement-version-locks-and-safe-cloning)
+      - [Placement Communications — Implementation Status](#placement-communications--implementation-status)
+
+  - [Shared Platform Features](#shared-platform-features)
+    - [Calendar](#calendar)
+    - [Account Settings](#account-settings)
+      - [Shared Profile Form](#shared-profile-form)
+      - [Teacher-Specific Information](#teacher-specific-information)
+      - [Shared Behaviour and Role-Specific Presentation](#shared-behaviour-and-role-specific-presentation)
+
+  - [Shared Interface Architecture](#shared-interface-architecture)
+    - [Shared Page Shells & Navigation](#shared-page-shells--navigation)
+      - [Student Detail Presentation](#student-detail-presentation)
+      - [Course Detail Presentation](#course-detail-presentation)
+      - [Template and CSS Responsibilities](#template-and-css-responsibilities)
+    - [Course & Student Selectors](#course--student-selectors)
+      - [Student Mode](#student-mode)
+      - [Course Mode](#course-mode)
+      - [Access Control](#access-control)
+    - [Reusable Forms & UI Components](#reusable-forms--ui-components)
+      - [Shared Presentation Components](#shared-presentation-components)
+    - [Data Visualisation Components](#data-visualisation-components)
+      - [Completion Rings](#completion-rings)
+      - [Progress Graphs](#progress-graphs)
+      - [Status and Accessibility](#status-and-accessibility)
+
+  - [Administration](#administration)
+    - [Django Admin](#django-admin)
+      - [Course Admin Operational Reporting](#course-admin-operational-reporting)
+      - [Global Admin Filter Presentation](#global-admin-filter-presentation)
+      - [Placement Administration](#placement-administration)
 
 - [Database Structure — Models](#database-structure--models)
   - [ERD — Entity Relationship Diagram](#erd--entity-relationship-diagram)
@@ -3712,6 +3743,31 @@ This separation allows EnglishGrows to provide both **fine-grained progress grap
 
 ---
 
+## Shared Platform Features
+
+---
+
+English Grows provides shared functionality that serves multiple application roles without requiring separate implementations of the same underlying feature.
+
+These features may belong technically to an existing Django app while remaining accessible through different role-specific interfaces.
+
+The architecture separates:
+
+- shared functionality and reusable business behaviour;
+- role-specific access permissions;
+- role-specific navigation and presentation.
+
+This approach maintains a consistent user experience while avoiding unnecessary duplication between the learner, teacher and company-administrator workspaces.
+
+The principal shared platform features currently include:
+
+- Calendar;
+- Account Settings.
+
+Individual features remain connected to their canonical models and owning Django applications.
+
+---
+
 ### Calendar
 
 ---
@@ -3855,6 +3911,421 @@ For company administrators, Group Details remains the monitoring action even for
 The frontend keeps one central `getEventAction()` decision for both list-view buttons and modal actions so action rules are not duplicated across presentation modes.
 
 The calendar therefore acts as a visual projection of the underlying lesson-delivery architecture rather than as an independent scheduling system.
+
+---
+
+### Account Settings
+
+---
+
+Account Settings provides a shared authenticated interface through which users can manage their personal and professional profile information.
+
+The feature belongs to the `profiles` app and is available across the relevant application roles.
+
+Rather than maintaining completely independent profile-editing implementations for learners, employees, teachers and company administrators, English Grows uses shared form logic with additional fields where a particular role requires them.
+
+#### Shared Profile Form
+
+The principal reusable form is:
+
+```python
+UserProfileForm
+```
+
+It manages common user and profile information, including:
+
+- First name;
+- Last name;
+- Email address;
+- Native language;
+- Country;
+- Profile photograph.
+
+The form coordinates information belonging to Django's authenticated `User` and the associated `UserProfile`.
+
+The email address is presented as read-only within the shared profile form. Email-address changes belong to the dedicated authentication/account-management workflow rather than being performed through an ordinary profile save.
+
+This preserves the distinction between editable personal information and authentication-related identity management.
+
+#### Teacher-Specific Information
+
+Teachers use the shared profile form together with:
+
+```python
+TeacherProfileForm
+```
+
+The teacher-specific form manages additional professional information, including:
+
+- Biography;
+- Specialties.
+
+This provides a clear separation between information shared by all platform users and information that belongs specifically to a teacher's professional profile.
+
+Conceptually:
+
+```text
+Authenticated User
+        │
+        ▼
+Account Settings
+        │
+        ├── UserProfileForm
+        │       ├── Name
+        │       ├── Email (read-only)
+        │       ├── Native language
+        │       ├── Country
+        │       └── Profile photograph
+        │
+        └── TeacherProfileForm
+                ├── Biography
+                └── Specialties
+```
+
+The teacher-specific form is included only where the authenticated user's role and profile context require it.
+
+#### Shared Behaviour and Role-Specific Presentation
+
+Account Settings follows the same architectural principle as the wider platform:
+
+```text
+Shared form logic
+        │
+        ▼
+Role-specific view
+        │
+        ▼
+Role-appropriate template / navigation
+```
+
+The authenticated user's role determines the workspace and available profile fields without requiring separate copies of common profile-management logic.
+
+Account Settings is independent of Course enrolment. A valid user can therefore manage their profile even when they have no active Courses or enrolments.
+
+The feature remains responsible for profile editing rather than taking ownership of Course, Attendance, Learning Needs or assessment data.
+
+---
+
+## Shared Interface Architecture
+
+---
+
+English Grows uses a reusable interface architecture to maintain consistency across role-specific pages while preserving the permissions and business responsibilities of each Django application.
+
+Shared templates and components provide common presentation structures. Role-specific views remain responsible for selecting authorised data and supplying the context required by those components.
+
+The principal reusable interface patterns include:
+
+- shared detail-page shells and navigation;
+- adaptable Course and learner selectors;
+- shared form presentation;
+- reusable visual components;
+- common data-visualisation patterns.
+
+This architecture reduces duplicated HTML, CSS and JavaScript while allowing individual pages to retain their own functionality and visual requirements.
+
+### Shared Page Shells & Navigation
+
+The platform uses shared Django template components for Course and learner detail pages.
+
+The principal structural component is:
+
+```text
+details_page_shell.html
+```
+
+It provides the common detail-page structure:
+
+```text
+Detail Page
+    │
+    ├── Header
+    │
+    ├── Inner Navigation
+    │
+    └── Page Content
+```
+
+Individual pages extend the shell and supply their own header, navigation and content through Django template blocks.
+
+The architecture separates the structural page layout from the identity and business context displayed within it.
+
+Reusable components include:
+
+```text
+details_page_shell.html
+
+student_details_header.html
+student_details_nav.html
+
+course_details_header.html
+course_details_nav.html
+
+course_selector.html
+```
+
+These components are maintained within the existing shared `profiles/components/` template structure.
+
+#### Student Detail Presentation
+
+The shared student-detail header presents learner identity and contextual information.
+
+Its presentation can be adapted through view-provided configuration, including whether to display:
+
+- Email;
+- User role;
+- Company information;
+- Current enrolment status.
+
+The current-enrolment indicator represents participation in an active Course rather than relying on the unrelated Django `User.is_active` authentication flag.
+
+Student detail navigation connects the selected Course context to the relevant learner information:
+
+```text
+Overview
+    ↓
+Learning Needs
+    ↓
+Skills
+    ↓
+Attendance
+```
+
+The same underlying student-detail architecture is reused across the appropriate learner, teacher and company-administrator interfaces.
+
+#### Course Detail Presentation
+
+Course detail pages use the corresponding shared Course header and navigation components.
+
+The header presents Course identity and operational context, while the associated views determine which Courses are accessible to the authenticated user.
+
+A teacher receives Course data within their teaching assignment.
+
+A company administrator receives Course data within their Company boundary.
+
+Shared presentation therefore does not imply unrestricted access to shared records.
+
+#### Template and CSS Responsibilities
+
+The shell owns common page structure.
+
+Individual components own their reusable presentation.
+
+Page-specific styles remain responsible for variations that are genuinely unique to a particular page.
+
+CSS required by an extending page is loaded through that page's template structure rather than relying on included components to override parent template blocks.
+
+This keeps template inheritance predictable and avoids unnecessarily duplicating complete page layouts.
+
+---
+
+### Course & Student Selectors
+
+The reusable `course_selector.html` component supports different navigation contexts without requiring separate selector implementations.
+
+Its behaviour is controlled through the context supplied by the parent view.
+
+Two selector modes are supported:
+
+| Selector mode | Data source | Navigation behaviour |
+| :--- | :--- | :--- |
+| Student | The selected learner's accessible CourseEnrollments | Preserves the current learner page and changes Course context |
+| Course | Courses accessible to the authenticated role | Navigates to the selected Course's detail page |
+
+#### Student Mode
+
+Student mode is used when the primary page entity is the learner and the Course is the selected context.
+
+The selector operates on the learner's accessible enrolment history.
+
+For the learner's own My Course area, it includes all lifetime CourseEnrollments regardless of current enrolment or Course status.
+
+The selected Course is preserved through:
+
+```text
+?course=<course_id>
+```
+
+The selector is displayed only when the learner has more than one lifetime enrolment.
+
+This avoids displaying a redundant selection control when there is no alternative Course to select.
+
+#### Course Mode
+
+Course mode is used when the primary page entity is the Course itself.
+
+The available options come from the Courses authorised for the current role.
+
+Teacher and company-administrator Course selectors preserve relevant historical Courses rather than restricting the selector to active training only.
+
+The normal Course-status priority is:
+
+```text
+Active
+    ↓
+Confirmed
+    ↓
+Paused
+    ↓
+Completed
+    ↓
+Cancelled
+```
+
+The view supplies the appropriate destination URL so the shared selector does not accidentally navigate from one role's workspace into another role's routes.
+
+#### Access Control
+
+The selector is a navigation component, not an authorisation mechanism.
+
+The destination view must still validate the requested Course or enrolment against the authenticated user's permitted queryset.
+
+A manually modified URL parameter must never allow a learner, teacher or company administrator to access records outside their authorised scope.
+
+---
+
+### Reusable Forms & UI Components
+
+English Grows separates feature-specific form logic from reusable interface presentation.
+
+A form may belong to one specific business feature while sharing styling, layout conventions and interaction patterns with forms elsewhere in the application.
+
+Examples include:
+
+| Form | Owning functionality |
+| :--- | :--- |
+| `UserProfileForm` | Shared Account Settings |
+| `TeacherProfileForm` | Teacher-specific profile information |
+| `StudentNeedsAnalysisForm` | Course-specific Learning Needs |
+| Placement assessment form | Public Placement Test |
+
+These forms do not constitute a single generic business workflow.
+
+Each retains its own validation rules, permissions and data ownership.
+
+The reusable layer concerns their common presentation and interaction conventions rather than combining unrelated form-processing responsibilities.
+
+The project uses Django Forms and Crispy Forms where appropriate for consistent form rendering and layout.
+
+Feature-specific JavaScript provides additional interaction behaviour when needed, but Django remains responsible for authoritative server-side validation.
+
+#### Shared Presentation Components
+
+The interface also uses reusable components for recurring visual elements, including:
+
+- Profile photographs and avatar presentation;
+- Course and enrolment status indicators;
+- Shared detail-page headers;
+- Inner navigation;
+- Course selection;
+- Completion rings;
+- Progress and reporting indicators.
+
+Reusable components are intended to have one canonical implementation, with controlled variations rather than copied page-specific implementations.
+
+For example, changes to the general appearance or sizing options of a completion ring belong in the reusable component's CSS.
+
+Rules concerned exclusively with positioning that component within a particular page belong in the relevant page stylesheet.
+
+This preserves consistency without making shared components unnecessarily rigid.
+
+---
+
+### Data Visualisation Components
+
+English Grows uses common visualisation patterns to communicate Course delivery, Attendance and learner development.
+
+The underlying business calculations remain owned by the relevant models.
+
+Views prepare the appropriate data for each role, while reusable presentation components display the resulting metrics.
+
+The system deliberately distinguishes between different types of numerical information:
+
+```text
+Course delivery
+→ percentage of teaching delivered
+
+Attendance
+→ percentage of finalized learner outcomes
+
+Skill assessment
+→ pedagogical score out of 10
+
+CEFR
+→ categorical proficiency classification
+
+Operational status
+→ lifecycle or participation state
+```
+
+These concepts are not interchangeable and should not be presented using misleadingly identical terminology.
+
+#### Completion Rings
+
+Completion rings are reusable visual components with centralised styling and controlled variations.
+
+Their implementation is maintained through the shared completion-ring CSS rather than being recreated independently for each dashboard, table or detail page.
+
+Component-level variations can control properties such as:
+
+- Ring size;
+- Ring colour;
+- Ring thickness;
+- Centre presentation.
+
+Individual pages may adjust surrounding layout and spacing without changing the reusable ring's drawing logic.
+
+A 100% value must remain visually recognisable as complete, and colour gradients must not compromise the interpretation of the underlying percentage.
+
+#### Progress Graphs
+
+Learner progress graphs use the canonical current assessments and historical assessment snapshots.
+
+Current skill values and historical progression represent different information and are kept separate in the data supplied to the visualisation.
+
+The same assessment information can be presented in the learner, teacher and company-administrator interfaces without duplicating the underlying scoring rules.
+
+Charts and progress indicators are presentation layers rather than alternative sources of business calculations.
+
+#### Status and Accessibility
+
+Colour reinforces meaning but must not be the sole indicator of a value or status.
+
+Where appropriate, components also provide:
+
+- Visible status labels;
+- Numeric values;
+- Contextual descriptions;
+- Accessible labels.
+
+Shared visualisation components follow the established English Grows colour system so that the same metric or semantic state retains a consistent visual meaning across the platform.
+
+The broader colour architecture, CEFR colours, language-skill colours and semantic-status palette remain documented under Design Choices → Colour System.
+
+---
+
+## Administration
+
+---
+
+English Grows provides a central administrative interface through Django Admin for authorised management of application data and operational workflows.
+
+The administrative interface spans the platform's custom Django applications rather than representing an additional custom application.
+
+It provides controlled access to the underlying models, configuration records and historical information, while respecting the business rules owned by those models.
+
+Administrative responsibilities include:
+
+- User and organisation management;
+- Course configuration and scheduling;
+- Enrolment and Attendance management;
+- Academic profiles and assessment records;
+- Learning Needs administration;
+- Email templates and marketing subscribers;
+- Placement question banks and historical attempts;
+- Operational reporting and data-integrity safeguards.
+
+Django Admin complements the role-specific platform interfaces rather than replacing them.
 
 ---
 
