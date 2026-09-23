@@ -82,6 +82,9 @@ The application combines course management, automated lesson scheduling, attenda
   - [Public Placement vs. Course-Specific Assessment](#public-placement-vs-course-specific-assessment)
   - [Live Question Bank vs. Historical Attempt](#live-question-bank-vs-historical-attempt)
 
+- [Security](#security)
+  - [Public Form Protection](#public-form-protection)
+
 - [Design Choices](#design-choices)
   - [Placement Test Presentation](#placement-test-presentation)
   - [Colour System](#colour-system)
@@ -5538,6 +5541,29 @@ TEACHER ASSESSMENT   → Course-specific skill/subskill evaluation
 A versioned `PlacementQuestion` bank is the source for the current public test and the Admin-only preview. A `PlacementAttempt.answer_snapshot` is a historical capture of the learner's actual questions, choices, selected/correct answers and result.
 
 Because these purposes are different, the attempt is not reconstructed later from the current bank. Admin editing is conditionally restricted while completed attempts for that version exist. Once deliberately disposable test attempts have all been removed, the bank may be edited again during development. Creating a later version uses a copy of the question records, not a rename/move of the original version.
+
+---
+
+# Security
+
+English Grows applies layered security controls across public forms,
+authentication, application access and data processing.
+
+Security mechanisms are implemented at the appropriate application
+layer rather than relying exclusively on browser-side validation.
+
+## Public Form Protection
+
+Public-facing forms incorporate complementary anti-abuse measures
+designed to reduce automated submissions while preserving a smooth
+experience for legitimate users.
+
+The placement-test workflow includes server-side validation,
+CSRF protection, session-token validation and a non-intrusive
+spam-trap mechanism.
+
+Additional bot-verification and rate-limiting controls are developed
+and documented separately as they are introduced.
 
 ---
 
