@@ -3109,6 +3109,8 @@ This architecture follows the wider project principle that the model owns busine
 
 ---
 
+The English Grows Placement Test has been carefully curated with reference to the ***Council of Europe’s Common European Framework of Reference*** for Languages (CEFR) and ***Cambridge English*** assessment principles. Its 50 questions are deliberately structured across A1–C2, assessing grammar, vocabulary and language use through progressively targeted language points. The test is designed to provide an ***informed initial course-placement recommendation***; **it is not an official Cambridge examination, a CEFR certification or a substitute for a comprehensive assessment of all language skills**.
+
 The `placement` app owns the public **English Grows English Level Test**. It is separate from the Course-specific teacher-assessment architecture and can be used before a person has an account or Course enrolment.
 
 It is a versioned, 50-question multiple-choice assessment designed to produce a **provisional course-placement recommendation**, not an official CEFR certificate. Public test presentation, question-bank administration, answer validation, grading and historical attempts remain within this app. The existing `communications` app remains the intended owner of outbound emails.
