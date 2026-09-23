@@ -173,6 +173,10 @@ SITE_ID = 1
 
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
+# CLOUDFLARE TURNSTILE
+TURNSTILE_SITEKEY = os.environ["TURNSTILE_SITEKEY"]
+TURNSTILE_SECRET_KEY = os.environ["TURNSTILE_SECRET_KEY"]
+
 AUTHENTICATION_BACKENDS = [
     # Keeps normal Django admin login working
     'django.contrib.auth.backends.ModelBackend',
@@ -195,6 +199,10 @@ else:
 
 
 ACCOUNT_CHANGE_EMAIL = True
+
+ACCOUNT_FORMS = {
+    "signup": "config.signup_forms.TurnstileSignupForm",
+}
 
 # Email configuration
 
