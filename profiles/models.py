@@ -408,11 +408,6 @@ class StudentNeedsAnalysis(models.Model):
             "priority_areas", "additional_information",
         ]
 
-        # Temporary compatibility if course_goal has not yet been removed.
-        if hasattr(self, "course_goal"):
-            self.course_goal = ""
-            fields.append("course_goal")
-
         self.save(update_fields=fields)
 
 

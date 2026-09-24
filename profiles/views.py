@@ -2089,9 +2089,6 @@ def my_needs_analysis(request):
                 needs_analysis.priority_areas = data[
                     "priority_areas"
                 ]
-                needs_analysis.course_goal = data[
-                    "course_goal"
-                ]
 
                 needs_analysis.additional_information = data[
                     "additional_information"
