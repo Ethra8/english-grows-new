@@ -138,6 +138,10 @@
     font-weight: 500;
 }
 
+.allauth-form-inner-content a:hover {
+    color: var(--color-teal);
+}
+
 
 @media (max-width: 767px) {
 

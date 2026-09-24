@@ -8,52 +8,50 @@
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
     {% block meta %}
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- SEO -->
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="teal">
-    <meta name="description" content="{% block meta_description %}English Grows offers online English training for individual learners and companies.{% endblock %}">
-    <meta name="keywords" content="Corporate English training, Online corporate training, English learning, teaching English, English classes online, English lessons online, English tutor, online teacher, English teacher, private lessons online, reduced group classes, online reduced groups, e-learning, corporate English lessons, online reduced classes, live English lessons">
-    <meta name="author" content="Edna Torres Munill">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- SEO -->
+      <meta name="msapplication-TileColor" content="#da532c">
+      <meta name="theme-color" content="teal">
+      <meta name="description" content="{% block meta_description %}English Grows offers online English training for individual learners and companies.{% endblock %}">
+      <meta name="keywords" content="Corporate English training, Online corporate training, English learning, teaching English, English classes online, English lessons online, English tutor, online teacher, English teacher, private lessons online, reduced group classes, online reduced groups, e-learning, corporate English lessons, online reduced classes, live English lessons">
+      <meta name="author" content="Edna Torres Munill">
     {% endblock %}
 
     {% block extra_meta %}
     {% endblock %}
 
     {% block corecss %}
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@100..900&family=Charmonman:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Stalemate&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&display=swap" rel="stylesheet">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <!-- Favicon -->
-     <link rel="icon" href="{% static 'icons/favicon/favicon.ico' %}" sizes="any">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/favicon/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon/favicon-16x16.png' %}">
-    <link rel="mask-icon" href="{% static 'icons/favicon/safari-pinned-tab.svg' %}" color="#006B7D">    
-    <link rel="manifest" href="{% static 'icons/favicon/site.webmanifest' %}">
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="{% static 'css/base/variables.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@100..900&family=Charmonman:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Stalemate&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&display=swap" rel="stylesheet">
+      <!-- Bootstrap -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+      <!-- Favicon -->
+      <link rel="icon" href="{% static 'icons/favicon/favicon.ico' %}" sizes="any">
+      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/favicon/apple-touch-icon.png' %}">
+      <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon/favicon-32x32.png' %}">
+      <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon/favicon-16x16.png' %}">
+      <link rel="mask-icon" href="{% static 'icons/favicon/safari-pinned-tab.svg' %}" color="#006B7D">    
+      <link rel="manifest" href="{% static 'icons/favicon/site.webmanifest' %}">
+      <!-- Custom styles -->
+      <link rel="stylesheet" href="{% static 'css/base/variables.css' %}">
+      <link rel="stylesheet" href="{% static 'css/base/base.css' %}">
     {% endblock %}
 
     {% block extra_css %}
     {% endblock %}
 
     {% block corejs %}
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/19349c9d8e.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>    
-    <!-- Stripe -->
-    <script src="https://js.stripe.com/v3/"></script>
+      <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+      <script src="https://kit.fontawesome.com/19349c9d8e.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>    
     {% endblock %}
 
     {% block extra_js %}

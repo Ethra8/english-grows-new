@@ -1085,7 +1085,7 @@ stacks every slide in precisely the same screen position.
 
 
 /*** Stripe Styling **********************************/
-.StripeElement,
+/* .StripeElement,
 .stripe-style-input {
   box-sizing: border-box;
   height: 40px;
@@ -1122,7 +1122,7 @@ stacks every slide in precisely the same screen position.
     color: #000;
     border: 1px solid #000;
     border-radius: 5px;
-}
+} */
 
 
 /********** About ************************/

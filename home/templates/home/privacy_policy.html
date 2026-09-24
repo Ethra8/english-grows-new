@@ -73,9 +73,19 @@
 
             <p>
                 {% blocktrans %}
-                    English Grows is operated by Edna Torres Munill,
-                    a self-employed professional established in Spain,
-                    using the trading name English Grows.
+                    English Grows acts as an independent controller for
+                    the training delivery, academic assessment and other
+                    processing activities whose purposes and essential
+                    means it determines.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Corporate clients remain responsible for their own
+                    processing activities, including selecting employees
+                    for training and determining how they use the
+                    information lawfully provided to them.
                 {% endblocktrans %}
             </p>
 
@@ -97,24 +107,6 @@
                     <a href="https://www.englishgrows.com/">www.englishgrows.com</a>
                 </li>
             </ul>
-
-            <p>
-                {% blocktrans %}
-                    English Grows acts as an independent controller for
-                    the training delivery, academic assessment and other
-                    processing activities whose purposes and essential
-                    means it determines.
-                {% endblocktrans %}
-            </p>
-
-            <p>
-                {% blocktrans %}
-                    Corporate clients remain responsible for their own
-                    processing activities, including selecting employees
-                    for training and determining how they use the
-                    information lawfully provided to them.
-                {% endblocktrans %}
-            </p>
 
             <p>
                 {% blocktrans %}
@@ -441,27 +433,6 @@
                 {% endblocktrans %}
             </p>
 
-
-            <!-- BILLING -->
-            <h3>{% trans "Billing and legal obligations" %}</h3>
-
-            <p>
-                {% blocktrans %}
-                    We process information necessary to administer payments,
-                    issue invoices and comply with applicable accounting
-                    and tax obligations.
-                {% endblocktrans %}
-            </p>
-
-            <p>
-                <strong>{% trans "Legal basis:" %}</strong>
-                {% blocktrans trimmed %}
-                    Contractual necessity where applicable, and compliance with 
-                    legal obligations under <a href="#official-references">Article 6(1)(c) GDPR.
-                {% endblocktrans %}
-            </p>
-
-
             <!-- ENQUIRIES -->
             <h3>{% trans "Enquiries and customer support" %}</h3>
 
@@ -593,16 +564,126 @@
                 </li>
             </ul>
 
+            <!-- EXTERNAL SERVICE PROVIDERS -->
+            <h3>{% trans "External service providers" %}</h3>
+
             <p>
                 {% blocktrans %}
-                    We also use service providers where necessary for
-                    hosting, email delivery, payments and platform protection.
-                    Providers process information according to their
-                    respective roles and the applicable data protection
-                    arrangements.
+                    English Grows uses the following third-party service providers
+                    to operate its website and learning platform, manage business
+                    communications and process customer payments. Personal data
+                    is processed according to the services provided and the
+                    applicable data protection arrangements.
                 {% endblocktrans %}
             </p>
 
+            <div class="privacy-policy__table-wrapper">
+                <table class="privacy-policy__table">
+                    <thead>
+                        <tr>
+                            <th scope="col">{% trans "Service provider" %}</th>
+                            <th scope="col">{% trans "Purpose of processing" %}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td><strong>Render Services, Inc.</strong></td>
+                            <td>
+                                {% trans "Hosting the English Grows website, learning platform, database and associated infrastructure." %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Google Workspace</strong></td>
+                            <td>
+                                {% trans "Business email hosting for info@englishgrows.com and the management and delivery of service-related communications, including enquiries, course information and placement-test results." %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Stripe</strong></td>
+                            <td>
+                                {% trans "Processing customer payments through Stripe-hosted Payment Links included on English Grows invoices, including payment confirmation and transaction management." %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAYMENT PROCESSING -->
+            <h3>{% trans "Payment processing through Stripe" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    English Grows includes Stripe-hosted payment links on its
+                    invoices. When you choose to pay through these links, you
+                    are redirected to Stripe's payment environment, where the
+                    information necessary to process your payment is collected.
+                    Payment card details entered on Stripe's payment page are
+                    provided directly to Stripe and are not collected through
+                    the English Grows website.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    English Grows receives the transaction information necessary
+                    to confirm payments, maintain billing records and provide
+                    customer support. Stripe may process personal data as a
+                    service provider and, for certain activities, as an
+                    independent data controller, in accordance with its
+                    applicable privacy terms.
+                {% endblocktrans %}
+            </p>
+
+            <!-- PROVIDER PRIVACY INFORMATION -->
+            <h3>{% trans "Further information about our providers" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Our service providers may engage affiliates or subprocessors
+                    in accordance with their applicable contractual and data
+                    protection arrangements. Further information is available
+                    through their respective privacy notices:
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li>
+                    <a href="https://render.com/privacy" target="_blank" rel="noopener noreferrer">
+                        {% trans "Render Privacy Policy" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+                        {% trans "Google Privacy Policy" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://stripe.com/es/privacy" target="_blank" rel="noopener noreferrer">
+                        {% trans "Stripe Privacy Policy" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://stripe.com/en-es/legal/preview/service-providers" target="_blank" rel="noopener noreferrer">
+                        {% trans "Stripe Service Providers and Subprocessors" %}
+                    </a>
+                </li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    Where the use of these services involves international
+                    transfers of personal data, the applicable safeguards
+                    are addressed in the following section.
+                {% endblocktrans %}
+                <a href="#international-transfers">
+                    {% trans "International data transfers" %}
+                </a>.
+            </p>
+
+            <!-- LEGAL DISCLOSURES -->
             <p>
                 {% blocktrans %}
                     Information may also be disclosed to public authorities
@@ -610,7 +691,6 @@
                 {% endblocktrans %}
             </p>
         </section>
-
 
         <!-- 7. INTERNATIONAL TRANSFERS -->
         <section id="international-transfers">
