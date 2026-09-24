@@ -519,11 +519,15 @@ footer hr {
 
 footer .topage-link {
     font-weight: 400 !important;
-    font-size: 1.2rem !important;
+    font-size: 1rem;
 }
 
 footer .topage-link:hover {
     color: var(--color-pearlaqua) !important;
+}
+
+.topage-links span {
+    color: var(--color-tropical-teal);
 }
 
 #subscribe-link a {

@@ -33,12 +33,12 @@
     letter-spacing: -.035em;
 }
 
-.privacy-policy__header p:first-of-type {
+.privacy-policy__header p:first-of-type,
+.privacy-policy__header p:nth-of-type(2) {
     color: var(--color-navy, #002D5A);
     font-size: 1.05rem;
     font-weight: 500;
 }
-
 
 /* LAST UPDATE **********************************************************/
 
@@ -195,6 +195,10 @@
 .privacy-policy .privacy-policy__table td:first-child {
     width: 205px;
     white-space: nowrap;
+}
+
+.privacy-policy .privacy-policy__table th.cookies-th {
+    width: 105px;
 }
 
 .privacy-policy .privacy-policy__table td:first-child {

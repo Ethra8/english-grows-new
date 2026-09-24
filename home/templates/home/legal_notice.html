@@ -1,0 +1,242 @@
+
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block extra_title %}| {% trans "Legal Notice" %}{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'home/css/privacy_policy.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <article class="privacy-policy legal-notice">
+
+        <!-- HEADER -->
+        <header class="privacy-policy__header">
+            <h1>{% trans "Legal Notice" %}</h1>
+
+            <p>
+                {% blocktrans %}
+                    This Legal Notice provides information about the
+                    ownership and operation of the English Grows website
+                    and the conditions governing its use.
+                {% endblocktrans %}
+            </p>
+
+            <div class="last-update">
+                <p>
+                    <strong>{% trans "Last updated:" %}</strong>
+                    <time datetime="2026-09-24">{% trans "24 September 2026" %}</time>
+                </p>
+            </div>
+        </header>
+
+
+        <!-- 1. WEBSITE OWNER -->
+        <section id="website-owner">
+            <h2>{% trans "1. Website owner and identification" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    In accordance with Article 10 of Spain's Law 34/2002
+                    on Information Society Services and Electronic Commerce
+                    (LSSI-CE), the following information identifies the
+                    person responsible for this website.
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li><strong>{% trans "Registered commercial name:" %}</strong> ENGLISH GROWS</li>
+                <li><strong>{% trans "Legal owner:" %}</strong> Edna Torres Munill</li>
+                <li><strong>{% trans "Business status:" %}</strong> {% trans "Self-employed professional (autónoma) established in Spain." %}</li>
+                <li><strong>{% trans "Professional activity:" %}</strong> {% trans "Online English-language training." %}</li>
+                <li><strong>{% trans "Professional location:" %}</strong> Caldes d'Estrac, Barcelona, Spain</li>
+                <!-- <li><strong>{% trans "Tax identification number (NIF):" %}</strong> 47723649Y</li> -->
+                <li>
+                    <strong>{% trans "Postal correspondence address:" %}</strong>
+                    English Grows<br>
+                    Apartado de Correos 0024<br>
+                    08350 Arenys de Mar, Spain
+                </li>
+                <li><strong>{% trans "Email:" %}</strong> <a href="mailto:info@englishgrows.com">info@englishgrows.com</a></li>
+                <li><strong>{% trans "Website:" %}</strong> <a href="https://www.englishgrows.com/">www.englishgrows.com</a></li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    English Grows provides its teaching services exclusively
+                    online and does not maintain premises open to the public.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 2. WEBSITE PURPOSE -->
+        <section id="website-purpose">
+            <h2>{% trans "2. Purpose and scope" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    The English Grows website provides information about
+                    its training services and access to its online learning
+                    platform. Certain features are publicly accessible,
+                    while others require registration or authorised access.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Access to the website does not, by itself, establish
+                    a contractual relationship for paid training services.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 3. INTELLECTUAL AND INDUSTRIAL PROPERTY -->
+        <section id="intellectual-property">
+            <h2>{% trans "3. Intellectual and industrial property" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    ENGLISH GROWS is a commercial name registered with the
+                    Spanish Patent and Trademark Office (OEPM), with separate
+                    denominative and figurative registrations:
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li><strong>{% trans "Denominative registration:" %}</strong> N0456030 — Class 41.</li>
+                <li><strong>{% trans "Figurative registration:" %}</strong> N0456029 — Class 41.</li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    The registered commercial name and its graphical
+                    representation are protected under applicable
+                    industrial property legislation.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    The website's original design, texts, graphics,
+                    educational materials and other protected content
+                    belong to their respective rights holders and are
+                    protected under applicable intellectual property law.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Access to the website does not transfer ownership
+                    of its content or authorise its reproduction,
+                    redistribution or commercial exploitation without
+                    the appropriate permission, except where permitted
+                    by law.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 4. ACCEPTABLE USE -->
+        <section id="acceptable-use">
+            <h2>{% trans "4. Acceptable use" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Users must access and use the website and learning
+                    platform lawfully and in accordance with their intended
+                    purposes. Unauthorised access, interference with the
+                    platform's operation, infringement of third-party rights
+                    and activities compromising its security are prohibited.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Registered users must safeguard their account credentials
+                    and notify English Grows if they suspect unauthorised
+                    access to their account.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 5. EXTERNAL LINKS -->
+        <section id="external-links">
+            <h2>{% trans "5. External links" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    The website may contain links to independent third-party
+                    websites and services. These are governed by their own
+                    applicable terms and privacy notices.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    English Grows does not control the content or operation
+                    of independent third-party websites. Nothing in this
+                    section excludes responsibilities arising under
+                    applicable law.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 6. CONTRACTUAL CONDITIONS AND PRIVACY -->
+        <section id="contractual-conditions">
+            <h2>{% trans "6. Training services and privacy" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Paid training services are governed by the applicable
+                    Terms and Conditions, training proposal or individual
+                    contractual agreement, including the relevant pricing,
+                    payment, scheduling and cancellation provisions.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Information about the processing of personal data,
+                    data protection rights and the use of cookies is
+                    provided in our Privacy Policy, accessible through
+                    the website footer.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 7. APPLICABLE LAW AND UPDATES -->
+        <section id="applicable-law">
+            <h2>{% trans "7. Applicable law and updates" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    This Legal Notice is governed by Spanish law,
+                    without prejudice to any mandatory provisions
+                    applicable to users, including statutory consumer
+                    rights and jurisdictional protections.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    English Grows may update this Legal Notice to reflect
+                    changes in its activities or applicable legal
+                    requirements. The current version and revision date
+                    will be available on this page.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+    </article>
+</div>
+
+{% endblock %}

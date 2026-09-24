@@ -374,17 +374,15 @@
 
       <p class="topage-links text-center text-white">
 
-        <a href="{% url 'privacy_policy' %}" class="topage-link ml-2 mr-2">
-            {% trans "Privacy Policy" %}
-        </a>
+        <a href="{% url 'privacy_policy' %}" class="topage-link ml-2 mr-2">{% trans "Privacy Policy" %}</a>
         
         <span aria-hidden="true"> | </span>
 
-        <a href=""
-           class="topage-link ml-2">
-          {% trans 'Terms & Cons' %}
-        </a>
+        <a href="" class="topage-link ml-2 mr-2">{% trans 'Terms & Cons' %}</a>
 
+        <span aria-hidden="true"> | </span>
+
+        <a href="{% url 'legal_notice' %}" class="topage-link ml-2">{% trans "Legal Notice" %}</a>
       </p>
 
       <!--

@@ -6,3 +6,6 @@ def home(request):
 
 def privacy_policy(request):
     return render(request, "home/privacy_policy.html")
+
+def legal_notice(request):
+    return render(request, "home/legal_notice.html")
