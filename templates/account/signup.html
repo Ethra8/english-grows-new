@@ -18,6 +18,16 @@
   <!-- CLOUDFLARE TURNSTILE -->
   <div class="cf-turnstile mb-3" data-sitekey="{{ form.turnstile_sitekey }}" data-action="signup"></div>
 
+  <!-- PRIVACY NOTICE -->
+  {% url 'privacy_policy' as privacy_url %}
+  <p class="signup-privacy-notice small text-muted mb-3">
+    {% blocktrans trimmed with policy_url=privacy_url %}
+      English Grows processes your personal information to create and manage your account.
+      Learn more about how your data is used and your rights in our
+      <a href="{{ policy_url }}" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+    {% endblocktrans %}
+  </p>
+
   <button class="btn mb-3" type="submit">{% trans "Sign Up" %}</button>
 </form>
 

@@ -1,0 +1,927 @@
+
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block extra_title %}| {% trans "Privacy Policy" %}{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'home/css/privacy_policy.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <article class="privacy-policy">
+
+        <!-- HEADER -->
+        <header class="privacy-policy__header">
+            <h1>{% trans "Privacy Policy" %}</h1>
+
+            <p>
+                {% blocktrans %}
+                    This Privacy Policy explains how English Grows collects,
+                    uses, protects and shares personal information, and how
+                    you can exercise your data protection rights.
+                {% endblocktrans %}
+            </p>
+
+            <div class="last-update">
+                <p>
+                    <strong>{% trans "Last updated:" %}</strong>
+                    <time datetime="2026-09-24">{% trans "24 September 2026" %}</time>
+                </p>
+            </div>
+        </header>
+
+
+        <!-- REGULATORY FRAMEWORK -->
+        <section id="regulatory-framework">
+            <h2>{% trans "Data Protection Framework" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    English Grows operates in Spain and is subject to the
+                    General Data Protection Regulation (GDPR) and Spain's
+                    Organic Law 3/2018 on Personal Data Protection and
+                    Guarantee of Digital Rights (LOPDGDD).
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    We apply the principles of lawfulness, transparency,
+                    purpose limitation, data minimisation, accuracy,
+                    storage limitation, confidentiality and accountability.
+                    We also take into account relevant guidance from the
+                    Spanish Data Protection Authority (AEPD) and the
+                    European Data Protection Board (EDPB).
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <a href="#official-references">
+                    {% trans "View official legislation and guidance" %}
+                </a>.
+            </p>
+        </section>
+
+
+        <!-- 1. DATA CONTROLLER -->
+        <section id="data-controller">
+            <h2>{% trans "1. Who is responsible for your personal data?" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    English Grows is operated by Edna Torres Munill,
+                    a self-employed professional established in Spain,
+                    using the trading name English Grows.
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li><strong>{% trans "Trading name:" %}</strong> English Grows</li>
+                <li><strong>{% trans "Data controller:" %}</strong> Edna Torres Munill</li>
+                <li>
+                    <strong>{% trans "Postal correspondence address:" %}</strong>
+                    English Grows - Edna Torres Munill<br>
+                    Apartado de Correos 0024<br>
+                    08350 Arenys de Mar, Spain
+                </li>
+                <li>
+                    <strong>{% trans "Privacy contact:" %}</strong>
+                    <a href="mailto:info@englishgrows.com">info@englishgrows.com</a>
+                </li>
+                <li>
+                    <strong>{% trans "Website:" %}</strong>
+                    <a href="https://www.englishgrows.com/">www.englishgrows.com</a>
+                </li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    English Grows acts as an independent controller for
+                    the training delivery, academic assessment and other
+                    processing activities whose purposes and essential
+                    means it determines.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Corporate clients remain responsible for their own
+                    processing activities, including selecting employees
+                    for training and determining how they use the
+                    information lawfully provided to them.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    If English Grows processes information solely on a
+                    corporate client's documented instructions, the
+                    corresponding processor obligations and contractual
+                    arrangements apply to that specific activity.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 2. SCOPE AND DATA SOURCES -->
+        <section id="scope">
+            <h2>{% trans "2. Who does this policy apply to?" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    This policy covers website visitors, people making
+                    enquiries, placement-test participants, registered
+                    learners, employees undertaking training, teachers,
+                    company administrators, corporate contacts and
+                    marketing subscribers.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Most personal information is provided directly by you.
+                    Where an employer arranges training, we may receive
+                    your name, professional email address and Course
+                    assignment from that employer.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Authorised teachers and English Grows administration
+                    may also create academic assessments and training
+                    records as part of delivering the service.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 3. PERSONAL DATA -->
+        <section id="personal-data">
+            <h2>{% trans "3. What personal information do we collect?" %}</h2>
+
+            <p>
+                {% trans "The information collected depends on the services and platform features you use." %}
+            </p>
+
+            <h3>{% trans "Account and identification information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    To create an English Grows account, <strong>only your name
+                    and email address are required</strong>. Additional profile
+                    information, including your country, language
+                    preferences and profile photograph, is optional.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Your account role may be assigned to provide access
+                    to the appropriate platform features. You are not
+                    required to select a role during registration.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Course and academic information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Course assignments, enrollment status, timetables,
+                    attendance, language levels, Learning Needs,
+                    academic assessments, teacher feedback and progress records.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Placement-test information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Your email address, submitted answers, test score,
+                    recommended Course level and CEFR reference.
+                    Registered users' attempts may also be associated
+                    with their platform accounts.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Communications and subscriptions" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Information necessary to respond to enquiries,
+                    send service-related communications and manage
+                    optional marketing subscriptions and consent records.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Technical information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Technical information processed as necessary for
+                    website operation, authentication, security and maintenance.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Required and optional information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Your name and email address are required to create
+                    an account. Placement-test participants must provide
+                    the information needed to complete the assessment
+                    and receive their results. Without this information,
+                    the corresponding service cannot be provided.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% blocktrans %}
+                    Optional profile details and marketing subscription
+                    are not required to access the training service.
+                {% endblocktrans %}</strong>
+            </p>
+        </section>
+
+
+        <!-- 4. PURPOSES AND LAWFUL BASES -->
+        <section id="processing-purposes">
+            <h2>{% trans "4. Why do we process your personal data?" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    We process personal information for defined purposes.
+                    The applicable legal basis depends on the activity
+                    and your relationship with English Grows.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- INDIVIDUAL TRAINING -->
+            <h3>{% trans "Individual training and account management" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We process the information necessary to manage your
+                    account, organise Courses, arrange lessons and deliver
+                    training contracted directly with English Grows.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    Performance of a contract under
+                    <a href="#official-references">Article 6(1)(b) GDPR</a>,
+                    where the processing is necessary for that contract.
+                {% endblocktrans %}
+            </p>
+
+            <!-- CORPORATE TRAINING -->
+            <h3>{% trans "Company-funded training" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Where your employer contracts English Grows to provide
+                    training, we process information necessary to organise
+                    your participation, deliver lessons, assess learning
+                    and maintain relevant training records.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Your employer is responsible for selecting participants
+                    and providing their necessary information. English Grows
+                    acts as an independent controller for its own training
+                    delivery and academic activities.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    Legitimate interests under <a href="#official-references">Article 6(1)(f) GDPR</a>,
+                    in organising and delivering the agreed corporate
+                    training and supporting learners' academic development.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    The information shared with corporate administrators
+                    is limited to what is necessary for their training
+                    administration and reporting responsibilities.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- ACADEMIC PROCESSING -->
+            <h3>{% trans "Academic assessment and Learning Needs" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We process academic information to identify learning
+                    requirements, personalise training, assess language
+                    development and support teaching.
+                {% endblocktrans %}
+            </p>
+
+            <p> 
+                <strong>{% trans "Legal basis:" %}</strong> 
+                {% blocktrans trimmed  %} 
+                    <a href="#official-references">Article 6(1)(b) GDPR</a> where necessary for individually 
+                    contracted training, or <a href="#official-references">Article 6(1)(f) GDPR</a> for 
+                    company-funded training under the legitimate interests 
+                    described above. 
+                {% endblocktrans %} 
+            </p> 
+            <p>
+                {% blocktrans %}
+                    Access to individual academic information is restricted
+                    according to the user's role and responsibilities.
+                    Learning Needs access is explained in the following section.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- PLACEMENT TEST -->
+            <h3>{% trans "Placement tests" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    The English Grows placement test is available both
+                    independently of enrollment and to prospective learners
+                    considering an English Course.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    We process your email address, submitted answers and
+                    assessment results to calculate a recommended Course
+                    level and send you the result.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    Legitimate interests under <a href="#official-references">Article 6(1)(f) GDPR</a>,
+                    in providing the placement assessment you have
+                    requested and supporting appropriate Course placement.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Where you have an assigned teacher, a separate result
+                    notification may be sent to that teacher. Otherwise,
+                    authorised English Grows staff may receive the result
+                    for placement administration.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    The recommendation supports Course placement and
+                    does not constitute formal CEFR certification.
+                    Completing the test does not subscribe you to marketing.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- SERVICE COMMUNICATIONS -->
+            <h3>{% trans "Service-related communications" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We use contact information to send placement results,
+                    Course information, scheduling updates and other
+                    communications necessary to provide the requested service.
+                    Their legal basis follows the corresponding service
+                    or processing activity.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% trans "Service-related communications are separate from optional marketing messages." %}
+            </p>
+
+
+            <!-- MARKETING -->
+            <h3>{% trans "Optional marketing communications" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Where you actively subscribe, we use your email address
+                    to send English Grows news, offers and information
+                    about our training services.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    Your consent under <a href="#official-references">Article 6(1)(a) GDPR</a>, 
+                    together with the applicable requirements of <a href="#official-references">Article 21 LSSI-CE.</a>
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Subscription is optional. You can withdraw consent
+                    at any time using the unsubscribe mechanism in our
+                    marketing emails, without affecting the lawfulness
+                    of processing carried out before withdrawal.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- BILLING -->
+            <h3>{% trans "Billing and legal obligations" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We process information necessary to administer payments,
+                    issue invoices and comply with applicable accounting
+                    and tax obligations.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    Contractual necessity where applicable, and compliance with 
+                    legal obligations under <a href="#official-references">Article 6(1)(c) GDPR.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- ENQUIRIES -->
+            <h3>{% trans "Enquiries and customer support" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We process the information you provide to respond
+                    to enquiries and manage communications relating
+                    to our services.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    <a href="#official-references">Article 6(1)(b) GDPR</a> where you request steps before
+                    entering into a contract, or <a href="#official-references">Article 6(1)(f) GDPR</a>
+                    where necessary to respond to general enquiries
+                    and provide customer support.
+                {% endblocktrans %}
+            </p>
+
+
+            <!-- SECURITY -->
+            <h3>{% trans "Platform operation and security" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    We process necessary technical information to maintain
+                    the website and learning platform, investigate technical
+                    problems and protect against unauthorised access.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans trimmed %}
+                    <a href="#official-references">Article 6(1)(f) GDPR</a>, based on our legitimate interest
+                    in maintaining a secure and functional service,
+                    and <a href="#official-references">Article 6(1)(c)</a> where a specific legal obligation applies.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 5. LEARNING NEEDS -->
+        <section id="learning-needs">
+            <h2>{% trans "5. Learning Needs and employer access" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    The Learning Needs questionnaire helps teachers
+                    understand how you use English, your communication
+                    priorities and confidence in different language skills.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Who can access your questionnaire?" %}</h3>
+
+            <ul>
+                <li>
+                    <strong>{% trans "You:" %}</strong>
+                    {% trans "Your own questionnaire and submitted responses." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Your assigned teacher:" %}</strong>
+                    {% trans "The questionnaire for the relevant Course, to support your training and academic review." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Authorised English Grows administration:" %}</strong>
+                    {% trans "Information required for academic administration and support." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Your company's administrator:" %}</strong>
+                    {% trans "Questionnaire submission status only, not your individual responses." %}
+                </li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    The Company Admin interface displays Pending or Submitted.
+                    It does not disclose individual answers, confidence ratings,
+                    communication priorities or additional free-text responses.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    A company administrator enrolled in training retains
+                    access to their own questionnaire as a learner.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 6. ACCESS AND RECIPIENTS -->
+        <section id="data-access">
+            <h2>{% trans "6. Who can access or receive your information?" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Access is restricted according to the user's role,
+                    responsibilities and relationship to the relevant
+                    learner or Course.
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li>
+                    <strong>{% trans "Learners:" %}</strong>
+                    {% trans "Their own personal, academic and Course information." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Teachers:" %}</strong>
+                    {% trans "Information required for their assigned Courses." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Company administrators:" %}</strong>
+                    {% trans "Information required to administer and monitor their organisation's training, subject to the applicable restrictions." %}
+                </li>
+
+                <li>
+                    <strong>{% trans "English Grows administration:" %}</strong>
+                    {% trans "Information required for authorised operational, academic, contractual and support responsibilities." %}
+                </li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    We also use service providers where necessary for
+                    hosting, email delivery, payments and platform protection.
+                    Providers process information according to their
+                    respective roles and the applicable data protection
+                    arrangements.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Information may also be disclosed to public authorities
+                    where required by applicable law.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 7. INTERNATIONAL TRANSFERS -->
+        <section id="international-transfers">
+            <h2>{% trans "7. International data transfers" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Some service providers may process personal information
+                    outside the European Economic Area. Where such transfers
+                    occur, they must be covered by an applicable GDPR
+                    transfer mechanism, such as an adequacy decision or
+                    appropriate contractual safeguards.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    You can contact us to obtain further information
+                    about the transfers applicable to your data and
+                    the corresponding safeguards.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 8. RETENTION -->
+        <section id="data-retention">
+            <h2>{% trans "8. How long do we retain your information?" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    We retain personal information only for as long
+                    as necessary for the relevant purpose, taking
+                    account of applicable legal, contractual and
+                    evidential requirements.
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li>
+                    <strong>{% trans "Account information:" %}</strong>
+                    {% blocktrans %}
+                        Retained while the account is required for
+                        access to the service and afterwards only
+                        where a valid retention purpose remains.
+                    {% endblocktrans %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Course and academic records:" %}</strong>
+                    {% blocktrans %}
+                        Retained for training administration, academic
+                        follow-up and any applicable contractual or
+                        legal retention requirements.
+                    {% endblocktrans %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Placement-test attempts:" %}</strong>
+                    {% blocktrans %}
+                        Retained for result delivery and related placement
+                        administration, subject to the applicable retention
+                        schedule.
+                    {% endblocktrans %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Marketing information:" %}</strong>
+                    {% blocktrans %}
+                        Retained while the subscription remains active.
+                        Following withdrawal, only information necessary
+                        to respect the unsubscribe request or demonstrate
+                        compliance is retained where justified.
+                    {% endblocktrans %}
+                </li>
+
+                <li>
+                    <strong>{% trans "Accounting records:" %}</strong>
+                    {% blocktrans %}
+                        Retained for the periods required by applicable
+                        accounting, tax and other legal obligations.
+                    {% endblocktrans %}
+                </li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    When information is no longer required, it is deleted
+                    or anonymised where appropriate, subject to any
+                    applicable legal retention obligation.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 9. RIGHTS -->
+        <section id="data-protection-rights">
+            <h2>{% trans "9. Your data protection rights" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Subject to the conditions established by law,
+                    you may exercise the following rights:
+                {% endblocktrans %}
+            </p>
+
+            <ul>
+                <li>{% trans "Access your personal data." %}</li>
+                <li>{% trans "Request correction of inaccurate information." %}</li>
+                <li>{% trans "Request erasure where the legal requirements are met." %}</li>
+                <li>{% trans "Request restriction of processing." %}</li>
+                <li>{% trans "Object to processing where applicable." %}</li>
+                <li>{% trans "Request data portability where applicable." %}</li>
+                <li>{% trans "Withdraw consent where processing is based on consent." %}</li>
+                <li>{% trans "Exercise your rights concerning automated individual decision-making where applicable." %}</li>
+            </ul>
+
+            <p>
+                {% blocktrans %}
+                    Where processing is based on legitimate interests,
+                    you may object on grounds relating to your particular
+                    situation. You may object to direct marketing at any
+                    time, without needing to provide a reason.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% trans "To exercise your rights, contact us at:" %}
+                <a href="mailto:info@englishgrows.com">info@englishgrows.com</a>.
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    We may request additional information where necessary
+                    to verify your identity. Requests will be handled
+                    within the periods established by the GDPR.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    You also have the right to lodge a complaint with
+                    the Spanish Data Protection Authority (AEPD).
+                {% endblocktrans %}
+                <a href="https://www.aepd.es/" target="_blank" rel="noopener noreferrer">
+                    {% trans "Visit the AEPD website" %}
+                </a>.
+            </p>
+        </section>
+
+
+        <!-- 10. COOKIES -->
+        <section id="cookies">
+            <h2>{% trans "10. Cookies and similar technologies" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    Cookies and similar technologies may be used for
+                    session management, authentication, security and
+                    other website functions.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Where a technology requires consent under applicable
+                    law, it must not be activated before the required
+                    information and consent have been provided.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 11. SECURITY AND AUTOMATED ASSESSMENT -->
+        <section id="security">
+            <h2>{% trans "11. Security and automated assessment" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    English Grows uses technical and organisational
+                    safeguards designed to protect personal information
+                    against unauthorised access, disclosure, alteration
+                    and loss.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Placement-test answers are scored automatically
+                    to generate a recommended Course level. The result
+                    supports placement decisions and may be reviewed
+                    by a teacher. It does not constitute formal
+                    CEFR certification.
+                {% endblocktrans %}
+            </p>
+        </section>
+
+
+        <!-- 12. POLICY UPDATES -->
+        <section id="policy-updates">
+            <h2>{% trans "12. Changes to this Privacy Policy" %}</h2>
+
+            <p>
+                {% blocktrans %}
+                    This policy may be updated to reflect changes in
+                    our services, processing activities or applicable
+                    legal requirements. The latest version will be
+                    available on this page.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>
+                    {% blocktrans %}
+                        English Grows will be compliant with applicable laws at all times.
+                    {% endblocktrans %}
+                </strong>
+            </p>
+        </section>
+
+
+        <!-- OFFICIAL REFERENCES -->
+        <section id="official-references">
+            <h2>{% trans "Official Legislation and Guidance" %}</h2>
+
+            <p>
+                {% trans "The following official sources provide further information about the legal framework described in this policy." %}
+            </p>
+
+            <h3>{% trans "European and Spanish legislation" %}</h3>
+
+            <ul>
+                <li>
+                    <a href="https://eur-lex.europa.eu/eli/reg/2016/679/"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "GDPR — Regulation (EU) 2016/679, EUR-Lex" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.boe.es/eli/es/lo/2018/12/05/3/con"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "LOPDGDD — Organic Law 3/2018, consolidated text, BOE" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "LSSI-CE — Law 34/2002, consolidated text, BOE" %}
+                    </a>
+                </li>
+            </ul>
+
+            <h3>{% trans "Data protection principles and responsibilities" %}</h3>
+
+            <ul>
+                <li id="gdpr-aticles-link">
+                    <a href="https://eur-lex.europa.eu/eli/reg/2016/679/"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "GDPR Articles 5, 6, 13, 14 and 25 — Principles, lawful bases, transparency and privacy by design" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.edpb.europa.eu/documents/guideline/guidelines-072020-on-the-concepts-of-controller-and-processor-in-the-gdpr_en"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "EDPB Guidelines 07/2020 — Controller and processor responsibilities" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.aepd.es/guias/la-proteccion-de-datos-en-las-relaciones-laborales.pdf"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "AEPD — Data protection in employment relationships" %}
+                    </a>
+                </li>
+            </ul>
+
+            <h3>{% trans "Regulatory authorities and practical guidance" %}</h3>
+
+            <ul>
+                <li>
+                    <a href="https://www.aepd.es/" target="_blank" rel="noopener noreferrer">
+                        {% trans "Spanish Data Protection Authority (AEPD)" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.edpb.europa.eu/" target="_blank" rel="noopener noreferrer">
+                        {% trans "European Data Protection Board (EDPB)" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.aepd.es/derechos-y-deberes/conoce-tus-derechos/derecho-de-informacion"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "AEPD — Right to information" %}
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.aepd.es/guias/guia-cookies.pdf"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "AEPD — Guide to cookies" %}
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+    </article>
+</div>
+
+{% endblock %}
