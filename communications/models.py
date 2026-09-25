@@ -1,4 +1,5 @@
 import uuid
+
 from datetime import timedelta
 
 from django.conf import settings
@@ -196,3 +197,66 @@ class MarketingSubscriber(models.Model):
         self.confirmation_token = uuid.uuid4()
         self.save(update_fields=["status", "last_unsubscribed_at", "confirmation_token", "updated_at"])
         return True
+
+
+
+
+class LearnerAccountClosureNotice(models.Model):
+    """
+    Track account-closure notices for each retention period.
+
+    A new retention reference date represents a new notification cycle.
+    Records are retained independently if the associated user is removed,
+    subject to the notification-record retention policy.
+    """
+
+    STATUS_PENDING = "pending"
+    STATUS_SENT = "sent"
+    STATUS_FAILED = "failed"
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, "Pending"),
+        (STATUS_SENT, "Sent"),
+        (STATUS_FAILED, "Failed"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="account_closure_notices",
+    )
+
+    reference_at = models.DateTimeField()
+    potential_expiry_at = models.DateTimeField()
+
+    effective_closure_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        editable=False,
+        help_text="Earliest permitted closure time, accounting for the 30-day notice period.",
+    )
+
+    recipient_email = models.EmailField()
+    
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "reference_at"],
+                name="unique_learner_closure_notice_reference",
+            ),
+        ]
+
+    def __str__(self):
+        return f"Account closure notice #{self.pk} — {self.get_status_display()}"

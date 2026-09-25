@@ -41,7 +41,6 @@ class CourseType(models.Model):
         return self.name
 
 
-
 class Programme(models.Model):
     """
     Reusable training programme category that defines the broad
@@ -308,9 +307,22 @@ class Course(models.Model):
             if became_paused:
                 self.pause_future_sessions()
 
+            # Course cancellation makes 'active/paused' 
+            # enrollment status become 'cancelled' too
             if became_cancelled:
+                cancelled_at = timezone.now()
                 self.cancel_future_sessions()
 
+                # Close ongoing enrollments without altering historical outcomes.
+                self.enrollments.filter(
+                    status__in=[
+                        CourseEnrollment.STATUS_ACTIVE,
+                        CourseEnrollment.STATUS_PAUSED,
+                    ]
+                ).update(
+                    status=CourseEnrollment.STATUS_CANCELLED,
+                    ended_at=cancelled_at,
+                )
             # ---------------------------------------------------------
             # INITIAL CLASS SESSION GENERATION
             # ---------------------------------------------------------
@@ -1373,56 +1385,47 @@ class Course(models.Model):
         )
 
 
-    # ---------------------------------------------------------
-    # BACKWARDS-COMPATIBILITY ALIASES
-    #
-    # Keep temporarily while older views/templates are migrated.
-    # New code should use the explicit properties above.
-    # ---------------------------------------------------------
-
-
     def update_completion_status(self):
         """
-        Mark the Course as completed only when EVERY ClassSession
-        has reached the terminal status:
+        Complete the course only when every ClassSession has completed
+        its attendance workflow.
 
-            complete_attendance_submitted
-
-        Active enrollments are also marked completed at the same time.
-
-        Returns:
-            True  -> all sessions are complete and attendance submitted
-            False -> at least one session is still outstanding
+        Active enrolments become completed.
+        Paused enrolments become ended_without_completion.
+        Existing terminal enrolments remain unchanged.
         """
-
-        # A course with no sessions should never auto-complete.
         if not self.class_sessions.exists():
             return False
 
-        has_unfinished_sessions = (
-            self.class_sessions
-            .exclude(
-                status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
-            )
-            .exists()
-        )
-
-        if has_unfinished_sessions:
+        if self.class_sessions.exclude(
+            status=ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED
+        ).exists():
             return False
 
         if self.status != "completed":
             self.status = "completed"
-            self.save(
-                update_fields=["status"]
-            )
+            self.save(update_fields=["status"])
 
+        completion_time = timezone.now()
+
+        # Active learners complete their training.
         self.enrollments.filter(
-            status="active"
+            status=CourseEnrollment.STATUS_ACTIVE
         ).update(
-            status="completed"
+            status=CourseEnrollment.STATUS_COMPLETED,
+            ended_at=completion_time,
+        )
+
+        # Paused learners finish without completing their training.
+        self.enrollments.filter(
+            status=CourseEnrollment.STATUS_PAUSED
+        ).update(
+            status=CourseEnrollment.STATUS_ENDED_WITHOUT_COMPLETION,
+            ended_at=completion_time,
         )
 
         return True
+
 
     def pause_future_sessions(self):
         """
@@ -1706,6 +1709,7 @@ class CourseTimetableSlot(models.Model):
         )
 
 
+
 class CourseEnrollment(models.Model):
     """
     Connects a user/student/employee to a specific course.
@@ -1749,12 +1753,14 @@ class CourseEnrollment(models.Model):
 
     STATUS_ACTIVE = "active"
     STATUS_PAUSED = "paused"
+    STATUS_ENDED_WITHOUT_COMPLETION = "ended_without_completion"
     STATUS_COMPLETED = "completed"
     STATUS_CANCELLED = "cancelled"
 
     ENROLLMENT_STATUS_CHOICES = [
         (STATUS_ACTIVE, "Active"),
         (STATUS_PAUSED, "Paused"),
+        (STATUS_ENDED_WITHOUT_COMPLETION, "Ended without completion"),
         (STATUS_COMPLETED, "Completed"),
         (STATUS_CANCELLED, "Cancelled"),
     ]
@@ -1785,8 +1791,10 @@ class CourseEnrollment(models.Model):
         auto_now_add=True
     )
 
+    ended_at = models.DateTimeField(null=True, blank=True, editable=False)
+
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=ENROLLMENT_STATUS_CHOICES,
         default=STATUS_ACTIVE
     )
@@ -1816,75 +1824,44 @@ class CourseEnrollment(models.Model):
     # ---------------------------------------------------------
     # SAVE
     # ---------------------------------------------------------
-
     def save(self, *args, **kwargs):
-        """
-        Save the enrollment and synchronize its Attendance records.
-
-        When an enrollment becomes paused:
-        - remaining pending Attendance records become enrollment_paused
-
-        When an enrollment becomes active:
-        - remaining enrollment_paused Attendance records return to pending
-        - missing Attendance records are created for unfinished lessons
-
-        When an enrollment becomes cancelled:
-        - remaining pending Attendance records are deleted
-        - remaining enrollment_paused Attendance records are deleted
-        - genuine attendance outcomes are preserved
-
-        Historical Attendance outcomes are never overwritten or deleted.
-        """
+        """Save the enrolment, record lifecycle dates and synchronise attendance."""
         is_new = self.pk is None
         old_status = None
 
         if self.pk:
-            old_enrollment = CourseEnrollment.objects.get(
-                pk=self.pk
+            old_status = CourseEnrollment.objects.values_list("status", flat=True).get(pk=self.pk)
+
+        update_fields = kwargs.get("update_fields")
+        status_changed = (
+            (is_new or old_status != self.status)
+            and (update_fields is None or "status" in update_fields)
+        )
+
+        if status_changed:
+            self.ended_at = (
+                timezone.now()
+                if self.status in {self.STATUS_COMPLETED, self.STATUS_CANCELLED}
+                else None
             )
-            old_status = old_enrollment.status
+
+            if update_fields is not None:
+                kwargs["update_fields"] = set(update_fields) | {"ended_at"}
 
         super().save(*args, **kwargs)
 
-        became_paused = (
-            self.status == self.STATUS_PAUSED
-            and old_status != self.STATUS_PAUSED
-        )
+        if not status_changed:
+            return
 
-        became_active = (
-            self.status == self.STATUS_ACTIVE
-            and (
-                is_new
-                or old_status != self.STATUS_ACTIVE
-            )
-        )
-
-        became_cancelled = (
-            self.status == self.STATUS_CANCELLED
-            and old_status != self.STATUS_CANCELLED
-        )
-
-        if became_paused:
+        if self.status == self.STATUS_PAUSED:
             self.pause_remaining_attendance_records()
 
-        if became_active:
-            # Restore Attendance rows that were paused because the
-            # enrollment itself was paused.
+        elif self.status == self.STATUS_ACTIVE:
             self.restore_remaining_attendance_records()
-
-            # If the Course already has ClassSessions, assign this learner
-            # automatically to every unfinished lesson.
             self.create_future_attendance_records()
-
-            # If this enrollment is the final prerequisite during initial
-            # Course setup, generate the Course's full ClassSession schedule
-            # and Attendance records automatically.
-            #
-            # The Course helper includes a "no existing ClassSessions" guard,
-            # so enrolling learners later will NEVER regenerate the schedule.
             self.course.try_generate_class_sessions()
 
-        if became_cancelled:
+        elif self.status == self.STATUS_CANCELLED:
             self.cancel_remaining_attendance_records()
 
 
@@ -3561,6 +3538,7 @@ class Attendance(models.Model):
             self.status == self.STATUS_ATTENDED
             and self.minutes_late == 0
         )
+
 
 
 class BankHoliday(models.Model):

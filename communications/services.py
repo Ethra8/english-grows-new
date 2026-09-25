@@ -1,18 +1,24 @@
 import logging
 import re
 
+from datetime import datetime, time, timedelta
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import escape, strip_tags
 
-from .models import EmailTemplate
+from .models import EmailTemplate, LearnerAccountClosureNotice
 from courses.models import CourseEnrollment
 from placement.models import TOTAL_QUESTIONS
 from profiles.models import UserProfile
+from profiles.utils.learner_account_retention import get_learner_retention_snapshot
+
 
 
 def _render_template_string(value, context):
@@ -264,3 +270,166 @@ def send_placement_result_emails(attempt):
             )
 
     return sent
+
+
+
+
+
+def send_learner_account_closure_notice(user_id):
+    """
+    Send an advance learner account-closure notice.
+
+    Normal execution: 30 calendar days before the retention deadline.
+    Missed execution: send when processing resumes and postpone closure
+    to preserve at least 30 days after successful email submission.
+
+    Existing notification records prevent automatic duplicate attempts.
+    Failed or interrupted attempts remain blocked pending review.
+
+    Returns the number of emails sent (0 or 1).
+    Never closes, deactivates or deletes an account.
+    """
+    logger = logging.getLogger(__name__)
+
+    # ---------------------------------------------------------
+    # 1. RETRIEVE THE CURRENT USER
+    # ---------------------------------------------------------
+
+    user = get_user_model().objects.filter(
+        pk=user_id,
+        is_active=True,
+    ).first()
+
+    if not user or not (user.email or "").strip():
+        return 0
+
+    # ---------------------------------------------------------
+    # 2. RECALCULATE ACCOUNT RETENTION
+    # ---------------------------------------------------------
+
+    snapshot = get_learner_retention_snapshot(user)
+
+    if snapshot["status"] not in {"never_enrolled", "calculable"}:
+        return 0
+
+    reference_at = snapshot["reference_at"]
+    expiry_at = snapshot["potential_expiry_at"]
+
+    if reference_at is None or expiry_at is None:
+        return 0
+
+    # ---------------------------------------------------------
+    # 3. CALCULATE THE EFFECTIVE CLOSURE DATE
+    # ---------------------------------------------------------
+
+    local_tz = timezone.get_default_timezone()
+    today = timezone.localdate(timezone=local_tz)
+    original_closure_date = timezone.localtime(expiry_at, local_tz).date()
+    days_remaining = (original_closure_date - today).days
+
+    # Do not send before the scheduled 30-day notification date.
+    # Missed notifications are recovered automatically.
+    if days_remaining > 30:
+        return 0
+
+    # Preserve the original date unless a missed notification
+    # requires postponement to provide 30 calendar days of notice.
+    effective_closure_date = max(
+        original_closure_date,
+        today + timedelta(days=30),
+    )
+
+    # Account closure is scheduled for 23:59 local time.
+    effective_closure_at = timezone.make_aware(
+        datetime.combine(effective_closure_date, time(23, 59)),
+        local_tz,
+    )
+
+
+    # ---------------------------------------------------------
+    # 4. REGISTER THE NOTIFICATION ATTEMPT
+    # ---------------------------------------------------------
+
+    recipient = user.email.strip()
+
+    notice, created = LearnerAccountClosureNotice.objects.get_or_create(
+        user=user,
+        reference_at=reference_at,
+        defaults={
+            "potential_expiry_at": expiry_at,
+            "recipient_email": recipient,
+        },
+    )
+
+    # A previous attempt already exists for this retention period.
+    # Never automatically resend an uncertain or failed delivery.
+    if not created:
+        return 0
+
+    # ---------------------------------------------------------
+    # 5. PREPARE EMAIL CONTENT AND BRANDED CTA
+    # ---------------------------------------------------------
+
+    login_url = (
+        f"{settings.SITE_URL.rstrip('/')}"
+        f"{reverse('account_login')}"
+    )
+
+    context = {
+        "first_name": user.first_name or user.get_username(),
+        "closure_date": effective_closure_date.strftime("%d %B %Y"),
+    }
+
+    # ---------------------------------------------------------
+    # 6. SEND USING THE EXISTING EMAIL SERVICE
+    # ---------------------------------------------------------
+
+    try:
+        sent = send_template_email(
+            template_key="learner_account_closure_notice",
+            recipient=recipient,
+            context=context,
+            cta_label="Sign in to my account",
+            cta_url=login_url,
+        )
+
+    except Exception:
+        notice.status = LearnerAccountClosureNotice.STATUS_FAILED
+        notice.save(update_fields=["status"])
+
+        logger.exception(
+            "Account-closure notice failed: user_id=%s, notice_id=%s",
+            user.pk,
+            notice.pk,
+        )
+        return 0
+
+    # ---------------------------------------------------------
+    # 7. RECORD SUCCESSFUL SUBMISSION
+    # ---------------------------------------------------------
+
+    if sent:
+        notice.status = LearnerAccountClosureNotice.STATUS_SENT
+        notice.sent_at = timezone.now()
+        notice.effective_closure_at = effective_closure_at
+        notice.save(update_fields=[
+            "status",
+            "sent_at",
+            "effective_closure_at",
+        ])
+        return sent
+
+    # ---------------------------------------------------------
+    # 8. RECORD UNSUCCESSFUL SUBMISSION
+    # ---------------------------------------------------------
+
+    notice.status = LearnerAccountClosureNotice.STATUS_FAILED
+    notice.save(update_fields=["status"])
+
+    logger.warning(
+        "Account-closure notice was not sent: user_id=%s, notice_id=%s",
+        user.pk,
+        notice.pk,
+    )
+
+    return 0

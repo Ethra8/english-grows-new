@@ -1,6 +1,7 @@
+
 from django.contrib import admin
 
-from .models import EmailTemplate, MarketingSubscriber
+from .models import EmailTemplate, MarketingSubscriber, LearnerAccountClosureNotice
 
 
 @admin.register(EmailTemplate)
@@ -84,4 +85,78 @@ class MarketingSubscriberAdmin(admin.ModelAdmin):
     )
 
     def has_add_permission(self, request):
+        return False
+
+
+@admin.register(LearnerAccountClosureNotice)
+class LearnerAccountClosureNoticeAdmin(admin.ModelAdmin):
+    list_display = (
+        "recipient_email",
+        "user",
+        "status",
+        "potential_expiry_at",
+        "sent_at",
+        "created_at",
+    )
+    list_display_links = ("recipient_email",)
+    list_filter = ("status", "created_at", "potential_expiry_at")
+    search_fields = (
+        "recipient_email",
+        "user__email",
+        "user__username",
+        "user__first_name",
+        "user__last_name",
+    )
+    ordering = ("-created_at",)
+    list_select_related = ("user",)
+    list_per_page = 50
+
+    readonly_fields = (
+        "user",
+        "recipient_email",
+        "status",
+        "reference_at",
+        "potential_expiry_at",
+        "created_at",
+        "sent_at",
+    )
+
+    fieldsets = (
+        (
+            "Learner and notification status",
+            {
+                "fields": (
+                    "user",
+                    "recipient_email",
+                    "status",
+                ),
+            },
+        ),
+        (
+            "Retention calculation",
+            {
+                "fields": (
+                    "reference_at",
+                    "potential_expiry_at",
+                ),
+            },
+        ),
+        (
+            "Notification history",
+            {
+                "fields": (
+                    "created_at",
+                    "sent_at",
+                ),
+            },
+        ),
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
         return False
