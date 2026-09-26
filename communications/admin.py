@@ -88,6 +88,7 @@ class MarketingSubscriberAdmin(admin.ModelAdmin):
         return False
 
 
+
 @admin.register(LearnerAccountClosureNotice)
 class LearnerAccountClosureNoticeAdmin(admin.ModelAdmin):
     list_display = (
@@ -95,6 +96,7 @@ class LearnerAccountClosureNoticeAdmin(admin.ModelAdmin):
         "user",
         "status",
         "potential_expiry_at",
+        "effective_closure_at",
         "sent_at",
         "created_at",
     )
@@ -117,6 +119,7 @@ class LearnerAccountClosureNoticeAdmin(admin.ModelAdmin):
         "status",
         "reference_at",
         "potential_expiry_at",
+        "effective_closure_at",
         "created_at",
         "sent_at",
     )
@@ -133,11 +136,12 @@ class LearnerAccountClosureNoticeAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Retention calculation",
+            "Retention and closure dates",
             {
                 "fields": (
                     "reference_at",
                     "potential_expiry_at",
+                    "effective_closure_at",
                 ),
             },
         ),

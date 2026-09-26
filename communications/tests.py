@@ -742,3 +742,102 @@ class LearnerAccountClosureNoticeTests(TestCase):
         self.assertIn("Emails sent: 0", second_output.getvalue())
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(LearnerAccountClosureNotice.objects.count(), 1)
+
+
+
+
+from datetime import datetime, timedelta
+from types import SimpleNamespace
+from zoneinfo import ZoneInfo
+
+from django.test import SimpleTestCase
+
+from communications.management.commands.process_learner_closure_notices import Command
+from communications.models import LearnerAccountClosureNotice
+
+
+class DeactivationEligibilityTests(SimpleTestCase):
+
+    def setUp(self):
+        self.tz = ZoneInfo("Europe/Madrid")
+        self.reference = datetime(2023, 9, 25, 10, 0, tzinfo=self.tz)
+        self.expiry = datetime(2026, 9, 25, 10, 0, tzinfo=self.tz)
+        self.sent_at = datetime(2026, 8, 26, 9, 0, tzinfo=self.tz)
+        self.deadline = datetime(2026, 9, 25, 23, 59, tzinfo=self.tz)
+
+        self.user = SimpleNamespace(
+            is_active=True,
+            email="learner@example.com",
+            last_login=None,
+        )
+        self.snapshot = {
+            "status": "calculable",
+            "reference_at": self.reference,
+            "potential_expiry_at": self.expiry,
+        }
+        self.notice = SimpleNamespace(
+            status=LearnerAccountClosureNotice.STATUS_SENT,
+            sent_at=self.sent_at,
+            effective_closure_at=self.deadline,
+            reference_at=self.reference,
+            potential_expiry_at=self.expiry,
+            recipient_email="learner@example.com",
+        )
+
+    def ready(self, now=None):
+        return Command._ready_for_deactivation(
+            self.user, self.snapshot, self.notice,
+            now if now is not None else self.deadline, self.tz,
+        )
+
+    def test_eligible_at_effective_deadline(self):
+        self.assertTrue(self.ready())
+
+    def test_cannot_deactivate_before_2359(self):
+        self.assertFalse(self.ready(self.deadline - timedelta(minutes=1)))
+
+    def test_late_notification_preserves_full_30_day_period(self):
+        self.notice.sent_at = datetime(2026, 9, 1, 9, 0, tzinfo=self.tz)
+        extended_deadline = datetime(2026, 10, 1, 23, 59, tzinfo=self.tz)
+
+        self.assertFalse(self.ready(self.deadline))
+        self.assertFalse(self.ready(extended_deadline - timedelta(minutes=1)))
+        self.assertTrue(self.ready(extended_deadline))
+
+    def test_old_retention_cycle_cannot_authorise_deactivation(self):
+        self.notice.reference_at = self.reference - timedelta(days=1)
+        self.assertFalse(self.ready())
+
+        self.notice.reference_at = self.reference
+        self.notice.potential_expiry_at = self.expiry - timedelta(days=1)
+        self.assertFalse(self.ready())
+
+    def test_notice_must_be_successfully_sent_with_a_deadline(self):
+        for field, value in (
+            ("status", LearnerAccountClosureNotice.STATUS_FAILED),
+            ("sent_at", None),
+            ("effective_closure_at", None),
+        ):
+            with self.subTest(field=field):
+                original = getattr(self.notice, field)
+                setattr(self.notice, field, value)
+                self.assertFalse(self.ready())
+                setattr(self.notice, field, original)
+
+    def test_login_after_notice_prevents_deactivation(self):
+        self.user.last_login = self.sent_at + timedelta(minutes=1)
+        self.assertFalse(self.ready())
+
+    def test_changed_email_prevents_deactivation(self):
+        self.user.email = "another@example.com"
+        self.assertFalse(self.ready())
+
+    def test_ineligible_or_inactive_account_cannot_be_deactivated(self):
+        for status in ("ongoing_enrollment", "needs_review", "company_onboarding_review"):
+            with self.subTest(status=status):
+                self.snapshot["status"] = status
+                self.assertFalse(self.ready())
+
+        self.snapshot["status"] = "calculable"
+        self.user.is_active = False
+        self.assertFalse(self.ready())
