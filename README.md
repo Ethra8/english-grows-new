@@ -944,13 +944,13 @@ status
 
 rather than hard-coding role names throughout the questionnaire presentation.
 
-This keeps one shared questionnaire/report component usable by:
+This keeps one shared questionnaire/report component usable by learners/employees and assigned teachers.
 
-- learner / employee;
-- teacher;
-- company administrator.
+Company administrators receive a separate status-only presentation. They do not have access to the questionnaire/report component or its individual responses.
 
 Role-specific views remain responsible for access control and Course/enrolment scoping.
+
+---
 
 #### Automatic enrolment invitation
 
@@ -1245,11 +1245,13 @@ choice_labels(...)
 confidence_display(...)
 ```
 
-for learner, teacher and company-admin read-only views.
+for learner and authorised teacher questionnaire reports.
 
 The shared report displays the question label above each human-readable answer and keeps supplementary accent text visually grouped with the main accent question.
 
 The submitted report therefore acts as a human-readable summary rather than exposing internal database codes.
+
+Company Admin views display only the questionnaire's workflow status and do not render individual answers through these helpers.
 
 ---
 
@@ -1280,7 +1282,7 @@ Company Admins may need to know whether an employee has submitted the Learning N
 
 English Grows therefore adopts the following default policy:
 
-**Company Admin access is limited to the questionnaire's submission status.**
+**Company Admin access is limited to the questionnaire's workflow status (`pending`, `submitted` or `reviewed`).**
 
 The following information is excluded from the default Company Admin view:
 
@@ -1291,7 +1293,11 @@ The following information is excluded from the default Company Admin view:
 - Additional Information entered by the learner.
 - The complete questionnaire record.
 
-Where a corporate client has a specific, justified need for additional information, the proposed disclosure must be assessed separately against the applicable purpose, legal basis and data-minimisation requirements.
+The current Company Admin interface does not provide access to individual questionnaire responses.
+
+Any exceptional proposal to disclose additional information to a corporate client requires a separate assessment of its purpose, lawful basis, necessity and data-minimisation requirements. Such disclosure is not authorised by the existing Company Admin role or its standard interface.
+
+---
 
 ##### Role-Based Access Policy
 
@@ -1308,18 +1314,20 @@ The Company Admin's relationship with the employee does not automatically grant 
 
 ##### Technical Enforcement
 
-Access restrictions are enforced server-side through role-aware views and Course/enrollment ownership checks.
+The agreed access policy must be enforced server-side through role-aware views and Course/enrolment ownership checks.
 
-The implementation safely ensures that:
+The required safeguards are:
 
 - Learners can access only their own questionnaire records.
 - Teachers can access questionnaire records only for learners enrolled in Courses assigned to them.
-- Company Admins can access only the permitted submission/completion status for employees belonging to their company.
-- Direct access to a questionnaire URL cannot bypass the applicable role and ownership checks.
-- Pending questionnaires do not expose unfinished responses through academic summaries.
-- The original questionnaire responses remain read-only after submission, subject to the established review and reset workflows.
+- Company Admins can access only the permitted workflow status for employees belonging to their company.
+- Direct access to a questionnaire URL must not bypass the applicable role and ownership checks.
+- Pending questionnaires must not expose unfinished responses through academic summaries.
+- Original questionnaire responses remain read-only after submission, subject to the established review and reset workflows.
 
-The Company Admin's existing Learning Needs route is restricted at the view level rather than relying on template presentation.
+The Company Admin's Learning Needs route must enforce the status-only restriction at the view level rather than relying exclusively on hiding questionnaire content in the template.
+
+---
 
 ##### Academic Profile Integration
 
@@ -1360,13 +1368,11 @@ See [Data Protection & Privacy](#data-protection--privacy) for the shared legal 
 | Course-specific `StudentNeedsAnalysis` model and questionnaire workflow | Implemented |
 | Read-only Learning Needs summary within the Academic Profile Django Admin | Implemented |
 | Suppression of unfinished questionnaire responses in the Admin summary | Implemented |
-| Teacher access restricted to assigned Courses | Existing workflow — authorisation audit required |
-| Company Admin access limited to submission/completion status | Pending implementation |
-| Removal of unrestricted questionnaire access from the existing Company Admin route | Pending implementation |
+| Teacher access restricted to assigned Courses | Implemented |
+| Company Admin access limited to submission/completion status | Implemented |
+| Removal of unrestricted questionnaire access from the existing Company Admin route | Implemented |
 | Teacher-facing consolidated Academic Overview | Planned |
-| Privacy Policy alignment with the final access model | Pending review |
-
-**Important:** The Company Admin restriction is an agreed access policy, not yet a verified technical safeguard. The existing view and its corresponding URL must be audited and updated before this requirement can be marked as implemented.
+| Privacy Policy alignment with the final access model | Reviewed |
 
 The overarching architectural principle is that **access to personal academic information follows the user's legitimate responsibilities within the training workflow, not merely their general role or organisational relationship**.
 
@@ -1456,6 +1462,7 @@ Attendance-submitted rows expose the relevant detail action, while held lessons 
 
 ---
 
+
 ### COMPANY ADMIN AREA
 
 Company administrators have a dedicated B2B management area allowing them to monitor the training delivered to employees belonging to their organisation.
@@ -1474,7 +1481,7 @@ Principal functionality includes:
 - **Employee skill development**
 - **Employee assessment information**
 - **Employee progress graphs**
-- **Learning Needs submission status**
+- **Learning Needs questionnaire submission status**
 - **Own participant record when the company administrator is actively enrolled in training**
 - **Company class calendar**
 
@@ -1500,11 +1507,34 @@ Within the same status, courses are ordered alphabetically by course name.
 
 Historical `CourseEnrollment` records also remain available on the relevant course learner/detail pages so that completed, paused, or cancelled participation remains visible for reporting and review.
 
-This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, learning outcomes, and historical training records.
+This preserves the Company access boundary while allowing an authorised company representative to monitor employee participation, attendance, course progression, learning outcomes and historical training records.
 
-Company administrators can review the employees' learning needs questionnaire's submission status only; individual responses are not accessible..
+#### Learning Needs access and data protection
 
-They cannot edit, view the answers to the learner questionnaire or mark it reviewed.
+Company administrators may view the submission status of an employee's Course-specific Learning Needs questionnaire within the student-detail architecture.
+
+Access is strictly limited to the questionnaire's workflow status:
+
+```text
+pending
+submitted
+reviewed
+```
+
+The following information is not accessible to Company Admins:
+
+- Individual questionnaire answers.
+- Selected communication priorities.
+- Self-assessed confidence ratings.
+- Communication partners and accent exposure.
+- Additional free-text information.
+- The complete questionnaire or its submitted report.
+
+Company administrators cannot edit questionnaire responses or mark a questionnaire as reviewed. These operations belong to the learner and assigned teacher respectively, according to the established Learning Needs workflow.
+
+This distinction preserves the company's ability to monitor questionnaire completion without exposing the employee's personal learning-needs responses.
+
+The applicable privacy and access-control principles are documented under [Data Protection and Employer Access to Learning Needs](#data-protection-and-employer-access-to-learning-needs).
 
 Company class/session lists use the same separation between **past/held teaching** and **Attendance finalization** as the teacher interface, so a lesson can be historically past while still showing Attendance as pending.
 
@@ -1549,6 +1579,8 @@ When an actively enrolled company administrator qualifies for the participant li
 
 A company administrator with no active qualifying enrolment remains a company administrator but is not treated as a current training participant in the employee/performance list.
 
+The administrator's own training participation does not expand their permissions to access other employees' Learning Needs questionnaire responses.
+
 This separation preserves the distinction between:
 
 ```text
@@ -1587,7 +1619,7 @@ Only that learner's own enrolments,
 attendance and assessment data
 ```
 
-Historical visibility does not weaken role boundaries: status determines whether a record is current or historical, while teacher assignment, company ownership, and learner ownership continue to determine whether the authenticated user is authorised to access it.
+Historical visibility does not weaken role boundaries: status determines whether a record is current or historical, while teacher assignment, company ownership and learner ownership continue to determine whether the authenticated user is authorised to access it.
 
 #### Zero-data workspace behaviour
 
@@ -1611,22 +1643,37 @@ Company Administrator with zero Company Courses / participants
 
 Object-specific pages and actions can still require a concrete Course, enrolment, ClassSession or other identifier where the operation has no meaning without one.
 
-The same boundary applies to Learning Needs:
+#### Learning Needs access boundaries
+
+Learning Needs permissions are determined by the authenticated user's role, the relevant Course/enrolment relationship and the specific information required for that role.
 
 ```text
 Learner / Employee
 → own CourseEnrollment Needs Analysis
-→ edit only while pending
+→ may edit questionnaire only while pending
+→ submitted responses become read-only
 
 Teacher
 → Needs Analysis for learners on assigned Courses
-→ read-only
-→ may mark submitted analysis reviewed
+→ may view submitted questionnaire responses
+→ may mark submitted analysis as reviewed
+→ cannot edit the learner's submitted answers
 
 Company Administrator
-→ Needs Analysis for employees inside own Company
-→ Submission status only; individual responses are not accessible.
+→ submission status for employees inside own Company
+→ may see pending / submitted / reviewed
+→ cannot access individual questionnaire responses
+→ cannot edit or mark the questionnaire as reviewed
 ```
+
+Company ownership does not, by itself, authorise access to the complete questionnaire.
+
+The Company Admin interface must expose only the permitted workflow status, not the underlying questionnaire answers or full submitted report.
+
+These restrictions must be enforced by the server-side views and authorised querysets, rather than relying solely on hiding questionnaire content in templates.
+
+For the complete access policy, see [Data Protection and Employer Access to Learning Needs](#data-protection-and-employer-access-to-learning-needs).
+
 
 ---
 
@@ -5704,7 +5751,7 @@ EnglishGrows implements database constraints and model-owned business rules to p
 - Once submitted, the learner's answers become read-only.
 - Teachers have read-only access to learners on their assigned Courses and may mark a submitted analysis `reviewed`.
 - Review stores `reviewed_at`.
-- Company administrators have read-only access only for employees / enrolments inside their own Company.
+- Company administrators access is limited to questionnaire workflow status only for employees / enrolments inside their own Company.
 - Communication situations, communication partners, accent exposure, priority areas and learning preferences are stored as structured multi-value data.
 - Confidence values are constrained to the integer range `1–5`.
 - Priority areas are limited to a maximum of three selections by server-side form validation.
@@ -5929,18 +5976,23 @@ StudentNeedsAnalysis
         ├── status → submitted
         └── submitted_at set
         │
-        ├── learner / company admin → read-only
+        ├── learner → read-only
         │
         └── teacher may mark reviewed
-                │
-                ▼
-          status → reviewed
-          reviewed_at set
+        |        │
+        |        ▼
+        | status → reviewed
+        | reviewed_at set
+        |
+        └── company admin → workflow status only      
 ```
 
-The same submitted data is rendered for different roles through one shared content component, while each role-specific view controls access and capabilities.
+The same submitted data is rendered for learner/employee and teacher roles through one shared content component, while each role-specific view controls access and capabilities. 
+
+Company admin roles can only view workflow status only, adn review whether an employee has or has not submitted their Learning Needs, but cannot view their submitted answers.
 
 Human-readable report values are produced from the form's canonical choice definitions rather than exposing the stored internal codes.
+---
 
 ### Public placement test flow
 
