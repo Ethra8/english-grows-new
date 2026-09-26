@@ -897,9 +897,9 @@ Their responsibilities are deliberately separated:
 
 | Status | Learner / Employee | Teacher | Company Admin |
 | :--- | :--- | :--- | :--- |
-| `pending` | May complete and submit | Read-only pending state | Read-only pending state |
-| `submitted` | Read-only | Read-only + may mark reviewed | Read-only |
-| `reviewed` | Read-only | Read-only | Read-only |
+| `pending` | May complete and submit | Read-only pending state | Submission status only |
+| `submitted` | Read-only | Read-only + may mark reviewed | Submission status only |
+| `reviewed` | Read-only | Read-only | Submission status only |
 
 Learners can edit only while:
 
@@ -932,7 +932,7 @@ reviewed_at
 → current timestamp
 ```
 
-Company administrators have read-only access within their own Company boundary.
+Company administrators have status-only access within their own Company boundary.
 
 The shared content template uses **capability/state flags** such as:
 
@@ -1474,7 +1474,7 @@ Principal functionality includes:
 - **Employee skill development**
 - **Employee assessment information**
 - **Employee progress graphs**
-- **Employee Learning Needs (read-only)**
+- **Learning Needs submission status**
 - **Own participant record when the company administrator is actively enrolled in training**
 - **Company class calendar**
 
@@ -1502,9 +1502,9 @@ Historical `CourseEnrollment` records also remain available on the relevant cour
 
 This prevents cross-company data exposure while allowing an authorised company representative to monitor employee participation, attendance, course progression, learning outcomes, and historical training records.
 
-Company administrators can also review an employee's Course-specific submitted Learning Needs inside the same student-detail architecture.
+Company administrators can review the employees' learning needs questionnaire's submission status only; individual responses are not accessible..
 
-They cannot edit the learner questionnaire or mark it reviewed.
+They cannot edit, view the answers to the learner questionnaire or mark it reviewed.
 
 Company class/session lists use the same separation between **past/held teaching** and **Attendance finalization** as the teacher interface, so a lesson can be historically past while still showing Attendance as pending.
 
@@ -1625,7 +1625,7 @@ Teacher
 
 Company Administrator
 → Needs Analysis for employees inside own Company
-→ read-only
+→ Submission status only; individual responses are not accessible.
 ```
 
 ---
@@ -6061,7 +6061,7 @@ Role-specific views then determine how current and historical data is exposed:
 - **Learner / Employee — Learning Needs:** the learner may edit only their own pending Needs Analysis and sees a read-only report after submission.
 - **Learner / Employee — Calendar:** current `scheduled`/`rescheduled` teaching comes from active enrolment + active Course context, while historical held/complete lessons remain visible across the learner's own Course history.
 - **Teacher:** assigned Courses and their relevant historical enrolments remain accessible regardless of status on Course-detail/learner pages; submitted learner Needs Analyses can be reviewed and marked reviewed.
-- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary; employee Needs Analyses are read-only. A company administrator who is also actively enrolled remains a `company_admin` but can appear as a training participant and open their own participant detail through the Company Admin architecture.
+- **Company Administrator:** company Courses and their relevant historical enrolments remain accessible regardless of status within the administrator's own company boundary; employee Learning Needs submission status is visible; questionnaire responses are not accessible. A company administrator who is also actively enrolled remains a `company_admin` but can appear as a training participant and open their own participant detail through the Company Admin architecture.
 
 Attendance, ClassSession lifecycle state, Learning Needs, Academic Profile data and assessment data then contribute to the Course-specific and learner-development information displayed throughout the platform.
 
