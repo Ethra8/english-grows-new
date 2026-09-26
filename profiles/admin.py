@@ -22,6 +22,8 @@ from .models import (
     StudentAcademicProfile,
     StudentSkillAssessment,
     StudentSubSkillAssessment,
+    StudentSkillAssessmentSnapshot,
+    StudentSkillTermSnapshot,
     SUBSKILLS,
 )
 
@@ -1292,6 +1294,20 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             )
 
             # -----------------------------------------------------------------
+            # ASSESSMENT HISTORY
+            # -----------------------------------------------------------------
+
+            history_section = format_html(
+                '<section class="academic-panel academic-panel--history">'
+                    '<header class="academic-panel__header">'
+                        '<h3 class="academic-panel__title">Assessment History</h3>'
+                    '</header>'
+                    '<div class="academic-panel__body">{}</div>'
+                '</section>',
+                self.assessment_history(user, course),
+            )
+
+            # -----------------------------------------------------------------
             # COURSE STATUS BADGE
             # -----------------------------------------------------------------
 
@@ -1357,6 +1373,7 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                         '<div class="academic-course__content">'
                             '{}'
                             '{}'
+                            '{}'
                         '</div>'
                     '</details>',
                     course.name,
@@ -1369,6 +1386,7 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                     course_status,
                     needs_section,
                     skills_section,
+                    history_section,
                 )
             )
 
@@ -1513,6 +1531,90 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             subskill_assessment.save(
                 update_fields=("rating", "updated_at")
             )
+
+    # -------------------------------------------------------------------------
+    # ASSESSMENT HISTORY
+    # Read-only historical records for one learner and course.
+    # -------------------------------------------------------------------------
+
+    def assessment_history(self, student, course):
+        assessments = (
+            StudentSkillAssessment.objects
+            .filter(student=student, course=course)
+            .prefetch_related("assessment_snapshots", "term_snapshots")
+        )
+
+        history = []
+
+        for assessment in assessments:
+            for snapshot in assessment.assessment_snapshots.all():
+                history.append({
+                    "date": snapshot.recorded_at,
+                    "skill": assessment.get_skill_display(),
+                    "type": "Skills assessment",
+                    "score": snapshot.score,
+                    "term": "",
+                    "pk": snapshot.pk,
+                })
+
+            for snapshot in assessment.term_snapshots.all():
+                history.append({
+                    "date": snapshot.recorded_at,
+                    "skill": assessment.get_skill_display(),
+                    "type": "Term assessment",
+                    "score": snapshot.score,
+                    "term": snapshot.term_label,
+                    "pk": snapshot.pk,
+                })
+
+        if not history:
+            return format_html(
+                '<p class="academic-needs__empty">{}</p>',
+                "No historical assessments have been recorded for this course.",
+            )
+
+        history.sort(
+            key=lambda item: (
+                item["date"].date()
+                if hasattr(item["date"], "date")
+                else item["date"],
+                item["pk"],
+            ),
+            reverse=True,
+        )
+
+        rows = format_html_join(
+            "",
+            '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>',
+            (
+                (
+                    date_format(item["date"], "j M Y, H:i")
+                    if hasattr(item["date"], "hour")
+                    else date_format(item["date"], "j M Y"),
+                    item["skill"],
+                    item["type"],
+                    item["term"] or "—",
+                    f'{item["score"]}/10',
+                )
+                for item in history
+            ),
+        )
+
+        return format_html(
+            '<div style="overflow-x:auto;">'
+                '<table style="width:100%;border-collapse:collapse;">'
+                    '<thead><tr>'
+                        '<th>Date</th>'
+                        '<th>Skill</th>'
+                        '<th>Assessment</th>'
+                        '<th>Term</th>'
+                        '<th>Score</th>'
+                    '</tr></thead>'
+                    '<tbody>{}</tbody>'
+                '</table>'
+            '</div>',
+            rows,
+        )
 
 
 # REGISTRATION ================================================================
