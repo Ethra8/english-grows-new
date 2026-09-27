@@ -1,3 +1,4 @@
+<!-- README -->
 # English Grows
 
 English Grows is a Django-based English language training platform designed for adult learners, teachers and corporate training environments.
@@ -3830,7 +3831,7 @@ The frontend uses namespaced assets under `placement/static/placement/`, includi
 
 The view validates that the selected question bank is complete, creates and verifies a session token, and builds the server-side answer form. Logged-in users may see their stored name/email as initial form values, but **authentication is not a prerequisite**. The result view obtains the completed attempt from the browser session and checks ownership where an attempt is linked to a user. The result response is private/no-store; public result pages are not intended to be indexed.
 
-The optional marketing preference is separate from the required assessment/privacy acknowledgement. Selecting the unchecked-by-default box now calls the `MarketingSubscriber` single-opt-in method during a successful submission; it is not needed for assessment grading or transactional result delivery. No additional subscription-confirmation email is sent. End-to-end persistence is still being tested.
+The optional marketing preference is separate from the required assessment/privacy acknowledgement. Selecting the unchecked-by-default box now calls the `MarketingSubscriber` single-opt-in method during a successful submission; it is not needed for assessment grading or transactional result delivery. No additional subscription-confirmation email is sent. The marketing choice does not affect grading or transactional result delivery.
 
 ### Placement Attempt Records and Historical Snapshots
 
@@ -4019,7 +4020,7 @@ student + course + skill
 
 combination.
 
-The model also stores teacher notes associated with the skill.
+The skill assessment stores the current structured subskill ratings; the obsolete `teacher_notes` field has been removed. Historical assessment snapshots remain separate from the editable current assessment.
 
 Rather than storing a manually entered overall percentage, the current skill score is calculated dynamically from the learner's assessed subskills.
 
@@ -5359,7 +5360,6 @@ erDiagram
         bigint student_id FK
         bigint course_id FK
         varchar skill
-        text teacher_notes
         datetime updated_at
     }
 
@@ -5861,7 +5861,6 @@ Courses
         └── Course-specific Learning Progress
                 ├── Skill Assessment
                 ├── Subskill Assessment
-                ├── Teacher Notes
                 └── Assessment Snapshots
 ```
 
@@ -6548,8 +6547,6 @@ StudentSkillAssessment
         │
         ├── Skill
         ├── Current aggregated score
-        ├── Teacher notes
-        │
         └── StudentSubSkillAssessment
                 ├── Subskill
                 └── Rating
@@ -7876,6 +7873,20 @@ This approach allows data visualisation to remain consistent with the wider **En
 ---
 
 Run the following commands from the **project root containing `manage.py`**, with the project's virtual environment active. The examples are reminders of the command and its purpose, not a replacement for checking the target environment before database-changing operations. Run database-mutating commands against the intended development or production configuration only.
+
+### Latest regression verification (27 September 2026)
+
+The latest full Django regression run completed successfully:
+
+```bash
+python manage.py test
+# Found 155 test(s).
+# Ran 155 tests — OK.
+```
+
+The Skills Assessment refactor removes the obsolete `StudentSkillAssessment.teacher_notes` field while retaining structured subskill ratings and assessment snapshots. Placement tests cover the current score bands (including 0–7 → Elementary/A1 and 49–50 → Proficiency/C2), public Turnstile acceptance/rejection and isolated transactional-email dispatch. Test doubles for Turnstile and email delivery are confined to tests; they do not bypass production verification or delivery.
+
+---
 
 ## Daily Development and Diagnostics
 

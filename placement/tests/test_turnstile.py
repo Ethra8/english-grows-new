@@ -10,8 +10,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from communications.models import MarketingSubscriber
-from .models import PlacementAttempt
-from .views import RESULT_KEY, TOKEN_KEY
+from ..models import PlacementAttempt
+from ..views import RESULT_KEY, TOKEN_KEY
 
 
 TEST_SITEKEY = "1x00000000000000000000AA"

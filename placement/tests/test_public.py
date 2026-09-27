@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from .models import PlacementAttempt, PlacementQuestion, TEST_VERSION
+from ..models import PlacementAttempt, PlacementQuestion, TEST_VERSION
 
 
 class PlacementPublicFlowTests(TestCase):

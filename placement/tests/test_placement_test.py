@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import SimpleTestCase, TestCase
 
-from .models import PlacementAttempt, PlacementQuestion, TEST_VERSION
+from ..models import PlacementAttempt, PlacementQuestion, TEST_VERSION
 
 
 class PlacementScoringTests(SimpleTestCase):
