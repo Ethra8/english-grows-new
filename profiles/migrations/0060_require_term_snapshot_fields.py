@@ -28,7 +28,7 @@ def remove_legacy_snapshots(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
+    atomic = False
     dependencies = [
         ("profiles", "0059_studenttermsubskillassessment_and_more"),
     ]
