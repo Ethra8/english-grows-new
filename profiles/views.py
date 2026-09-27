@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
+from django.db import transaction
+
 from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField, F, DateField, Exists, OuterRef
 from django.db.models.functions import Coalesce, Concat, Lower, NullIf, Trim
 
@@ -46,7 +48,6 @@ from .forms import (
     UserProfileForm,
     TeacherProfileForm,
     StudentAcademicProfileForm,
-    StudentSkillAssessmentForm,
     StudentSubSkillAssessmentFormSet,
     StudentNeedsAnalysisForm,
 )
@@ -1665,7 +1666,6 @@ def my_skills(request):
                 "course": None,
                 "skills": skills,
                 "has_skill_assessment": False,
-                "skill_notes": StudentSkillAssessment.objects.none(),
                 "skill_note_display": [],
                 "academic_profile": academic_profile,
                 "chart_data": {"labels": [], "datasets": []},
@@ -1697,19 +1697,6 @@ def my_skills(request):
     ]
 
     # ---------------------------------------------------------
-    # SKILL NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(teacher_notes="")
-        .order_by("skill")
-    )
-
-    # ---------------------------------------------------------
     # CHART DATA
     # ---------------------------------------------------------
     chart_data = build_skill_progress_chart_data(
@@ -1734,7 +1721,6 @@ def my_skills(request):
         # Skills
         "skills": skills,
         "has_skill_assessment": has_skill_assessment,
-        "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
 
         # Academic profile
@@ -1752,6 +1738,7 @@ def my_skills(request):
         "profiles/student/my_skills.html",
         context,
     )
+
 
 
 @login_required
@@ -1845,21 +1832,6 @@ def my_learning_progress_assessment(request):
         for skill_assessment in skill_assessments
     ]
 
-    # ---------------------------------------------------------
-    # TEACHER NOTES
-    # ---------------------------------------------------------
-    if course:
-        skill_notes = (
-            StudentSkillAssessment.objects
-            .filter(
-                student=student,
-                course=course,
-            )
-            .exclude(teacher_notes="")
-            .order_by("skill")
-        )
-    else:
-        skill_notes = StudentSkillAssessment.objects.none()
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -1884,7 +1856,6 @@ def my_learning_progress_assessment(request):
         "active_enrollment": enrollment,
 
         # Assessment
-        "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
     }
 
@@ -4013,7 +3984,6 @@ def build_skill_note_display(skill_assessment):
             if subskill.rating == "needs_work"
         ],
 
-        "plain_notes": skill_assessment.teacher_notes,
     }
 
 
@@ -5215,24 +5185,6 @@ def student_skills_overview(request, course_id, enrollment_id):
 
 
     # ---------------------------------------------------------
-    # TEACHER NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(
-            teacher_notes=""
-        )
-        .order_by(
-            "skill"
-        )
-    )
-
-
-    # ---------------------------------------------------------
     # ACADEMIC PROFILE
     # ---------------------------------------------------------
     academic_profile = getattr(
@@ -5289,7 +5241,6 @@ def student_skills_overview(request, course_id, enrollment_id):
         # Skills
         "skills": skills,
         "skill_assessments": skill_assessments,
-        "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
         # Overall current score
         "overall_average_score": overall_average_score,
@@ -5323,139 +5274,87 @@ def teacher_edit_student_skill(request, skill_assessment_id):
     # ---------------------------------------------------------
     skill_assessment = get_object_or_404(
         StudentSkillAssessment.objects
-        .select_related(
-            "student",
-            "course",
-        )
-        .prefetch_related(
-            "subskill_assessments",
-        ),
+        .select_related("student", "course")
+        .prefetch_related("subskill_assessments"),
         id=skill_assessment_id,
         course__teacher=request.user,
     )
 
     skill = StudentSkillAssessment.SKILL_AREA_CHOICES
 
-
     # ---------------------------------------------------------
     # POST
     # ---------------------------------------------------------
     if request.method == "POST":
-
-        form = StudentSkillAssessmentForm(
-            request.POST,
-            instance=skill_assessment,
-        )
-
         formset = StudentSubSkillAssessmentFormSet(
             request.POST,
             instance=skill_assessment,
         )
 
-
-        # -----------------------------------------------------
-        # VALID FORMS
-        # -----------------------------------------------------
-        if form.is_valid() and formset.is_valid():
+        if formset.is_valid():
 
             # -------------------------------------------------
-            # SAVE GENERAL SKILL FORM
+            # SAVE COMPLETE ASSESSMENT
             #
-            # Currently this saves teacher_notes.
+            # All rating changes and the historical snapshot
+            # are saved within the same database transaction.
+            #
+            # If any database operation fails, the transaction
+            # is rolled back.
             # -------------------------------------------------
-            form.save()
+            with transaction.atomic():
 
+                # ---------------------------------------------
+                # SAVE SUBSKILL RATINGS
+                #
+                # Individual subskill saves no longer create
+                # historical snapshots.
+                # ---------------------------------------------
+                formset.save()
 
-            # -------------------------------------------------
-            # SAVE SUBSKILL RATINGS
-            #
-            # IMPORTANT:
-            #
-            # Each StudentSubSkillAssessment is saved through
-            # its own model save() method.
-            #
-            # That model method:
-            # - checks whether the rating genuinely changed
-            # - ignores unrated subskills
-            # - recalculates the overall skill average
-            # - creates a StudentSkillAssessmentSnapshot
-            #   when a real rating is added or changed
-            #
-            # Therefore NO snapshot creation is needed here.
-            # -------------------------------------------------
-            formset.save()
+                # ---------------------------------------------
+                # CLEAR PREFETCH CACHE
+                #
+                # Ensure average_score uses the latest saved
+                # subskill ratings rather than cached values.
+                # ---------------------------------------------
+                if hasattr(skill_assessment, "_prefetched_objects_cache"):
+                    skill_assessment._prefetched_objects_cache = {}
 
+                # ---------------------------------------------
+                # CALCULATE FINAL SKILL AVERAGE
+                #
+                # Unrated subskills are excluded.
+                # ---------------------------------------------
+                final_score = skill_assessment.average_score
 
-            # -------------------------------------------------
-            # CLEAR PREFETCH CACHE
-            #
-            # skill_assessment was loaded with:
-            #
-            #     prefetch_related("subskill_assessments")
-            #
-            # After formset.save(), that cached queryset may
-            # still contain the old values.
-            #
-            # Clearing the cache ensures the newly saved
-            # ratings are used below.
-            # -------------------------------------------------
-            if hasattr(
-                skill_assessment,
-                "_prefetched_objects_cache",
-            ):
-                skill_assessment._prefetched_objects_cache = {}
-
-
-            # -------------------------------------------------
-            # REGENERATE TEACHER NOTES
-            #
-            # Uses the latest saved subskill ratings.
-            # -------------------------------------------------
-            skill_assessment.teacher_notes = (
-                skill_assessment.generate_teacher_notes()
-            )
-
+                # ---------------------------------------------
+                # CREATE ONE ONGOING ASSESSMENT SNAPSHOT
+                #
+                # Every valid explicit assessment submission
+                # creates one historical record, even when
+                # the submitted ratings remain unchanged.
+                #
+                # An entirely unrated skill has no score and
+                # therefore produces no snapshot.
+                # ---------------------------------------------
+                if final_score is not None:
+                    StudentSkillAssessmentSnapshot.objects.create(
+                        skill_assessment=skill_assessment,
+                        score=final_score,
+                    )
 
             # -------------------------------------------------
-            # SAVE GENERATED NOTES
+            # WRITTEN FEEDBACK
             #
-            # Do NOT create a snapshot here.
+            # Do NOT regenerate teacher_notes here.
             #
-            # Snapshot creation belongs to:
-            #
-            # StudentSubSkillAssessment.save()
-            #
-            # because the snapshot represents an actual
-            # subskill assessment change.
+            # Written feedback will be generated separately
+            # through an explicit teacher/admin action.
             # -------------------------------------------------
-            skill_assessment.save(
-                update_fields=[
-                    "teacher_notes",
-                    "updated_at",
-                ]
-            )
-
-
-            # -------------------------------------------------
-            # IMPORTANT:
-            # NO StudentSkillTermSnapshot HERE
-            #
-            # StudentSkillTermSnapshot is reserved for formal
-            # term assessments only.
-            #
-            # Ordinary teacher changes are stored as:
-            #
-            # StudentSkillAssessmentSnapshot
-            #
-            # via StudentSubSkillAssessment.save().
-            # -------------------------------------------------
-
 
             # -------------------------------------------------
             # GET COURSE ENROLLMENT
-            #
-            # Needed for redirect back to the teacher's
-            # student skills overview.
             # -------------------------------------------------
             enrollment = get_object_or_404(
                 CourseEnrollment,
@@ -5463,9 +5362,8 @@ def teacher_edit_student_skill(request, skill_assessment_id):
                 course=skill_assessment.course,
             )
 
-
             # -------------------------------------------------
-            # REDIRECT
+            # REDIRECT TO STUDENT SKILLS OVERVIEW
             # -------------------------------------------------
             return redirect(
                 "profiles:student_skills_overview",
@@ -5473,35 +5371,23 @@ def teacher_edit_student_skill(request, skill_assessment_id):
                 enrollment_id=enrollment.id,
             )
 
-
     # ---------------------------------------------------------
     # GET
     # ---------------------------------------------------------
     else:
-
-        form = StudentSkillAssessmentForm(
-            instance=skill_assessment,
-        )
-
         formset = StudentSubSkillAssessmentFormSet(
             instance=skill_assessment,
         )
-
 
     # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
         "skill_assessment": skill_assessment,
-        "form": form,
         "formset": formset,
         "skill": skill,
     }
 
-
-    # ---------------------------------------------------------
-    # RENDER
-    # ---------------------------------------------------------
     return render(
         request,
         "profiles/teacher/teacher_edit_student_skill.html",
@@ -5789,18 +5675,6 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
 
     skills = []
 
-    # ---------------------------------------------------------
-    # TEACHER NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(teacher_notes="")
-        .order_by("skill")
-    )
 
     # ---------------------------------------------------------
     # CONTEXT
@@ -5819,7 +5693,6 @@ def teacher_student_assessment_notes(request, course_id, enrollment_id):
         "student_profile": student_profile,
 
         "skills": skills,
-        "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
 
         "level_choices": UserProfile.LEVEL_CHOICES,
@@ -5997,145 +5870,6 @@ def teacher_calendar_events(request):
         events.append(event)
 
     return JsonResponse(events, safe=False)
-
-
-# =========================================================
-# COMPANY ADMIN CALENDAR EVENTS
-# =========================================================
-
-@login_required
-def company_admin_calendar_events(request):
-    profile = get_object_or_404(
-        UserProfile.objects.select_related("company"),
-        user=request.user,
-    )
-
-    if profile.role != UserProfile.ROLE_COMPANY_ADMIN or not profile.company:
-        return JsonResponse([], safe=False)
-
-    start = request.GET.get("start")
-    end = request.GET.get("end")
-    now = timezone.now()
-
-    # Current/upcoming: scheduled, rescheduled.
-    # Historical: held_attendance_pending, complete_attendance_submitted.
-    # Excluded: pending_reschedule, cancelled.
-    sessions = (
-        ClassSession.objects
-        .filter(
-            course__company=profile.company,
-            status__in=[
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_RESCHEDULED,
-                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
-                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
-            ],
-        )
-        .select_related(
-            "course",
-            "course__teacher",
-            "course__teacher__profile",
-            "course__company",
-        )
-        .order_by("start_time")
-    )
-
-    bank_holidays = BankHoliday.objects.filter(is_active=True).order_by("start_date")
-
-    # FullCalendar visible range.
-    if start and end:
-        start_datetime = parse_datetime(start)
-        end_datetime = parse_datetime(end)
-
-        if start_datetime and end_datetime:
-            sessions = sessions.filter(
-                start_time__gte=start_datetime,
-                start_time__lt=end_datetime,
-            )
-            bank_holidays = (
-                bank_holidays
-                .filter(start_date__lt=end_datetime.date())
-                .filter(
-                    Q(end_date__isnull=True)
-                    | Q(end_date__gte=start_datetime.date())
-                )
-            )
-
-    events = []
-
-    for session in sessions:
-        status_class = {
-            "confirmed": "course-confirmed-event",
-            "paused": "course-paused-event",
-            "cancelled": "course-cancelled-event",
-        }.get(session.course.status, "")
-
-        teacher = session.course.teacher
-        teacher_name = (
-            teacher.get_full_name() or teacher.email
-            if teacher
-            else "Not assigned"
-        )
-
-        # Temporal state is separate from lifecycle state.
-        is_past = (
-            session.end_time <= now
-            if session.end_time
-            else session.start_time < now
-        )
-
-        # Historical held sessions remain visible but are not joinable.
-        is_joinable = (
-            not is_past
-            and session.status in [
-                ClassSession.STATUS_SCHEDULED,
-                ClassSession.STATUS_RESCHEDULED,
-            ]
-        )
-
-        events.append({
-            "id": session.id,
-            "title": session.title,
-            "start": session.start_time.isoformat(),
-            "end": session.end_time.isoformat() if session.end_time else None,
-            "className": status_class,
-            "extendedProps": {
-                "type": "class_session",
-                "course": session.course.name,
-                "course_status": session.course.status,
-                "class_number": session.class_number,
-                "status": session.status,
-                "is_past": is_past,
-                "meeting_link": (
-                    get_calendar_meeting_link(session)
-                    if is_joinable else None
-                ),
-                "teacher": teacher_name,
-                "group_details_url": reverse(
-                    "profiles:company_admin_course_details",
-                    args=[session.course.id],
-                ),
-            },
-        })
-
-    for holiday in bank_holidays:
-        event = {
-            "id": f"holiday-{holiday.id}",
-            "title": holiday.title,
-            "start": holiday.start_date.isoformat(),
-            "allDay": True,
-            "display": "block",
-            "className": "bank-holiday-event",
-            "extendedProps": {"type": "bank_holiday"},
-        }
-
-        if holiday.end_date:
-            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
-
-        events.append(event)
-
-    return JsonResponse(events, safe=False)
-
 
 
 
@@ -6538,62 +6272,6 @@ def teacher_reschedule_classes(request):
 
 
 
-# TEACHER PROFILE SETTINGS
-@login_required
-def teacher_profile_settings(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-
-    if user_profile.role != UserProfile.ROLE_TEACHER:
-        return redirect("home")
-
-    teacher_profile, _ = TeacherProfile.objects.get_or_create(
-        user=request.user
-    )
-
-    if request.method == "POST":
-        user_form = UserProfileForm(
-            request.POST,
-            request.FILES,
-            instance=user_profile,
-            user=request.user
-        )
-
-        teacher_form = TeacherProfileForm(
-            request.POST,
-            instance=teacher_profile
-        )
-
-        if user_form.is_valid() and teacher_form.is_valid():
-            user_form.save()
-            teacher_form.save()
-
-            messages.success(request, "Your teacher profile has been updated.")
-            return redirect("profiles:teacher_profile_settings")
-
-    else:
-        user_form = UserProfileForm(
-            instance=user_profile,
-            user=request.user
-        )
-
-        teacher_form = TeacherProfileForm(
-            instance=teacher_profile
-        )
-
-    context = {
-        "profile": user_profile,
-        "teacher_profile": teacher_profile,
-        "user_form": user_form,
-        "teacher_form": teacher_form,
-    }
-
-    return render(
-        request,
-        "profiles/teacher/teacher_profile_settings.html",
-        context
-    )
-
-
 # CHOOSE NEW TIME & DATE
 # To Reschedule Pending Class
 @login_required
@@ -6653,6 +6331,63 @@ def reschedule_class_detail(request, session_id):
             "session": session,
         }
     )
+
+
+# TEACHER PROFILE SETTINGS
+@login_required
+def teacher_profile_settings(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if user_profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    teacher_profile, _ = TeacherProfile.objects.get_or_create(
+        user=request.user
+    )
+
+    if request.method == "POST":
+        user_form = UserProfileForm(
+            request.POST,
+            request.FILES,
+            instance=user_profile,
+            user=request.user
+        )
+
+        teacher_form = TeacherProfileForm(
+            request.POST,
+            instance=teacher_profile
+        )
+
+        if user_form.is_valid() and teacher_form.is_valid():
+            user_form.save()
+            teacher_form.save()
+
+            messages.success(request, "Your teacher profile has been updated.")
+            return redirect("profiles:teacher_profile_settings")
+
+    else:
+        user_form = UserProfileForm(
+            instance=user_profile,
+            user=request.user
+        )
+
+        teacher_form = TeacherProfileForm(
+            instance=teacher_profile
+        )
+
+    context = {
+        "profile": user_profile,
+        "teacher_profile": teacher_profile,
+        "user_form": user_form,
+        "teacher_form": teacher_form,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_profile_settings.html",
+        context
+    )
+
 
 
 
@@ -9469,6 +9204,11 @@ def company_admin_student_skills_overview(request, student_id):
     # NO ENROLLMENTS
     # ---------------------------------------------------------
     if not enrollment:
+        _, skills = build_student_skill_cards(
+            student=student,
+            course=None,
+            build_skill_note_display=build_skill_note_display,
+        )
         context = {
             "profile": profile,
             "company": company,
@@ -9479,7 +9219,7 @@ def company_admin_student_skills_overview(request, student_id):
             "enrollments": enrollments,
             "enrollment": None,
             "course": None,
-            "skills": [],
+            "skills": skills,
             "academic_profile": getattr(
                 student,
                 "academic_profile",
@@ -9489,7 +9229,6 @@ def company_admin_student_skills_overview(request, student_id):
                 "labels": [],
                 "datasets": [],
             },
-            "skill_notes": [],
             "skill_note_display": [],
         }
 
@@ -9542,20 +9281,6 @@ def company_admin_student_skills_overview(request, student_id):
         for skill_assessment in skill_assessments
     ]
 
-    # ---------------------------------------------------------
-    # SKILL NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(
-            teacher_notes=""
-        )
-        .order_by("skill")
-    )
 
     # ---------------------------------------------------------
     # ACADEMIC PROFILE
@@ -9599,7 +9324,6 @@ def company_admin_student_skills_overview(request, student_id):
         # Chart
         "chart_data": chart_data,
         # Notes
-        "skill_notes": skill_notes,
         "skill_note_display":
             skill_note_display,
     }
@@ -10075,7 +9799,6 @@ def company_admin_student_teacher_notes(request, student_id):
 
             # Assessment
             "skills": [],
-            "skill_notes": StudentSkillAssessment.objects.none(),
             "skill_note_display": [],
         }
 
@@ -10121,19 +9844,6 @@ def company_admin_student_teacher_notes(request, student_id):
     skills = []
 
     # ---------------------------------------------------------
-    # TEACHER NOTES
-    # ---------------------------------------------------------
-    skill_notes = (
-        StudentSkillAssessment.objects
-        .filter(
-            student=student,
-            course=course,
-        )
-        .exclude(teacher_notes="")
-        .order_by("skill")
-    )
-
-    # ---------------------------------------------------------
     # CONTEXT
     # ---------------------------------------------------------
     context = {
@@ -10156,7 +9866,6 @@ def company_admin_student_teacher_notes(request, student_id):
 
         # Assessment
         "skills": skills,
-        "skill_notes": skill_notes,
         "skill_note_display": skill_note_display,
     }
 
@@ -10368,33 +10077,16 @@ def company_admin_calendar_events(request):
         user=request.user,
     )
 
-    if (
-        profile.role != UserProfile.ROLE_COMPANY_ADMIN
-        or not profile.company
-    ):
+    if profile.role != UserProfile.ROLE_COMPANY_ADMIN or not profile.company:
         return JsonResponse([], safe=False)
 
     start = request.GET.get("start")
     end = request.GET.get("end")
     now = timezone.now()
 
-    # ---------------------------------------------------------
-    # CLASS SESSIONS
-    #
-    # Visible lifecycle states:
-    #
-    # Current / upcoming:
-    # - scheduled
-    # - rescheduled
-    #
-    # Historical:
-    # - held_attendance_pending
-    # - complete_attendance_submitted
-    #
-    # Excluded:
-    # - pending_reschedule
-    # - cancelled
-    # ---------------------------------------------------------
+    # Current/upcoming: scheduled, rescheduled.
+    # Historical: held_attendance_pending, complete_attendance_submitted.
+    # Excluded: pending_reschedule, cancelled.
     sessions = (
         ClassSession.objects
         .filter(
@@ -10415,15 +10107,9 @@ def company_admin_calendar_events(request):
         .order_by("start_time")
     )
 
-    bank_holidays = (
-        BankHoliday.objects
-        .filter(is_active=True)
-        .order_by("start_date")
-    )
+    bank_holidays = BankHoliday.objects.filter(is_active=True).order_by("start_date")
 
-    # ---------------------------------------------------------
-    # FULLCALENDAR DATE RANGE
-    # ---------------------------------------------------------
+    # FullCalendar visible range.
     if start and end:
         start_datetime = parse_datetime(start)
         end_datetime = parse_datetime(end)
@@ -10433,7 +10119,6 @@ def company_admin_calendar_events(request):
                 start_time__gte=start_datetime,
                 start_time__lt=end_datetime,
             )
-
             bank_holidays = (
                 bank_holidays
                 .filter(start_date__lt=end_datetime.date())
@@ -10445,49 +10130,28 @@ def company_admin_calendar_events(request):
 
     events = []
 
-    # ---------------------------------------------------------
-    # CLASS SESSION EVENTS
-    # ---------------------------------------------------------
     for session in sessions:
-        status_class = ""
-
-        if session.course.status == "confirmed":
-            status_class = "course-confirmed-event"
-
-        elif session.course.status == "paused":
-            status_class = "course-paused-event"
-
-        elif session.course.status == "cancelled":
-            status_class = "course-cancelled-event"
+        status_class = {
+            "confirmed": "course-confirmed-event",
+            "paused": "course-paused-event",
+            "cancelled": "course-cancelled-event",
+        }.get(session.course.status, "")
 
         teacher = session.course.teacher
+        teacher_name = (
+            teacher.get_full_name() or teacher.email
+            if teacher
+            else "Not assigned"
+        )
 
-        if teacher:
-            teacher_name = teacher.get_full_name() or teacher.email
-        else:
-            teacher_name = "Not assigned"
-
-        # -----------------------------------------------------
-        # TEMPORAL STATE
-        #
-        # Lifecycle state and temporal state remain separate.
-        # -----------------------------------------------------
+        # Temporal state is separate from lifecycle state.
         is_past = (
             session.end_time <= now
             if session.end_time
             else session.start_time < now
         )
 
-        # -----------------------------------------------------
-        # JOINABILITY
-        #
-        # Only genuine current/upcoming teaching slots expose
-        # a meeting link.
-        #
-        # Held attendance-pending and attendance-submitted
-        # sessions remain visible historically but are no
-        # longer joinable.
-        # -----------------------------------------------------
+        # Historical held sessions remain visible but are not joinable.
         is_joinable = (
             not is_past
             and session.status in [
@@ -10500,32 +10164,20 @@ def company_admin_calendar_events(request):
             "id": session.id,
             "title": session.title,
             "start": session.start_time.isoformat(),
-            "end": (
-                session.end_time.isoformat()
-                if session.end_time
-                else None
-            ),
+            "end": session.end_time.isoformat() if session.end_time else None,
             "className": status_class,
             "extendedProps": {
                 "type": "class_session",
                 "course": session.course.name,
                 "course_status": session.course.status,
                 "class_number": session.class_number,
-
-                # Lifecycle and chronology exposed separately.
                 "status": session.status,
                 "is_past": is_past,
-
-                # Only current/upcoming scheduled/rescheduled
-                # lessons may expose a meeting link.
                 "meeting_link": (
                     get_calendar_meeting_link(session)
-                    if is_joinable
-                    else None
+                    if is_joinable else None
                 ),
-
                 "teacher": teacher_name,
-
                 "group_details_url": reverse(
                     "profiles:company_admin_course_details",
                     args=[session.course.id],
@@ -10533,9 +10185,6 @@ def company_admin_calendar_events(request):
             },
         })
 
-    # ---------------------------------------------------------
-    # BANK HOLIDAYS
-    # ---------------------------------------------------------
     for holiday in bank_holidays:
         event = {
             "id": f"holiday-{holiday.id}",
@@ -10544,20 +10193,15 @@ def company_admin_calendar_events(request):
             "allDay": True,
             "display": "block",
             "className": "bank-holiday-event",
-            "extendedProps": {
-                "type": "bank_holiday",
-            },
+            "extendedProps": {"type": "bank_holiday"},
         }
 
         if holiday.end_date:
-            event["end"] = (
-                holiday.end_date + timedelta(days=1)
-            ).isoformat()
+            event["end"] = (holiday.end_date + timedelta(days=1)).isoformat()
 
         events.append(event)
 
     return JsonResponse(events, safe=False)
-
 
 
 

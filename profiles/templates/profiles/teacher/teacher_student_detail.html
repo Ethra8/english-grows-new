@@ -172,102 +172,41 @@
 
 
                 <div class="current-course-block">
-
                     <div class="d-flex flex-column">
-
                         <div class="student-ring-layout">
 
-                            <div
-                                class="progress-ring"
-                                style="--percentage: {{ delivery_percentage }};"
-                            >
-
+                            <div class="progress-ring" style="--percentage: {{ delivery_percentage }};">
                                 <div class="progress-ring-inner">
-
-                                    <strong>
-                                        {{ delivery_percentage }}%
-                                    </strong>
-
-                                    <span>
-                                        {% trans 'Completed' %}
-                                    </span>
-
+                                    <strong>{{ delivery_percentage }}%</strong>
+                                    <span>{% trans 'delivered' context 'course details page' %}</span>
                                 </div>
-
                             </div>
-
 
                             <div class="student-stat-list">
 
                                 <div class="detail-row">
-
-                                    {% if course.status == "completed" or course.status == "confirmed" %}
-
-                                        <strong>
-                                            {% trans 'Dates' %}
-                                        </strong>
-
-                                        <span>
-                                            {{ course.start_date|date:"j M"|default:"?" }}
-                                            -
-                                            {{ course.end_date|date:"j M 'y"|default:"?" }}
-                                        </span>
-
-                                    {% elif course.status == "active" %}
-
-                                        <strong>
-                                            {% trans 'Timetable' %}
-                                        </strong>
-
-                                        <span>
-
-                                            {% if formatted_timetable %}
-
-                                                {% for timetable in formatted_timetable %}
-
-                                                    {{ timetable.days }}
-                                                    <br>
-                                                    {{ timetable.start }} - {{ timetable.end }}
-
-                                                    {% if not forloop.last %}
-                                                        <br>
-                                                    {% endif %}
-
-                                                {% endfor %}
-
-                                            {% else %}
-
-                                                {% trans 'Pending' %}
-
-                                            {% endif %}
-
-                                        </span>
-
-                                    {% endif %}
-
+                                    <strong>{% trans 'Dates' %}</strong>
+                                    <span>{{ course.start_date|date:"j M"|default:"?" }} - {{ course.end_date|date:"j M 'y"|default:"?" }}</span>
                                 </div>
 
-
                                 <div class="detail-row">
-
-                                    <strong>
-                                        {% trans 'Completed Hours' %}:
-                                    </strong>
-
+                                    <strong>{% trans 'Timetable' %}</strong>
                                     <span>
-                                        {{ completed_hours_display }} / {{ total_hours_display }}
+                                        {% if formatted_timetable %}
+                                            {% for timetable in formatted_timetable %}
+                                                {{ timetable.days }}<br>
+                                                {{ timetable.start }} - {{ timetable.end }}{% if not forloop.last %}<br>{% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {% trans 'Pending' %}
+                                        {% endif %}
                                     </span>
-
                                 </div>
 
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </article>
 
 
@@ -309,28 +248,19 @@
                         <div class="student-stat-list">
 
                             <div class="detail-row">
-
-                                <strong>
-                                    {% trans 'Total Attendance' %}:
-                                </strong>
-
+                                <strong>{% trans 'Total Attendance' %}:</strong>
                                 <span>
                                     {{ attended_count }} / {{ total_attendance_records }}
+                                    <small>{% trans 'submitted records' context 'course details page attendance' %}</small>
                                 </span>
-
                             </div>
 
-
                             <div class="detail-row">
-
-                                <strong>
-                                    {% trans 'Hours Attended' %}:
-                                </strong>
-
+                                <strong>{% trans 'Hours Attended' %}:</strong>
                                 <span>
-                                    {{ attended_hours_display }} / {{ completed_hours_display }}
+                                    {{ attended_hours_display }} / {{ submitted_hours_display }}
+                                    <small>{% trans 'submitted' context 'course details page attendance' %}</small>
                                 </span>
-
                             </div>
 
                         </div>

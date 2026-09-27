@@ -26,13 +26,12 @@ urlpatterns = [
     # Teacher ATTENDANCE: Group Record/ Take/ Update 
     path("teacher/teacher_attendance/", views.teacher_attendance, name="teacher_attendance"),
     path("teacher/attendance/<int:session_id>/take/", views.teacher_take_attendance, name="teacher_take_attendance"),
-    path("teacher/attendance/<int:session_id>/detail/", views.teacher_attendance_detail, name="teacher_attendance_detail"),
     # Teacher COURSES
     path("teacher/courses/", views.teacher_courses, name="teacher_courses"),
     # Teacher COURSE DETAILS
     path("teacher/courses/<int:course_id>/", views.teacher_course_details, name="teacher_course_details"),
     path("teacher/courses/<int:course_id>/attendance/", views.teacher_course_attendance, name="teacher_course_attendance"),
-    path("teacher/sessions/<int:session_id>/attendance/", views.teacher_attendance_detail, name="teacher_attendance_detail"),
+    path("teacher/sessions/<int:session_id>/attendance_detail/", views.teacher_attendance_detail, name="teacher_attendance_detail"),
     path("teacher/courses/<int:course_id>/enrollments/", views.teacher_course_students_list, name="teacher_course_students_list"),
     # Teacher STUDENT DETAILS
     path("teacher/courses/<int:course_id>/enrollments/<int:enrollment_id>/",views.teacher_student_detail, name="teacher_student_detail"),

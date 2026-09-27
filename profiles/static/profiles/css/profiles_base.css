@@ -492,9 +492,9 @@ div:has(> .student-action-btn) {
 }
 
 .status-badge.today {
-    background: var(--color_frozen-water);
+    background: var(--color-frozen-water);
     color: var(--color-navy);
-    border: 1px outset var(--color_frozen-water) !important;
+    border: 1px outset var(--color-frozen-water) !important;
 }
 
 .status-badge.active,

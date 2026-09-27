@@ -72,7 +72,7 @@
 }
 
 .company-attendance-summary .attendance-summary-card strong {
-    color: var(--color_frozen-water);
+    color: var(--color-frozen-water);
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 1;

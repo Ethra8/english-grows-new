@@ -1,11 +1,10 @@
-# Adding all forms here allows models/admin to access them
-# although they have been moved to forms/ folder
-# So no further update is needed
+# Expose forms and formsets from their individual modules.
+# Other modules can import them directly from profiles.forms
+# without needing to know their individual file locations.
 
 from .profile import UserProfileForm, TeacherProfileForm
 from .academic_profile import StudentAcademicProfileForm
 from .skill_assessment import (
-    StudentSkillAssessmentForm,
     StudentSubSkillAssessmentInlineForm,
     StudentSubSkillAssessmentFormSet,
 )

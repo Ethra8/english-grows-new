@@ -3,7 +3,7 @@
 }
 
 h2 {
-   color: var(--color_frozen-water); 
+   color: var(--color-frozen-water); 
 }
 
 
@@ -124,7 +124,7 @@ h2 {
     color: var(--color-navy);
     font-weight: 600;
     border: outset 2px var(--color-pearlaqua);
-    background: var(--color_frozen-water);
+    background: var(--color-frozen-water);
     background: linear-gradient(195deg,rgba(193, 247, 227, 1) 0%, rgba(var(--color-pearlaqua-rgb), 1) 100%);
     color: var(--color-navy);
     box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
@@ -214,7 +214,7 @@ h2 {
 
 /* BOTH COLUMNS */
 .wrapper-course-detail-cards h4 i {
-    color: var(--color_frozen-water) ;
+    color: var(--color-frozen-water) ;
 }
 
 .course-detail-grid {
@@ -281,7 +281,7 @@ h2 {
 }
 
 .wrapper-course-detail-cards h3 {
-    color: var(--color_frozen-water);
+    color: var(--color-frozen-water);
     font-family: "Big Shoulders Display", sans-serif;
     letter-spacing: 0.03em;
 }
@@ -325,7 +325,7 @@ h2 {
 }
 
 .student-row span {
-    color: var(--color_frozen-water);
+    color: var(--color-frozen-water);
     display: grid;
 }
 
@@ -365,6 +365,47 @@ h2 {
 }
 
 
+/* TEACHER SKILL CARD TOOLBAR *********************************/
+
+.skill-subskills-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.skill-subskills-toolbar .skill-subskills-count {
+    flex: 1;
+    min-width: 0;
+}
+
+.skill-subskills-toolbar .skill-edit-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--color-teal);
+    border-radius: 0.35rem;
+    background: transparent;
+    color: var(--color-teal);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.skill-subskills-toolbar .skill-edit-button:hover,
+.skill-subskills-toolbar .skill-edit-button:focus-visible {
+    background: var(--color-teal);
+    color: #fff;
+}
+
+.skill-subskills-toolbar .skill-accordion-toggle {
+    flex: 0 0 auto;
+    width: auto;
+}
+
 /************************************************|
 **** EDIT STD SKILLS Page *************|
 *********************************************** */
@@ -377,33 +418,36 @@ h2 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     border-radius: 8px;
-    padding: 1rem;
 }
 
 .subskills-edit-list-four {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1rem;
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
+    /* background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75)); */
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
     border-radius: 8px;
-    padding: 1rem;
 }
 
 .subskill-edit-card {
-    background: rgba(var(--color-navy-rgb), 0.95);
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
+    /* background: rgba(var(--color-navy-rgb), 0.95); */
+    background: var(--color-whitesmoke);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.35);
     padding: 1rem 1rem 0.25rem;
     border-radius: 8px;
     width: 100%;
 }
 
-.subskill-edit-card h3 {
-    color:var(--color-pearlaqua);
+.subskill-edit-card h2,
+.skill-notes-card h2 {
+    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
+    color:var(--color-whitesmoke);
     font-weight: 400;
+    border-radius: 999px;
+    padding: 0 1rem;
+    font-size: 1.5rem;
 }
 
 .subskill-edit-card .form-group {
@@ -415,6 +459,11 @@ h2 {
     border-radius: 8px !important;
     margin-left: 0.5rem !important;
     width: 160px;
+    padding: 0.25rem;
+}
+
+.subskill-edit-card .form-group label {
+    color: var(--color-slate);
 }
 
 .subskill-edit-card p,
@@ -423,16 +472,22 @@ h2 {
 }
 
 .skill-notes-card {
-    background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.95), rgba(var(--color-teal-rgb), 0.75));
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.35);
+    background: var(--color-whitesmoke);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.35);
     border-radius: 8px;
     padding: 1rem;
-    margin-top: 1rem;
+    margin-top: 2.75rem;
 }
 
 .skill-notes-card p {
-    color: var(--color-whitesmoke);
+    color: var(--color-slate);
 }
+
+.btn.btn-skill-save-assessment{
+    border: 1px solid var(--color-teal) !important;
+}
+
+
 
 /******************************************************/
 /* RESCHEDULE Pages *********************************** */

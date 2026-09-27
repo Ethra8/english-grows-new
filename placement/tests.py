@@ -1,3 +1,4 @@
+
 from collections import Counter
 from io import StringIO
 
@@ -12,12 +13,12 @@ from .models import PlacementAttempt, PlacementQuestion, TEST_VERSION
 class PlacementScoringTests(SimpleTestCase):
     def test_placement_boundaries(self):
         cases = (
-            (0, "foundation", ""), (7, "foundation", ""),
-            (8, "elementary", "A1"), (14, "elementary", "A1"),
-            (15, "pre_intermediate", "A2"), (24, "pre_intermediate", "A2"),
-            (25, "intermediate", "B1"), (33, "intermediate", "B1"),
-            (34, "upper_intermediate", "B2"), (44, "upper_intermediate", "B2"),
-            (45, "advanced", "C1"), (50, "advanced", "C1"),
+            (0, "elementary", "A1"), (7, "elementary", "A1"),
+            (8, "pre_intermediate", "A2"), (14, "pre_intermediate", "A2"),
+            (15, "intermediate", "B1"), (24, "intermediate", "B1"),
+            (25, "upper_intermediate", "B2"), (37, "upper_intermediate", "B2"),
+            (38, "advanced", "C1"), (48, "advanced", "C1"),
+            (49, "proficiency", "C2"), (50, "proficiency", "C2"),
         )
         for score, level, cefr in cases:
             with self.subTest(score=score):
@@ -64,14 +65,14 @@ class PlacementQuestionBankTests(TestCase):
         answers = {str(q.number): q.correct_answer for q in PlacementQuestion.objects.filter(version=TEST_VERSION)}
         self.assertIn("D", answers.values())
         attempt = PlacementAttempt(name="Test Learner", email="learner@example.com", answers=answers).grade()
-        self.assertEqual((attempt.score, attempt.recommended_level, attempt.cefr_reference), (50, "advanced", "C1"))
+        self.assertEqual((attempt.score, attempt.recommended_level, attempt.cefr_reference), (50, "proficiency", "C2"))
         self.assertEqual(len(attempt.answer_snapshot), 50)
         self.assertTrue(all(row["is_correct"] for row in attempt.answer_snapshot.values()))
         self.assertEqual(len(attempt.answer_snapshot["1"]["options"]), 4)
 
     def test_unanswered_questions_score_zero(self):
         attempt = PlacementAttempt(name="Test Learner", email="learner@example.com", answers={}).grade()
-        self.assertEqual((attempt.score, attempt.recommended_level), (0, "foundation"))
+        self.assertEqual((attempt.score, attempt.recommended_level, attempt.cefr_reference), (0, "elementary", "A1"))
         self.assertIsNone(attempt.answer_snapshot["1"]["selected"])
 
     def test_invalid_answer_is_rejected(self):

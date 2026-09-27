@@ -278,7 +278,7 @@
 }
 
 .academic-needs-status--reviewed {
-    background: var(--color_frozen-water, #E4FFF4);
+    background: var(--color-frozen-water, #E4FFF4);
     color: var(--color-teal, #006b7d);
 }
 

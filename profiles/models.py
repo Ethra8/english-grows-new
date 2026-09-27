@@ -501,8 +501,6 @@ class StudentSkillAssessment(models.Model):
         choices=SKILL_AREA_CHOICES,
     )
 
-    teacher_notes = models.TextField(blank=True)
-
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -548,67 +546,10 @@ class StudentSkillAssessment(models.Model):
         )
 
 
-    def generate_teacher_notes(self):
-        subskills = self.subskill_assessments.all()
 
-        if not subskills.exists():
-            return ""
-
-        strengths = []
-        confident = []
-        required_standard = []
-        developing = []
-        needs_work = []
-
-        for subskill in subskills:
-            label = subskill.get_subskill_display()
-
-            if subskill.rating == "strong":
-                strengths.append(label)
-
-            elif subskill.rating == "confident":
-                confident.append(label)
-
-            elif subskill.rating == "required_standard":
-                required_standard.append(label)
-
-            elif subskill.rating == "developing":
-                developing.append(label)
-
-            elif subskill.rating == "needs_work":
-                needs_work.append(label)
-
-
-        notes = []
-
-        if strengths:
-            notes.append(
-                f"Key strengths: {', '.join(strengths)}."
-            )
-
-        if confident:
-            notes.append(
-                f"Confident in: {', '.join(confident)}."
-            )
-
-        if required_standard:
-            notes.append(
-                f"Required standard achieved: {', '.join(required_standard)}."
-            )
-
-        if developing:
-            notes.append(
-                f"Developing: {', '.join(developing)}."
-            )
-
-        if needs_work:
-            notes.append(
-                f"Focus areas: {', '.join(needs_work)}."
-            )
-
-        return "\n".join(notes)
-
-
+# =========================================================
+# STUDENT SUBSKILL ASSESSMENT
+# =========================================================
 class StudentSubSkillAssessment(models.Model):
 
     class Rating(models.TextChoices):
@@ -657,6 +598,7 @@ class StudentSubSkillAssessment(models.Model):
         choices=SUBSKILL_CHOICES,
     )
 
+    # An unrated subskill is represented by a blank/NULL rating.
     rating = models.CharField(
         max_length=30,
         choices=Rating.choices,
@@ -680,63 +622,34 @@ class StudentSubSkillAssessment(models.Model):
         """
         Return the numeric representation of this
         subskill assessment on a 0-10 scale.
+
+        Unrated subskills return None.
         """
         if not self.rating:
             return None
 
         return self.SCORE_BY_RATING.get(self.rating)
 
-    def save(self, *args, **kwargs):
-        """
-        Save the subskill assessment.
-
-        Create a historical snapshot ONLY when:
-        - a real teacher rating is assigned for the first time, or
-        - an existing teacher rating is changed.
-
-        Saving an unrated subskill does NOT create a snapshot.
-        """
-
-        previous_rating = None
-
-        # -----------------------------------------------------
-        # GET PREVIOUS RATING
-        # -----------------------------------------------------
-        if self.pk:
-            previous_rating = (
-                StudentSubSkillAssessment.objects
-                .filter(pk=self.pk)
-                .values_list("rating", flat=True)
-                .first()
-            )
-
-        # A real assessment exists only when rating is not blank/null.
-        has_real_rating = bool(self.rating)
-
-        rating_changed = (
-            has_real_rating
-            and previous_rating != self.rating
-        )
-
-        # -----------------------------------------------------
-        # SAVE FIRST
-        #
-        # The new rating must exist in the DB before calculating
-        # the new overall skill average.
-        # -----------------------------------------------------
-        super().save(*args, **kwargs)
-
-        # -----------------------------------------------------
-        # CREATE HISTORICAL SNAPSHOT
-        # -----------------------------------------------------
-        if rating_changed:
-            current_score = self.skill_assessment.average_score
-
-            if current_score is not None:
-                StudentSkillAssessmentSnapshot.objects.create(
-                    skill_assessment=self.skill_assessment,
-                    score=current_score,
-                )
+    # ---------------------------------------------------------
+    # ASSESSMENT HISTORY
+    #
+    # No custom save() method is required.
+    #
+    # This model stores the CURRENT rating of one subskill.
+    # Saving an individual rating must NOT create a historical
+    # assessment snapshot.
+    #
+    # The teacher_edit_student_skill() view is responsible for:
+    # 1. Validating the complete subskill formset.
+    # 2. Saving all submitted ratings.
+    # 3. Calculating the final overall skill average.
+    # 4. Creating ONE ongoing assessment snapshot.
+    #
+    # A new snapshot is created for every valid explicit
+    # assessment submission, even when ratings are unchanged.
+    #
+    # An entirely unrated skill produces no snapshot.
+    # ---------------------------------------------------------
 
     def __str__(self):
         return (
@@ -745,24 +658,42 @@ class StudentSubSkillAssessment(models.Model):
         )
 
 
+# =========================================================
+# STUDENT SKILL ASSESSMENT SNAPSHOT
+# =========================================================
 class StudentSkillAssessmentSnapshot(models.Model):
     """
-    Stores the overall skill score whenever any subskill
-    rating changes.
+    Historical record of ONE completed ongoing skill assessment.
 
-    Used to build the detailed skill progress history.
+    Created explicitly by teacher_edit_student_skill() after
+    all submitted subskill ratings have been saved.
+
+    Each valid assessment submission creates one snapshot
+    containing the final overall skill average.
+
+    IMPORTANT:
+    - Unchanged ratings still constitute a new assessment.
+    - An entirely unrated skill produces no snapshot.
+    - Individual subskill saves do not create snapshots.
+    - Written feedback is generated separately on request.
+    - Formal term assessments use StudentSkillTermSnapshot.
+
+    Used to build the detailed ongoing skill progress history.
     """
+
     skill_assessment = models.ForeignKey(
         StudentSkillAssessment,
         on_delete=models.CASCADE,
         related_name="assessment_snapshots",
     )
 
+    # Final overall skill average at the time of submission.
     score = models.DecimalField(
         max_digits=3,
         decimal_places=1,
     )
 
+    # Timestamp of the completed assessment submission.
     recorded_at = models.DateTimeField(
         auto_now_add=True,
     )
@@ -783,7 +714,6 @@ class StudentSkillAssessmentSnapshot(models.Model):
             f"{score_display}/10 · "
             f"{self.recorded_at:%d %b %Y %H:%M}"
         )
-
 
 
 class StudentSkillTermSnapshot(models.Model):

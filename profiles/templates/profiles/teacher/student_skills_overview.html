@@ -36,7 +36,8 @@
                         <h2 class="notranslate" translate="no">{% trans 'Skills Progress' %}</h2>
                         {% if not skills %}
                             <p class="skills-assessment-pending notranslate" translate="no">
-                                {% trans 'Pending assessment' %}</p>
+                                {% trans 'Pending assessment' %}
+                            </p>
                         {% endif %}
                     </div>
 
@@ -47,7 +48,6 @@
                 </div>
             </article>
         </div>
-
 
         <div>
 
@@ -74,20 +74,30 @@
                             </h2>
 
                             <h3 class="skill-subskills-heading">
-
-                                <button type="button"
-                                    class="skill-accordion-toggle"
-                                    aria-expanded="false"
-                                    aria-controls="skill-body-{{ forloop.counter }}">
+                                <div class="skill-subskills-toolbar">
 
                                     <span class="skill-subskills-count">
-                                        <strong>{{ skill.assessed_subskills_count }} /{{ skill.total_subskills_count }} {{ skill.name }} subskills</strong> 
+                                        <strong>{{ skill.assessed_subskills_count }} /{{ skill.total_subskills_count }} {{ skill.name }} subskills</strong>
                                         {% trans 'assessed' %}
-                                    </span>                            
-                                    <img src="{% static 'icons/custom/chevrons/chevron_down_teal.png' %}" alt="" class="skill-chevron">
+                                    </span>
 
-                                </button>
+                                    {% if skill.assessment_id %}
+                                        <a href="{% url 'profiles:teacher_edit_student_skill' skill.assessment_id %}"
+                                            class="skill-edit-button"
+                                            aria-label="{% blocktrans with name=skill.name %}Edit {{ name }} assessment{% endblocktrans %}">
+                                            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                                            {% trans 'Edit Skill' %}
+                                        </a>
+                                    {% endif %}
 
+                                    <button type="button" class="skill-accordion-toggle"
+                                        aria-expanded="false"
+                                        aria-controls="skill-body-{{ forloop.counter }}"
+                                        aria-label="{% blocktrans with name=skill.name %}Show {{ name }} assessment details{% endblocktrans %}">
+                                        <img src="{% static 'icons/custom/chevrons/chevron_down_teal.png' %}" alt="" class="skill-chevron">
+                                    </button>
+
+                                </div>
                             </h3>
 
                         </div>
@@ -109,7 +119,6 @@
                                 </div>
                                 {% endif %}
 
-
                                 {% if skill.confident %}
                                 <div class="subskill-group">
                                     <p><strong>{% trans 'Confident in' %}</strong></p>
@@ -120,7 +129,6 @@
                                     </ul>
                                 </div>
                                 {% endif %}
-
 
                                 {% if skill.required_standard %}
                                 <div class="subskill-group">
@@ -133,7 +141,6 @@
                                 </div>
                                 {% endif %}
 
-
                                 {% if skill.developing %}
                                 <div class="subskill-group">
                                     <p><strong>{% trans 'Developing areas' %}</strong></p>
@@ -145,7 +152,6 @@
                                 </div>
                                 {% endif %}
 
-
                                 {% if skill.needs_work %}
                                 <div class="subskill-group">
                                     <p><strong>{% trans 'Focus areas' %}</strong></p>
@@ -156,7 +162,6 @@
                                     </ul>
                                 </div>
                                 {% endif %}
-
 
                                 {% if skill.assessed_subskills_count < skill.total_subskills_count %}
                                 <div class="subskill-group">
@@ -171,7 +176,7 @@
                                 </div>
                                 {% endif %}
 
-                            </div>                
+                            </div>
 
                         </div>
 
@@ -185,7 +190,6 @@
 
     </div>
 
-</section>
 {% endblock %}
 
 

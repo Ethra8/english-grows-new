@@ -111,7 +111,6 @@ def build_student_skill_cards(student, course, build_skill_note_display):
                     "fa-solid fa-chart-simple",
                 ),
                 "score": score,
-                "teacher_notes": assessment.teacher_notes,
                 "subskills": subskills_display,
                 "assessed_subskills_count":
                     assessed_subskills_count,
@@ -140,7 +139,6 @@ def build_student_skill_cards(student, course, build_skill_note_display):
                     "fa-solid fa-chart-simple",
                 ),
                 "score": None,
-                "teacher_notes": "",
                 "subskills": subskills_display,
                 "assessed_subskills_count": 0,
                 "total_subskills_count":

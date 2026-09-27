@@ -105,7 +105,7 @@
 
 /* Right chunk: month/week/list/year */
 .my-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button {
-    background-color: var(--color_frozen-water);
+    background-color: var(--color-frozen-water);
     color: rgb(59, 59, 59);
     text-transform: capitalize;
     font-weight: 600;

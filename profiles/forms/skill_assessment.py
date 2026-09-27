@@ -1,71 +1,94 @@
 from django import forms
 from django.forms import inlineformset_factory
 
-from ..models import (
-    StudentSkillAssessment,
-    StudentSubSkillAssessment,
-)
-
-# ---------------------------------------------------------
-# SKILL ASSESSMENT
-# ---------------------------------------------------------
-class StudentSkillAssessmentForm(forms.ModelForm):
-    class Meta:
-        model = StudentSkillAssessment
-        fields = [
-            "teacher_notes",
-        ]
-
-        widgets = {
-            "teacher_notes": forms.Textarea(
-                attrs={
-                    "rows": 4,
-                }
-            ),
-        }
+from ..models import StudentSkillAssessment, StudentSubSkillAssessment
 
 
 # ---------------------------------------------------------
-# SUBSKILL ASSESSMENT
+# INDIVIDUAL SUBSKILL RATING FORM
 #
-# A blank rating means:
-# "Not assessed yet"
+# StudentSubSkillAssessmentInlineForm represents ONE
+# subskill rating within a larger skill assessment.
 #
-# This is important because unrated subskills must:
-# - have no score
-# - be excluded from average_score
-# - create no historical snapshot
+# Example:
+# Speaking (parent skill assessment)
+#     - Fluency       -> one form
+#     - Pronunciation -> one form
+#     - Interaction   -> one form
+#
+# Each form:
+# - Displays the rating field for one existing subskill.
+# - Allows the teacher to select a rating.
+# - Allows the rating to remain blank ("Not assessed yet").
+#
+# It does NOT:
+# - Represent the complete Speaking/Reading/etc. assessment.
+# - Generate written feedback.
+# - Create assessment history directly.
+#
+# The formset defined below groups these individual forms.
 # ---------------------------------------------------------
 class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
 
     class Meta:
         model = StudentSubSkillAssessment
-        fields = [
-            "rating",
-        ]
+        fields = ["rating"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # The model already allows blank / NULL ratings.
-        # Explicitly keep the form field optional as well.
+        # A subskill does not need to be assessed immediately.
+        # Blank ratings are permitted and excluded from the
+        # parent skill's calculated average.
         self.fields["rating"].required = False
 
-        # Give the empty option a meaningful label instead
-        # of Django's default "---------".
+        # Replace Django's default empty dropdown label
+        # ("---------") with a meaningful description.
         self.fields["rating"].empty_label = "Not assessed yet"
 
 
 # ---------------------------------------------------------
-# INLINE FORMSET
+# COMPLETE SKILL ASSESSMENT FORMSET
 #
-# Only existing predefined subskills are displayed.
+# StudentSubSkillAssessmentFormSet groups the individual
+# subskill forms belonging to ONE StudentSkillAssessment.
+#
+# Example:
+# Parent: Speaking assessment for a particular learner/course
+#
+# Formset:
+#     Fluency       -> rating dropdown
+#     Pronunciation -> rating dropdown
+#     Interaction   -> rating dropdown
+#     ...           -> rating dropdown
+#
+# Django uses the relationship between:
+#
+#     StudentSkillAssessment (parent)
+#     StudentSubSkillAssessment (children)
+#
+# to retrieve and save the corresponding subskill records.
+#
+# Configuration:
+#
+# form:
+#     Use the individual subskill rating form defined above.
 #
 # extra=0:
-#     Do not create blank/new subskill forms.
+#     Do not display additional empty forms for creating
+#     new subskill records.
 #
 # can_delete=False:
-#     Teachers cannot remove predefined subskills.
+#     Teachers cannot delete predefined subskill records
+#     through this formset.
+#
+# IMPORTANT:
+# The formset saves the individual subskill ratings.
+# The teacher assessment view is responsible for generating
+# the written feedback after the ratings have been saved.
+#
+# Historical snapshot creation will be moved into the
+# explicit assessment submission workflow separately.
 # ---------------------------------------------------------
 StudentSubSkillAssessmentFormSet = inlineformset_factory(
     StudentSkillAssessment,
