@@ -716,48 +716,319 @@ class StudentSkillAssessmentSnapshot(models.Model):
         )
 
 
-class StudentSkillTermSnapshot(models.Model):
-    '''
-    For TERM ASSESSMENTS snapshots
-    (ALL SKILLS Assessed)
-    To display progress over time
-    '''
+# =========================================================
+# STUDENT TERM ASSESSMENT
+# =========================================================
+class StudentTermAssessment(models.Model):
+    """
+    Formal assessment of one learner within one course.
 
-    skill_assessment = models.ForeignKey(
-        StudentSkillAssessment,
+    Draft assessments contain independent copies of the learner's
+    subskill ratings, which the teacher may review and adjust.
+
+    Submitted assessments preserve their final academic results
+    independently of subsequent ongoing Skills Assessment changes.
+    """
+
+    class Status(models.TextChoices):
+        DRAFT = "draft", _("Draft")
+        SUBMITTED = "submitted", _("Submitted")
+
+    enrollment = models.ForeignKey(
+        CourseEnrollment,
         on_delete=models.CASCADE,
-        related_name="term_snapshots",
+        related_name="term_assessments",
     )
 
     term_label = models.CharField(
         max_length=50,
+        help_text=_("For example: Assessment 1, Mid-course review or Final review."),
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.DRAFT,
+    )
+
+    assessment_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text=_("Academic date of the formal assessment."),
+    )
+
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="submitted_term_assessments",
+    )
+
+    overall_score = models.DecimalField(
+        max_digits=3,
+        decimal_places=1,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+
+    overall_feedback = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    submitted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["enrollment", "term_label"],
+                name="unique_term_assessment_per_enrollment",
+            ),
+        ]
+
+    @property
+    def calculated_overall_score(self):
+        """Calculate the equally weighted average of all four skills."""
+        snapshots = list(self.skill_snapshots.all())
+
+        if len(snapshots) != len(SUBSKILLS):
+            return None
+
+        scores = [snapshot.calculated_score for snapshot in snapshots]
+
+        if any(score is None for score in scores):
+            return None
+
+        average = sum(scores, Decimal("0")) / Decimal(len(scores))
+        return average.quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            previous = type(self).objects.filter(pk=self.pk).values("status").first()
+
+            if previous and previous["status"] == self.Status.SUBMITTED:
+                raise ValidationError("Submitted assessments cannot be modified.")
+
+        super().save(*args, **kwargs)    
+
+    def __str__(self):
+        return (
+            f"{self.enrollment.student.get_full_name() or self.enrollment.student.username} · "
+            f"{self.enrollment.course} · {self.term_label}"
+        )
+
+
+# =========================================================
+# STUDENT SKILL TERM SNAPSHOT
+# =========================================================
+class StudentSkillTermSnapshot(models.Model):
+    """
+    Formal assessment result for one skill within a term assessment.
+
+    Stores the calculated skill score independently of ongoing
+    Skills Assessment records.
+    """
+    term_assessment = models.ForeignKey(
+        StudentTermAssessment,
+        on_delete=models.CASCADE,
+        related_name="skill_snapshots",
+    )
+
+    skill = models.CharField(
+        max_length=20,
+        choices=StudentSkillAssessment.SKILL_AREA_CHOICES,
     )
 
     score = models.DecimalField(
         max_digits=3,
         decimal_places=1,
-    )
-
-    recorded_at = models.DateField(
-        auto_now_add=True,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
     )
 
     class Meta:
-        unique_together = (
-            "skill_assessment",
-            "term_label",
-        )
-        ordering = ["recorded_at"]
+        ordering = ["skill"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["term_assessment", "skill"],
+                name="unique_skill_per_term_assessment",
+            ),
+        ]
+
+    @property
+    def calculated_score(self):
+        """Calculate the formal skill average from its rated subskills."""
+        scores = [
+            subskill.score
+            for subskill in self.subskill_assessments.all()
+            if subskill.score is not None
+        ]
+
+        if not scores:
+            return None
+
+        average = sum(scores, Decimal("0")) / Decimal(len(scores))
+        return average.quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+
+    def _ensure_editable(self):
+        status = StudentTermAssessment.objects.filter(
+            pk=self.term_assessment_id,
+        ).values_list("status", flat=True).first()
+
+        if status == StudentTermAssessment.Status.SUBMITTED:
+            raise ValidationError("Submitted skill results cannot be modified.")
+
+    def save(self, *args, **kwargs):
+        self._ensure_editable()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self._ensure_editable()
+        return super().delete(*args, **kwargs)
+
 
     def __str__(self):
-        score_display = (
-            int(self.score)
-            if self.score == self.score.to_integral()
-            else self.score
+        return (
+            f"{self.term_assessment} · "
+            f"{self.get_skill_display()}"
         )
 
+
+# =========================================================
+# STUDENT TERM SUBSKILL ASSESSMENT
+# =========================================================
+class StudentTermSubSkillAssessment(models.Model):
+    """
+    Independent formal subskill rating within a term assessment.
+
+    Initially copied from the learner's ongoing assessment.
+    Subsequent changes do not modify ongoing subskill ratings.
+    """
+
+    skill_snapshot = models.ForeignKey(
+        StudentSkillTermSnapshot,
+        on_delete=models.CASCADE,
+        related_name="subskill_assessments",
+    )
+
+    subskill = models.CharField(
+        max_length=50,
+        choices=SUBSKILL_CHOICES,
+    )
+
+    rating = models.CharField(
+        max_length=30,
+        choices=StudentSubSkillAssessment.Rating.choices,
+        null=True,
+        blank=True,
+    )
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["subskill"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["skill_snapshot", "subskill"],
+                name="unique_subskill_per_term_skill",
+            ),
+        ]
+
+    @property
+    def score(self):
+        if not self.rating:
+            return None
+
+        return StudentSubSkillAssessment.SCORE_BY_RATING.get(self.rating)
+
+    def _ensure_editable(self):
+        status = StudentTermAssessment.objects.filter(
+            pk=self.skill_snapshot.term_assessment_id,
+        ).values_list("status", flat=True).first()
+
+        if status == StudentTermAssessment.Status.SUBMITTED:
+            raise ValidationError("Submitted assessment ratings cannot be modified.")
+
+    def save(self, *args, **kwargs):
+        self._ensure_editable()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self._ensure_editable()
+        return super().delete(*args, **kwargs)
+
+    
+    def __str__(self):
         return (
-            f"{self.skill_assessment.student.get_full_name()} · "
-            f"{self.skill_assessment.get_skill_display()} · "
-            f"{self.term_label}: {score_display}/10"
+            f"{self.skill_snapshot} · "
+            f"{self.get_subskill_display()}"
+        )
+
+
+
+
+# =========================================================
+# STUDENT TERM ASSESSMENT REPORT
+# =========================================================
+
+class StudentTermAssessmentReport(models.Model):
+    """
+    Persisted report generated from a submitted Formal Term Assessment.
+
+    One report per assessment. Its content is stored independently
+    and is not automatically regenerated or overwritten.
+
+    Generation does not imply publication to the learner.
+    """
+
+    assessment = models.OneToOneField(
+        StudentTermAssessment,
+        on_delete=models.CASCADE,
+        related_name="report",
+    )
+
+    content = models.JSONField(
+        help_text=_("Snapshot of the generated assessment report."),
+    )
+
+    generated_at = models.DateTimeField(auto_now_add=True)
+
+    generated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="generated_term_assessment_reports",
+    )
+
+    class Meta:
+        ordering = ["-generated_at"]
+        verbose_name = _("Student Term Assessment Report")
+        verbose_name_plural = _("Student Term Assessment Reports")
+
+    def __str__(self):
+        return f"{self.assessment} · Report"
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError(
+                _("Generated assessment reports cannot be modified.")
+            )
+
+        if self.assessment.status != StudentTermAssessment.Status.SUBMITTED:
+            raise ValidationError(
+                _("Reports can only be created for submitted assessments.")
+            )
+
+        if not self.content:
+            raise ValidationError(_("Report content cannot be empty."))
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError(
+            _("Generated assessment reports cannot be deleted directly.")
         )

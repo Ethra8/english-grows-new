@@ -4,11 +4,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django import forms
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 
 from allauth.account.models import EmailAddress
 from allauth.account.internal.flows.email_verification import (
@@ -25,6 +27,7 @@ from .models import (
     StudentSkillAssessmentSnapshot,
     StudentSkillTermSnapshot,
     SUBSKILLS,
+    StudentTermAssessmentReport,
 )
 
 from .forms.student_needs_analysis import (
@@ -1615,6 +1618,168 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             '</div>',
             rows,
         )
+
+
+
+@admin.register(StudentTermAssessmentReport)
+class StudentTermAssessmentReportAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "learner",
+        "course",
+        "term",
+        "assessment_status",
+        "generated_at",
+        "generated_by",
+    )
+    list_filter = ("generated_at",)
+    search_fields = (
+        "assessment__enrollment__student__first_name",
+        "assessment__enrollment__student__last_name",
+        "assessment__enrollment__student__email",
+        "assessment__enrollment__course__name",
+        "assessment__term_label",
+    )
+    list_select_related = (
+        "assessment",
+        "assessment__enrollment",
+        "assessment__enrollment__student",
+        "assessment__enrollment__course",
+        "generated_by",
+    )
+    readonly_fields = (
+        "assessment",
+        "generated_at",
+        "generated_by",
+        "report_content",
+    )
+    fields = (
+        "assessment",
+        "generated_at",
+        "generated_by",
+        "report_content",
+    )
+    actions = None
+
+    @admin.display(description="Learner")
+    def learner(self, obj):
+        return obj.assessment.enrollment.student.get_full_name() or obj.assessment.enrollment.student.username
+
+    @admin.display(description="Course")
+    def course(self, obj):
+        return obj.assessment.enrollment.course
+
+    @admin.display(description="Term")
+    def term(self, obj):
+        return obj.assessment.term_label
+
+    @admin.display(description="Assessment status")
+    def assessment_status(self, obj):
+        return obj.assessment.get_status_display()
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_active and request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_active and request.user.is_superuser
+
+    def delete_model(self, request, obj):
+        if not self.has_delete_permission(request, obj):
+            raise PermissionDenied
+
+        with transaction.atomic():
+            StudentTermAssessmentReport.objects.filter(pk=obj.pk).delete()
+
+        self.message_user(
+            request,
+            "The generated report has been deleted. The underlying assessment remains unchanged.",
+            level=messages.SUCCESS,
+        )
+
+    def delete_queryset(self, request, queryset):
+        raise PermissionDenied
+
+    @admin.display(description="Generated report")
+    def report_content(self, obj):
+        if not obj or not obj.pk:
+            return "No report has been generated."
+
+        content = obj.content
+        sections = []
+
+        def add_section(title, value):
+            if not value:
+                return
+
+            sections.append(
+                format_html(
+                    '<div style="margin-bottom:24px;">'
+                    '<h3 style="margin-bottom:10px;">{}</h3>'
+                    '<div style="line-height:1.7;">{}</div>'
+                    '</div>',
+                    title,
+                    value,
+                )
+            )
+
+        add_section(
+            "Overall Score",
+            f'{content.get("overall_score", "—")}/10',
+        )
+
+        add_section(
+            "Performance Summary",
+            self.render_skill_paragraphs(
+                content.get("performance_summary", {})
+            ),
+        )
+
+        add_section(
+            "Development Priorities",
+            self.render_skill_paragraphs(
+                content.get("development_priorities", {})
+            ),
+        )
+
+        add_section(
+            "Next-Term Focus",
+            content.get("next_term_focus", ""),
+        )
+
+        return format_html_join(
+            "",
+            "{}",
+            ((section,) for section in sections),
+        )
+
+    def render_skill_paragraphs(self, data):
+        if not isinstance(data, dict):
+            return "This report uses an earlier content format."
+
+        labels = {
+            "speaking": "Speaking",
+            "reading": "Reading",
+            "listening": "Listening",
+            "writing": "Writing",
+        }
+
+        return format_html_join(
+            "",
+            '<div style="margin-bottom:14px;">'
+            '<strong>{}</strong><br>{}'
+            '</div>',
+            (
+                (label, data.get(skill, "—"))
+                for skill, label in labels.items()
+            ),
+        )
+
 
 
 # REGISTRATION ================================================================

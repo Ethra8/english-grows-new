@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 from django.db import transaction
 
@@ -10,10 +11,12 @@ from django.db.models import Count, Q, Prefetch, Case, When, Value, IntegerField
 from django.db.models.functions import Coalesce, Concat, Lower, NullIf, Trim
 
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
-
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
 from django.utils.formats import date_format
+
+from django.views.decorators.http import require_POST
 
 from django.forms import inlineformset_factory
 from django.urls import reverse
@@ -27,6 +30,15 @@ from decimal import Decimal, ROUND_HALF_UP
 from profiles.utils.courses import build_formatted_timetable
 from profiles.utils.enrollments import order_enrollments_by_course_status
 from profiles.utils.skills import build_student_skill_cards
+
+from profiles.utils.term_assessments import (
+    get_or_create_term_assessment_draft,
+    update_term_subskill_rating,
+    submit_term_assessment,
+)
+
+from profiles.utils.term_assessment_reports import create_term_assessment_report
+
 from profiles.utils.time_formating import (
     format_hours_duration,
     format_minutes_duration,
@@ -38,9 +50,13 @@ from .models import (
     TeacherProfile, 
     StudentAcademicProfile, 
     StudentSkillAssessment, 
-    StudentSubSkillAssessment, 
+    StudentSubSkillAssessment,
+    StudentTermSubSkillAssessment, 
     SUBSKILLS,
     StudentSkillAssessmentSnapshot, 
+    StudentTermAssessment,
+    StudentTermAssessmentReport,
+    StudentSkillTermSnapshot,
     StudentNeedsAnalysis,
 )
 
@@ -3335,17 +3351,12 @@ def teacher_course_attendance(request, course_id=None):
 
 @login_required
 def teacher_course_assessment(request, course_id=None):
-    profile = get_object_or_404(
-        UserProfile,
-        user=request.user,
-    )
+    profile = get_object_or_404(UserProfile, user=request.user)
 
     if profile.role != UserProfile.ROLE_TEACHER:
         return redirect("home")
 
-    # ---------------------------------------------------------
     # AVAILABLE COURSES
-    # ---------------------------------------------------------
     available_courses = (
         Course.objects
         .filter(teacher=request.user)
@@ -3360,75 +3371,77 @@ def teacher_course_assessment(request, course_id=None):
                 output_field=IntegerField(),
             )
         )
-        .select_related(
-            "course_type",
-            "company",
-        )
-        .order_by(
-            "status_order",
-            "name",
-        )
+        .select_related("course_type", "company")
+        .order_by("status_order", "name")
     )
 
-    # ---------------------------------------------------------
     # CURRENT COURSE
-    # ---------------------------------------------------------
     course = None
 
     if course_id is not None:
-        course = get_object_or_404(
-            available_courses,
-            id=course_id,
-        )
+        course = get_object_or_404(available_courses, id=course_id)
     else:
         first_course = available_courses.first()
-
         if first_course:
-            return redirect(
-                "profiles:teacher_course_assessment",
-                course_id=first_course.id,
-            )
+            return redirect("profiles:teacher_course_assessment", course_id=first_course.id)
 
-    # ---------------------------------------------------------
     # DEFAULT EMPTY-STATE VALUES
-    # ---------------------------------------------------------
     enrollments = CourseEnrollment.objects.none()
+    assessment_rows = []
+    assessed_learners = 0
+    submitted_assessments = 0
 
-    # ---------------------------------------------------------
     # COURSE-SPECIFIC DATA
-    # ---------------------------------------------------------
     if course:
-        enrollments = (
+        enrollments = list(
             course.enrollments
-            .select_related(
-                "student",
-                "student__profile",
-            )
-            .order_by(
-                "student__first_name",
-                "student__last_name",
-                "student__username",
-            )
+            .select_related("student", "student__profile")
+            .order_by("student__first_name", "student__last_name", "student__username")
         )
 
-    # ---------------------------------------------------------
-    # CONTEXT
-    # ---------------------------------------------------------
+        assessments = (
+            StudentTermAssessment.objects
+            .filter(enrollment_id__in=[enrollment.id for enrollment in enrollments])
+            .order_by("enrollment_id", "-pk")
+        )
+
+        latest_by_enrollment = {}
+        assessment_counts = {}
+
+        for assessment in assessments:
+            enrollment_id = assessment.enrollment_id
+            assessment_counts[enrollment_id] = assessment_counts.get(enrollment_id, 0) + 1
+            latest_by_enrollment.setdefault(enrollment_id, assessment)
+
+        assessment_rows = [
+            {
+                "enrollment": enrollment,
+                "latest_assessment": latest_by_enrollment.get(enrollment.id),
+                "assessment_count": assessment_counts.get(enrollment.id, 0),
+            }
+            for enrollment in enrollments
+        ]
+
+        assessed_learners = len(assessment_counts)
+        submitted_assessments = sum(
+            assessment.status == StudentTermAssessment.Status.SUBMITTED
+            for assessment in assessments
+        )
+
     context = {
         "profile": profile,
         "course": course,
         "available_courses": available_courses,
         "enrollments": enrollments,
-
-        # Component Course Details nav
+        "assessment_rows": assessment_rows,
+        "assessed_learners": assessed_learners,
+        "submitted_assessments": submitted_assessments,
         "active_section": "assessment",
     }
 
-    return render(
-        request,
-        "profiles/teacher/teacher_course_assessment.html",
-        context,
-    )
+    return render(request, "profiles/teacher/teacher_course_assessment.html", context)
+
+
 
 
 @login_required
@@ -4291,6 +4304,296 @@ def teacher_student_detail(request, course_id, enrollment_id):
         "profiles/teacher/teacher_student_detail.html",
         context,
     )
+
+
+@login_required
+def teacher_student_term_assessment(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    # Original course and enrollment: teacher ownership enforced.
+    original_course = get_object_or_404(
+        Course, id=course_id, teacher=request.user
+    )
+
+    original_enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student", "student__profile", "course"
+        ),
+        id=enrollment_id,
+        course=original_course,
+    )
+
+    student = original_enrollment.student
+    student_profile = student.profile
+
+    # All historical and current enrollments for this teacher.
+    enrollments = order_enrollments_by_course_status(
+        CourseEnrollment.objects.filter(
+            student=student,
+            course__teacher=request.user,
+        ).select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+    )
+
+    # Selected course, including the shared course selector.
+    selected_course_id = request.GET.get("course")
+
+    if selected_course_id:
+        enrollment = get_object_or_404(
+            enrollments,
+            course_id=selected_course_id,
+        )
+    else:
+        enrollment = original_enrollment
+
+    course = enrollment.course
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
+
+    # Formal assessments only: independent of ongoing Skills Assessment.
+    term_assessments = (
+        StudentTermAssessment.objects
+        .filter(enrollment=enrollment)
+        .select_related("teacher")
+        .order_by("-pk")
+    )
+
+    context = {
+        "profile": profile,
+        "student": student,
+        "student_profile": student_profile,
+        "student_is_active": student.is_active,
+        "user_currently_enrolled": user_currently_enrolled,
+        "course": course,
+        "enrollment": enrollment,
+        "enrollments": enrollments,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+        "term_assessments": term_assessments,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_student_term_assessment.html",
+        context,
+    )
+
+
+
+
+@login_required
+def teacher_term_assessment_detail(request, course_id, enrollment_id, assessment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    # Teacher-owned course and selected enrollment.
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment.objects.select_related(
+            "student",
+            "student__profile",
+            "course",
+        ),
+        id=enrollment_id,
+        course=course,
+    )
+
+    student = enrollment.student
+    student_profile = student.profile
+
+    # Assessment must belong to this exact enrollment.
+    assessment = get_object_or_404(
+        StudentTermAssessment.objects
+        .select_related("teacher")
+        .prefetch_related("skill_snapshots__subskill_assessments"),
+        id=assessment_id,
+        enrollment=enrollment,
+    )
+
+    # ---------------------------------------------------------
+    # FORMAL ASSESSMENT ACTIONS
+    # ---------------------------------------------------------
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        # Generate a permanent report only after submission.
+        if action == "generate_report":
+            try:
+                create_term_assessment_report(assessment, request.user)
+            except ValidationError as exc:
+                messages.error(request, "; ".join(exc.messages))
+            else:
+                messages.success(request, "Assessment report generated successfully.")
+
+            return redirect(request.path)
+
+        # All remaining assessment actions require a draft.
+        if assessment.status != StudentTermAssessment.Status.DRAFT:
+            messages.error(request, "Submitted assessments cannot be edited.")
+            return redirect(request.path)
+
+        # Submit the completed formal assessment.
+        if action == "submit":
+            try:
+                submit_term_assessment(assessment, request.user)
+            except ValidationError as exc:
+                messages.error(request, "; ".join(exc.messages))
+            else:
+                messages.success(request, "Assessment submitted successfully.")
+
+            return redirect(request.path)
+
+        # Save an individual formal subskill rating.
+        if action in (None, "", "save_rating"):
+            subskill = get_object_or_404(
+                StudentTermSubSkillAssessment,
+                id=request.POST.get("subskill_id"),
+                skill_snapshot__term_assessment=assessment,
+            )
+
+            rating = request.POST.get("rating") or None
+
+            try:
+                update_term_subskill_rating(subskill, rating)
+            except ValidationError as exc:
+                messages.error(request, "; ".join(exc.messages))
+            else:
+                messages.success(request, "Assessment rating saved successfully.")
+
+            return redirect(request.path)
+
+        messages.error(request, "Invalid assessment action.")
+        return redirect(request.path)
+
+    # ---------------------------------------------------------
+    # EXISTING GENERATED REPORT
+    # ---------------------------------------------------------
+    report = StudentTermAssessmentReport.objects.filter(
+        assessment=assessment
+    ).select_related("generated_by").first()
+
+    # Preserve the shared learner course selector.
+    enrollments = order_enrollments_by_course_status(
+        CourseEnrollment.objects.filter(
+            student=student,
+            course__teacher=request.user,
+        ).select_related(
+            "course",
+            "course__teacher",
+            "course__course_type",
+            "course__company",
+        )
+    )
+
+    user_currently_enrolled = CourseEnrollment.objects.filter(
+        student=student,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
+
+    skill_snapshots = assessment.skill_snapshots.all()
+
+    total_subskills = sum(
+        snapshot.subskill_assessments.count()
+        for snapshot in skill_snapshots
+    )
+
+    assessed_subskills = sum(
+        1
+        for snapshot in skill_snapshots
+        for subskill in snapshot.subskill_assessments.all()
+        if subskill.rating
+    )
+
+    context = {
+        "profile": profile,
+        "course": course,
+        "enrollment": enrollment,
+        "enrollments": enrollments,
+        "student": student,
+        "student_profile": student_profile,
+        "student_is_active": student.is_active,
+        "user_currently_enrolled": user_currently_enrolled,
+        "level_choices": UserProfile.LEVEL_CHOICES,
+        "assessment": assessment,
+        "skill_snapshots": skill_snapshots,
+        "total_subskills": total_subskills,
+        "assessed_subskills": assessed_subskills,
+        "rating_choices": StudentSubSkillAssessment.Rating.choices,
+        "report": report,
+    }
+
+    return render(
+        request,
+        "profiles/teacher/teacher_term_assessment_detail.html",
+        context,
+    )
+
+
+
+@login_required
+@require_POST
+def teacher_create_term_assessment(request, course_id, enrollment_id):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role != UserProfile.ROLE_TEACHER:
+        return redirect("home")
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        teacher=request.user,
+    )
+
+    enrollment = get_object_or_404(
+        CourseEnrollment,
+        id=enrollment_id,
+        course=course,
+    )
+
+    term_label = request.POST.get("term_label", "").strip()
+    history_url = reverse(
+        "profiles:teacher_student_term_assessment",
+        kwargs={"course_id":course.id, "enrollment_id":enrollment.id},
+    )
+
+    if not term_label or len(term_label) > 50:
+        messages.error(request, "Enter an assessment period of up to 50 characters.")
+        return redirect(history_url)
+
+    existing = StudentTermAssessment.objects.filter(
+        enrollment=enrollment,
+        term_label=term_label,
+    ).first()
+
+    if existing:
+        messages.info(request, "An assessment already exists for this period.")
+        return redirect(history_url)
+
+    get_or_create_term_assessment_draft(
+        enrollment=enrollment,
+        term_label=term_label,
+    )
+
+    messages.success(request, "Term assessment draft created successfully.")
+    return redirect(history_url)
 
 
 

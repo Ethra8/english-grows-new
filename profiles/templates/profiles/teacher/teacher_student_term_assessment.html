@@ -1,0 +1,123 @@
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
+
+{% block extra_title %}| Term Assessment{% endblock %}
+
+{% block details_page_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/term_assessment.css' %}">
+{% endblock %}
+
+{% block details_page_shell_class %}student-detail-page student-term-assessment-page{% endblock %}
+
+{% block details_page_background %}{% endblock %}
+
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=True %}
+{% endblock %}
+
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" with active_section="assessment" nav_role="teacher" %}
+{% endblock %}
+
+{% block details_content %}
+<section class="student-term-assessments">
+
+    <div class="term-assessment-heading">
+        <div>
+            <h2>{% trans "Term Assessments" %}</h2>
+            <p>{% trans "Formal assessment records for this learner and course." %}</p>
+        </div>
+    </div>
+
+    <!-- CREATE FORM -->
+    <div class="term-assessment-create-card">
+        <div class="term-assessment-create-header">
+            <div>
+                <h3>{% trans "New Term Assessment" %}</h3>
+                <p>{% trans "Create a formal assessment for this learner and course." %}</p>
+            </div>
+            <i class="fa-regular fa-clipboard" aria-hidden="true"></i>
+        </div>
+
+        <form method="post" action="{% url 'profiles:teacher_create_term_assessment' course_id=course.id enrollment_id=enrollment.id %}">
+            {% csrf_token %}
+
+            <div class="term-assessment-form-field">
+                <label for="term-label">{% trans "Assessment period" %}</label>
+                <input type="text" id="term-label" name="term_label" maxlength="50" required
+                       placeholder="{% trans 'e.g. September–December 2026' %}"
+                       aria-describedby="term-label-help">
+
+                <small id="term-label-help">
+                    {% trans "Enter a name that identifies the assessment period. For example: Term 1, September–December 2026, or Final Assessment." %}
+                </small>
+            </div>
+
+            <div class="term-assessment-info">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                <p>{% trans "Your learner's current skill ratings will be copied into a separate draft. You can review and adjust them before submitting the final assessment." %}</p>
+            </div>
+
+            <button type="submit" class="term-assessment-create-btn">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                {% trans "Create Assessment" %}
+            </button>
+        </form>
+    </div>
+
+    <!-- ASSESSMENT HISTORY -->
+    <div class="term-assessment-history">
+        <h3>{% trans "Assessment History" %}</h3>
+
+        {% for assessment in term_assessments %}
+            <article class="term-assessment-card mb-3">
+                <div class="term-assessment-record-header">
+                    <h4>{{ assessment.term_label }}</h4>
+                    <span class="term-assessment-status term-assessment-status--{{ assessment.status }}">
+                        {{ assessment.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="term-assessment-record-score">
+                    <small>{% trans "Overall score" %}</small>
+                    <strong>
+                        {% if assessment.overall_score is not None %}
+                            {{ assessment.overall_score }} / 10
+                        {% else %}
+                            —
+                        {% endif %}
+                    </strong>
+                </div>
+
+                {% if assessment.assessment_date %}
+                    <p>{% trans "Assessment date" %}: {{ assessment.assessment_date|date:"DATE_FORMAT" }}</p>
+                {% endif %}
+
+                {% if assessment.submitted_at %}
+                    <p>{% trans "Submitted" %}: {{ assessment.submitted_at|date:"DATETIME_FORMAT" }}</p>
+                {% endif %}
+
+                <a href="{% url 'profiles:teacher_term_assessment_detail' course_id=course.id enrollment_id=enrollment.id assessment_id=assessment.id %}"
+                    class="term-assessment-create-btn mt-3">
+                        {% if assessment.status == "draft" %}
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                            {% trans "Continue Assessment" %}
+                        {% else %}
+                            <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            {% trans "View Assessment" %}
+                        {% endif %}
+                </a>
+            </article>
+        {% empty %}
+            <div class="term-assessment-empty">
+                <p>{% trans "No formal term assessments have been created for this learner and course yet." %}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</section>
+{% endblock %}

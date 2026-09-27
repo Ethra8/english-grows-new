@@ -1,0 +1,295 @@
+
+{% extends "profiles/components/details_page_shell.html" %}
+{% load static i18n %}
+
+{% block extra_title %}| Term Assessment{% endblock %}
+
+{% block details_page_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/term_assessment.css' %}">
+{% endblock %}
+
+{% block details_page_shell_class %}student-detail-page student-term-assessment-page{% endblock %}
+{% block details_page_background %}{% endblock %}
+
+{% block details_header %}
+    {% include "profiles/components/student_details_header.html" with show_email=True show_user_role=True show_company=True %}
+{% endblock %}
+
+{% block details_nav %}
+    {% include "profiles/components/student_details_nav.html" with active_section="assessment" nav_role="teacher" %}
+{% endblock %}
+
+{% block details_content %}
+<section class="student-term-assessments">
+
+    <!-- BACK TO ASSESSMENT HISTORY -->
+    <a href="{% url 'profiles:teacher_student_term_assessment' course_id=course.id enrollment_id=enrollment.id %}" class="mb-4 d-inline-block">
+        <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
+        {% trans "Assessment History" %}
+    </a>
+
+    <!-- ASSESSMENT HEADER -->
+    <div class="term-assessment-record-header mb-4">
+        <div>
+            <h2>{{ assessment.term_label }}</h2>
+            <p>{% trans "Formal Term Assessment" %}</p>
+        </div>
+
+        <span class="term-assessment-status term-assessment-status--{{ assessment.status }}">
+            {{ assessment.get_status_display }}
+        </span>
+    </div>
+
+    <!-- ASSESSMENT SUMMARY -->
+    <div class="term-assessment-card term-assessment-summary mb-4">
+        <div class="term-assessment-record-score">
+            <small>{% trans "Overall score" %}</small>
+            <strong>
+                {% if assessment.overall_score is not None %}
+                    {{ assessment.overall_score }} / 10
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+        <p class="mt-3">
+            {% trans "Subskills assessed" %}: {{ assessed_subskills }} / {{ total_subskills }}
+        </p>
+    </div>
+
+    {% if assessment.status == "draft" %}
+        <div class="term-assessment-submit-panel mb-4">
+            <div>
+                <h3>{% trans "Ready to finalise?" %}</h3>
+                <p>{% trans "All 14 subskills must be rated before submission. Once submitted, the assessment becomes read-only." %}</p>
+            </div>
+
+            <form method="post" onsubmit="return confirm(this.dataset.confirmMessage);" data-confirm-message="{% trans 'Submit this assessment? You will no longer be able to edit its ratings.' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="submit">
+                <button type="submit" class="term-assessment-submit-btn">
+                    <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                    {% trans "Submit Assessment" %}
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
+    <!-- FOUR SKILL CARDS -->
+    <div class="term-assessment-skills-grid">
+
+        {% for snapshot in skill_snapshots %}
+            <article class="term-assessment-card term-assessment-skill-card">
+
+                <div class="term-assessment-record-header mb-3">
+                    <h3>{{ snapshot.get_skill_display }}</h3>
+
+                    <strong>
+                        {% if snapshot.score is not None %}
+                            {{ snapshot.score }} / 10
+                        {% else %}
+                            —
+                        {% endif %}
+                    </strong>
+                </div>
+
+                {% for subskill in snapshot.subskill_assessments.all %}
+                    <div class="term-assessment-subskill-row">
+                        <span>{{ subskill.get_subskill_display }}</span>
+
+                        {% if assessment.status == "draft" %}
+                            <form method="post" class="term-assessment-rating-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="subskill_id" value="{{ subskill.id }}">
+
+                                <select name="rating" class="term-assessment-rating-select" aria-label="{% blocktrans with name=subskill.get_subskill_display %}Rating for {{ name }}{% endblocktrans %}">
+                                    <option value="">{% trans "Not assessed" %}</option>
+
+                                    {% for value, label in rating_choices %}
+                                        <option value="{{ value }}" {% if subskill.rating == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <button type="submit" class="term-assessment-rating-save" aria-label="{% trans 'Save rating' %}">
+                                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <strong class="term-assessment-rating {% if subskill.rating %}term-assessment-rating--rated{% else %}term-assessment-rating--empty{% endif %}">
+                                {% if subskill.rating %}
+                                    {{ subskill.get_rating_display }}
+                                {% else %}
+                                    {% trans "Not assessed" %}
+                                {% endif %}
+                            </strong>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </article>
+
+        {% empty %}
+            <div class="term-assessment-empty">
+                <p>{% trans "No formal skill snapshots are available for this assessment." %}</p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- ASSESSMENT REPORT -->
+    <article class="term-assessment-card term-assessment-report">
+
+        <div class="term-assessment-record-header mb-3">
+            <div>
+                <h3>{% trans "Assessment Report" %}</h3>
+                <p>{% trans "Generated from the learner's submitted formal assessment." %}</p>
+            </div>
+
+            {% if report %}
+                <span class="term-assessment-status term-assessment-status--submitted">
+                    {% trans "Generated" %}
+                </span>
+            {% else %}
+                <span class="term-assessment-status">
+                    {% trans "Not generated" %}
+                </span>
+            {% endif %}
+        </div>
+
+        {% if assessment.status == "draft" %}
+
+            <!-- DRAFT: REPORT UNAVAILABLE -->
+            <div class="term-assessment-report-empty">
+                <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                <div>
+                    <strong>{% trans "Report not available yet" %}</strong>
+                    <p>{% trans "Complete and submit the assessment before generating the learner's performance report." %}</p>
+                </div>
+            </div>
+
+        {% elif not report %}
+
+            <!-- SUBMITTED: GENERATE REPORT -->
+            <div class="term-assessment-report-empty">
+                <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                <div>
+                    <strong>{% trans "Ready to generate" %}</strong>
+                    <p>{% trans "Generate a permanent report from the submitted assessment. The saved report cannot be edited or regenerated." %}</p>
+                </div>
+            </div>
+
+            <form method="post" class="mt-4" onsubmit="return confirm(this.dataset.confirmMessage);" data-confirm-message="{% trans 'Generate this assessment report? The saved report cannot be edited or regenerated.' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="generate_report">
+                <button type="submit" class="term-assessment-submit-btn">
+                    <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
+                    {% trans "Generate Report" %}
+                </button>
+            </form>
+
+        {% else %}
+
+            <!-- GENERATED: REPORT AVAILABLE -->
+            <div class="term-assessment-report-empty">
+                <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                <div>
+                    <strong>{% trans "Report generated successfully" %}</strong>
+                    <p>{% trans "This report is a permanent snapshot of the submitted assessment and is currently available to the teacher only." %}</p>
+                    <small>
+                        {% trans "Generated on" %} {{ report.generated_at|date:"DATE_FORMAT" }}
+                        {% if report.generated_by %}
+                            · {% trans "By" %} {{ report.generated_by.get_full_name|default:report.generated_by.username }}
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+
+            <details class="term-assessment-report-preview mt-4">
+                <summary class="term-assessment-submit-btn">
+                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                    {% trans "View Report" %}
+                </summary>
+
+                <div class="term-assessment-report-content mt-4">
+
+                    <!-- REPORT OVERVIEW -->
+                    <div class="term-assessment-report-section">
+                        <h4>{% trans "Assessment Overview" %}</h4>
+                        <p><strong>{% trans "Learner" %}:</strong> {{ report.content.learner }}</p>
+                        <p><strong>{% trans "Course" %}:</strong> {{ report.content.course }}</p>
+                        <p><strong>{% trans "Term" %}:</strong> {{ report.content.term_label }}</p>
+                        <p><strong>{% trans "Assessment date" %}:</strong> {{ report.content.assessment_date }}</p>
+                        <p><strong>{% trans "Teacher" %}:</strong> {{ report.content.teacher }}</p>
+                        <p><strong>{% trans "Overall score" %}:</strong> {{ report.content.overall_score }} / 10</p>
+                    </div>
+
+                    <!-- SKILL SCORES -->
+                    <div class="term-assessment-report-section">
+                        <h4>{% trans "Skill Performance" %}</h4>
+
+                        {% for skill in report.content.skills %}
+                            <div class="term-assessment-subskill-row">
+                                <span>{{ skill.label }}</span>
+                                <strong>{{ skill.score }} / 10</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- PERFORMANCE SUMMARY -->
+                    <div class="term-assessment-report-section">
+                        <h4>{% trans "Performance Summary" %}</h4>
+
+                        <h5>{% trans "Speaking" %}</h5>
+                        <p>{{ report.content.performance_summary.speaking }}</p>
+
+                        <h5>{% trans "Reading" %}</h5>
+                        <p>{{ report.content.performance_summary.reading }}</p>
+
+                        <h5>{% trans "Listening" %}</h5>
+                        <p>{{ report.content.performance_summary.listening }}</p>
+
+                        <h5>{% trans "Writing" %}</h5>
+                        <p>{{ report.content.performance_summary.writing }}</p>
+                    </div>
+
+
+                    <!-- DEVELOPMENT PRIORITIES -->
+                    <div class="term-assessment-report-section">
+                        <h4>{% trans "Development Priorities" %}</h4>
+
+                        <h5>{% trans "Speaking" %}</h5>
+                        <p>{{ report.content.development_priorities.speaking }}</p>
+
+                        <h5>{% trans "Reading" %}</h5>
+                        <p>{{ report.content.development_priorities.reading }}</p>
+
+                        <h5>{% trans "Listening" %}</h5>
+                        <p>{{ report.content.development_priorities.listening }}</p>
+
+                        <h5>{% trans "Writing" %}</h5>
+                        <p>{{ report.content.development_priorities.writing }}</p>
+                    </div>
+
+                    
+                    <!-- NEXT TERM FOCUS -->
+                    <div class="term-assessment-report-section">
+                        <h4>{% trans "Next-Term Focus" %}</h4>
+                        <p>{{ report.content.next_term_focus }}</p>
+                    </div>
+
+                </div>
+            </details>
+
+        {% endif %}
+
+    </article>
+
+</section>
+{% endblock %}

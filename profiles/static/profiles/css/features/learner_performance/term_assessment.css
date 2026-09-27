@@ -1,0 +1,551 @@
+
+/* TERM ASSESSMENTS ***********************************************/
+
+/* SHARED */
+.student-term-assessment-page .student-term-assessments {
+    width: 100%;
+    padding-bottom: 3rem;
+    color: var(--color-navy);
+}
+
+.student-term-assessment-page .term-assessment-record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.student-term-assessment-page .term-assessment-record-header h2,
+.student-term-assessment-page .term-assessment-record-header h3,
+.student-term-assessment-page .term-assessment-record-header h4 {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    color: var(--color-navy);
+}
+
+.student-term-assessment-page .term-assessment-record-header p {
+    margin: 0.35rem 0 0;
+    color: var(--color-blue-slate);
+}
+
+.student-term-assessment-page .term-assessment-status {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50px;
+    background: rgba(var(--color-teal-rgb), 0.07);
+    color: var(--color-blue-slate);
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.student-term-assessment-page .term-assessment-status--draft {
+    background: rgba(255, 176, 0, 0.15);
+    color: #9a6800;
+}
+
+.student-term-assessment-page .term-assessment-status--submitted {
+    background: rgba(var(--color-teal-rgb), 0.12);
+    color: var(--color-teal);
+}
+
+.student-term-assessment-page .term-assessment-record-score {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.student-term-assessment-page .term-assessment-record-score small {
+    color: var(--color-blue-slate);
+    font-size: 0.85rem;
+}
+
+.student-term-assessment-page .term-assessment-record-score strong {
+    color: var(--color-navy);
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+
+/* ASSESSMENT CREATION ********************************************/
+
+.student-term-assessment-page .term-assessment-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.student-term-assessment-page .term-assessment-create-card {
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.2);
+    border-radius: 12px;
+    background: var(--color-whitesmoke);
+    box-shadow: 0 4px 12px rgba(var(--color-shadow-rgb), 0.08);
+}
+
+.student-term-assessment-page .term-assessment-create-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.student-term-assessment-page .term-assessment-create-header h3,
+.student-term-assessment-page .term-assessment-history h3 {
+    height: auto;
+    padding: 0;
+    background: none;
+    color: var(--color-navy);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.7rem;
+}
+
+.student-term-assessment-page .term-assessment-create-header i {
+    color: var(--color-teal);
+    font-size: 2rem;
+}
+
+.student-term-assessment-page .term-assessment-create-header p {
+    color: var(--color-blue-slate);
+}
+
+.student-term-assessment-page .term-assessment-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.student-term-assessment-page .term-assessment-form-field label {
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
+.student-term-assessment-page .term-assessment-form-field input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.3);
+    border-radius: 8px;
+    background: white;
+    color: var(--color-navy);
+}
+
+.student-term-assessment-page .term-assessment-form-field input:focus {
+    outline: 2px solid var(--color-tropical-teal);
+    outline-offset: 2px;
+}
+
+.student-term-assessment-page .term-assessment-form-field small {
+    color: var(--color-steel);
+}
+
+.student-term-assessment-page .term-assessment-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.06);
+}
+
+.student-term-assessment-page .term-assessment-info i {
+    margin-top: 0.2rem;
+    color: var(--color-teal);
+}
+
+.student-term-assessment-page .term-assessment-info p {
+    margin: 0;
+    color: var(--color-blue-slate);
+}
+
+.student-term-assessment-page .term-assessment-create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-teal);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.student-term-assessment-page .term-assessment-create-btn:hover {
+    background: var(--color-navy);
+    color: white;
+}
+
+.student-term-assessment-page .term-assessment-history h3 {
+    margin-bottom: 1.5rem;
+}
+
+.student-term-assessment-page .term-assessment-record-header h4 {
+    color: var(--color-navy);
+}
+
+
+/* FORMAL ASSESSMENT DETAIL **************************************/
+
+/* ASSESSMENT HEADING */
+.student-term-assessment-page .student-term-assessments > .term-assessment-record-header {
+    margin-top: 1rem;
+}
+
+.student-term-assessment-page .student-term-assessments > .term-assessment-record-header h2 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+}
+
+/* SHARED CARD SURFACE */
+.student-term-assessment-page .term-assessment-card {
+    min-width: 0;
+    padding: 1.75rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.18);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 5px 18px rgba(var(--color-shadow-rgb), 0.07);
+}
+
+/* ASSESSMENT SUMMARY */
+.student-term-assessment-page .term-assessment-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    border-left: 3px solid var(--color-tropical-teal);
+    background: linear-gradient(110deg, #fff, rgba(var(--color-teal-rgb), 0.04));
+}
+
+.student-term-assessment-page .term-assessment-summary .term-assessment-record-score strong {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+.student-term-assessment-page .term-assessment-summary > p {
+    margin: 0 !important;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.07);
+    color: var(--color-blue-slate);
+    font-size: 0.9rem;
+}
+
+/* TWO-COLUMN SKILL GRID */
+.student-term-assessment-page .term-assessment-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+    margin-bottom: 2rem;
+}
+
+.student-term-assessment-page .term-assessment-skill-card {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    margin-bottom: 0 !important;
+    padding: 1.5rem;
+    overflow: hidden;
+    border-top: 3px solid var(--color-tropical-teal);
+}
+
+.student-term-assessment-page .term-assessment-skill-card .term-assessment-record-header {
+    padding-bottom: 1rem;
+    margin-bottom: 0.75rem !important;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.15);
+}
+
+.student-term-assessment-page .term-assessment-skill-card h3 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.student-term-assessment-page .term-assessment-skill-card .term-assessment-record-header > strong {
+    flex-shrink: 0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(var(--color-teal-rgb), 0.07);
+    color: var(--color-teal);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* SUBSKILL ROWS */
+.student-term-assessment-page .term-assessment-subskill-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.1);
+}
+
+.student-term-assessment-page .term-assessment-subskill-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.student-term-assessment-page .term-assessment-subskill-row > span {
+    flex: 1;
+    min-width: 0;
+    color: var(--color-navy);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* RATING BADGES */
+.student-term-assessment-page .term-assessment-rating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    max-width: 45%;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.student-term-assessment-page .term-assessment-rating--rated {
+    background: rgba(var(--color-teal-rgb), 0.09);
+    color: var(--color-teal);
+}
+
+.student-term-assessment-page .term-assessment-rating--empty {
+    background: rgba(var(--color-shadow-rgb), 0.05);
+    color: var(--color-blue-slate);
+}
+
+/* ASSESSMENT REPORT */
+.student-term-assessment-page .term-assessment-report {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-left: 3px solid var(--color-tropical-teal);
+}
+
+.student-term-assessment-page .term-assessment-report h3 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.student-term-assessment-page .term-assessment-report .term-assessment-record-header p {
+    font-size: 0.9rem;
+}
+
+.student-term-assessment-page .term-assessment-report-empty {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border: 1px dashed rgba(var(--color-teal-rgb), 0.25);
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.035);
+}
+
+.student-term-assessment-page .term-assessment-report-empty > i {
+    color: var(--color-teal);
+    font-size: 1.5rem;
+}
+
+.student-term-assessment-page .term-assessment-report-empty strong {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
+.student-term-assessment-page .term-assessment-report-empty p {
+    margin: 0;
+    color: var(--color-blue-slate);
+    font-size: 0.9rem;
+}
+
+/* FORMAL ASSESSMENT RATING EDITOR *******************************/
+
+.student-term-assessment-page .term-assessment-rating-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 1 55%;
+    min-width: 0;
+    margin: 0;
+}
+
+.student-term-assessment-page .term-assessment-rating-select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid rgba(var(--color-teal-rgb), 0.25);
+    border-radius: 6px;
+    background: white;
+    color: var(--color-navy);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.student-term-assessment-page .term-assessment-rating-select:focus {
+    outline: 2px solid var(--color-tropical-teal);
+    outline-offset: 2px;
+}
+
+.student-term-assessment-page .term-assessment-rating-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-teal);
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.student-term-assessment-page .term-assessment-rating-save:hover {
+    background: var(--color-navy);
+}
+
+/* TERM ASSESSMENT SUBMISSION **********************************/
+
+.student-term-assessment-page .term-assessment-submit-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 1.75rem;
+    background: #fff;
+    border: 1px solid rgba(0, 107, 125, 0.18);
+    border-left: 3px solid var(--color-tropical-teal);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 45, 90, 0.04);
+}
+
+.student-term-assessment-page .term-assessment-submit-panel h3 {
+    margin: 0 0 0.4rem;
+    color: var(--color-navy);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.student-term-assessment-page .term-assessment-submit-panel p {
+    margin: 0;
+    color: var(--color-slate);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.student-term-assessment-page .term-assessment-submit-panel form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.student-term-assessment-page .term-assessment-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    min-height: 42px;
+    padding: 0.75rem 1.4rem;
+    background: var(--color-teal);
+    border: 1px solid var(--color-teal);
+    border-radius: 6px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.student-term-assessment-page .term-assessment-submit-btn:hover {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    color: #fff;
+}
+
+.student-term-assessment-page .term-assessment-submit-btn:focus-visible {
+    outline: 2px solid var(--color-tropical-teal);
+    outline-offset: 3px;
+}
+
+
+
+/* RESPONSIVE ****************************************************/
+
+@media (max-width: 991.98px) {
+    .student-term-assessment-page .term-assessment-skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .student-term-assessment-page .term-assessment-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .student-term-assessment-page .term-assessment-card {
+        padding: 1.25rem;
+    }
+
+    .student-term-assessment-page .term-assessment-rating {
+        max-width: 50%;
+    }
+    .student-term-assessment-page .term-assessment-submit-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .student-term-assessment-page .term-assessment-submit-btn {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 576px) {
+    .student-term-assessment-page .term-assessment-heading,
+    .student-term-assessment-page .term-assessment-record-header {
+        align-items: flex-start;
+    }
+
+    .student-term-assessment-page .term-assessment-subskill-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .student-term-assessment-page .term-assessment-rating {
+        max-width: 100%;
+    }
+
+    .student-term-assessment-page .term-assessment-rating-form {
+        width: 100%;
+        flex: 1 1 auto;
+    }
+
+}

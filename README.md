@@ -39,6 +39,8 @@ The application combines course management, automated lesson scheduling, attenda
         - [Student Subskill Assessment](#student-subskill-assessment)
         - [Detailed Assessment Snapshots](#detailed-assessment-snapshots)
         - [Term Assessment Snapshots](#term-assessment-snapshots)
+        - [Formal Term Assessment & Academic Reports](https://github.com/Ethra8/english-grows-new/blob/main/README.md#formal-term-assessment--academic-reports)
+          - [Academic Reports](https://github.com/Ethra8/english-grows-new/blob/main/README.md#academic-reports)
       - [Learning Needs / Student Needs Analysis](#learning-needs--student-needs-analysis)
         - [Data Protection and Employer Access to Learning Needs](#data-protection-and-employer-access-to-learning-needs)
       - [Learner / Employee Area](#learner--employee-area)
@@ -4242,6 +4244,34 @@ Conceptually:
 ```
 
 This separation allows EnglishGrows to provide both **fine-grained progress graphs** and **structured term-to-term reporting** without conflating the two types of historical data.
+
+---
+
+## Formal Term Assessment & Academic Reports
+
+English Grows provides structured Formal Term Assessments to evaluate learners' progress throughout their English learning journey.
+
+Formal assessments are conducted by the assigned teacher and evaluate 14 subskills across the four core language skills: Speaking, Reading, Listening and Writing.
+
+Each assessment records individual subskill ratings, skill-level results and an overall assessment score.
+
+---
+
+### Academic Reports
+
+Submitted Formal Term Assessments support individualised academic reports that provide a structured overview of the learner's performance and recommended learning direction.
+
+Each report includes:
+
+- **Assessment Overview:** Learner, course, assessment period, assessment date, teacher and overall assessment result.
+- **Skill Results:** Individual results for Speaking, Reading, Listening and Writing.
+- **Performance Summary:** A qualitative overview of the learner's demonstrated abilities across the four language skills.
+- **Development Priorities:** Skill-specific recommendations identifying areas for further development or consolidation.
+- **Next-Term Focus:** A personalised learning direction highlighting up to three priorities for the following learning period.
+
+Reports are based on the learner's submitted assessment results and provide a consistent framework for documenting academic progress and supporting future learning objectives.
+
+Each report is preserved as a separate academic record associated with its corresponding Formal Term Assessment.
 
 ---
 
