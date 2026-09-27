@@ -2,13 +2,28 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-def verify_empty_snapshots(apps, schema_editor):
-    Snapshot = apps.get_model("profiles", "StudentSkillTermSnapshot")
+def remove_legacy_snapshots(apps, schema_editor):
+    """
+    Remove obsolete test snapshots from the previous assessment
+    structure before requiring the new Formal Term Assessment fields.
 
-    if Snapshot.objects.using(schema_editor.connection.alias).exists():
+    Preserve snapshots already associated with a Formal Term Assessment.
+    """
+    Snapshot = apps.get_model("profiles", "StudentSkillTermSnapshot")
+    db = schema_editor.connection.alias
+
+    # Legacy snapshots have no Formal Term Assessment relationship.
+    Snapshot.objects.using(db).filter(
+        term_assessment__isnull=True
+    ).delete()
+
+    # Remaining snapshots must have a valid skill.
+    if Snapshot.objects.using(db).filter(
+        skill__isnull=True
+    ).exists():
         raise RuntimeError(
-            "Cannot make term snapshot fields required: existing records "
-            "must be reviewed before applying this migration."
+            "Cannot make term snapshot fields required: "
+            "some Formal Term Assessment snapshots have no skill."
         )
 
 
@@ -20,7 +35,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            verify_empty_snapshots,
+            remove_legacy_snapshots,
             reverse_code=migrations.RunPython.noop,
         ),
         migrations.AlterField(
