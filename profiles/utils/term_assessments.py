@@ -10,7 +10,76 @@ from profiles.models import (
     StudentTermAssessment,
     StudentSkillTermSnapshot,
     StudentTermSubSkillAssessment,
+    StudentSkillAssessmentSnapshot,
 )
+
+
+
+# =========================================================
+# ONGOING SKILL ASSESSMENT
+# =========================================================
+
+@transaction.atomic
+def submit_skill_assessment(skill_assessment, ratings):
+    """
+    Submit one ongoing skill assessment.
+
+    Updates the supplied subskill ratings and creates one historical
+    skill snapshot when the resulting skill has a calculated score.
+
+    Every valid explicit submission creates a snapshot, even when the
+    submitted ratings are unchanged.
+
+    An entirely unrated skill produces no snapshot.
+    """
+    skill_assessment = (
+        StudentSkillAssessment.objects
+        .select_for_update()
+        .get(pk=skill_assessment.pk)
+    )
+
+    expected_subskills = {
+        subskill
+        for subskill, _ in SUBSKILLS.get(skill_assessment.skill, [])
+    }
+
+    if not expected_subskills:
+        raise ValidationError("Invalid skill assessment.")
+
+    if set(ratings) != expected_subskills:
+        raise ValidationError("The assessment contains an invalid subskill structure.")
+
+    valid_ratings = {
+        choice.value
+        for choice in StudentSubSkillAssessment.Rating
+    }
+
+    for subskill, rating in ratings.items():
+        rating = rating or None
+
+        if rating is not None and rating not in valid_ratings:
+            raise ValidationError("Invalid assessment rating.")
+
+        subskill_assessment, _ = StudentSubSkillAssessment.objects.get_or_create(
+            skill_assessment=skill_assessment,
+            subskill=subskill,
+        )
+
+        if subskill_assessment.rating != rating:
+            subskill_assessment.rating = rating
+            subskill_assessment.save(update_fields=["rating", "updated_at"])
+
+    final_score = skill_assessment.average_score
+
+    snapshot = None
+
+    if final_score is not None:
+        snapshot = StudentSkillAssessmentSnapshot.objects.create(
+            skill_assessment=skill_assessment,
+            score=final_score,
+        )
+
+    return skill_assessment, snapshot
 
 
 @transaction.atomic

@@ -454,6 +454,21 @@
 }
 
 
+/* Skills assessment actions */
+.academic-skill__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+}
+
+.academic-skill__actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    line-height: 1;
+}
+
 /* RESPONSIVE **********************************************************/
 
 @media (max-width: 767px) {

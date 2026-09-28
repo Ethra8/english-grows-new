@@ -35,6 +35,7 @@ from profiles.utils.term_assessments import (
     get_or_create_term_assessment_draft,
     update_term_subskill_rating,
     submit_term_assessment,
+    submit_skill_assessment,
 )
 
 from profiles.utils.term_assessment_reports import create_term_assessment_report
@@ -5596,57 +5597,15 @@ def teacher_edit_student_skill(request, skill_assessment_id):
 
         if formset.is_valid():
 
-            # -------------------------------------------------
-            # SAVE COMPLETE ASSESSMENT
-            #
-            # All rating changes and the historical snapshot
-            # are saved within the same database transaction.
-            #
-            # If any database operation fails, the transaction
-            # is rolled back.
-            # -------------------------------------------------
-            with transaction.atomic():
+            ratings = {
+                form.instance.subskill: form.cleaned_data["rating"]
+                for form in formset.forms
+            }
 
-                # ---------------------------------------------
-                # SAVE SUBSKILL RATINGS
-                #
-                # Individual subskill saves no longer create
-                # historical snapshots.
-                # ---------------------------------------------
-                formset.save()
-
-                # ---------------------------------------------
-                # CLEAR PREFETCH CACHE
-                #
-                # Ensure average_score uses the latest saved
-                # subskill ratings rather than cached values.
-                # ---------------------------------------------
-                if hasattr(skill_assessment, "_prefetched_objects_cache"):
-                    skill_assessment._prefetched_objects_cache = {}
-
-                # ---------------------------------------------
-                # CALCULATE FINAL SKILL AVERAGE
-                #
-                # Unrated subskills are excluded.
-                # ---------------------------------------------
-                final_score = skill_assessment.average_score
-
-                # ---------------------------------------------
-                # CREATE ONE ONGOING ASSESSMENT SNAPSHOT
-                #
-                # Every valid explicit assessment submission
-                # creates one historical record, even when
-                # the submitted ratings remain unchanged.
-                #
-                # An entirely unrated skill has no score and
-                # therefore produces no snapshot.
-                # ---------------------------------------------
-                if final_score is not None:
-                    StudentSkillAssessmentSnapshot.objects.create(
-                        skill_assessment=skill_assessment,
-                        score=final_score,
-                    )
-
+            submit_skill_assessment(
+                skill_assessment=skill_assessment,
+                ratings=ratings,
+            )            
             # -------------------------------------------------
             # WRITTEN FEEDBACK
             #

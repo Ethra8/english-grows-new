@@ -36,6 +36,8 @@ from .forms.student_needs_analysis import (
     SITUATION_CHOICES,
 )
 
+from profiles.utils.term_assessments import submit_skill_assessment
+
 from courses.models import CourseEnrollment
 
 
@@ -1261,15 +1263,26 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                                 '<span class="academic-skill__name">{}</span>'
                                 '<span class="academic-skill__count">{}/{} assessed</span>'
                             '</summary>'
-                            '<div class="academic-skill__content">{}</div>'
+                            '<div class="academic-skill__content">'
+                                '{}'
+                                '<div class="academic-skill__actions">'
+                                    '<button type="submit" '
+                                            'name="_save_skill_assessment" '
+                                            'value="{}__{}" '
+                                            'class="button">'
+                                        'Save assessment'
+                                    '</button>'
+                                '</div>'
+                            '</div>'
                         '</details>',
                         skill_label,
                         skill_assessed_count,
                         skill_total_count,
                         rows_html,
+                        course.id,
+                        skill_value,
                     )
                 )
-
             skills_html = format_html_join(
                 "",
                 "{}",
@@ -1296,7 +1309,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                 total_subskills,
                 skills_html,
             )
-
             # -----------------------------------------------------------------
             # ASSESSMENT HISTORY
             # -----------------------------------------------------------------
@@ -1418,21 +1430,29 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
         if not academic_profile.pk or not academic_profile.student_id:
             return
 
-        user = academic_profile.student
+        # ---------------------------------------------------------
+        # EXPLICIT SKILL ASSESSMENT SUBMISSION ONLY
+        #
+        # Normal Django Admin saves must not update skill ratings
+        # or create assessment history.
+        #
+        # An assessment is submitted only through the dedicated
+        # "Save assessment" button for one individual skill.
+        #
+        # The submitted value identifies both the course and skill
+        # so only that skill's ratings are processed and only that
+        # skill can generate a new historical snapshot.
+        # ---------------------------------------------------------
+        submitted_assessment = request.POST.get("_save_skill_assessment")
 
-        allowed_course_ids = set(
-            CourseEnrollment.objects
-            .filter(student=user)
-            .values_list("course_id", flat=True)
-        )
+        if not submitted_assessment:
+            return
 
-        # Historical assessment courses remain editable even if their
-        # enrollment record is no longer available.
-        allowed_course_ids.update(
-            StudentSkillAssessment.objects
-            .filter(student=user)
-            .values_list("course_id", flat=True)
-        )
+        try:
+            course_id, submitted_skill = submitted_assessment.split("__", 1)
+            submitted_course_id = int(course_id)
+        except (ValueError, TypeError):
+            return
 
         valid_skills = {
             value
@@ -1440,101 +1460,100 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             in StudentSkillAssessment.SKILL_AREA_CHOICES
         }
 
-        valid_subskills = {
-            skill: {value for value, label in subskills}
-            for skill, subskills in SUBSKILLS.items()
-        }
+        if submitted_skill not in valid_skills:
+            return
 
-        allowed_ratings = {
-            value
-            for value, label
-            in StudentSubSkillAssessment.Rating.choices
-        }
+        user = academic_profile.student
+        
+        # ---------------------------------------------------------
+        # ALLOWED COURSES
+        #
+        # Include current/historical enrollments and historical
+        # courses that already contain assessment data.
+        # ---------------------------------------------------------
+        allowed_course_ids = set(
+            CourseEnrollment.objects
+            .filter(student=user)
+            .values_list("course_id", flat=True)
+        )
 
-        for field_name, submitted_rating in request.POST.items():
-            if not field_name.startswith("subskill_rating__"):
-                continue
+        allowed_course_ids.update(
+            StudentSkillAssessment.objects
+            .filter(student=user)
+            .values_list("course_id", flat=True)
+        )
 
-            try:
-                prefix, course_id, skill, subskill = field_name.split("__", 3)
-                course_id = int(course_id)
-            except (ValueError, TypeError):
-                continue
+        if submitted_course_id not in allowed_course_ids:
+            return
 
-            if course_id not in allowed_course_ids:
-                continue
+        # ---------------------------------------------------------
+        # SUBMIT EACH SKILL FOR THE SELECTED COURSE
+        #
+        # One explicit course assessment may therefore create up
+        # to four skill snapshots: Speaking, Reading, Writing and
+        # Listening.
+        #
+        # A completely unrated skill with no existing assessment
+        # is ignored so displaying blank Admin fields does not
+        # create empty assessment records.
+        # ---------------------------------------------------------
+        for skill, expected_subskills in SUBSKILLS.items():
+            ratings = {}
 
-            if skill not in valid_skills:
-                continue
-
-            if subskill not in valid_subskills.get(skill, set()):
-                continue
-
-            rating = submitted_rating or None
-
-            if rating is not None and rating not in allowed_ratings:
-                continue
-
-            # -----------------------------------------------------------------
-            # BLANK RATING
-            #
-            # Do not create assessment records merely because they were
-            # displayed in Admin.
-            # -----------------------------------------------------------------
-
-            if rating is None:
-                assessment = (
-                    StudentSkillAssessment.objects
-                    .filter(
-                        student=user,
-                        course_id=course_id,
-                        skill=skill,
-                    )
-                    .first()
+            for subskill, label in expected_subskills:
+                field_name = (
+                    f"subskill_rating__{submitted_course_id}__"
+                    f"{skill}__{subskill}"
                 )
 
-                if not assessment:
-                    continue
+                rating = request.POST.get(field_name)
+                ratings[subskill] = rating or None
 
-                subskill_assessment = (
-                    StudentSubSkillAssessment.objects
-                    .filter(
-                        skill_assessment=assessment,
-                        subskill=subskill,
-                    )
-                    .first()
+            assessment = (
+                StudentSkillAssessment.objects
+                .filter(
+                    student=user,
+                    course_id=submitted_course_id,
+                    skill=skill,
                 )
-
-                if subskill_assessment and subskill_assessment.rating:
-                    subskill_assessment.rating = None
-                    subskill_assessment.save(
-                        update_fields=("rating", "updated_at")
-                    )
-
-                continue
-
-            # -----------------------------------------------------------------
-            # FIRST OR EXISTING ASSESSMENT
-            # -----------------------------------------------------------------
-
-            assessment, created = StudentSkillAssessment.objects.get_or_create(
-                student=user,
-                course_id=course_id,
-                skill=skill,
+                .first()
             )
 
-            subskill_assessment, created = StudentSubSkillAssessment.objects.get_or_create(
+            # Do not create an empty assessment merely because its
+            # blank fields were displayed in Django Admin.
+            if assessment is None and not any(ratings.values()):
+                continue
+
+            if assessment is None:
+                assessment = StudentSkillAssessment.objects.create(
+                    student=user,
+                    course_id=submitted_course_id,
+                    skill=skill,
+                )
+
+            submit_skill_assessment(
                 skill_assessment=assessment,
-                subskill=subskill,
+                ratings=ratings,
             )
 
-            if subskill_assessment.rating == rating:
-                continue
 
-            subskill_assessment.rating = rating
-            subskill_assessment.save(
-                update_fields=("rating", "updated_at")
+    def response_change(self, request, obj):
+        if "_save_skill_assessment" in request.POST:
+            self.message_user(
+                request,
+                "Skills assessment updated successfully.",
+                messages.SUCCESS,
             )
+
+            return HttpResponseRedirect(
+                reverse(
+                    f"admin:{obj._meta.app_label}_{obj._meta.model_name}_change",
+                    args=[obj.pk],
+                )
+            )
+
+        return super().response_change(request, obj)
+
 
     def assessment_history(self, student, course):
         # -------------------------------------------------------------------------

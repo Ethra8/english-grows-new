@@ -83,12 +83,15 @@ class StudentSubSkillAssessmentInlineForm(forms.ModelForm):
 #     through this formset.
 #
 # IMPORTANT:
-# The formset saves the individual subskill ratings.
-# The teacher assessment view is responsible for generating
-# the written feedback after the ratings have been saved.
+# The formset validates and packages the submitted subskill
+# ratings. Persistence is handled by the shared assessment
+# submission service.
 #
-# Historical snapshot creation will be moved into the
-# explicit assessment submission workflow separately.
+# The shared service saves the ratings and creates the
+# historical ongoing assessment snapshot.
+#
+# Written feedback is generated separately through an
+# explicit teacher/admin action.
 # ---------------------------------------------------------
 StudentSubSkillAssessmentFormSet = inlineformset_factory(
     StudentSkillAssessment,
