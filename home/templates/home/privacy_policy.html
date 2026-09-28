@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static i18n %}
 
@@ -38,7 +37,7 @@
             <div class="last-update">
                 <p>
                     <strong>{% trans "Last updated:" %}</strong>
-                    <time datetime="2026-09-24">{% trans "24 September 2026" %}</time>
+                    <time datetime="2026-09-28">{% trans "28 September 2026" %}</time>
                 </p>
             </div>
         </header>
@@ -118,6 +117,28 @@
                 {% endblocktrans %}
             </p>
 
+            <h3>{% trans "Online classroom and connection information" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Live online lessons are delivered using Microsoft Teams.
+                    Information generated in connection with an online lesson
+                    may include the participant's name or account identifier,
+                    email address where available, meeting or session details,
+                    date of attendance, joining and leaving times and total
+                    connection duration.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    These connection records may be used to verify attendance
+                    and participation in training, including where documentary
+                    evidence is required for company-funded or FUNDAE-related
+                    training.
+                {% endblocktrans %}
+            </p>
+
             <h3>{% trans "Placement-test information" %}</h3>
 
             <p>
@@ -175,6 +196,14 @@
 
             <p>
                 {% blocktrans %}
+                    Microsoft Teams may generate connection and attendance
+                    information automatically when participants join and
+                    leave live online lessons.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
                     Information required for registration, assessment
                     or the provision of a requested service must be
                     supplied to enable that service. Optional profile
@@ -222,6 +251,40 @@
                     Legitimate interests under Article 6(1)(f) GDPR
                     in organising and delivering agreed corporate
                     training and supporting learners' academic development.
+                {% endblocktrans %}
+            </p>
+
+            <h3>{% trans "Live online lessons and attendance verification" %}</h3>
+
+            <p>
+                {% blocktrans %}
+                    Microsoft Teams is used to deliver live online lessons.
+                    Connection and attendance information may be processed
+                    to organise and deliver lessons, verify participation,
+                    maintain attendance records and provide documentary
+                    evidence of training where required.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Where training is managed through FUNDAE or another
+                    applicable funded-training framework, connection records
+                    may be retained and made available as evidence of
+                    participation in accordance with the applicable training
+                    administration, monitoring and verification requirements.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                <strong>{% trans "Legal basis:" %}</strong>
+                {% blocktrans %}
+                    Article 6(1)(b) GDPR where the processing is necessary
+                    to deliver individually contracted training; Article
+                    6(1)(f) GDPR for the organisation and verification of
+                    company-funded training; and Article 6(1)(c) GDPR where
+                    the retention or provision of attendance evidence is
+                    required by an applicable legal obligation.
                 {% endblocktrans %}
             </p>
 
@@ -416,8 +479,9 @@
             <p>
                 {% blocktrans %}
                     English Grows uses the following providers
-                    to operate its platform, manage business
-                    communications and process customer payments.
+                    to operate its platform, deliver online training,
+                    manage business communications and process
+                    customer payments.
                 {% endblocktrans %}
             </p>
 
@@ -439,12 +503,28 @@
                             <td>{% trans "Business email hosting and the management and delivery of service-related communications." %}</td>
                         </tr>
                         <tr>
+                            <td><strong>Microsoft Teams</strong></td>
+                            <td>{% trans "Delivery of live online lessons and generation of meeting, connection and attendance information associated with those lessons." %}</td>
+                        </tr>
+                        <tr>
                             <td><strong>Stripe</strong></td>
                             <td>{% trans "Processing customer payments through Stripe-hosted payment pages, including payment confirmation and transaction management." %}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            <p>
+                {% blocktrans %}
+                    When participating in a live online lesson through
+                    Microsoft Teams, information required to operate
+                    the meeting and identify participation is processed
+                    within Microsoft's online services. English Grows
+                    may download and retain attendance reports where
+                    required for course administration or training
+                    verification.
+                {% endblocktrans %}
+            </p>
 
             <p>
                 {% blocktrans %}
@@ -461,7 +541,9 @@
             <p>
                 {% blocktrans %}
                     Information may also be disclosed to public
-                    authorities where required by applicable law.
+                    authorities or competent training-management
+                    bodies where required by applicable law or
+                    applicable funded-training requirements.
                     Further information about international
                     processing is provided in the following section.
                 {% endblocktrans %}
@@ -502,11 +584,19 @@
                     {% trans "Its Data Processing Addendum addresses international processing and provides for applicable Data Privacy Framework or Standard Contractual Clause arrangements." %}
                     <a href="https://render.com/dpa" target="_blank" rel="noopener noreferrer">{% trans "View agreement" %}</a>.
                 </li>
+
                 <li>
                     <strong>Google Workspace:</strong>
                     {% trans "Its Cloud Data Processing Addendum establishes the applicable international-transfer provisions." %}
                     <a href="https://cloud.google.com/terms/data-processing-addendum" target="_blank" rel="noopener noreferrer">{% trans "View agreement" %}</a>.
                 </li>
+
+                <li>
+                    <strong>Microsoft Teams:</strong>
+                    {% trans "Microsoft's Products and Services Data Protection Addendum establishes data-protection and international-transfer provisions applicable to Microsoft online services." %}
+                    <a href="https://www.microsoft.com/licensing/docs/view/Microsoft-Products-and-Services-Data-Protection-Addendum-DPA" target="_blank" rel="noopener noreferrer">{% trans "View agreement" %}</a>.
+                </li>
+
                 <li>
                     <strong>Stripe:</strong>
                     {% trans "Its Data Processing Agreement and incorporated Data Transfers Addendum establish the applicable transfer mechanisms." %}
@@ -544,18 +634,34 @@
                     <strong>{% trans "Account information:" %}</strong>
                     {% trans "While the account is required for the service, and afterwards only where a valid retention purpose remains." %}
                 </li>
+
                 <li>
                     <strong>{% trans "Course and academic records:" %}</strong>
                     {% trans "For training administration and academic follow-up, subject to applicable contractual or legal requirements." %}
                 </li>
+
+                <li>
+                    <strong>{% trans "Online-class attendance and connection records:" %}</strong>
+                    {% blocktrans %}
+                        For the period necessary to administer and verify
+                        training participation. Where records form part of
+                        the supporting documentation for FUNDAE-funded or
+                        FUNDAE-bonified training, they may be retained for
+                        four years in accordance with the applicable
+                        documentation-retention requirements.
+                    {% endblocktrans %}
+                </li>
+
                 <li>
                     <strong>{% trans "Placement-test attempts:" %}</strong>
                     {% trans "For result delivery and related placement administration, including necessary follow-up." %}
                 </li>
+
                 <li>
                     <strong>{% trans "Marketing information:" %}</strong>
                     {% trans "While the subscription remains active. Following withdrawal, limited information may be retained where necessary to respect the request or demonstrate compliance." %}
                 </li>
+
                 <li>
                     <strong>{% trans "Billing and accounting records:" %}</strong>
                     {% trans "For the periods required under applicable commercial, accounting and tax legislation." %}
@@ -657,6 +763,7 @@
                             <td data-label="{% trans 'Purpose' %}">{% trans "Protects forms against cross-site request forgery." %}</td>
                             <td data-label="{% trans 'Duration' %}">{% trans "364 days (Django default; renewable)." %}</td>
                         </tr>
+
                         <tr>
                             <td><strong><code>sessionid</code></strong></td>
                             <td data-label="{% trans 'Provider' %}">English Grows (Django)</td>
@@ -682,6 +789,15 @@
                     browser settings. Disabling essential cookies
                     may prevent certain website features from
                     functioning correctly.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans %}
+                    Live online lessons are accessed through Microsoft's
+                    external Teams environment. Microsoft's own websites
+                    and services are governed by Microsoft's applicable
+                    privacy and cookie information.
                 {% endblocktrans %}
             </p>
 
