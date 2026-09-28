@@ -25,6 +25,7 @@ from .models import (
     StudentSkillAssessment,
     StudentSubSkillAssessment,
     StudentSkillAssessmentSnapshot,
+    StudentTermAssessment,
     StudentSkillTermSnapshot,
     SUBSKILLS,
     StudentTermAssessmentReport,
@@ -1535,21 +1536,20 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                 update_fields=("rating", "updated_at")
             )
 
-    # -------------------------------------------------------------------------
-    # ASSESSMENT HISTORY
-    # Read-only historical records for one learner and course.
-    # -------------------------------------------------------------------------
-
     def assessment_history(self, student, course):
-        assessments = (
+        # -------------------------------------------------------------------------
+        # SKILLS ASSESSMENT HISTORY
+        # -------------------------------------------------------------------------
+
+        skill_assessments = (
             StudentSkillAssessment.objects
             .filter(student=student, course=course)
-            .prefetch_related("assessment_snapshots", "term_snapshots")
+            .prefetch_related("assessment_snapshots")
         )
 
         history = []
 
-        for assessment in assessments:
+        for assessment in skill_assessments:
             for snapshot in assessment.assessment_snapshots.all():
                 history.append({
                     "date": snapshot.recorded_at,
@@ -1560,13 +1560,31 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
                     "pk": snapshot.pk,
                 })
 
-            for snapshot in assessment.term_snapshots.all():
+        # -------------------------------------------------------------------------
+        # TERM ASSESSMENT HISTORY
+        #
+        # Term assessments belong to CourseEnrollment, not StudentSkillAssessment.
+        # -------------------------------------------------------------------------
+
+        term_assessments = (
+            StudentTermAssessment.objects
+            .filter(
+                enrollment__student=student,
+                enrollment__course=course,
+            )
+            .prefetch_related("skill_snapshots")
+        )
+
+        skill_labels = dict(StudentSkillAssessment.SKILL_AREA_CHOICES)
+
+        for term_assessment in term_assessments:
+            for snapshot in term_assessment.skill_snapshots.all():
                 history.append({
-                    "date": snapshot.recorded_at,
-                    "skill": assessment.get_skill_display(),
+                    "date": term_assessment.assessment_date,
+                    "skill": skill_labels.get(snapshot.skill, snapshot.skill),
                     "type": "Term assessment",
                     "score": snapshot.score,
-                    "term": snapshot.term_label,
+                    "term": term_assessment.term_label,
                     "pk": snapshot.pk,
                 })
 
@@ -1618,7 +1636,6 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             '</div>',
             rows,
         )
-
 
 
 @admin.register(StudentTermAssessmentReport)
