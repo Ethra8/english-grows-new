@@ -66,10 +66,10 @@
         </p>
         {% endif %}
 
-        {% if note.required_standard %}
+        {% if note.satisfactory %}
         <p>
             <strong>{% trans 'Meets minimum required standard' %}:</strong>
-            {% for subskill in note.required_standard %}
+            {% for subskill in note.satisfactory %}
                 <span class="teacher-subskill">{{ subskill }}</span>{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>

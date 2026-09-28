@@ -127,7 +127,7 @@ class SkillAssessmentModelTests(SkillAssessmentTestMixin, TestCase):
         expected = {
             Rating.NEEDS_WORK: Decimal("4.0"),
             Rating.DEVELOPING: Decimal("5.0"),
-            Rating.REQUIRED_STANDARD: Decimal("6.0"),
+            Rating.SATISFACTORY: Decimal("6.0"),
             Rating.CONFIDENT: Decimal("7.5"),
             Rating.STRONG: Decimal("10.0"),
         }
@@ -149,7 +149,7 @@ class SkillAssessmentModelTests(SkillAssessmentTestMixin, TestCase):
     def test_average_rounds_half_up_to_one_decimal(self):
         self.set_rating(0, Rating.STRONG)
         self.set_rating(1, Rating.STRONG)
-        self.set_rating(2, Rating.REQUIRED_STANDARD)
+        self.set_rating(2, Rating.SATISFACTORY)
 
         # 26 / 3 = 8.666... -> 8.7
         self.assertEqual(
@@ -221,7 +221,7 @@ class SkillAssessmentFormsetTests(SkillAssessmentTestMixin, TestCase):
             {
                 Rating.NEEDS_WORK,
                 Rating.DEVELOPING,
-                Rating.REQUIRED_STANDARD,
+                Rating.SATISFACTORY,
                 Rating.CONFIDENT,
                 Rating.STRONG,
             }.issubset(available)
@@ -449,7 +449,7 @@ class SkillCardHelperTests(SkillAssessmentTestMixin, TestCase):
             self.assertEqual(skill["assessed_subskills_count"], 0)
             self.assertEqual(skill["strengths"], [])
             self.assertEqual(skill["confident"], [])
-            self.assertEqual(skill["required_standard"], [])
+            self.assertEqual(skill["satisfactory"], [])
             self.assertEqual(skill["developing"], [])
             self.assertEqual(skill["needs_work"], [])
 
@@ -533,7 +533,7 @@ class SkillRatingDisplayTests(SkillAssessmentTestMixin, TestCase):
         expected = {
             "strengths": Rating.STRONG,
             "confident": Rating.CONFIDENT,
-            "required_standard": Rating.REQUIRED_STANDARD,
+            "satisfactory": Rating.SATISFACTORY,
             "developing": Rating.DEVELOPING,
             "needs_work": Rating.NEEDS_WORK,
         }
@@ -556,7 +556,7 @@ class SkillRatingDisplayTests(SkillAssessmentTestMixin, TestCase):
         for category in (
             "strengths",
             "confident",
-            "required_standard",
+            "satisfactory",
             "developing",
             "needs_work",
         ):

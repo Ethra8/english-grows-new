@@ -27,7 +27,7 @@ from .term_assessment_report_content import (
     NARRATIVE_RATING_LANGUAGE,
     SUBSKILL_DEVELOPMENT_NARRATIVES,
     SKILL_CONSOLIDATION_NARRATIVES,
-    SKILL_REQUIRED_STANDARD_NARRATIVES,
+    SKILL_SATISFACTORY_NARRATIVES,
     SUBSKILL_NEXT_TERM_FOCUS,
 )
 
@@ -147,7 +147,7 @@ def build_skill_performance_summary(skill, items, learner_name):
     rating_order = (
         RATING.STRONG,
         RATING.CONFIDENT,
-        RATING.REQUIRED_STANDARD,
+        RATING.SATISFACTORY,
         RATING.DEVELOPING,
         RATING.NEEDS_WORK,
     )
@@ -159,14 +159,13 @@ def build_skill_performance_summary(skill, items, learner_name):
         groups[item["rating"]].append(expression)
 
     sentences = []
-    possessive = f"{learner_name}'" if learner_name.endswith("s") else f"{learner_name}'s"
 
     openings = {
         RATING.STRONG: f"{learner_name} demonstrates strong ability in",
         RATING.CONFIDENT: f"{learner_name} demonstrates confidence in",
-        RATING.REQUIRED_STANDARD: f"{possessive} performance meets the expected standard in",
-        RATING.DEVELOPING: f"{possessive} skills are still developing in",
-        RATING.NEEDS_WORK: f"{learner_name} would benefit from targeted practice in",
+        RATING.SATISFACTORY: f"{learner_name} demonstrates satisfactory ability in",
+        RATING.DEVELOPING: f"{learner_name} demonstrates developing ability in",
+        RATING.NEEDS_WORK: f"{learner_name} currently shows limited ability in",
     }
 
     for rating in rating_order:
@@ -220,7 +219,7 @@ def build_development_priorities(subskills):
     Generate a development paragraph for each language skill.
 
     Needs Work / Developing: targeted development.
-    Required Standard: consolidation and further improvement.
+    Satisfactory: consolidation and further improvement.
     Confident / Strong: consolidation and extension.
     """
     priorities = {}
@@ -246,52 +245,30 @@ def build_development_priorities(subskills):
             if item["rating"] == RATING.DEVELOPING
         ]
 
-        required_standard = [
+        satisfactory = [
             item for item in skill_items
-            if item["rating"] == RATING.REQUIRED_STANDARD
+            if item["rating"] == RATING.SATISFACTORY
         ]
 
         sentences = []
 
         # Targeted development
-        if needs_work:
-            expressions = [
-                SUBSKILL_NARRATIVES[skill][item["subskill"]]
-                for item in needs_work
-            ]
-
-            sentences.append(
-                f"Targeted development is recommended in "
-                f"{join_narrative_items(expressions)}."
-            )
-
-        if developing:
-            expressions = [
-                SUBSKILL_NARRATIVES[skill][item["subskill"]]
-                for item in developing
-            ]
-
-            sentences.append(
-                f"Further development is recommended in "
-                f"{join_narrative_items(expressions)}."
-            )
-
         for item in needs_work + developing:
             sentences.append(
                 SUBSKILL_DEVELOPMENT_NARRATIVES[skill][item["subskill"]]
             )
 
-        # Required Standard: acknowledge achievement while
+        # Satisfactory: acknowledge achievement while
         # identifying specific opportunities for improvement.
-        if required_standard:
+        if satisfactory:
             if not needs_work and not developing:
                 sentences.append(
-                    SKILL_REQUIRED_STANDARD_NARRATIVES[skill]
+                    SKILL_SATISFACTORY_NARRATIVES[skill]
                 )
             else:
                 expressions = [
                     SUBSKILL_NARRATIVES[skill][item["subskill"]]
-                    for item in required_standard
+                    for item in satisfactory
                 ]
 
                 sentences.append(
@@ -299,12 +276,12 @@ def build_development_priorities(subskills):
                     f"{join_narrative_items(expressions)}."
                 )
 
-            for item in required_standard:
+            for item in satisfactory:
                 sentences.append(
                     SUBSKILL_RECOMMENDATIONS[skill][item["subskill"]]
                 )
 
-        # No development ratings and no Required Standard:
+        # No development ratings and no Satisfactory:
         # all subskills are Confident or Strong.
         if not sentences:
             sentences.append(
@@ -327,7 +304,7 @@ def select_development_priorities(subskills):
     Priority order:
     1. Focus areas
     2. Developing
-    3. Required standard achieved, for consolidation
+    3. Satisfactory, for consolidation
     4. Confident in / Key strengths, for extension
 
     Equal ratings retain the existing SUBSKILLS order.

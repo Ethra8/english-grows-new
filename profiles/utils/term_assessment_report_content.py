@@ -1,21 +1,22 @@
-
 """
 Curated pedagogical content for Formal Term Assessment Reports.
 
 Recommendations are selected from submitted assessment ratings.
+
 This module contains content only; it does not access or modify the database.
 """
+
 
 # ---------------------------------------------------------
 # RATING INTERPRETATIONS
 # ---------------------------------------------------------
 
 RATING_INTERPRETATIONS = {
-    "needs_work": "Priority development is recommended.",
-    "developing": "Further development is recommended.",
-    "required_standard": "The required standard has been achieved. Consolidation is recommended.",
-    "confident": "Continue extending performance in this area.",
-    "strong": "Maintain and build on this established strength.",
+    "needs_work": "This area requires targeted development.",
+    "developing": "This area is still developing.",
+    "satisfactory": "Performance in this area is satisfactory.",
+    "confident": "Performance in this area is confident and secure.",
+    "strong": "Performance in this area is a clear strength.",
 }
 
 
@@ -104,7 +105,6 @@ SUBSKILL_RECOMMENDATIONS = {
 }
 
 
-
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY — NARRATIVE EXPRESSIONS
 #
@@ -145,22 +145,22 @@ SUBSKILL_NARRATIVES = {
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY — RATING LANGUAGE
 #
-# Rating values remain unchanged. These descriptions guide
-# the narrative generator without affecting numerical scores.
+# Describes current demonstrated performance only.
+# Development advice belongs in Development Priorities.
 # ---------------------------------------------------------
 
 NARRATIVE_RATING_LANGUAGE = {
     "needs_work": {
         "group": "development",
-        "description": "requires targeted attention",
+        "description": "currently shows limited ability",
     },
     "developing": {
         "group": "development",
-        "description": "is developing",
+        "description": "demonstrates developing ability",
     },
-    "required_standard": {
-        "group": "standard",
-        "description": "meets the expected standard",
+    "satisfactory": {
+        "group": "satisfactory",
+        "description": "demonstrates satisfactory ability",
     },
     "confident": {
         "group": "strength",
@@ -171,7 +171,6 @@ NARRATIVE_RATING_LANGUAGE = {
         "description": "demonstrates strong ability",
     },
 }
-
 
 
 # ---------------------------------------------------------
@@ -296,40 +295,40 @@ SKILL_CONSOLIDATION_NARRATIVES = {
 
 
 # ---------------------------------------------------------
-# DEVELOPMENT PRIORITIES — REQUIRED STANDARD
+# DEVELOPMENT PRIORITIES — SATISFACTORY
 #
 # Used when a skill has no Needs Work or Developing
 # ratings, but one or more subskills are rated
-# Required Standard (6/10).
+# Satisfactory (6/10).
 # ---------------------------------------------------------
 
-SKILL_REQUIRED_STANDARD_NARRATIVES = {
+SKILL_SATISFACTORY_NARRATIVES = {
     "speaking": (
-        "The expected standard has been achieved, with further opportunities "
-        "to develop fluency, accuracy and confidence in spoken communication. "
-        "Continued speaking practice is encouraged to consolidate existing "
-        "skills and gradually extend communicative range and flexibility."
+        "Performance is satisfactory, with opportunities to further develop "
+        "fluency, accuracy and confidence in spoken communication. Continued "
+        "speaking practice is encouraged to consolidate existing skills and "
+        "gradually extend communicative range and flexibility."
     ),
     "reading": (
-        "The expected standard has been achieved, with further opportunities "
-        "to develop reading efficiency and depth of comprehension. "
-        "Continued exposure to varied written texts is encouraged to "
-        "consolidate existing skills and progressively strengthen the "
-        "ability to interpret information and meaning in context."
+        "Performance is satisfactory, with opportunities to further develop "
+        "reading efficiency and depth of comprehension. Continued exposure to "
+        "varied written texts is encouraged to consolidate existing skills and "
+        "progressively strengthen the ability to interpret information and "
+        "meaning in context."
     ),
     "listening": (
-        "The expected standard has been achieved, with further opportunities "
-        "to develop listening confidence and depth of comprehension. "
-        "Regular exposure to spoken English is encouraged to consolidate "
-        "existing skills and gradually strengthen the ability to understand "
-        "information across different speaking styles and contexts."
+        "Performance is satisfactory, with opportunities to further develop "
+        "listening confidence and depth of comprehension. Regular exposure to "
+        "spoken English is encouraged to consolidate existing skills and "
+        "gradually strengthen comprehension across different speaking styles "
+        "and contexts."
     ),
     "writing": (
-        "The expected standard has been achieved, with further opportunities "
-        "to develop accuracy, range and flexibility in written communication. "
-        "Continued writing practice is encouraged to consolidate existing "
-        "skills and progressively strengthen the ability to express ideas "
-        "clearly and effectively."
+        "Performance is satisfactory, with opportunities to further develop "
+        "accuracy, range and flexibility in written communication. Continued "
+        "writing practice is encouraged to consolidate existing skills and "
+        "progressively strengthen the ability to express ideas clearly and "
+        "effectively."
     ),
 }
 
@@ -348,16 +347,19 @@ SUBSKILL_NEXT_TERM_FOCUS = {
         "pronunciation": "developing clearer pronunciation, word stress and intonation",
         "interaction": "strengthening conversational interaction and confidence in spoken exchanges",
     },
+
     "reading": {
         "scanning": "improving the ability to locate specific information efficiently in written texts",
         "skimming": "strengthening the ability to identify main ideas and the overall purpose of written texts",
         "detailed": "strengthening detailed reading comprehension",
     },
+
     "listening": {
         "gist": "developing greater confidence in understanding the main message of spoken English",
         "specific_information": "improving the ability to identify and retain specific information in spoken English",
         "detailed": "strengthening detailed listening comprehension",
     },
+
     "writing": {
         "organization": "developing clearer organisation and structure in written communication",
         "cohesion": "strengthening cohesion and the logical connection of ideas in writing",

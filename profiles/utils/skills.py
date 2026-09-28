@@ -120,8 +120,8 @@ def build_student_skill_cards(student, course, build_skill_note_display):
                     note_display["strengths"],
                 "confident":
                     note_display["confident"],
-                "required_standard":
-                    note_display["required_standard"],
+                "satisfactory":
+                    note_display["satisfactory"],
                 "developing":
                     note_display["developing"],
                 "needs_work":
@@ -145,7 +145,7 @@ def build_student_skill_cards(student, course, build_skill_note_display):
                     total_subskills_count,
                 "strengths": [],
                 "confident": [],
-                "required_standard": [],
+                "satisfactory": [],
                 "developing": [],
                 "needs_work": [],
             })

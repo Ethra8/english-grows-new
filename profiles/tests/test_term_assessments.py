@@ -71,7 +71,7 @@ class TermAssessmentDraftTests(TestCase):
                 StudentSubSkillAssessment.objects.create(
                     skill_assessment=skill_assessment,
                     subskill=subskill,
-                    rating="required_standard",
+                    rating="satisfactory",
                 )
 
     def create_draft(self, term_label="Test Term 1"):
@@ -342,7 +342,7 @@ class TermAssessmentDraftTests(TestCase):
 
         ratings = {
             "fluency": "confident",
-            "accuracy_and_range": "required_standard",
+            "accuracy_and_range": "satisfactory",
             "pronunciation": "developing",
             "interaction": "strong",
         }
@@ -377,7 +377,7 @@ class TermAssessmentDraftTests(TestCase):
 
         ratings = {
             "listening": "confident",
-            "reading": "required_standard",
+            "reading": "satisfactory",
             "speaking": "strong",
             "writing": "developing",
         }
@@ -510,7 +510,7 @@ class TermAssessmentDraftTests(TestCase):
         ongoing_fluency = self.get_ongoing_fluency()
         ongoing_fluency.refresh_from_db()
 
-        self.assertEqual(ongoing_fluency.rating, "required_standard")
+        self.assertEqual(ongoing_fluency.rating, "satisfactory")
 
     def test_failed_submission_does_not_store_partial_scores(self):
         assessment, _ = self.create_draft()
@@ -566,7 +566,7 @@ class TermAssessmentDraftTests(TestCase):
             update_term_subskill_rating(formal_fluency, "invalid_rating")
 
         formal_fluency.refresh_from_db()
-        self.assertEqual(formal_fluency.rating, "required_standard")
+        self.assertEqual(formal_fluency.rating, "satisfactory")
 
     def test_submitted_rating_cannot_be_edited_through_helper(self):
         assessment, _ = self.create_draft()
@@ -578,7 +578,7 @@ class TermAssessmentDraftTests(TestCase):
             update_term_subskill_rating(formal_fluency, "strong")
 
         formal_fluency.refresh_from_db()
-        self.assertEqual(formal_fluency.rating, "required_standard")
+        self.assertEqual(formal_fluency.rating, "satisfactory")
 
     def test_submitted_rating_cannot_be_saved_directly(self):
         assessment, _ = self.create_draft()
@@ -592,7 +592,7 @@ class TermAssessmentDraftTests(TestCase):
             formal_fluency.save()
 
         formal_fluency.refresh_from_db()
-        self.assertEqual(formal_fluency.rating, "required_standard")
+        self.assertEqual(formal_fluency.rating, "satisfactory")
 
     def test_submitted_rating_cannot_be_deleted_directly(self):
         assessment, _ = self.create_draft()
@@ -669,7 +669,7 @@ class TermAssessmentDraftTests(TestCase):
         ongoing_fluency = self.get_ongoing_fluency()
         ongoing_fluency.refresh_from_db()
 
-        self.assertEqual(ongoing_fluency.rating, "required_standard")
+        self.assertEqual(ongoing_fluency.rating, "satisfactory")
 
 
     # ---------------------------------------------------------
@@ -899,7 +899,7 @@ class TermAssessmentDraftTests(TestCase):
         ongoing_after = self.get_ongoing_fluency().rating
 
         self.assertEqual(ongoing_before, ongoing_after)
-        self.assertEqual(ongoing_after, "required_standard")
+        self.assertEqual(ongoing_after, "satisfactory")
 
     def test_report_generation_is_deterministic(self):
         assessment, _ = self.create_draft()
@@ -1070,7 +1070,7 @@ class TermAssessmentDraftTests(TestCase):
         ongoing_after = self.get_ongoing_fluency().rating
 
         self.assertEqual(ongoing_before, ongoing_after)
-        self.assertEqual(ongoing_after, "required_standard")
+        self.assertEqual(ongoing_after, "satisfactory")
 
     def test_report_creation_rolls_back_on_generation_failure(self):
         assessment, _ = self.create_draft()
@@ -1142,7 +1142,7 @@ class TermAssessmentDetailViewTests(TestCase):
                 StudentSubSkillAssessment.objects.create(
                     skill_assessment=skill_assessment,
                     subskill=subskill,
-                    rating="required_standard",
+                    rating="satisfactory",
                 )
 
     def setUp(self):
@@ -1267,7 +1267,7 @@ class TermAssessmentDetailViewTests(TestCase):
         self.formal_fluency.refresh_from_db()
         self.assertEqual(
             self.formal_fluency.rating,
-            "required_standard",
+            "satisfactory",
         )
 
 
@@ -1282,8 +1282,8 @@ class TermAssessmentDetailViewTests(TestCase):
         other_subskill.refresh_from_db()
         self.formal_fluency.refresh_from_db()
 
-        self.assertEqual(other_subskill.rating, "required_standard")
-        self.assertEqual(self.formal_fluency.rating, "required_standard")
+        self.assertEqual(other_subskill.rating, "satisfactory")
+        self.assertEqual(self.formal_fluency.rating, "satisfactory")
 
     def test_nonexistent_subskill_is_rejected(self):
         response = self.client.post(
@@ -1296,7 +1296,7 @@ class TermAssessmentDetailViewTests(TestCase):
         self.formal_fluency.refresh_from_db()
         self.assertEqual(
             self.formal_fluency.rating,
-            "required_standard",
+            "satisfactory",
         )
 
     # ---------------------------------------------------------
@@ -1320,7 +1320,7 @@ class TermAssessmentDetailViewTests(TestCase):
         self.formal_fluency.refresh_from_db()
         self.assertEqual(
             self.formal_fluency.rating,
-            "required_standard",
+            "satisfactory",
         )
 
     def test_student_cannot_update_assessment(self):
@@ -1333,7 +1333,7 @@ class TermAssessmentDetailViewTests(TestCase):
         self.formal_fluency.refresh_from_db()
         self.assertEqual(
             self.formal_fluency.rating,
-            "required_standard",
+            "satisfactory",
         )
 
     def test_anonymous_user_cannot_access_assessment(self):
@@ -1373,7 +1373,7 @@ class TermAssessmentDetailViewTests(TestCase):
 
         self.assertEqual(
             self.formal_fluency.rating,
-            "required_standard",
+            "satisfactory",
         )
         self.assertEqual(
             self.assessment.status,

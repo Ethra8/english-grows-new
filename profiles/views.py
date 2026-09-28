@@ -1665,7 +1665,7 @@ def my_skills(request):
                 "total_subskills_count": len(subskills),
                 "strengths": [],
                 "confident": [],
-                "required_standard": [],
+                "satisfactory": [],
                 "developing": [],
                 "needs_work": [],
             })
@@ -3980,10 +3980,10 @@ def build_skill_note_display(skill_assessment):
             if subskill.rating == "confident"
         ],
 
-        "required_standard": [
+        "satisfactory": [
             subskill.get_subskill_display()
             for subskill in subskills
-            if subskill.rating == "required_standard"
+            if subskill.rating == "satisfactory"
         ],
 
         "developing": [

@@ -113,11 +113,11 @@
                         {% endif %}
 
 
-                        {% if skill.required_standard %}
+                        {% if skill.satisfactory %}
                         <div class="subskill-group">
                             <p><strong>{% trans 'Required standard achieved' %}</strong></p>
                             <ul>
-                                {% for subskill in skill.required_standard %}
+                                {% for subskill in skill.satisfactory %}
                                     <li><span class="teacher-subskill">{{ subskill }}</span></li>
                                 {% endfor %}
                             </ul>

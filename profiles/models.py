@@ -561,9 +561,9 @@ class StudentSubSkillAssessment(models.Model):
             "developing",
             "Developing",
         )
-        REQUIRED_STANDARD = (
-            "required_standard",
-            "Required standard achieved",
+        SATISFACTORY = (
+            "satisfactory",
+            "Satisfactory/ Pass",
         )
         CONFIDENT = (
             "confident",
@@ -582,7 +582,7 @@ class StudentSubSkillAssessment(models.Model):
     SCORE_BY_RATING = {
         Rating.NEEDS_WORK: Decimal("4.0"),
         Rating.DEVELOPING: Decimal("5.0"),
-        Rating.REQUIRED_STANDARD: Decimal("6.0"),
+        Rating.SATISFACTORY: Decimal("6.0"),
         Rating.CONFIDENT: Decimal("7.5"),
         Rating.STRONG: Decimal("10.0"),
     }
