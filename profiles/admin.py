@@ -1487,55 +1487,51 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             return
 
         # ---------------------------------------------------------
-        # SUBMIT EACH SKILL FOR THE SELECTED COURSE
+        # SUBMIT SELECTED SKILL ONLY
         #
-        # One explicit course assessment may therefore create up
-        # to four skill snapshots: Speaking, Reading, Writing and
-        # Listening.
-        #
-        # A completely unrated skill with no existing assessment
-        # is ignored so displaying blank Admin fields does not
-        # create empty assessment records.
+        # The Save assessment button identifies one course and one
+        # skill. Only that skill's subskill ratings are processed,
+        # and only that skill can create a historical snapshot.
         # ---------------------------------------------------------
-        for skill, expected_subskills in SUBSKILLS.items():
-            ratings = {}
+        expected_subskills = SUBSKILLS.get(submitted_skill, [])
+        ratings = {}
 
-            for subskill, label in expected_subskills:
-                field_name = (
-                    f"subskill_rating__{submitted_course_id}__"
-                    f"{skill}__{subskill}"
-                )
-
-                rating = request.POST.get(field_name)
-                ratings[subskill] = rating or None
-
-            assessment = (
-                StudentSkillAssessment.objects
-                .filter(
-                    student=user,
-                    course_id=submitted_course_id,
-                    skill=skill,
-                )
-                .first()
+        for subskill, label in expected_subskills:
+            field_name = (
+                f"subskill_rating__{submitted_course_id}__"
+                f"{submitted_skill}__{subskill}"
             )
 
-            # Do not create an empty assessment merely because its
-            # blank fields were displayed in Django Admin.
-            if assessment is None and not any(ratings.values()):
-                continue
+            rating = request.POST.get(field_name)
+            ratings[subskill] = rating or None
 
-            if assessment is None:
-                assessment = StudentSkillAssessment.objects.create(
-                    student=user,
-                    course_id=submitted_course_id,
-                    skill=skill,
-                )
+        assessment = (
+            StudentSkillAssessment.objects
+            .filter(
+                student=user,
+                course_id=submitted_course_id,
+                skill=submitted_skill,
+            )
+            .first()
+        )
 
-            submit_skill_assessment(
-                skill_assessment=assessment,
-                ratings=ratings,
+        # Do not create an empty assessment merely because its
+        # blank fields were displayed in Django Admin.
+        if assessment is None and not any(ratings.values()):
+            return
+
+        if assessment is None:
+            assessment = StudentSkillAssessment.objects.create(
+                student=user,
+                course_id=submitted_course_id,
+                skill=submitted_skill,
             )
 
+        submit_skill_assessment(
+            skill_assessment=assessment,
+            ratings=ratings,
+        )
+        
 
     def response_change(self, request, obj):
         if "_save_skill_assessment" in request.POST:
