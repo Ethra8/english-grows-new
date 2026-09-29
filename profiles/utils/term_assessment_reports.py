@@ -44,6 +44,11 @@ from .term_assessment_listening_narratives import (
     LISTENING_SUBSKILL_ORDER,
 )
 
+from profiles.utils.term_assessment_writing_narratives import (
+    WRITING_PERFORMANCE_NARRATIVES,
+    WRITING_SUBSKILL_ORDER,
+)
+
 # ---------------------------------------------------------
 # CONFIGURATION
 # ---------------------------------------------------------
@@ -547,6 +552,60 @@ def build_listening_performance_summary(items, learner_name):
 
 
 
+def build_writing_performance_summary(items, learner_name):
+    """Return the canonical Writing narrative for the exact rating combination."""
+    expected_subskills = set(WRITING_SUBSKILL_ORDER)
+
+    if len(items) != len(expected_subskills):
+        raise ValidationError(
+            "Writing performance requires exactly four subskill ratings."
+        )
+
+    ratings = {}
+
+    for item in items:
+        subskill = item["subskill"]
+        rating = item["rating"]
+
+        if subskill not in expected_subskills:
+            raise ValidationError(
+                f"Unsupported Writing subskill: {subskill}."
+            )
+
+        if subskill in ratings:
+            raise ValidationError(
+                f"Duplicate Writing subskill: {subskill}."
+            )
+
+        rating_value = getattr(rating, "value", rating)
+
+        if rating_value not in RATING.values:
+            raise ValidationError(
+                f"Unsupported Writing rating: {rating_value}."
+            )
+
+        ratings[subskill] = rating_value
+
+    if set(ratings) != expected_subskills:
+        raise ValidationError(
+            "Writing performance contains an invalid subskill structure."
+        )
+
+    combination = tuple(
+        ratings[subskill]
+        for subskill in WRITING_SUBSKILL_ORDER
+    )
+
+    try:
+        narrative = WRITING_PERFORMANCE_NARRATIVES[combination]
+    except KeyError as exc:
+        raise ValidationError(
+            f"No Writing performance narrative exists for ratings: {combination}."
+        ) from exc
+
+    return narrative.format(learner_name=learner_name)
+
+
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY
 # ---------------------------------------------------------
@@ -655,6 +714,12 @@ def build_skill_performance_summary(skill, items, learner_name):
             learner_name,
         )
     
+    if skill == "writing":
+        return build_writing_performance_summary(
+            items,
+            learner_name,
+        )
+
     rating_order = (
         RATING.STRONG,
         RATING.CONFIDENT,

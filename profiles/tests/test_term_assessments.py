@@ -30,6 +30,7 @@ from profiles.utils.term_assessment_reports import (
     build_speaking_performance_summary,
     build_reading_performance_summary,
     build_listening_performance_summary,
+    build_writing_performance_summary,
     create_term_assessment_report,
     generate_term_assessment_report,
 )
@@ -509,6 +510,133 @@ class ListeningPerformanceSummaryTests(TestCase):
                 "development to reach the expected standard."
             ),
         )
+
+
+
+class WritingPerformanceSummaryTests(TestCase):
+    """Exhaustive tests for the Writing canonical performance narratives."""
+
+    subskills = (
+        "organization",
+        "cohesion",
+        "vocabulary_grammar",
+        "register",
+    )
+
+    @staticmethod
+    def build_items(combination):
+        return [
+            {
+                "subskill": subskill,
+                "rating": item_rating,
+            }
+            for subskill, item_rating in zip(
+                WritingPerformanceSummaryTests.subskills,
+                combination,
+            )
+        ]
+
+    def test_every_writing_rating_combination_generates_summary(self):
+        rating = StudentSubSkillAssessment.Rating
+        ratings = (
+            rating.NEEDS_WORK,
+            rating.DEVELOPING,
+            rating.SATISFACTORY,
+            rating.CONFIDENT,
+            rating.STRONG,
+        )
+
+        combinations_tested = 0
+
+        for combination in product(ratings, repeat=4):
+            summary = build_writing_performance_summary(
+                self.build_items(combination),
+                "Maria",
+            )
+
+            self.assertTrue(summary.strip())
+            self.assertNotIn("None", summary)
+            self.assertNotIn("{learner_name}", summary)
+
+            combinations_tested += 1
+
+        self.assertEqual(combinations_tested, 625)
+
+    def test_writing_all_strong_uses_expected_narrative(self):
+        rating = StudentSubSkillAssessment.Rating
+
+        summary = build_writing_performance_summary(
+            self.build_items(
+                (
+                    rating.STRONG,
+                    rating.STRONG,
+                    rating.STRONG,
+                    rating.STRONG,
+                )
+            ),
+            "Maria",
+        )
+
+        self.assertEqual(
+            summary,
+            (
+                "Written communication is a clear strength for Maria, "
+                "who demonstrates consistently strong performance across "
+                "organisation and clarity, cohesion, grammatical accuracy "
+                "and language range, and control of register."
+            ),
+        )
+
+    def test_writing_all_satisfactory_uses_expected_narrative(self):
+        rating = StudentSubSkillAssessment.Rating
+
+        summary = build_writing_performance_summary(
+            self.build_items(
+                (
+                    rating.SATISFACTORY,
+                    rating.SATISFACTORY,
+                    rating.SATISFACTORY,
+                    rating.SATISFACTORY,
+                )
+            ),
+            "Maria",
+        )
+
+        self.assertEqual(
+            summary,
+            (
+                "Maria's writing performance meets the expected standard "
+                "across all four assessed areas. Organisation and clarity, "
+                "cohesion, grammatical accuracy and language range, and "
+                "control of register are satisfactory for this level, "
+                "although there remains clear scope to develop greater "
+                "consistency, flexibility and precision."
+            ),
+        )
+
+    def test_writing_rejects_incomplete_assessment(self):
+        rating = StudentSubSkillAssessment.Rating
+
+        items = [
+            {
+                "subskill": "organization",
+                "rating": rating.SATISFACTORY,
+            },
+            {
+                "subskill": "cohesion",
+                "rating": rating.SATISFACTORY,
+            },
+            {
+                "subskill": "vocabulary_grammar",
+                "rating": rating.SATISFACTORY,
+            },
+        ]
+
+        with self.assertRaises(ValidationError):
+            build_writing_performance_summary(
+                items,
+                "Maria",
+            )
 
 
 class TermAssessmentDraftTests(TestCase):
@@ -1286,6 +1414,32 @@ class TermAssessmentDraftTests(TestCase):
             with self.assertRaises(RuntimeError):
                 create_term_assessment_report(assessment, self.student)
         self.assertFalse(StudentTermAssessmentReport.objects.exists())
+
+    def test_report_uses_canonical_writing_performance_summary(self):
+        assessment, _ = self.create_draft()
+
+        StudentTermSubSkillAssessment.objects.filter(
+            skill_snapshot__term_assessment=assessment,
+            skill_snapshot__skill="writing",
+        ).update(rating="strong")
+
+        assessment = submit_term_assessment(
+            assessment,
+            self.student,
+        )
+
+        report = generate_term_assessment_report(assessment)
+        writing_summary = report["performance_summary"]["writing"]
+
+        self.assertIn(
+            "Written communication is a clear strength",
+            writing_summary,
+        )
+        self.assertIn(
+            "consistently strong performance across organisation and clarity",
+            writing_summary,
+        )
+
 
 
 class TermAssessmentDetailViewTests(TestCase):
