@@ -998,16 +998,32 @@ class TermAssessmentDraftTests(TestCase):
         )
     def test_report_identifies_recorded_strengths(self):
         assessment, _ = self.create_draft()
+
         StudentTermSubSkillAssessment.objects.filter(
             skill_snapshot__term_assessment=assessment,
             skill_snapshot__skill="speaking",
             subskill="fluency",
         ).update(rating="strong")
-        assessment = submit_term_assessment(assessment, self.student)
-        report = generate_term_assessment_report(assessment)
+
+        assessment = submit_term_assessment(
+            assessment,
+            self.student,
+        )
+
+        report = generate_term_assessment_report(
+            assessment,
+        )
+
+        speaking_summary = report["performance_summary"]["speaking"]
+
         self.assertIn(
-            "fluency stands out as a particular strength",
-            report["performance_summary"]["speaking"],
+            "shows a clear strength in fluency",
+            speaking_summary,
+        )
+        self.assertIn(
+            "grammatical accuracy and language range, pronunciation, and spoken interaction "
+            "meet the expected standard",
+            speaking_summary,
         )
     def test_report_rejects_missing_subskill_rating(self):
         assessment, _ = self.create_draft()
