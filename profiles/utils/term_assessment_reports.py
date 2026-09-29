@@ -53,10 +53,10 @@ SUBSKILL_LABELS = {
 }
 
 
+
 # ---------------------------------------------------------
 # VALIDATION AND DATA COLLECTION
 # ---------------------------------------------------------
-
 def get_report_assessment_data(assessment):
     """Return validated, ordered data from a submitted assessment."""
 
@@ -264,6 +264,22 @@ def analyse_speaking_profile(items):
     }
 
 
+def get_stronger_area_language(level, plural=False):
+    if level == 5:
+        return "clear strengths" if plural else "a particular strength"
+    if level == 4:
+        return "more confident areas" if plural else "a more confident area"
+    return "more established areas" if plural else "a more established area"
+
+
+def get_weaker_area_language(level, plural=False):
+    if level == 1:
+        return "least established areas" if plural else "the least established area"
+    if level == 2:
+        return "less consistent areas" if plural else "a less consistent area"
+    return "comparatively less secure areas" if plural else "a comparatively less secure area"
+
+
 
 def build_speaking_performance_summary(profile, learner_name):
     """
@@ -281,7 +297,6 @@ def build_speaking_performance_summary(profile, learner_name):
             for subskill, rating in ratings.items()
             if rating == RATING.STRONG
         ]
-
         confident = [
             subskill
             for subskill, rating in ratings.items()
@@ -299,12 +314,10 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         mixed = content["mixed"]
-
         strong_expressions = [
             mixed["strength_clause"][subskill]
             for subskill in strong
         ]
-
         secure_expressions = [
             mixed["secure_clause"][subskill]
             for subskill in confident
@@ -315,7 +328,6 @@ def build_speaking_performance_summary(profile, learner_name):
             if len(strong) >= 2
             else "opening_confident"
         )
-
         opening = mixed[opening_key].format(
             learner_name=learner_name
         )
@@ -336,7 +348,6 @@ def build_speaking_performance_summary(profile, learner_name):
             for subskill, rating in ratings.items()
             if rating == RATING.CONFIDENT
         ]
-
         satisfactory = [
             subskill
             for subskill, rating in ratings.items()
@@ -349,12 +360,10 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         mixed = content["mixed"]
-
         confident_expressions = [
             mixed["confident_clause"][subskill]
             for subskill in confident
         ]
-
         satisfactory_expressions = [
             mixed["satisfactory_clause"][subskill]
             for subskill in satisfactory
@@ -365,7 +374,6 @@ def build_speaking_performance_summary(profile, learner_name):
             if len(confident) >= 2
             else "opening_satisfactory"
         )
-
         opening = mixed[opening_key].format(
             learner_name=learner_name
         )
@@ -374,9 +382,9 @@ def build_speaking_performance_summary(profile, learner_name):
             f"{opening}, with particular confidence in "
             f"{join_narrative_items(confident_expressions)}. "
             f"Performance in {join_narrative_items(satisfactory_expressions)} "
-            f"is satisfactory and provides a sound basis for continued progress."
+            f"is satisfactory and contributes to effective overall communication."
         )
-
+    
     if profile_name == "developing_evenly":
         content = SPEAKING_PROFILE_NARRATIVES["developing_evenly"]
 
@@ -385,7 +393,6 @@ def build_speaking_performance_summary(profile, learner_name):
             for subskill, rating in ratings.items()
             if rating == RATING.DEVELOPING
         ]
-
         satisfactory = [
             subskill
             for subskill, rating in ratings.items()
@@ -398,12 +405,10 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         mixed = content["mixed"]
-
         satisfactory_expressions = [
             mixed["satisfactory_clause"][subskill]
             for subskill in satisfactory
         ]
-
         developing_expressions = [
             mixed["developing_clause"][subskill]
             for subskill in developing
@@ -414,19 +419,21 @@ def build_speaking_performance_summary(profile, learner_name):
             if len(satisfactory) >= 2
             else "opening_developing"
         )
-
         opening = mixed[opening_key].format(
             learner_name=learner_name
         )
 
         return (
-            f"{opening}, with satisfactory performance in "
-            f"{join_narrative_items(satisfactory_expressions)}. "
-            f"{join_narrative_items(developing_expressions).capitalize()} "
+            f"{learner_name}'s ability in spoken communication is still developing. "
+            f"Although {join_narrative_items(satisfactory_expressions)} "
+            f"{'are' if len(satisfactory_expressions) > 1 else 'is'} satisfactory "
+            f"for this level, "
+            f"{join_narrative_items(developing_expressions)} "
             f"{'remain' if len(developing_expressions) > 1 else 'remains'} "
             f"less consistent."
         )
 
+    
     if profile_name == "broad_support_needed":
         content = SPEAKING_PROFILE_NARRATIVES["broad_support_needed"]
 
@@ -435,7 +442,6 @@ def build_speaking_performance_summary(profile, learner_name):
             for subskill, rating in ratings.items()
             if rating == RATING.NEEDS_WORK
         ]
-
         developing = [
             subskill
             for subskill, rating in ratings.items()
@@ -448,12 +454,10 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         mixed = content["mixed"]
-
         developing_expressions = [
             mixed["developing_clause"][subskill]
             for subskill in developing
         ]
-
         needs_work_expressions = [
             mixed["needs_work_clause"][subskill]
             for subskill in needs_work
@@ -464,7 +468,6 @@ def build_speaking_performance_summary(profile, learner_name):
             if len(developing) >= 2
             else "opening_needs_work"
         )
-
         opening = mixed[opening_key].format(
             learner_name=learner_name
         )
@@ -477,10 +480,8 @@ def build_speaking_performance_summary(profile, learner_name):
             f"less established."
         )
 
-
     if profile_name == "pronounced_strength":
         content = SPEAKING_PROFILE_NARRATIVES["pronounced_strength"]
-
         standout = profile["stronger"]
 
         if len(standout) != 1:
@@ -489,19 +490,19 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         standout_subskill = standout[0]
+        standout_level = profile["levels"][standout_subskill]
+
         remaining = [
             subskill
             for subskill in ratings
             if subskill != standout_subskill
         ]
-
         remaining_levels = {
             subskill: SPEAKING_RATING_LEVELS[ratings[subskill]]
             for subskill in remaining
         }
 
         baseline_level = sorted(remaining_levels.values())[1]
-
         baseline_rating = {
             1: "needs_work",
             2: "developing",
@@ -514,19 +515,25 @@ def build_speaking_performance_summary(profile, learner_name):
             for subskill, level in remaining_levels.items()
             if level > baseline_level
         ]
-
         baseline_areas = [
             subskill
             for subskill, level in remaining_levels.items()
-            if level <= baseline_level
+            if level == baseline_level
+        ]
+        lower_areas = [
+            subskill
+            for subskill, level in remaining_levels.items()
+            if level < baseline_level
         ]
 
         opening = content["baseline"][baseline_rating].format(
             learner_name=learner_name
         )
+        standout_area = content["baseline_area"][standout_subskill]
 
         sentences = [
-            f"{opening}, while {content['standout'][standout_subskill]}."
+            f"{opening}, while {standout_area} stands out as "
+            f"{get_stronger_area_language(standout_level)}."
         ]
 
         if secondary:
@@ -542,18 +549,35 @@ def build_speaking_performance_summary(profile, learner_name):
             content["baseline_area"][subskill]
             for subskill in baseline_areas
         ]
-
         sentences.append(
             f"Performance in {join_narrative_items(baseline_expressions)} "
             f"is broadly consistent with the overall level demonstrated."
         )
 
-        return " ".join(sentences)
+        if lower_areas:
+            lower_level = min(
+                remaining_levels[subskill]
+                for subskill in lower_areas
+            )
+            lower_language = {
+                1: "less established",
+                2: "less consistent",
+                3: "comparatively less secure",
+            }[lower_level]
+            lower_expressions = [
+                content["baseline_area"][subskill]
+                for subskill in lower_areas
+            ]
+            sentences.append(
+                f"By comparison, performance in "
+                f"{join_narrative_items(lower_expressions)} is "
+                f"{lower_language}."
+            )
 
+        return " ".join(sentences)
 
     if profile_name == "pronounced_weakness":
         content = SPEAKING_PROFILE_NARRATIVES["pronounced_weakness"]
-
         standout = profile["weaker"]
 
         if len(standout) != 1:
@@ -562,19 +586,20 @@ def build_speaking_performance_summary(profile, learner_name):
             )
 
         weak_subskill = standout[0]
+        weak_level = profile["levels"][weak_subskill]
+        weak_language = get_weaker_area_language(weak_level)
+
         remaining = [
             subskill
             for subskill in ratings
             if subskill != weak_subskill
         ]
-
         remaining_levels = [
             SPEAKING_RATING_LEVELS[ratings[subskill]]
             for subskill in remaining
         ]
 
         baseline_level = sorted(remaining_levels)[1]
-
         baseline_rating = {
             2: "developing",
             3: "satisfactory",
@@ -586,6 +611,7 @@ def build_speaking_performance_summary(profile, learner_name):
             content["baseline_area"][subskill]
             for subskill in remaining
         ]
+        weak_expression = content["baseline_area"][weak_subskill]
 
         opening = content["baseline"][baseline_rating].format(
             learner_name=learner_name
@@ -595,9 +621,8 @@ def build_speaking_performance_summary(profile, learner_name):
             f"{opening}, with "
             f"{join_narrative_items(baseline_expressions)} broadly supporting "
             f"that level of performance. By contrast, "
-            f"{content['contrast'][weak_subskill]}."
+            f"{weak_expression} is {weak_language}."
         )
-    
 
     if profile_name == "mixed":
         content = SPEAKING_PROFILE_NARRATIVES["mixed"]
@@ -606,18 +631,25 @@ def build_speaking_performance_summary(profile, learner_name):
         highest = max(levels.values())
         lowest = min(levels.values())
 
+        stronger_language = get_stronger_area_language(
+            highest,
+            plural=len(profile["stronger"]) > 1,
+        )
+        weaker_language = get_weaker_area_language(
+            lowest,
+            plural=len(profile["weaker"]) > 1,
+        )
+
         stronger = [
             subskill
             for subskill, level in levels.items()
             if level == highest
         ]
-
         weaker = [
             subskill
             for subskill, level in levels.items()
             if level == lowest
         ]
-
         middle = [
             subskill
             for subskill, level in levels.items()
@@ -628,7 +660,6 @@ def build_speaking_performance_summary(profile, learner_name):
             content["area"][subskill]
             for subskill in stronger
         ]
-
         weaker_expressions = [
             content["area"][subskill]
             for subskill in weaker
@@ -643,7 +674,7 @@ def build_speaking_performance_summary(profile, learner_name):
         sentences.append(
             f"{join_narrative_items(stronger_expressions).capitalize()} "
             f"{'stand' if len(stronger) > 1 else 'stands'} out as "
-            f"{'relative strengths' if len(stronger) > 1 else 'a relative strength'}."
+            f"{stronger_language}."
         )
 
         if len(stronger) == 1:
@@ -653,7 +684,7 @@ def build_speaking_performance_summary(profile, learner_name):
 
         sentences.append(
             f"By contrast, {join_narrative_items(weaker_expressions)} "
-            f"{'are' if len(weaker) > 1 else 'is'} less established."
+            f"{'are' if len(weaker) > 1 else 'is'} {weaker_language}."
         )
 
         if len(weaker) == 1:
@@ -666,15 +697,13 @@ def build_speaking_performance_summary(profile, learner_name):
                 content["area"][subskill]
                 for subskill in middle
             ]
-
             sentences.append(
                 f"Performance in {join_narrative_items(middle_expressions)} "
                 f"sits between these stronger and weaker areas."
             )
 
         return " ".join(sentences)
-    
-    
+
     raise ValidationError(
         f"Unsupported Speaking performance profile: {profile_name}."
     )

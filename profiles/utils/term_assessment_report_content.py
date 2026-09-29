@@ -221,10 +221,10 @@ SPEAKING_PROFILE_NARRATIVES = {
     },
     "generally_secure": {
         "all_satisfactory": (
-            "{learner_name} demonstrates a satisfactory and generally consistent "
-            "level of spoken communication across fluency, accuracy and range, "
-            "pronunciation and interaction."
-        ),
+            "{learner_name}'s spoken communication across fluency, accuracy and range, "
+            "pronunciation and interaction is satisfactory for this level, although "
+            "there remains considerable room for improvement across all assessed areas."
+        ),        
         "mixed": {
             "opening_satisfactory": (
                 "{learner_name} demonstrates a generally secure level of spoken communication"
@@ -249,11 +249,11 @@ SPEAKING_PROFILE_NARRATIVES = {
     },
     "developing_evenly": {
         "all_developing": (
-            "{learner_name} demonstrates developing ability across the main areas "
-            "of spoken communication. Ideas can be communicated in familiar "
-            "contexts, although fluency, accuracy and range, pronunciation and "
-            "interaction are not yet consistently secure."
-        ),
+            "{learner_name}'s ability in spoken communication is still developing "
+            "across all assessed areas. Fluency, accuracy and range, pronunciation "
+            "and interaction all require further development to reach a satisfactory "
+            "level of performance."
+        ),        
         "mixed": {
             "opening_developing": (
                 "{learner_name} demonstrates developing ability in spoken "
