@@ -313,9 +313,8 @@ SKILL_SATISFACTORY_NARRATIVES = {
         "Performance is satisfactory, with opportunities to further develop "
         "reading efficiency and depth of comprehension. Continued exposure to "
         "varied written texts is encouraged to consolidate existing skills and "
-        "progressively strengthen the ability to interpret information and "
-        "meaning in context."
-    ),
+        "support further progress."
+    ),    
     "listening": (
         "Performance is satisfactory, with opportunities to further develop "
         "listening confidence and depth of comprehension. Regular exposure to "
@@ -365,5 +364,34 @@ SUBSKILL_NEXT_TERM_FOCUS = {
         "cohesion": "strengthening cohesion and the logical connection of ideas in writing",
         "vocabulary_grammar": "improving grammatical accuracy and vocabulary range in writing",
         "register": "developing greater flexibility in adapting written communication to different audiences and purposes",
+    },
+}
+
+
+SUBSKILL_NARRATIVES = {
+    "speaking": {
+        "fluency": "spoken fluency and ease of expression",
+        "accuracy_and_range": "grammatical accuracy and the range of vocabulary and sentence structures used in spoken communication",
+        "pronunciation": "pronunciation, word stress and intonation",
+        "interaction": "conversational interaction and the ability to maintain exchanges",
+    },
+
+    "reading": {
+        "scanning": "locating specific information in written texts",
+        "skimming": "identifying main ideas and the overall purpose of a text",
+        "detailed": "detailed comprehension and understanding meaning in context",
+    },
+
+    "listening": {
+        "gist": "understanding the main message and overall purpose of spoken English",
+        "specific_information": "identifying specific information in spoken English",
+        "detailed": "detailed listening comprehension and understanding meaning in context",
+    },
+
+    "writing": {
+        "organization": "the organisation and clear presentation of written ideas",
+        "cohesion": "cohesion and the logical connection of ideas",
+        "vocabulary_grammar": "grammatical accuracy and the range of vocabulary and sentence structures used in writing",
+        "register": "adapting tone and style to different purposes, audiences and contexts",
     },
 }

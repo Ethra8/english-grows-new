@@ -1,4 +1,3 @@
-
 """
 Rule-based generation of Formal Term Assessment Reports.
 
@@ -6,10 +5,9 @@ Reads submitted assessment data and assembles a structured report.
 Does not modify assessments, save reports or publish results.
 """
 
-from django.core.exceptions import ValidationError
-
 import json
 
+from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 
@@ -127,13 +125,12 @@ def get_report_assessment_data(assessment):
     return skills, subskills
 
 
-
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY
 # ---------------------------------------------------------
 
 def join_narrative_items(items):
-    """Join report expressions using natural English punctuation."""
+    """Join short report expressions using natural English punctuation."""
     if len(items) == 1:
         return items[0]
     if len(items) == 2:
@@ -141,9 +138,80 @@ def join_narrative_items(items):
     return f"{', '.join(items[:-1])} and {items[-1]}"
 
 
-def build_skill_performance_summary(skill, items, learner_name):
-    """Describe every recorded subskill within one language skill."""
+def build_performance_rating_sentence(rating, expressions, learner_name):
+    """
+    Build natural descriptive prose for subskills sharing one rating.
 
+    Performance Summary describes demonstrated performance only.
+    It does not provide recommendations or suggest future practice.
+    """
+    first = expressions[0]
+    remaining = expressions[1:]
+
+    if rating == RATING.STRONG:
+        if not remaining:
+            return f"{learner_name} demonstrates strong ability in {first}."
+        return (
+            f"{learner_name} demonstrates strong ability in {first}, "
+            f"with similarly strong performance in "
+            f"{join_narrative_items(remaining)}."
+        )
+
+    if rating == RATING.CONFIDENT:
+        if not remaining:
+            return f"{learner_name} demonstrates confidence in {first}."
+        return (
+            f"{learner_name} demonstrates confidence in {first}, "
+            f"as well as in {join_narrative_items(remaining)}."
+        )
+
+    if rating == RATING.SATISFACTORY:
+        if not remaining:
+            return (
+                f"{learner_name} demonstrates satisfactory performance "
+                f"in {first}."
+            )
+        return (
+            f"{learner_name} demonstrates satisfactory performance in {first}, "
+            f"with a similar level of performance in "
+            f"{join_narrative_items(remaining)}."
+        )
+
+    if rating == RATING.DEVELOPING:
+        if not remaining:
+            return (
+                f"{learner_name} demonstrates developing performance "
+                f"in {first}."
+            )
+        return (
+            f"{learner_name} demonstrates developing performance in {first}, "
+            f"with a similar level of performance in "
+            f"{join_narrative_items(remaining)}."
+        )
+
+    if rating == RATING.NEEDS_WORK:
+        if not remaining:
+            return (
+                f"{learner_name} currently experiences difficulty "
+                f"with {first}."
+            )
+        return (
+            f"{learner_name} currently experiences difficulty with {first}, "
+            f"as well as with {join_narrative_items(remaining)}."
+        )
+
+    raise ValidationError("Invalid rating in performance summary.")
+
+
+def build_skill_performance_summary(skill, items, learner_name):
+    """
+    Describe the learner's current demonstrated performance in every
+    recorded subskill within one language skill.
+
+    Subskills sharing the same rating are grouped into natural prose.
+    Development recommendations and suggested practice belong exclusively
+    in Development Priorities.
+    """
     rating_order = (
         RATING.STRONG,
         RATING.CONFIDENT,
@@ -160,20 +228,16 @@ def build_skill_performance_summary(skill, items, learner_name):
 
     sentences = []
 
-    openings = {
-        RATING.STRONG: f"{learner_name} demonstrates strong ability in",
-        RATING.CONFIDENT: f"{learner_name} demonstrates confidence in",
-        RATING.SATISFACTORY: f"{learner_name} demonstrates satisfactory ability in",
-        RATING.DEVELOPING: f"{learner_name} demonstrates developing ability in",
-        RATING.NEEDS_WORK: f"{learner_name} currently shows limited ability in",
-    }
-
     for rating in rating_order:
         expressions = groups[rating]
 
         if expressions:
             sentences.append(
-                f"{openings[rating]} {join_narrative_items(expressions)}."
+                build_performance_rating_sentence(
+                    rating,
+                    expressions,
+                    learner_name,
+                )
             )
 
     return " ".join(sentences)
@@ -181,12 +245,12 @@ def build_skill_performance_summary(skill, items, learner_name):
 
 def build_performance_summary(subskills, learner_name):
     """
-    Generate four skill-specific narrative paragraphs.
+    Generate four skill-specific descriptive performance paragraphs.
 
     Every assessed subskill contributes to its corresponding paragraph.
     Ratings and numerical scores are not modified.
+    Development recommendations are generated separately.
     """
-
     summary = {}
 
     for skill in SKILL_LABELS:
@@ -209,7 +273,6 @@ def build_performance_summary(subskills, learner_name):
     return summary
 
 
-
 # ---------------------------------------------------------
 # SKILL-SPECIFIC DEVELOPMENT PRIORITIES
 # ---------------------------------------------------------
@@ -218,9 +281,20 @@ def build_development_priorities(subskills):
     """
     Generate a development paragraph for each language skill.
 
-    Needs Work / Developing: targeted development.
-    Satisfactory: consolidation and further improvement.
-    Confident / Strong: consolidation and extension.
+    Needs Work / Developing:
+    - provide targeted development guidance.
+
+    Satisfactory:
+    - if all subskills are Satisfactory, provide the broader skill-level
+      consolidation narrative plus the individual subskill recommendations;
+    - if mixed with Confident / Strong only, provide recommendations only
+      for the Satisfactory subskills;
+    - if mixed with Needs Work / Developing, identify the Satisfactory
+      areas for consolidation and provide their recommendations.
+
+    Confident / Strong:
+    - if all subskills are Confident or Strong, provide the broader
+      consolidation and extension narrative.
     """
     priorities = {}
 
@@ -252,20 +326,27 @@ def build_development_priorities(subskills):
 
         sentences = []
 
-        # Targeted development
+        # Needs Work / Developing:
+        # provide targeted development guidance for each weaker subskill.
         for item in needs_work + developing:
             sentences.append(
                 SUBSKILL_DEVELOPMENT_NARRATIVES[skill][item["subskill"]]
             )
 
-        # Satisfactory: acknowledge achievement while
-        # identifying specific opportunities for improvement.
         if satisfactory:
-            if not needs_work and not developing:
+            all_satisfactory = len(satisfactory) == len(skill_items)
+            has_development = bool(needs_work or developing)
+
+            # Every subskill is Satisfactory:
+            # provide the broader skill-level consolidation narrative.
+            if all_satisfactory:
                 sentences.append(
                     SKILL_SATISFACTORY_NARRATIVES[skill]
                 )
-            else:
+
+            # Satisfactory mixed with Needs Work / Developing:
+            # identify the satisfactory areas that should also be consolidated.
+            elif has_development:
                 expressions = [
                     SUBSKILL_NARRATIVES[skill][item["subskill"]]
                     for item in satisfactory
@@ -276,12 +357,17 @@ def build_development_priorities(subskills):
                     f"{join_narrative_items(expressions)}."
                 )
 
+            # Satisfactory mixed only with Confident / Strong:
+            # do not characterise the whole skill as Satisfactory.
+            # The individual recommendations below identify the specific
+            # satisfactory areas that can be developed further.
+
             for item in satisfactory:
                 sentences.append(
                     SUBSKILL_RECOMMENDATIONS[skill][item["subskill"]]
                 )
 
-        # No development ratings and no Satisfactory:
+        # No Needs Work, Developing or Satisfactory ratings:
         # all subskills are Confident or Strong.
         if not sentences:
             sentences.append(
@@ -291,7 +377,6 @@ def build_development_priorities(subskills):
         priorities[skill] = " ".join(sentences)
 
     return priorities
-
 
 # ---------------------------------------------------------
 # DEVELOPMENT PRIORITIES
@@ -305,11 +390,10 @@ def select_development_priorities(subskills):
     1. Focus areas
     2. Developing
     3. Satisfactory, for consolidation
-    4. Confident in / Key strengths, for extension
+    4. Confident / Strong, for extension
 
     Equal ratings retain the existing SUBSKILLS order.
     """
-
     ordered = sorted(subskills, key=lambda item: item["score"])
 
     development = [
@@ -334,11 +418,6 @@ def select_development_priorities(subskills):
         })
 
     return priorities
-
-
-# ---------------------------------------------------------
-# NEXT-TERM FOCUS
-# ---------------------------------------------------------
 
 
 # ---------------------------------------------------------
@@ -398,14 +477,12 @@ def generate_term_assessment_report(assessment):
     Returns a structured dictionary.
     Does not save, regenerate or publish a report record.
     """
-
     skills, subskills = get_report_assessment_data(assessment)
 
     priorities = select_development_priorities(subskills)
 
     student = assessment.enrollment.student
-
-    learner_name = student.first_name.strip() or student.get_full_name() or student.username
+    learner_name = student.first_name.strip() or student.username
 
     return {
         "assessment_id": assessment.pk,
@@ -426,8 +503,6 @@ def generate_term_assessment_report(assessment):
     }
 
 
-
-
 # ---------------------------------------------------------
 # PERSISTENT REPORT CREATION
 # ---------------------------------------------------------
@@ -441,7 +516,6 @@ def create_term_assessment_report(assessment, generated_by):
 
     Existing reports are never regenerated or overwritten.
     """
-
     if generated_by is None or not generated_by.pk:
         raise ValidationError("A report must have a valid generating user.")
 

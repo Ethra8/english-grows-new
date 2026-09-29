@@ -40,7 +40,7 @@
                 <h3>{% trans "New Term Assessment" %}</h3>
                 <p>{% trans "Create a formal assessment for this learner and course." %}</p>
             </div>
-            <i class="fa-regular fa-clipboard" aria-hidden="true"></i>
+            <!-- <i class="fa-regular fa-clipboard" aria-hidden="true"></i> -->
         </div>
 
         <form method="post" action="{% url 'profiles:teacher_create_term_assessment' course_id=course.id enrollment_id=enrollment.id %}">
