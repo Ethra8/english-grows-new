@@ -3,9 +3,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django import forms
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.formats import date_format
@@ -26,6 +27,7 @@ from .models import (
     StudentSubSkillAssessment,
     StudentSkillAssessmentSnapshot,
     StudentTermAssessment,
+    StudentTermSubSkillAssessment,
     StudentSkillTermSnapshot,
     SUBSKILLS,
     StudentTermAssessmentReport,
@@ -36,7 +38,14 @@ from .forms.student_needs_analysis import (
     SITUATION_CHOICES,
 )
 
-from profiles.utils.term_assessments import submit_skill_assessment
+from profiles.utils.term_assessments import (
+    get_or_create_term_assessment_draft,
+    submit_term_assessment,
+    update_term_subskill_rating,
+    submit_skill_assessment,
+)
+
+from profiles.utils.term_assessment_reports import create_term_assessment_report
 
 from courses.models import CourseEnrollment
 
@@ -1651,6 +1660,603 @@ class StudentAcademicProfileAdmin(admin.ModelAdmin):
             '</div>',
             rows,
         )
+
+
+
+class StudentTermAssessmentAdminForm(forms.ModelForm):
+    class Meta:
+        model = StudentTermAssessment
+        fields = ("enrollment", "term_label", "assessment_date", "overall_feedback")
+        widgets = {
+            "assessment_date": forms.DateInput(attrs={"type": "date"}),
+        }
+
+    def clean_term_label(self):
+        return self.cleaned_data["term_label"].strip()
+
+    
+
+# =========================================================
+# STUDENT TERM ASSESSMENT
+# =========================================================
+@admin.register(StudentTermAssessment)
+class StudentTermAssessmentAdmin(admin.ModelAdmin):
+    form = StudentTermAssessmentAdminForm
+
+    list_display = (
+        "id",
+        "learner",
+        "course",
+        "term_label",
+        "assessment_date",
+        "status",
+        "overall_score",
+        "report_status",
+    )
+    list_filter = (
+        "status",
+        "assessment_date",
+        "submitted_at",
+    )
+    search_fields = (
+        "enrollment__student__first_name",
+        "enrollment__student__last_name",
+        "enrollment__student__email",
+        "enrollment__course__name",
+        "term_label",
+    )
+    list_select_related = (
+        "enrollment",
+        "enrollment__student",
+        "enrollment__course",
+        "teacher",
+    )
+    actions = None
+
+    # ---------------------------------------------------------
+    # LIST DISPLAY
+    # ---------------------------------------------------------
+
+    @admin.display(description="Learner")
+    def learner(self, obj):
+        student = obj.enrollment.student
+        return student.get_full_name() or student.username
+
+    @admin.display(description="Course")
+    def course(self, obj):
+        return obj.enrollment.course
+
+    @admin.display(description="Report")
+    def report_status(self, obj):
+        report = StudentTermAssessmentReport.objects.filter(
+            assessment=obj
+        ).first()
+
+        if report:
+            url = reverse(
+                "admin:profiles_studenttermassessmentreport_change",
+                args=[report.pk],
+            )
+            return format_html('<a href="{}">View report</a>', url)
+
+        if obj.status == StudentTermAssessment.Status.SUBMITTED:
+            return "Ready to generate"
+
+        return "Not available"
+
+    # ---------------------------------------------------------
+    # ADMIN FIELDS
+    # ---------------------------------------------------------
+
+    def get_fields(self, request, obj=None):
+        if obj is None:
+            return (
+                "enrollment",
+                "term_label",
+                "assessment_date",
+                "overall_feedback",
+            )
+
+        return (
+            "enrollment",
+            "term_label",
+            "status",
+            "assessment_date",
+            "teacher",
+            "overall_score",
+            "overall_feedback",
+            "assessment_results",
+            "submitted_at",
+            "created_at",
+            "updated_at",
+            "assessment_actions",
+        )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            return ()
+
+        return (
+            "enrollment",
+            "term_label",
+            "status",
+            "teacher",
+            "overall_score",
+            "assessment_results",
+            "submitted_at",
+            "created_at",
+            "updated_at",
+            "assessment_actions",
+        )
+
+    # ---------------------------------------------------------
+    # CREATE DRAFT
+    # ---------------------------------------------------------
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            # Draft metadata such as assessment_date and overall_feedback
+            # may still be edited through the normal model save.
+            super().save_model(request, obj, form, change)
+            return
+
+        assessment, created = get_or_create_term_assessment_draft(
+            enrollment=form.cleaned_data["enrollment"],
+            term_label=form.cleaned_data["term_label"],
+        )
+
+        assessment.assessment_date = form.cleaned_data.get("assessment_date")
+        assessment.overall_feedback = form.cleaned_data.get(
+            "overall_feedback",
+            "",
+        )
+
+        assessment.save(
+            update_fields=[
+                "assessment_date",
+                "overall_feedback",
+                "updated_at",
+            ]
+        )
+
+        obj.pk = assessment.pk
+        obj._state.adding = False
+
+        if not created:
+            self.message_user(
+                request,
+                "An assessment with this enrollment and term label already exists.",
+                level=messages.WARNING,
+            )
+
+    # ---------------------------------------------------------
+    # ASSESSMENT RESULTS
+    # ---------------------------------------------------------
+
+    @admin.display(description="Assessment results")
+    def assessment_results(self, obj):
+        if not obj or not obj.pk:
+            return "No assessment selected."
+
+        snapshots = {
+            snapshot.skill: snapshot
+            for snapshot in obj.skill_snapshots.prefetch_related(
+                "subskill_assessments"
+            )
+        }
+
+        sections = []
+
+        for skill, expected_subskills in SUBSKILLS.items():
+            snapshot = snapshots.get(skill)
+
+            if not snapshot:
+                sections.append(
+                    format_html(
+                        '<div style="margin-bottom:24px;">'
+                        '<h3>{}</h3>'
+                        '<p>Assessment data unavailable.</p>'
+                        '</div>',
+                        skill.title(),
+                    )
+                )
+                continue
+
+            records = {
+                record.subskill: record
+                for record in snapshot.subskill_assessments.all()
+            }
+
+            rows = []
+
+            for subskill, label in expected_subskills:
+                record = records.get(subskill)
+
+                if record is None:
+                    rows.append(
+                        format_html(
+                            '<div style="margin-bottom:8px;">'
+                            '<strong>{}</strong>: —'
+                            '</div>',
+                            label,
+                        )
+                    )
+                    continue
+
+                if obj.status == StudentTermAssessment.Status.DRAFT:
+                    options = [
+                        format_html(
+                            '<option value="{}"{}>{}</option>',
+                            value,
+                            " selected" if record.rating == value else "",
+                            rating_label,
+                        )
+                        for value, rating_label
+                        in StudentSubSkillAssessment.Rating.choices
+                    ]
+
+                    rows.append(
+                        format_html(
+                            '<div style="display:grid;'
+                            'grid-template-columns:minmax(260px, 1fr) 220px;'
+                            'gap:20px;align-items:center;margin-bottom:8px;">'
+                            '<label for="rating_{}"><strong>{}</strong></label>'
+                            '<select id="rating_{}" name="rating_{}">'
+                            '<option value="">Not assessed yet</option>'
+                            '{}'
+                            '</select>'
+                            '</div>',
+                            record.pk,
+                            label,
+                            record.pk,
+                            record.pk,
+                            format_html_join(
+                                "",
+                                "{}",
+                                ((option,) for option in options),
+                            ),
+                        )
+                    )
+                else:
+                    rows.append(
+                        format_html(
+                            '<div style="display:grid;'
+                            'grid-template-columns:minmax(260px, 1fr) 220px;'
+                            'gap:20px;margin-bottom:8px;">'
+                            '<span>{}</span>'
+                            '<strong>{}</strong>'
+                            '</div>',
+                            label,
+                            record.get_rating_display() if record.rating else "—",
+                        )
+                    )
+
+            score = (
+                snapshot.score
+                if obj.status == StudentTermAssessment.Status.SUBMITTED
+                else snapshot.calculated_score
+            )
+
+            sections.append(
+                format_html(
+                    '<div style="margin-bottom:28px;">'
+                    '<h3 style="margin-bottom:10px;">{}'
+                    '<span style="font-weight:normal;margin-left:10px;">'
+                    '{}'
+                    '</span>'
+                    '</h3>'
+                    '{}'
+                    '</div>',
+                    snapshot.get_skill_display(),
+                    f"{score}/10" if score is not None else "",
+                    format_html_join(
+                        "",
+                        "{}",
+                        ((row,) for row in rows),
+                    ),
+                )
+            )
+
+        return format_html_join(
+            "",
+            "{}",
+            ((section,) for section in sections),
+        )
+
+    # ---------------------------------------------------------
+    # ACTION BUTTONS
+    # ---------------------------------------------------------
+
+    @admin.display(description="Assessment actions")
+    def assessment_actions(self, obj):
+        if not obj or not obj.pk:
+            return "No assessment selected."
+
+        if obj.status == StudentTermAssessment.Status.DRAFT:
+            save_url = reverse(
+                "admin:profiles_studenttermassessment_save_ratings",
+                args=[obj.pk],
+            )
+            submit_url = reverse(
+                "admin:profiles_studenttermassessment_submit",
+                args=[obj.pk],
+            )
+
+            return format_html(
+                '<button type="submit" class="button" formaction="{}" '
+                'formmethod="post" style="margin-right:8px;">'
+                'Save Ratings'
+                '</button>'
+                '<button type="submit" class="button" formaction="{}" '
+                'formmethod="post">'
+                'Submit Assessment'
+                '</button>',
+                save_url,
+                submit_url,
+            )
+        
+        report = StudentTermAssessmentReport.objects.filter(
+            assessment=obj
+        ).first()
+
+        if report:
+            url = reverse(
+                "admin:profiles_studenttermassessmentreport_change",
+                args=[report.pk],
+            )
+            return format_html(
+                '<a class="button" href="{}">View Generated Report</a>',
+                url,
+            )
+
+        url = reverse(
+            "admin:profiles_studenttermassessment_generate_report",
+            args=[obj.pk],
+        )
+
+        return format_html(
+            '<button type="submit" class="button" formaction="{}" '
+            'formmethod="post">'
+            'Generate Automated Report'
+            '</button>',
+            url,
+        )
+    # ---------------------------------------------------------
+    # CUSTOM ADMIN URLS
+    # ---------------------------------------------------------
+
+    def get_urls(self):
+        urls = super().get_urls()
+
+        custom_urls = [
+            path(
+                "<path:object_id>/save-ratings/",
+                self.admin_site.admin_view(self.save_ratings_view),
+                name="profiles_studenttermassessment_save_ratings",
+            ),
+            path(
+                "<path:object_id>/submit/",
+                self.admin_site.admin_view(self.submit_assessment_view),
+                name="profiles_studenttermassessment_submit",
+            ),
+            path(
+                "<path:object_id>/generate-report/",
+                self.admin_site.admin_view(self.generate_report_view),
+                name="profiles_studenttermassessment_generate_report",
+            ),
+        ]
+
+        return custom_urls + urls
+
+    # ---------------------------------------------------------
+    # SAVE RATINGS
+    # ---------------------------------------------------------
+
+    def save_ratings_view(self, request, object_id):
+        assessment = self.get_object(request, object_id)
+
+        if assessment is None:
+            return redirect(
+                "admin:profiles_studenttermassessment_changelist"
+            )
+
+        if not self.has_change_permission(request, assessment):
+            raise PermissionDenied
+
+        if assessment.status != StudentTermAssessment.Status.DRAFT:
+            self.message_user(
+                request,
+                "Only draft assessment ratings can be edited.",
+                level=messages.ERROR,
+            )
+            return redirect(
+                "admin:profiles_studenttermassessment_change",
+                assessment.pk,
+            )
+
+        if request.method != "POST":
+            return redirect(
+                "admin:profiles_studenttermassessment_change",
+                assessment.pk,
+            )
+
+        records = StudentTermSubSkillAssessment.objects.filter(
+            skill_snapshot__term_assessment=assessment
+        )
+
+        try:
+            with transaction.atomic():
+                for record in records:
+                    field_name = f"rating_{record.pk}"
+
+                    if field_name not in request.POST:
+                        continue
+
+                    rating = request.POST.get(field_name) or None
+
+                    update_term_subskill_rating(
+                        subskill_assessment=record,
+                        rating=rating,
+                    )
+
+        except ValidationError as exc:
+            self.message_user(
+                request,
+                "; ".join(exc.messages),
+                level=messages.ERROR,
+            )
+        else:
+            self.message_user(
+                request,
+                "Assessment ratings have been saved.",
+                level=messages.SUCCESS,
+            )
+
+        return redirect(
+            "admin:profiles_studenttermassessment_change",
+            assessment.pk,
+        )
+
+    # ---------------------------------------------------------
+    # SUBMIT ASSESSMENT
+    # ---------------------------------------------------------
+
+    def submit_assessment_view(self, request, object_id):
+        assessment = self.get_object(request, object_id)
+
+        if assessment is None:
+            return redirect(
+                "admin:profiles_studenttermassessment_changelist"
+            )
+
+        if not self.has_change_permission(request, assessment):
+            raise PermissionDenied
+
+        if request.method != "POST":
+            return redirect(
+                "admin:profiles_studenttermassessment_change",
+                assessment.pk,
+            )
+
+        try:
+            self._save_posted_ratings(request, assessment)
+
+            submit_term_assessment(
+                assessment=assessment,
+                teacher=request.user,
+            )
+
+        except ValidationError as exc:
+            self.message_user(
+                request,
+                "; ".join(exc.messages),
+                level=messages.ERROR,
+            )
+        else:
+            self.message_user(
+                request,
+                "The term assessment has been submitted successfully.",
+                level=messages.SUCCESS,
+            )
+
+        return redirect(
+            "admin:profiles_studenttermassessment_change",
+            assessment.pk,
+        )
+
+    # ---------------------------------------------------------
+    # GENERATE REPORT
+    # ---------------------------------------------------------
+
+    def generate_report_view(self, request, object_id):
+        assessment = self.get_object(request, object_id)
+
+        if assessment is None:
+            return redirect(
+                "admin:profiles_studenttermassessment_changelist"
+            )
+
+        if not self.has_view_permission(request, assessment):
+            raise PermissionDenied
+
+        if request.method != "POST":
+            return redirect(
+                "admin:profiles_studenttermassessment_change",
+                assessment.pk,
+            )
+
+        try:
+            report = create_term_assessment_report(
+                assessment=assessment,
+                generated_by=request.user,
+            )
+
+        except ValidationError as exc:
+            self.message_user(
+                request,
+                "; ".join(exc.messages),
+                level=messages.ERROR,
+            )
+
+            return redirect(
+                "admin:profiles_studenttermassessment_change",
+                assessment.pk,
+            )
+
+        self.message_user(
+            request,
+            "The automated report has been generated successfully.",
+            level=messages.SUCCESS,
+        )
+
+        return redirect(
+            "admin:profiles_studenttermassessmentreport_change",
+            report.pk,
+        )
+
+    # ---------------------------------------------------------
+    # SHARED RATING SAVE
+    # ---------------------------------------------------------
+
+    def _save_posted_ratings(self, request, assessment):
+        records = StudentTermSubSkillAssessment.objects.filter(
+            skill_snapshot__term_assessment=assessment
+        )
+
+        for record in records:
+            field_name = f"rating_{record.pk}"
+
+            if field_name not in request.POST:
+                continue
+
+            rating = request.POST.get(field_name) or None
+
+            update_term_subskill_rating(
+                subskill_assessment=record,
+                rating=rating,
+            )
+
+    # ---------------------------------------------------------
+    # PERMISSIONS
+    # ---------------------------------------------------------
+
+    def has_add_permission(self, request):
+        return request.user.is_active and request.user.is_staff
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_active and request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.is_active or not request.user.is_staff:
+            return False
+
+        if obj is None:
+            return True
+
+        return obj.status == StudentTermAssessment.Status.DRAFT
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(StudentTermAssessmentReport)

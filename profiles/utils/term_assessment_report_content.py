@@ -173,6 +173,273 @@ NARRATIVE_RATING_LANGUAGE = {
 }
 
 
+
+# ---------------------------------------------------------
+# PERFORMANCE SUMMARY — SPEAKING PROFILES
+#
+# Holistic narrative content for Speaking performance.
+# Profile selection is handled in term_assessment_reports.py.
+#
+# Performance Summary describes demonstrated performance only.
+# Development advice belongs in Development Priorities.
+# ---------------------------------------------------------
+
+SPEAKING_PROFILE_NARRATIVES = {
+    "consistently_strong": {
+        "all_confident": (
+            "{learner_name} communicates confidently and effectively in spoken "
+            "English, with secure performance across fluency, accuracy and range, "
+            "pronunciation and interaction."
+        ),
+        "all_strong": (
+            "Spoken communication is a clear strength for {learner_name}, who "
+            "demonstrates consistently strong performance across fluency, accuracy "
+            "and range, pronunciation and interaction."
+        ),
+        "mixed": {
+            "opening_confident": (
+                "{learner_name} communicates confidently and effectively in "
+                "spoken English"
+            ),
+            "opening_strong": (
+                "{learner_name} demonstrates a strong overall level of spoken "
+                "communication"
+            ),
+            "strength_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "grammatical accuracy and language range",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+            "secure_clause": {
+                "fluency": "control of fluency",
+                "accuracy_and_range": "grammatical and lexical control",
+                "pronunciation": "control of pronunciation",
+                "interaction": "interaction skills",
+            },
+        },
+    },
+    "generally_secure": {
+        "all_satisfactory": (
+            "{learner_name} demonstrates a satisfactory and generally consistent "
+            "level of spoken communication across fluency, accuracy and range, "
+            "pronunciation and interaction."
+        ),
+        "mixed": {
+            "opening_satisfactory": (
+                "{learner_name} demonstrates a generally secure level of spoken communication"
+            ),
+            "opening_secure": (
+                "{learner_name} communicates effectively in spoken English, with "
+                "generally secure performance across the assessed areas"
+            ),
+            "confident_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "grammatical accuracy and language range",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+            "satisfactory_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "accuracy and range",
+                "pronunciation": "pronunciation",
+                "interaction": "interaction",
+            },
+        },
+    },
+    "developing_evenly": {
+        "all_developing": (
+            "{learner_name} demonstrates developing ability across the main areas "
+            "of spoken communication. Ideas can be communicated in familiar "
+            "contexts, although fluency, accuracy and range, pronunciation and "
+            "interaction are not yet consistently secure."
+        ),
+        "mixed": {
+            "opening_developing": (
+                "{learner_name} demonstrates developing ability in spoken "
+                "communication"
+            ),
+            "opening_satisfactory": (
+                "{learner_name} demonstrates a developing but increasingly "
+                "effective level of spoken communication"
+            ),
+            "satisfactory_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "language control",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+            "developing_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "language control",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+        },
+    },
+    "broad_support_needed": {
+        "all_needs_work": (
+            "{learner_name} currently demonstrates limited control across the main "
+            "areas of spoken communication. Fluency, accuracy and range, pronunciation "
+            "and interaction are not yet sufficiently established for consistently "
+            "effective spoken communication."
+        ),
+        "mixed": {
+            "opening_needs_work": (
+                "{learner_name} is still establishing the core skills needed for "
+                "effective spoken communication"
+            ),
+            "opening_developing": (
+                "{learner_name} demonstrates emerging ability in spoken communication"
+            ),
+            "developing_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "language control",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+            "needs_work_clause": {
+                "fluency": "fluency",
+                "accuracy_and_range": "language control",
+                "pronunciation": "pronunciation",
+                "interaction": "spoken interaction",
+            },
+        },
+    },
+    "pronounced_strength": {
+        "baseline": {
+            "needs_work": (
+                "{learner_name} is still establishing the core skills needed for "
+                "effective spoken communication"
+            ),
+            "developing": (
+                "{learner_name} demonstrates developing ability in spoken communication"
+            ),
+            "satisfactory": (
+                "{learner_name} demonstrates a generally satisfactory level of "
+                "spoken communication"
+            ),
+            "confident": (
+                "{learner_name} demonstrates a generally confident and secure level "
+                "of spoken communication"
+            ),
+        },
+        "standout": {
+            "fluency": (
+                "fluency stands out as a particular strength, allowing ideas to be "
+                "expressed with greater continuity and ease"
+            ),
+            "accuracy_and_range": (
+                "grammatical accuracy and language range stand out as particular "
+                "strengths, supporting precise and flexible expression"
+            ),
+            "pronunciation": (
+                "pronunciation stands out as a particular strength, supporting clear "
+                "and effective spoken communication"
+            ),
+            "interaction": (
+                "spoken interaction stands out as a particular strength, with confident "
+                "and effective participation in conversational exchanges"
+            ),
+        },
+        "secondary": {
+            "fluency": "fluency is also relatively secure",
+            "accuracy_and_range": "language control is also relatively secure",
+            "pronunciation": "pronunciation is also relatively secure",
+            "interaction": "spoken interaction is also relatively secure",
+        },
+        "baseline_area": {
+            "fluency": "fluency",
+            "accuracy_and_range": "language control",
+            "pronunciation": "pronunciation",
+            "interaction": "spoken interaction",
+        },
+    },
+    "pronounced_weakness": {
+        "baseline": {
+            "developing": (
+                "{learner_name} demonstrates developing ability in spoken communication"
+            ),
+            "satisfactory": (
+                "{learner_name} demonstrates a generally satisfactory level of "
+                "spoken communication"
+            ),
+            "confident": (
+                "{learner_name} demonstrates a generally confident and secure level "
+                "of spoken communication"
+            ),
+            "strong": (
+                "{learner_name} demonstrates a strong overall level of spoken "
+                "communication"
+            ),
+        },
+        "contrast": {
+            "fluency": (
+                "fluency is notably less consistent, affecting the continuity and "
+                "ease of spoken expression"
+            ),
+            "accuracy_and_range": (
+                "language control is notably less secure, reducing precision and "
+                "flexibility of expression"
+            ),
+            "pronunciation": (
+                "pronunciation is notably less secure and can reduce the clarity "
+                "of spoken communication"
+            ),
+            "interaction": (
+                "spoken interaction is notably less secure, particularly when "
+                "sustaining and responding within conversational exchanges"
+            ),
+        },
+        "baseline_area": {
+            "fluency": "fluency",
+            "accuracy_and_range": "language control",
+            "pronunciation": "pronunciation",
+            "interaction": "spoken interaction",
+        },
+    },
+    "mixed": {
+        "opening": (
+            "{learner_name} demonstrates an uneven profile in spoken communication, "
+            "with clear differences in performance across the assessed areas."
+        ),
+        "area": {
+            "fluency": "fluency",
+            "accuracy_and_range": "language control",
+            "pronunciation": "pronunciation",
+            "interaction": "spoken interaction",
+        },
+        "stronger_effect": {
+            "fluency": (
+                "this supports greater continuity and ease when expressing ideas"
+            ),
+            "accuracy_and_range": (
+                "this supports more precise and flexible expression"
+            ),
+            "pronunciation": (
+                "this supports clarity and intelligibility in spoken communication"
+            ),
+            "interaction": (
+                "this supports confident participation and the ability to sustain exchanges"
+            ),
+        },        
+        "weaker_effect": {
+            "fluency": (
+                "this can make spoken expression less continuous and assured"
+            ),
+            "accuracy_and_range": (
+                "this can reduce precision and flexibility when expressing ideas"
+            ),
+            "pronunciation": (
+                "this can reduce clarity and intelligibility in spoken communication"
+            ),
+            "interaction": (
+                "this can make conversational exchanges less sustained and responsive"
+            ),
+        },
+    },
+}
+
 # ---------------------------------------------------------
 # DEVELOPMENT PRIORITIES — NARRATIVE RECOMMENDATIONS
 #
@@ -367,31 +634,3 @@ SUBSKILL_NEXT_TERM_FOCUS = {
     },
 }
 
-
-SUBSKILL_NARRATIVES = {
-    "speaking": {
-        "fluency": "spoken fluency and ease of expression",
-        "accuracy_and_range": "grammatical accuracy and the range of vocabulary and sentence structures used in spoken communication",
-        "pronunciation": "pronunciation, word stress and intonation",
-        "interaction": "conversational interaction and the ability to maintain exchanges",
-    },
-
-    "reading": {
-        "scanning": "locating specific information in written texts",
-        "skimming": "identifying main ideas and the overall purpose of a text",
-        "detailed": "detailed comprehension and understanding meaning in context",
-    },
-
-    "listening": {
-        "gist": "understanding the main message and overall purpose of spoken English",
-        "specific_information": "identifying specific information in spoken English",
-        "detailed": "detailed listening comprehension and understanding meaning in context",
-    },
-
-    "writing": {
-        "organization": "the organisation and clear presentation of written ideas",
-        "cohesion": "cohesion and the logical connection of ideas",
-        "vocabulary_grammar": "grammatical accuracy and the range of vocabulary and sentence structures used in writing",
-        "register": "adapting tone and style to different purposes, audiences and contexts",
-    },
-}

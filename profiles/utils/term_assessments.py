@@ -1,18 +1,16 @@
-from django.db import transaction
-
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils import timezone
 
 from profiles.models import (
     SUBSKILLS,
     StudentSkillAssessment,
+    StudentSkillAssessmentSnapshot,
+    StudentSkillTermSnapshot,
     StudentSubSkillAssessment,
     StudentTermAssessment,
-    StudentSkillTermSnapshot,
     StudentTermSubSkillAssessment,
-    StudentSkillAssessmentSnapshot,
 )
-
 
 
 # =========================================================
@@ -28,9 +26,8 @@ def submit_skill_assessment(skill_assessment, ratings):
     skill snapshot when the resulting skill has a calculated score.
 
     Every valid explicit submission creates a snapshot, even when the
-    submitted ratings are unchanged.
-
-    An entirely unrated skill produces no snapshot.
+    submitted ratings are unchanged. An entirely unrated skill produces
+    no snapshot.
     """
     skill_assessment = (
         StudentSkillAssessment.objects
@@ -46,8 +43,13 @@ def submit_skill_assessment(skill_assessment, ratings):
     if not expected_subskills:
         raise ValidationError("Invalid skill assessment.")
 
-    if set(ratings) != expected_subskills:
-        raise ValidationError("The assessment contains an invalid subskill structure.")
+    # Ongoing assessments may legitimately contain only part of the canonical
+    # subskill set. Reject unknown subskills, but do not require every canonical
+    # subskill to be present in an existing ongoing assessment.
+    if not set(ratings).issubset(expected_subskills):
+        raise ValidationError(
+            "The assessment contains an invalid subskill structure."
+        )
 
     valid_ratings = {
         choice.value
@@ -70,7 +72,6 @@ def submit_skill_assessment(skill_assessment, ratings):
             subskill_assessment.save(update_fields=["rating", "updated_at"])
 
     final_score = skill_assessment.average_score
-
     snapshot = None
 
     if final_score is not None:
@@ -82,6 +83,10 @@ def submit_skill_assessment(skill_assessment, ratings):
     return skill_assessment, snapshot
 
 
+# =========================================================
+# FORMAL TERM ASSESSMENT
+# =========================================================
+
 @transaction.atomic
 def get_or_create_term_assessment_draft(enrollment, term_label):
     """
@@ -90,7 +95,6 @@ def get_or_create_term_assessment_draft(enrollment, term_label):
     Copies available ongoing subskill ratings once.
     Existing assessments are returned without modification.
     """
-
     term_label = term_label.strip()
 
     if not term_label:
@@ -105,7 +109,6 @@ def get_or_create_term_assessment_draft(enrollment, term_label):
     if not created:
         return assessment, False
 
-    # Read the learner's current ongoing assessments.
     ongoing_assessments = (
         StudentSkillAssessment.objects
         .filter(student=enrollment.student, course=enrollment.course)
@@ -118,14 +121,12 @@ def get_or_create_term_assessment_draft(enrollment, term_label):
         for subskill in assessment.subskill_assessments.all()
     }
 
-    # Create the four independent formal skill records.
     for skill, subskills in SUBSKILLS.items():
         skill_snapshot = StudentSkillTermSnapshot.objects.create(
             term_assessment=assessment,
             skill=skill,
         )
 
-        # Create every expected subskill, including unrated ones.
         StudentTermSubSkillAssessment.objects.bulk_create([
             StudentTermSubSkillAssessment(
                 skill_snapshot=skill_snapshot,
@@ -162,21 +163,23 @@ def submit_term_assessment(assessment, teacher):
         assessment.skill_snapshots
         .prefetch_related("subskill_assessments")
     )
-
     expected_skills = set(SUBSKILLS)
 
     if len(snapshots) != len(expected_skills):
         raise ValidationError("The assessment must contain all four skills.")
 
     if {snapshot.skill for snapshot in snapshots} != expected_skills:
-        raise ValidationError("The assessment contains an invalid skill structure.")
+        raise ValidationError(
+            "The assessment contains an invalid skill structure."
+        )
 
     skill_scores = []
 
     for snapshot in snapshots:
         subskills = list(snapshot.subskill_assessments.all())
         expected_subskills = {
-            subskill for subskill, _ in SUBSKILLS[snapshot.skill]
+            subskill
+            for subskill, _ in SUBSKILLS[snapshot.skill]
         }
 
         if (
@@ -199,17 +202,17 @@ def submit_term_assessment(assessment, teacher):
 
         skill_scores.append((snapshot, score))
 
-    # Validation has completed successfully. Persist the final results.
     for snapshot, score in skill_scores:
         snapshot.score = score
         snapshot.save(update_fields=["score"])
 
     assessment.overall_score = assessment.calculated_overall_score
     assessment.teacher = teacher
-    assessment.assessment_date = assessment.assessment_date or timezone.localdate()
+    assessment.assessment_date = (
+        assessment.assessment_date or timezone.localdate()
+    )
     assessment.submitted_at = timezone.now()
     assessment.status = StudentTermAssessment.Status.SUBMITTED
-
     assessment.save(update_fields=[
         "overall_score",
         "teacher",
@@ -220,6 +223,7 @@ def submit_term_assessment(assessment, teacher):
     ])
 
     return assessment
+
 
 @transaction.atomic
 def update_term_subskill_rating(subskill_assessment, rating):
@@ -245,7 +249,6 @@ def update_term_subskill_rating(subskill_assessment, rating):
         pk=subskill_assessment.pk,
         skill_snapshot__term_assessment=assessment,
     )
-
     subskill.rating = rating
     subskill.save(update_fields=["rating", "updated_at"])
 
