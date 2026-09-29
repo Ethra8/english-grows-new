@@ -29,6 +29,7 @@ from profiles.utils.term_assessment_reports import (
     analyse_reading_profile,
     build_speaking_performance_summary,
     build_reading_performance_summary,
+    build_listening_performance_summary,
     create_term_assessment_report,
     generate_term_assessment_report,
 )
@@ -432,6 +433,82 @@ class ReadingProfileAnalysisTests(TestCase):
 
         self.assertEqual(first_profile, second_profile)
         self.assertEqual(first_summary, second_summary)
+
+
+
+
+class ListeningPerformanceSummaryTests(TestCase):
+    """Exhaustive tests for the Listening performance-summary engine."""
+
+    subskills = (
+        "gist",
+        "specific_information",
+        "detailed",
+    )
+
+    @staticmethod
+    def build_items(combination):
+        return [
+            {
+                "subskill": subskill,
+                "rating": subskill_rating,
+            }
+            for subskill, subskill_rating in zip(
+                ListeningPerformanceSummaryTests.subskills,
+                combination,
+            )
+        ]
+
+    def test_every_listening_rating_combination_generates_summary(self):
+        rating = StudentSubSkillAssessment.Rating
+        ratings = (
+            rating.NEEDS_WORK,
+            rating.DEVELOPING,
+            rating.SATISFACTORY,
+            rating.CONFIDENT,
+            rating.STRONG,
+        )
+
+        combinations_tested = 0
+
+        for combination in product(ratings, repeat=3):
+            summary = build_listening_performance_summary(
+                self.build_items(combination),
+                "Maria",
+            )
+
+            self.assertTrue(summary.strip())
+            self.assertNotIn("None", summary)
+            self.assertNotIn("{learner_name}", summary)
+
+            combinations_tested += 1
+
+        self.assertEqual(combinations_tested, 125)
+
+    def test_listening_all_needs_work_uses_expected_narrative(self):
+        rating = StudentSubSkillAssessment.Rating
+
+        summary = build_listening_performance_summary(
+            self.build_items(
+                (
+                    rating.NEEDS_WORK,
+                    rating.NEEDS_WORK,
+                    rating.NEEDS_WORK,
+                )
+            ),
+            "Maria",
+        )
+
+        self.assertEqual(
+            summary,
+            (
+                "Maria is currently finding listening challenging across all three "
+                "assessed areas. Understanding the main idea and overall message, "
+                "identifying specific information and key details, and understanding "
+                "detailed information and meaning in context all require further "
+                "development to reach the expected standard."
+            ),
+        )
 
 
 class TermAssessmentDraftTests(TestCase):

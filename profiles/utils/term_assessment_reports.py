@@ -39,6 +39,11 @@ from .term_assessment_reading_narratives import (
     READING_SUBSKILL_ORDER,
 )
 
+from .term_assessment_listening_narratives import (
+    LISTENING_PERFORMANCE_NARRATIVES,
+    LISTENING_SUBSKILL_ORDER,
+)
+
 # ---------------------------------------------------------
 # CONFIGURATION
 # ---------------------------------------------------------
@@ -476,6 +481,72 @@ def build_reading_performance_summary(profile, learner_name):
 
 
 
+def build_listening_performance_summary(items, learner_name):
+    """
+    Return the canonical narrative for one exact Listening rating combination.
+
+    Tuple order:
+    gist, specific_information, detailed.
+    """
+    expected_subskills = set(LISTENING_SUBSKILL_ORDER)
+
+    if len(items) != len(expected_subskills):
+        raise ValidationError(
+            "Listening performance requires exactly three subskill ratings."
+        )
+
+    ratings = {}
+
+    for item in items:
+        subskill = item["subskill"]
+        rating = item["rating"]
+
+        if subskill not in expected_subskills:
+            raise ValidationError(
+                f"Unsupported Listening subskill: {subskill}."
+            )
+
+        if subskill in ratings:
+            raise ValidationError(
+                f"Duplicate Listening subskill: {subskill}."
+            )
+
+        rating_value = getattr(
+            rating,
+            "value",
+            rating,
+        )
+
+        if rating_value not in RATING.values:
+            raise ValidationError(
+                f"Unsupported Listening rating: {rating_value}."
+            )
+
+        ratings[subskill] = rating_value
+
+    if set(ratings) != expected_subskills:
+        raise ValidationError(
+            "Listening performance contains an invalid subskill structure."
+        )
+
+    combination = tuple(
+        ratings[subskill]
+        for subskill in LISTENING_SUBSKILL_ORDER
+    )
+
+    try:
+        narrative = LISTENING_PERFORMANCE_NARRATIVES[combination]
+    except KeyError as exc:
+        raise ValidationError(
+            f"No Listening performance narrative exists for ratings: {combination}."
+        ) from exc
+
+    return narrative.format(
+        learner_name=learner_name
+    )
+
+
+
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY
 # ---------------------------------------------------------
@@ -575,6 +646,12 @@ def build_skill_performance_summary(skill, items, learner_name):
         profile = analyse_reading_profile(items)
         return build_reading_performance_summary(
             profile,
+            learner_name,
+        )
+
+    if skill == "listening":
+        return build_listening_performance_summary(
+            items,
             learner_name,
         )
     
