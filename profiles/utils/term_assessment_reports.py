@@ -30,6 +30,10 @@ from .term_assessment_report_content import (
     SUBSKILL_NEXT_TERM_FOCUS,
 )
 
+from .term_assessment_reading_narratives import (
+    READING_PERFORMANCE_NARRATIVES,
+    READING_SUBSKILL_ORDER,
+)
 
 # ---------------------------------------------------------
 # CONFIGURATION
@@ -128,10 +132,18 @@ def get_report_assessment_data(assessment):
 
 
 # ---------------------------------------------------------
-# SPEAKING PERFORMANCE PROFILE
+# SKILLS PERFORMANCE PROFILE
 # ---------------------------------------------------------
 
 SPEAKING_RATING_LEVELS = {
+    RATING.NEEDS_WORK: 1,
+    RATING.DEVELOPING: 2,
+    RATING.SATISFACTORY: 3,
+    RATING.CONFIDENT: 4,
+    RATING.STRONG: 5,
+}
+
+READING_RATING_LEVELS = {
     RATING.NEEDS_WORK: 1,
     RATING.DEVELOPING: 2,
     RATING.SATISFACTORY: 3,
@@ -262,6 +274,116 @@ def analyse_speaking_profile(items):
         "middle": middle,
         "weaker": weaker,
     }
+
+
+
+def analyse_reading_profile(items):
+    """
+    Analyse the relationship between the three Reading subskill ratings.
+
+    The returned profile describes the shape of performance independently
+    from the absolute rating level. Narrative generation is handled
+    separately.
+    """
+    expected_subskills = [
+        subskill
+        for subskill, _ in SUBSKILLS["reading"]
+    ]
+
+    if len(items) != len(expected_subskills):
+        raise ValidationError(
+            "Reading assessment must contain all three subskills."
+        )
+
+    raw_ratings = {}
+
+    for item in items:
+        subskill = item.get("subskill")
+        rating = item.get("rating")
+
+        if subskill not in expected_subskills:
+            raise ValidationError(
+                "Reading assessment contains an invalid subskill."
+            )
+
+        if subskill in raw_ratings:
+            raise ValidationError(
+                "Reading assessment contains a duplicate subskill."
+            )
+
+        if rating not in READING_RATING_LEVELS:
+            raise ValidationError(
+                "Reading assessment contains an invalid rating."
+            )
+
+        raw_ratings[subskill] = rating
+
+    if set(raw_ratings) != set(expected_subskills):
+        raise ValidationError(
+            "Reading assessment must contain all three subskills."
+        )
+
+    ratings = {
+        subskill: raw_ratings[subskill]
+        for subskill in expected_subskills
+    }
+    levels = {
+        subskill: READING_RATING_LEVELS[rating]
+        for subskill, rating in ratings.items()
+    }
+
+    lowest = min(levels.values())
+    highest = max(levels.values())
+    spread = highest - lowest
+
+    stronger = [
+        subskill
+        for subskill, level in levels.items()
+        if level == highest
+    ]
+    weaker = [
+        subskill
+        for subskill, level in levels.items()
+        if level == lowest
+    ]
+    middle = [
+        subskill
+        for subskill, level in levels.items()
+        if lowest < level < highest
+    ]
+
+    if spread >= 2:
+        ordered_levels = sorted(levels.values())
+        lower_gap = ordered_levels[1] - ordered_levels[0]
+        upper_gap = ordered_levels[2] - ordered_levels[1]
+
+        if upper_gap > lower_gap:
+            profile_name = "pronounced_strength"
+        elif lower_gap > upper_gap:
+            profile_name = "pronounced_weakness"
+        else:
+            profile_name = "mixed"
+    else:
+        average = sum(levels.values()) / len(levels)
+
+        if average >= 4:
+            profile_name = "consistently_strong"
+        elif average >= 3:
+            profile_name = "generally_secure"
+        elif average >= 2:
+            profile_name = "developing_evenly"
+        else:
+            profile_name = "broad_support_needed"
+
+    return {
+        "profile": profile_name,
+        "ratings": ratings,
+        "levels": levels,
+        "stronger": stronger,
+        "middle": middle,
+        "weaker": weaker,
+    }
+
 
 
 def get_stronger_area_language(level, plural=False):
@@ -710,6 +832,47 @@ def build_speaking_performance_summary(profile, learner_name):
 
 
 
+def get_reading_status_language(level, plural=False):
+    if level == 5:
+        return "are clear strengths" if plural else "is a clear strength"
+    if level == 4:
+        return "are confident areas" if plural else "is a confident area"
+    if level == 3:
+        return "are satisfactory for this level" if plural else "is satisfactory for this level"
+    if level == 2:
+        return "are still developing" if plural else "is still developing"
+    return "remain less established" if plural else "remains less established"
+
+
+def build_reading_performance_summary(profile, learner_name):
+    """
+    Return the canonical narrative for one exact Reading rating combination.
+
+    Tuple order:
+    scanning, skimming, detailed.
+    """
+    combination = tuple(
+        getattr(
+            profile["ratings"][subskill],
+            "value",
+            profile["ratings"][subskill],
+        )
+        for subskill in READING_SUBSKILL_ORDER
+    )
+
+    try:
+        narrative = READING_PERFORMANCE_NARRATIVES[combination]
+    except KeyError as exc:
+        raise ValidationError(
+            f"No Reading performance narrative exists for ratings: {combination}."
+        ) from exc
+
+    return narrative.format(
+        learner_name=learner_name
+    )
+
+
+
 # ---------------------------------------------------------
 # PERFORMANCE SUMMARY
 # ---------------------------------------------------------
@@ -804,6 +967,13 @@ def build_skill_performance_summary(skill, items, learner_name):
     if skill == "speaking":
         profile = analyse_speaking_profile(items)
         return build_speaking_performance_summary(profile, learner_name)
+
+    if skill == "reading":
+        profile = analyse_reading_profile(items)
+        return build_reading_performance_summary(
+            profile,
+            learner_name,
+        )
     
     rating_order = (
         RATING.STRONG,

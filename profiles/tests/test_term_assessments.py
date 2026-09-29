@@ -26,7 +26,9 @@ from profiles.utils.term_assessments import (
 )
 from profiles.utils.term_assessment_reports import (
     analyse_speaking_profile,
+    analyse_reading_profile,
     build_speaking_performance_summary,
+    build_reading_performance_summary,
     create_term_assessment_report,
     generate_term_assessment_report,
 )
@@ -200,6 +202,236 @@ class SpeakingPerformanceSummaryTests(TestCase):
         ]
         with self.assertRaises(ValidationError):
             analyse_speaking_profile(items)
+
+
+
+class ReadingProfileAnalysisTests(TestCase):
+    """Exhaustive tests for the Reading performance-profile analyser."""
+
+    subskills = (
+        "scanning",
+        "skimming",
+        "detailed",
+    )
+
+    @staticmethod
+    def build_items(combination):
+        return [
+            {
+                "subskill": subskill,
+                "rating": subskill_rating,
+            }
+            for subskill, subskill_rating in zip(
+                ReadingProfileAnalysisTests.subskills,
+                combination,
+            )
+        ]
+
+    def test_every_reading_rating_combination_generates_valid_profile(self):
+        rating = StudentSubSkillAssessment.Rating
+        ratings = (
+            rating.NEEDS_WORK,
+            rating.DEVELOPING,
+            rating.SATISFACTORY,
+            rating.CONFIDENT,
+            rating.STRONG,
+        )
+        expected_profiles = {
+            "consistently_strong",
+            "generally_secure",
+            "developing_evenly",
+            "broad_support_needed",
+            "mixed",
+            "pronounced_strength",
+            "pronounced_weakness",
+        }
+
+        profiles_found = set()
+        combinations_checked = 0
+
+        for combination in product(ratings, repeat=3):
+            profile = analyse_reading_profile(
+                self.build_items(combination)
+            )
+
+            summary = build_reading_performance_summary(
+                profile,
+                "Maria",
+            )
+
+            self.assertTrue(summary.strip())
+            self.assertNotIn("None", summary)
+            self.assertNotIn("{learner_name}", summary)
+
+            combinations_checked += 1
+            profiles_found.add(profile["profile"])
+
+            self.assertIn(
+                profile["profile"],
+                expected_profiles,
+            )
+            self.assertEqual(
+                set(profile["ratings"]),
+                set(self.subskills),
+            )
+            self.assertEqual(
+                set(profile["levels"]),
+                set(self.subskills),
+            )
+
+        self.assertEqual(combinations_checked, 125)
+        self.assertEqual(profiles_found, expected_profiles)
+
+    def test_representative_reading_profiles_are_classified_correctly(self):
+        rating = StudentSubSkillAssessment.Rating
+        cases = (
+            (
+                (
+                    rating.STRONG,
+                    rating.STRONG,
+                    rating.STRONG,
+                ),
+                "consistently_strong",
+            ),
+            (
+                (
+                    rating.SATISFACTORY,
+                    rating.CONFIDENT,
+                    rating.SATISFACTORY,
+                ),
+                "generally_secure",
+            ),
+            (
+                (
+                    rating.DEVELOPING,
+                    rating.DEVELOPING,
+                    rating.SATISFACTORY,
+                ),
+                "developing_evenly",
+            ),
+            (
+                (
+                    rating.NEEDS_WORK,
+                    rating.DEVELOPING,
+                    rating.NEEDS_WORK,
+                ),
+                "broad_support_needed",
+            ),
+            (
+                (
+                    rating.SATISFACTORY,
+                    rating.SATISFACTORY,
+                    rating.STRONG,
+                ),
+                "pronounced_strength",
+            ),
+            (
+                (
+                    rating.NEEDS_WORK,
+                    rating.SATISFACTORY,
+                    rating.SATISFACTORY,
+                ),
+                "pronounced_weakness",
+            ),
+            (
+                (
+                    rating.NEEDS_WORK,
+                    rating.DEVELOPING,
+                    rating.SATISFACTORY,
+                ),
+                "mixed",
+            ),
+            (
+                (
+                    rating.NEEDS_WORK,
+                    rating.DEVELOPING,
+                    rating.CONFIDENT,
+                ),
+                "pronounced_strength",
+            ),
+            (
+                (
+                    rating.NEEDS_WORK,
+                    rating.SATISFACTORY,
+                    rating.CONFIDENT,
+                ),
+                "pronounced_weakness",
+            ),
+        )
+
+        for combination, expected_profile in cases:
+            with self.subTest(
+                combination=combination,
+                expected_profile=expected_profile,
+            ):
+                profile = analyse_reading_profile(
+                    self.build_items(combination)
+                )
+                self.assertEqual(
+                    profile["profile"],
+                    expected_profile,
+                )
+
+    def test_reading_profile_rejects_incomplete_assessment(self):
+        rating = StudentSubSkillAssessment.Rating
+        items = [
+            {
+                "subskill": "scanning",
+                "rating": rating.SATISFACTORY,
+            },
+            {
+                "subskill": "skimming",
+                "rating": rating.SATISFACTORY,
+            },
+        ]
+
+        with self.assertRaises(ValidationError):
+            analyse_reading_profile(items)
+
+    def test_reading_profile_rejects_invalid_subskill(self):
+        rating = StudentSubSkillAssessment.Rating
+        items = [
+            {
+                "subskill": "scanning",
+                "rating": rating.SATISFACTORY,
+            },
+            {
+                "subskill": "skimming",
+                "rating": rating.SATISFACTORY,
+            },
+            {
+                "subskill": "invented_reading_skill",
+                "rating": rating.SATISFACTORY,
+            },
+        ]
+
+        with self.assertRaises(ValidationError):
+            analyse_reading_profile(items)
+
+    def test_reading_performance_summary_is_deterministic(self):
+        rating = StudentSubSkillAssessment.Rating
+        items = self.build_items(
+            (
+                rating.SATISFACTORY,
+                rating.DEVELOPING,
+                rating.CONFIDENT,
+            )
+        )
+
+        first_profile = analyse_reading_profile(items)
+        second_profile = analyse_reading_profile(items)
+
+        first_summary = build_reading_performance_summary(
+            first_profile,
+            "Maria",
+        )
+        second_summary = build_reading_performance_summary(
+            second_profile,
+            "Maria",
+        )
+
+        self.assertEqual(first_profile, second_profile)
+        self.assertEqual(first_summary, second_summary)
 
 
 class TermAssessmentDraftTests(TestCase):

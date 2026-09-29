@@ -440,6 +440,47 @@ SPEAKING_PROFILE_NARRATIVES = {
     },
 }
 
+
+
+# READING_PROFILE_NARRATIVES = {
+#     "area": {
+#         "scanning": "locating specific information",
+#         "skimming": "identifying main ideas and overall purpose",
+#         "detailed": "understanding detailed information and meaning in context",
+#     },
+#     "all_strong": (
+#         "{learner_name} demonstrates strong reading ability across all assessed "
+#         "areas, with clear strengths in locating specific information, identifying "
+#         "main ideas and overall purpose, and understanding detailed information "
+#         "and meaning in context."
+#     ),
+#     "all_confident": (
+#         "{learner_name} demonstrates confident and secure reading ability across "
+#         "all assessed areas, including locating specific information, identifying "
+#         "main ideas and overall purpose, and understanding detailed information "
+#         "and meaning in context."
+#     ),
+#     "all_satisfactory": (
+#         "{learner_name}'s reading performance across locating specific information, "
+#         "identifying main ideas and overall purpose, and detailed comprehension is "
+#         "satisfactory for this level, although there remains considerable room for "
+#         "improvement across all assessed areas."
+#     ),
+#     "all_developing": (
+#         "{learner_name}'s reading ability is still developing across all assessed "
+#         "areas. Locating specific information, identifying main ideas and overall "
+#         "purpose, and detailed comprehension all require further development to "
+#         "reach a satisfactory level of performance."
+#     ),
+#     "all_needs_work": (
+#         "{learner_name} currently experiences difficulty across all assessed areas "
+#         "of reading. Locating specific information, identifying main ideas and "
+#         "overall purpose, and detailed comprehension are not yet established at "
+#         "the expected level."
+#     ),
+# }
+
+
 # ---------------------------------------------------------
 # DEVELOPMENT PRIORITIES — NARRATIVE RECOMMENDATIONS
 #
