@@ -13,3282 +13,5345 @@ WRITING_SUBSKILL_ORDER = (
 
 WRITING_PERFORMANCE_NARRATIVES = {
     ('needs_work', 'needs_work', 'needs_work', 'needs_work'): (
-        '{learner_name} is currently finding written communication challenging across all four assessed areas. '
-        'The organisation and clear presentation of ideas, the ability to connect ideas coherently, grammatical '
-        'accuracy and language range, and the appropriate use of tone and style all require further development '
-        'to reach the expected standard.'
+        "{learner_name}'s written communication falls well below the minimum expected "
+        'standard for this level across all four assessed areas. Organising and '
+        'presenting written work clearly, connecting ideas logically and maintaining '
+        'coherence, grammatical accuracy and language range, and adapting tone and '
+        'style appropriately to purpose, audience and context all require substantial '
+        'further development.'
     ),
     ('needs_work', 'needs_work', 'needs_work', 'developing'): (
-        '{learner_name} is beginning to develop greater awareness of how tone and style should be adapted to '
-        'purpose, audience and context. However, the organisation of written work, the coherent connection of '
-        'ideas, and control of grammar and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the three assessed areas, '
+        'namely organisation and clear presentation of written work, connecting ideas '
+        'logically and maintaining coherence, and grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('needs_work', 'needs_work', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates satisfactory control of register and is able to adapt tone and style to '
-        'purpose, audience and context at the expected level. However, the organisation of written work, cohesion, '
-        'and grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'However, the three assessed areas, namely organisation and clear presentation '
+        'of written work, connecting ideas logically and maintaining coherence, and '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context. However, the ability to organise written work clearly, connect ideas coherently, and use grammar '
-        'and vocabulary accurately and flexibly remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established. However, the three assessed areas, namely '
+        'organisation and clear presentation of written work, connecting ideas '
+        'logically and maintaining coherence, and grammatical accuracy and language '
+        'range, fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. By contrast, the organisation and cohesion of written work and control of grammar and language '
-        'range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. However, the three assessed areas, namely '
+        'organisation and clear presentation of written work, connecting ideas '
+        'logically and maintaining coherence, and grammatical accuracy and language '
+        'range, fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
     ),
-
     ('needs_work', 'needs_work', 'developing', 'needs_work'): (
-        '{learner_name} is developing greater control of grammar and a broader range of vocabulary and sentence '
-        'structures. However, the organisation of written work, the coherent connection of ideas, and the ability '
-        'to adapt tone and style appropriately remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are still developing "
+        'and require further consolidation to reach the minimum expected standard for '
+        'this level. However, the three assessed areas, namely organisation and clear '
+        'presentation of written work, connecting ideas logically and maintaining '
+        'coherence, and adapting tone and style to purpose, audience and context, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'developing', 'developing'): (
-        '{learner_name} is developing greater control of grammar and language range, while awareness of '
-        'appropriate tone and style is also beginning to develop. However, the organisation of written work and '
-        'the ability to connect ideas coherently remain less established and require further development.'
+        "{learner_name}'s performance is still developing in grammatical accuracy and "
+        'language range, as well as in appropriate tone and style and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as connecting ideas logically and maintaining coherence, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context, '
-        'while grammatical accuracy and language range are still developing. However, the organisation of written '
-        'work and the coherent connection of ideas remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'Grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'connecting ideas logically and maintaining coherence, fall well below that '
+        'standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range are still developing. However, the organisation '
-        'of written work and the ability to connect ideas coherently remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established. Grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach the minimum '
+        'expected standard for this level. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as connecting '
+        'ideas logically and maintaining coherence, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. Control of grammar and language range is still developing; however, the organisation and '
-        'cohesion of written work remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. Grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach the minimum '
+        'expected standard for this level. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as connecting '
+        'ideas logically and maintaining coherence, fall well below that standard and '
+        'require substantial further development.'
     ),
-
     ('needs_work', 'needs_work', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range. However, the '
-        'organisation of written work, the ability to connect ideas coherently, and control of register remain '
-        'less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. However, the three assessed '
+        'areas, namely organisation and clear presentation of written work, connecting '
+        'ideas logically and maintaining coherence, and adapting tone and style to '
+        'purpose, audience and context, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('needs_work', 'needs_work', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range, while the ability '
-        'to adapt tone and style appropriately is still developing. However, the organisation and cohesion of '
-        'written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. The ability to adapt tone and '
+        'style to purpose, audience and context is still developing and requires '
+        'further consolidation to reach that standard. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'connecting ideas logically and maintaining coherence, fall well below that '
+        'standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range and in adapting '
-        'tone and style appropriately to purpose, audience and context. However, the organisation of written work '
-        'and the coherent connection of ideas remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in grammatical accuracy and language range, as well as in appropriate '
+        'tone and style. However, the two assessed areas, namely organisation and '
+        'clear presentation of written work, as well as connecting ideas logically and '
+        'maintaining coherence, fall well below that standard and require substantial '
+        'further development.'
     ),
     ('needs_work', 'needs_work', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. However, the '
-        'organisation and cohesion of written work remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as connecting ideas logically and maintaining coherence, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. However, the '
-        'organisation and cohesion of written work remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as connecting ideas logically and maintaining coherence, fall '
+        'well below that standard and require substantial further development.'
     ),
-
     ('needs_work', 'needs_work', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in using grammar accurately and drawing on a varied range of '
-        'vocabulary and sentence structures. However, the organisation of written work, the coherent connection '
-        'of ideas, and the ability to adapt tone and style appropriately remain less established and require '
-        'further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. However, the three assessed areas, namely organisation and clear '
+        'presentation of written work, connecting ideas logically and maintaining '
+        'coherence, and adapting tone and style to purpose, audience and context, fall '
+        'well below the minimum expected standard for this level and require '
+        'substantial further development.'
     ),
     ('needs_work', 'needs_work', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while control of '
-        'register is still developing. However, the organisation of written work and the ability to connect ideas '
-        'coherently remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to adapt tone and style to purpose, audience and '
+        'context is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the two assessed areas, '
+        'namely organisation and clear presentation of written work, as well as '
+        'connecting ideas logically and maintaining coherence, fall well below that '
+        'standard and require substantial further development.'
     ),
     ('needs_work', 'needs_work', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while the ability to '
-        'adapt tone and style appropriately meets the expected standard. However, the organisation and cohesion '
-        'of written work remain less established and require further development.'
-    ),
-    ('needs_work', 'needs_work', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. However, the organisation and cohesion of '
-        'written work remain less established and require further development.'
-    ),
-    ('needs_work', 'needs_work', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. However, the '
-        'organisation of written work and the ability to connect ideas coherently remain less established and '
-        'require further development.'
-    ),
-
-    ('needs_work', 'needs_work', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and the use of a varied range of vocabulary '
-        'and sentence structures. However, the organisation of written work, the coherent connection of ideas, '
-        'and the ability to adapt tone and style appropriately remain less established and require further '
-        'development.'
-    ),
-    ('needs_work', 'needs_work', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while control of '
-        'register is still developing. However, the organisation and cohesion of written work remain less '
-        'established and require further development.'
-    ),
-    ('needs_work', 'needs_work', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while the ability to '
-        'adapt tone and style appropriately meets the expected standard. However, the organisation and cohesion '
-        'of written work remain less established and require further development.'
-    ),
-    ('needs_work', 'needs_work', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. However, the '
-        'organisation and cohesion of written work remain less established and require further development.'
-    ),
-    ('needs_work', 'needs_work', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. However, the organisation of written work and the '
-        'ability to connect ideas coherently remain less established and require further development.'
-    ),
-    ('needs_work', 'developing', 'needs_work', 'needs_work'): (
-        '{learner_name} is developing greater ability to connect ideas logically and maintain coherence. '
-        'However, the organisation and clear presentation of written work, grammatical accuracy and language '
-        'range, and the ability to adapt tone and style appropriately remain less established and require '
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established, while the ability to adapt tone and style to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this '
+        'level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as connecting ideas logically and '
+        'maintaining coherence, fall well below that standard and require substantial '
         'further development.'
     ),
-    ('needs_work', 'developing', 'needs_work', 'developing'): (
-        '{learner_name} is developing greater control of cohesion and is also beginning to adapt tone and style '
-        'more appropriately to purpose, audience and context. However, the organisation of written work and '
-        'control of grammar and language range remain less established and require further development.'
+    ('needs_work', 'needs_work', 'confident', 'confident'): (
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range, as well as in appropriate tone and style, with confidence '
+        'evident in both areas. However, the two assessed areas, namely organisation '
+        'and clear presentation of written work, as well as connecting ideas logically '
+        'and maintaining coherence, fall well below the minimum expected standard for '
+        'this level and require substantial further development.'
     ),
-    ('needs_work', 'developing', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context, '
-        'while the ability to connect ideas logically and maintain coherence is still developing. However, the '
-        'organisation of written work and control of grammar and language range remain less established and '
-        'require further development.'
+    ('needs_work', 'needs_work', 'confident', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while grammatical accuracy and language range '
+        'are also well established. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as connecting '
+        'ideas logically and maintaining coherence, fall well below the minimum '
+        'expected standard for this level and require substantial further development.'
     ),
-    ('needs_work', 'developing', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion is still developing. However, the organisation of written work and grammatical '
-        'accuracy and language range remain less established and require further development.'
+    ('needs_work', 'needs_work', 'strong', 'needs_work'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. However, the three assessed areas, namely organisation and clear '
+        'presentation of written work, connecting ideas logically and maintaining '
+        'coherence, and adapting tone and style to purpose, audience and context, fall '
+        'well below the minimum expected standard for this level and require '
+        'substantial further development.'
     ),
-    ('needs_work', 'developing', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. The ability to connect ideas logically and maintain coherence is still developing; however, '
-        'the organisation of written work and control of grammar and language range remain less established and '
-        'require further development.'
+    ('needs_work', 'needs_work', 'strong', 'developing'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to adapt tone and style to purpose, audience and context '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as connecting '
+        'ideas logically and maintaining coherence, fall well below that standard and '
+        'require substantial further development.'
     ),
-
-    ('needs_work', 'developing', 'developing', 'needs_work'): (
-        '{learner_name} is developing greater control of cohesion and of grammar and language range. However, the '
-        'organisation and clear presentation of written work and the ability to adapt tone and style appropriately '
-        'remain less established and require further development.'
-    ),
-    ('needs_work', 'developing', 'developing', 'developing'): (
-        '{learner_name} is making progress in connecting ideas coherently, developing grammatical accuracy and '
-        'language range, and adapting tone and style to purpose, audience and context. However, the organisation '
-        'and clear presentation of written work remain less established and require further development.'
-    ),
-    ('needs_work', 'developing', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context, '
-        'while cohesion and grammatical accuracy and language range are still developing. However, the '
-        'organisation and clear presentation of written work remain less established and require further '
+    ('needs_work', 'needs_work', 'strong', 'satisfactory'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as connecting ideas logically and maintaining '
+        'coherence, fall well below that standard and require substantial further '
         'development.'
     ),
+    ('needs_work', 'needs_work', 'strong', 'confident'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style to purpose, audience and '
+        'context is also well established. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as connecting '
+        'ideas logically and maintaining coherence, fall well below the minimum '
+        'expected standard for this level and require substantial further development.'
+    ),
+    ('needs_work', 'needs_work', 'strong', 'strong'): (
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range, as well as in appropriate tone and style. However, the two '
+        'assessed areas, namely organisation and clear presentation of written work, '
+        'as well as connecting ideas logically and maintaining coherence, fall well '
+        'below the minimum expected standard for this level and require substantial '
+        'further development.'
+    ),
+    ('needs_work', 'developing', 'needs_work', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the three assessed areas, namely '
+        'organisation and clear presentation of written work, grammatical accuracy and '
+        'language range, and adapting tone and style to purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
+    ),
+    ('needs_work', 'developing', 'needs_work', 'developing'): (
+        "{learner_name}'s performance is still developing in cohesion and logical "
+        'connection of ideas, as well as in appropriate tone and style and requires '
+        'further consolidation to reach the minimum expected standard for this level. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as grammatical accuracy and language range, fall '
+        'well below that standard and require substantial further development.'
+    ),
+    ('needs_work', 'developing', 'needs_work', 'satisfactory'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'The ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as grammatical accuracy and language range, fall '
+        'well below that standard and require substantial further development.'
+    ),
+    ('needs_work', 'developing', 'needs_work', 'confident'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established. The ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
+    ),
+    ('needs_work', 'developing', 'needs_work', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. The ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
+    ),
+    ('needs_work', 'developing', 'developing', 'needs_work'): (
+        "{learner_name}'s performance is still developing in cohesion and logical "
+        'connection of ideas, as well as in grammatical accuracy and language range '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as adapting tone and style to purpose, '
+        'audience and context, fall well below that standard and require substantial '
+        'further development.'
+    ),
+    ('needs_work', 'developing', 'developing', 'developing'): (
+        "{learner_name}'s performance is still developing in cohesion and logical "
+        'connection of ideas, in grammatical accuracy and language range, and in '
+        'appropriate tone and style and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to organise '
+        'and present written work clearly falls well below that standard and requires '
+        'substantial further development.'
+    ),
+    ('needs_work', 'developing', 'developing', 'satisfactory'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'Performance is still developing in cohesion and logical connection of ideas, '
+        'as well as in grammatical accuracy and language range and requires further '
+        'consolidation to reach that standard. However, the ability to organise and '
+        'present written work clearly falls well below that standard and requires '
+        'substantial further development.'
+    ),
     ('needs_work', 'developing', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context. Cohesion and grammatical accuracy and language range are still developing, while the '
-        'organisation and clear presentation of written work remain less established and require further '
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established. Performance is still developing in cohesion and '
+        'logical connection of ideas, as well as in grammatical accuracy and language '
+        'range and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly falls well below that standard and requires substantial further '
         'development.'
     ),
     ('needs_work', 'developing', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. Cohesion and grammatical accuracy and language range are still developing; however, the '
-        'organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. Performance is still developing in cohesion '
+        'and logical connection of ideas, as well as in grammatical accuracy and '
+        'language range and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to organise and '
+        'present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
-
     ('needs_work', 'developing', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range, while the ability '
-        'to connect ideas logically and maintain coherence is still developing. However, the organisation of '
-        'written work and control of register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. The ability to connect ideas '
+        'logically and maintain coherence is still developing and requires further '
+        'consolidation to reach that standard. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as adapting tone '
+        'and style to purpose, audience and context, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'developing', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range. Cohesion and the '
-        'ability to adapt tone and style appropriately are still developing, while the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. Performance is still developing '
+        'in cohesion and logical connection of ideas, as well as in appropriate tone '
+        'and style and requires further consolidation to reach that standard. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range and in adapting '
-        'tone and style appropriately to purpose, audience and context. Cohesion is still developing; however, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in grammatical accuracy and language range, as well as in appropriate '
+        'tone and style. The ability to connect ideas logically and maintain coherence '
+        'is still developing and requires further consolidation to reach that '
+        'standard. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. The ability to '
-        'connect ideas logically and maintain coherence is still developing. However, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. The ability '
+        'to connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. Cohesion is still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. The ability '
+        'to connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
-
     ('needs_work', 'developing', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while the ability to '
-        'connect ideas logically and maintain coherence is still developing. However, the organisation of '
-        'written work and control of register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to connect ideas logically and maintain coherence is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as adapting tone '
+        'and style to purpose, audience and context, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'developing', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range. Cohesion and control '
-        'of register are still developing, while the organisation and clear presentation of written work remain '
-        'less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Performance is still developing in cohesion and logical '
+        'connection of ideas, as well as in appropriate tone and style and requires '
+        'further consolidation to reach the minimum expected standard for this level. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. The ability to connect ideas logically and maintain coherence is '
-        'still developing. However, the organisation and clear presentation of written work remain less '
-        'established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established, while the ability to adapt tone and style to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this '
+        'level. The ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. Cohesion is still developing; however, the '
-        'organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range, as well as in appropriate tone and style, with confidence '
+        'evident in both areas. The ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to organise '
+        'and present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'developing', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. The ability to '
-        'connect ideas logically and maintain coherence is still developing. However, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while grammatical accuracy and language range '
+        'are also well established. The ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
-
     ('needs_work', 'developing', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while the ability to '
-        'connect ideas logically and maintain coherence is still developing. However, the organisation of '
-        'written work and control of register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to connect ideas logically and maintain coherence is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as adapting tone '
+        'and style to purpose, audience and context, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'developing', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range. Cohesion and control '
-        'of register are still developing, while the organisation and clear presentation of written work remain '
-        'less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Performance is still developing in cohesion and logical connection of '
+        'ideas, as well as in appropriate tone and style and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. Cohesion is still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'The ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'developing', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Cohesion is still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style to purpose, audience and '
+        'context is also well established. The ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'developing', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. The ability to connect ideas logically and '
-        'maintain coherence is still developing. However, the organisation and clear presentation of written '
-        'work remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range, as well as in appropriate tone and style. The ability to '
+        'connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach the minimum expected standard for '
+        'this level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'needs_work', 'needs_work'): (
-        '{learner_name} meets the expected standard in connecting ideas logically and maintaining coherence. '
-        'However, the organisation and clear presentation of written work, grammatical accuracy and language '
-        'range, and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the three assessed areas, namely organisation and clear presentation of '
+        'written work, grammatical accuracy and language range, and adapting tone and '
+        'style to purpose, audience and context, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'needs_work', 'developing'): (
-        '{learner_name} meets the expected standard in connecting ideas logically and maintaining coherence, '
-        'while the ability to adapt tone and style appropriately is still developing. However, the organisation '
-        'of written work and control of grammar and language range remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to adapt tone and style to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as grammatical accuracy and language range, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in both cohesion and the use of an appropriate register. '
-        'However, the organisation and clear presentation of written work and control of grammar and language '
-        'range remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in cohesion and logical connection of ideas, as well as in appropriate '
+        'tone and style. However, the two assessed areas, namely organisation and '
+        'clear presentation of written work, as well as grammatical accuracy and '
+        'language range, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('needs_work', 'satisfactory', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while the ability to connect ideas logically and maintain coherence meets the expected standard. '
-        'However, the organisation of written work and control of grammar and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established, while the ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('needs_work', 'satisfactory', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. However, the organisation of written work and '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while the ability to connect ideas logically '
+        'and maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
+        'development.'
     ),
-
     ('needs_work', 'satisfactory', 'developing', 'needs_work'): (
-        '{learner_name} meets the expected standard in connecting ideas logically and maintaining coherence, '
-        'while grammatical accuracy and language range are still developing. However, the organisation of '
-        'written work and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. '
+        'Grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'adapting tone and style to purpose, audience and context, fall well below '
+        'that standard and require substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'developing', 'developing'): (
-        '{learner_name} meets the expected standard in cohesion. Grammatical accuracy and language range and the '
-        'ability to adapt tone and style appropriately are still developing, while the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. '
+        'Performance is still developing in grammatical accuracy and language range, '
+        'as well as in appropriate tone and style and requires further consolidation '
+        'to reach that standard. However, the ability to organise and present written '
+        'work clearly falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('needs_work', 'satisfactory', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in connecting ideas coherently and in adapting tone and style '
-        'appropriately to purpose, audience and context. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in cohesion and logical connection of ideas, as well as in appropriate '
+        'tone and style. Grammatical accuracy and language range are still developing '
+        'and require further consolidation to reach that standard. However, the '
+        'ability to organise and present written work clearly falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established, while the ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while the ability to connect ideas logically '
+        'and maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
-
     ('needs_work', 'satisfactory', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in cohesion and in grammatical accuracy and language range. '
-        'However, the organisation and clear presentation of written work and the ability to adapt tone and style '
-        'appropriately remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in cohesion and logical connection of ideas, as well as in grammatical '
+        'accuracy and language range. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as adapting tone '
+        'and style to purpose, audience and context, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in cohesion and in grammatical accuracy and language range, '
-        'while control of register is still developing. However, the organisation and clear presentation of '
-        'written work remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in cohesion and logical connection of ideas, as well as in grammatical '
+        'accuracy and language range. The ability to adapt tone and style to purpose, '
+        'audience and context is still developing and requires further consolidation '
+        'to reach that standard. However, the ability to organise and present written '
+        'work clearly falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('needs_work', 'satisfactory', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in cohesion, grammatical accuracy and language range, and '
-        'control of register. However, the organisation and clear presentation of written work remain less '
-        'established and are the main area requiring further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in cohesion and logical connection of ideas, in grammatical accuracy '
+        'and language range, and in appropriate tone and style. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion and grammatical accuracy and language range meet the expected standard. However, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is well established. The learner satisfactorily meets the minimum '
+        'expected standard for this level in cohesion and logical connection of ideas, '
+        'as well as in grammatical accuracy and language range. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion and grammatical accuracy and language range meet the expected standard. However, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. The learner satisfactorily meets the minimum '
+        'expected standard for this level in cohesion and logical connection of ideas, '
+        'as well as in grammatical accuracy and language range. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
-
     ('needs_work', 'satisfactory', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. However, the organisation and clear presentation of written work and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established, while the ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as adapting tone and style to purpose, audience and '
+        'context, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('needs_work', 'satisfactory', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. Control of register is still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established, while the ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'The ability to adapt tone and style to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion and '
-        'control of register meet the expected standard. However, the organisation and clear presentation of '
-        'written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The learner satisfactorily meets the minimum expected standard '
+        'for this level in cohesion and logical connection of ideas, as well as in '
+        'appropriate tone and style. However, the ability to organise and present '
+        'written work clearly falls well below that standard and requires substantial '
+        'further development.'
     ),
     ('needs_work', 'satisfactory', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. Cohesion meets the expected standard; however, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range, as well as in appropriate tone and style, with confidence '
+        'evident in both areas. The ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Cohesion meets the '
-        'expected standard; however, the organisation and clear presentation of written work remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while grammatical accuracy and language range '
+        'are also well established. The ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
-
     ('needs_work', 'satisfactory', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. However, the organisation and clear presentation of written work and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as adapting tone and style to purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. Control of register is still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to adapt tone and style to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion and '
-        'control of register meet the expected standard. However, the organisation and clear presentation of '
-        'written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The learner satisfactorily meets the minimum expected standard for '
+        'this level in cohesion and logical connection of ideas, as well as in '
+        'appropriate tone and style. However, the ability to organise and present '
+        'written work clearly falls well below that standard and requires substantial '
+        'further development.'
     ),
     ('needs_work', 'satisfactory', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Cohesion meets the '
-        'expected standard; however, the organisation and clear presentation of written work remain less '
-        'established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style to purpose, audience and '
+        'context is also well established. The ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'satisfactory', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. Cohesion meets the expected standard; however, the '
-        'organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range, as well as in appropriate tone and style. The ability to '
+        'connect ideas logically and maintain coherence satisfactorily meets the '
+        'minimum expected standard for this level. However, the ability to organise '
+        'and present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'confident', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence. '
-        'However, the organisation and clear presentation of written work, grammatical accuracy and language '
-        'range, and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. However, the three assessed areas, namely organisation and '
+        'clear presentation of written work, grammatical accuracy and language range, '
+        'and adapting tone and style to purpose, audience and context, fall well below '
+        'the minimum expected standard for this level and require substantial further '
+        'development.'
     ),
     ('needs_work', 'confident', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'control of register is still developing. However, the organisation of written work and grammatical '
-        'accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. The ability to adapt tone and style to purpose, audience '
+        'and context is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'confident', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'the ability to adapt tone and style appropriately meets the expected standard. However, the organisation '
-        'of written work and control of grammar and language range remain less established and require further '
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while the ability to adapt tone and style to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
         'development.'
     ),
     ('needs_work', 'confident', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in both cohesion and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context. However, the organisation and clear presentation of '
-        'written work and grammatical accuracy and language range remain less established and require further '
-        'development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in appropriate tone and style, with '
+        'confidence evident in both areas. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as grammatical '
+        'accuracy and language range, fall well below the minimum expected standard '
+        'for this level and require substantial further development.'
     ),
     ('needs_work', 'confident', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in connecting ideas logically and maintaining coherence. '
-        'However, the organisation of written work and control of grammar and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while the ability to connect ideas logically '
+        'and maintain coherence is also well established. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below the minimum expected '
+        'standard for this level and require substantial further development.'
     ),
-
     ('needs_work', 'confident', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range are still developing. However, the organisation of written work '
-        'and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. Grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach the minimum expected '
+        'standard for this level. However, the two assessed areas, namely organisation '
+        'and clear presentation of written work, as well as adapting tone and style to '
+        'purpose, audience and context, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('needs_work', 'confident', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion. Grammatical accuracy and language range and control '
-        'of register are still developing, while the organisation and clear presentation of written work remain '
-        'less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. Performance is still developing in grammatical accuracy and '
+        'language range, as well as in appropriate tone and style and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'control of register meets the expected standard. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while the ability to adapt tone and style to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'confident', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context. Grammatical accuracy and language range are still developing; however, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in appropriate tone and style, with '
+        'confidence evident in both areas. Grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to organise and '
+        'present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'confident', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while the ability to connect ideas logically '
+        'and maintain coherence is also well established. Grammatical accuracy and '
+        'language range are still developing and require further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
-
     ('needs_work', 'confident', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range meet the expected standard. However, the organisation and clear '
-        'presentation of written work and control of register remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as adapting tone and style to purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
     ),
     ('needs_work', 'confident', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion, while grammatical accuracy and language range meet '
-        'the expected standard. Control of register is still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. The ability '
+        'to adapt tone and style to purpose, audience and context is still developing '
+        'and requires further consolidation to reach that standard. However, the '
+        'ability to organise and present written work clearly falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range and control of register meet the expected standard. However, '
-        'the organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. The learner satisfactorily meets the minimum expected '
+        'standard for this level in grammatical accuracy and language range, as well '
+        'as in appropriate tone and style. However, the ability to organise and '
+        'present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'confident', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'However, the organisation and clear presentation of written work remain less established and require '
-        'further development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in appropriate tone and style, with '
+        'confidence evident in both areas. Grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Grammatical accuracy and language range meet the '
-        'expected standard; however, the organisation and clear presentation of written work remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong, while the ability to connect ideas logically '
+        'and maintain coherence is also well established. Grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
-
     ('needs_work', 'confident', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence and in '
-        'using grammar and vocabulary with accuracy and range. However, the organisation and clear presentation '
-        'of written work and control of register remain less established and require further development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in grammatical accuracy and language range, '
+        'with confidence evident in both areas. However, the two assessed areas, '
+        'namely organisation and clear presentation of written work, as well as '
+        'adapting tone and style to purpose, audience and context, fall well below the '
+        'minimum expected standard for this level and require substantial further '
+        'development.'
     ),
     ('needs_work', 'confident', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'control of register is still developing. However, the organisation and clear presentation of written '
-        'work remain less established and require further development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in grammatical accuracy and language range, '
+        'with confidence evident in both areas. The ability to adapt tone and style to '
+        'purpose, audience and context is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'the ability to adapt tone and style appropriately meets the expected standard. However, the organisation '
-        'and clear presentation of written work remain less established and require further development.'
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, as well as in grammatical accuracy and language range, '
+        'with confidence evident in both areas. The ability to adapt tone and style to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('needs_work', 'confident', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, the organisation '
-        'and clear presentation of written work remain less established and are the main area requiring further '
-        'development.'
-    ),
-    ('needs_work', 'confident', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in cohesion and in grammatical accuracy and language range. '
-        'However, the organisation and clear presentation of written work remain less established and require '
+        "{learner_name}'s performance is well established in cohesion and logical "
+        'connection of ideas, in grammatical accuracy and language range, and in '
+        'appropriate tone and style, with confidence evident in all three areas. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below the minimum expected standard for this level and requires substantial '
         'further development.'
     ),
-
-    ('needs_work', 'confident', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in connecting ideas logically and maintaining coherence. However, the organisation and clear '
-        'presentation of written work and control of register remain less established and require further '
+    ('needs_work', 'confident', 'confident', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style to purpose, audience and "
+        'context is particularly strong. Performance is well established in cohesion '
+        'and logical connection of ideas, as well as in grammatical accuracy and '
+        'language range, with confidence evident in both areas. However, the ability '
+        'to organise and present written work clearly falls well below the minimum '
+        'expected standard for this level and requires substantial further '
         'development.'
+    ),
+    ('needs_work', 'confident', 'strong', 'needs_work'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'is also well established. However, the two assessed areas, namely '
+        'organisation and clear presentation of written work, as well as adapting tone '
+        'and style to purpose, audience and context, fall well below the minimum '
+        'expected standard for this level and require substantial further development.'
     ),
     ('needs_work', 'confident', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion. Control of register is still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'is also well established. The ability to adapt tone and style to purpose, '
+        'audience and context is still developing and requires further consolidation '
+        'to reach the minimum expected standard for this level. However, the ability '
+        'to organise and present written work clearly falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion, while control of register meets the expected standard. However, the organisation '
-        'and clear presentation of written work remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'is also well established. The ability to adapt tone and style to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'confident', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in both cohesion and the ability to adapt tone and style appropriately. However, the '
-        'organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Performance is well established in cohesion and logical connection of '
+        'ideas, as well as in appropriate tone and style, with confidence evident in '
+        'both areas. However, the ability to organise and present written work clearly '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'confident', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in connecting '
-        'ideas logically and maintaining coherence. However, the organisation and clear presentation of written '
-        'work remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range, as well as in appropriate tone and style. The ability to '
+        'connect ideas logically and maintain coherence is well established. However, '
+        'the ability to organise and present written work clearly falls well below the '
+        'minimum expected standard for this level and requires substantial further '
+        'development.'
     ),
     ('needs_work', 'strong', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence. '
-        'However, the organisation and clear presentation of written work, grammatical accuracy and language '
-        'range, and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. However, the three assessed areas, namely organisation '
+        'and clear presentation of written work, grammatical accuracy and language '
+        'range, and adapting tone and style to purpose, audience and context, fall '
+        'well below the minimum expected standard for this level and require '
+        'substantial further development.'
     ),
     ('needs_work', 'strong', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion, while control of register is still developing. '
-        'However, the organisation of written work and grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to adapt tone and style to purpose, audience '
+        'and context is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('needs_work', 'strong', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'the ability to adapt tone and style appropriately meets the expected standard. However, the organisation '
-        'of written work and control of grammar and language range remain less established and require further '
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, the two assessed areas, namely organisation and clear '
+        'presentation of written work, as well as grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
         'development.'
     ),
     ('needs_work', 'strong', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. However, the organisation of written work and '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style to purpose, '
+        'audience and context is also well established. However, the two assessed '
+        'areas, namely organisation and clear presentation of written work, as well as '
+        'grammatical accuracy and language range, fall well below the minimum expected '
+        'standard for this level and require substantial further development.'
     ),
     ('needs_work', 'strong', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context. However, the organisation and clear presentation of written work and control of '
-        'grammar and language range remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in appropriate tone and style. However, the '
+        'two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as grammatical accuracy and language range, fall well below the '
+        'minimum expected standard for this level and require substantial further '
+        'development.'
     ),
-
     ('needs_work', 'strong', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range are still developing. However, the organisation of written work '
-        'and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach the minimum expected '
+        'standard for this level. However, the two assessed areas, namely organisation '
+        'and clear presentation of written work, as well as adapting tone and style to '
+        'purpose, audience and context, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('needs_work', 'strong', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion. Grammatical accuracy and language range and control '
-        'of register are still developing, while the organisation and clear presentation of written work remain '
-        'less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is still developing in grammatical accuracy '
+        'and language range, as well as in appropriate tone and style and requires '
+        'further consolidation to reach the minimum expected standard for this level. '
+        'However, the ability to organise and present written work clearly falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while control of register meets the expected standard. '
-        'Grammatical accuracy and language range are still developing; however, the organisation and clear '
-        'presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'strong', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Grammatical accuracy and language range are still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style to purpose, '
+        'audience and context is also well established. Grammatical accuracy and '
+        'language range are still developing and require further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'strong', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context. Grammatical accuracy and language range are still developing; however, the '
-        'organisation and clear presentation of written work remain less established and require further '
-        'development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in appropriate tone and style. Grammatical '
+        'accuracy and language range are still developing and require further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
-
     ('needs_work', 'strong', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion, while grammatical accuracy and language range meet '
-        'the expected standard. However, the organisation and clear presentation of written work and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the two assessed areas, namely organisation and clear presentation of written '
+        'work, as well as adapting tone and style to purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
     ),
     ('needs_work', 'strong', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range meet the expected standard. Control of register is still '
-        'developing; however, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. The ability '
+        'to adapt tone and style to purpose, audience and context is still developing '
+        'and requires further consolidation to reach that standard. However, the '
+        'ability to organise and present written work clearly falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while grammatical accuracy and language range and '
-        'control of register meet the expected standard. However, the organisation and clear presentation of '
-        'written work remain less established and are the main area requiring further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The learner satisfactorily meets the minimum expected '
+        'standard for this level in grammatical accuracy and language range, as well '
+        'as in appropriate tone and style. However, the ability to organise and '
+        'present written work clearly falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('needs_work', 'strong', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Grammatical accuracy and language range meet the '
-        'expected standard; however, the organisation and clear presentation of written work remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style to purpose, '
+        'audience and context is also well established. Grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while grammatical accuracy and language range meet the expected standard. However, '
-        'the organisation and clear presentation of written work remain less established and require further '
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in appropriate tone and style. Grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected standard '
+        'for this level. However, the ability to organise and present written work '
+        'clearly falls well below that standard and requires substantial further '
         'development.'
     ),
-
     ('needs_work', 'strong', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. However, the organisation and clear presentation of written work and '
-        'control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. However, the two assessed areas, namely organisation and '
+        'clear presentation of written work, as well as adapting tone and style to '
+        'purpose, audience and context, fall well below the minimum expected standard '
+        'for this level and require substantial further development.'
     ),
     ('needs_work', 'strong', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. Control of register is still developing; however, the organisation and '
-        'clear presentation of written work remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. The ability to adapt tone and style to purpose, audience '
+        'and context is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, the ability to '
+        'organise and present written work clearly falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'strong', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in grammatical accuracy '
-        'and language range, while the ability to adapt tone and style appropriately meets the expected standard. '
-        'However, the organisation and clear presentation of written work remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. The ability to adapt tone and style to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this '
+        'level. However, the ability to organise and present written work clearly '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence and also '
-        'demonstrates confidence in grammatical accuracy and language range and in adapting tone and style '
-        'appropriately. However, the organisation and clear presentation of written work remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is well established in grammatical accuracy '
+        'and language range, as well as in appropriate tone and style, with confidence '
+        'evident in both areas. However, the ability to organise and present written '
+        'work clearly falls well below the minimum expected standard for this level '
+        'and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in grammatical accuracy and language range. '
-        'However, the organisation and clear presentation of written work remain less established and require '
-        'further development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in appropriate tone and style. Grammatical '
+        'accuracy and language range are well established. However, the ability to '
+        'organise and present written work clearly falls well below the minimum '
+        'expected standard for this level and requires substantial further '
+        'development.'
     ),
-
     ('needs_work', 'strong', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range. '
-        'However, the organisation and clear presentation of written work and control of register remain less '
-        'established and require further development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in grammatical accuracy and language range. '
+        'However, the two assessed areas, namely organisation and clear presentation '
+        'of written work, as well as adapting tone and style to purpose, audience and '
+        'context, fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
     ),
     ('needs_work', 'strong', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in connecting ideas logically and maintaining coherence and in '
-        'grammatical accuracy and language range. Control of register is still developing; however, the '
-        'organisation and clear presentation of written work remain less established and require further '
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in grammatical accuracy and language range. '
+        'The ability to adapt tone and style to purpose, audience and context is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly falls well below that standard and requires substantial further '
         'development.'
     ),
     ('needs_work', 'strong', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'the ability to adapt tone and style appropriately meets the expected standard. However, the organisation '
-        'and clear presentation of written work remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in grammatical accuracy and language range. '
+        'The ability to adapt tone and style to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('needs_work', 'strong', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range and also '
-        'demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'However, the organisation and clear presentation of written work remain less established and require '
-        'further development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, as well as in grammatical accuracy and language range. '
+        'The ability to adapt tone and style to purpose, audience and context is well '
+        'established. However, the ability to organise and present written work '
+        'clearly falls well below the minimum expected standard for this level and '
+        'requires substantial further development.'
     ),
     ('needs_work', 'strong', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, the organisation '
-        'and clear presentation of written work remain less established and are the main area requiring further '
-        'development.'
+        '{learner_name} demonstrates particular strengths in cohesion and logical '
+        'connection of ideas, in grammatical accuracy and language range, and in '
+        'appropriate tone and style. However, the ability to organise and present '
+        'written work clearly falls well below the minimum expected standard for this '
+        'level and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'needs_work', 'needs_work'): (
-        '{learner_name} is developing greater ability to organise written work and present ideas clearly. '
-        'However, cohesion, grammatical accuracy and language range, and control of register remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is still "
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the remaining three assessed areas, namely '
+        'connecting ideas logically and maintaining coherence, grammatical accuracy and '
+        'language range, and adapting tone and style appropriately to purpose, audience '
+        'and context, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('developing', 'needs_work', 'needs_work', 'developing'): (
-        '{learner_name} is developing greater control over the organisation of written work and the use of '
-        'appropriate tone and style. However, the ability to connect ideas coherently and control grammar and '
-        'language range remains less established and requires further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the remaining two assessed areas, '
+        'namely connecting ideas logically and maintaining coherence and grammatical '
+        'accuracy and language range, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context, '
-        'while the organisation and clear presentation of written work are still developing. However, cohesion '
-        'and grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. The ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard. However, '
+        'the remaining two assessed areas, namely connecting ideas logically and '
+        'maintaining coherence and grammatical accuracy and language range, fall well '
+        'below that standard and require substantial further development.'
     ),
     ('developing', 'needs_work', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while the organisation of written work is still developing. However, cohesion and grammatical '
-        'accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the remaining two '
+        'assessed areas, namely connecting ideas logically and maintaining coherence '
+        'and grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('developing', 'needs_work', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. The organisation and clear presentation of written work are still developing; however, cohesion '
-        'and grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The ability to organise and '
+        'present written work clearly is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the remaining two assessed areas, namely connecting ideas logically and '
+        'maintaining coherence and grammatical accuracy and language range, fall well '
+        'below that standard and require substantial further development.'
     ),
-
     ('developing', 'needs_work', 'developing', 'needs_work'): (
-        '{learner_name} is developing greater control over the organisation of written work and over grammatical '
-        'accuracy and language range. However, cohesion and the ability to adapt tone and style appropriately '
-        'remain less established and require further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly and in grammatical accuracy and language range and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the remaining two assessed areas, namely connecting ideas '
+        'logically and maintaining coherence and adapting tone and style appropriately '
+        'to purpose, audience and context, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'developing', 'developing'): (
-        '{learner_name} is developing greater control of organisation, grammatical accuracy and language range, '
-        'and register. However, the ability to connect ideas logically and maintain coherence remains less '
-        'established and requires further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to connect ideas logically and maintain coherence '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context. '
-        'The organisation of written work and grammatical accuracy and language range are still developing; '
-        'however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. Performance is still developing in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range and '
+        'requires further consolidation to reach that standard. However, the ability to '
+        'connect ideas logically and maintain coherence falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context. Organisation and grammatical accuracy and language range are still developing; however, the '
-        'ability to connect ideas coherently remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. Organisation and grammatical accuracy and language range are still developing; however, '
-        'cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Performance is still developing '
+        'in organising and presenting written work clearly and in grammatical accuracy '
+        'and language range and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
-
     ('developing', 'needs_work', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range, while the '
-        'organisation and clear presentation of written work are still developing. However, cohesion and control '
-        'of register remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. The ability to organise and '
+        'present written work clearly is still developing and requires further '
+        'consolidation to reach that standard. However, the remaining two assessed '
+        'areas, namely connecting ideas logically and maintaining coherence and '
+        'adapting tone and style appropriately to purpose, audience and context, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('developing', 'needs_work', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range. Organisation and '
-        'control of register are still developing; however, the ability to connect ideas logically and maintain '
-        'coherence remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. Performance is still developing '
+        'in organising and presenting written work clearly and in adapting tone and '
+        'style appropriately to purpose, audience and context and requires further '
+        'consolidation to reach that standard. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range and in adapting '
-        'tone and style appropriately to purpose, audience and context. The organisation of written work is still '
-        'developing; however, cohesion remains less established and requires further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in grammatical accuracy and language range and in adapting tone and '
+        'style appropriately to purpose, audience and context. The ability to organise '
+        'and present written work clearly is still developing and requires further '
+        'consolidation to reach that standard. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. Organisation is still '
-        'developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established, while grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. The ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard. However, '
+        'the ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. The organisation and '
-        'clear presentation of written work are still developing; however, cohesion remains less established and '
-        'requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. The ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard. However, '
+        'the ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
-
     ('developing', 'needs_work', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while the organisation '
-        'and clear presentation of written work are still developing. However, cohesion and control of register '
-        'remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well established. "
+        'The ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, the remaining two assessed areas, namely connecting ideas '
+        'logically and maintaining coherence and adapting tone and style appropriately '
+        'to purpose, audience and context, fall well below that standard and require '
+        'substantial further development.'
     ),
     ('developing', 'needs_work', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range. Organisation and '
-        'control of register are still developing; however, cohesion remains less established and requires '
+        "{learner_name}'s grammatical accuracy and language range are well established. "
+        'Performance is still developing in organising and presenting written work '
+        'clearly and in adapting tone and style appropriately to purpose, audience and '
+        'context and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'needs_work', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. The organisation and clear presentation of written work are still '
-        'developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well established, "
+        'while the ability to adapt tone and style appropriately to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this level. '
+        'The ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach that standard. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. Organisation is still developing; however, '
-        'the ability to connect ideas logically and maintain coherence remains less established and requires '
-        'further development.'
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident in both assessed areas. The '
+        'ability to organise and present written work clearly is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to connect ideas logically and maintain coherence '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. The organisation '
-        'and clear presentation of written work are still developing; however, cohesion remains less established '
-        'and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while grammatical accuracy and '
+        'language range are also well established. The ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'connect ideas logically and maintain coherence falls well below that standard '
+        'and requires substantial further development.'
     ),
-
     ('developing', 'needs_work', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while the organisation '
-        'and clear presentation of written work are still developing. However, cohesion and control of register '
-        'remain less established and require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the remaining two assessed areas, namely '
+        'connecting ideas logically and maintaining coherence and adapting tone and '
+        'style appropriately to purpose, audience and context, fall well below that '
+        'standard and require substantial further development.'
     ),
     ('developing', 'needs_work', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range. Organisation and '
-        'control of register are still developing; however, cohesion remains less established and requires '
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Performance is still developing in organising and presenting written '
+        'work clearly and in adapting tone and style appropriately to purpose, audience '
+        'and context and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'needs_work', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. The organisation and clear presentation of written work are still '
-        'developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style appropriately to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. The ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard. However, '
+        'the ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Organisation is '
-        'still developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. The ability to organise and '
+        'present written work clearly is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'needs_work', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. The organisation and clear presentation of written '
-        'work are still developing; however, cohesion remains less established and is the main area requiring '
-        'further development.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context. The ability to organise and present written work clearly '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('developing', 'developing', 'needs_work', 'needs_work'): (
-        '{learner_name} is developing greater control over the organisation of written work and the ability to '
-        'connect ideas coherently. However, grammatical accuracy and language range and control of register '
-        'remain less established and require further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, the remaining two assessed areas, namely '
+        'grammatical accuracy and language range and adapting tone and style '
+        'appropriately to purpose, audience and context, fall well below that standard '
+        'and require substantial further development.'
     ),
     ('developing', 'developing', 'needs_work', 'developing'): (
-        '{learner_name} is developing greater control of organisation, cohesion and register. However, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'developing', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context. '
-        'Organisation and cohesion are still developing; however, grammatical accuracy and language range remain '
-        'less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. Performance is still developing in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence and requires further consolidation to reach that standard. However, '
+        'grammatical accuracy and language range fall well below that standard and '
+        'require substantial further development.'
     ),
     ('developing', 'developing', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context. Organisation and cohesion are still developing; however, grammatical accuracy and language '
-        'range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Performance is still developing in '
+        'organising and presenting written work clearly and in connecting ideas '
+        'logically and maintaining coherence and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('developing', 'developing', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. Organisation and cohesion are still developing; however, grammatical accuracy and language '
-        'range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Performance is still developing '
+        'in organising and presenting written work clearly and in connecting ideas '
+        'logically and maintaining coherence and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
-
     ('developing', 'developing', 'developing', 'needs_work'): (
-        '{learner_name} is developing greater control of organisation, cohesion, and grammatical accuracy and '
-        'language range. However, the ability to adapt tone and style appropriately remains less established and '
-        'requires further development.'
+        "{learner_name}'s performance is still developing in organising and presenting "
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in grammatical accuracy and language range and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to adapt tone and style appropriately to purpose, audience and '
+        'context falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('developing', 'developing', 'developing', 'developing'): (
-        "{learner_name}'s writing skills are still developing across all four assessed areas. Further "
-        'consolidation of organisation and clarity, cohesion, grammatical accuracy and language range, and '
-        'control of register will help bring written performance more consistently to the expected standard.'
+        "{learner_name}'s written communication is still developing across all four "
+        'assessed areas. Organising and presenting written work clearly, connecting '
+        'ideas logically and maintaining coherence, grammatical accuracy and language '
+        'range, and adapting tone and style to purpose, audience and context have not '
+        'yet reached the minimum expected standard for this level and require further '
+        'consolidation.'
     ),
     ('developing', 'developing', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in adapting tone and style to purpose, audience and context, '
-        'while organisation, cohesion, and grammatical accuracy and language range are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, performance is still developing in organising and '
+        'presenting written work clearly, in connecting ideas logically and maintaining '
+        'coherence, and in grammatical accuracy and language range and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'developing', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation, cohesion, and grammatical accuracy and language range are still developing '
-        'and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. However, performance is still '
+        'developing in organising and presenting written work clearly, in connecting '
+        'ideas logically and maintaining coherence, and in grammatical accuracy and '
+        'language range and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('developing', 'developing', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context. By contrast, organisation, cohesion, and grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. However, performance is still '
+        'developing in organising and presenting written work clearly, in connecting '
+        'ideas logically and maintaining coherence, and in grammatical accuracy and '
+        'language range and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
-
     ('developing', 'developing', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range, while organisation '
-        'and cohesion are still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. Performance is still developing '
+        'in organising and presenting written work clearly and in connecting ideas '
+        'logically and maintaining coherence and requires further consolidation to '
+        'reach that standard. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('developing', 'developing', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range. Organisation, '
-        'cohesion and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range satisfactorily meet "
+        'the minimum expected standard for this level. However, performance is still '
+        'developing in organising and presenting written work clearly, in connecting '
+        'ideas logically and maintaining coherence, and in adapting tone and style '
+        'appropriately to purpose, audience and context and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'developing', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in grammatical accuracy and language range and in adapting '
-        'tone and style appropriately to purpose, audience and context. However, organisation and cohesion are '
-        'still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in grammatical accuracy and language range and in adapting tone and '
+        'style appropriately to purpose, audience and context. However, performance is '
+        'still developing in organising and presenting written work clearly and in '
+        'connecting ideas logically and maintaining coherence and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'developing', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. Organisation and '
-        'cohesion are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established, while grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. However, performance is still developing in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence and requires further consolidation to reach that standard.'
     ),
     ('developing', 'developing', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while grammatical accuracy and language range meet the expected standard. Organisation and '
-        'cohesion are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this '
+        'level. However, performance is still developing in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence and requires further consolidation to reach that standard.'
     ),
-
     ('developing', 'developing', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'and cohesion are still developing. However, control of register remains less established and requires '
+        "{learner_name}'s grammatical accuracy and language range are well established. "
+        'Performance is still developing in organising and presenting written work '
+        'clearly and in connecting ideas logically and maintaining coherence and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'developing', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range. Organisation, '
-        'cohesion and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well established. "
+        'However, performance is still developing in organising and presenting written '
+        'work clearly, in connecting ideas logically and maintaining coherence, and in '
+        'adapting tone and style appropriately to purpose, audience and context and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
     ),
     ('developing', 'developing', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. Organisation and cohesion are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well established, "
+        'while the ability to adapt tone and style appropriately to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this level. '
+        'However, performance is still developing in organising and presenting written '
+        'work clearly and in connecting ideas logically and maintaining coherence and '
+        'requires further consolidation to reach that standard.'
     ),
     ('developing', 'developing', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. However, organisation and cohesion are still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident in both assessed areas. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in connecting ideas logically and maintaining coherence and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
     ),
     ('developing', 'developing', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Organisation and '
-        'cohesion are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while grammatical accuracy and '
+        'language range are also well established. However, performance is still '
+        'developing in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence and requires further consolidation '
+        'to reach the minimum expected standard for this level.'
     ),
-
     ('developing', 'developing', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation and '
-        'cohesion are still developing. However, control of register remains less established and requires '
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Performance is still developing in organising and presenting written '
+        'work clearly and in connecting ideas logically and maintaining coherence and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'developing', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range. Organisation, cohesion '
-        'and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. However, performance is still developing in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('developing', 'developing', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while control of '
-        'register meets the expected standard. Organisation and cohesion are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style appropriately to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, performance is still developing in organising and '
+        'presenting written work clearly and in connecting ideas logically and '
+        'maintaining coherence and requires further consolidation to reach that '
+        'standard.'
     ),
     ('developing', 'developing', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Organisation and '
-        'cohesion are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. However, performance is still '
+        'developing in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence and requires further consolidation '
+        'to reach the minimum expected standard for this level.'
     ),
     ('developing', 'developing', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. However, organisation and cohesion are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context. However, performance is still developing in organising '
+        'and presenting written work clearly and in connecting ideas logically and '
+        'maintaining coherence and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('developing', 'satisfactory', 'needs_work', 'needs_work'): (
-        '{learner_name} meets the expected standard in connecting ideas logically and maintaining coherence, '
-        'while the organisation and clear presentation of written work are still developing. However, '
-        'grammatical accuracy and language range and control of register remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. The ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard. However, the remaining two '
+        'assessed areas, namely grammatical accuracy and language range and adapting '
+        'tone and style appropriately to purpose, audience and context, fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'satisfactory', 'needs_work', 'developing'): (
-        '{learner_name} meets the expected standard in cohesion. Organisation and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'is still developing in organising and presenting written work clearly and in '
+        'adapting tone and style appropriately to purpose, audience and context and '
+        'requires further consolidation to reach that standard. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('developing', 'satisfactory', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context. The organisation and clear presentation of written work are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in connecting ideas logically and maintaining coherence and in adapting '
+        'tone and style appropriately to purpose, audience and context. The ability to '
+        'organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard. However, grammatical accuracy '
+        'and language range fall well below that standard and require substantial '
         'further development.'
     ),
     ('developing', 'satisfactory', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. Organisation is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established, while the ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected '
+        'standard for this level. The ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'satisfactory', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. The organisation and clear presentation of written '
-        'work are still developing; however, grammatical accuracy and language range remain less established and '
-        'require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to connect '
+        'ideas logically and maintain coherence satisfactorily meets the minimum '
+        'expected standard for this level. The ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'that standard. However, grammatical accuracy and language range fall well '
+        'below that standard and require substantial further development.'
     ),
-
     ('developing', 'satisfactory', 'developing', 'needs_work'): (
-        '{learner_name} meets the expected standard in cohesion, while organisation and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'is still developing in organising and presenting written work clearly and in '
+        'grammatical accuracy and language range and requires further consolidation to '
+        'reach that standard. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('developing', 'satisfactory', 'developing', 'developing'): (
-        '{learner_name} meets the expected standard in connecting ideas logically and maintaining coherence. '
-        'Organisation, grammatical accuracy and language range, and control of register are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly, in grammatical accuracy and language range, and in adapting tone and '
+        'style appropriately to purpose, audience and context and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context. Organisation and grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in connecting ideas logically and maintaining coherence and in adapting '
+        'tone and style appropriately to purpose, audience and context. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in grammatical accuracy and language range and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. Organisation and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established, while the ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected '
+        'standard for this level. However, performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion meets the expected standard. Organisation and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to connect '
+        'ideas logically and maintain coherence satisfactorily meets the minimum '
+        'expected standard for this level. However, performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach that standard.'
     ),
-
     ('developing', 'satisfactory', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in cohesion and in grammatical accuracy and language range, '
-        'while the organisation and clear presentation of written work are still developing. However, control '
-        'of register remains less established and requires further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in connecting ideas logically and maintaining coherence and in '
+        'grammatical accuracy and language range. The ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach that standard. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('developing', 'satisfactory', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in cohesion and in grammatical accuracy and language range. '
-        'Organisation and control of register are still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in connecting ideas logically and maintaining coherence and in '
+        'grammatical accuracy and language range. However, performance is still '
+        'developing in organising and presenting written work clearly and in adapting '
+        'tone and style appropriately to purpose, audience and context and requires '
+        'further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in cohesion, grammatical accuracy and language range, and '
-        'control of register. However, the organisation and clear presentation of written work are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in connecting ideas logically and maintaining coherence, in grammatical '
+        'accuracy and language range, and in adapting tone and style appropriately to '
+        'purpose, audience and context. However, the ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach that standard.'
     ),
     ('developing', 'satisfactory', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion and grammatical accuracy and language range meet the expected standard. '
-        'Organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The learner satisfactorily meets the '
+        'minimum expected standard for this level in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range. However, '
+        'the ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while cohesion and grammatical accuracy and language range meet the expected standard. '
-        'Organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The learner satisfactorily meets '
+        'the minimum expected standard for this level in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range. However, '
+        'the ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach that standard.'
     ),
-
     ('developing', 'satisfactory', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard and organisation is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well established, "
+        'while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. The ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'satisfactory', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. Organisation and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well established, "
+        'while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in adapting tone and style appropriately to purpose, audience and '
+        'context and requires further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while cohesion and '
-        'control of register meet the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well established. "
+        'The learner satisfactorily meets the minimum expected standard for this level '
+        'in connecting ideas logically and maintaining coherence and in adapting tone '
+        'and style appropriately to purpose, audience and context. However, the ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context. Cohesion meets the expected standard, while '
-        'organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in grammatical accuracy and "
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident in both assessed areas. The '
+        'ability to connect ideas logically and maintain coherence satisfactorily meets '
+        'the minimum expected standard for this level. However, the ability to organise '
+        'and present written work clearly is still developing and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Cohesion meets the '
-        'expected standard, while the organisation and clear presentation of written work are still developing '
-        'and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while grammatical accuracy and '
+        'language range are also well established. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'that standard.'
     ),
-
     ('developing', 'satisfactory', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard and organisation is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. The ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'satisfactory', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion meets '
-        'the expected standard. Organisation and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in adapting tone and style appropriately to purpose, audience and '
+        'context and requires further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while cohesion and '
-        'control of register meet the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The learner satisfactorily meets the minimum expected standard for '
+        'this level in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('developing', 'satisfactory', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Cohesion meets the '
-        'expected standard, while organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'that standard.'
     ),
     ('developing', 'satisfactory', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. Cohesion also meets the expected standard, while '
-        'the organisation and clear presentation of written work are still developing and would benefit from '
-        'further consolidation.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context. The ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('developing', 'confident', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'the organisation and clear presentation of written work are still developing. However, grammatical '
-        'accuracy and language range and control of register remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. The ability to organise and present written work clearly is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the remaining two assessed areas, '
+        'namely grammatical accuracy and language range and adapting tone and style '
+        'appropriately to purpose, audience and context, fall well below that standard '
+        'and require substantial further development.'
     ),
     ('developing', 'confident', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion. Organisation and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. Performance is still developing in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further '
+        'development.'
     ),
     ('developing', 'confident', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'control of register meets the expected standard. The organisation and clear presentation of written '
-        'work are still developing; however, grammatical accuracy and language range remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while the ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. The ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'confident', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context. Organisation is still developing; however, grammatical accuracy and '
-        'language range remain less established and require further development.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident in both assessed areas. '
+        'The ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'confident', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. The organisation and clear presentation of '
-        'written work are still developing; however, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to connect '
+        'ideas logically and maintain coherence is also well established. The ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that standard '
+        'and require substantial further development.'
     ),
-
     ('developing', 'confident', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. Performance is still developing in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'confident', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence. '
-        'Organisation, grammatical accuracy and language range, and control of register are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. However, performance is still developing in organising and '
+        'presenting written work clearly, in grammatical accuracy and language range, '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('developing', 'confident', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion, while control of register meets the expected '
-        'standard. Organisation and grammatical accuracy and language range are still developing and would '
-        'benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while the ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach that standard.'
     ),
     ('developing', 'confident', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context. However, organisation and grammatical accuracy and language range are '
-        'still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident in both assessed areas. '
+        'However, performance is still developing in organising and presenting written '
+        'work clearly and in grammatical accuracy and language range and requires '
+        'further consolidation to reach the minimum expected standard for this level.'
     ),
     ('developing', 'confident', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Organisation and grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to connect '
+        'ideas logically and maintain coherence is also well established. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in grammatical accuracy and language range and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
-
     ('developing', 'confident', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion, while grammatical accuracy and language range meet '
-        'the expected standard and organisation is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while grammatical accuracy and language range satisfactorily '
+        'meet the minimum expected standard for this level. The ability to organise and '
+        'present written work clearly is still developing and requires further '
+        'consolidation to reach that standard. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('developing', 'confident', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range meet the expected standard. Organisation and control of register '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established, while grammatical accuracy and language range satisfactorily '
+        'meet the minimum expected standard for this level. However, performance is '
+        'still developing in organising and presenting written work clearly and in '
+        'adapting tone and style appropriately to purpose, audience and context and '
+        'requires further consolidation to reach that standard.'
     ),
     ('developing', 'confident', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion, while grammatical accuracy and language range and '
-        'control of register meet the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'well established. The learner satisfactorily meets the minimum expected '
+        'standard for this level in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('developing', 'confident', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'Organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident in both assessed areas. '
+        'Grammatical accuracy and language range satisfactorily meet the minimum '
+        'expected standard for this level. However, the ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach that standard.'
     ),
     ('developing', 'confident', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Grammatical accuracy and language range meet the '
-        'expected standard, while the organisation and clear presentation of written work are still developing '
-        'and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to connect '
+        'ideas logically and maintain coherence is also well established. Grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected standard '
+        'for this level. However, the ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach that '
+        'standard.'
     ),
-
     ('developing', 'confident', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'organisation is still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in grammatical accuracy and language range, with '
+        'confidence evident in both assessed areas. The ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, the ability to '
+        'adapt tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('developing', 'confident', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range. '
-        'Organisation and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in grammatical accuracy and language range, with '
+        'confidence evident in both assessed areas. However, performance is still '
+        'developing in organising and presenting written work clearly and in adapting '
+        'tone and style appropriately to purpose, audience and context and requires '
+        'further consolidation to reach the minimum expected standard for this level.'
     ),
     ('developing', 'confident', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'control of register meets the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence and in grammatical accuracy and language range, with '
+        'confidence evident in both assessed areas. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the '
+        'minimum expected standard for this level. However, the ability to organise and '
+        'present written work clearly is still developing and requires further '
+        'consolidation to reach that standard.'
     ),
     ('developing', 'confident', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, the organisation '
-        'and clear presentation of written work are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in connecting ideas logically "
+        'and maintaining coherence, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context, with '
+        'confidence evident in all three assessed areas. However, the ability to '
+        'organise and present written work clearly is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level.'
     ),
     ('developing', 'confident', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in cohesion and in grammatical accuracy and language range. '
-        'The organisation and clear presentation of written work are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Performance is well established '
+        'in connecting ideas logically and maintaining coherence and in grammatical '
+        'accuracy and language range, with confidence evident in both assessed areas. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
-
     ('developing', 'confident', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion. Organisation is still developing; however, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence is '
+        'also well established. The ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to adapt tone '
+        'and style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('developing', 'confident', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion. Organisation and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence is '
+        'also well established. However, performance is still developing in organising '
+        'and presenting written work clearly and in adapting tone and style '
+        'appropriately to purpose, audience and context and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
     ('developing', 'confident', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion, while control of register meets the expected standard. The organisation and '
-        'clear presentation of written work are still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to connect ideas logically and maintain coherence is '
+        'also well established. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'that standard.'
     ),
     ('developing', 'confident', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in both cohesion and the ability to adapt tone and style appropriately. However, the '
-        'organisation and clear presentation of written work are still developing and would benefit from further '
-        'consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Performance is well established in connecting ideas logically and '
+        'maintaining coherence and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident in both assessed areas. However, '
+        'the ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('developing', 'confident', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in cohesion. '
-        'The organisation and clear presentation of written work are still developing and would benefit from '
-        'further consolidation.'
+        '{learner_name} demonstrates particular strengths in grammatical accuracy and '
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context. The ability to connect ideas logically and maintain '
+        'coherence is well established. However, the ability to organise and present '
+        'written work clearly is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level.'
     ),
-
     ('developing', 'strong', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while the '
-        'organisation and clear presentation of written work are still developing. However, grammatical accuracy '
-        'and language range and control of register remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise and present written work clearly '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the remaining two assessed areas, '
+        'namely grammatical accuracy and language range and adapting tone and style '
+        'appropriately to purpose, audience and context, fall well below that standard '
+        'and require substantial further development.'
     ),
     ('developing', 'strong', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion. Organisation and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is still developing in organising and '
+        'presenting written work clearly and in adapting tone and style appropriately '
+        'to purpose, audience and context and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, grammatical accuracy '
+        'and language range fall well below that standard and require substantial '
         'further development.'
     ),
     ('developing', 'strong', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'control of register meets the expected standard. The organisation and clear presentation of written '
-        'work are still developing; however, grammatical accuracy and language range remain less established '
-        'and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style appropriately '
+        'to purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. The ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
     ),
     ('developing', 'strong', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style appropriately '
+        'to purpose, audience and context is also well established. The ability to '
+        'organise and present written work clearly is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that standard '
+        'and require substantial further development.'
     ),
     ('developing', 'strong', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context. The organisation and clear presentation of written work are still developing; '
-        'however, grammatical accuracy and language range remain less established and require further development.'
-    ),
-
-    ('developing', 'strong', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context. The ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, grammatical accuracy '
+        'and language range fall well below that standard and require substantial '
         'further development.'
     ),
+    ('developing', 'strong', 'developing', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is still developing in organising and '
+        'presenting written work clearly and in grammatical accuracy and language range '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, the ability to adapt tone and style appropriately to '
+        'purpose, audience and context falls well below that standard and requires '
+        'substantial further development.'
+    ),
     ('developing', 'strong', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence. '
-        'Organisation, grammatical accuracy and language range, and control of register are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. However, performance is still developing in organising '
+        'and presenting written work clearly, in grammatical accuracy and language '
+        'range, and in adapting tone and style appropriately to purpose, audience and '
+        'context and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('developing', 'strong', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while control of register meets the expected standard. '
-        'Organisation and grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style appropriately '
+        'to purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach that standard.'
     ),
     ('developing', 'strong', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation and grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style appropriately '
+        'to purpose, audience and context is also well established. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in grammatical accuracy and language range and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
     ('developing', 'strong', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context. However, organisation and grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context. However, performance is still developing in '
+        'organising and presenting written work clearly and in grammatical accuracy and '
+        'language range and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
-
     ('developing', 'strong', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion, while grammatical accuracy and language range meet '
-        'the expected standard and organisation is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. The ability '
+        'to organise and present written work clearly is still developing and requires '
+        'further consolidation to reach that standard. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('developing', 'strong', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'grammatical accuracy and language range meet the expected standard. Organisation and control of register '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'performance is still developing in organising and presenting written work '
+        'clearly and in adapting tone and style appropriately to purpose, audience and '
+        'context and requires further consolidation to reach that standard.'
     ),
     ('developing', 'strong', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while grammatical accuracy and language range and '
-        'control of register meet the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The learner satisfactorily meets the minimum expected '
+        'standard for this level in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('developing', 'strong', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Grammatical accuracy and language range meet the '
-        'expected standard, while organisation is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while the ability to adapt tone and style appropriately '
+        'to purpose, audience and context is also well established. Grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected standard '
+        'for this level. However, the ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach that '
+        'standard.'
     ),
     ('developing', 'strong', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while grammatical accuracy and language range meet the expected standard. The '
-        'organisation and clear presentation of written work are still developing and would benefit from further '
-        'consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context. Grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, the '
+        'ability to organise and present written work clearly is still developing and '
+        'requires further consolidation to reach that standard.'
     ),
-
     ('developing', 'strong', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. Organisation is still developing; however, control of register remains '
-        'less established and requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. The ability to organise and present written work clearly is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('developing', 'strong', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. Organisation and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. However, performance is still developing in organising and '
+        'presenting written work clearly and in adapting tone and style appropriately '
+        'to purpose, audience and context and requires further consolidation to reach '
+        'the minimum expected standard for this level.'
     ),
     ('developing', 'strong', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in grammatical accuracy '
-        'and language range, while control of register meets the expected standard. The organisation and clear '
-        'presentation of written work are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong, while grammatical accuracy and language range are also '
+        'well established. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to organise and present written '
+        'work clearly is still developing and requires further consolidation to reach '
+        'that standard.'
     ),
     ('developing', 'strong', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range and in adapting tone and style appropriately. However, the organisation and '
-        'clear presentation of written work are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is well established in grammatical accuracy '
+        'and language range and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident in both assessed areas. However, '
+        'the ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('developing', 'strong', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in grammatical accuracy and language range. '
-        'The organisation and clear presentation of written work are still developing and would benefit from '
-        'further consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in adapting tone and style appropriately to '
+        'purpose, audience and context. Grammatical accuracy and language range are '
+        'well established. However, the ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level.'
     ),
-
     ('developing', 'strong', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'organisation is still developing. However, control of register remains less established and requires '
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in grammatical accuracy and language range. The '
+        'ability to organise and present written work clearly is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
         'further development.'
     ),
     ('developing', 'strong', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range. '
-        'Organisation and control of register are still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in grammatical accuracy and language range. '
+        'However, performance is still developing in organising and presenting written '
+        'work clearly and in adapting tone and style appropriately to purpose, audience '
+        'and context and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('developing', 'strong', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'control of register meets the expected standard. The organisation and clear presentation of written work '
-        'are still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in grammatical accuracy and language range. The '
+        'ability to adapt tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to organise and present written work clearly is still developing '
+        'and requires further consolidation to reach that standard.'
     ),
     ('developing', 'strong', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range and also '
-        'demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'However, the organisation and clear presentation of written work are still developing and would benefit '
-        'from further consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence and in grammatical accuracy and language range. The '
+        'ability to adapt tone and style appropriately to purpose, audience and context '
+        'is well established. However, the ability to organise and present written work '
+        'clearly is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level.'
     ),
     ('developing', 'strong', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, the organisation '
-        'and clear presentation of written work are still developing and remain the principal area for further '
-        'consolidation.'
+        '{learner_name} demonstrates particular strengths in connecting ideas logically '
+        'and maintaining coherence, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'However, the ability to organise and present written work clearly is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('satisfactory', 'needs_work', 'needs_work', 'needs_work'): (
-        '{learner_name} meets the expected standard in the organisation and clear presentation of written work. '
-        'However, cohesion, grammatical accuracy and language range, and control of register remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the other three assessed areas, namely cohesion and the logical connection '
+        'of ideas, grammatical accuracy and language range, and appropriate use of '
+        'tone and style for purpose, audience and context, fall well below that '
+        'standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'needs_work', 'developing'): (
-        '{learner_name} meets the expected standard in organising written work and presenting ideas clearly, '
-        'while control of register is still developing. However, cohesion and grammatical accuracy and language '
-        'range remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that '
+        'standard. However, the two assessed areas, namely cohesion and the logical '
+        'connection of ideas and grammatical accuracy and language range, fall well '
+        'below that standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation and in adapting tone and style appropriately '
-        'to purpose, audience and context. However, cohesion and grammatical accuracy and language range remain '
-        'less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in adapting tone '
+        'and style appropriately to purpose, audience and context. However, the two '
+        'assessed areas, namely cohesion and the logical connection of ideas and '
+        'grammatical accuracy and language range, fall well below that standard and '
+        'require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. However, cohesion and grammatical accuracy and '
-        'language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the two assessed areas, namely cohesion '
+        'and the logical connection of ideas and grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('satisfactory', 'needs_work', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while the organisation and clear presentation of written work meet the expected standard. '
-        'However, cohesion and grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to organise '
+        'and present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the two assessed areas, namely cohesion '
+        'and the logical connection of ideas and grammatical accuracy and language '
+        'range, fall well below that standard and require substantial further '
+        'development.'
     ),
-
     ('satisfactory', 'needs_work', 'developing', 'needs_work'): (
-        '{learner_name} meets the expected standard in organisation, while grammatical accuracy and language '
-        'range are still developing. However, cohesion and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. '
+        'Grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard. However, the two assessed '
+        'areas, namely cohesion and the logical connection of ideas and appropriate '
+        'use of tone and style for purpose, audience and context, fall well below '
+        'that standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'developing', 'developing'): (
-        '{learner_name} meets the expected standard in organising written work and presenting ideas clearly. '
-        'Grammatical accuracy and language range and control of register are still developing; however, cohesion '
-        'remains less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. '
+        'Grammatical accuracy and language range and appropriate use of tone and '
+        'style for purpose, audience and context are still developing and require '
+        'further consolidation to reach that standard. However, the ability to '
+        'connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation and in adapting tone and style appropriately '
-        'to purpose, audience and context. Grammatical accuracy and language range are still developing; however, '
-        'cohesion remains less established and requires further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in adapting tone '
+        'and style appropriately to purpose, audience and context. Grammatical '
+        'accuracy and language range are still developing and require further '
+        'consolidation to reach that standard. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Grammatical accuracy and language range are '
-        'still developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. Grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach that standard. '
+        'However, the ability to connect ideas logically and maintain coherence falls '
+        'well below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Grammatical accuracy and language range are '
-        'still developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to organise '
+        'and present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. Grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach that standard. '
+        'However, the ability to connect ideas logically and maintain coherence falls '
+        'well below that standard and requires substantial further development.'
     ),
-
     ('satisfactory', 'needs_work', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in organisation and in grammatical accuracy and language '
-        'range. However, cohesion and control of register remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in using grammar '
+        'accurately and drawing on an appropriate range of language. However, the two '
+        'assessed areas, namely cohesion and the logical connection of ideas and '
+        'appropriate use of tone and style for purpose, audience and context, fall '
+        'well below that standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in organisation and in grammatical accuracy and language '
-        'range, while control of register is still developing. However, cohesion remains less established and '
-        'requires further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in using grammar '
+        'accurately and drawing on an appropriate range of language. The ability to '
+        'adapt tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to connect ideas logically and maintain coherence falls '
+        'well below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation, grammatical accuracy and language range, '
-        'and control of register. However, cohesion remains less established and is the main area requiring '
-        'further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in using grammar '
+        'accurately and drawing on an appropriate range of language, and in adapting '
+        'tone and style appropriately to purpose, audience and context. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below '
+        'that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and grammatical accuracy and language range meet the expected standard. '
-        'However, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Organisation and the clear '
+        'presentation of written work and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and grammatical accuracy and language range meet the expected standard. '
-        'However, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Organisation and the clear '
+        'presentation of written work and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
     ),
-
     ('satisfactory', 'needs_work', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. However, cohesion and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the two assessed areas, namely cohesion and the logical connection of ideas '
+        'and appropriate use of tone and style for purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that '
+        'standard. However, the ability to connect ideas logically and maintain '
+        'coherence falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('satisfactory', 'needs_work', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'and control of register meet the expected standard. However, cohesion remains less established and '
-        'requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Organisation and the clear presentation of written work and '
+        'appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context, while organisation meets the expected '
-        'standard. However, cohesion remains less established and requires further development.'
+        "{learner_name}'s abilities to use grammar accurately and draw on a varied "
+        'range of language and to adapt tone and style appropriately to purpose, '
+        'audience and context are well established, with confidence evident in both '
+        'assessed areas. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Organisation meets '
-        'the expected standard; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Grammatical accuracy and '
+        'language range are also well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial '
+        'further development.'
     ),
-
     ('satisfactory', 'needs_work', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. However, cohesion and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the two assessed areas, namely cohesion and the logical connection of ideas '
+        'and appropriate use of tone and style for purpose, audience and context, '
+        'fall well below that standard and require substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that '
+        'standard. However, the ability to connect ideas logically and maintain '
+        'coherence falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('satisfactory', 'needs_work', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'and control of register meet the expected standard. However, cohesion remains less established and '
-        'requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Organisation and the clear presentation of written work and '
+        'appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'needs_work', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Organisation meets '
-        'the expected standard; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial '
+        'further development.'
     ),
     ('satisfactory', 'needs_work', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while organisation meets the expected standard. '
-        'However, cohesion remains less established and is the main area requiring further development.'
+        '{learner_name} demonstrates particularly strong abilities in using grammar '
+        'accurately and drawing on an appropriate range of language and in adapting '
+        'tone and style appropriately to purpose, audience and context, while the '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, the ability to '
+        'connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
     ),
-
     ('satisfactory', 'developing', 'needs_work', 'needs_work'): (
-        '{learner_name} meets the expected standard in the organisation and clear presentation of written work, '
-        'while cohesion is still developing. However, grammatical accuracy and language range and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the two assessed areas, namely grammatical accuracy and language '
+        'range and appropriate use of tone and style for purpose, audience and '
+        'context, fall well below that standard and require substantial further '
+        'development.'
     ),
     ('satisfactory', 'developing', 'needs_work', 'developing'): (
-        '{learner_name} meets the expected standard in organisation. Cohesion and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. Cohesion '
+        'and the logical connection of ideas and appropriate use of tone and style '
+        'for purpose, audience and context are still developing and require further '
+        'consolidation to reach that standard. However, grammatical accuracy and '
+        'language range fall well below that standard and require substantial further '
+        'development.'
     ),
     ('satisfactory', 'developing', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation and in adapting tone and style appropriately '
-        'to purpose, audience and context. Cohesion is still developing; however, grammatical accuracy and '
-        'language range remain less established and require further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in adapting tone '
+        'and style appropriately to purpose, audience and context. The ability to '
+        'connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('satisfactory', 'developing', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Cohesion is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. The ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach '
+        'that standard. However, grammatical accuracy and language range fall well '
+        'below that standard and require substantial further development.'
     ),
     ('satisfactory', 'developing', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Cohesion is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to organise '
+        'and present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. The ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach '
+        'that standard. However, grammatical accuracy and language range fall well '
+        'below that standard and require substantial further development.'
     ),
-
     ('satisfactory', 'developing', 'developing', 'needs_work'): (
-        '{learner_name} meets the expected standard in organisation, while cohesion and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. Cohesion '
+        'and the logical connection of ideas and grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard. However, the ability to adapt tone and style appropriately to '
+        'purpose, audience and context falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('satisfactory', 'developing', 'developing', 'developing'): (
-        '{learner_name} meets the expected standard in organising written work and presenting ideas clearly. '
-        'Cohesion, grammatical accuracy and language range, and control of register are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly "
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'cohesion and the logical connection of ideas, grammatical accuracy and '
+        'language range, and appropriate use of tone and style for purpose, audience '
+        'and context are still developing and require further consolidation to reach '
+        'that standard.'
     ),
     ('satisfactory', 'developing', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation and in adapting tone and style appropriately '
-        'to purpose, audience and context, while cohesion and grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in adapting tone '
+        'and style appropriately to purpose, audience and context. However, cohesion '
+        'and the logical connection of ideas and grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard.'
     ),
     ('satisfactory', 'developing', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Cohesion and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, cohesion and the logical connection of '
+        'ideas and grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation meets the expected standard. Cohesion and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong, while the ability to organise '
+        'and present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, cohesion and the logical connection of '
+        'ideas and grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard.'
     ),
-
     ('satisfactory', 'developing', 'satisfactory', 'needs_work'): (
-        '{learner_name} meets the expected standard in organisation and in grammatical accuracy and language '
-        'range, while cohesion is still developing. However, control of register remains less established and '
-        'requires further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in using grammar '
+        'accurately and drawing on an appropriate range of language. The ability to '
+        'connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context falls '
+        'well below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'developing', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in organisation and in grammatical accuracy and language '
-        'range. Cohesion and control of register are still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in using grammar '
+        'accurately and drawing on an appropriate range of language. However, '
+        'cohesion and the logical connection of ideas and appropriate use of tone and '
+        'style for purpose, audience and context are still developing and require '
+        'further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'satisfactory', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation, grammatical accuracy and language range, '
-        'and control of register. However, cohesion is still developing and would benefit from further '
-        'consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in using grammar '
+        'accurately and drawing on an appropriate range of language, and in adapting '
+        'tone and style appropriately to purpose, audience and context. However, the '
+        'ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and grammatical accuracy and language range meet the expected standard. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Organisation and the clear '
+        'presentation of written work and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and grammatical accuracy and language range meet the expected standard. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Organisation and the clear '
+        'presentation of written work and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
-
     ('satisfactory', 'developing', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'meets the expected standard and cohesion is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
+        'further development.'
     ),
     ('satisfactory', 'developing', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. Cohesion and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'cohesion and the logical connection of ideas and appropriate use of tone and '
+        'style for purpose, audience and context are still developing and require '
+        'further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'and control of register meet the expected standard. Cohesion is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Organisation and the clear presentation of written work and '
+        'appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context, while organisation meets the expected standard. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s abilities to use grammar accurately and draw on a varied "
+        'range of language and to adapt tone and style appropriately to purpose, '
+        'audience and context are well established, with confidence evident in both '
+        'assessed areas. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Organisation meets '
-        'the expected standard, while cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Grammatical accuracy and '
+        'language range are also well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach that standard.'
     ),
-
     ('satisfactory', 'developing', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'meets the expected standard and cohesion is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. The '
+        'ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard. '
+        'However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
+        'further development.'
     ),
     ('satisfactory', 'developing', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'meets the expected standard. Cohesion and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong, while the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'cohesion and the logical connection of ideas and appropriate use of tone and '
+        'style for purpose, audience and context are still developing and require '
+        'further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation '
-        'and control of register meet the expected standard. Cohesion is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Organisation and the clear presentation of written work and '
+        'appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'developing', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Organisation meets '
-        'the expected standard, while cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. The ability to organise and '
+        'present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to '
+        'reach that standard.'
     ),
     ('satisfactory', 'developing', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation also meets the expected standard, '
-        'while cohesion is still developing and remains the main area for further consolidation.'
+        '{learner_name} demonstrates particularly strong abilities in using grammar '
+        'accurately and drawing on an appropriate range of language and in adapting '
+        'tone and style appropriately to purpose, audience and context, while the '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, the ability to '
+        'connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'needs_work', 'needs_work'): (
-        "{learner_name}'s writing meets the expected standard in organisation and cohesion. However, grammatical "
-        'accuracy and language range and control of register remain less established and require further '
-        'development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence. However, the two assessed areas, '
+        'namely grammatical accuracy and language range and appropriate use of tone '
+        'and style for purpose, audience and context, fall well below that standard '
+        'and require substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'needs_work', 'developing'): (
-        '{learner_name} meets the expected standard in organisation and cohesion, while control of register is '
-        'still developing. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence. The ability to adapt tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach that standard. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'needs_work', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation, cohesion and control of register. However, '
-        'grammatical accuracy and language range remain less established and are the main area requiring further '
-        'development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in connecting ideas '
+        'logically and maintaining coherence, and in adapting tone and style '
+        'appropriately to purpose, audience and context. However, grammatical '
+        'accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and cohesion meet the expected standard. However, grammatical accuracy and '
-        'language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Organisation and the clear '
+        'presentation of written work and cohesion and the logical connection of '
+        'ideas satisfactorily meet the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and cohesion meet the expected standard. However, grammatical accuracy and '
-        'language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Organisation and the clear '
+        'presentation of written work and cohesion and the logical connection of '
+        'ideas satisfactorily meet the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
     ),
-
     ('satisfactory', 'satisfactory', 'developing', 'needs_work'): (
-        '{learner_name} meets the expected standard in organisation and cohesion, while grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence. Grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard. However, the ability to adapt tone and style appropriately to '
+        'purpose, audience and context falls well below that standard and requires '
+        'substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'developing', 'developing'): (
-        '{learner_name} meets the expected standard in organisation and cohesion. Grammatical accuracy and '
-        'language range and control of register are still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly and in connecting '
+        'ideas logically and maintaining coherence. However, grammatical accuracy and '
+        'language range and appropriate use of tone and style for purpose, audience '
+        'and context are still developing and require further consolidation to reach '
+        'that standard.'
     ),
     ('satisfactory', 'satisfactory', 'developing', 'satisfactory'): (
-        '{learner_name} meets the expected standard in organisation, cohesion and control of register, while '
-        'grammatical accuracy and language range are still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in connecting ideas '
+        'logically and maintaining coherence, and in adapting tone and style '
+        'appropriately to purpose, audience and context. However, grammatical '
+        'accuracy and language range are still developing and require further '
+        'consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and cohesion meet the expected standard. Grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Organisation and the clear '
+        'presentation of written work and cohesion and the logical connection of '
+        'ideas satisfactorily meet the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation and cohesion meet the expected standard. Grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Organisation and the clear '
+        'presentation of written work and cohesion and the logical connection of '
+        'ideas satisfactorily meet the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard.'
     ),
-
     ('satisfactory', 'satisfactory', 'satisfactory', 'needs_work'): (
-        "{learner_name}'s writing meets the expected standard in organisation, cohesion, and grammatical accuracy "
-        'and language range. However, control of register remains less established and is the main area requiring '
-        'further development.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in connecting ideas '
+        'logically and maintaining coherence, and in using grammar accurately and '
+        'drawing on an appropriate range of language. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'satisfactory', 'developing'): (
-        '{learner_name} meets the expected standard in organisation, cohesion, and grammatical accuracy and '
-        'language range. Control of register is still developing and would benefit from further consolidation.'
+        '{learner_name} satisfactorily meets the minimum expected standard for this '
+        'level in organising and presenting written work clearly, in connecting ideas '
+        'logically and maintaining coherence, and in using grammar accurately and '
+        'drawing on an appropriate range of language. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'satisfactory', 'satisfactory'): (
-        "{learner_name}'s writing performance meets the expected standard across all four assessed areas. "
-        'Organisation and clarity, cohesion, grammatical accuracy and language range, and control of register '
-        'are satisfactory for this level, although there remains clear scope to develop greater consistency, '
-        'flexibility and precision.'
+        "{learner_name}'s writing performance satisfactorily meets the minimum "
+        'expected standard across all four assessed areas. Organisation and clarity, '
+        'cohesion, grammatical accuracy and language range, and appropriate use of '
+        'tone and style are all satisfactory for this level, although there is still '
+        'scope for further development and consolidation.'
     ),
     ('satisfactory', 'satisfactory', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation, cohesion, and grammatical accuracy and language range meet the expected '
-        'standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is well established. Although organisation and the '
+        'clear presentation of written work, cohesion and the logical connection of '
+        'ideas, and grammatical accuracy and language range satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
     ),
     ('satisfactory', 'satisfactory', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while organisation, cohesion, and grammatical accuracy and language range meet the expected '
-        'standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Although organisation and the '
+        'clear presentation of written work, cohesion and the logical connection of '
+        'ideas, and grammatical accuracy and language range satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
     ),
-
     ('satisfactory', 'satisfactory', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'and cohesion meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Organisation and the clear presentation of written work and '
+        'cohesion and the logical connection of ideas satisfactorily meet the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation '
-        'and cohesion meet the expected standard. Control of register is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Organisation and the clear presentation of written work and '
+        'cohesion and the logical connection of ideas satisfactorily meet the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range, while organisation, '
-        'cohesion and control of register meet the expected standard, with further scope for development.'
+        "{learner_name}'s grammatical accuracy and language range are well "
+        'established. Although organisation and the clear presentation of written '
+        'work, cohesion and the logical connection of ideas, and appropriate use of '
+        'tone and style for purpose, audience and context satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
     ),
     ('satisfactory', 'satisfactory', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in grammatical accuracy and language range and in adapting tone '
-        'and style appropriately to purpose, audience and context, while organisation and cohesion meet the '
-        'expected standard.'
+        "{learner_name}'s abilities to use grammar accurately and draw on a varied "
+        'range of language and to adapt tone and style appropriately to purpose, '
+        'audience and context are well established, with confidence evident in both '
+        'assessed areas. Although organisation and the clear presentation of written '
+        'work and cohesion and the logical connection of ideas satisfactorily meet '
+        'the minimum expected standard for this level, there is still scope for '
+        'further development and consolidation in both areas.'
     ),
     ('satisfactory', 'satisfactory', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in grammatical accuracy and language range. Organisation and '
-        'cohesion meet the expected standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. Grammatical accuracy and '
+        'language range are also well established. Although organisation and the '
+        'clear presentation of written work and cohesion and the logical connection '
+        'of ideas satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both '
+        'areas.'
     ),
-
     ('satisfactory', 'satisfactory', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation and '
-        'cohesion meet the expected standard. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Organisation and the clear presentation of written work and cohesion '
+        'and the logical connection of ideas satisfactorily meet the minimum expected '
+        'standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('satisfactory', 'satisfactory', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation and '
-        'cohesion meet the expected standard. Control of register is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Organisation and the clear presentation of written work and cohesion '
+        'and the logical connection of ideas satisfactorily meet the minimum expected '
+        'standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach that standard.'
     ),
     ('satisfactory', 'satisfactory', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while organisation, '
-        'cohesion and control of register meet the expected standard, with further scope for development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. Although organisation and the clear presentation of written work, '
+        'cohesion and the logical connection of ideas, and appropriate use of tone '
+        'and style for purpose, audience and context satisfactorily meet the minimum '
+        'expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
     ),
     ('satisfactory', 'satisfactory', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in adapting tone and style appropriately to purpose, audience and context. Organisation and '
-        'cohesion meet the expected standard.'
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to adapt tone and style appropriately to purpose, '
+        'audience and context is also well established. Although organisation and the '
+        'clear presentation of written work and cohesion and the logical connection '
+        'of ideas satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both '
+        'areas.'
     ),
     ('satisfactory', 'satisfactory', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while organisation and cohesion meet the expected '
-        'standard, with further scope for development.'
+        '{learner_name} demonstrates particularly strong abilities in using grammar '
+        'accurately and drawing on an appropriate range of language and in adapting '
+        'tone and style appropriately to purpose, audience and context. Although '
+        'organisation and the clear presentation of written work and cohesion and the '
+        'logical connection of ideas satisfactorily meet the minimum expected '
+        'standard for this level, there is still scope for further development and '
+        'consolidation in both areas.'
     ),
-
     ('satisfactory', 'confident', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'organisation meets the expected standard. However, grammatical accuracy and language range and control '
-        'of register remain less established and require further development.'
-    ),
-    ('satisfactory', 'confident', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation meets the expected standard and '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
-    ),
-    ('satisfactory', 'confident', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation and control of register meet the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
-    ),
-    ('satisfactory', 'confident', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context, while organisation meets the expected standard. However, grammatical '
-        'accuracy and language range remain less established and require further development.'
-    ),
-    ('satisfactory', 'confident', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Organisation meets the expected standard; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
-    ),
-
-    ('satisfactory', 'confident', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation meets the expected standard and '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
-    ),
-    ('satisfactory', 'confident', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'organisation meets the expected standard. Grammatical accuracy and language range and control of '
-        'register are still developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation and control of register meet the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context, while organisation meets the expected standard. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Organisation meets the expected standard, while '
-        'grammatical accuracy and language range are still developing and would benefit from further consolidation.'
-    ),
-
-    ('satisfactory', 'confident', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation and grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('satisfactory', 'confident', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion, while organisation and grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in connecting ideas logically and maintaining coherence, while '
-        'organisation, grammatical accuracy and language range, and control of register meet the expected '
-        'standard, with further scope for development.'
-    ),
-    ('satisfactory', 'confident', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion and in adapting tone and style appropriately to '
-        'purpose, audience and context, while organisation and grammatical accuracy and language range meet the '
-        'expected standard.'
-    ),
-    ('satisfactory', 'confident', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in cohesion. Organisation and grammatical accuracy and language '
-        'range meet the expected standard, with further scope for development.'
-    ),
-
-    ('satisfactory', 'confident', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'organisation meets the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('satisfactory', 'confident', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'organisation meets the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in cohesion and in grammatical accuracy and language range, while '
-        'organisation and control of register meet the expected standard.'
-    ),
-    ('satisfactory', 'confident', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. Organisation meets the '
-        'expected standard, with further scope for development.'
-    ),
-    ('satisfactory', 'confident', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in cohesion and in grammatical accuracy and language range. '
-        'Organisation meets the expected standard, with further scope for development.'
-    ),
-
-    ('satisfactory', 'confident', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion. Organisation meets the expected standard; however, control of register remains '
-        'less established and requires further development.'
-    ),
-    ('satisfactory', 'confident', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion. Organisation meets the expected standard, while control of register is still '
-        'developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'confident', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in cohesion, while organisation and control of register meet the expected standard.'
-    ),
-    ('satisfactory', 'confident', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in both cohesion and the ability to adapt tone and style appropriately. Organisation meets '
-        'the expected standard, with further scope for development.'
-    ),
-    ('satisfactory', 'confident', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in cohesion. '
-        'Organisation meets the expected standard, with further scope for development.'
-    ),
-
-    ('satisfactory', 'strong', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'organisation meets the expected standard. However, grammatical accuracy and language range and control '
-        'of register remain less established and require further development.'
-    ),
-    ('satisfactory', 'strong', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation meets the expected standard and '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
-    ),
-    ('satisfactory', 'strong', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation and control of register meet the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
-    ),
-    ('satisfactory', 'strong', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation meets the expected standard; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
-    ),
-    ('satisfactory', 'strong', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context. Organisation meets the expected standard; however, grammatical accuracy and '
-        'language range remain less established and require further development.'
-    ),
-
-    ('satisfactory', 'strong', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation meets the expected standard and '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
-    ),
-    ('satisfactory', 'strong', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'organisation meets the expected standard. Grammatical accuracy and language range and control of '
-        'register are still developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation and control of register meet the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation meets the expected standard, while '
-        'grammatical accuracy and language range are still developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while organisation meets the expected standard. Grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
-    ),
-
-    ('satisfactory', 'strong', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation and grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('satisfactory', 'strong', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion, while organisation and grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'organisation, grammatical accuracy and language range, and control of register meet the expected '
-        'standard, with further scope for development.'
-    ),
-    ('satisfactory', 'strong', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in adapting tone and '
-        'style appropriately to purpose, audience and context. Organisation and grammatical accuracy and language '
-        'range meet the expected standard.'
-    ),
-    ('satisfactory', 'strong', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while organisation and grammatical accuracy and language range meet the expected '
-        'standard, with further scope for development.'
-    ),
-
-    ('satisfactory', 'strong', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. Organisation meets the expected standard; however, control of register '
-        'remains less established and requires further development.'
-    ),
-    ('satisfactory', 'strong', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range. Organisation meets the expected standard, while control of register is '
-        'still developing and would benefit from further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in grammatical accuracy '
-        'and language range, while organisation and control of register meet the expected standard.'
-    ),
-    ('satisfactory', 'strong', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in grammatical '
-        'accuracy and language range and in adapting tone and style appropriately. Organisation meets the '
-        'expected standard, with further scope for development.'
-    ),
-    ('satisfactory', 'strong', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in grammatical accuracy and language range. '
-        'Organisation meets the expected standard, with further scope for development.'
-    ),
-
-    ('satisfactory', 'strong', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'organisation meets the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('satisfactory', 'strong', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'organisation meets the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('satisfactory', 'strong', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'organisation and control of register meet the expected standard, with further scope for development.'
-    ),
-    ('satisfactory', 'strong', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range and also '
-        'demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'Organisation meets the expected standard, with further scope for development.'
-    ),
-    ('satisfactory', 'strong', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. Organisation also meets '
-        'the expected standard, with further scope to develop greater consistency and sophistication.'
-    ),
-    ('confident', 'needs_work', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly. '
-        'However, cohesion, grammatical accuracy and language range, and control of register remain less '
-        'established and require further development.'
-    ),
-    ('confident', 'needs_work', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in the organisation and clear presentation of written work, while '
-        'control of register is still developing. However, cohesion and grammatical accuracy and language range '
-        'remain less established and require further development.'
-    ),
-    ('confident', 'needs_work', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while control of register meets the expected '
-        'standard. However, cohesion and grammatical accuracy and language range remain less established and '
-        'require further development.'
-    ),
-    ('confident', 'needs_work', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in both the organisation of written work and the ability to adapt '
-        'tone and style appropriately to purpose, audience and context. However, cohesion and grammatical '
-        'accuracy and language range remain less established and require further development.'
-    ),
-    ('confident', 'needs_work', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organising written work and presenting ideas clearly. '
-        'However, cohesion and grammatical accuracy and language range remain less established and require '
-        'further development.'
-    ),
-
-    ('confident', 'needs_work', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'are still developing. However, cohesion and control of register remain less established and require '
-        'further development.'
-    ),
-    ('confident', 'needs_work', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly. '
-        'Grammatical accuracy and language range and control of register are still developing; however, cohesion '
-        'remains less established and requires further development.'
-    ),
-    ('confident', 'needs_work', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while control of register meets the expected '
-        'standard. Grammatical accuracy and language range are still developing; however, cohesion remains less '
-        'established and requires further development.'
-    ),
-    ('confident', 'needs_work', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. Grammatical accuracy and language range are still developing; however, '
-        'cohesion remains less established and requires further development.'
-    ),
-    ('confident', 'needs_work', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Grammatical accuracy and language range are '
-        'still developing; however, cohesion remains less established and requires further development.'
-    ),
-
-    ('confident', 'needs_work', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'meet the expected standard. However, cohesion and control of register remain less established and '
-        'require further development.'
-    ),
-    ('confident', 'needs_work', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'meet the expected standard. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
-    ),
-    ('confident', 'needs_work', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly, while '
-        'grammatical accuracy and language range and control of register meet the expected standard. However, '
-        'cohesion remains less established and is the main area requiring further development.'
-    ),
-    ('confident', 'needs_work', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'However, cohesion remains less established and requires further development.'
-    ),
-    ('confident', 'needs_work', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Grammatical accuracy and language range meet '
-        'the expected standard; however, cohesion remains less established and requires further development.'
-    ),
-
-    ('confident', 'needs_work', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range. '
-        'However, cohesion and control of register remain less established and require further development.'
-    ),
-    ('confident', 'needs_work', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range. '
-        'Control of register is still developing; however, cohesion remains less established and requires further '
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'However, the two assessed areas, namely grammatical accuracy and language '
+        'range and appropriate use of tone and style for purpose, audience and '
+        'context, fall well below that standard and require substantial further '
         'development.'
     ),
+    ('satisfactory', 'confident', 'needs_work', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'The ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below '
+        'that standard and require substantial further development.'
+    ),
+    ('satisfactory', 'confident', 'needs_work', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. Organisation and the clear presentation of written work '
+        'and appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range fall well below that standard and '
+        'require substantial further development.'
+    ),
+    ('satisfactory', 'confident', 'needs_work', 'confident'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to adapt tone and style appropriately to purpose, audience and context '
+        'are well established, with confidence evident in both assessed areas. The '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, grammatical accuracy '
+        'and language range fall well below that standard and require substantial '
+        'further development.'
+    ),
+    ('satisfactory', 'confident', 'needs_work', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The ability to connect ideas '
+        'logically and maintain coherence is also well established. The ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('satisfactory', 'confident', 'developing', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'Grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'confident', 'developing', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range and appropriate use of tone '
+        'and style for purpose, audience and context are still developing and require '
+        'further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'developing', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. Organisation and the clear presentation of written work '
+        'and appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'developing', 'confident'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to adapt tone and style appropriately to purpose, audience and context '
+        'are well established, with confidence evident in both assessed areas. The '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, grammatical accuracy '
+        'and language range are still developing and require further consolidation to '
+        'reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'developing', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The ability to connect ideas '
+        'logically and maintain coherence is also well established. The ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard.'
+    ),
+    ('satisfactory', 'confident', 'satisfactory', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. Organisation and the clear presentation of written work '
+        'and grammatical accuracy and language range satisfactorily meet the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'confident', 'satisfactory', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. Organisation and the clear presentation of written work '
+        'and grammatical accuracy and language range satisfactorily meet the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'satisfactory', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is well established. Although organisation and the clear presentation of '
+        'written work, grammatical accuracy and language range, and appropriate use '
+        'of tone and style for purpose, audience and context satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
+    ),
+    ('satisfactory', 'confident', 'satisfactory', 'confident'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to adapt tone and style appropriately to purpose, audience and context '
+        'are well established, with confidence evident in both assessed areas. '
+        'Although organisation and the clear presentation of written work and '
+        'grammatical accuracy and language range satisfactorily meet the minimum '
+        'expected standard for this level, there is still scope for further '
+        'development and consolidation in both areas.'
+    ),
+    ('satisfactory', 'confident', 'satisfactory', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The ability to connect ideas '
+        'logically and maintain coherence is also well established. Although '
+        'organisation and the clear presentation of written work and grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected '
+        'standard for this level, there is still scope for further development and '
+        'consolidation in both areas.'
+    ),
+    ('satisfactory', 'confident', 'confident', 'needs_work'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to use grammar accurately and draw on a varied range of language are '
+        'well established, with confidence evident in both assessed areas. The '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'confident', 'confident', 'developing'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to use grammar accurately and draw on a varied range of language are '
+        'well established, with confidence evident in both assessed areas. The '
+        'ability to organise and present written work clearly satisfactorily meets '
+        'the minimum expected standard for this level. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'confident', 'satisfactory'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain coherence "
+        'and to use grammar accurately and draw on a varied range of language are '
+        'well established, with confidence evident in both assessed areas. Although '
+        'organisation and the clear presentation of written work and appropriate use '
+        'of tone and style for purpose, audience and context satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in both areas.'
+    ),
+    ('satisfactory', 'confident', 'confident', 'confident'): (
+        "{learner_name}'s abilities to connect ideas logically and maintain "
+        'coherence, to use grammar accurately and draw on a varied range of language, '
+        'and to adapt tone and style appropriately to purpose, audience and context '
+        'are well established, with confidence evident in all three assessed areas. '
+        'Although the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('satisfactory', 'confident', 'confident', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, "
+        'audience and context is particularly strong. The abilities to connect ideas '
+        'logically and maintain coherence and to use grammar accurately and draw on a '
+        'varied range of language are well established, with confidence evident in '
+        'both assessed areas. Although the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level, there is still scope for further development and consolidation in '
+        'this area.'
+    ),
+    ('satisfactory', 'confident', 'strong', 'needs_work'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to connect ideas logically and maintain coherence is '
+        'also well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial '
+        'further development.'
+    ),
+    ('satisfactory', 'confident', 'strong', 'developing'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to connect ideas logically and maintain coherence is '
+        'also well established. The ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context is still developing and requires further consolidation '
+        'to reach that standard.'
+    ),
+    ('satisfactory', 'confident', 'strong', 'satisfactory'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The ability to connect ideas logically and maintain coherence is '
+        'also well established. Although organisation and the clear presentation of '
+        'written work and appropriate use of tone and style for purpose, audience and '
+        'context satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both '
+        'areas.'
+    ),
+    ('satisfactory', 'confident', 'strong', 'confident'): (
+        "{learner_name}'s grammatical accuracy and language range are particularly "
+        'strong. The abilities to connect ideas logically and maintain coherence and '
+        'to adapt tone and style appropriately to purpose, audience and context are '
+        'well established, with confidence evident in both assessed areas. Although '
+        'the ability to organise and present written work clearly satisfactorily '
+        'meets the minimum expected standard for this level, there is still scope for '
+        'further development and consolidation in this area.'
+    ),
+    ('satisfactory', 'confident', 'strong', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in using grammar '
+        'accurately and drawing on an appropriate range of language and in adapting '
+        'tone and style appropriately to purpose, audience and context. The ability '
+        'to connect ideas logically and maintain coherence is also well established. '
+        'Although the ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('satisfactory', 'strong', 'needs_work', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong, while the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level. However, the two assessed areas, namely grammatical accuracy and '
+        'language range and appropriate use of tone and style for purpose, audience '
+        'and context, fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('satisfactory', 'strong', 'needs_work', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong, while the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level. The ability to adapt tone and style appropriately to purpose, '
+        'audience and context is still developing and requires further consolidation '
+        'to reach that standard. However, grammatical accuracy and language range '
+        'fall well below that standard and require substantial further development.'
+    ),
+    ('satisfactory', 'strong', 'needs_work', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Organisation and the clear presentation of written '
+        'work and appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range fall well below that standard and '
+        'require substantial further development.'
+    ),
+    ('satisfactory', 'strong', 'needs_work', 'confident'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context is also well established. The ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('satisfactory', 'strong', 'needs_work', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context, while the ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('satisfactory', 'strong', 'developing', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong, while the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context falls '
+        'well below that standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'strong', 'developing', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong, while the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level. However, grammatical accuracy and language range and appropriate use '
+        'of tone and style for purpose, audience and context are still developing and '
+        'require further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'strong', 'developing', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Organisation and the clear presentation of written '
+        'work and appropriate use of tone and style for purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range are still developing and require '
+        'further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'strong', 'developing', 'confident'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context is also well established. The ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard.'
+    ),
+    ('satisfactory', 'strong', 'developing', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context, while the ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that '
+        'standard.'
+    ),
+    ('satisfactory', 'strong', 'satisfactory', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Organisation and the clear presentation of written '
+        'work and grammatical accuracy and language range satisfactorily meet the '
+        'minimum expected standard for this level. However, the ability to adapt tone '
+        'and style appropriately to purpose, audience and context falls well below '
+        'that standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'strong', 'satisfactory', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Organisation and the clear presentation of written '
+        'work and grammatical accuracy and language range satisfactorily meet the '
+        'minimum expected standard for this level. However, the ability to adapt tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'strong', 'satisfactory', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Although organisation and the clear presentation of '
+        'written work, grammatical accuracy and language range, and appropriate use '
+        'of tone and style for purpose, audience and context satisfactorily meet the '
+        'minimum expected standard for this level, there is still scope for further '
+        'development and consolidation in all three areas.'
+    ),
+    ('satisfactory', 'strong', 'satisfactory', 'confident'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context is also well established. Although '
+        'organisation and the clear presentation of written work and grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected '
+        'standard for this level, there is still scope for further development and '
+        'consolidation in both areas.'
+    ),
+    ('satisfactory', 'strong', 'satisfactory', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context. Although organisation and '
+        'the clear presentation of written work and grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both '
+        'areas.'
+    ),
+    ('satisfactory', 'strong', 'confident', 'needs_work'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Grammatical accuracy and language range are also '
+        'well established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to adapt tone and style appropriately to purpose, audience and '
+        'context falls well below that standard and requires substantial further '
+        'development.'
+    ),
+    ('satisfactory', 'strong', 'confident', 'developing'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Grammatical accuracy and language range are also '
+        'well established. The ability to organise and present written work clearly '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that '
+        'standard.'
+    ),
+    ('satisfactory', 'strong', 'confident', 'satisfactory'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. Grammatical accuracy and language range are also '
+        'well established. Although organisation and the clear presentation of '
+        'written work and appropriate use of tone and style for purpose, audience and '
+        'context satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both '
+        'areas.'
+    ),
+    ('satisfactory', 'strong', 'confident', 'confident'): (
+        "{learner_name}'s ability to connect ideas logically and maintain coherence "
+        'is particularly strong. The abilities to use grammar accurately and draw on '
+        'a varied range of language and to adapt tone and style appropriately to '
+        'purpose, audience and context are well established, with confidence evident '
+        'in both assessed areas. Although the ability to organise and present written '
+        'work clearly satisfactorily meets the minimum expected standard for this '
+        'level, there is still scope for further development and consolidation in '
+        'this area.'
+    ),
+    ('satisfactory', 'strong', 'confident', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context. Grammatical accuracy and '
+        'language range are also well established. Although the ability to organise '
+        'and present written work clearly satisfactorily meets the minimum expected '
+        'standard for this level, there is still scope for further development and '
+        'consolidation in this area.'
+    ),
+    ('satisfactory', 'strong', 'strong', 'needs_work'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in using grammar accurately '
+        'and drawing on an appropriate range of language, while the ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('satisfactory', 'strong', 'strong', 'developing'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in using grammar accurately '
+        'and drawing on an appropriate range of language, while the ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach that standard.'
+    ),
+    ('satisfactory', 'strong', 'strong', 'satisfactory'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in using grammar accurately '
+        'and drawing on an appropriate range of language. Although organisation and '
+        'the clear presentation of written work and appropriate use of tone and style '
+        'for purpose, audience and context satisfactorily meet the minimum expected '
+        'standard for this level, there is still scope for further development and '
+        'consolidation in both areas.'
+    ),
+    ('satisfactory', 'strong', 'strong', 'confident'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence and in using grammar accurately '
+        'and drawing on an appropriate range of language. The ability to adapt tone '
+        'and style appropriately to purpose, audience and context is also well '
+        'established. Although the ability to organise and present written work '
+        'clearly satisfactorily meets the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in this area.'
+    ),
+    ('satisfactory', 'strong', 'strong', 'strong'): (
+        '{learner_name} demonstrates particularly strong abilities in connecting '
+        'ideas logically and maintaining coherence, in using grammar accurately and '
+        'drawing on an appropriate range of language, and in adapting tone and style '
+        'appropriately to purpose, audience and context. Although the ability to '
+        'organise and present written work clearly satisfactorily meets the minimum '
+        'expected standard for this level, there is still scope for further '
+        'development and consolidation in this area.'
+    ),
+    ('confident', 'needs_work', 'needs_work', 'needs_work'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. However, the ability to connect '
+        'ideas logically and maintain coherence, grammatical accuracy and language range, and '
+        'the ability to adapt tone and style appropriately to purpose, audience and context '
+        'fall well below the minimum expected standard for this level and require substantial '
+        'further development.'
+    ),
+    ('confident', 'needs_work', 'needs_work', 'developing'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence and grammatical accuracy '
+        'and language range fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('confident', 'needs_work', 'needs_work', 'satisfactory'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence and grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
+    ),
+    ('confident', 'needs_work', 'needs_work', 'confident'): (
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. However, the ability '
+        'to connect ideas logically and maintain coherence and grammatical accuracy and '
+        'language range fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
+    ),
+    ('confident', 'needs_work', 'needs_work', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. However, '
+        'the ability to connect ideas logically and maintain coherence and grammatical accuracy '
+        'and language range fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
+    ),
+    ('confident', 'needs_work', 'developing', 'needs_work'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence and the ability to adapt tone and style appropriately to purpose, '
+        'audience and context fall well below that standard and require substantial further '
+        'development.'
+    ),
+    ('confident', 'needs_work', 'developing', 'developing'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context are still developing and require further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial further '
+        'development.'
+    ),
+    ('confident', 'needs_work', 'developing', 'satisfactory'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. Grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach that standard. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'developing', 'confident'): (
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. Grammatical accuracy '
+        'and language range are still developing and require further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
+    ),
+    ('confident', 'needs_work', 'developing', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. '
+        'Grammatical accuracy and language range are still developing and require further '
+        'consolidation to reach the minimum expected standard for this level. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'satisfactory', 'needs_work'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level. However, the '
+        'ability to connect ideas logically and maintain coherence and the ability to adapt '
+        'tone and style appropriately to purpose, audience and context fall well below that '
+        'standard and require substantial further development.'
+    ),
+    ('confident', 'needs_work', 'satisfactory', 'developing'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level. The ability to '
+        'adapt tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'satisfactory', 'satisfactory'): (
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context satisfactorily meet the minimum expected standard for this level. However, the '
+        'ability to connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'satisfactory', 'confident'): (
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. Grammatical accuracy '
+        'and language range satisfactorily meet the minimum expected standard for this level. '
+        'However, the ability to connect ideas logically and maintain coherence falls well '
+        'below that standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'satisfactory', 'strong'): (
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. '
+        'Grammatical accuracy and language range satisfactorily meet the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and maintain '
+        'coherence falls well below that standard and requires substantial further development.'
+    ),
+    ('confident', 'needs_work', 'confident', 'needs_work'): (
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. However, the ability to connect ideas logically and '
+        'maintain coherence and the ability to adapt tone and style appropriately to purpose, '
+        'audience and context fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
+    ),
+    ('confident', 'needs_work', 'confident', 'developing'): (
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context is still developing and requires further consolidation '
+        'to reach the minimum expected standard for this level. However, the ability to connect '
+        'ideas logically and maintain coherence falls well below that standard and requires '
+        'substantial further development.'
+    ),
     ('confident', 'needs_work', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while control of register meets the expected standard. However, cohesion remains less established and '
-        'requires further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, the ability to connect ideas logically and maintain coherence '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('confident', 'needs_work', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, cohesion remains '
-        'less established and is the main area requiring further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, grammatical accuracy and language range, and adapting tone '
+        'and style appropriately to purpose, audience and context, with confidence evident '
+        'across these areas. However, the ability to connect ideas logically and maintain '
+        'coherence falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('confident', 'needs_work', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and in grammatical accuracy and language '
-        'range. However, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and grammatical accuracy and language range, '
+        'with confidence evident across both areas. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below the minimum expected standard for '
+        'this level and requires substantial further development.'
     ),
-
     ('confident', 'needs_work', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation. However, cohesion and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. However, the ability to connect ideas logically '
+        'and maintain coherence and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context fall well below the minimum expected standard for this '
+        'level and require substantial further development.'
     ),
     ('confident', 'needs_work', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. However, '
+        'the ability to connect ideas logically and maintain coherence falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('confident', 'needs_work', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while control of register meets the expected standard. However, cohesion '
-        'remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('confident', 'needs_work', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in both organisation and the ability to adapt tone and style appropriately. However, cohesion '
-        'remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and adapting tone and style appropriately to purpose, audience and context, '
+        'with confidence evident across both areas. However, the ability to connect ideas '
+        'logically and maintain coherence falls well below the minimum expected standard for '
+        'this level and requires substantial further development.'
     ),
     ('confident', 'needs_work', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in organisation. '
-        'However, cohesion remains less established and is the main area requiring further development.'
+        "{learner_name}'s writing is particularly strong in grammatical accuracy and language "
+        'range and adapting tone and style appropriately to purpose, audience and context. The '
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. However, the ability to connect ideas logically '
+        'and maintain coherence falls well below the minimum expected standard for this level '
+        'and requires substantial further development.'
     ),
-
     ('confident', 'developing', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly, while '
-        'cohesion is still developing. However, grammatical accuracy and language range and control of register '
-        'remain less established and require further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range and the ability to adapt tone and style '
+        'appropriately to purpose, audience and context fall well below that standard and '
+        'require substantial further development.'
     ),
     ('confident', 'developing', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation. Cohesion and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and the ability to adapt tone and style appropriately '
+        'to purpose, audience and context are still developing and require further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('confident', 'developing', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while control of register meets the expected '
-        'standard. Cohesion is still developing; however, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. The ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
     ),
     ('confident', 'developing', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. Cohesion is still developing; however, grammatical accuracy and language '
-        'range remain less established and require further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. The ability to '
+        'connect ideas logically and maintain coherence is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('confident', 'developing', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Cohesion is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. The '
+        'ability to connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that standard and '
+        'require substantial further development.'
     ),
-
     ('confident', 'developing', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and grammatical accuracy and language range are still '
+        'developing and require further consolidation to reach the minimum expected standard '
+        'for this level. However, the ability to adapt tone and style appropriately to purpose, '
+        'audience and context falls well below that standard and requires substantial further '
+        'development.'
     ),
     ('confident', 'developing', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly. '
-        'Cohesion, grammatical accuracy and language range, and control of register are still developing and '
-        'would benefit from further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. However, the ability to connect '
+        'ideas logically and maintain coherence, grammatical accuracy and language range, and '
+        'the ability to adapt tone and style appropriately to purpose, audience and context are '
+        'still developing and require further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('confident', 'developing', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while control of register meets the expected '
-        'standard. Cohesion and grammatical accuracy and language range are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence and grammatical accuracy and language range are still developing '
+        'and require further consolidation to reach that standard.'
     ),
     ('confident', 'developing', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. Cohesion and grammatical accuracy and language range are still developing '
-        'and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. However, the ability '
+        'to connect ideas logically and maintain coherence and grammatical accuracy and '
+        'language range are still developing and require further consolidation to reach the '
+        'minimum expected standard for this level.'
     ),
     ('confident', 'developing', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Cohesion and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. However, '
+        'the ability to connect ideas logically and maintain coherence and grammatical accuracy '
+        'and language range are still developing and require further consolidation to reach the '
+        'minimum expected standard for this level.'
     ),
-
     ('confident', 'developing', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'meet the expected standard and cohesion is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level. The ability to '
+        'connect ideas logically and maintain coherence is still developing and requires '
+        'further consolidation to reach that standard. However, the ability to adapt tone and '
+        'style appropriately to purpose, audience and context falls well below that standard '
+        'and requires substantial further development.'
     ),
     ('confident', 'developing', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'meet the expected standard. Cohesion and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level. However, the '
+        'ability to connect ideas logically and maintain coherence and the ability to adapt '
+        'tone and style appropriately to purpose, audience and context are still developing and '
+        'require further consolidation to reach that standard.'
     ),
     ('confident', 'developing', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while grammatical accuracy and language range '
-        'and control of register meet the expected standard. Cohesion is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context satisfactorily meet the minimum expected standard for this level. However, the '
+        'ability to connect ideas logically and maintain coherence is still developing and '
+        'requires further consolidation to reach that standard.'
     ),
     ('confident', 'developing', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. Grammatical accuracy '
+        'and language range satisfactorily meet the minimum expected standard for this level. '
+        'However, the ability to connect ideas logically and maintain coherence is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'developing', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Grammatical accuracy and language range meet '
-        'the expected standard, while cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. '
+        'Grammatical accuracy and language range satisfactorily meet the minimum expected '
+        'standard for this level. However, the ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach that '
+        'standard.'
     ),
-
     ('confident', 'developing', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while cohesion is still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('confident', 'developing', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range. '
-        'Cohesion and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. However, the ability to connect ideas logically and '
+        'maintain coherence and the ability to adapt tone and style appropriately to purpose, '
+        'audience and context are still developing and require further consolidation to reach '
+        'the minimum expected standard for this level.'
     ),
     ('confident', 'developing', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while control of register meets the expected standard. Cohesion is still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, the ability to connect ideas logically and maintain coherence is '
+        'still developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'developing', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, cohesion is '
-        'still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, grammatical accuracy and language range, and adapting tone '
+        'and style appropriately to purpose, audience and context, with confidence evident '
+        'across these areas. However, the ability to connect ideas logically and maintain '
+        'coherence is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('confident', 'developing', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and in grammatical accuracy and language '
-        'range. Cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and grammatical accuracy and language range, '
+        'with confidence evident across both areas. However, the ability to connect ideas '
+        'logically and maintain coherence is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
-
     ('confident', 'developing', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while cohesion is still developing. However, control of register remains '
-        'less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('confident', 'developing', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation. Cohesion and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. However, the ability to connect ideas logically '
+        'and maintain coherence and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context are still developing and require further consolidation '
+        'to reach the minimum expected standard for this level.'
     ),
     ('confident', 'developing', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while control of register meets the expected standard. Cohesion is still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, the ability to connect ideas logically and '
+        'maintain coherence is still developing and requires further consolidation to reach '
+        'that standard.'
     ),
     ('confident', 'developing', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in organisation and in adapting tone and style appropriately. Cohesion is still developing '
-        'and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and adapting tone and style appropriately to purpose, audience and context, '
+        'with confidence evident across both areas. However, the ability to connect ideas '
+        'logically and maintain coherence is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
     ('confident', 'developing', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in organisation. '
-        'Cohesion is still developing and remains the principal area for further consolidation.'
+        "{learner_name}'s writing is particularly strong in grammatical accuracy and language "
+        'range and adapting tone and style appropriately to purpose, audience and context. The '
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. However, the ability to connect ideas logically '
+        'and maintain coherence is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level.'
     ),
-
     ('confident', 'satisfactory', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly, while '
-        'cohesion meets the expected standard. However, grammatical accuracy and language range and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level. However, grammatical accuracy and language range and the ability to '
+        'adapt tone and style appropriately to purpose, audience and context fall well below '
+        'that standard and require substantial further development.'
     ),
     ('confident', 'satisfactory', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion meets the expected standard and '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level. The ability to adapt tone and style appropriately to purpose, audience '
+        'and context is still developing and requires further consolidation to reach that '
+        'standard. However, grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
     ),
     ('confident', 'satisfactory', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion and control of register meet the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and the ability to adapt tone and style appropriately '
+        'to purpose, audience and context satisfactorily meet the minimum expected standard for '
+        'this level. However, grammatical accuracy and language range fall well below that '
+        'standard and require substantial further development.'
     ),
     ('confident', 'satisfactory', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion meets the expected standard. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. The ability to '
+        'connect ideas logically and maintain coherence satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language range '
+        'fall well below that standard and require substantial further development.'
     ),
     ('confident', 'satisfactory', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Cohesion meets the expected standard; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. The '
+        'ability to connect ideas logically and maintain coherence satisfactorily meets the '
+        'minimum expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further development.'
     ),
-
     ('confident', 'satisfactory', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion meets the expected standard and '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level. Grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard. However, the ability to adapt '
+        'tone and style appropriately to purpose, audience and context falls well below that '
+        'standard and requires substantial further development.'
     ),
     ('confident', 'satisfactory', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion meets the expected standard. '
-        'Grammatical accuracy and language range and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level. However, grammatical accuracy and language range and the ability to '
+        'adapt tone and style appropriately to purpose, audience and context are still '
+        'developing and require further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion and control of register meet the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and the ability to adapt tone and style appropriately '
+        'to purpose, audience and context satisfactorily meet the minimum expected standard for '
+        'this level. However, grammatical accuracy and language range are still developing and '
+        'require further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion meets the expected standard. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. The ability to '
+        'connect ideas logically and maintain coherence satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Cohesion meets the expected standard, while '
-        'grammatical accuracy and language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. The '
+        'ability to connect ideas logically and maintain coherence satisfactorily meets the '
+        'minimum expected standard for this level. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that standard.'
     ),
-
     ('confident', 'satisfactory', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion and grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('confident', 'satisfactory', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, while cohesion and grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. The ability to connect ideas '
+        'logically and maintain coherence and grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organising written work and presenting ideas clearly, while '
-        'cohesion, grammatical accuracy and language range, and control of register meet the expected standard, '
-        'with further scope for development.'
+        "{learner_name}'s ability to organise written work and present ideas clearly is well "
+        'established, with confidence evident in this area. Although the ability to connect '
+        'ideas logically and maintain coherence, grammatical accuracy and language range, and '
+        'the ability to adapt tone and style appropriately to purpose, audience and context '
+        'satisfactorily meet the minimum expected standard for this level, there is still scope '
+        'for further development and consolidation in these areas.'
     ),
     ('confident', 'satisfactory', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion and grammatical accuracy and language range meet the '
-        'expected standard.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. Although the ability '
+        'to connect ideas logically and maintain coherence and grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this level, there '
+        'is still scope for further development and consolidation in both areas.'
     ),
     ('confident', 'satisfactory', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context and also demonstrates confidence in organisation. Cohesion and grammatical accuracy and language '
-        'range meet the expected standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. The ability to organise written work and present '
+        'ideas clearly is also well established, with confidence evident in this area. Although '
+        'the ability to connect ideas logically and maintain coherence and grammatical accuracy '
+        'and language range satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both areas.'
     ),
-
     ('confident', 'satisfactory', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while cohesion meets the expected standard. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to adapt tone and style appropriately to purpose, audience and context '
+        'falls well below that standard and requires substantial further development.'
     ),
     ('confident', 'satisfactory', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while cohesion meets the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. The ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level. However, '
+        'the ability to adapt tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and in grammatical accuracy and language range, '
-        'while cohesion and control of register meet the expected standard.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas. Although the ability to connect ideas logically and '
+        'maintain coherence and the ability to adapt tone and style appropriately to purpose, '
+        'audience and context satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in both areas.'
     ),
     ('confident', 'satisfactory', 'confident', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. Cohesion meets the '
-        'expected standard, with further scope for development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, grammatical accuracy and language range, and adapting tone '
+        'and style appropriately to purpose, audience and context, with confidence evident '
+        'across these areas. Although the ability to connect ideas logically and maintain '
+        'coherence satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
     ),
     ('confident', 'satisfactory', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and in grammatical accuracy and language '
-        'range. Cohesion meets the expected standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and grammatical accuracy and language range, '
+        'with confidence evident across both areas. Although the ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level, there is still scope for further development and consolidation in this '
+        'area.'
     ),
-
     ('confident', 'satisfactory', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while cohesion meets the expected standard. However, control of register '
-        'remains less established and requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context falls well below that standard and requires substantial further development.'
     ),
     ('confident', 'satisfactory', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while cohesion meets the expected standard. Control of register is still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. The ability to connect ideas logically and '
+        'maintain coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'satisfactory', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation, while cohesion and control of register meet the expected standard.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. The "
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. Although the ability to connect ideas logically '
+        'and maintain coherence and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meet the minimum expected standard for '
+        'this level, there is still scope for further development and consolidation in both '
+        'areas.'
     ),
     ('confident', 'satisfactory', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and demonstrates '
-        'confidence in organisation and in adapting tone and style appropriately. Cohesion meets the expected '
-        'standard, with further scope for development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and adapting tone and style appropriately to purpose, audience and context, '
+        'with confidence evident across both areas. Although the ability to connect ideas '
+        'logically and maintain coherence satisfactorily meets the minimum expected standard '
+        'for this level, there is still scope for further development and consolidation in this '
+        'area.'
     ),
     ('confident', 'satisfactory', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in organisation. '
-        'Cohesion meets the expected standard, with further scope for development.'
+        "{learner_name}'s writing is particularly strong in grammatical accuracy and language "
+        'range and adapting tone and style appropriately to purpose, audience and context. The '
+        'ability to organise written work and present ideas clearly is also well established, '
+        'with confidence evident in this area. Although the ability to connect ideas logically '
+        'and maintain coherence satisfactorily meets the minimum expected standard for this '
+        'level, there is still scope for further development and consolidation in this area.'
     ),
     ('confident', 'confident', 'needs_work', 'needs_work'): (
-        '{learner_name} demonstrates confidence in both the organisation of written work and the ability to '
-        'connect ideas logically and maintain coherence. However, grammatical accuracy and language range and '
-        'control of register remain less established and require further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. However, grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context fall well below the minimum expected standard for this level and require '
+        'substantial further development.'
     ),
     ('confident', 'confident', 'needs_work', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while control of register is still '
-        'developing. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level. However, '
+        'grammatical accuracy and language range fall well below that standard and require '
+        'substantial further development.'
     ),
     ('confident', 'confident', 'needs_work', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while control of register meets the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language range '
+        'fall well below that standard and require substantial further development.'
     ),
     ('confident', 'confident', 'needs_work', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context. However, grammatical accuracy and language range remain '
-        'less established and are the main area requiring further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'adapting tone and style appropriately to purpose, audience and context, with '
+        'confidence evident across these areas. However, grammatical accuracy and language '
+        'range fall well below the minimum expected standard for this level and require '
+        'substantial further development.'
     ),
     ('confident', 'confident', 'needs_work', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and cohesion. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and connecting ideas logically and '
+        'maintaining coherence, with confidence evident across both areas. However, grammatical '
+        'accuracy and language range fall well below the minimum expected standard for this '
+        'level and require substantial further development.'
     ),
-
     ('confident', 'confident', 'developing', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. Grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach the minimum expected '
+        'standard for this level. However, the ability to adapt tone and style appropriately to '
+        'purpose, audience and context falls well below that standard and requires substantial '
         'further development.'
     ),
     ('confident', 'confident', 'developing', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion. Grammatical accuracy and language '
-        'range and control of register are still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. However, grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context are still developing and require further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('confident', 'confident', 'developing', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while control of register meets the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. The ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level. However, grammatical accuracy and language range are '
+        'still developing and require further consolidation to reach that standard.'
     ),
     ('confident', 'confident', 'developing', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context. However, grammatical accuracy and language range are '
-        'still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'adapting tone and style appropriately to purpose, audience and context, with '
+        'confidence evident across these areas. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('confident', 'confident', 'developing', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and cohesion. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and connecting ideas logically and '
+        'maintaining coherence, with confidence evident across both areas. However, grammatical '
+        'accuracy and language range are still developing and require further consolidation to '
+        'reach the minimum expected standard for this level.'
     ),
-
     ('confident', 'confident', 'satisfactory', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. Grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context falls well '
+        'below that standard and requires substantial further development.'
     ),
     ('confident', 'confident', 'satisfactory', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. Grammatical accuracy and language range '
+        'satisfactorily meet the minimum expected standard for this level. However, the ability '
+        'to adapt tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'confident', 'satisfactory', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation and cohesion, while grammatical accuracy and '
-        'language range and control of register meet the expected standard, with further scope for development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly and connecting ideas logically and maintaining coherence, '
+        'with confidence evident across both areas. Although grammatical accuracy and language '
+        'range and the ability to adapt tone and style appropriately to purpose, audience and '
+        'context satisfactorily meet the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in both areas.'
     ),
     ('confident', 'confident', 'satisfactory', 'confident'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context, while grammatical accuracy and language range meet the '
-        'expected standard.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'adapting tone and style appropriately to purpose, audience and context, with '
+        'confidence evident across these areas. Although grammatical accuracy and language '
+        'range satisfactorily meet the minimum expected standard for this level, there is still '
+        'scope for further development and consolidation in this area.'
     ),
     ('confident', 'confident', 'satisfactory', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while also demonstrating confidence in organisation and cohesion. Grammatical accuracy and '
-        'language range meet the expected standard, with further scope for development.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly and connecting ideas logically and '
+        'maintaining coherence, with confidence evident across both areas. Although grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected standard for this '
+        'level, there is still scope for further development and consolidation in this area.'
     ),
-
     ('confident', 'confident', 'confident', 'needs_work'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and grammatical accuracy and language '
-        'range. However, control of register remains less established and is the main area requiring further '
-        'development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'grammatical accuracy and language range, with confidence evident across these areas. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('confident', 'confident', 'confident', 'developing'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and grammatical accuracy and language '
-        'range. Control of register is still developing and would benefit from further consolidation.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'grammatical accuracy and language range, with confidence evident across these areas. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('confident', 'confident', 'confident', 'satisfactory'): (
-        '{learner_name} demonstrates confidence in organisation, cohesion, and grammatical accuracy and language '
-        'range, while control of register meets the expected standard, with further scope for development.'
+        "{learner_name}'s performance is well established in organising written work and "
+        'presenting ideas clearly, connecting ideas logically and maintaining coherence, and '
+        'grammatical accuracy and language range, with confidence evident across these areas. '
+        'Although the ability to adapt tone and style appropriately to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
     ),
     ('confident', 'confident', 'confident', 'confident'): (
-        '{learner_name} writes with confidence across all four assessed areas. Secure control is evident in the '
-        'organisation and presentation of ideas, cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context.'
+        "{learner_name}'s writing performance is well established across all four assessed "
+        'areas. Organisation and clear presentation, cohesion, grammatical accuracy and '
+        'language range, and register are all handled with confidence at this level.'
     ),
     ('confident', 'confident', 'confident', 'strong'): (
-        '{learner_name} shows a clear strength in adapting tone and style appropriately to purpose, audience and '
-        'context, while demonstrating confidence in organisation, cohesion, and grammatical accuracy and language '
-        'range.'
+        "{learner_name}'s ability to adapt tone and style appropriately to purpose, audience "
+        'and context is particularly strong. Performance is also well established in organising '
+        'written work and presenting ideas clearly, connecting ideas logically and maintaining '
+        'coherence, and grammatical accuracy and language range, with confidence evident across '
+        'these areas.'
     ),
-
     ('confident', 'confident', 'strong', 'needs_work'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation and cohesion. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and connecting ideas logically and maintaining coherence, with confidence '
+        'evident across both areas. However, the ability to adapt tone and style appropriately '
+        'to purpose, audience and context falls well below the minimum expected standard for '
+        'this level and requires substantial further development.'
     ),
     ('confident', 'confident', 'strong', 'developing'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation and cohesion. Control of register is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and connecting ideas logically and maintaining coherence, with confidence '
+        'evident across both areas. However, the ability to adapt tone and style appropriately '
+        'to purpose, audience and context is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level.'
     ),
     ('confident', 'confident', 'strong', 'satisfactory'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range and also demonstrates '
-        'confidence in organisation and cohesion, while control of register meets the expected standard.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and connecting ideas logically and maintaining coherence, with confidence '
+        'evident across both areas. Although the ability to adapt tone and style appropriately '
+        'to purpose, audience and context satisfactorily meets the minimum expected standard '
+        'for this level, there is still scope for further development and consolidation in this '
+        'area.'
     ),
     ('confident', 'confident', 'strong', 'confident'): (
-        '{learner_name} shows a clear strength in grammatical accuracy and language range, while also '
-        'demonstrating confidence in organisation, cohesion, and the ability to adapt tone and style appropriately '
-        'to purpose, audience and context.'
+        "{learner_name}'s grammatical accuracy and language range are particularly strong. "
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly, connecting ideas logically and maintaining coherence, and adapting tone and '
+        'style appropriately to purpose, audience and context, with confidence evident across '
+        'these areas.'
     ),
     ('confident', 'confident', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in grammatical accuracy and language range and in adapting tone and '
-        'style appropriately to purpose, audience and context, while also demonstrating confidence in organisation '
-        'and cohesion.'
+        "{learner_name}'s writing is particularly strong in grammatical accuracy and language "
+        'range and adapting tone and style appropriately to purpose, audience and context. '
+        'Performance is also well established in organising written work and presenting ideas '
+        'clearly and connecting ideas logically and maintaining coherence, with confidence '
+        'evident across both areas.'
     ),
-
     ('confident', 'strong', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence and also '
-        'demonstrates confidence in organising written work and presenting ideas clearly. However, grammatical '
-        'accuracy and language range and control of register remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. However, grammatical '
+        'accuracy and language range and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context fall well below the minimum expected standard for this '
+        'level and require substantial further development.'
     ),
     ('confident', 'strong', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. The ability to adapt tone '
+        'and style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this level. '
+        'However, grammatical accuracy and language range fall well below that standard and '
+        'require substantial further development.'
     ),
     ('confident', 'strong', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'control of register meets the expected standard. However, grammatical accuracy and language range remain '
-        'less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. The ability to adapt tone '
+        'and style appropriately to purpose, audience and context satisfactorily meets the '
+        'minimum expected standard for this level. However, grammatical accuracy and language '
+        'range fall well below that standard and require substantial further development.'
     ),
     ('confident', 'strong', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in both organisation and '
-        'the ability to adapt tone and style appropriately. However, grammatical accuracy and language range '
-        'remain less established and require further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. However, grammatical '
+        'accuracy and language range fall well below the minimum expected standard for this '
+        'level and require substantial further development.'
     ),
     ('confident', 'strong', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in organisation. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and adapting tone and style appropriately to purpose, audience '
+        'and context. The ability to organise written work and present ideas clearly is also '
+        'well established, with confidence evident in this area. However, grammatical accuracy '
+        'and language range fall well below the minimum expected standard for this level and '
+        'require substantial further development.'
     ),
-
     ('confident', 'strong', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. Grammatical accuracy and '
+        'language range are still developing and require further consolidation to reach the '
+        'minimum expected standard for this level. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below that standard and '
+        'requires substantial further development.'
     ),
     ('confident', 'strong', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence and also '
-        'demonstrates confidence in organisation. Grammatical accuracy and language range and control of register '
-        'are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. However, grammatical '
+        'accuracy and language range and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context are still developing and require further consolidation '
+        'to reach the minimum expected standard for this level.'
     ),
     ('confident', 'strong', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'control of register meets the expected standard. Grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. The ability to adapt tone '
+        'and style appropriately to purpose, audience and context satisfactorily meets the '
+        'minimum expected standard for this level. However, grammatical accuracy and language '
+        'range are still developing and require further consolidation to reach that standard.'
     ),
     ('confident', 'strong', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in organisation and in '
-        'adapting tone and style appropriately to purpose, audience and context. Grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. However, grammatical '
+        'accuracy and language range are still developing and require further consolidation to '
+        'reach the minimum expected standard for this level.'
     ),
     ('confident', 'strong', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in organisation. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and adapting tone and style appropriately to purpose, audience '
+        'and context. The ability to organise written work and present ideas clearly is also '
+        'well established, with confidence evident in this area. However, grammatical accuracy '
+        'and language range are still developing and require further consolidation to reach the '
+        'minimum expected standard for this level.'
     ),
-
     ('confident', 'strong', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'grammatical accuracy and language range meet the expected standard. However, control of register remains '
-        'less established and requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. Grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context falls well below that standard and requires substantial further development.'
     ),
     ('confident', 'strong', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'grammatical accuracy and language range meet the expected standard. Control of register is still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. Grammatical accuracy and '
+        'language range satisfactorily meet the minimum expected standard for this level. '
+        'However, the ability to adapt tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach that standard.'
     ),
     ('confident', 'strong', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and also demonstrates confidence in organisation, while '
-        'grammatical accuracy and language range and control of register meet the expected standard, with further '
-        'scope for development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. The ability to organise written work and present ideas clearly is '
+        'also well established, with confidence evident in this area. Although grammatical '
+        'accuracy and language range and the ability to adapt tone and style appropriately to '
+        'purpose, audience and context satisfactorily meet the minimum expected standard for '
+        'this level, there is still scope for further development and consolidation in both '
+        'areas.'
     ),
     ('confident', 'strong', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in organisation and in '
-        'adapting tone and style appropriately to purpose, audience and context, while grammatical accuracy and '
-        'language range meet the expected standard.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across both areas. Although grammatical '
+        'accuracy and language range satisfactorily meet the minimum expected standard for this '
+        'level, there is still scope for further development and consolidation in this area.'
     ),
     ('confident', 'strong', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in organisation. Grammatical accuracy and '
-        'language range meet the expected standard, with further scope for development.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and adapting tone and style appropriately to purpose, audience '
+        'and context. The ability to organise written work and present ideas clearly is also '
+        'well established, with confidence evident in this area. Although grammatical accuracy '
+        'and language range satisfactorily meet the minimum expected standard for this level, '
+        'there is still scope for further development and consolidation in this area.'
     ),
-
     ('confident', 'strong', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in organisation and in '
-        'grammatical accuracy and language range. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and grammatical accuracy and language range, with '
+        'confidence evident across both areas. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('confident', 'strong', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in organisation and in '
-        'grammatical accuracy and language range. Control of register is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and grammatical accuracy and language range, with '
+        'confidence evident across both areas. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level.'
     ),
     ('confident', 'strong', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in cohesion and demonstrates confidence in organisation and in '
-        'grammatical accuracy and language range, while control of register meets the expected standard.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly and grammatical accuracy and language range, with '
+        'confidence evident across both areas. Although the ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level, there is still scope for further development and '
+        'consolidation in this area.'
     ),
     ('confident', 'strong', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in connecting ideas logically and maintaining coherence, while '
-        'demonstrating confidence in organisation, grammatical accuracy and language range, and the ability to '
-        'adapt tone and style appropriately to purpose, audience and context.'
+        "{learner_name}'s ability to connect ideas logically and maintain coherence is "
+        'particularly strong. Performance is also well established in organising written work '
+        'and presenting ideas clearly, grammatical accuracy and language range, and adapting '
+        'tone and style appropriately to purpose, audience and context, with confidence evident '
+        'across these areas.'
     ),
     ('confident', 'strong', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context, while also demonstrating confidence in organisation and in grammatical accuracy '
-        'and language range.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and adapting tone and style appropriately to purpose, audience '
+        'and context. Performance is also well established in organising written work and '
+        'presenting ideas clearly and grammatical accuracy and language range, with confidence '
+        'evident across both areas.'
     ),
-
     ('confident', 'strong', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range and also '
-        'demonstrates confidence in organisation. However, control of register remains less established and '
-        'requires further development.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and grammatical accuracy and language range. The ability to '
+        'organise written work and present ideas clearly is also well established, with '
+        'confidence evident in this area. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('confident', 'strong', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range and also '
-        'demonstrates confidence in organisation. Control of register is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and grammatical accuracy and language range. The ability to '
+        'organise written work and present ideas clearly is also well established, with '
+        'confidence evident in this area. However, the ability to adapt tone and style '
+        'appropriately to purpose, audience and context is still developing and requires '
+        'further consolidation to reach the minimum expected standard for this level.'
     ),
     ('confident', 'strong', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'also demonstrating confidence in organisation. Control of register meets the expected standard, with '
-        'further scope for development.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and grammatical accuracy and language range. The ability to '
+        'organise written work and present ideas clearly is also well established, with '
+        'confidence evident in this area. Although the ability to adapt tone and style '
+        'appropriately to purpose, audience and context satisfactorily meets the minimum '
+        'expected standard for this level, there is still scope for further development and '
+        'consolidation in this area.'
     ),
     ('confident', 'strong', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in cohesion and in grammatical accuracy and language range, while '
-        'also demonstrating confidence in organisation and in adapting tone and style appropriately to purpose, '
-        'audience and context.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence and grammatical accuracy and language range. Performance is also '
+        'well established in organising written work and presenting ideas clearly and adapting '
+        'tone and style appropriately to purpose, audience and context, with confidence evident '
+        'across both areas.'
     ),
     ('confident', 'strong', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in cohesion, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context, while also demonstrating '
-        'confidence in the organisation and clear presentation of written work.'
+        "{learner_name}'s writing is particularly strong in connecting ideas logically and "
+        'maintaining coherence, grammatical accuracy and language range, and adapting tone and '
+        'style appropriately to purpose, audience and context. The ability to organise written '
+        'work and present ideas clearly is also well established, with confidence evident in '
+        'this area.'
     ),
 
     ('strong', 'needs_work', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly. However, '
-        'cohesion, grammatical accuracy and language range, and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. However, performance in connecting ideas logically and '
+        'maintaining coherence, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while control of register is still developing. '
-        'However, cohesion and grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is still developing and requires further '
+        'consolidation to reach the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while control of register meets the expected '
-        'standard. However, cohesion and grammatical accuracy and language range remain less established and '
-        'require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. However, performance in connecting ideas logically '
+        'and maintaining coherence and in grammatical accuracy and language range falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context. However, cohesion and grammatical accuracy and '
-        'language range remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. However, performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. However, cohesion and grammatical accuracy and language range remain less '
-        'established and require further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. However, performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
-
     ('strong', 'needs_work', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range are '
-        'still developing. However, cohesion and control of register remain less established and require further '
-        'development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context falls well below the minimum '
+        'expected standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly. '
-        'Grammatical accuracy and language range and control of register are still developing; however, cohesion '
-        'remains less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while control of register meets the expected '
-        'standard. Grammatical accuracy and language range are still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. Performance in grammatical accuracy and language '
+        'range is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, performance in connecting '
+        'ideas logically and maintaining coherence falls well below the minimum '
+        'expected standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context. Grammatical accuracy and language range are '
-        'still developing; however, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in grammatical accuracy and language range '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. Grammatical accuracy and language range are still developing; however, '
-        'cohesion remains less established and requires further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'is still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
-
     ('strong', 'needs_work', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range meet '
-        'the expected standard. However, cohesion and control of register remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range meet '
-        'the expected standard. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly, while '
-        'grammatical accuracy and language range and control of register meet the expected standard. However, '
-        'cohesion remains less established and is the main area requiring further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
     ),
     ('strong', 'needs_work', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context, while grammatical accuracy and language range '
-        'meet the expected standard. However, cohesion remains less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
     ),
     ('strong', 'needs_work', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'However, cohesion remains less established and requires further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
     ),
-
     ('strong', 'needs_work', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range. However, cohesion and control of register remain less established and '
-        'require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. However, '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range. Control of register is still developing; however, cohesion remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level. However, performance in connecting ideas '
+        'logically and maintaining coherence falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range, while control of register meets the expected standard. However, cohesion '
-        'remains less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in connecting ideas logically and maintaining coherence falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
     ),
     ('strong', 'needs_work', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range and in adapting tone and style appropriately. However, cohesion remains '
-        'less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in grammatical '
+        'accuracy and language range and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident across these areas. '
+        'However, performance in connecting ideas logically and maintaining coherence '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in grammatical accuracy and language '
-        'range. However, cohesion remains less established and requires further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'is also well established, with confidence evident in this area. However, '
+        'performance in connecting ideas logically and maintaining coherence falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
     ),
-
     ('strong', 'needs_work', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range. '
-        'However, cohesion and control of register remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. However, '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range. '
-        'Control of register is still developing; however, cohesion remains less established and requires further '
-        'development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, performance in connecting '
+        'ideas logically and maintaining coherence falls well below the minimum '
+        'expected standard for this level and requires substantial further development.'
     ),
     ('strong', 'needs_work', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while control of register meets the expected standard. However, cohesion remains less established and '
-        'requires further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'However, performance in connecting ideas logically and maintaining coherence '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range and '
-        'also demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'However, cohesion remains less established and requires further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is also well established, with confidence evident in this area. '
+        'However, performance in connecting ideas logically and maintaining coherence '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'needs_work', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, cohesion remains '
-        'less established and is the main area requiring further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'However, performance in connecting ideas logically and maintaining coherence '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'developing', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly, while '
-        'cohesion is still developing. However, grammatical accuracy and language range and control of register '
-        'remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, performance in grammatical '
+        'accuracy and language range and in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in organisation. Cohesion and control of register are still '
-        'developing; however, grammatical accuracy and language range remain less established and require '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in adapting tone and style appropriately to purpose, audience '
+        'and context is still developing and requires further consolidation to reach '
+        'the minimum expected standard for this level. However, performance in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while control of register meets the expected '
-        'standard and cohesion is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. Performance in connecting ideas logically and '
+        'maintaining coherence is still developing and requires further consolidation '
+        'to reach the minimum expected standard for this level. However, performance in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context. Cohesion is still developing; however, '
-        'grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in connecting ideas logically and '
+        'maintaining coherence is still developing and requires further consolidation '
+        'to reach the minimum expected standard for this level. However, performance in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. Cohesion is still developing; however, grammatical accuracy and language '
-        'range remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence is still developing and requires further consolidation '
+        'to reach the minimum expected standard for this level. However, performance in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
     ),
-
     ('strong', 'developing', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion and grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in grammatical accuracy and language range is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, performance in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly. Cohesion, '
-        'grammatical accuracy and language range, and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence, in grammatical accuracy and language range, and in adapting tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'developing', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while control of register meets the expected '
-        'standard. Cohesion and grammatical accuracy and language range are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context satisfactorily meets the minimum expected '
+        'standard for this level. Performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'developing', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context. Cohesion and grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'developing', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context. However, cohesion and grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
-
     ('strong', 'developing', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range meet '
-        'the expected standard and cohesion is still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level. However, performance in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range meet '
-        'the expected standard. Cohesion and control of register are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence and in adapting tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'developing', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while grammatical accuracy and language range and '
-        'control of register meet the expected standard. Cohesion is still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range '
+        'and in adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'developing', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context. Grammatical accuracy and language range meet '
-        'the expected standard, while cohesion is still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'developing', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while grammatical accuracy and language range meet the expected standard. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
-
     ('strong', 'developing', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range, while cohesion is still developing. However, control of register remains '
-        'less established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'connecting ideas logically and maintaining coherence is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, performance in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range. Cohesion and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'connecting ideas logically and maintaining coherence and in adapting tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
     ),
     ('strong', 'developing', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range, while control of register meets the expected standard. Cohesion is still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in connecting ideas logically and maintaining coherence is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'developing', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range and in adapting tone and style appropriately. However, cohesion is still '
-        'developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in grammatical '
+        'accuracy and language range and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident across these areas. '
+        'Performance in connecting ideas logically and maintaining coherence is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'developing', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in grammatical accuracy and language '
-        'range. Cohesion is still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'is also well established, with confidence evident in this area. Performance in '
+        'connecting ideas logically and maintaining coherence is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
     ),
-
     ('strong', 'developing', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while cohesion is still developing. However, control of register remains less established and requires '
-        'further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, performance in adapting tone and style '
+        'appropriately to purpose, audience and context falls well below the minimum '
+        'expected standard for this level and requires substantial further development.'
     ),
     ('strong', 'developing', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range. '
-        'Cohesion and control of register are still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
     ),
     ('strong', 'developing', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while control of register meets the expected standard. Cohesion is still developing and would benefit '
-        'from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'Performance in connecting ideas logically and maintaining coherence is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'developing', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range and '
-        'also demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'Cohesion is still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is also well established, with confidence evident in this area. '
+        'Performance in connecting ideas logically and maintaining coherence is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'developing', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. However, cohesion is '
-        'still developing and remains the principal area for further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'Performance in connecting ideas logically and maintaining coherence is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
-
     ('strong', 'satisfactory', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly, while '
-        'cohesion meets the expected standard. However, grammatical accuracy and language range and control of '
-        'register remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'However, performance in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'satisfactory', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion meets the expected standard and '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, performance in grammatical '
+        'accuracy and language range falls well below the minimum expected standard for '
+        'this level and requires substantial further development.'
     ),
     ('strong', 'satisfactory', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion and control of register meet the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in adapting tone and style appropriately to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this level. '
+        'However, performance in grammatical accuracy and language range falls well '
+        'below the minimum expected standard for this level and requires substantial '
         'further development.'
     ),
     ('strong', 'satisfactory', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context, while cohesion meets the expected standard. '
-        'However, grammatical accuracy and language range remain less established and require further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in connecting ideas logically and '
+        'maintaining coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, performance in grammatical accuracy and language range '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
     ('strong', 'satisfactory', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion meets the expected standard. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence satisfactorily meets the minimum expected standard for '
+        'this level. However, performance in grammatical accuracy and language range '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
     ),
-
     ('strong', 'satisfactory', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion meets the expected standard and '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'Performance in grammatical accuracy and language range is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, performance in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
     ),
     ('strong', 'satisfactory', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion meets the expected standard. '
-        'Grammatical accuracy and language range and control of register are still developing and would benefit '
-        'from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence satisfactorily meets the minimum expected standard for this level. '
+        'Performance in grammatical accuracy and language range and in adapting tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'satisfactory', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion and control of register meet the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in adapting tone and style appropriately to purpose, audience '
+        'and context satisfactorily meets the minimum expected standard for this level. '
+        'Performance in grammatical accuracy and language range is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
     ),
     ('strong', 'satisfactory', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context, while cohesion meets the expected standard. '
-        'Grammatical accuracy and language range are still developing and would benefit from further consolidation.'
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Performance in connecting ideas logically and '
+        'maintaining coherence satisfactorily meets the minimum expected standard for '
+        'this level. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
     ('strong', 'satisfactory', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion meets the expected standard. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence satisfactorily meets the minimum expected standard for '
+        'this level. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
     ),
-
     ('strong', 'satisfactory', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion and grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'satisfactory', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in organisation, while cohesion and grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('strong', 'satisfactory', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly, while '
-        'cohesion, grammatical accuracy and language range, and control of register meet the expected standard, '
-        'with further scope for development.'
-    ),
-    ('strong', 'satisfactory', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in adapting tone '
-        'and style appropriately to purpose, audience and context, while cohesion and grammatical accuracy and '
-        'language range meet the expected standard.'
-    ),
-    ('strong', 'satisfactory', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while cohesion and grammatical accuracy and language range meet the '
-        'expected standard, with further scope for development.'
-    ),
-
-    ('strong', 'satisfactory', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range, while cohesion meets the expected standard. However, control of register '
-        'remains less established and requires further development.'
-    ),
-    ('strong', 'satisfactory', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in grammatical '
-        'accuracy and language range, while cohesion meets the expected standard. Control of register is still '
-        'developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'satisfactory', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range, while cohesion and control of register meet the expected standard.'
-    ),
-    ('strong', 'satisfactory', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in grammatical '
-        'accuracy and language range and in adapting tone and style appropriately, while cohesion meets the '
-        'expected standard.'
-    ),
-    ('strong', 'satisfactory', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in grammatical accuracy and language '
-        'range. Cohesion meets the expected standard, with further scope for development.'
-    ),
-
-    ('strong', 'satisfactory', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while cohesion meets the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'satisfactory', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while cohesion meets the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('strong', 'satisfactory', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while cohesion and control of register meet the expected standard, with further scope for development.'
-    ),
-    ('strong', 'satisfactory', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range and '
-        'also demonstrates confidence in adapting tone and style appropriately to purpose, audience and context. '
-        'Cohesion meets the expected standard, with further scope for development.'
-    ),
-    ('strong', 'satisfactory', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context. Cohesion meets the '
-        'expected standard, with further scope to develop greater consistency and sophistication.'
-    ),
-
-    ('strong', 'confident', 'needs_work', 'needs_work'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly and also '
-        'demonstrates confidence in cohesion. However, grammatical accuracy and language range and control of '
-        'register remain less established and require further development.'
-    ),
-    ('strong', 'confident', 'needs_work', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'control of register is still developing. However, grammatical accuracy and language range remain less '
-        'established and require further development.'
-    ),
-    ('strong', 'confident', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'control of register meets the expected standard. However, grammatical accuracy and language range remain '
-        'less established and require further development.'
-    ),
-    ('strong', 'confident', 'needs_work', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'adapting tone and style appropriately to purpose, audience and context. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
-    ),
-    ('strong', 'confident', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in cohesion. However, grammatical '
-        'accuracy and language range remain less established and require further development.'
-    ),
-
-    ('strong', 'confident', 'developing', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'grammatical accuracy and language range are still developing. However, control of register remains less '
-        'established and requires further development.'
-    ),
-    ('strong', 'confident', 'developing', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion. '
-        'Grammatical accuracy and language range and control of register are still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('strong', 'confident', 'developing', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'control of register meets the expected standard. Grammatical accuracy and language range are still '
-        'developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'confident', 'developing', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'adapting tone and style appropriately to purpose, audience and context. Grammatical accuracy and language '
-        'range are still developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'confident', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in cohesion. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
-    ),
-
-    ('strong', 'confident', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'grammatical accuracy and language range meet the expected standard. However, control of register remains '
-        'less established and requires further development.'
-    ),
-    ('strong', 'confident', 'satisfactory', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'grammatical accuracy and language range meet the expected standard. Control of register is still '
-        'developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'confident', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and also demonstrates confidence in cohesion, while '
-        'grammatical accuracy and language range and control of register meet the expected standard, with further '
-        'scope for development.'
-    ),
-    ('strong', 'confident', 'satisfactory', 'confident'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'adapting tone and style appropriately to purpose, audience and context, while grammatical accuracy and '
-        'language range meet the expected standard.'
-    ),
-    ('strong', 'confident', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in cohesion. Grammatical accuracy and '
-        'language range meet the expected standard, with further scope for development.'
-    ),
-
-    ('strong', 'confident', 'confident', 'needs_work'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'grammatical accuracy and language range. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'confident', 'confident', 'developing'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'grammatical accuracy and language range. Control of register is still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('strong', 'confident', 'confident', 'satisfactory'): (
-        '{learner_name} shows a clear strength in organisation and demonstrates confidence in cohesion and in '
-        'grammatical accuracy and language range, while control of register meets the expected standard.'
-    ),
-    ('strong', 'confident', 'confident', 'confident'): (
-        '{learner_name} shows a clear strength in organising written work and presenting ideas clearly, while '
-        'demonstrating confidence in cohesion, grammatical accuracy and language range, and the ability to adapt '
-        'tone and style appropriately to purpose, audience and context.'
-    ),
-    ('strong', 'confident', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in organisation and in adapting tone and style appropriately to '
-        'purpose, audience and context, while also demonstrating confidence in cohesion and in grammatical '
-        'accuracy and language range.'
-    ),
-
-    ('strong', 'confident', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range and '
-        'also demonstrates confidence in cohesion. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'confident', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range and '
-        'also demonstrates confidence in cohesion. Control of register is still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('strong', 'confident', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while also demonstrating confidence in cohesion. Control of register meets the expected standard, with '
-        'further scope for development.'
-    ),
-    ('strong', 'confident', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and in grammatical accuracy and language range, '
-        'while also demonstrating confidence in cohesion and in adapting tone and style appropriately to purpose, '
-        'audience and context.'
-    ),
-    ('strong', 'confident', 'strong', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, grammatical accuracy and language range, and the '
-        'ability to adapt tone and style appropriately to purpose, audience and context, while also demonstrating '
-        'confidence in connecting ideas logically and maintaining coherence.'
-    ),
-
-    ('strong', 'strong', 'needs_work', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and cohesion. However, grammatical accuracy and '
-        'language range and control of register remain less established and require further development.'
-    ),
-    ('strong', 'strong', 'needs_work', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while control of register is still '
-        'developing. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
-    ),
-    ('strong', 'strong', 'needs_work', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while control of register meets the '
-        'expected standard. However, grammatical accuracy and language range remain less established and require '
-        'further development.'
-    ),
-    ('strong', 'strong', 'needs_work', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and also demonstrates confidence in '
-        'adapting tone and style appropriately to purpose, audience and context. However, grammatical accuracy '
-        'and language range remain less established and require further development.'
-    ),
-    ('strong', 'strong', 'needs_work', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context. However, grammatical accuracy and language range remain '
-        'less established and are the main area requiring further development.'
-    ),
-
-    ('strong', 'strong', 'developing', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while grammatical accuracy and '
-        'language range are still developing. However, control of register remains less established and requires '
-        'further development.'
-    ),
-    ('strong', 'strong', 'developing', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and cohesion. Grammatical accuracy and language '
-        'range and control of register are still developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'strong', 'developing', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while control of register meets the '
-        'expected standard. Grammatical accuracy and language range are still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('strong', 'strong', 'developing', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and also demonstrates confidence in '
-        'adapting tone and style appropriately to purpose, audience and context. Grammatical accuracy and '
-        'language range are still developing and would benefit from further consolidation.'
-    ),
-    ('strong', 'strong', 'developing', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context. However, grammatical accuracy and language range are '
-        'still developing and would benefit from further consolidation.'
-    ),
-
-    ('strong', 'strong', 'satisfactory', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while grammatical accuracy and '
-        'language range meet the expected standard. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'strong', 'satisfactory', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while grammatical accuracy and '
-        'language range meet the expected standard. Control of register is still developing and would benefit '
-        'from further consolidation.'
-    ),
-    ('strong', 'strong', 'satisfactory', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while grammatical accuracy and '
-        'language range and control of register meet the expected standard, with further scope for development.'
-    ),
-    ('strong', 'strong', 'satisfactory', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and also demonstrates confidence in '
-        'adapting tone and style appropriately to purpose, audience and context, while grammatical accuracy and '
-        'language range meet the expected standard.'
-    ),
-    ('strong', 'strong', 'satisfactory', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context, while grammatical accuracy and language range meet the '
-        'expected standard, with further scope for development.'
-    ),
-
-    ('strong', 'strong', 'confident', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and also demonstrates confidence in '
-        'grammatical accuracy and language range. However, control of register remains less established and '
-        'requires further development.'
-    ),
-    ('strong', 'strong', 'confident', 'developing'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and also demonstrates confidence in '
-        'grammatical accuracy and language range. Control of register is still developing and would benefit from '
-        'further consolidation.'
-    ),
-    ('strong', 'strong', 'confident', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation and cohesion and demonstrates confidence in '
-        'grammatical accuracy and language range, while control of register meets the expected standard.'
-    ),
-    ('strong', 'strong', 'confident', 'confident'): (
-        '{learner_name} shows clear strengths in organisation and cohesion, while also demonstrating confidence '
-        'in grammatical accuracy and language range and in adapting tone and style appropriately to purpose, '
-        'audience and context.'
-    ),
-    ('strong', 'strong', 'confident', 'strong'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and the ability to adapt tone and style '
-        'appropriately to purpose, audience and context, while also demonstrating confidence in grammatical '
-        'accuracy and language range.'
-    ),
-
-    ('strong', 'strong', 'strong', 'needs_work'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and grammatical accuracy and language '
-        'range. However, control of register remains less established and is the main area requiring further '
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in grammatical accuracy and language range satisfactorily meets '
+        'the minimum expected standard for this level. However, performance in adapting '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'the minimum expected standard for this level and requires substantial further '
         'development.'
     ),
+    ('strong', 'satisfactory', 'satisfactory', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence and in grammatical accuracy and language range satisfactorily meets '
+        'the minimum expected standard for this level. Performance in adapting tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
+    ),
+    ('strong', 'satisfactory', 'satisfactory', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Although performance in connecting ideas logically and '
+        'maintaining coherence, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'satisfactory', 'satisfactory', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in adapting tone and style appropriately to '
+        'purpose, audience and context is also well established, with confidence '
+        'evident in this area. Although performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'satisfactory', 'satisfactory', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Although performance in connecting ideas logically and '
+        'maintaining coherence and in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'satisfactory', 'confident', 'needs_work'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'connecting ideas logically and maintaining coherence satisfactorily meets the '
+        'minimum expected standard for this level. However, performance in adapting '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'the minimum expected standard for this level and requires substantial further '
+        'development.'
+    ),
+    ('strong', 'satisfactory', 'confident', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Performance in '
+        'connecting ideas logically and maintaining coherence satisfactorily meets the '
+        'minimum expected standard for this level. Performance in adapting tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
+    ),
+    ('strong', 'satisfactory', 'confident', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in grammatical accuracy and language range is '
+        'also well established, with confidence evident in this area. Although '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'satisfactory', 'confident', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in grammatical '
+        'accuracy and language range and in adapting tone and style appropriately to '
+        'purpose, audience and context, with confidence evident across these areas. '
+        'Although performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'satisfactory', 'confident', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in grammatical accuracy and language range '
+        'is also well established, with confidence evident in this area. Although '
+        'performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'satisfactory', 'strong', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in adapting tone and style appropriately to purpose, audience and '
+        'context falls well below the minimum expected standard for this level and '
+        'requires substantial further development.'
+    ),
+    ('strong', 'satisfactory', 'strong', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
+    ),
+    ('strong', 'satisfactory', 'strong', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. Although '
+        'performance in connecting ideas logically and maintaining coherence and in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'satisfactory', 'strong', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is also well established, with confidence evident in this area. '
+        'Although performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'satisfactory', 'strong', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'Although performance in connecting ideas logically and maintaining coherence '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'confident', 'needs_work', 'needs_work'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'However, performance in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'confident', 'needs_work', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context is still developing and requires further consolidation to reach the '
+        'minimum expected standard for this level. However, performance in grammatical '
+        'accuracy and language range falls well below the minimum expected standard for '
+        'this level and requires substantial further development.'
+    ),
+    ('strong', 'confident', 'needs_work', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'However, performance in grammatical accuracy and language range falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
+    ),
+    ('strong', 'confident', 'needs_work', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context, with confidence evident across '
+        'these areas. However, performance in grammatical accuracy and language range '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'confident', 'needs_work', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence is also well established, with confidence evident in '
+        'this area. However, performance in grammatical accuracy and language range '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'confident', 'developing', 'needs_work'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in grammatical accuracy and language range is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level. However, performance in adapting tone and style appropriately to '
+        'purpose, audience and context falls well below the minimum expected standard '
+        'for this level and requires substantial further development.'
+    ),
+    ('strong', 'confident', 'developing', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in grammatical accuracy and language range and in adapting tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
+    ),
+    ('strong', 'confident', 'developing', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in adapting tone and style appropriately to purpose, audience and '
+        'context satisfactorily meets the minimum expected standard for this level. '
+        'Performance in grammatical accuracy and language range is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
+    ),
+    ('strong', 'confident', 'developing', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context, with confidence evident across '
+        'these areas. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'confident', 'developing', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence is also well established, with confidence evident in '
+        'this area. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'confident', 'satisfactory', 'needs_work'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in grammatical accuracy and language range satisfactorily meets '
+        'the minimum expected standard for this level. However, performance in adapting '
+        'tone and style appropriately to purpose, audience and context falls well below '
+        'the minimum expected standard for this level and requires substantial further '
+        'development.'
+    ),
+    ('strong', 'confident', 'satisfactory', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Performance in grammatical accuracy and language range satisfactorily meets '
+        'the minimum expected standard for this level. Performance in adapting tone and '
+        'style appropriately to purpose, audience and context is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
+    ),
+    ('strong', 'confident', 'satisfactory', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance in connecting ideas logically and maintaining '
+        'coherence is also well established, with confidence evident in this area. '
+        'Although performance in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'confident', 'satisfactory', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in adapting tone and style '
+        'appropriately to purpose, audience and context, with confidence evident across '
+        'these areas. Although performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'confident', 'satisfactory', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance in connecting ideas logically and '
+        'maintaining coherence is also well established, with confidence evident in '
+        'this area. Although performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'confident', 'confident', 'needs_work'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in grammatical accuracy and language '
+        'range, with confidence evident across these areas. However, performance in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'confident', 'confident', 'developing'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in grammatical accuracy and language '
+        'range, with confidence evident across these areas. Performance in adapting '
+        'tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'confident', 'confident', 'satisfactory'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in grammatical accuracy and language '
+        'range, with confidence evident across these areas. Although performance in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'confident', 'confident', 'confident'): (
+        "{learner_name}'s ability to organise and present written work clearly is "
+        'particularly strong. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence, in grammatical accuracy and language '
+        'range, and in adapting tone and style appropriately to purpose, audience and '
+        'context, with confidence evident across these areas.'
+    ),
+    ('strong', 'confident', 'confident', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in adapting tone and style appropriately to purpose, '
+        'audience and context. Performance is also well established in connecting ideas '
+        'logically and maintaining coherence and in grammatical accuracy and language '
+        'range, with confidence evident across these areas.'
+    ),
+    ('strong', 'confident', 'strong', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence is also '
+        'well established, with confidence evident in this area. However, performance '
+        'in adapting tone and style appropriately to purpose, audience and context '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'confident', 'strong', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence is also '
+        'well established, with confidence evident in this area. Performance in '
+        'adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
+    ),
+    ('strong', 'confident', 'strong', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance in connecting ideas logically and maintaining coherence is also '
+        'well established, with confidence evident in this area. Although performance '
+        'in adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'confident', 'strong', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in grammatical accuracy and language range. '
+        'Performance is also well established in connecting ideas logically and '
+        'maintaining coherence and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across these areas.'
+    ),
+    ('strong', 'confident', 'strong', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in grammatical accuracy and language range, and in '
+        'adapting tone and style appropriately to purpose, audience and context. '
+        'Performance in connecting ideas logically and maintaining coherence is also '
+        'well established, with confidence evident in this area.'
+    ),
+    ('strong', 'strong', 'needs_work', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. However, performance in grammatical accuracy and language range and '
+        'in adapting tone and style appropriately to purpose, audience and context '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'strong', 'needs_work', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context is still developing and requires further consolidation to '
+        'reach the minimum expected standard for this level. However, performance in '
+        'grammatical accuracy and language range falls well below the minimum expected '
+        'standard for this level and requires substantial further development.'
+    ),
+    ('strong', 'strong', 'needs_work', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. However, performance in grammatical accuracy and language range '
+        'falls well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'strong', 'needs_work', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context is also well established, with confidence evident in this '
+        'area. However, performance in grammatical accuracy and language range falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'strong', 'needs_work', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context. '
+        'However, performance in grammatical accuracy and language range falls well '
+        'below the minimum expected standard for this level and requires substantial '
+        'further development.'
+    ),
+    ('strong', 'strong', 'developing', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level. However, performance in adapting tone and style '
+        'appropriately to purpose, audience and context falls well below the minimum '
+        'expected standard for this level and requires substantial further development.'
+    ),
+    ('strong', 'strong', 'developing', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range and in '
+        'adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
+    ),
+    ('strong', 'strong', 'developing', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context satisfactorily meets the minimum expected standard for '
+        'this level. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'strong', 'developing', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context is also well established, with confidence evident in this '
+        'area. Performance in grammatical accuracy and language range is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'strong', 'developing', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context. '
+        'Performance in grammatical accuracy and language range is still developing and '
+        'requires further consolidation to reach the minimum expected standard for this '
+        'level.'
+    ),
+    ('strong', 'strong', 'satisfactory', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. However, '
+        'performance in adapting tone and style appropriately to purpose, audience and '
+        'context falls well below the minimum expected standard for this level and '
+        'requires substantial further development.'
+    ),
+    ('strong', 'strong', 'satisfactory', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level. Performance '
+        'in adapting tone and style appropriately to purpose, audience and context is '
+        'still developing and requires further consolidation to reach the minimum '
+        'expected standard for this level.'
+    ),
+    ('strong', 'strong', 'satisfactory', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Although performance in grammatical accuracy and language range and '
+        'in adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in these areas.'
+    ),
+    ('strong', 'strong', 'satisfactory', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in adapting tone and style appropriately to purpose, '
+        'audience and context is also well established, with confidence evident in this '
+        'area. Although performance in grammatical accuracy and language range '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'strong', 'satisfactory', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context. '
+        'Although performance in grammatical accuracy and language range satisfactorily '
+        'meets the minimum expected standard for this level, there is still scope for '
+        'further development and consolidation in this area.'
+    ),
+    ('strong', 'strong', 'confident', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range is also well '
+        'established, with confidence evident in this area. However, performance in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
+    ('strong', 'strong', 'confident', 'developing'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range is also well '
+        'established, with confidence evident in this area. Performance in adapting '
+        'tone and style appropriately to purpose, audience and context is still '
+        'developing and requires further consolidation to reach the minimum expected '
+        'standard for this level.'
+    ),
+    ('strong', 'strong', 'confident', 'satisfactory'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance in grammatical accuracy and language range is also well '
+        'established, with confidence evident in this area. Although performance in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
+    ),
+    ('strong', 'strong', 'confident', 'confident'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly and in connecting ideas logically and maintaining '
+        'coherence. Performance is also well established in grammatical accuracy and '
+        'language range and in adapting tone and style appropriately to purpose, '
+        'audience and context, with confidence evident across these areas.'
+    ),
+    ('strong', 'strong', 'confident', 'strong'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in adapting tone and style appropriately to purpose, audience and context. '
+        'Performance in grammatical accuracy and language range is also well '
+        'established, with confidence evident in this area.'
+    ),
+    ('strong', 'strong', 'strong', 'needs_work'): (
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in grammatical accuracy and language range. However, performance in '
+        'adapting tone and style appropriately to purpose, audience and context falls '
+        'well below the minimum expected standard for this level and requires '
+        'substantial further development.'
+    ),
     ('strong', 'strong', 'strong', 'developing'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and grammatical accuracy and language '
-        'range. Control of register is still developing and would benefit from further consolidation.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in grammatical accuracy and language range. Performance in adapting tone '
+        'and style appropriately to purpose, audience and context is still developing '
+        'and requires further consolidation to reach the minimum expected standard for '
+        'this level.'
     ),
     ('strong', 'strong', 'strong', 'satisfactory'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and grammatical accuracy and language '
-        'range, while control of register meets the expected standard, with further scope for development.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in grammatical accuracy and language range. Although performance in '
+        'adapting tone and style appropriately to purpose, audience and context '
+        'satisfactorily meets the minimum expected standard for this level, there is '
+        'still scope for further development and consolidation in this area.'
     ),
     ('strong', 'strong', 'strong', 'confident'): (
-        '{learner_name} shows clear strengths in organisation, cohesion, and grammatical accuracy and language '
-        'range and also demonstrates confidence in adapting tone and style appropriately to purpose, audience '
-        'and context.'
+        '{learner_name} demonstrates particular strengths in organising and presenting '
+        'written work clearly, in connecting ideas logically and maintaining coherence, '
+        'and in grammatical accuracy and language range. Performance in adapting tone '
+        'and style appropriately to purpose, audience and context is also well '
+        'established, with confidence evident in this area.'
     ),
     ('strong', 'strong', 'strong', 'strong'): (
-        'Written communication is a clear strength for {learner_name}, who demonstrates consistently strong '
-        'performance across organisation and clarity, cohesion, grammatical accuracy and language range, and '
-        'control of register.'
+        "{learner_name}'s written communication is particularly strong across all four "
+        'assessed areas. Organisation and clear presentation, cohesion, grammatical '
+        'accuracy and language range, and control of register are all particular '
+        'strengths at this level.'
     ),
 }

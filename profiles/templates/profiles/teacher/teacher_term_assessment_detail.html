@@ -1,4 +1,3 @@
-
 {% extends "profiles/components/details_page_shell.html" %}
 {% load static i18n %}
 
@@ -82,7 +81,6 @@
 
     <!-- FOUR SKILL CARDS -->
     <div class="term-assessment-skills-grid">
-
         {% for snapshot in skill_snapshots %}
             <article class="term-assessment-card term-assessment-skill-card">
 
@@ -140,7 +138,6 @@
                 <p>{% trans "No formal skill snapshots are available for this assessment." %}</p>
             </div>
         {% endfor %}
-
     </div>
 
     <!-- ASSESSMENT REPORT -->
@@ -242,47 +239,63 @@
                         {% endfor %}
                     </div>
 
-                    <!-- PERFORMANCE SUMMARY -->
-                    <div class="term-assessment-report-section">
-                        <h4>{% trans "Performance Summary" %}</h4>
+                    {% if report.content.performance_summary_paragraphs %}
 
-                        <h5>{% trans "Speaking" %}</h5>
-                        <p>{{ report.content.performance_summary.speaking }}</p>
+                        <!-- CURRENT REPORT STRUCTURE -->
+                        <div class="term-assessment-report-section">
+                            <h4>{% trans "Performance Summary" %}</h4>
 
-                        <h5>{% trans "Reading" %}</h5>
-                        <p>{{ report.content.performance_summary.reading }}</p>
+                            {% for paragraph in report.content.performance_summary_paragraphs %}
+                                <p>{{ paragraph }}</p>
+                            {% endfor %}
+                        </div>
 
-                        <h5>{% trans "Listening" %}</h5>
-                        <p>{{ report.content.performance_summary.listening }}</p>
+                        <div class="term-assessment-report-section">
+                            <h4>{% trans "Development Focus" %}</h4>
+                            <p>{{ report.content.development_focus }}</p>
+                        </div>
 
-                        <h5>{% trans "Writing" %}</h5>
-                        <p>{{ report.content.performance_summary.writing }}</p>
-                    </div>
+                    {% else %}
 
+                        <!-- LEGACY REPORT STRUCTURE -->
+                        <div class="term-assessment-report-section">
+                            <h4>{% trans "Performance Summary" %}</h4>
 
-                    <!-- DEVELOPMENT PRIORITIES -->
-                    <div class="term-assessment-report-section">
-                        <h4>{% trans "Development Priorities" %}</h4>
+                            <h5>{% trans "Speaking" %}</h5>
+                            <p>{{ report.content.performance_summary.speaking }}</p>
 
-                        <h5>{% trans "Speaking" %}</h5>
-                        <p>{{ report.content.development_priorities.speaking }}</p>
+                            <h5>{% trans "Reading" %}</h5>
+                            <p>{{ report.content.performance_summary.reading }}</p>
 
-                        <h5>{% trans "Reading" %}</h5>
-                        <p>{{ report.content.development_priorities.reading }}</p>
+                            <h5>{% trans "Listening" %}</h5>
+                            <p>{{ report.content.performance_summary.listening }}</p>
 
-                        <h5>{% trans "Listening" %}</h5>
-                        <p>{{ report.content.development_priorities.listening }}</p>
+                            <h5>{% trans "Writing" %}</h5>
+                            <p>{{ report.content.performance_summary.writing }}</p>
+                        </div>
 
-                        <h5>{% trans "Writing" %}</h5>
-                        <p>{{ report.content.development_priorities.writing }}</p>
-                    </div>
+                        <div class="term-assessment-report-section">
+                            <h4>{% trans "Development Priorities" %}</h4>
 
-                    
-                    <!-- NEXT TERM FOCUS -->
-                    <div class="term-assessment-report-section">
-                        <h4>{% trans "Next-Term Focus" %}</h4>
-                        <p>{{ report.content.next_term_focus }}</p>
-                    </div>
+                            <h5>{% trans "Speaking" %}</h5>
+                            <p>{{ report.content.development_priorities.speaking }}</p>
+
+                            <h5>{% trans "Reading" %}</h5>
+                            <p>{{ report.content.development_priorities.reading }}</p>
+
+                            <h5>{% trans "Listening" %}</h5>
+                            <p>{{ report.content.development_priorities.listening }}</p>
+
+                            <h5>{% trans "Writing" %}</h5>
+                            <p>{{ report.content.development_priorities.writing }}</p>
+                        </div>
+
+                        <div class="term-assessment-report-section">
+                            <h4>{% trans "Next-Term Focus" %}</h4>
+                            <p>{{ report.content.next_term_focus }}</p>
+                        </div>
+
+                    {% endif %}
 
                 </div>
             </details>

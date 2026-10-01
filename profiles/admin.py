@@ -2301,7 +2301,8 @@ class StudentTermAssessmentReportAdmin(admin.ModelAdmin):
 
     @admin.display(description="Learner")
     def learner(self, obj):
-        return obj.assessment.enrollment.student.get_full_name() or obj.assessment.enrollment.student.username
+        student = obj.assessment.enrollment.student
+        return student.get_full_name() or student.username
 
     @admin.display(description="Course")
     def course(self, obj):
@@ -2336,7 +2337,8 @@ class StudentTermAssessmentReportAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            "The generated report has been deleted. The underlying assessment remains unchanged.",
+            "The generated report has been deleted. "
+            "The underlying assessment remains unchanged.",
             level=messages.SUCCESS,
         )
 
@@ -2371,29 +2373,63 @@ class StudentTermAssessmentReportAdmin(admin.ModelAdmin):
             f'{content.get("overall_score", "—")}/10',
         )
 
-        add_section(
-            "Performance Summary",
-            self.render_skill_paragraphs(
-                content.get("performance_summary", {})
-            ),
-        )
+        # -------------------------------------------------
+        # CURRENT REPORT STRUCTURE
+        # -------------------------------------------------
+        if content.get("performance_summary_paragraphs"):
+            add_section(
+                "Performance Summary",
+                self.render_report_paragraphs(
+                    content["performance_summary_paragraphs"]
+                ),
+            )
 
-        add_section(
-            "Development Priorities",
-            self.render_skill_paragraphs(
-                content.get("development_priorities", {})
-            ),
-        )
+            add_section(
+                "Development Focus",
+                content.get("development_focus", ""),
+            )
 
-        add_section(
-            "Next-Term Focus",
-            content.get("next_term_focus", ""),
-        )
+        # -------------------------------------------------
+        # LEGACY REPORT STRUCTURE
+        # -------------------------------------------------
+        else:
+            add_section(
+                "Performance Summary",
+                self.render_skill_paragraphs(
+                    content.get("performance_summary", {})
+                ),
+            )
+
+            add_section(
+                "Development Priorities",
+                self.render_skill_paragraphs(
+                    content.get("development_priorities", {})
+                ),
+            )
+
+            add_section(
+                "Next-Term Focus",
+                content.get("next_term_focus", ""),
+            )
 
         return format_html_join(
             "",
             "{}",
             ((section,) for section in sections),
+        )
+
+    def render_report_paragraphs(self, paragraphs):
+        if not isinstance(paragraphs, (list, tuple)):
+            return "This report uses an earlier content format."
+
+        return format_html_join(
+            "",
+            '<p style="margin:0 0 12px;">{}</p>',
+            (
+                (paragraph,)
+                for paragraph in paragraphs
+                if paragraph
+            ),
         )
 
     def render_skill_paragraphs(self, data):

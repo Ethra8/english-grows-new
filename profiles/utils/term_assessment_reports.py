@@ -70,7 +70,55 @@ SUBSKILL_LABELS = {
     for skill, subskills in SUBSKILLS.items()
 }
 
+REPORT_SUMMARY_AREAS = {
+    "speaking": {
+        "fluency": "fluency",
+        "accuracy_and_range": "grammatical accuracy and language range",
+        "pronunciation": "pronunciation",
+        "interaction": "interaction",
+    },
+    "reading": {
+        "scanning": "locating specific information",
+        "skimming": "identifying main ideas and overall purpose",
+        "detailed": "understanding detailed information",
+    },
+    "listening": {
+        "gist": "understanding the main idea and overall message",
+        "specific_information": "identifying specific information",
+        "detailed": "understanding detailed meaning",
+    },
+    "writing": {
+        "organization": "the organisation and clear presentation of written work",
+        "cohesion": "cohesion",
+        "vocabulary_grammar": "grammatical accuracy and language range",
+        "register": "control of register",
+    },
+}
 
+DEVELOPMENT_FOCUS_AREAS = {
+    "speaking": {
+        "fluency": "greater fluency",
+        "accuracy_and_range": "greater grammatical accuracy and broader language range",
+        "pronunciation": "clearer pronunciation",
+        "interaction": "more confident interaction",
+    },
+    "reading": {
+        "scanning": "more efficient location of specific information",
+        "skimming": "more effective identification of main ideas and overall purpose",
+        "detailed": "stronger detailed comprehension",
+    },
+    "listening": {
+        "gist": "more reliable understanding of the main message",
+        "specific_information": "more effective identification of specific information",
+        "detailed": "stronger detailed comprehension",
+    },
+    "writing": {
+        "organization": "clearer organisation",
+        "cohesion": "stronger cohesion",
+        "vocabulary_grammar": "greater grammatical accuracy and language range",
+        "register": "more flexible control of register",
+    },
+}
 
 # ---------------------------------------------------------
 # VALIDATION AND DATA COLLECTION
@@ -782,6 +830,375 @@ def build_performance_summary(subskills, learner_name):
 
 
 # ---------------------------------------------------------
+# INTEGRATED PERFORMANCE SUMMARY
+# ---------------------------------------------------------
+
+def _join_report_areas(items):
+    """Join concise report areas without awkward repeated 'and'."""
+    if len(items) == 1:
+        return items[0]
+
+    if len(items) == 2:
+        if " and " in items[0] or " and " in items[1]:
+            return f"{items[0]}, or {items[1]}"
+        return f"{items[0]} and {items[1]}"
+
+    return f"{', '.join(items[:-1])} and {items[-1]}"
+
+
+def _sentence_case(text):
+    """Capitalise the first character of a generated clause."""
+    return text[:1].upper() + text[1:]
+
+
+def _overall_performance_language(score):
+    if score < 4.5:
+        return "requires substantial further development"
+
+    if score < 5.5:
+        return "is still developing"
+
+    if score < 6.75:
+        return "is satisfactory"
+
+    if score < 8.75:
+        return "is generally confident"
+
+    return "is strong"
+
+
+# def _build_integrated_rating_clause(rating, areas):
+#     """Return one concise descriptive clause for a rating group."""
+#     area_text = _join_report_areas(areas)
+
+#     if rating == RATING.STRONG:
+#         return f"clear strengths are evident in {area_text}"
+
+#     if rating == RATING.CONFIDENT:
+#         return f"confidence is evident in {area_text}"
+
+#     if rating == RATING.SATISFACTORY:
+#         return f"performance meets the expected standard in {area_text}"
+
+#     if rating == RATING.DEVELOPING:
+#         return f"{area_text} is still developing"
+
+#     if rating == RATING.NEEDS_WORK:
+#         return f"greater support is required in {area_text}"
+
+#     raise ValidationError(
+#         "Invalid rating in integrated performance summary."
+#     )
+
+
+# def _build_integrated_skill_summary(skill, items, include_skill=True):
+#     """Return a concise one- or two-sentence interpretation of one skill."""
+#     rating_order = (
+#         RATING.STRONG,
+#         RATING.CONFIDENT,
+#         RATING.SATISFACTORY,
+#         RATING.DEVELOPING,
+#         RATING.NEEDS_WORK,
+#     )
+
+#     groups = {rating: [] for rating in rating_order}
+
+#     for item in items:
+#         groups[item["rating"]].append(
+#             REPORT_SUMMARY_AREAS[skill][item["subskill"]]
+#         )
+
+#     clauses = [
+#         _build_integrated_rating_clause(rating, groups[rating])
+#         for rating in rating_order
+#         if groups[rating]
+#     ]
+
+#     sentences = []
+
+#     for index in range(0, len(clauses), 2):
+#         pair = clauses[index:index + 2]
+
+#         if index == 0 and include_skill:
+#             sentence = (
+#                 f"In {SKILL_LABELS[skill].lower()}, {pair[0]}"
+#             )
+#         else:
+#             sentence = _sentence_case(pair[0])
+
+#         if len(pair) == 2:
+#             sentence += f". However, {pair[1]}"
+
+#         sentences.append(f"{sentence}.")
+
+#     return " ".join(sentences)
+
+
+def build_integrated_performance_summary(
+    skills,
+    subskills,
+    learner_name,
+):
+    """
+    Build the report Performance Summary as four paragraphs,
+    one for each assessed skill.
+
+    Each paragraph uses the reviewed canonical narrative for the exact
+    subskill-rating combination.
+
+    Skills are ordered from highest to lowest score. The first paragraph
+    also provides the overall assessment context. Ties are handled without
+    inventing differences between equally scored skills.
+    """
+    skill_map = {
+        item["key"]: item
+        for item in skills
+    }
+
+    if set(skill_map) != set(SKILL_LABELS):
+        raise ValidationError(
+            "Integrated performance summary requires all four skills."
+        )
+
+    # These are the reviewed 625 / 125 / 125 / 625 canonical narratives.
+    skill_summaries = build_performance_summary(
+        subskills,
+        learner_name,
+    )
+
+    skill_order = {
+        skill: index
+        for index, skill in enumerate(SKILL_LABELS)
+    }
+
+    ranked_skills = sorted(
+        SKILL_LABELS,
+        key=lambda skill: (
+            -skill_map[skill]["score"],
+            skill_order[skill],
+        ),
+    )
+
+    scores = [
+        skill_map[skill]["score"]
+        for skill in SKILL_LABELS
+    ]
+
+    overall_score = sum(scores) / len(scores)
+    highest_score = max(scores)
+    lowest_score = min(scores)
+
+    strongest = [
+        skill for skill in SKILL_LABELS
+        if skill_map[skill]["score"] == highest_score
+    ]
+
+    weakest = [
+        skill for skill in SKILL_LABELS
+        if skill_map[skill]["score"] == lowest_score
+    ]
+
+    possessive = (
+        f"{learner_name}'"
+        if learner_name.lower().endswith("s")
+        else f"{learner_name}'s"
+    )
+
+    opening = (
+        f"{possessive} overall performance "
+        f"{_overall_performance_language(overall_score)}"
+    )
+
+    if len(strongest) == 1 and highest_score != lowest_score:
+        opening += (
+            f", with {SKILL_LABELS[strongest[0]].lower()} currently "
+            "the strongest of the four assessed skills."
+        )
+    elif len(strongest) < len(SKILL_LABELS):
+        strongest_labels = _join_report_areas([
+            SKILL_LABELS[skill].lower()
+            for skill in strongest
+        ])
+        opening += (
+            f", with {strongest_labels} currently the strongest "
+            "of the assessed skills."
+        )
+    else:
+        opening += (
+            ", with broadly consistent performance across "
+            "the four assessed skills."
+        )
+
+    paragraphs = []
+
+    for index, skill in enumerate(ranked_skills):
+        canonical_summary = skill_summaries[skill]
+
+        if index == 0:
+            paragraph = (
+                f"{opening} "
+                f"{canonical_summary}"
+            )
+
+        elif (
+            len(weakest) == 1
+            and skill == weakest[0]
+            and highest_score != lowest_score
+        ):
+            paragraph = (
+                f"{SKILL_LABELS[skill]} is currently the least established "
+                f"of the four assessed skills. {canonical_summary}"
+            )
+
+        else:
+            paragraph = (
+                f"In {SKILL_LABELS[skill].lower()}, "
+                f"{canonical_summary}"
+            )
+
+        paragraphs.append(paragraph)
+
+    return paragraphs
+
+
+
+# ---------------------------------------------------------
+# DEVELOPMENT FOCUS
+# ---------------------------------------------------------
+
+def _build_skill_development_clause(
+    skill,
+    items,
+    include_consolidation=False,
+):
+    """Return a concise development direction for one language skill."""
+    development_items = [
+        item for item in items
+        if item["rating"] in (
+            RATING.NEEDS_WORK,
+            RATING.DEVELOPING,
+        )
+    ]
+
+    development_items = sorted(
+        development_items,
+        key=lambda item: item["score"],
+    )[:2]
+
+    if development_items:
+        areas = _join_report_areas([
+            DEVELOPMENT_FOCUS_AREAS[skill][item["subskill"]]
+            for item in development_items
+        ])
+
+        if skill == "speaking":
+            clause = (
+                f"prioritise {areas} in spoken communication"
+            )
+        elif skill == "writing":
+            clause = f"focus particularly on {areas}"
+        else:
+            clause = f"focus on {areas}"
+
+        if include_consolidation:
+            consolidation_items = [
+                item for item in items
+                if item["rating"] in (
+                    RATING.SATISFACTORY,
+                    RATING.CONFIDENT,
+                    RATING.STRONG,
+                )
+            ][:2]
+
+            if consolidation_items:
+                consolidation = _join_report_areas([
+                    REPORT_SUMMARY_AREAS[skill][item["subskill"]]
+                    for item in consolidation_items
+                ])
+                clause += (
+                    f", while continuing to consolidate {consolidation}"
+                )
+
+        return clause
+
+    satisfactory_items = [
+        item for item in items
+        if item["rating"] == RATING.SATISFACTORY
+    ][:2]
+
+    if satisfactory_items:
+        areas = _join_report_areas([
+            REPORT_SUMMARY_AREAS[skill][item["subskill"]]
+            for item in satisfactory_items
+        ])
+        return f"continue to consolidate {areas}"
+
+    return "continue to consolidate and extend established performance"
+
+
+def build_development_focus(subskills):
+    """
+    Build one concise Development Focus paragraph across all four skills.
+
+    Up to two Needs Work / Developing areas are selected within each skill.
+    Where one skill has the uniquely strongest overall profile, established
+    areas within that skill may also be acknowledged for consolidation.
+    """
+    items_by_skill = {}
+
+    for skill in SKILL_LABELS:
+        items = [
+            item for item in subskills
+            if item["skill"] == skill
+        ]
+
+        if len(items) != len(SUBSKILLS[skill]):
+            raise ValidationError(
+                f"Cannot generate complete {SKILL_LABELS[skill]} development focus."
+            )
+
+        items_by_skill[skill] = items
+
+    skill_averages = {
+        skill: (
+            sum(item["score"] for item in items)
+            / len(items)
+        )
+        for skill, items in items_by_skill.items()
+    }
+
+    highest_score = max(skill_averages.values())
+    strongest = [
+        skill for skill, score in skill_averages.items()
+        if score == highest_score
+    ]
+    unique_strongest = (
+        strongest[0]
+        if len(strongest) == 1
+        else None
+    )
+
+    clauses = {
+        skill: _build_skill_development_clause(
+            skill,
+            items_by_skill[skill],
+            include_consolidation=(skill == unique_strongest),
+        )
+        for skill in SKILL_LABELS
+    }
+
+    return (
+        f"The next learning period should {clauses['speaking']}. "
+        f"Reading should {clauses['reading']}, while listening should "
+        f"{clauses['listening']}. "
+        f"Written work should {clauses['writing']}."
+    )
+
+
+# ---------------------------------------------------------
+# SKILL-SPECIFIC DEVELOPMENT PRIORITIES
+# ---------------------------------------------------------
+# ---------------------------------------------------------
 # SKILL-SPECIFIC DEVELOPMENT PRIORITIES
 # ---------------------------------------------------------
 
@@ -974,6 +1391,9 @@ def build_next_term_focus(priorities):
     )
 
 
+
+
+
 # ---------------------------------------------------------
 # COMPLETE REPORT GENERATION
 # ---------------------------------------------------------
@@ -1004,7 +1424,19 @@ def generate_term_assessment_report(assessment):
         ),
         "overall_score": assessment.overall_score,
         "skills": skills,
-        "performance_summary": build_performance_summary(subskills, learner_name),
+        # New concise report structure
+        "performance_summary_paragraphs": build_integrated_performance_summary(
+            skills,
+            subskills,
+            learner_name,
+        ),
+        "development_focus": build_development_focus(subskills),
+
+        # Existing fields kept temporarily
+        "performance_summary": build_performance_summary(
+            subskills,
+            learner_name,
+        ),
         "development_priorities": build_development_priorities(subskills),
         "next_term_priorities": priorities,
         "next_term_focus": build_next_term_focus(priorities),
