@@ -239,12 +239,18 @@
                         {% endfor %}
                     </div>
 
+
                     {% if report.content.performance_summary_paragraphs %}
 
                         <!-- CURRENT REPORT STRUCTURE -->
                         <div class="term-assessment-report-section">
                             <h4>{% trans "Performance Summary" %}</h4>
 
+                            {% if report.performance_summary_overview %}
+                                <p>{{ report.performance_summary_overview }}</p>
+                            {% endif %}
+
+                            
                             {% for paragraph in report.content.performance_summary_paragraphs %}
                                 <p>{{ paragraph }}</p>
                             {% endfor %}
