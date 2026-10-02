@@ -488,6 +488,48 @@ class CourseAdmin(admin.ModelAdmin):
 
 
     # ---------------------------------------------------------
+    # COURSE DELETION
+    # ---------------------------------------------------------
+    def has_delete_permission(self, request, obj=None):
+        """
+        Permanent Course deletion is restricted to superusers.
+
+        Deleting a Course deliberately cascades to its dependent records,
+        including CourseEnrollments, ClassSessions, Attendance records and
+        other related objects whose model relationships use CASCADE.
+        """
+        return request.user.is_superuser
+
+    def get_deleted_objects(self, objs, request):
+        """
+        Allow a superuser to confirm whole-Course cascade deletion even
+        though some related models deliberately prohibit direct deletion
+        from their own Admin pages.
+
+        Protected relationships remain protected.
+        """
+        deleted_objects, model_count, perms_needed, protected = (
+            super().get_deleted_objects(objs, request)
+        )
+
+        if request.user.is_superuser:
+            perms_needed = set()
+
+        return deleted_objects, model_count, perms_needed, protected
+
+    def get_actions(self, request):
+        """
+        Bulk Course deletion is available only to superusers.
+        """
+        actions = super().get_actions(request)
+
+        if not request.user.is_superuser:
+            actions.pop("delete_selected", None)
+
+        return actions
+
+
+    # ---------------------------------------------------------
     # COURSE LIST DISPLAY
     # ---------------------------------------------------------
     @admin.display(description="Type", ordering="course_type__name")
@@ -667,7 +709,9 @@ class CourseAdmin(admin.ModelAdmin):
                 "courses/css/admin/course_admin.css",
             )
         }
-
+        js = (
+            "courses/js/admin/course_admin.js",
+        )
     # ClassSessions + initial Attendance records are generated
     # automatically by the model lifecycle once all prerequisites exist.
     # ----------------------------------------
