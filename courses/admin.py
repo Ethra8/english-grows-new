@@ -424,6 +424,7 @@ class CourseAdmin(admin.ModelAdmin):
         "name",
         "company",
         "course_type",
+        "total_hours",
         "status",
         "course_level",
         "programmes",
