@@ -2377,11 +2377,21 @@ class StudentTermAssessmentReportAdmin(admin.ModelAdmin):
         # CURRENT REPORT STRUCTURE
         # -------------------------------------------------
         if content.get("performance_summary_paragraphs"):
+            performance_summary = self.render_report_paragraphs(
+                content["performance_summary_paragraphs"]
+            )
+
+            overview = content.get("performance_summary_overview")
+            if overview:
+                performance_summary = format_html(
+                    '<p style="margin:0 0 16px;">{}</p>{}',
+                    overview,
+                    performance_summary,
+                )
+
             add_section(
                 "Performance Summary",
-                self.render_report_paragraphs(
-                    content["performance_summary_paragraphs"]
-                ),
+                performance_summary,
             )
 
             add_section(
