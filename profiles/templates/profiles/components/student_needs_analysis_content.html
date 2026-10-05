@@ -36,23 +36,36 @@
             {% if not enrollment or can_edit %}
 
                 <div class="student-needs-analysis__intro">
-                    <div class="student-needs-analysis__intro-icon" aria-hidden="true">
-                        <i class="fa-regular fa-lightbulb"></i>
+
+                    <div class="student-needs-analysis__intro-header">
+                        <div class="student-needs-analysis__intro-icon" aria-hidden="true">
+                            <i class="fa-regular fa-lightbulb"></i>
+                        </div>
+
+                        <h3>{% trans "Tell us about your learning needs" %}</h3>
                     </div>
 
                     <div>
-                        <h3>{% trans "Tell us about your learning needs" %}</h3>
+                        <p>{% trans "Your answers will help your teacher understand how you use English, how confident you feel, and which communication situations you would most like to focus on." %}</p>
 
-                        <p>
-                            {% trans "Your answers will help your teacher understand how you use English, how confident you feel, and which communication situations you would most like to focus on." %}
-                        </p>
-
-                        <p>
-                            {% trans "There are no right or wrong answers. Please choose the options that best reflect your experience and priorities." %}
-                        </p>
+                        <p>{% trans "There are no right or wrong answers. Please choose the options that best reflect your experience and priorities." %}</p>
                     </div>
-                </div>
 
+                    <div class="student-needs-analysis__intro-actions">
+                        <button
+                            type="button"
+                            id="needsAnalysisStart"
+                            class="needs-analysis-next"
+                            aria-controls="needsAnalysisExperience"
+                            aria-expanded="false"
+                        >
+                            {% trans "Start" %}
+                            <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div id="needsAnalysisExperience" class="needs-analysis-experience" hidden>
                 <!-- LEARNER PROGRESS NAVIGATION -->
                 <nav class="needs-analysis-progress" aria-label="{% trans 'Learning Needs sections' %}">
 
@@ -526,7 +539,7 @@
                                     </button>
 
                                     {% if enrollment and needs_analysis and can_edit %}
-                                        <button type="submit" class="btn-primary">
+                                        <button type="submit" class="needs-analysis-submit">
                                             {% trans "Submit Learning Needs" %}
                                             <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
                                         </button>
@@ -538,7 +551,7 @@
                         </div>
                     </div>
                 </form>
-
+            </div>
             <!-- TEACHER / COMPANY ADMIN — PENDING -->
             {% else %}
 

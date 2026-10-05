@@ -37,7 +37,7 @@
 .needs-analysis-hero__identity h2 {
     margin: 0 0 .4rem;
     color: var(--color-navy);
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 600;
     display: flex;
     align-content: center;
@@ -100,15 +100,29 @@
 
 /* LEARNER INTRO */
 
+.needs-analysis-hero__header {
+    display: flex;
+    align-items: center;
+}
+
 .student-needs-analysis__intro {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
-    margin-top: 1rem;
+    margin: 1rem 0;
     padding: 1rem 1.25rem;
-    background: rgba(var(--color-tropical-teal-rgb), .045);
+    background: rgba(var(--color-whitesmoke-rgb), .75);
     border: 1px solid rgba(var(--color-teal-rgb), .12);
     border-radius: 7px;
+}
+
+.student-needs-analysis__intro-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    gap: .75rem;
 }
 
 .student-needs-analysis__intro-icon {
@@ -123,9 +137,11 @@
 }
 
 .student-needs-analysis__intro h3 {
-    margin: 0 0 .35rem;
+    margin: 0;
     color: var(--color-navy);
-    font-size: 1rem;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
+    text-transform: capitalize;
+    font-size: 1.1rem;
     font-weight: 600;
 }
 
@@ -143,6 +159,36 @@
 
 /* INNER NAVIGATION TO COMPLETE INITIAL FORM */
 
+/* ---------------------------------------------------------
+   NEEDS ANALYSIS — START STATE
+--------------------------------------------------------- */
+
+.student-needs-analysis__intro-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.student-needs-analysis--started {
+    margin-top: 1rem !important;
+}
+
+.needs-analysis-progress {
+    scroll-margin-top: 1rem;
+}
+
+/* ---------------------------------------------------------
+   NEEDS ANALYSIS — ACTIVE QUESTIONNAIRE
+--------------------------------------------------------- */
+
+.student-needs-analysis--started > .needs-analysis-hero,
+.student-needs-analysis--started .student-needs-analysis__intro {
+    display: none;
+}
+
+.student-needs-analysis--started {
+    margin-top: 1rem !important;
+}
 
 /* FORM */
 
@@ -169,7 +215,6 @@
     background: rgba(255, 255, 255, .92);
     border: 1px solid rgba(var(--color-teal-rgb), .13);
     border-radius: 8px;
-    box-shadow: 0 5px 18px rgba(var(--color-navy-rgb), .055);
 }
 
 .needs-analysis-card__header {
@@ -177,7 +222,7 @@
     align-items: center;
     gap: .9rem;
     padding: 1rem 1.4rem;
-    background: rgba(var(--color-tropical-teal-rgb), .045);
+    background: rgba(var(--color-tropical-teal-rgb), .1);
     border-bottom: 1px solid rgba(var(--color-teal-rgb), .1);
 }
 
@@ -210,6 +255,8 @@
 
 .needs-analysis-card__content {
     padding: 1.5rem;
+    min-height: 345px;
+    max-height: fit-content;
 }
 
 .needs-analysis-card__secondary {
@@ -240,6 +287,9 @@
     flex: 0 0 100%;
     width: 100%;
     min-width: 0;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
 }
 
 .needs-analysis-wizard__page[aria-hidden="true"] {
@@ -295,7 +345,8 @@
 }
 
 .needs-analysis-next,
-.needs-analysis-back {
+.needs-analysis-back,
+.needs-analysis-submit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -311,13 +362,15 @@
         color .18s ease;
 }
 
-.needs-analysis-next {
+.needs-analysis-next,
+.needs-analysis-submit {
     background: var(--color-teal);
     border: 1px solid var(--color-teal);
     color: white;
 }
 
-.needs-analysis-next:hover {
+.needs-analysis-next:hover,
+.needs-analysis-submit:hover {
     background: var(--color-navy);
     border-color: var(--color-navy);
 }
@@ -637,8 +690,9 @@
     display: flex;
     align-items: center;
     gap: .65rem;
-    color: var(--color-blue-slate);
+    color: var(--color-slate);
     font-size: .8rem;
+    padding: 1rem 1.25rem;
 }
 
 .student-needs-analysis__submit-message i {
@@ -832,7 +886,7 @@
 /* RESPONSIVE */
 /* RESPONSIVE **************************************************/
 
-@media (max-width: 1000px) {
+@media (max-width: 1199.98px) {
     .needs-analysis-progress {
         overflow-x: auto;
     }
@@ -840,7 +894,9 @@
     .needs-analysis-grid--english,
     .needs-analysis-grid--preferences,
     .needs-analysis-grid--additional,
-    .confidence-grid {
+    .confidence-grid,
+    .needs-analysis-grid--english,
+    .needs-analysis-grid--communication  {
         grid-template-columns: 1fr;
     }
 
@@ -849,13 +905,6 @@
     }
 }
 
-
-@media (max-width: 900px) {
-    .needs-analysis-grid--english,
-    .needs-analysis-grid--communication {
-        grid-template-columns: 1fr;
-    }
-}
 
 @media (prefers-reduced-motion: reduce) {
     .needs-analysis-wizard,

@@ -4,18 +4,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!form || !wizard) return;
 
+    const section = form.closest(".student-needs-analysis");
+    const experience = section?.querySelector("#needsAnalysisExperience");
+    const startButton = section?.querySelector("#needsAnalysisStart");
+
     const track = wizard.querySelector(".needs-analysis-wizard__track");
     const pages = [...wizard.querySelectorAll("[data-step-panel]")];
-    const progress = document.querySelector(".needs-analysis-progress");
-    const tabs = [...document.querySelectorAll(".needs-analysis-progress__item")];
+    const progress = section?.querySelector(".needs-analysis-progress");
+    const tabs = [...section.querySelectorAll(".needs-analysis-progress__item")];
     const nextButtons = [...wizard.querySelectorAll(".needs-analysis-next")];
     const backButtons = [...wizard.querySelectorAll(".needs-analysis-back")];
 
-    const accentOtherCheckbox = form.querySelector('input[name="accent_exposure"][value="other"]');
+    const accentOtherCheckbox = form.querySelector(
+        'input[name="accent_exposure"][value="other"]'
+    );
     const accentOtherField = form.querySelector(".needs-analysis-accent-other");
     const accentOtherInput = form.querySelector('[name="accent_exposure_other"]');
 
-    const requiredCheckboxGroups = ["communication_situations", "priority_areas"];
+    const requiredCheckboxGroups = [
+        "communication_situations",
+        "priority_areas",
+    ];
 
     let currentStep = 0;
     let maxStepReached = 0;
@@ -29,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     function updateWizardHeight() {
         const page = pages[currentStep];
+
         if (!page) return;
 
         wizard.style.height = `${page.scrollHeight}px`;
@@ -40,13 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     function scrollActiveTabIntoView() {
         const tab = tabs[currentStep];
+
         if (!tab || !progress) return;
 
         const tabRect = tab.getBoundingClientRect();
         const navRect = progress.getBoundingClientRect();
 
         progress.scrollBy({
-            left: tabRect.left - navRect.left - (progress.clientWidth - tabRect.width) / 2,
+            left:
+                tabRect.left -
+                navRect.left -
+                (progress.clientWidth - tabRect.width) / 2,
             behavior: "smooth",
         });
     }
@@ -56,26 +70,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // SHOW STEP
     // ---------------------------------------------------------
     function showStep(step) {
-        currentStep = Math.max(0, Math.min(step, pages.length - 1));
+        currentStep = Math.max(
+            0,
+            Math.min(step, pages.length - 1)
+        );
 
         track.style.transform = `translateX(-${currentStep * 100}%)`;
 
         pages.forEach((page, index) => {
             const active = index === currentStep;
 
-            page.setAttribute("aria-hidden", String(!active));
+            page.setAttribute(
+                "aria-hidden",
+                String(!active)
+            );
+
             page.inert = !active;
         });
 
         tabs.forEach((tab, index) => {
             const active = index === currentStep;
 
-            tab.classList.toggle("active", active);
+            tab.classList.toggle(
+                "active",
+                active
+            );
 
             if (active) {
-                tab.setAttribute("aria-current", "step");
+                tab.setAttribute(
+                    "aria-current",
+                    "step"
+                );
             } else {
-                tab.removeAttribute("aria-current");
+                tab.removeAttribute(
+                    "aria-current"
+                );
             }
 
             tab.disabled = index > maxStepReached;
@@ -89,17 +118,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ---------------------------------------------------------
+    // START ANALYSIS
+    // ---------------------------------------------------------
+    function startAnalysis({
+        scroll = true,
+        behavior = "smooth",
+    } = {}) {
+        if (!section || !experience) return;
+
+        section.classList.add(
+            "student-needs-analysis--started"
+        );
+
+        experience.hidden = false;
+
+        if (startButton) {
+            startButton.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+        }
+
+        showStep(currentStep);
+
+        if (scroll && progress) {
+            requestAnimationFrame(() => {
+                progress.scrollIntoView({
+                    behavior,
+                    block: "start",
+                });
+            });
+        }
+    }
+
+
+    // ---------------------------------------------------------
     // VALIDATE CHECKBOX GROUPS
     // ---------------------------------------------------------
     function validateCheckboxGroups(page, report = true) {
         for (const name of requiredCheckboxGroups) {
-            const checkboxes = [...page.querySelectorAll(`input[type="checkbox"][name="${name}"]`)];
+            const checkboxes = [
+                ...page.querySelectorAll(
+                    `input[type="checkbox"][name="${name}"]`
+                ),
+            ];
 
             if (!checkboxes.length) continue;
 
-            checkboxes.forEach(checkbox => checkbox.setCustomValidity(""));
+            checkboxes.forEach(
+                checkbox => checkbox.setCustomValidity("")
+            );
 
-            const selected = checkboxes.filter(checkbox => checkbox.checked);
+            const selected = checkboxes.filter(
+                checkbox => checkbox.checked
+            );
 
             let target = null;
             let message = "";
@@ -107,7 +179,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!selected.length) {
                 target = checkboxes[0];
                 message = "Please select at least one option.";
-            } else if (name === "priority_areas" && selected.length > 3) {
+            } else if (
+                name === "priority_areas" &&
+                selected.length > 3
+            ) {
                 target = selected[selected.length - 1];
                 message = "Please choose no more than three priorities.";
             }
@@ -133,19 +208,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     function validateStep(step, report = true) {
         const page = pages[step];
+
         if (!page) return true;
 
-        const fields = [...page.querySelectorAll("input, select, textarea")];
+        const fields = [
+            ...page.querySelectorAll(
+                "input, select, textarea"
+            ),
+        ];
 
-        // Clear previous checkbox-group validation messages.
         requiredCheckboxGroups.forEach(name => {
-            page.querySelectorAll(`input[type="checkbox"][name="${name}"]`).forEach(
+            page.querySelectorAll(
+                `input[type="checkbox"][name="${name}"]`
+            ).forEach(
                 checkbox => checkbox.setCustomValidity("")
             );
         });
 
         for (const field of fields) {
-            if (field.disabled || field.type === "hidden") continue;
+            if (
+                field.disabled ||
+                field.type === "hidden"
+            ) {
+                continue;
+            }
 
             if (!field.checkValidity()) {
                 if (report) {
@@ -157,9 +243,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        if (!validateCheckboxGroups(page, report)) return false;
+        if (!validateCheckboxGroups(page, report)) {
+            return false;
+        }
 
-        // Other accent is compulsory only when "Other" is selected.
         if (
             accentOtherCheckbox &&
             accentOtherInput &&
@@ -179,7 +266,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         }
 
-        if (accentOtherInput) accentOtherInput.setCustomValidity("");
+        if (accentOtherInput) {
+            accentOtherInput.setCustomValidity("");
+        }
 
         return true;
     }
@@ -189,7 +278,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // OTHER ACCENT / VARIETY
     // ---------------------------------------------------------
     function updateAccentOtherField() {
-        if (!accentOtherCheckbox || !accentOtherField || !accentOtherInput) return;
+        if (
+            !accentOtherCheckbox ||
+            !accentOtherField ||
+            !accentOtherInput
+        ) {
+            return;
+        }
 
         const show = accentOtherCheckbox.checked;
 
@@ -200,7 +295,19 @@ document.addEventListener("DOMContentLoaded", () => {
             accentOtherInput.setCustomValidity("");
         }
 
-        requestAnimationFrame(updateWizardHeight);
+        requestAnimationFrame(
+            updateWizardHeight
+        );
+    }
+
+
+    // ---------------------------------------------------------
+    // START BUTTON
+    // ---------------------------------------------------------
+    if (startButton) {
+        startButton.addEventListener("click", () => {
+            startAnalysis();
+        });
     }
 
 
@@ -209,9 +316,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     nextButtons.forEach(button => {
         button.addEventListener("click", () => {
-            if (!validateStep(currentStep)) return;
+            if (!validateStep(currentStep)) {
+                return;
+            }
 
-            maxStepReached = Math.max(maxStepReached, currentStep + 1);
+            maxStepReached = Math.max(
+                maxStepReached,
+                currentStep + 1
+            );
+
             showStep(currentStep + 1);
         });
     });
@@ -232,7 +345,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     tabs.forEach((tab, index) => {
         tab.addEventListener("click", () => {
-            if (index <= maxStepReached) showStep(index);
+            if (index <= maxStepReached) {
+                showStep(index);
+            }
         });
     });
 
@@ -241,11 +356,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // CHECKBOX VALIDATION RESET
     // ---------------------------------------------------------
     requiredCheckboxGroups.forEach(name => {
-        const checkboxes = [...form.querySelectorAll(`input[type="checkbox"][name="${name}"]`)];
+        const checkboxes = [
+            ...form.querySelectorAll(
+                `input[type="checkbox"][name="${name}"]`
+            ),
+        ];
 
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener("change", () => {
-                checkboxes.forEach(item => item.setCustomValidity(""));
+                checkboxes.forEach(
+                    item => item.setCustomValidity("")
+                );
             });
         });
     });
@@ -255,7 +376,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // ACCENT EVENTS
     // ---------------------------------------------------------
     if (accentOtherCheckbox) {
-        accentOtherCheckbox.addEventListener("change", updateAccentOtherField);
+        accentOtherCheckbox.addEventListener(
+            "change",
+            updateAccentOtherField
+        );
     }
 
     if (accentOtherInput) {
@@ -269,14 +393,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // FINAL SUBMISSION — VALIDATE ALL STEPS
     // ---------------------------------------------------------
     form.addEventListener("submit", event => {
-        for (let index = 0; index < pages.length; index++) {
+        for (
+            let index = 0;
+            index < pages.length;
+            index++
+        ) {
             if (!validateStep(index, false)) {
                 event.preventDefault();
 
-                maxStepReached = Math.max(maxStepReached, index);
+                maxStepReached = Math.max(
+                    maxStepReached,
+                    index
+                );
+
                 showStep(index);
 
-                requestAnimationFrame(() => validateStep(index));
+                requestAnimationFrame(
+                    () => validateStep(index)
+                );
 
                 return;
             }
@@ -287,14 +421,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------
     // RESIZE
     // ---------------------------------------------------------
-    window.addEventListener("resize", updateWizardHeight);
+    window.addEventListener(
+        "resize",
+        updateWizardHeight
+    );
 
 
     // ---------------------------------------------------------
     // RESTORE FIRST STEP WITH SERVER-SIDE ERRORS
     // ---------------------------------------------------------
     const firstErrorStep = pages.findIndex(page =>
-        page.querySelector(".needs-analysis-field--error, .needs-analysis-field__errors")
+        page.querySelector(
+            ".needs-analysis-field--error, .needs-analysis-field__errors"
+        )
     );
 
     if (firstErrorStep >= 0) {
@@ -302,6 +441,28 @@ document.addEventListener("DOMContentLoaded", () => {
         maxStepReached = firstErrorStep;
     }
 
+
+    // ---------------------------------------------------------
+    // INITIAL STATE
+    // ---------------------------------------------------------
     updateAccentOtherField();
-    showStep(currentStep);
+
+    if (firstErrorStep >= 0) {
+        /*
+         * A POST returned form errors.
+         * Skip the introduction and take the learner directly
+         * back to the questionnaire and the first invalid step.
+         */
+        startAnalysis({
+            scroll: true,
+            behavior: "auto",
+        });
+    } else if (experience) {
+        /*
+         * Fresh visit.
+         * Show only the two introductory cards until Start
+         * is selected.
+         */
+        experience.hidden = true;
+    }
 });
