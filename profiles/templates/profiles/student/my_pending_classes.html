@@ -1,0 +1,334 @@
+{% extends "profiles/profile_base.html" %}
+{% load static i18n %}
+{% load date_extras %}
+
+{% block extra_title %}| Reschedule Classes {% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/reschedule_page.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/reschedule_modal.css' %}">
+{% endblock %}
+
+{% block profile_content %}
+
+<section class="profile-page learner-reschedule-page notranslate" translate="no">
+
+    <div class="overlay-globe"></div>
+    <div class="overlay-mist"></div>
+
+    <!-- PAGE HEADER -->
+    <header>
+        <div class="row">
+            <div class="col-12 ml-0 pl-0">
+                <h1>Reschedule Classes</h1>
+            </div>
+        </div>
+        <hr>
+    </header>
+
+    <p class="mb-4">
+        View classes waiting to be rescheduled and review classes that have already been rescheduled.
+    </p>
+
+    <!-- MAIN TABS -->
+    <div class="reschedule-page-tabs">
+
+        <button type="button"
+            class="reschedule-page-tab active"
+            data-target="pending-reschedule-panel"
+            aria-selected="true">
+            <span>Pending Reschedule</span>
+            <strong>{{ pending_sessions|length }}</strong>
+        </button>
+
+        <button type="button"
+            class="reschedule-page-tab"
+            data-target="rescheduled-panel"
+            aria-selected="false">
+            <span>Rescheduled</span>
+            <strong>{{ rescheduled_sessions|length }}</strong>
+        </button>
+
+    </div>
+
+    <!-- PANELS -->
+    <div class="reschedule-page-panels">
+
+        <!-- PENDING RESCHEDULE -->
+        <div id="pending-reschedule-panel"
+            class="reschedule-page-panel active"
+            data-panel-status="pending-reschedule">
+
+            <div class="reschedule-page-panel-header">
+                <h2>Pending Reschedule</h2>
+            </div>
+
+            <div class="reschedule-page-list">
+
+                {% for session in pending_sessions %}
+
+                    <div class="reschedule-page-row">
+
+                        <!-- CLASS INFORMATION -->
+                        <div class="reschedule-page-main-info">
+                            <div class="reschedule-page-class-info">
+                                <h3>
+                                    {{ session.course.name }}
+                                    <span> - Lesson {{ session.class_number }}</span>
+                                </h3>
+
+                                <div class="d-flex align-items-center flex-row">
+                                    <img src="{% static 'icons/calendar_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="22"
+                                        class="mr-2 mb-1">
+                                    <p>
+                                        {{ session.start_time|date:"D, j M" }}
+                                        |
+                                        {{ session.start_time|time:"H:i" }}
+                                        -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LEVEL -->
+                        <div class="reschedule-page-level">
+                            <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+                                {{ session.course.course_level|default:"Pending" }}
+                            </span>
+                        </div>
+
+                        <!-- STATUS -->
+                        <span class="status-badge pending-reschedule">
+                            Pending Reschedule
+                        </span>
+
+                        <!-- STUDENT INFORMATION -->
+                        <div class="reschedule-page-action">
+                            <span class="reschedule-page-waiting">
+                                Waiting for a new date and time
+                            </span>
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="reschedule-page-empty p-3">
+                        No classes are currently pending reschedule.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- RESCHEDULED -->
+        <div id="rescheduled-panel"
+            class="reschedule-page-panel"
+            data-panel-status="rescheduled"
+            hidden>
+
+            <div class="reschedule-page-panel-header">
+                <h2>Rescheduled Classes</h2>
+            </div>
+
+            <!-- RESCHEDULED FILTERS -->
+            <div class="reschedule-page-filter-tabs">
+
+                <button type="button"
+                    class="reschedule-page-filter-btn active"
+                    data-rescheduled-filter="upcoming"
+                    aria-selected="true">
+                    Upcoming
+                </button>
+
+                <button type="button"
+                    class="reschedule-page-filter-btn"
+                    data-rescheduled-filter="past"
+                    aria-selected="false">
+                    Past
+                </button>
+
+                <button type="button"
+                    class="reschedule-page-filter-btn"
+                    data-rescheduled-filter="all"
+                    aria-selected="false">
+                    All
+                </button>
+
+            </div>
+
+            <div class="reschedule-page-list">
+
+                {% for session in rescheduled_sessions %}
+
+                    <div class="reschedule-page-row"
+                        data-rescheduled-past="{{ session.is_rescheduled_past|yesno:'true,false' }}"
+                        data-rescheduled-upcoming="{{ session.is_rescheduled_upcoming|yesno:'true,false' }}">
+
+                        <!-- CLASS INFORMATION -->
+                        <div class="reschedule-page-main-info">
+                            <div class="reschedule-page-class-info">
+
+                                <h3>
+                                    {{ session.course.name }}
+                                    <small>- Lesson {{ session.class_number }}</small>
+                                </h3>
+
+                                <div class="d-flex align-items-center flex-row">
+                                    <img src="{% static 'icons/calendar_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="18"
+                                        class="mr-2 mb-1">
+                                    <p>
+                                        {{ session.start_time|date:"D, j M" }}
+                                        |
+                                        {{ session.start_time|time:"H:i" }}
+                                        -
+                                        {{ session.end_time|time:"H:i" }}
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- LEVEL -->
+                        <div class="reschedule-page-level">
+                            <span class="level level-{{ session.course.course_level|lower|cut:'.' }}">
+                                {{ session.course.course_level|default:"Pending" }}
+                            </span>
+                        </div>
+
+                        <!-- STATUS -->
+                        <div>
+                            {% if session.is_rescheduled_upcoming %}
+
+                                {% if session.is_today %}
+                                    <span class="status-badge today">Today</span>
+                                {% endif %}
+
+                                <span class="status-badge rescheduled">
+                                    <img src="{% static 'icons/custom/attendance/calendar_check_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="18"
+                                        class="mr-2">
+                                    Rescheduled
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge completed">Past</span>
+
+                                <span class="status-badge rescheduled">
+                                    <img src="{% static 'icons/custom/attendance/calendar_check_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="18"
+                                        class="mr-2">
+                                    Rescheduled
+                                </span>
+
+                            {% endif %}
+                        </div>
+
+                        <!-- ACTION: ONLY UPCOMING RESCHEDULED CLASSES -->
+                        {% if session.is_rescheduled_upcoming %}
+
+                            <div class="reschedule-page-action">
+
+                                <button type="button"
+                                    class="reschedule-page-action-btn js-open-reschedule-modal"
+                                    data-action-url="{% url 'profiles:student_mark_class_pending_reschedule' session.id %}"
+                                    data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                                    data-class-date="{{ session.start_time|date:'D, j M' }}"
+                                    data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}">
+
+                                    <img src="{% static 'icons/reschedule_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="22"
+                                        class="mr-2">
+
+                                    Request Reschedule
+
+                                    <img src="{% static 'icons/custom/chevrons/chevron_right_teal_icon.png' %}"
+                                        alt="" aria-hidden="true" width="12" height="14"
+                                        class="ml-2">
+
+                                </button>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="reschedule-page-empty p-3">
+                        No classes have been rescheduled yet.
+                    </p>
+
+                {% endfor %}
+
+                {% if rescheduled_sessions %}
+                    <p class="reschedule-page-filter-empty p-3" hidden>
+                        No rescheduled classes apply to the selected filter.
+                    </p>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RESCHEDULE REQUEST CONFIRMATION MODAL -->
+    <div class="reschedule-page-modal-overlay" id="rescheduleModal">
+
+        <div class="reschedule-page-modal">
+
+            <h3>Request another reschedule?</h3>
+
+            <p id="rescheduleModalClassName"
+                class="reschedule-page-modal-class-name"></p>
+
+            <p id="rescheduleModalClassTime"
+                class="reschedule-page-modal-time"></p>
+
+            <p>
+                This class will be moved back to
+                <strong>Pending Reschedule</strong>.
+                Your teacher will arrange a new date and time with you.
+            </p>
+
+            <div class="reschedule-page-modal-actions">
+
+                <button type="button"
+                    class="reschedule-page-modal-cancel"
+                    id="cancelRescheduleModal">
+                    Cancel
+                </button>
+
+                <form method="POST" id="rescheduleConfirmForm">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                        class="reschedule-page-modal-confirm">
+                        Yes, request reschedule
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/features/classes/reschedule_page.js' %}"></script>
+{% endblock %}

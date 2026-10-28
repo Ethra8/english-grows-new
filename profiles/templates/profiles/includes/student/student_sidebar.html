@@ -54,6 +54,11 @@
             <span>{% trans "My Performance" %}</span>
         </a>
 
+        <a href="{% url 'profiles:my_pending_classes' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_pending_classes' %}active{% endif %}" aria-label="{% trans 'Pending Reschedule' %}">
+            <i class="fa-regular fa-calendar-plus"></i>
+            <span>{% trans "Pending Reschedule" %}</span>
+        </a>
+
         <a href="#" class="sidebar-link {% if request.resolver_match.url_name == '#' %}active{% endif %}" aria-label="{% trans 'Materials' %}">
             <i class="fa-solid fa-folder-open"></i>
             <span>{% trans "Materials" %}</span>

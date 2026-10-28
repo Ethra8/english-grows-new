@@ -1089,6 +1089,59 @@ def student_mark_class_pending_reschedule(request, session_id):
 
 
 
+@login_required
+def my_pending_classes(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if profile.role not in [UserProfile.ROLE_INDIVIDUAL_LEARNER, UserProfile.ROLE_EMPLOYEE]:
+        return redirect("home:index")
+
+    now = timezone.now()
+
+    enrollments = CourseEnrollment.objects.filter(
+        student=request.user,
+        status__in=["active", "paused", "completed"],
+    ).values_list("course_id", flat=True)
+
+    pending_sessions = (
+        ClassSession.objects
+        .filter(
+            course_id__in=enrollments,
+            status="pending_reschedule",
+        )
+        .select_related("course")
+        .order_by("start_time")
+    )
+
+    rescheduled_sessions = (
+        ClassSession.objects
+        .filter(
+            course_id__in=enrollments,
+            status="rescheduled",
+        )
+        .select_related("course")
+        .order_by("-start_time")
+    )
+
+    for session in rescheduled_sessions:
+        session.is_rescheduled_past = session.start_time < now
+        session.is_rescheduled_upcoming = session.start_time >= now
+        session.is_today = timezone.localdate(session.start_time) == timezone.localdate()
+
+    context = {
+        "profile": profile,
+        "pending_sessions": pending_sessions,
+        "rescheduled_sessions": rescheduled_sessions,
+    }
+
+    return render(
+        request,
+        "profiles/student/my_pending_classes.html",
+        context,
+    )
+
+
+
 # STUDENT CALENDAR PAGE
 @login_required
 def my_calendar(request):
