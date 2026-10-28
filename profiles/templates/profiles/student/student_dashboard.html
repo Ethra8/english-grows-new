@@ -55,26 +55,23 @@
                 </div>
             </a>
 
-            <a href="{% url 'profiles:my_learning_progress' %}" aria-label="{% trans 'View my progress' %}">
-                <div class="meta-card meta-students">
-                    <div>
-                        <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
-                    </div>
-                    <div class="meta-text">
-                        <strong>
-                            {% trans 'Level' %}
-                            <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
-                        </strong>
-                        <span>
-                            {% if request.user.profile.current_level %}
-                                {{ request.user.profile.get_current_level_display }}
-                            {% else %}
-                                <small>{% trans "Pending" %}</small>
-                            {% endif %}
-                        </span>
-                    </div>
+            <div class="meta-card meta-students">
+                <div>
+                    <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
                 </div>
-            </a>
+                <div class="meta-text">
+                    <strong>
+                        {% trans 'Level' %}
+                    </strong>
+                    <span>
+                        {% if request.user.profile.current_level %}
+                            <small>{{ request.user.profile.get_current_level_display }}</small>
+                        {% else %}
+                            <small>{% trans "Pending" %}</small>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
 
             <div class="meta-card meta-attendance">
                 <div>
@@ -113,31 +110,48 @@
                     <div class="today-classes-list" role="region" aria-label="{% trans "Today's classes" %}" tabindex="0">
                         {% for session in todays_sessions %}
                             <div class="today-class-row">
-                                <div class="today-time">
-                                    {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
-                                </div>
-
-                                <a href="{% url 'profiles:my_course' %}">
-                                    <div class="today-course">
-                                        <div class="course-name-and-class-num">
-                                            <strong>{{ session.course.name }}</strong>
-                                            <span class="class-number">{% trans "Lesson" %} {{ session.class_number }}</span>
-                                        </div>
+                                <div>
+                                    <div class="today-time">
+                                        {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
                                     </div>
-                                </a>
-
-                                <div class="today-level">
-                                    <span class="level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
-                                        {{ session.course.course_level|default:"Pending" }}
-                                    </span>
+                                    <div class="today-level">
+                                        <span class="level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
+                                            {{ session.course.course_level|default:"Pending" }}
+                                        </span>
+                                    </div>
                                 </div>
-
-                                {% if session.meeting_link %}
-                                    <a href="{{ session.meeting_link }}" class="btn-join-class btn" target="_blank" rel="noopener" aria-label="{% trans 'Join class' %}">
-                                        <i class="fa-solid fa-video mr-2" aria-hidden="true"></i>
-                                        {% trans "Join Class" context 'student dashboard' %}
+                                <div class="course-and-buttons">
+                                    <a href="{% url 'profiles:my_course' %}">
+                                        <div class="today-course">
+                                            <div class="course-name-and-class-num">
+                                                <strong>{{ session.course.name }}</strong>
+                                                <span class="class-number">{% trans "Lesson" %} {{ session.class_number }}</span>
+                                            </div>
+                                        </div>
                                     </a>
-                                {% endif %}
+
+                                    <!-- ACTION -->
+                                    <div class="today-action">
+                                        {% if session.meeting_link %}
+                                        <button type="button" class="js-open-reschedule-modal btn-course-details"
+                                            data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+                                            data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                                            data-class-date="{{ session.start_time|date:'D, j M' }}"
+                                            data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
+                                            aria-label="open rescheduling modal">
+                                            
+                                            <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
+
+                                        <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
+                                            Start
+                                            <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
+                                        {% else %}
+                                        <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn" aria-label="check calendar">
+                                            Calendar
+                                            <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
@@ -209,24 +223,35 @@
                         </div>
 
                         <div class="overview-metric overview-total">
-                            <span class="overview-mobile-label">{% trans 'Classes Attended' %}</span>
+                            <span class="overview-mobile-label">{% trans 'Attendance records' %}</span>
                             <span class="overview-number">
                                 {{ attended_weekly_sessions|default:"0" }} / {{ held_weekly_sessions|default:"0" }}
                             </span>
 
-                            {% if held_weekly_sessions > 0 %}
+                            {% if weekly_attendance_pending_sessions > 0 %}
+
+                                <span class="attendance-status-badge pending">
+                                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                    {{ weekly_attendance_pending_sessions }}
+                                    {% if weekly_attendance_pending_sessions == 1 %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge singular' %}
+                                    {% else %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge plural' %}
+                                    {% endif %}
+                                </span>
+
+                            {% elif held_weekly_sessions > 1 and weekly_attendance_pending_sessions == 0 %}
+
                                 <span class="attendance-status-badge complete">
                                     <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                    {% blocktrans count count=attended_weekly_sessions|default:0 %}
-                                        {{ count }} attended
-                                    {% plural %}
-                                        {{ count }} attended
-                                    {% endblocktrans %}
+                                    {% trans 'Up to date' context 'submitted attendance status badge' %}
                                 </span>
-                            {% else %}
+                            
+                            {% else %}    
                                 <span class="attendance-status-badge neutral">
-                                    {% trans 'No past classes' context 'student dashboard attendance status' %}
-                                </span>
+                                    {% trans 'No past classes' context 'submitted attendance status badge' %}
+                                </span>    
+
                             {% endif %}
                         </div>
 
@@ -291,25 +316,37 @@
                         </div>
 
                         <div class="overview-metric overview-total">
-                            <span class="overview-mobile-label">{% trans 'Classes Attended' %}</span>
+                            <span class="overview-mobile-label">{% trans 'Attendance records' %}</span>
                             <span class="overview-number">
                                 {{ attended_monthly_sessions|default:"0" }} / {{ held_monthly_sessions|default:"0" }}
                             </span>
 
-                            {% if held_monthly_sessions > 0 %}
+                            {% if monthly_attendance_pending_sessions > 0 %}
+
+                                <span class="attendance-status-badge pending">
+                                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                    {{ monthly_attendance_pending_sessions }}
+                                    {% if monthly_attendance_pending_sessions == 1 %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge singular' %}
+                                    {% else %}
+                                        {% trans 'awaiting' context 'submitted attendance status badge plural' %}
+                                    {% endif %}
+                                </span>
+
+                            {% elif held_monthly_sessions > 1 and monthly_attendance_pending_sessions == 0 %}
+
                                 <span class="attendance-status-badge complete">
                                     <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                                    {% blocktrans count count=attended_monthly_sessions|default:0 %}
-                                        {{ count }} attended
-                                    {% plural %}
-                                        {{ count }} attended
-                                    {% endblocktrans %}
+                                    {% trans 'Up to date' context 'submitted attendance status badge' %}
                                 </span>
-                            {% else %}
+                            
+                            {% else %}    
                                 <span class="attendance-status-badge neutral">
-                                    {% trans 'No classes held' context 'student dashboard attendance status' %}
-                                </span>
+                                    {% trans 'No past classes' context 'submitted attendance status badge' %}
+                                </span>    
+
                             {% endif %}
+
                         </div>
 
                         <div class="overview-metric overview-attendance">

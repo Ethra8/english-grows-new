@@ -406,8 +406,7 @@
    CLASS LIST
 ========================================================= */
 
-.assigned-classes-list,
-.teacher-assigned-classes-list {
+.assigned-classes-list {
     display: block;
     width: 100%;
     max-width: 100%;
@@ -430,26 +429,22 @@
     scrollbar-width: auto;
 }
 
-.assigned-classes-list::-webkit-scrollbar,
-.teacher-assigned-classes-list::-webkit-scrollbar {
+.assigned-classes-list::-webkit-scrollbar {
     width: 9px;
     height: 9px;
 }
 
-.assigned-classes-list::-webkit-scrollbar-track,
-.teacher-assigned-classes-list::-webkit-scrollbar-track {
+.assigned-classes-list::-webkit-scrollbar-track {
     background: rgba(var(--color-teal-rgb), 0.07);
 }
 
-.assigned-classes-list::-webkit-scrollbar-thumb,
-.teacher-assigned-classes-list::-webkit-scrollbar-thumb {
+.assigned-classes-list::-webkit-scrollbar-thumb {
     border: 2px solid var(--color-whitesmoke);
     border-radius: 999px;
     background: rgba(var(--color-steel-rgb), 0.50);
 }
 
-.assigned-classes-list::-webkit-scrollbar-thumb:hover,
-.teacher-assigned-classes-list::-webkit-scrollbar-thumb:hover {
+.assigned-classes-list::-webkit-scrollbar-thumb:hover {
     background: rgba(var(--color-steel-rgb), 0.70);
 }
 
@@ -477,45 +472,59 @@
 /* Company-admin / generic upcoming row: no far-right action. */
 .assigned-class-row.class-row--upcoming {
     grid-template-columns:
-        minmax(360px, 1.25fr)
-        76px
-        minmax(285px, 1fr)
-        minmax(145px, 0.35fr);
-    min-width: 880px;
+        minmax(360px, 1.25fr) /* course name */
+        76px /* level */
+        minmax(285px, 1fr) /* timetable */
+        minmax(145px, 0.55fr) /* num students */
+        minmax(285px, 1fr); /* teacher */
+    min-width: 1300px;
 }
 
 .assigned-class-row.class-row--past {
     grid-template-columns:
-        minmax(360px, 1.25fr)
-        76px
-        minmax(280px, 1fr)
-        minmax(145px, 0.65fr)
-        minmax(95px, 0.35fr);
-    min-width: 986px;
+        minmax(360px, 1.25fr) /* course name */
+        76px /* level */
+        minmax(285px, 1fr) /* timetable */
+        minmax(145px, 0.55fr) /* num students */
+        minmax(285px, 1fr) /* teacher */
+        minmax(95px, 0.35fr); /* attendance stat */
+    min-width: 1300px;
 }
 
-.teacher-assigned-classes-list .assigned-class-row.class-row--upcoming,
-.teacher-assigned-classes-list .assigned-class-row.class-row--past {
+.assigned-classes-list.teacher .assigned-class-row.class-row--upcoming,
+.assigned-classes-list.teacher .assigned-class-row.class-row--past {
     grid-template-columns:
-        minmax(360px, 1.25fr)
-        76px
-        minmax(280px, 1fr)
-        minmax(145px, 0.65fr)
-        minmax(195px, 0.85fr);
-    min-width: 1146px;
+        minmax(360px, 1.25fr) /* course name */
+        76px /* level */
+        minmax(280px, 1fr) /* timetable */
+        minmax(145px, 0.55fr) /* num students */
+        minmax(285px, 1fr) /* teacher */
+        minmax(195px, 0.85fr);  /* actions */
+    min-width: 1380px;
 } 
+
+.assigned-classes-list.learner .assigned-class-row.class-row--upcoming,
+.assigned-classes-list.learner .assigned-class-row.class-row--past {
+    grid-template-columns:
+        minmax(360px, 1.25fr) /* course name */
+        76px /* level */
+        minmax(280px, 1fr) /* timetable */
+        minmax(285px, 1fr) /* teacher */
+        minmax(195px, 0.85fr);  /* actions */
+    min-width: 1380px;
+}
 
 
 /* Existing teacher row structure retained until teacher HTML is migrated. */
-.teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--past) {
+.assigned-classes-list.teacher .assigned-class-row:not(.class-row--upcoming):not(.class-row--past),
+.assigned-classes-list.learner .assigned-class-row:not(.class-row--upcoming):not(.class-row--past)  {
     grid-template-columns:
         minmax(400px, 1fr)
         90px
         minmax(200px, 1fr)
         minmax(120px, 0.7fr)
         minmax(150px, 1fr);
-    /* gap: 1rem; */
-    min-width: 1300px;
+    min-width: 1380px;
 }
 
 .assigned-class-row:hover {
@@ -524,7 +533,6 @@
 }
 
 .assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
-.teacher-assigned-classes-list > .assigned-class-row:last-of-type:not(.class-hidden),
 .attendance-row:last-child {
     border-bottom: 0 !important;
 }
@@ -672,23 +680,15 @@
     justify-content: center;
     height: 68%;
     padding: 0 0.75rem;
-    /* border-left: 1px solid rgba(var(--color-teal-rgb), 0.18); */
 }
 
-/* .class-list-level-cell .level,
-.class-list-course .level {
-    width: auto;
-    min-width: 46px;
-    height: auto;
-    margin: 0;
-    padding: 0.15rem 0.45rem;
-} */
-
 .class-list-date,
-.class-list-student-num {
+.class-list-student-num,
+.course-list-teacher {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     min-width: 0;
     height: 68%;
     margin: 0;
@@ -697,36 +697,33 @@
     gap: 0.75rem;
 }
 
-.class-list-date {
-    padding: 0 25%;
-}
-
 .class-list-student-num {
-    /* border-right: 1px solid rgba(var(--color-teal-rgb), 0.18); */
     padding: 0 30%;
     justify-content: center;
 }
 
-/* .class-list-date .icon,
-.class-list-student-num .icon {
-    display: inline-flex;
+.class-list-date .icon,
+.class-list-student-num .icon,
+.course-list-teacher .icon {
+    display: flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 36px;
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    margin: 0;
-    border: 1px solid var(--color-teal);
-    border-radius: 999px;
-    background: transparent;
-} */
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+}
 
 .class-list-date .icon img,
-.class-list-student-num .icon img {
+.class-list-student-num .icon img,
+.course-list-teacher .icon img {
     display: block;
     max-width: 100%;
     height: auto;
+    object-fit: contain;
+    display: block;
+    width: 24px;
+    height: 24px;
 }
 
 .class-list-date-copy {
@@ -754,8 +751,9 @@
 }
 
 
+
 /* =========================================================
-   HELD ATTENDANCE CHEVRON
+   HELD ATTENDANCE
 ========================================================= */
 
 .class-row-action {
@@ -764,10 +762,10 @@
     justify-content: center;
     height: 68%;
     padding-left: 0.3rem;
-    /* border-left: 1px solid rgba(var(--color-teal-rgb), 0.18); */
 }
 
-.teacher-assigned-classes-list .class-row-action {
+.assigned-classes-list.teacher .class-row-action,
+.assigned-classes-list.learner .class-row-action {
     justify-content: flex-end;
     gap: 0.35rem;
 }
@@ -873,29 +871,6 @@
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1199.98px) {
-
-    .assigned-class-row.class-row--upcoming {
-        grid-template-columns:
-            minmax(310px, 1.35fr)
-            minmax(72px, 0.28fr)
-            minmax(220px, 0.90fr)
-            minmax(115px, 0.42fr);
-        min-width: 835px;
-    }
-
-    /* .assigned-class-row.class-row--past {
-        grid-template-columns:
-            minmax(310px, 1.35fr)
-            minmax(72px, 0.28fr)
-            minmax(220px, 0.90fr)
-            minmax(115px, 0.42fr)
-            44px;
-        min-width: 879px;
-    } */
-} 
-
-
 @media (max-width: 991.98px) {
 
     .assigned-classes-header {
@@ -915,8 +890,7 @@
         display: inline-block !important;
     }
 
-    .assigned-classes-list,
-    .teacher-assigned-classes-list {
+    .assigned-classes-list {
         padding: 0 0.5rem 0.25rem;
     }
 
@@ -930,16 +904,18 @@
 
     /* Preserve the existing teacher/reschedule card treatment where the
        row has not yet migrated to the new class-row--* structure. */
-    .teacher-assigned-classes-list .assigned-class-row:not(.class-row--upcoming):not(.class-row--past) {
+    .assigned-classes-list.teacher .assigned-class-row:not(.class-row--upcoming):not(.class-row--past),
+    .assigned-classes-list.learner .assigned-class-row:not(.class-row--upcoming):not(.class-row--past) {
         display: flex;
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
-        min-width: 0;
+        /* min-width: 0; */
         padding: 1.5rem 1.4rem 1rem;
     }
 
-    .teacher-assigned-classes-list .class-list-course {
+    .assigned-classes-list.teacher .class-list-course,
+    .assigned-classes-list.learner .class-list-course {
         padding-left: 0;
         padding-bottom: 0.75rem;
         border-left: 0;

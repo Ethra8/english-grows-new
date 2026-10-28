@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -8,12 +9,12 @@ from django.db.models import Q, Prefetch
 
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
+
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from django.urls import reverse
-
-import json
 
 import calendar
 
@@ -53,6 +54,41 @@ from courses.models import Course, CourseEnrollment, ClassSession, BankHoliday, 
 
 
 User = get_user_model()
+
+
+def student_can_request_reschedule(session, now=None):
+    """
+    A learner may request postponement at any time before
+    17:00 on the calendar day immediately before the lesson.
+
+    Example:
+    Thursday lesson -> cutoff is Wednesday at 17:00.
+    """
+    now = now or timezone.now()
+
+    local_now = timezone.localtime(now)
+    local_start = timezone.localtime(session.start_time)
+
+    cutoff_date = local_start.date() - timedelta(days=1)
+
+    cutoff = timezone.make_aware(
+        datetime.combine(
+            cutoff_date,
+            time(17, 0),
+        ),
+        timezone.get_current_timezone(),
+    )
+
+    valid_status = session.status in {
+        ClassSession.STATUS_SCHEDULED,
+        ClassSession.STATUS_RESCHEDULED,
+    }
+
+    return (
+        local_now < cutoff
+        and valid_status
+    )
+
 
 
 @login_required
@@ -783,6 +819,273 @@ def my_course(request):
         "profiles/student/my_course.html",
         context,
     )
+
+
+
+@login_required
+def my_classes(request):
+    student = request.user
+    profile = get_object_or_404(
+        UserProfile,
+        user=student,
+    )
+
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
+    now = timezone.now()
+    today = timezone.localdate()
+
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    # ---------------------------------------------------------
+    # ACTIVE ENROLLMENTS
+    # ---------------------------------------------------------
+
+    active_course_ids = (
+        CourseEnrollment.objects
+        .filter(
+            student=student,
+            status=CourseEnrollment.STATUS_ACTIVE,
+            course__status="active",
+        )
+        .values_list(
+            "course_id",
+            flat=True,
+        )
+    )
+
+    # ---------------------------------------------------------
+    # CLASS SESSIONS
+    #
+    # Attendance rows are the source of truth for which learner
+    # is assigned to each ClassSession.
+    #
+    # Excluded:
+    # - pending_reschedule
+    # - cancelled
+    # ---------------------------------------------------------
+
+    sessions = (
+        ClassSession.objects
+        .filter(
+            course_id__in=active_course_ids,
+            course__status="active",
+            attendance_records__student=student,
+            status__in=[
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+                ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+                ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+            ],
+        )
+        .select_related(
+            "course",
+            "course__course_type",
+            "course__company",
+            "course__teacher",
+        )
+        .distinct()
+        .order_by("start_time")
+    )
+
+    class_filter_counts = {
+        "upcoming": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
+        "past": {
+            "today": 0,
+            "weekly": 0,
+            "monthly": 0,
+            "all": 0,
+        },
+    }
+
+    for session in sessions:
+        session_date = timezone.localdate(
+            session.start_time
+        )
+
+        # --------------------------------------------------
+        # UI GROUP
+        #
+        # Upcoming:
+        # scheduled/rescheduled sessions still in the future.
+        #
+        # Past:
+        # class held, regardless of whether attendance has
+        # already been submitted.
+        # --------------------------------------------------
+
+        if (
+            session.status in [
+                ClassSession.STATUS_SCHEDULED,
+                ClassSession.STATUS_RESCHEDULED,
+            ]
+            and session.start_time > now
+        ):
+            session.class_status_group = "upcoming"
+
+        elif session.status in [
+            ClassSession.STATUS_HELD_ATTENDANCE_PENDING,
+            ClassSession.STATUS_COMPLETE_ATTENDANCE_SUBMITTED,
+        ]:
+            session.class_status_group = "past"
+
+        else:
+            session.class_status_group = None
+
+        # --------------------------------------------------
+        # DATE FILTERS
+        # --------------------------------------------------
+
+        session.is_today = (
+            session_date == today
+        )
+
+        session.is_this_week = (
+            start_of_week
+            <= session_date
+            <= end_of_week
+        )
+
+        session.is_this_month = (
+            session_date.year == today.year
+            and session_date.month == today.month
+        )
+
+        # --------------------------------------------------
+        # STUDENT ACTIONS
+        # --------------------------------------------------
+
+        session.meeting_link = (
+            get_calendar_meeting_link(session)
+        )
+
+        session.can_request_reschedule = (
+            student_can_request_reschedule(
+                session,
+                now=now,
+            )
+        )
+
+        # --------------------------------------------------
+        # LEARNER ATTENDANCE
+        #
+        # Useful for the student row when displaying past
+        # lessons.
+        # --------------------------------------------------
+
+        session.student_attendance = (
+            Attendance.objects
+            .filter(
+                student=student,
+                class_session=session,
+            )
+            .first()
+        )
+
+        # --------------------------------------------------
+        # COUNTS
+        # --------------------------------------------------
+
+        if session.class_status_group:
+            counts = (
+                class_filter_counts[
+                    session.class_status_group
+                ]
+            )
+
+            counts["all"] += 1
+
+            if session.is_today:
+                counts["today"] += 1
+
+            if session.is_this_week:
+                counts["weekly"] += 1
+
+            if session.is_this_month:
+                counts["monthly"] += 1
+
+    context = {
+        "profile": profile,
+        "sessions": sessions,
+        "now": now,
+        "class_filter_counts": class_filter_counts,
+    }
+
+    return render(
+        request,
+        "profiles/student/my_classes.html",
+        context,
+    )
+
+
+
+@login_required
+@require_POST
+def student_mark_class_pending_reschedule(request, session_id):
+    profile = get_object_or_404(
+        UserProfile,
+        user=request.user,
+    )
+
+    if profile.role not in [
+        UserProfile.ROLE_INDIVIDUAL_LEARNER,
+        UserProfile.ROLE_EMPLOYEE,
+    ]:
+        return redirect("home")
+
+    session = get_object_or_404(
+        ClassSession.objects.select_related(
+            "course",
+        ),
+        id=session_id,
+        course__status="active",
+        status__in=[
+            ClassSession.STATUS_SCHEDULED,
+            ClassSession.STATUS_RESCHEDULED,
+        ],
+        attendance_records__student=request.user,
+    )
+
+    enrollment_exists = CourseEnrollment.objects.filter(
+        student=request.user,
+        course=session.course,
+        status=CourseEnrollment.STATUS_ACTIVE,
+        course__status="active",
+    ).exists()
+
+    if not enrollment_exists:
+        messages.error(
+            request,
+            "You are not currently enrolled in this course.",
+        )
+        return redirect("profiles:my_classes")
+
+    if not student_can_request_reschedule(session):
+        messages.error(
+            request,
+            "This lesson can only be postponed until 17:00 local time on the day before the class.",
+        )
+        return redirect("profiles:my_classes")
+
+    session.status = ClassSession.STATUS_PENDING_RESCHEDULE
+    session.save(update_fields=["status"])
+
+    messages.success(
+        request,
+        "Your lesson has been marked as pending reschedule.",
+    )
+
+    return redirect("profiles:my_classes")
 
 
 

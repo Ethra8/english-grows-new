@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <div href="{% url 'profiles:teacher_course_details' session.course.id %}"
-    class="assigned-class-row class-row--{{ session.class_status_group }}"
+    class="assigned-class-row teacher class-row--{{ session.class_status_group }}"
     data-status-group="{{ session.class_status_group }}"
     data-today="{{ session.is_today|yesno:'true,false' }}"
     data-weekly="{{ session.is_this_week|yesno:'true,false' }}"

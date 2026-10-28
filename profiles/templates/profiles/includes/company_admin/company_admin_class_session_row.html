@@ -95,6 +95,13 @@
         <strong>{{ session.course.enrollments.count }}</strong>
     </div>
 
+    <div class="course-list-teacher">
+        <div class="icon">
+            <img src="{% static 'icons/teacher_teal_icon.png' %}" alt="" aria-hidden="true" width="28">
+        </div>
+        <span>{{ session.course.teacher.get_full_name }}</span>   
+    </div>
+
 
     <!-- HELD CLASS ACTION ONLY -->
     {% if session.class_status_group == "past" and session.attendance_submitted %}

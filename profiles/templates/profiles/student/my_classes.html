@@ -1,0 +1,183 @@
+{% extends "profiles/profile_base.html" %}
+{% load static i18n date_extras %}
+
+{% block extra_title %}| {% trans "My Classes" %}{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'profiles/css/features/learner_performance/learner_performance_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/classes/classes_list_pages.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/reschedule_modal.css' %}">
+{% endblock %}
+
+{% block profile_content %}
+<section class="classes-list-page profile-page notranslate" translate="no">
+    <div class="overlay-globe"></div>
+    <div class="overlay-mist"></div>
+
+    <header>
+        <div class="row">
+            <div class="col-12 ml-0 pl-0">
+                <h1>{% trans "My Classes" %}</h1>
+            </div>
+        </div>
+        <hr>
+    </header>
+
+    <p class="text-dark">{% trans "Review and filter your upcoming and past class sessions." %}</p>
+
+    <div class="all-assigned-classes mt-5">
+
+        <!-- PRIMARY STATUS NAVIGATION -->
+        <nav class="classes-status-nav" aria-label="{% trans 'Class session status' %}">
+            <button type="button" class="classes-status-tab active" data-status-tab="upcoming" aria-selected="true">
+                <i class="fa-solid fa-clock mr-2" aria-hidden="true"></i>
+                <span>{% trans "Upcoming" %}</span>
+                <strong>{{ class_filter_counts.upcoming.all }}</strong>
+            </button>
+
+            <button type="button" class="classes-status-tab" data-status-tab="completed" aria-selected="false">
+                <i class="fa-solid fa-clock-rotate-left mr-2" aria-hidden="true"></i>
+                <span>{% trans "Held" %}</span>
+                <strong>{{ class_filter_counts.past.all }}</strong>
+            </button>
+        </nav>
+
+        <!-- UPCOMING CLASSES -->
+        <section class="classes-status-panel active" data-status-panel="upcoming">
+
+            <!-- Desktop filters -->
+            <div class="classes-filter-buttons">
+                <button type="button" class="classes-filter-btn active" data-filter="today">
+                    <span>{% trans "Today" %}</span>
+                    <strong>{{ class_filter_counts.upcoming.today }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="weekly">
+                    <span>{% trans "This Week" %}</span>
+                    <strong>{{ class_filter_counts.upcoming.weekly }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="monthly">
+                    <span>{% trans "This Month" %}</span>
+                    <strong>{{ class_filter_counts.upcoming.monthly }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="all">
+                    <span>{% trans "All" %}</span>
+                    <strong>{{ class_filter_counts.upcoming.all }}</strong>
+                </button>
+            </div>
+
+            <!-- Mobile filter -->
+            <select class="mobile-filter-select classes-panel-select" aria-label="{% trans 'Filter upcoming classes' %}">
+                <option value="today">{% trans "Today" %}: {{ class_filter_counts.upcoming.today }}</option>
+                <option value="weekly">{% trans "This Week" %}: {{ class_filter_counts.upcoming.weekly }}</option>
+                <option value="monthly">{% trans "This Month" %}: {{ class_filter_counts.upcoming.monthly }}</option>
+                <option value="all">{% trans "All" %}: {{ class_filter_counts.upcoming.all }}</option>
+            </select>
+
+            <!-- Upcoming list -->
+            <div class="assigned-classes-list learner">
+                {% for session in sessions %}
+                    {% if session.class_status_group == "upcoming" %}
+                        {% include "profiles/includes/student/class_session_row.html" %}
+                    {% endif %}
+                {% endfor %}
+
+                <p class="no-classes-message text-grey p-3" hidden>
+                    {% trans "No upcoming classes apply to the selected filter." %}
+                </p>
+            </div>
+        </section>
+
+        <!-- PAST CLASSES -->
+        <section class="classes-status-panel" data-status-panel="completed" hidden>
+
+            <!-- Desktop filters -->
+            <div class="classes-filter-buttons">
+                <button type="button" class="classes-filter-btn active" data-filter="today">
+                    <span>{% trans "Today" %}</span>
+                    <strong>{{ class_filter_counts.past.today }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="weekly">
+                    <span>{% trans "This Week" %}</span>
+                    <strong>{{ class_filter_counts.past.weekly }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="monthly">
+                    <span>{% trans "This Month" %}</span>
+                    <strong>{{ class_filter_counts.past.monthly }}</strong>
+                </button>
+
+                <button type="button" class="classes-filter-btn" data-filter="all">
+                    <span>{% trans "All" %}</span>
+                    <strong>{{ class_filter_counts.past.all }}</strong>
+                </button>
+            </div>
+
+            <!-- Mobile filter -->
+            <select class="mobile-filter-select classes-panel-select" aria-label="{% trans 'Filter past classes' %}">
+                <option value="today">{% trans "Today" %}: {{ class_filter_counts.past.today }}</option>
+                <option value="weekly">{% trans "This Week" %}: {{ class_filter_counts.past.weekly }}</option>
+                <option value="monthly">{% trans "This Month" %}: {{ class_filter_counts.past.monthly }}</option>
+                <option value="all">{% trans "All" %}: {{ class_filter_counts.past.all }}</option>
+            </select>
+
+            <!-- Past list -->
+            <div class="assigned-classes-list learner">
+                {% for session in sessions %}
+                    {% if session.class_status_group == "past" %}
+                        {% include "profiles/includes/student/class_session_row.html" %}
+                    {% endif %}
+                {% endfor %}
+
+                <p class="no-classes-message text-grey p-3" hidden>
+                    {% trans "No past classes apply to the selected filter." %}
+                </p>
+            </div>
+        </section>
+
+    </div>
+</section>
+
+<!-- RESCHEDULE MODAL -->
+<div class="reschedule-modal-overlay" id="rescheduleModal">
+    <div class="reschedule-modal-box">
+        <h3>
+            {% trans "Request to postpone this class?" %}
+        </h3>
+
+        <p id="rescheduleModalClassName" class="reschedule-modal-class-name"></p>
+        <p class="reschedule-modal-current-time" id="rescheduleModalClassTime"></p>
+
+        <p>
+            {% trans "This class will be marked as pending reschedule. Your teacher will arrange a new date and time with you." %}
+        </p>
+
+        <p class="text-muted small">
+            {% trans "Postponement requests are available until 17:00 CET on the day before the class." %}
+        </p>
+
+        <div class="reschedule-modal-actions">
+            <button type="button" class="reschedule-modal-cancel" id="cancelRescheduleModal">
+                {% trans "Cancel" %}
+            </button>
+
+            <form method="POST" id="rescheduleConfirmForm">
+                {% csrf_token %}
+                <button type="submit" class="reschedule-modal-confirm">
+                    {% trans "Request postponement" %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'profiles/js/features/classes/classes_list_pages.js' %}"></script>
+    <script type="text/javascript" src="{% static 'profiles/js/features/classes/reschedule_page.js' %}"></script>
+{% endblock %}

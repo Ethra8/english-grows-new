@@ -110,16 +110,34 @@
 
 .assigned-course-row {
     display: grid;
-    grid-template-columns: minmax(380px, 1fr) minmax(60px, 0.5fr) minmax(140px, 0.75fr) minmax(220px, 1.4fr) minmax(100px, 0.75fr) minmax(150px, 1.25fr);
+    grid-template-columns: 
+        minmax(320px, 1.25fr) /* name */ 
+        minmax(76px, 0.5fr) /* level */ 
+        minmax(180px, 0.95fr) /* status */ 
+        minmax(260px, 1.15fr) /* timetable */ 
+        minmax(100px, 0.75fr) /* num. students */ 
+        minmax(200px, 1fr) /* completion ring */ 
+        minmax(260px, 1.15fr); /* teacher */   
     align-items: center;
     padding: 0.75rem 0.75rem;
     border-bottom: 1px solid rgba(var(--color-teal-rgb), 0.4) !important;
-    min-width: 1300px;
+    min-width: 1380px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     transition: all 0.2s ease;
 }
+
+.assigned-course-row.teacher {
+    grid-template-columns: 
+        minmax(280px, 1fr) /* name */ 
+        minmax(76px, 0.5fr) /* level */
+        minmax(140px, 0.75fr) /* status */
+        minmax(260px, 1fr) /* timetable */
+        minmax(100px, 0.75fr) /* num. students */
+        minmax(150px, 1.25fr); /* completion ring */
+}
+
 
 .assigned-courses-list .assigned-course-row:last-of-type {
     border-bottom: none;
@@ -258,22 +276,6 @@
     justify-content: center;
 }
 
-/* .course-list-date .icon,
-.course-list-student-num .icon {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    border: 1px solid var(--color-teal);
-    background: transparent;
-    border-radius: 999px;
-    text-align: center !important;
-} */
-
-/* .course-list-date i,
-.course-list-student-num i {
-    color: var(--color-teal);
-} */
-
 .course-list-date strong,
 .course-list-student-num strong {
     color: var(--color-teal);
@@ -310,6 +312,28 @@
     color: var(--color-slate);
 }
 
+
+/* =========================================================
+   COURSE STATUS
+========================================================= */
+
+.course-list-teacher {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    color: var(--color-slate);
+    border-left: 1px solid rgba(var(--color-teal-rgb), 0.2);
+    height: 70%;
+    min-width: 100px;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.course-list-teacher strong {
+    font-weight: 500;
+}
 
 /* =========================================================
    RESPONSIVE

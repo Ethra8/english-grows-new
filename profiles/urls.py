@@ -9,6 +9,8 @@ from profiles.views.shared import (
 from profiles.views.student import (
     student_dashboard,
     my_course,
+    my_classes,
+    student_mark_class_pending_reschedule,
     my_calendar,
     my_calendar_events,
     my_learning_progress,
@@ -79,6 +81,8 @@ urlpatterns = [
     # STUDENT PAGES    
     path("student/dashboard/", student_dashboard, name="student_dashboard"),
     path("student/my_course/", my_course, name="my_course"),
+    path("student/my_classes/", my_classes, name="my_classes"),
+    path("student/classes/<int:session_id>/pending-reschedule/", student_mark_class_pending_reschedule, name="student_mark_class_pending_reschedule"),
     path("student/my_calendar/", my_calendar, name="my_calendar"),
     path("student/my_calendar/events/", my_calendar_events, name="my_calendar_events"),
     path("student/my_learning_progress/", my_learning_progress, name="my_learning_progress"),

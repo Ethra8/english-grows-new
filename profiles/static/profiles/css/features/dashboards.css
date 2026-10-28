@@ -220,7 +220,7 @@
     box-sizing: border-box;
     height: stretch;
     max-height: 436.28px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     scrollbar-gutter: stable;
     -webkit-overflow-scrolling: touch;
@@ -233,7 +233,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-width: 0;
     gap: 0.2rem;
 }
 
@@ -244,91 +243,138 @@
 }
 
 .today-class-row {
-    display: grid;
-    grid-template-columns: 160px minmax(220px, 1fr) 60px;
-    align-items: center;
-    width: 100%;
-    min-width: 0;
+    /* display: grid;
+    grid-template-columns: 150px minmax(220px, 1fr) 60px auto;
+    grid-template-areas: "time course level button"; */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* width: 100%; */
+    min-width: 100%;
     padding: 0.25rem 1rem 0.25rem 0.25rem;
     overflow: hidden;
     flex: 0 0 auto;
-    flex-shrink: 0;
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
     border-radius: 8px;
     background: var(--color-whitesmoke);
 }
 
-/* If ClassSession has already passed */
 .today-class-row.today-class-row-past {
     background: rgba(var(--color-whitesmoke-rgb), 0.95);
 }
 
+.today-class-row > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 100%;
+}
+
+
+/* TIME *********************************************************/
+
 .today-time {
+    grid-area: time;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 150px;
-    padding: 0.9rem 0;
+    min-width: 0;
+    padding: 0.6rem 0;    
     border: 0;
     border-radius: 8px;
     background: rgba(var(--color-navy-rgb), 0.95);
     color: var(--color-pearlaqua);
     font-weight: 700;
+    white-space: nowrap;
+}
+
+
+/* COURSE *******************************************************/
+
+/* The anchor itself is the grid item */
+.today-class-row > a:not(.btn-class-today) {
+    grid-area: course;
+    min-width: 0;
+    text-decoration: none;
+}
+
+.today-class-row > a:not(.btn-class-today):hover {
+    text-decoration: none;
 }
 
 .today-course {
     display: flex;
-    flex: 1;
+    width: 100%;
     min-width: 0;
     margin: 0;
     border: 0;
     color: var(--color-teal);
+    text-align: left;
 }
 
 .today-course .course-name-and-class-num {
     display: flex;
     flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
     padding-left: 0.5rem;
+}
+
+.today-course strong {
+    overflow-wrap: anywhere;
 }
 
 .today-course span.class-number {
     color: var(--color-slate);
 }
 
+
+/* LEVEL ********************************************************/
+
+.today-level {
+    grid-area: level;
+    justify-self: center;
+    align-self: center;
+}
+
+.today-level .level {
+    margin: 0 !important;
+}
+
+
+/* ACTIONS ******************************************************/
+
 .today-action {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.7rem;
-}
-
-/* Optional action content receives its own row when present */
-.today-class-row > .today-action {
-    grid-column: 1 / -1;
-    justify-self: stretch;
-}
-
-.today-action button {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: fit-content;
-    height: 34px;
+    gap: 0.7rem;
+    min-width: 0;
+    white-space: nowrap;
 }
 
-.today-action img {
-    width: 32px;
-    margin-left: 0.5rem;
+.today-action button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 34px;
+    margin: 0;
 }
 
 .today-action .js-open-reschedule-modal img {
     width: 28px;
-    margin-left: 0;
+    margin: 0;
 }
 
 a.btn-class-today {
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 0.6rem;
+    width: max-content;
+    margin: 0;
     padding: 0.25rem 0.85rem;
     border: 1px solid var(--color-pearlaqua);
     border-radius: 8px;
@@ -352,8 +398,9 @@ a.btn-class-today:hover {
 
 a.btn-class-today img {
     width: 28px;
-    margin-left: 0.5rem;
+    margin-left: 0;
 }
+
 
 
 /* TRAINING OVERVIEW ********************************************/
@@ -690,7 +737,7 @@ a.btn-class-today img {
         grid-template-columns: repeat(1, 1fr);
     }
 
-    .today-class-row {
+    /* .today-class-row {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-areas:
@@ -702,7 +749,7 @@ a.btn-class-today img {
         min-width: 0;
         padding: 0.75rem 1rem 0.15rem;
         align-items: center;
-    }
+    } */
 
     .today-classes-card.dashboard-card {
         gap: 1rem;
@@ -756,12 +803,12 @@ a.btn-class-today img {
         margin-right: 0 !important;
     }
 
-    .today-action {
+    /* .today-action {
         grid-area: button;
         grid-column: auto;
         width: 100%;
         justify-content: center;
-    }
+    } */
 
     .btn-class-today,
     .today-action button {
@@ -848,6 +895,14 @@ a.btn-class-today img {
 
     .today-class-row {
         padding: 0.5rem 0.5rem 0.15rem;
+    }
+
+    .today-class-row .course-and-buttons {
+        flex-direction: column !important;
+    }
+
+    a.btn-class-today {
+        width: 100%;
     }
 
 }

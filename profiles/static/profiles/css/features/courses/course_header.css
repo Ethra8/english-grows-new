@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, rgba(var(--color-teal-rgb), 0.15), rgba(var(--color-teal-rgb), 0.3));
-    padding: 0 0 1.15rem;
     position: relative;
     overflow: visible;
     border-radius: 8px;
@@ -45,6 +44,11 @@
     position: relative;
     overflow: hidden;
     border-radius: 8px;
+    padding: 1.75em 4%;
+}
+
+.course-header-info-level-wrapper {
+    width: fit-content;
 }
 
 /* Course name in header */
@@ -55,7 +59,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 2.5rem 4% 0;
+    width: max-content;
     position: relative;
     z-index: 1;
 }
@@ -65,9 +69,9 @@
 .course-details-page .course-header-level {
     gap: 1.95rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin: 0.5rem 0 0.75rem;    
-    padding: 0 4%;
     position: relative;
     z-index: 1;
 }    
@@ -149,13 +153,13 @@
         background-position: right -600px top 20px;
     }
 
-    .course-details-page .course-header-info {
+    /* .course-details-page .course-header-info {
         padding: 2.5rem 7% 0;
-    }
+    } */
 
-    .course-details-page .course-header-level {
+    /* .course-details-page .course-header-level {
         padding: 0 7%;
-    }
+    } */
     
 }
 

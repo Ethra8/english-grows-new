@@ -129,50 +129,52 @@
                 {% if todays_sessions %}
                     {% for session in todays_sessions %}
                         <div class="today-class-row{% if session.is_past %} today-class-row-past{% endif %}">
-
-                            <!-- TIME -->
-                            <div class="today-time">
-                                {{ session.start_time|time:"H:i" }}
-                                -
-                                {{ session.end_time|time:"H:i" }}
-                            </div>
-
-                            <!-- COURSE -->
-                            <div class="today-course">
-                                <div class="course-name-and-class-num">
-                                    <strong>{{ session.course.name }}</strong>
-                                    <span class="class-number">Lesson {{ session.class_number }}</span>
+                            <div>
+                                <!-- TIME -->
+                                <div class="today-time">
+                                    {{ session.start_time|time:"H:i" }}
+                                    -
+                                    {{ session.end_time|time:"H:i" }}
+                                </div>
+                                <!-- LEVEL -->
+                                <div class="today-level">
+                                    <span class="level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
+                                        {{ session.course.course_level|default:"Pending" }}</span>
                                 </div>
                             </div>
+                            <div>
+                                <!-- COURSE -->
+                                <div class="today-course">
+                                    <div class="course-name-and-class-num">
+                                        <strong>{{ session.course.name }}</strong>
+                                        <span class="class-number">Lesson {{ session.class_number }}</span>
+                                    </div>
+                                </div>
 
-                            <!-- LEVEL -->
-                            <div class="today-level">
-                                <span class="level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
-                                    {{ session.course.course_level|default:"Pending" }}</span>
-                            </div>
 
-                            <!-- ACTION -->
-                            <div class="today-action">
-                            {% if not session.is_past %}
-                                {% if session.meeting_link %}
-                                <button type="button" class="js-open-reschedule-modal btn-course-details"
-                                    data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
-                                    data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
-                                    data-class-date="{{ session.start_time|date:'D, j M' }}"
-                                    data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
-                                    aria-label="open rescheduling modal">
-                                    
-                                    <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
+                                <!-- ACTION -->
+                                <div class="today-action">
+                                {% if not session.is_past %}
+                                    {% if session.meeting_link %}
+                                    <button type="button" class="js-open-reschedule-modal btn-course-details"
+                                        data-action-url="{% url 'profiles:mark_class_pending_reschedule' session.id %}"
+                                        data-class-title="{{ session.course.name }} - Lesson {{ session.class_number }}"
+                                        data-class-date="{{ session.start_time|date:'D, j M' }}"
+                                        data-class-time="{{ session.start_time|time:'H:i' }} - {{ session.end_time|time:'H:i' }}"
+                                        aria-label="open rescheduling modal">
+                                        
+                                        <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
 
-                                <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
-                                    Start
-                                    <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
-                                {% else %}
-                                <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn" aria-label="check calendar">
-                                    Calendar
-                                    <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
+                                    <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
+                                        Start
+                                        <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
+                                    {% else %}
+                                    <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn" aria-label="check calendar">
+                                        Calendar
+                                        <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                                </div>
                             </div>
                         </div>
 
@@ -276,7 +278,6 @@
                         </span>
 
                         <div class="overview-completion">
-
                             <div
                                 class="completion-ring"
                                 style="--completion: {{ held_weekly_percentage|default:'0' }};"
@@ -292,49 +293,10 @@
                             </div>
 
                             <div class="overview-completion-data">
-
                                 <span class="completion-count">
                                     {{ held_weekly_sessions|default:"0" }}
                                 </span>
-
-                                <!-- {% if held_weekly_sessions > 0 %}
-
-                                    <small class="attendance-submission-status">
-
-                                        {% if weekly_attendance_pending_sessions > 0 %}
-
-                                            <span class="attendance-pending">
-                                                <i
-                                                    class="fa-solid fa-triangle-exclamation mr-1"
-                                                    aria-hidden="true"
-                                                ></i>
-
-                                                {{ weekly_attendance_submitted_sessions|default:"0" }}
-                                                /
-                                                {{ held_weekly_sessions|default:"0" }}
-
-                                                {% trans 'attendance submitted' %}
-                                            </span>
-
-                                        {% else %}
-
-                                            <span class="attendance-complete">
-                                                <i
-                                                    class="fa-solid fa-circle-check mr-1"
-                                                    aria-hidden="true"
-                                                ></i>
-
-                                                {% trans 'All attendance submitted' %}
-                                            </span>
-
-                                        {% endif %}
-
-                                    </small>
-
-                                {% endif %} -->
-
                             </div>
-
                         </div>
 
                     </div>

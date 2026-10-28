@@ -39,6 +39,11 @@
             <span>{% trans "Course Info" %}</span>
         </a>
 
+        <a href="{% url 'profiles:my_classes' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_classes' %}active{% endif %}"  aria-label="{% trans 'Class List' %}">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>{% trans "Class List" %}</span>
+        </a>
+
         <a href="{% url 'profiles:my_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_calendar' %}active{% endif %}" aria-label="{% trans 'Calendar' %}">
             <i class="fa-regular fa-calendar-days"></i>
             <span>{% trans "Calendar" %}</span>
