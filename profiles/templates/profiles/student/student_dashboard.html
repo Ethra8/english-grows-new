@@ -1,83 +1,342 @@
 {% extends "profiles/profile_base.html" %}
 {% load static i18n %}
-
 {% load date_extras %}
 {% load course_extras %}
 
-{% block extra_title %}| Dashboard {% endblock %}
+{% block extra_title %}| Dashboard{% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/teacher/teacher_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/student/student_profile.css' %}">
-
+    <!-- <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/dashboards.css' %}">
 {% endblock %}
 
-
 {% block profile_content %}
-
-<section class="profile-dashboard profile-page notranslate" translate="no">    
+<section class="profile-dashboard profile-page notranslate" translate="no">
     <div class="overlay-globe"></div>
     <div class="overlay-mist"></div>
 
     <header>
-        <h1>Welcome, {{ request.user.first_name|default:request.user.username }}</h1>
-        <hr>
+        <div class="row">
+            <div class="col-12 pl-0">
+                <h1>{% trans "Welcome" %}, {{ request.user.first_name|default:request.user.username }}</h1>
+            </div>
+            <hr>
+        </div>
     </header>
 
-    <div class="mb-5">
-        <div class="level-pill">
-            <span class="current-level-label">{% trans "Level" %}</span>
-            <span class="current-level-value">
-            {% if request.user.profile.current_level %}    
-                {{ request.user.profile.get_current_level_display }}
-            {% else %}
-                {% trans "Pending" %}
-            {% endif %}    
-            </span>
+    <!-- GENERAL META CARDS -->
+    <div class="dashboard-meta-cards">
+        <div class="meta-row">
+
+            <a href="{% url 'profiles:my_course' %}" aria-label="{% trans 'View my courses' %}">
+                <div class="meta-card meta-courses">
+                    <div>
+                        <img src="{% static 'icons/custom/meta_cards_headers/course_icon.png' %}" alt="" aria-hidden="true" width="50">
+                    </div>
+                    <div class="meta-text">
+                        <strong>
+                            {% trans 'Courses' %}
+                            <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                        </strong>
+                        <span>
+                            {{ active_courses|default:"0" }}
+                            <small>
+                                {% if active_courses == 1 %}
+                                    {% trans 'active' context 'metacards singular' %}
+                                {% else %}
+                                    {% trans 'active' context 'metacards plural' %}
+                                {% endif %}
+                            </small>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'profiles:my_learning_progress' %}" aria-label="{% trans 'View my progress' %}">
+                <div class="meta-card meta-students">
+                    <div>
+                        <img src="{% static 'icons/dashboard_meta_learners_list_icon.png' %}" alt="" aria-hidden="true" width="50">
+                    </div>
+                    <div class="meta-text">
+                        <strong>
+                            {% trans 'Level' %}
+                            <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="12" height="18" class="ml-2">
+                        </strong>
+                        <span>
+                            {% if request.user.profile.current_level %}
+                                {{ request.user.profile.get_current_level_display }}
+                            {% else %}
+                                <small>{% trans "Pending" %}</small>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="meta-card meta-attendance">
+                <div>
+                    <img src="{% static 'icons/dashboard_meta_attendance_icon.png' %}" alt="" aria-hidden="true" width="50">
+                </div>
+                <div class="meta-text">
+                    <strong>{% trans 'Attendance' context 'dashboard metacard' %}</strong>
+                    <span>{{ total_attendance_rate|default:"0" }}%</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="wrapper-next-class-card">
-        <div class="next-class-card">
-            <div class="circle-panel1">
-                <h2>{% trans "Next Class" context 'student dashboard' %}</h2>
-            </div>
-            <div class="circle-panel2"></div>
-            <div class="info">
-                {% if next_class %}
-                    {% get_current_language as LANGUAGE_CODE %}
-                    <p>
-                        <i class="fa-solid fa-calendar-day mr-2"></i>
+    <!-- DASHBOARD CARDS -->
+    <div class="dashboard-cards-grid">
 
-                        {% if LANGUAGE_CODE == "en" or LANGUAGE_CODE == "en-us" %}
-                            {{ next_class.start_time|ordinal_sup|safe }}
-                        {% else %}
-                            {{ next_class.start_time|date:"l, j F" }}
-                        {% endif %}
-                    </p>
-                    <p>
-                        <img src="{% static 'icons/dashboard_time_navy_icon.png' %}" alt="" aria-hidden="true" width="20" class="mr-2">
-                        {{ next_class.start_time|time:"H:i" }} - {{ next_class.end_time|time:"H:i" }}</p>
-                    <p><i class="fa-solid fa-graduation-cap mr-2"></i> {{ active_enrollment.course.teacher.first_name|default:"Edna" }} {{ active_enrollment.course.teacher.last_name|default:"T." }}</p>
-                    {% if next_class.topic %}
-                    <p><i class="fa-regular fa-bookmark"></i>{{ next_class.topic }}</p>
-                    {% endif %}
-                    {% if next_class.meeting_link %}
-                        <a href="{{ next_class.meeting_link }}" class="btn-join-class btn mt-3" target="_blank" rel="noopener" aria-label="link to join class session">
-                            <i class="fa-solid fa-video mr-3"></i>
-                            {% trans "Join Class" context 'student dashboard' %}
-                            <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" width="8" class="ml-4">
-                        </a>
-                    {% endif %}
+        <!-- TODAY'S CLASSES -->
+        <div class="wrapper-dashboard-card">
+            <div class="today-classes-card dashboard-card">
+                <div class="header">
+                    <div class="today-calendar-icon" aria-hidden="true">
+                        <img src="{% static 'icons/today_calendar_icon.png' %}" alt="" aria-hidden="true" width="70">
+                        <div class="today-calendar-date">
+                            <span class="today-calendar-month">{{ today|date:"M" }}</span>
+                            <span class="today-calendar-day">{{ today|date:"j" }}</span>
+                        </div>
+                    </div>
+                    <div class="title">
+                        <h2>{% trans "Today's Classes" %}</h2>
+                        <span>{{ today|ordinal_sup_short|safe }}</span>
+                    </div>
+                </div>
+
+                {% if todays_sessions %}
+                    <div class="today-classes-list" role="region" aria-label="{% trans "Today's classes" %}" tabindex="0">
+                        {% for session in todays_sessions %}
+                            <div class="today-class-row">
+                                <div class="today-time">
+                                    {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
+                                </div>
+
+                                <a href="{% url 'profiles:my_course' %}">
+                                    <div class="today-course">
+                                        <div class="course-name-and-class-num">
+                                            <strong>{{ session.course.name }}</strong>
+                                            <span class="class-number">{% trans "Lesson" %} {{ session.class_number }}</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <div class="today-level">
+                                    <span class="level level-{{ session.course.course_level|lower|cut:'.' }} mr-2">
+                                        {{ session.course.course_level|default:"Pending" }}
+                                    </span>
+                                </div>
+
+                                {% if session.meeting_link %}
+                                    <a href="{{ session.meeting_link }}" class="btn-join-class btn" target="_blank" rel="noopener" aria-label="{% trans 'Join class' %}">
+                                        <i class="fa-solid fa-video mr-2" aria-hidden="true"></i>
+                                        {% trans "Join Class" context 'student dashboard' %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% else %}
-                    <p>{% trans 'No upcoming class scheduled yet' context 'student dashboard' %}.</p>
+                    <div class="empty-message">
+                        <p>{% trans 'No classes scheduled for today' %}.</p>
+                    </div>
                 {% endif %}
-
             </div>
         </div>
+
+        <!-- TRAINING OVERVIEW -->
+        <div class="wrapper-dashboard-card">
+            <div class="training-overview dashboard-card">
+                <div class="header">
+                    <div>
+                        <img src="{% static 'icons/dashboard_training_overview_icon.png' %}" alt="" aria-hidden="true" width="65" class="mt-2">
+                    </div>
+                    <div class="title">
+                        <h2>{% trans 'Training Overview' %}</h2>
+                        <span>{% trans 'Weekly & monthly performance' %}</span>
+                    </div>
+                </div>
+
+                <div class="training-overview-grid">
+
+                    <!-- THIS WEEK -->
+                    <div class="overview-period">
+                        <div class="overview-period-icon">
+                            <img src="{% static 'icons/dashboard_training_overview_week_icon.png' %}" alt="" aria-hidden="true" width="26">
+                        </div>
+                        <div>
+                            <strong>{% trans 'This Week' %} · </strong>
+                            <span class="overview-period-total">
+                                <strong>
+                                    {{ total_weekly_sessions|default:"0" }}
+                                    {% if total_weekly_sessions == 1 %}
+                                        {% trans 'class' %}
+                                    {% else %}
+                                        {% trans 'classes' %}
+                                    {% endif %}
+                                </strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-period-grid">
+                        <div class="overview-metric overview-completed top-row">
+                            <span class="overview-mobile-label">{% trans 'Classes Held' context 'dashboard training overview' %}</span>
+                            <div class="overview-completion">
+                                <div class="completion-ring"
+                                     style="--completion: {{ held_weekly_percentage|default:'0' }};"
+                                     role="progressbar"
+                                     aria-label="{% trans 'Classes held this week' %}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     aria-valuenow="{{ held_weekly_percentage|default:'0' }}">
+                                    <span class="completion-ring-value">{{ held_weekly_percentage|default:"0" }}%</span>
+                                </div>
+                                <div class="overview-completion-data">
+                                    <span class="completion-count">{{ held_weekly_sessions|default:"0" }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="overview-metric overview-upcoming top-row">
+                            <span class="overview-mobile-label">{% trans 'Upcoming Classes' context 'dashboard training overview' %}</span>
+                            <span class="overview-number">{{ upcoming_weekly_sessions|default:"0" }}</span>
+                        </div>
+
+                        <div class="overview-metric overview-total">
+                            <span class="overview-mobile-label">{% trans 'Classes Attended' %}</span>
+                            <span class="overview-number">
+                                {{ attended_weekly_sessions|default:"0" }} / {{ held_weekly_sessions|default:"0" }}
+                            </span>
+
+                            {% if held_weekly_sessions > 0 %}
+                                <span class="attendance-status-badge complete">
+                                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                    {% blocktrans count count=attended_weekly_sessions|default:0 %}
+                                        {{ count }} attended
+                                    {% plural %}
+                                        {{ count }} attended
+                                    {% endblocktrans %}
+                                </span>
+                            {% else %}
+                                <span class="attendance-status-badge neutral">
+                                    {% trans 'No past classes' context 'student dashboard attendance status' %}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="overview-metric overview-attendance">
+                            <span class="overview-mobile-label">{% trans 'Attendance Rate' context 'dashboard training overview' %}</span>
+                            <div class="attendance-progress">
+                                <span class="attendance-value">{{ weekly_attendance_rate|default:"0" }}%</span>
+                                <div class="training-attendance-bar"
+                                     role="progressbar"
+                                     aria-label="{% trans 'Weekly attendance rate' %}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     aria-valuenow="{{ weekly_attendance_rate|default:'0' }}">
+                                    <div class="training-attendance-bar-fill" data-percentage="{{ weekly_attendance_rate|default:'0' }}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- THIS MONTH -->
+                    <div class="overview-period">
+                        <div class="overview-period-icon">
+                            <img src="{% static 'icons/dashboard_training_overview_month_icon.png' %}" alt="" aria-hidden="true" width="26">
+                        </div>
+                        <div>
+                            <strong>{% trans 'This Month' %} · </strong>
+                            <span class="overview-period-total">
+                                <strong>
+                                    {{ total_monthly_sessions|default:"0" }}
+                                    {% if total_monthly_sessions == 1 %}
+                                        {% trans 'class' %}
+                                    {% else %}
+                                        {% trans 'classes' %}
+                                    {% endif %}
+                                </strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="attendance-period-grid">
+                        <div class="overview-metric overview-completed top-row">
+                            <span class="overview-mobile-label">{% trans 'Classes Held' context 'dashboard training overview' %}</span>
+                            <div class="overview-completion">
+                                <div class="completion-ring"
+                                     style="--completion: {{ held_monthly_percentage|default:'0' }};"
+                                     role="progressbar"
+                                     aria-label="{% trans 'Classes held this month' %}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     aria-valuenow="{{ held_monthly_percentage|default:'0' }}">
+                                    <span class="completion-ring-value">{{ held_monthly_percentage|default:"0" }}%</span>
+                                </div>
+                                <div class="overview-completion-data">
+                                    <span class="completion-count">{{ held_monthly_sessions|default:"0" }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="overview-metric overview-upcoming top-row">
+                            <span class="overview-mobile-label">{% trans 'Upcoming Classes' context 'dashboard training overview' %}</span>
+                            <span class="overview-number">{{ upcoming_monthly_sessions|default:"0" }}</span>
+                        </div>
+
+                        <div class="overview-metric overview-total">
+                            <span class="overview-mobile-label">{% trans 'Classes Attended' %}</span>
+                            <span class="overview-number">
+                                {{ attended_monthly_sessions|default:"0" }} / {{ held_monthly_sessions|default:"0" }}
+                            </span>
+
+                            {% if held_monthly_sessions > 0 %}
+                                <span class="attendance-status-badge complete">
+                                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                    {% blocktrans count count=attended_monthly_sessions|default:0 %}
+                                        {{ count }} attended
+                                    {% plural %}
+                                        {{ count }} attended
+                                    {% endblocktrans %}
+                                </span>
+                            {% else %}
+                                <span class="attendance-status-badge neutral">
+                                    {% trans 'No classes held' context 'student dashboard attendance status' %}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="overview-metric overview-attendance">
+                            <span class="overview-mobile-label">{% trans 'Attendance Rate' context 'dashboard training overview' %}</span>
+                            <div class="attendance-progress">
+                                <span class="attendance-value">{{ monthly_attendance_rate|default:"0" }}%</span>
+                                <div class="training-attendance-bar"
+                                     role="progressbar"
+                                     aria-label="{% trans 'Monthly attendance rate' %}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     aria-valuenow="{{ monthly_attendance_rate|default:'0' }}">
+                                    <div class="training-attendance-bar-fill" data-percentage="{{ monthly_attendance_rate|default:'0' }}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
+{% endblock %}
 
+{% block postloadjs %}
+    {{ block.super }}
+    <script src="{% static 'profiles/js/features/dashboards.js' %}"></script>
 {% endblock %}

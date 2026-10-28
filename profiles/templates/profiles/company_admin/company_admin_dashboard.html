@@ -1,6 +1,5 @@
 {% extends "profiles/profile_base.html" %}
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
 {% load date_extras %}
 {% load course_extras %}
 
@@ -11,14 +10,13 @@
     <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/company_admin_profile.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/meta_cards.css' %}">
     <link rel="stylesheet" href="{% static 'profiles/css/components/completion_ring.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/features/dashboards_admin_and_teacher.css' %}">
-    <link rel="stylesheet" href="{% static 'profiles/css/profile_roles/company_admin/dashboard_admin.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/features/dashboards.css' %}">
 {% endblock %}
 
 
 {% block profile_content %}
 
-<section id="company_admin" class="profile-dashboard profile-page notranslate" translate="no">    
+<section class="profile-dashboard profile-page notranslate" translate="no">    
     <div class="overlay-globe"></div>
     <div class="overlay-mist"></div>
 
@@ -540,6 +538,6 @@
 {% block postloadjs %}
 {{ block.super }}
 
-<script src="{% static 'profiles/js/features/dashboards_admin_and_teacher.js' %}"></script>
+<script src="{% static 'profiles/js/features/dashboards.js' %}"></script>
 
 {% endblock %}

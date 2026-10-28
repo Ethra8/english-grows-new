@@ -15,6 +15,9 @@
     opacity: 0.42;
 }
 
+
+/* DASHBOARD CARDS GRID *****************************************/
+
 .dashboard-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -27,19 +30,23 @@
     min-width: 0 !important;
     width: 100% !important;
 }
+
 .wrapper-dashboard-card {
-    border-radius: 8px;
-    padding: 4px;
-    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
-    background: rgba(var(--color-teal-rgb), 0.3);    /* width: 100%; */
+    flex: 1 1 0;
     height: fit-content;
+    padding: 4px;
+    border-radius: 8px;
+    background: rgba(var(--color-teal-rgb), 0.3);
+    box-shadow: 0 8px 20px rgba(var(--color-shadow-rgba));
 }
 
 .wrapper-dashboard-card:not(:first-child) {
-    margin-top: 3.8rem;
+    margin-top: 0;
 }
 
-/* *** META ROW / CARD in HEADERS ***********************************/
+
+/* META ROW / CARD IN HEADERS ***********************************/
+
 .dashboard-meta-cards {
     min-width: 100% !important;
     width: 100%;
@@ -51,7 +58,9 @@
     margin: 2rem 0 1rem;
 }
 
-/* TODAY & TRAINING OVERVIEW Cards ***********/
+
+/* TODAY & TRAINING OVERVIEW CARDS *******************************/
+
 .dashboard-card {
     display: flex;
     background: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.76), rgba(var(--color-teal-rgb), 0.95));
@@ -63,28 +72,28 @@
 .dashboard-card .icon {
     width: 55px;
     height: 55px;
-    border-radius: 50%;
-    background: radial-gradient(circle,rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-tropical-teal-rgb), 0.8) 80%, rgba(var(--color-pearlaqua-rgb), 1) 100%);
-    border: 1px outset rgba(var(--color-pearlaqua-rgb), 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    border: 1px outset rgba(var(--color-pearlaqua-rgb), 0.5);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--color-navy-rgb), 0.75) 0%, rgba(var(--color-teal-rgb), 0.9) 48%, rgba(var(--color-tropical-teal-rgb), 0.8) 80%, rgba(var(--color-pearlaqua-rgb), 1) 100%);
     color: var(--color-whitesmoke);
     font-size: 1.4rem;
-    flex-shrink: 0;
 }
 
 .dashboard-card.today-classes-card::after {
     content: "";
     position: absolute;
+    top: -12%;
+    right: 1%;
     width: 180px;
     height: 180px;
     background-image: url("/static/icons/dashboard_today_card_icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    top: -12%;
-    right: 1%;
     transform: rotate(4deg);
     opacity: 0.05;
     pointer-events: none;
@@ -93,14 +102,14 @@
 .dashboard-card.training-overview::after {
     content: "";
     position: absolute;
+    top: -4%;
+    right: 1%;
     width: 180px;
     height: 180px;
     background-image: url("/static/icons/dashboard_training_overview_icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    top: -4%;
-    right: 1%;
     transform: rotate(12deg);
     opacity: 0.05;
     pointer-events: none;
@@ -118,18 +127,38 @@
     color: var(--color-pearlaqua);
 }
 
-.today-classes-card.dashboard-card {
+.today-classes-card.dashboard-card,
+.training-overview.dashboard-card {
     position: relative;
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
-    gap: 3rem;
-    min-width: 100% !important;
-    width: 100%;
+    gap: 0.5rem;
     padding: 1rem 0.5rem 0.5rem;
 }
 
+.today-classes-card.dashboard-card {
+    min-width: 100% !important;
+    width: 100%;
+}
 
-/* TODAY CALENDAR ICON **************** */
+.today-classes-card .header,
+.training-overview .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 300px;
+    padding: 0 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.overview-grid-header {
+    display: none;
+    font-size: 0.9rem;
+}
+
+
+/* TODAY CALENDAR ICON ******************************************/
+
 .today-calendar-icon {
     position: relative;
     width: 75px;
@@ -142,30 +171,21 @@
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
     margin-top: 0.2rem;
+    object-fit: contain;
 }
 
-
-/* MONTH + DAY CONTAINER */
 .today-calendar-date {
     position: absolute;
-
-    /* Center horizontally */
-    left: 50%;
-    transform: translateX(-50%);
-
-    /* Adjust this to fit the writable area of your icon */
     top: 35%;
-
+    left: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    transform: translateX(-50%);
     text-align: center;
     line-height: 1;
-
     pointer-events: none;
 }
 
@@ -188,35 +208,10 @@
     font-size: 1.1rem;
     font-weight: 600;
 }
-/* END TODAY CALENDAR ICON **************** */
 
-.training-overview.dashboard-card {
-    flex-direction: column;
-    position: relative;
-}
 
-.training-overview.dashboard-card {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-    padding: 1rem 0.5rem 0.5rem;
-}
+/* TODAY'S CLASSES **********************************************/
 
-.today-classes-card .header,
-.training-overview .header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 300px;
-    padding: 0 0.9rem;
-    margin-bottom: 0.5rem;
-}
-
-.overview-grid-header {
-    font-size: 0.9rem;
-}
-
-/* TODAY'S CLASSES Card *******/
 .today-classes-list {
     flex: 1;
     display: flex;
@@ -225,23 +220,15 @@
     box-sizing: border-box;
     height: stretch;
     max-height: 436.28px;
-
-    /* Always reserve/show the vertical scrollbar area */
     overflow-y: scroll;
     overflow-x: hidden;
-
     scrollbar-gutter: stable;
     -webkit-overflow-scrolling: touch;
-
-    /* Firefox — default / no overflow */
     scrollbar-width: thin;
-    scrollbar-color:
-        rgba(var(--color-teal-rgb), 0.30)
-        transparent;
-    scroll-behavior: smooth;    
+    scrollbar-color: rgba(var(--color-teal-rgb), 0.30) transparent;
+    scroll-behavior: smooth;
 }
 
-/* TODAY'S CLASSES */
 .today-sessions-list {
     display: flex;
     flex-direction: column;
@@ -251,27 +238,28 @@
 }
 
 .today-classes-list p {
-    color: var(--color-steel);
-    padding: 0;
     margin: 0;
+    padding: 0;
+    color: var(--color-steel);
 }
 
-/* TODAY CLASS INFO LIST */
 .today-class-row {
     display: grid;
-    grid-template-columns: 150px minmax(280px, 1fr) 60px minmax(120px, 1fr);
+    grid-template-columns: 160px minmax(220px, 1fr) 60px;
     align-items: center;
-    background: var(--color-whitesmoke);
-    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
-    border-radius: 8px;
-    overflow: hidden;
+    width: 100%;
+    min-width: 0;
     padding: 0.25rem 1rem 0.25rem 0.25rem;
+    overflow: hidden;
     flex: 0 0 auto;
     flex-shrink: 0;
+    border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.25);
+    border-radius: 8px;
+    background: var(--color-whitesmoke);
 }
 
-/* if class_session has already past */
-#teacher .today-class-row.today-class-row-past {
+/* If ClassSession has already passed */
+.today-class-row.today-class-row-past {
     background: rgba(var(--color-whitesmoke-rgb), 0.95);
 }
 
@@ -279,21 +267,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 150px;
+    padding: 0.9rem 0;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(var(--color-navy-rgb), 0.95);
     color: var(--color-pearlaqua);
     font-weight: 700;
-    background: rgba(var(--color-navy-rgb), 0.95);
-    border-radius: 8px;
-    padding: 0.9rem 0;
-    width: 150px;
 }
 
 .today-course {
     display: flex;
     flex: 1;
     min-width: 0;
-    color: var(--color-teal);
-    border-left: 1px solid rgba(var(--color-pearlaqua-rgb), 0.2);
     margin: 0;
+    border: 0;
+    color: var(--color-teal);
 }
 
 .today-course .course-name-and-class-num {
@@ -309,15 +298,21 @@
 .today-action {
     display: flex;
     justify-content: flex-end;
-    gap: .7rem;
+    gap: 0.7rem;
+}
+
+/* Optional action content receives its own row when present */
+.today-class-row > .today-action {
+    grid-column: 1 / -1;
+    justify-self: stretch;
 }
 
 .today-action button {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     width: fit-content;
     height: 34px;
-    align-items: center;
 }
 
 .today-action img {
@@ -331,16 +326,17 @@
 }
 
 a.btn-class-today {
-    border: 1px solid var(--color-pearlaqua);
-    color: var(--color-navy);
-    padding: 0.25rem 0.85rem;
-    border-radius: 8px;
-    text-transform: capitalize;
-    font-weight: 400;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.25rem 0.85rem;
+    border: 1px solid var(--color-pearlaqua);
+    border-radius: 8px;
     background: rgba(var(--color-tropical-teal-rgb), 0.2);
+    color: var(--color-navy);
+    text-transform: capitalize;
+    text-decoration: none;
+    font-weight: 400;
     cursor: pointer;
     box-shadow: 1px 2px 5px rgba(0, 20, 40, 0.25);
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
@@ -356,117 +352,137 @@ a.btn-class-today:hover {
 
 a.btn-class-today img {
     width: 28px;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
 }
 
 
-/* === TRAINING OVERVIEW =============== */
+/* TRAINING OVERVIEW ********************************************/
 
-/* === HEADER ========================== */
+.training-overview-grid {
+    width: 100%;
+    border-radius: 8px;
+    background: var(--color-whitesmoke);
+}
+
+
+/* TRAINING OVERVIEW HEADER *************************************/
 
 .header .icon {
     flex-shrink: 0;
 }
 
 
-/* === PERIOD LABELS ================== */
+/* PERIOD LABELS ************************************************/
+
 .overview-period {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
     grid-column: 1 / -1;
-    padding: 1rem .5rem 1rem 1.3rem;
-    background: rgba(var(--color-teal-rgb), 0.1);
-    max-height: 56px !important;
     min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 1rem 0.5rem 1rem 1.3rem;
     border-radius: 8px 8px 0 0;
+    background: rgba(var(--color-teal-rgb), 0.1);
 }
 
-/* Month training overview header */
-.training-overview-grid > :nth-last-child(-n + 5){
+/* Month Training Overview header */
+.training-overview-grid > :nth-last-child(-n + 5) {
     border-radius: 0;
 }
 
 .overview-period-icon {
     width: 32px;
     height: 32px;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     color: var(--color-navy);
     font-size: 1.05rem;
 }
 
 .overview-period strong {
-    font-size: 1.1rem;
     color: var(--color-navy);
+    font-size: 1.1rem;
     font-weight: 600;
 }
 
 .overview-period .overview-period-total a {
+    color: var(--color-navy);
     font-size: 1rem;
     font-weight: 500;
-    color: var(--color-navy);
     opacity: 0.8;
-    transition: color .15s ease-in-out
+    transition: color .15s ease-in-out;
 }
 
-.overview-period  .overview-period-total a strong:hover {
+.overview-period .overview-period-total a strong:hover {
     color: var(--color-teal);
 }
 
-.overview-period  .overview-period-total a img {
+.overview-period .overview-period-total a img {
+    margin-left: 0.25rem;
     transition: color .15s ease-in-out;
-    margin-left: .25rem;
 }
 
-.overview-period  .overview-period-total a img:hover {
+.overview-period .overview-period-total a img:hover {
     width: 28px;
 }
 
-/* === METRIC CELLS ================ */
+
+/* ATTENDANCE PERIOD GRID ***************************************/
+
+.attendance-period-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.75fr) minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+    background: var(--color-whitesmoke);
+}
+
+
+/* METRIC CELLS *************************************************/
+
 .overview-metric {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1.1rem;
     min-width: 0;
-    max-height: 125px;    
-    border-right: 1px solid rgba(var(--color-navy-rgb), 0.08);
-    flex-direction: column;
-    gap: 1.1rem;    
-    border-left: 0;
+    max-height: 125px;
     margin: 1.25rem 0 0.75rem;
+    border-left: 0;
+    border-right: 1px solid rgba(var(--color-navy-rgb), 0.08);
     border-radius: 0;
 }
 
 .overview-number {
+    color: var(--color-navy);
     font-size: 1.1rem;
     line-height: 1;
     font-weight: 600;
-    color: var(--color-navy);
 }
 
 .overview-metric.overview-upcoming span:nth-of-type(2) {
-    line-height: 3.3rem;
     margin-bottom: 1.5rem;
+    line-height: 3.3rem;
 }
 
-/* Mobile labels hidden on desktop */
 .overview-mobile-label {
-    display: none;
+    display: block;
+    width: 55%;
+    margin: 0 0 auto;
+    color: rgba(var(--color-slate-rgb), 1);
     font-size: 0.8rem;
     font-weight: 500;
+    line-height: 1.2;
     text-align: center;
-    color: rgba(var(--color-slate-rgb), 1);    
-    margin: 0 0 auto;
-    width: 55%;
-    line-height: 1.2;    
 }
 
 
-/* === COMPLETION RING ====================== */
+/* COMPLETION RING **********************************************/
+
 .overview-completion {
     display: flex;
     flex-direction: row;
@@ -476,10 +492,11 @@ a.btn-class-today img {
 }
 
 
-/* === ATTENDANCE =========== */
+/* ATTENDANCE ***************************************************/
+
 .overview-attendance {
-    justify-content: center;
     position: relative;
+    justify-content: center;
 }
 
 .overview-metric .attendance-progress {
@@ -489,31 +506,30 @@ a.btn-class-today img {
     align-items: center;
     width: 60%;
     max-width: 60%;
-    border-radius: 50px;
-    box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
     height: 10px;
     margin-bottom: 2.5rem;
+    border-radius: 50px;
+    box-shadow: 1px 2px 2px rgba(var(--color-shadow-rgba));
 }
 
 .attendance-value {
     position: absolute;
-    font-size: 1.1rem;
     top: -30px;
-    font-weight: 600;
-    color: var(--color-navy);
     z-index: 2;
+    color: var(--color-navy);
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .training-attendance-bar {
     position: relative;
+    z-index: 1;
     width: 100%;
     height: 10px;
     min-height: 10px;
     max-height: 10px;
     border-radius: 999px;
     background: rgba(var(--color-navy-rgb), 0.12);
-    position: relative;
-    z-index: 1;
 }
 
 .training-attendance-bar-fill {
@@ -524,14 +540,16 @@ a.btn-class-today img {
     transition: width 0.45s ease;
 }
 
-/* ATTENDACE STATUS BADGE ****/
+
+/* ATTENDANCE STATUS BADGE **************************************/
+
 .attendance-status-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
     width: max-content;
-    padding: 0.35rem 0.7rem;
     margin-bottom: 1.2rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 999px;
     font-size: 0.78rem;
     font-weight: 600;
@@ -540,53 +558,91 @@ a.btn-class-today img {
 }
 
 .attendance-status-badge.complete {
-    color: var(--attendance-submission-status-complete);
-    background: rgba(var(--attendance-submission-status-complete-rgb), 0.12);
     border: 1px solid rgba(0, 143, 120, 0.3);
+    background: rgba(var(--attendance-submission-status-complete-rgb), 0.12);
+    color: var(--attendance-submission-status-complete);
 }
 
 .attendance-status-badge.pending {
-    color: var(--attendance-submission-status-awaiting);
-    background: rgba(var(--attendance-submission-status-awaiting-rgb), 0.10);
     border: 1px solid rgba(255, 176, 0, 0.4);
+    background: rgba(var(--attendance-submission-status-awaiting-rgb), 0.10);
+    color: var(--attendance-submission-status-awaiting);
 }
 
 .attendance-status-badge.neutral {
-    color: var(--color-slate);
-    background: rgba(var(--color-steel-rgb), 0.2);
     border: 1px solid rgba(var(--color-steel-rgb), 0.4);
+    background: rgba(var(--color-steel-rgb), 0.2);
+    color: var(--color-slate);
 }
 
 
-/* ==== REMOVE FINAL ROW BORDER ====== */
+/* REMOVE FINAL ROW BORDER **************************************/
+
 .attendance-period-grid > :nth-last-child(-n + 5) {
     border-bottom: 0;
 }
 
 
+/* 1360–1599px
+   Dashboard cards remain side-by-side.
+   Training Overview becomes a 2 × 2 metric grid.
+*****************************************************************/
 
-@media (max-width: 1600px) {
+@media (min-width: 1360px) and (max-width: 1599.98px) {
 
-    .today-classes-card.dashboard-card,
-    .training-overview.dashboard-card {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.5rem;
-        padding: 1rem 0.5rem 0.5rem;
+    .attendance-period-grid {
+        --divider-color: rgba(var(--color-steel-rgb), 0.15);
+        --divider-gap: 20px;
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, 1fr);
     }
 
-    .today-time,
-    .today-course {
-        border: 0;
+    .attendance-period-grid::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            var(--divider-color) 0,
+            var(--divider-color) calc(50% - var(--divider-gap)),
+            transparent calc(50% - var(--divider-gap)),
+            transparent calc(50% + var(--divider-gap)),
+            var(--divider-color) calc(50% + var(--divider-gap)),
+            var(--divider-color) 100%
+        );
     }
 
-    .overview-grid-header {
-        font-size: 0.9rem;
+    .today-classes-list {
+        max-height: 674.94px;
     }
 
+    .training-attendance-bar {
+        height: 7px;
+    }
 
 }
 
+
+/* ≤1359px
+   Dashboard cards stack vertically and regain full width.
+*****************************************************************/
+
+@media (max-width: 1359.98px) {
+
+    .dashboard-cards-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+
+/* ≤1250px ******************************************************/
 
 @media (max-width: 1250px) {
 
@@ -597,104 +653,14 @@ a.btn-class-today img {
 }
 
 
+/* TABLET *******************************************************/
+
 @media (max-width: 991.99px) {
 
-    #teacher .today-classes-card.dashboard-card {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    /* TODAY'S CLASSES */
-    #teacher .today-classes-list {
-        width: 100%;
-        min-width: 0;
-    }
-
-    #teacher .today-class-row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-areas:
-            "time  level"
-            "course course"
-            "button button";
-
-        gap: .5rem 1rem;
-        width: 100%;
-        min-width: 0;
-        padding: 1rem;
-        align-items: center;
-    }
-
-    /* Time */
-    #teacher .today-time {
-        grid-area: time;
-        min-width: 0;
-        justify-self: start;
-        margin: 0;
-        font-weight: 600;
-        white-space: nowrap;
-        height: 40px;
-    }
-
-    /* Course & lesson */
-    #teacher .today-course {
-        grid-area: course;
-        min-width: 0;
-        width: 100%;
-        padding: 0.5rem 0.25rem 0.5rem 0;
-    }
-
-    #teacher .course-name-and-class-num {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: .15rem;
-    }
-
-    #teacher .today-course strong {
-        overflow-wrap: anywhere;
-    }
-
-    #teacher .class-number {
-        display: block;
-    }
-
-    /* Level */
-    #teacher .today-level {
-        grid-area: level;
-
-        justify-self: end;
-        align-self: center;
-    }
-
-    #teacher .today-level .level {
-        margin-right: 0 !important;
-    }
-
-    /* Classes btn - */
-    .btn-class-today,
-    .today-action button {
-        grid-area: button;
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: .6rem;
-        margin: 0;
-        box-sizing: border-box;    
-    }
-
-    /* TRAINING OVERVIEW */
     .attendance-period-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    /* Hide desktop column headings */
-    .overview-grid-header {
-        display: none;
-    }
-
-    /* Show tablet/mobile column headings(as labels) */
     .overview-mobile-label {
         display: block;
         max-width: 40%;
@@ -702,7 +668,7 @@ a.btn-class-today img {
 
     .overview-period {
         grid-column: 1 / -1;
-        padding: 1rem 0.3rem 1rem .5rem;
+        padding: 1rem 0.3rem 1rem 0.5rem;
     }
 
     .attendance-progress {
@@ -716,15 +682,103 @@ a.btn-class-today img {
 }
 
 
+/* MOBILE *******************************************************/
 
 @media (max-width: 767.99px) {
-    
+
     .dashboard-meta-cards .meta-row {
         grid-template-columns: repeat(1, 1fr);
     }
 
+    .today-class-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "time level"
+            "course course"
+            "button button";
+        gap: 0.5rem 1rem;
+        width: 100%;
+        min-width: 0;
+        padding: 0.75rem 1rem 0.15rem;
+        align-items: center;
+    }
+
+    .today-classes-card.dashboard-card {
+        gap: 1rem;
+    }
+
+    .today-classes-list {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .today-time {
+        grid-area: time;
+        min-width: 0;
+        height: 40px;
+        margin: 0;
+        justify-self: start;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .today-course {
+        grid-area: course;
+        min-width: 0;
+        width: 100%;
+        padding: 0.5rem 0.25rem 0.5rem 0;
+    }
+
+    .course-name-and-class-num,
+    .today-course .course-name-and-class-num {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+    }
+
+    .today-course strong {
+        overflow-wrap: anywhere;
+    }
+
+    .class-number {
+        display: block;
+    }
+
+    .today-level {
+        grid-area: level;
+        justify-self: end;
+        align-self: center;
+    }
+
+    .today-level .level {
+        margin-right: 0 !important;
+    }
+
+    .today-action {
+        grid-area: button;
+        grid-column: auto;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-class-today,
+    .today-action button {
+        grid-area: button;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        margin: 0;
+        gap: 0.6rem;
+        box-sizing: border-box;
+    }
 
 }
+
+
+/* ≤660px *******************************************************/
 
 @media (max-width: 660.99px) {
 
@@ -735,14 +789,46 @@ a.btn-class-today img {
     .overview-completed .overview-mobile-label {
         width: 50%;
     }
+
 }
 
 
+/* SMALL MOBILE
+   Training Overview becomes a 2 × 2 metric grid.
+*****************************************************************/
+
 @media (max-width: 600px) {
-    
+
     .attendance-period-grid {
+        --divider-color: rgba(var(--color-steel-rgb), 0.15);
+        --divider-gap: 20px;
+        position: relative;
+        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, 1fr);
         gap: 0;
+    }
+
+    .attendance-period-grid::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            var(--divider-color) 0,
+            var(--divider-color) calc(50% - var(--divider-gap)),
+            transparent calc(50% - var(--divider-gap)),
+            transparent calc(50% + var(--divider-gap)),
+            var(--divider-color) calc(50% + var(--divider-gap)),
+            var(--divider-color) 100%
+        );
+    }
+
+    .overview-mobile-label {
+        font-size: 0.75rem;
     }
 
     .overview-period:first-of-type {
@@ -756,30 +842,36 @@ a.btn-class-today img {
 }
 
 
+/* ≤576px *******************************************************/
 
 @media (max-width: 576px) {
-    
+
     .today-class-row {
-            padding: 0.5rem 0.5rem 0.15rem 0.5rem;
+        padding: 0.5rem 0.5rem 0.15rem;
     }
 
 }
 
 
+/* ≤436px *******************************************************/
+
 @media (max-width: 436.98px) {
 
-    .today-classes-card .header, .training-overview .header {
+    .today-classes-card .header,
+    .training-overview .header {
         padding: 0;
     }
 
     .overview-period strong {
-        font-size: 1rem;
         color: var(--color-navy);
+        font-size: 1rem;
         font-weight: 500;
     }
 
 }
 
+
+/* ≤370px *******************************************************/
 
 @media (max-width: 370px) {
 
