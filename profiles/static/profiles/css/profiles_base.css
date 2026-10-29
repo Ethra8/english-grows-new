@@ -120,11 +120,12 @@ main.profile-main {
     text-decoration: none;
     text-transform: capitalize;
     font-weight: 400;
-    width: max-content;
+    width: fit-content;
     max-height: fit-content;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
+    gap: .5em;
     background: rgba(var(--color-pearlaqua-rgb), 0.1);
     align-self: center;
     cursor: pointer;

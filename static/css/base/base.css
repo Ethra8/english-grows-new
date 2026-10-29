@@ -490,7 +490,7 @@ a.text-white:hover {
 }
 
 .nav-language-divider {
-    display: none;
+    color: rgba(var(--color-whitesmoke-rgb), 0.5);
 }
 /* END NAV Lang Selector form **************************************/
 
