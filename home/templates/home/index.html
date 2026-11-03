@@ -1,92 +1,54 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
-{% load i18n %}
+{% load static i18n %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'home/css/index.css' %}">
+{% endblock %}
 
 
 {% block page_header %}
-
-<!-- =========================================================
-     MAINTENANCE BANNER
-========================================================== -->
-<div class="maintenance-banner notranslate" translate="no">
-    <div class="text-center">
-        <div style="background-color:#5ff5cf; width:48px;height:48px;border-radius:999px;border:1px solid #006b7d;margin:1rem;box-shadow: 0 8px 12px rgba(var(--color-shadow-rgba));">
-            <i class="fa-solid fa-screwdriver-wrench mr-3" style="color:#006b7d;font-size:3.1rem;"></i></div>
-
-        <p class="text-center mb-2">
-            <strong>{% trans 'PLATFORM CURRENTLY UNDER DEVELOPMENT' %}</strong>
-        </p>
-
-        <p class="text-center">
-            <span  class="text-center">
-                {% trans 'Thank you for your patience while new features are being built and refined' %}.
-            </span>
-        </p>
-    </div>
-</div>
-
-
-<!-- =========================================================
-     DECORATIVE GLOBE
-========================================================== -->
-<div class="overlay-globe" aria-hidden="true"></div>
-
-
-<!-- =========================================================
-     TRANSPARENT BIRDS VIDEO
-========================================================== -->
-<!-- <video
-    class="index-top-video w-100 h-100"
-    autoplay
-    muted
-    playsinline
-    aria-hidden="true"
->
-    <source
-        src="{% static 'videos/birds-video.webm' %}"
-        type="video/webm"
-    >
-</video>
- -->
-
-<!-- =========================================================
-     LANDING-PAGE HERO
-========================================================== -->
+<!-- LANDING-PAGE HERO ================ -->
 <div id="index" class="container-fluid w-100 notranslate" translate="no">
 
-    <div class="row index-hero-row align-items-center">
+    <div class="index-hero-row align-items-center">
 
         <!-- =================================================
              LEFT SIDE: BRANDING, TEXT AND CTA BUTTONS
         ================================================== -->
-        <div class="col-12 col-lg-7 index-content-column">
+        <div class="index-content-column">
 
             <header class="index-header">
-
-                <!-- <h1 class="display-1 text-white charmonman-title">
-                    your
-                    <br>
-                    <span class="eg-font text-uppercase ml-md-3">
-                        English grows</span>
-                    <br>
-                    <span class="w-edna">
-                        with Edna</span>
-                </h1> -->
                 <img src="{% static 'images/hero_title_transparent.png' %}" alt="Your English grows with Edna" class="hero-title-image">
                 <img src="{% static 'images/title_landingpage_mobile.png' %}" alt="Your English grows with Edna" class="hero-title-image-mobile">
 
-                <h2>{% trans 'Online professional' %} <br> <span>{% trans 'English training' %}</span></h2>
+                <h1>{% trans 'Online professional' %}
+                    <span>{% trans 'English training' %}</span>
+                </h1>
 
-                <p class="mb-0">{% trans 'Communicate confidently and improve your performance' %}.</p>
-                <p class="mt-2">{% trans 'Take the best from different methodologies' %}.</p>
+                <p class="mb-0">
+                    {% trans 'Communicate confidently and improve your performance' %}.
+                    <span class="d-block mt-2">
+                        {% trans 'Take the best from different methodologies' %}.
+                    </span>
+                </p>
+
+                <a href="" class="btn btn-lg mt-3 mb-5 rounded-pill" aria-label="Explore Training">
+                    {% trans 'Explore Training' %}
+                    <img src="{% static 'icons/custom/chevrons/chevron_right_teal_icon.png' %}" alt="" aria-hidden="true" class="ml-2" width="16">
+                </a>
+
+                <a href="{% url 'placement:test' %}" class="btn btn-lg mt-3 mb-5 ml-5 rounded-pill" aria-label="Take Level Test">
+                    {% trans 'Level Test' %}
+                    <img src="{% static 'icons/custom/chevrons/chevron_right_white_icon.png' %}" alt="" aria-hidden="true" class="ml-2" width="9">
+                </a>
 
             </header>
 
         </div>
 
         <!-- RIGHT SIDE: LAPTOP PLATFORM SHOWCASE -->
-        <div class="col-12 col-lg-5 index-laptop-column">
+        <!-- <div class="col-12 col-lg-5 index-laptop-column">
 
             <section class="platform-showcase" aria-label="English Grows live online lesson preview">
                 <div class="platform-laptop">
@@ -94,26 +56,45 @@
                 </div>
             </section>
 
-        </div>
+        </div> -->
     </div>
 
 
     <!-- CTA BUTTONS -->
-    <!-- <div class="cta">
-            <div>
-                <a href="" class="index-cta-button btn text-uppercase py-2" aria-label="Go to the companies section to request a tailored plan for your enterprise">
-                    Companies<i class="fa-solid fa-chevron-right ml-2 float-right mt-1" aria-hidden="true"></i></a>
+    <section class="training-services">
+        <div class="training-services-container">
+            <div class="training-services-header">
+                <span class="services-eyebrow">{% trans "TAILORED TO YOUR GOALS" %}</span>
+                <h2>{% trans "English training for professionals" %}</h2>
+                <p>{% trans "Discover the training that works for you." %}</p>
             </div>
-            <div>
-                <a href="" class="index-cta-button btn text-uppercase py-2" aria-label="Go to the section with services tailored for professionals">
-                    Professionals<i class="fa-solid fa-chevron-right ml-2 float-right mt-1" aria-hidden="true"></i></a>
-            </div>
-            <div>
-                <a href="" class="index-cta-button btn text-uppercase py-2" aria-label="Go to the section with services tailored for Cambridge exam candidates">
-                    Cambridge Exams<i class="fa-solid fa-chevron-right ml-2 float-right mt-1" aria-hidden="true"></i></a>
-            </div>
-    </div> -->
 
+            <div class="training-services-grid">
+                <a href="#" class="training-service-card">
+                    <span class="service-icon">
+                        <img src="{% static 'icons/custom/briefcase_icon.png' %}" alt="" aria-hidden="true" width="32">
+                    </span>
+                    <h3>{% trans "Companies" %}</h3>
+                    <p>{% trans "Tailored English training for teams and organisations." %}</p>
+                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a href="#" class="training-service-card">
+                    <span class="service-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></span>
+                    <h3>{% trans "Professionals" %}</h3>
+                    <p>{% trans "Develop your confidence and communication skills for professional success." %}</p>
+                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+
+                <a href="#" class="training-service-card">
+                    <span class="service-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
+                    <h3>{% trans "Cambridge Exams" %}</h3>
+                    <p>{% trans "Prepare for internationally recognised English qualifications." %}</p>
+                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
 
 {% endblock %}

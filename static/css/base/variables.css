@@ -155,4 +155,11 @@
 
     /* GRADIENT BUTTON META */
     --bg-gradient-metacard: linear-gradient(135deg, rgba(var(--color-navy-rgb), 0.96), rgba(var(--color-teal-rgb), 0.96), rgba(var(--color-teal-rgb), 0.75));
+
+    /* All Transitions */
+    --all-transitions: all 0.3s ease-in-out;
+
+    /* Maintenance Banner Height var calculated by base.js */
+    --maintenance-banner-height: 0px;
+
 }

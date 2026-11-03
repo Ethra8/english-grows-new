@@ -1,73 +1,8 @@
 
-/*******************************************************************|
-|****** COLOR PALETTE **********************************************|
-|*******************************************************************|
-|** --> Check all color vars in variables.css file *****************/
-
-
-.maintenance-banner {
-    position: fixed;
-    z-index: 999;
-    width: 100%;
-    background: var(--color-pearlaqua);
-    display: flex;
-    align-items: center;      /* Vertical centering */
-    justify-content: space-around;  /* Horizontal centering */
-    flex-direction: column;
-    min-height: 76px;         /* or height: 56px */
-    padding: .85rem 1.5rem;
-    font-weight: 500;
-    letter-spacing: .03em;
-    border-bottom: 3px solid var(--color-teal);
-    margin-top: 120px;
-    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
-}
-
-.maintenance-banner>div {
-    background-color: var(--color-frozen-water);
-    width: 98%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;      /* Vertical centering */
-    justify-content: space-around;
-    padding: 0.15rem 1.5rem 0.75rem;  /* Horizontal centering */
-    border-radius: 8px;
-    border: 1px outset var(--color-whitesmoke);
-    box-shadow: 0 6px 16px rgba(0, 50, 54, 0.28);
-}
-
-.maintenance-banner i {
-    color: var(--color-teal);
-    font-size: 2rem;
-}
-
-.maintenance-banner strong {
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: var(--color-teal);
-}
-
-.maintenance-banner span,
-.maintenance-banner p {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    opacity: .9;
-    line-height: 1.2;
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-
-@media (max-width: 768px) {
-    .maintenance-banner {
-        font-size: .85rem;
-        padding: .75rem 1rem;
-    }
-
-    .maintenance-text {
-        display: block;
-        margin-top: .25rem;
-    }
+/* *** COLOR PALETTE **********************************************|
+|** --> Check all color vars in variables.css file ****************/
+:root {
+    --maintenance-banner-height: 0px;
 }
 
 html {
@@ -152,7 +87,7 @@ a.js-back-link:hover {
     display: inline-flex;
     border: 1px solid rgba(var(--color-pearlaqua-rgb), 0.6);
     color: var(--color-whitesmoke);
-    padding: 0 1.1rem;
+    padding: .35em 1.1em;
     justify-content: space-between;
     align-items: center;
     height: 42.61px !important;
@@ -314,16 +249,6 @@ a.js-back-link:hover {
     right: -15px;
 }
 
-.main-bg {
-    margin: 120px 0 auto;
-    flex-grow: 1 !important; /* forces content area to grow and fill remaining space between nav and footer */
-    min-height: calc(100vh - 278px) !important;  /* nav + main nav + footer height */
-}
-
-.main-bg .col-9 {
-    padding-left: 0;
-}
-
 
 /* *** NAVBAR ************************************************************/
 .nav-profile-photo {
@@ -408,11 +333,6 @@ a.js-back-link:hover {
 
 a.text-white:hover {
     color: var(--color-frozen-water) !important;
-}
-
-.eg-font {
-    font-family: "Big Shoulders Display", sans-serif;
-    letter-spacing: 0.03em;
 }
 
 .logo {
@@ -734,335 +654,6 @@ span.btt-link:hover {
 }
 
 
-/* *****************************************************|
-|****** Index Page *************************************|
-|*******************************************************/
-
-#index {
-    position: relative;
-    overflow: hidden;
-    min-height: calc(100vh - 120px) ; /* nav margin-top 120px */
-    padding: 200px 14% 60px;
-    z-index: 2;
-    width: 100%;
-}
-
-.index-top-video {
-    position: absolute;
-    bottom: 0 !important;
-    right: 0 !important;
-    width: 110vw;
-    min-width: 110vw;
-    height: 100vh;
-    min-height: 100vh;
-    object-fit: cover;
-    z-index: 99;
-    pointer-events: none;
-}
-
-.hero-title-image {
-    display: block;
-    width: 100%;
-    max-width: 610px;
-    height: auto;
-    object-fit: contain;
-    margin: 0 auto 1.5rem -10%;
-    z-index: 999 !important;
-}
-
-.hero-title-image-mobile {
-    display: none;
-}
-
-#index .row {
-    position: relative;
-    z-index: 2;
-}
-
-#index h1 {
-    line-height: 1.2;
-}
-
-#index h2 {
-    font-size: 2.3rem;
-    font-weight: 700;
-    font-family: 'Lato', sans-serif;
-    color: var(--color-whitesmoke);
-    width: 65%;
-    margin: 6rem 0 2rem;
-    line-height: 1.4;
-    text-transform: uppercase;
-}
-
-#index h2 span {
-    color: var(--color-tropical-teal);
-}
-
-#index header p {
-    color: var(--color-frozen-water);
-    margin-top: 0.25rem;
-    font-size: 1.2rem;
-    width: 75%;
-    text-justify: none;
-}
-
-#index .platform-laptop {
-    position: relative;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-}
-
-#index .platform-laptop img,
-#index .platform-laptop-static-image {
-    position: static;
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-    object-fit: contain;
-}
-
-
-/* === HERO LAYOUT ================== */
-
-.index-hero-row {
-    min-height: calc(100vh - 70px);
-}
-
-/* Left content */
-.index-content-column {
-    position: relative;
-    z-index: 4;
-}
-
-/* Right laptop column */
-#index .index-laptop-column {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    min-height: 0;
-    padding-left: 15px;
-    padding-right: 15px;
-    overflow: visible;
-}
-
-
-/* =========================================================
-   COMPLETE LAPTOP SHOWCASE
-========================================================= */
-
-.platform-showcase {
-    position: relative;
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
-}
-
-/*
-The laptop image determines the dimensions of the entire
-component. The screen is then positioned relative to it.
-*/
-.platform-laptop {
-    --screen-top: 14.6%;
-    --screen-left: 17.35%;
-    --screen-width: 66%;
-    --screen-height: 53.6%;
-    position: relative;
-    width: 100%;
-    min-width: 100%;
-    max-width: none;
-    margin: 0 auto;
-}
-
-/* Actual transparent laptop PNG */
-.platform-laptop-image {
-    position: relative;
-    z-index: 6;
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    pointer-events: none;
-    user-select: none;
-}
-
-/* =========================================================
-   SCREEN AREA
-========================================================= */
-/*
-These measurements correspond to the generated laptop image.
-
-Because the laptop image still contains a dark screen,
-the slideshow must sit ABOVE the laptop image.
-
-The overlay is limited precisely to the inner display,
-so it does not cover the black bezel.
-*/
-.platform-laptop-screen {
-    position: absolute;
-    top: var(--screen-top);
-    left: var(--screen-left);
-    width: var(--screen-width);
-    height: var(--screen-height);
-    z-index: 2;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    background-color: var(--color-navy);
-    border-radius: 1px;
-}
-
-
-/* =========================================================
-   SLIDES
-========================================================= */
-/*
-Your slides are <figure> elements.
-
-This removes the browser's default figure margins and
-stacks every slide in precisely the same screen position.
-*/
-
-.platform-slide {
-    position: absolute;
-    inset: 0;
-    width: 97%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    opacity: 0;
-    visibility: hidden;
-    overflow: hidden;
-    transition: opacity 700ms ease-in-out, visibility 700ms ease-in-out;
-}
-
-/* Image inside every figure */
-.platform-slide img {
-    display: block;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-    /* object-fit: contain;
-    object-position: top center; */
-    /*
-    Fills the complete inner laptop display.
-    A very small amount may be cropped at the sides.
-    */
-    object-fit: contain;
-    object-position: top top;
-}
-
-.platform-slide.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* =========================================================
-   CAPTION
-========================================================= */
-
-.platform-showcase-caption {
-    position: relative;
-    z-index: 4;
-
-    margin-top: 0.75rem;
-
-    text-align: center;
-}
-
-.platform-showcase-eyebrow {
-    color: rgba(255, 255, 255, 0.68);
-
-    font-size: 0.75rem;
-    font-weight: 600;
-
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.platform-current-slide {
-    color: var(--color-whitesmoke);
-
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-
-/* =========================================================
-   SLIDE NAVIGATION DOTS
-========================================================= */
-
-.platform-slide-controls {
-    position: relative;
-    z-index: 4;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 0.65rem;
-
-    margin-top: 0.75rem;
-}
-
-.platform-slide-dot {
-    display: block;
-
-    width: 9px;
-    height: 9px;
-
-    margin: 0;
-    padding: 0;
-
-    background-color: transparent;
-
-    border: 1px solid var(--color-pearlaqua);
-    border-radius: 50%;
-
-    cursor: pointer;
-
-    transition:
-        background-color 200ms ease,
-        border-color 200ms ease,
-        transform 200ms ease;
-}
-
-.platform-slide-dot:hover {
-    transform: scale(1.25);
-}
-
-.platform-slide-dot:focus {
-    outline: 2px solid rgba(var(--color-pearlaqua-rgb), 0.45);
-    outline-offset: 3px;
-}
-
-.platform-slide-dot.active {
-    background-color: var(--color-pearlaqua);
-    border-color: var(--color-pearlaqua);
-}
-
-/* ******************************* |
-|**** FOOTER **********************|
-|******************************** */
-
-#index .footer {
-    bottom: 0;
-    background-color: var(--color-navy);
-    width: 100%;
-    padding: 17px;
-    position: relative;
-    left: 0;
-    right: 0;
-    margin-top: auto;
-}
 
 
 /**** Django Messages *****************/
@@ -1151,14 +742,6 @@ stacks every slide in precisely the same screen position.
    MEDIUM DESKTOPS
 ========================================================= */
 
-@media (min-width: 992px) and (max-width: 1399.98px) {
-
-    #index {
-        padding: 200px 6% 60px;
-    }
-
-
-}
 
 
 
@@ -1195,15 +778,6 @@ stacks every slide in precisely the same screen position.
         margin: 0 0 0 auto;
     }
 
-    #index {
-        padding: 290px 6% 60px;
-    }
-
-    #index .hero-title-image {
-        margin: 0 auto;
-        width: 100%;
-    }
-
     .main-bg {
         margin: 70px 0 auto;
         /* forces content area to grow and fill 
@@ -1235,44 +809,10 @@ stacks every slide in precisely the same screen position.
 ========================================================= */
 
 @media (max-width: 767.98px) {
-
     .btn-custom,
     .btn-custom-teal {
         width: 100% !important; 
         max-width: 100% !important; 
-    }
-
-    #index h2 {
-        width: 80%;
-        line-height: 1.6;
-    }
-
-    #index header p {
-        width: 80%;
-    }
-
-    #index .index-laptop-column {
-        width: 100%;
-        max-width: 100%;
-        padding-left: 0;
-        padding-right: 0;
-        margin-top: 2.5rem;
-    }
-
-    #index .platform-showcase {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    #index .platform-laptop {
-        width: 100%;
-        max-width: 760px;
-    }
-
-    #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
     }
 
     #checkout-page {
@@ -1320,54 +860,15 @@ stacks every slide in precisely the same screen position.
 ========================================================= */
 
 @media (max-width: 575px) {
-    
     body {
         padding-left: 15px;
         padding-right: 15px;
-    }
-
-    #index {
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 330px;
     }
 
     .logo {
         height: 4.5rem;
         width: 4.5rem;
         margin-left: 0;
-    }
-
-    #index .hero-title-image {
-        display: none;
-    }
-
-    #index .hero-title-image-mobile {
-        display: block;
-        width: 80%;
-    }
-
-    #index h2 {
-        line-height: 1.1;
-        width: 90%;
-    }
-
-    #index header p {
-        width: 90%;
-    }
-
-    #index .index-laptop-column {
-        padding-left: 0;
-        padding-right: 0;
-
-        overflow: visible;
-    }
-
-    #index .platform-showcase,
-    #index .platform-laptop,
-    #index .platform-laptop-static-image {
-        width: 100%;
-        max-width: 100%;
     }
     
     .topage-links {
@@ -1428,15 +929,9 @@ stacks every slide in precisely the same screen position.
         margin-left: auto !important;
     }
 
-    .index-cta-button,
     .error-page-button {
         min-width: 100%;
         font-size: 1rem;
-    }
-
-    #index h1 {
-        font-size: 2.5rem;
-        padding-left: 0;
     }
 
     #pack-details, 

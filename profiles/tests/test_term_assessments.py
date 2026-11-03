@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from itertools import product
 from decimal import Decimal
 
 from django.db import IntegrityError, transaction
@@ -25,618 +24,58 @@ from profiles.utils.term_assessments import (
     update_term_subskill_rating,
 )
 from profiles.utils.term_assessment_reports import (
-    analyse_speaking_profile,
-    analyse_reading_profile,
-    build_speaking_performance_summary,
-    build_reading_performance_summary,
-    build_listening_performance_summary,
-    build_writing_performance_summary,
+    build_skill_performance_summary,
+    build_performance_summary,
+    build_development_focus,
+    PERFORMANCE_NARRATIVE_CONFIG,
     create_term_assessment_report,
     generate_term_assessment_report,
 )
 
 
-class SpeakingPerformanceSummaryTests(TestCase):
-    """Exhaustive tests for the Speaking performance-summary engine."""
-    subskills = (
-        "fluency",
-        "accuracy_and_range",
-        "pronunciation",
-        "interaction",
-    )
-    @staticmethod
-    def build_items(combination):
-        return [
-            {
-                "subskill": subskill,
-                "rating": subskill_rating,
-            }
-            for subskill, subskill_rating in zip(
-                SpeakingPerformanceSummaryTests.subskills,
-                combination,
-            )
-        ]
-    def test_every_speaking_rating_combination_generates_valid_summary(self):
-        rating = StudentSubSkillAssessment.Rating
-        ratings = (
-            rating.NEEDS_WORK,
-            rating.DEVELOPING,
-            rating.SATISFACTORY,
-            rating.CONFIDENT,
-            rating.STRONG,
-        )
-        expected_profiles = {
-            "consistently_strong",
-            "generally_secure",
-            "developing_evenly",
-            "broad_support_needed",
-            "mixed",
-            "pronounced_strength",
-            "pronounced_weakness",
-        }
-        profiles_found = set()
-        summaries = {}
-        for combination in product(ratings, repeat=4):
-            items = self.build_items(combination)
-            profile = analyse_speaking_profile(items)
-            summary = build_speaking_performance_summary(profile, "Maria")
-            profiles_found.add(profile["profile"])
-            summaries[combination] = summary
-            self.assertIn(profile["profile"], expected_profiles)
-            self.assertTrue(summary.strip())
-            self.assertNotIn("None", summary)
-            self.assertNotIn("{learner_name}", summary)
-        self.assertEqual(len(summaries), 625)
-        self.assertEqual(profiles_found, expected_profiles)
-    def test_speaking_performance_summary_is_deterministic(self):
-        rating = StudentSubSkillAssessment.Rating
-        items = self.build_items(
-            (
-                rating.SATISFACTORY,
-                rating.DEVELOPING,
-                rating.CONFIDENT,
-                rating.CONFIDENT,
-            )
-        )
-        first_profile = analyse_speaking_profile(items)
-        second_profile = analyse_speaking_profile(items)
-        first_summary = build_speaking_performance_summary(
-            first_profile,
-            "Maria",
-        )
-        second_summary = build_speaking_performance_summary(
-            second_profile,
-            "Maria",
-        )
-        self.assertEqual(first_profile, second_profile)
-        self.assertEqual(first_summary, second_summary)
-    def test_representative_speaking_profiles_are_classified_correctly(self):
-        rating = StudentSubSkillAssessment.Rating
-        cases = (
-            (
-                (
-                    rating.STRONG,
-                    rating.STRONG,
-                    rating.STRONG,
-                    rating.STRONG,
-                ),
-                "consistently_strong",
-            ),
-            (
-                (
-                    rating.SATISFACTORY,
-                    rating.CONFIDENT,
-                    rating.SATISFACTORY,
-                    rating.CONFIDENT,
-                ),
-                "generally_secure",
-            ),
-            (
-                (
-                    rating.DEVELOPING,
-                    rating.DEVELOPING,
-                    rating.SATISFACTORY,
-                    rating.DEVELOPING,
-                ),
-                "developing_evenly",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                ),
-                "broad_support_needed",
-            ),
-            (
-                (
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                    rating.STRONG,
-                ),
-                "pronounced_strength",
-            ),
-            (
-                (
-                    rating.SATISFACTORY,
-                    rating.NEEDS_WORK,
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                ),
-                "pronounced_weakness",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                    rating.CONFIDENT,
-                    rating.STRONG,
-                ),
-                "mixed",
-            ),
-        )
-        for combination, expected_profile in cases:
-            with self.subTest(
-                combination=combination,
-                expected_profile=expected_profile,
-            ):
-                profile = analyse_speaking_profile(
-                    self.build_items(combination)
-                )
-                self.assertEqual(
-                    profile["profile"],
-                    expected_profile,
-                )
-    def test_speaking_profile_rejects_incomplete_assessment(self):
-        rating = StudentSubSkillAssessment.Rating
-        items = [
-            {"subskill": "fluency", "rating": rating.SATISFACTORY},
-            {
-                "subskill": "accuracy_and_range",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "pronunciation",
-                "rating": rating.SATISFACTORY,
-            },
-        ]
-        with self.assertRaises(ValidationError):
-            analyse_speaking_profile(items)
-
-
-
-class ReadingProfileAnalysisTests(TestCase):
-    """Exhaustive tests for the Reading performance-profile analyser."""
-
-    subskills = (
-        "scanning",
-        "skimming",
-        "detailed",
-    )
+class TermAssessmentNarrativeTests(TestCase):
+    """Current report narrative lookup and Development Focus behaviour."""
 
     @staticmethod
-    def build_items(combination):
+    def items_for(skill, rating="satisfactory"):
         return [
-            {
-                "subskill": subskill,
-                "rating": subskill_rating,
-            }
-            for subskill, subskill_rating in zip(
-                ReadingProfileAnalysisTests.subskills,
-                combination,
-            )
+            {"skill": skill, "subskill": subskill, "rating": rating,
+             "score": StudentSubSkillAssessment.SCORE_BY_RATING[rating]}
+            for subskill, _ in SUBSKILLS[skill]
         ]
 
-    def test_every_reading_rating_combination_generates_valid_profile(self):
-        rating = StudentSubSkillAssessment.Rating
-        ratings = (
-            rating.NEEDS_WORK,
-            rating.DEVELOPING,
-            rating.SATISFACTORY,
-            rating.CONFIDENT,
-            rating.STRONG,
-        )
-        expected_profiles = {
-            "consistently_strong",
-            "generally_secure",
-            "developing_evenly",
-            "broad_support_needed",
-            "mixed",
-            "pronounced_strength",
-            "pronounced_weakness",
-        }
+    def test_all_four_skills_use_their_reviewed_narratives(self):
+        all_items = []
+        for skill in ("speaking", "reading", "listening", "writing"):
+            items = self.items_for(skill)
+            all_items.extend(items)
+            combination = ("satisfactory",) * len(items)
+            expected = PERFORMANCE_NARRATIVE_CONFIG[skill]["narratives"][combination]
+            self.assertEqual(build_skill_performance_summary(skill, items, "Maria"),
+                             expected.format(learner_name="Maria"))
+        paragraphs = build_performance_summary(all_items, "Maria")
+        self.assertEqual(len(paragraphs), 4)
+        self.assertTrue(all(isinstance(paragraph, str) and paragraph.strip() for paragraph in paragraphs))
 
-        profiles_found = set()
-        combinations_checked = 0
+    def test_narrative_lookup_is_independent_of_item_order(self):
+        items = self.items_for("speaking")
+        self.assertEqual(build_skill_performance_summary("speaking", items, "Maria"),
+                         build_skill_performance_summary("speaking", list(reversed(items)), "Maria"))
 
-        for combination in product(ratings, repeat=3):
-            profile = analyse_reading_profile(
-                self.build_items(combination)
-            )
+    def test_narrative_lookup_rejects_incomplete_duplicate_and_invalid_data(self):
+        items = self.items_for("reading")
+        for invalid_items in (items[:-1], items[:-1] + [items[0]],
+                              [*items[:-1], {**items[-1], "rating": "invalid"}]):
+            with self.subTest(items=invalid_items), self.assertRaises(ValidationError):
+                build_skill_performance_summary("reading", invalid_items, "Maria")
 
-            summary = build_reading_performance_summary(
-                profile,
-                "Maria",
-            )
-
-            self.assertTrue(summary.strip())
-            self.assertNotIn("None", summary)
-            self.assertNotIn("{learner_name}", summary)
-
-            combinations_checked += 1
-            profiles_found.add(profile["profile"])
-
-            self.assertIn(
-                profile["profile"],
-                expected_profiles,
-            )
-            self.assertEqual(
-                set(profile["ratings"]),
-                set(self.subskills),
-            )
-            self.assertEqual(
-                set(profile["levels"]),
-                set(self.subskills),
-            )
-
-        self.assertEqual(combinations_checked, 125)
-        self.assertEqual(profiles_found, expected_profiles)
-
-    def test_representative_reading_profiles_are_classified_correctly(self):
-        rating = StudentSubSkillAssessment.Rating
-        cases = (
-            (
-                (
-                    rating.STRONG,
-                    rating.STRONG,
-                    rating.STRONG,
-                ),
-                "consistently_strong",
-            ),
-            (
-                (
-                    rating.SATISFACTORY,
-                    rating.CONFIDENT,
-                    rating.SATISFACTORY,
-                ),
-                "generally_secure",
-            ),
-            (
-                (
-                    rating.DEVELOPING,
-                    rating.DEVELOPING,
-                    rating.SATISFACTORY,
-                ),
-                "developing_evenly",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                    rating.NEEDS_WORK,
-                ),
-                "broad_support_needed",
-            ),
-            (
-                (
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                    rating.STRONG,
-                ),
-                "pronounced_strength",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                ),
-                "pronounced_weakness",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                    rating.SATISFACTORY,
-                ),
-                "mixed",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.DEVELOPING,
-                    rating.CONFIDENT,
-                ),
-                "pronounced_strength",
-            ),
-            (
-                (
-                    rating.NEEDS_WORK,
-                    rating.SATISFACTORY,
-                    rating.CONFIDENT,
-                ),
-                "pronounced_weakness",
-            ),
-        )
-
-        for combination, expected_profile in cases:
-            with self.subTest(
-                combination=combination,
-                expected_profile=expected_profile,
-            ):
-                profile = analyse_reading_profile(
-                    self.build_items(combination)
-                )
-                self.assertEqual(
-                    profile["profile"],
-                    expected_profile,
-                )
-
-    def test_reading_profile_rejects_incomplete_assessment(self):
-        rating = StudentSubSkillAssessment.Rating
-        items = [
-            {
-                "subskill": "scanning",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "skimming",
-                "rating": rating.SATISFACTORY,
-            },
-        ]
-
-        with self.assertRaises(ValidationError):
-            analyse_reading_profile(items)
-
-    def test_reading_profile_rejects_invalid_subskill(self):
-        rating = StudentSubSkillAssessment.Rating
-        items = [
-            {
-                "subskill": "scanning",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "skimming",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "invented_reading_skill",
-                "rating": rating.SATISFACTORY,
-            },
-        ]
-
-        with self.assertRaises(ValidationError):
-            analyse_reading_profile(items)
-
-    def test_reading_performance_summary_is_deterministic(self):
-        rating = StudentSubSkillAssessment.Rating
-        items = self.build_items(
-            (
-                rating.SATISFACTORY,
-                rating.DEVELOPING,
-                rating.CONFIDENT,
-            )
-        )
-
-        first_profile = analyse_reading_profile(items)
-        second_profile = analyse_reading_profile(items)
-
-        first_summary = build_reading_performance_summary(
-            first_profile,
-            "Maria",
-        )
-        second_summary = build_reading_performance_summary(
-            second_profile,
-            "Maria",
-        )
-
-        self.assertEqual(first_profile, second_profile)
-        self.assertEqual(first_summary, second_summary)
-
-
-
-
-class ListeningPerformanceSummaryTests(TestCase):
-    """Exhaustive tests for the Listening performance-summary engine."""
-
-    subskills = (
-        "gist",
-        "specific_information",
-        "detailed",
-    )
-
-    @staticmethod
-    def build_items(combination):
-        return [
-            {
-                "subskill": subskill,
-                "rating": subskill_rating,
-            }
-            for subskill, subskill_rating in zip(
-                ListeningPerformanceSummaryTests.subskills,
-                combination,
-            )
-        ]
-
-    def test_every_listening_rating_combination_generates_summary(self):
-        rating = StudentSubSkillAssessment.Rating
-        ratings = (
-            rating.NEEDS_WORK,
-            rating.DEVELOPING,
-            rating.SATISFACTORY,
-            rating.CONFIDENT,
-            rating.STRONG,
-        )
-
-        combinations_tested = 0
-
-        for combination in product(ratings, repeat=3):
-            summary = build_listening_performance_summary(
-                self.build_items(combination),
-                "Maria",
-            )
-
-            self.assertTrue(summary.strip())
-            self.assertNotIn("None", summary)
-            self.assertNotIn("{learner_name}", summary)
-
-            combinations_tested += 1
-
-        self.assertEqual(combinations_tested, 125)
-
-    def test_listening_all_needs_work_uses_expected_narrative(self):
-        rating = StudentSubSkillAssessment.Rating
-
-        summary = build_listening_performance_summary(
-            self.build_items(
-                (
-                    rating.NEEDS_WORK,
-                    rating.NEEDS_WORK,
-                    rating.NEEDS_WORK,
-                )
-            ),
-            "Maria",
-        )
-
+    def test_development_focus_extends_when_every_area_is_confident_or_strong(self):
+        items = [item for skill in SUBSKILLS for item in self.items_for(skill, "strong")]
         self.assertEqual(
-            summary,
-            (
-                "Maria is currently finding listening challenging across all three "
-                "assessed areas. Understanding the main idea and overall message, "
-                "identifying specific information and key details, and understanding "
-                "detailed information and meaning in context all require further "
-                "development to reach the expected standard."
-            ),
+            build_development_focus(items),
+            "The next learning period should focus on consolidating and extending "
+            "established performance across all four language skills.",
         )
-
-
-
-class WritingPerformanceSummaryTests(TestCase):
-    """Exhaustive tests for the Writing canonical performance narratives."""
-
-    subskills = (
-        "organization",
-        "cohesion",
-        "vocabulary_grammar",
-        "register",
-    )
-
-    @staticmethod
-    def build_items(combination):
-        return [
-            {
-                "subskill": subskill,
-                "rating": item_rating,
-            }
-            for subskill, item_rating in zip(
-                WritingPerformanceSummaryTests.subskills,
-                combination,
-            )
-        ]
-
-    def test_every_writing_rating_combination_generates_summary(self):
-        rating = StudentSubSkillAssessment.Rating
-        ratings = (
-            rating.NEEDS_WORK,
-            rating.DEVELOPING,
-            rating.SATISFACTORY,
-            rating.CONFIDENT,
-            rating.STRONG,
-        )
-
-        combinations_tested = 0
-
-        for combination in product(ratings, repeat=4):
-            summary = build_writing_performance_summary(
-                self.build_items(combination),
-                "Maria",
-            )
-
-            self.assertTrue(summary.strip())
-            self.assertNotIn("None", summary)
-            self.assertNotIn("{learner_name}", summary)
-
-            combinations_tested += 1
-
-        self.assertEqual(combinations_tested, 625)
-
-    def test_writing_all_strong_uses_expected_narrative(self):
-        rating = StudentSubSkillAssessment.Rating
-
-        summary = build_writing_performance_summary(
-            self.build_items(
-                (
-                    rating.STRONG,
-                    rating.STRONG,
-                    rating.STRONG,
-                    rating.STRONG,
-                )
-            ),
-            "Maria",
-        )
-
-        self.assertEqual(
-            summary,
-            (
-                "Written communication is a clear strength for Maria, "
-                "who demonstrates consistently strong performance across "
-                "organisation and clarity, cohesion, grammatical accuracy "
-                "and language range, and control of register."
-            ),
-        )
-
-    def test_writing_all_satisfactory_uses_expected_narrative(self):
-        rating = StudentSubSkillAssessment.Rating
-
-        summary = build_writing_performance_summary(
-            self.build_items(
-                (
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                    rating.SATISFACTORY,
-                )
-            ),
-            "Maria",
-        )
-
-        self.assertEqual(
-            summary,
-            (
-                "Maria's writing performance meets the expected standard "
-                "across all four assessed areas. Organisation and clarity, "
-                "cohesion, grammatical accuracy and language range, and "
-                "control of register are satisfactory for this level, "
-                "although there remains clear scope to develop greater "
-                "consistency, flexibility and precision."
-            ),
-        )
-
-    def test_writing_rejects_incomplete_assessment(self):
-        rating = StudentSubSkillAssessment.Rating
-
-        items = [
-            {
-                "subskill": "organization",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "cohesion",
-                "rating": rating.SATISFACTORY,
-            },
-            {
-                "subskill": "vocabulary_grammar",
-                "rating": rating.SATISFACTORY,
-            },
-        ]
-
-        with self.assertRaises(ValidationError):
-            build_writing_performance_summary(
-                items,
-                "Maria",
-            )
 
 
 class TermAssessmentDraftTests(TestCase):
@@ -1135,101 +574,67 @@ class TermAssessmentDraftTests(TestCase):
         for (skill, subskill), rating in ratings.items():
             StudentTermSubSkillAssessment.objects.filter(
                 skill_snapshot__term_assessment=assessment,
-                skill_snapshot__skill=skill,
-                subskill=subskill,
+                skill_snapshot__skill=skill, subskill=subskill,
             ).update(rating=rating)
         assessment = submit_term_assessment(assessment, self.student)
         report = generate_term_assessment_report(assessment)
-        priorities = report["next_term_priorities"]
-        self.assertEqual(len(priorities), 3)
         self.assertEqual(
-            [(item["skill"], item["subskill"]) for item in priorities],
-            [
-                ("speaking", "fluency"),
-                ("listening", "gist"),
-                ("reading", "scanning"),
-            ],
-        )
-        self.assertEqual(
-            [item["rating"] for item in priorities],
-            ["needs_work", "needs_work", "developing"],
+            report["development_focus"],
+            "The next learning period should prioritise greater fluency in spoken "
+            "communication, more reliable understanding of the main message when "
+            "listening and more efficient location of specific information when reading.",
         )
     def test_equal_ratings_follow_existing_subskills_order(self):
         assessment, _ = self.create_draft()
         for skill, subskill in [
-            ("speaking", "fluency"),
-            ("speaking", "pronunciation"),
-            ("reading", "scanning"),
-            ("listening", "gist"),
+            ("speaking", "fluency"), ("speaking", "pronunciation"),
+            ("reading", "scanning"), ("listening", "gist"),
         ]:
             StudentTermSubSkillAssessment.objects.filter(
                 skill_snapshot__term_assessment=assessment,
-                skill_snapshot__skill=skill,
-                subskill=subskill,
+                skill_snapshot__skill=skill, subskill=subskill,
             ).update(rating="needs_work")
         assessment = submit_term_assessment(assessment, self.student)
         report = generate_term_assessment_report(assessment)
         self.assertEqual(
-            [
-                (item["skill"], item["subskill"])
-                for item in report["next_term_priorities"]
-            ],
-            [
-                ("speaking", "fluency"),
-                ("speaking", "pronunciation"),
-                ("reading", "scanning"),
-            ],
+            report["development_focus"],
+            "The next learning period should prioritise greater fluency in spoken "
+            "communication, clearer pronunciation and more efficient location of "
+            "specific information when reading.",
         )
     def test_report_does_not_invent_weaknesses(self):
         assessment, _ = self.create_draft()
         assessment = submit_term_assessment(assessment, self.student)
         report = generate_term_assessment_report(assessment)
-        self.assertEqual(len(report["development_priorities"]), 4)
-        self.assertEqual(len(report["next_term_priorities"]), 3)
-        for skill in ("speaking", "reading", "listening", "writing"):
-            self.assertIn(
-                "Performance is satisfactory",
-                report["development_priorities"][skill],
-            )
-            self.assertNotIn(
-                "Targeted development is recommended",
-                report["development_priorities"][skill],
-            )
-        self.assertTrue(
-            all(
-                item["focus_type"] == "consolidation"
-                for item in report["next_term_priorities"]
-            )
+        self.assertEqual(len(report["performance_summary_paragraphs"]), 4)
+        self.assertTrue(all(p.strip() for p in report["performance_summary_paragraphs"]))
+        self.assertTrue(report["performance_summary_overview"].strip())
+        self.assertEqual(
+            report["development_focus"],
+            "The next learning period should focus on consolidating fluency in spoken "
+            "communication, grammatical accuracy and language range in speaking "
+            "and pronunciation.",
         )
+        self.assertNotIn("prioritise", report["development_focus"])
     def test_report_identifies_recorded_strengths(self):
         assessment, _ = self.create_draft()
-
         StudentTermSubSkillAssessment.objects.filter(
             skill_snapshot__term_assessment=assessment,
-            skill_snapshot__skill="speaking",
-            subskill="fluency",
+            skill_snapshot__skill="speaking", subskill="fluency",
         ).update(rating="strong")
-
-        assessment = submit_term_assessment(
-            assessment,
-            self.student,
+        assessment = submit_term_assessment(assessment, self.student)
+        report = generate_term_assessment_report(assessment)
+        speaking_summary = report["performance_summary_paragraphs"][0]
+        ratings = ("strong", "satisfactory", "satisfactory", "satisfactory")
+        expected = PERFORMANCE_NARRATIVE_CONFIG["speaking"]["narratives"][ratings].format(
+            learner_name=self.student.username
         )
-
-        report = generate_term_assessment_report(
-            assessment,
+        baseline = PERFORMANCE_NARRATIVE_CONFIG["speaking"]["narratives"][("satisfactory",) * 4].format(
+            learner_name=self.student.username
         )
-
-        speaking_summary = report["performance_summary"]["speaking"]
-
-        self.assertIn(
-            "shows a clear strength in fluency",
-            speaking_summary,
-        )
-        self.assertIn(
-            "grammatical accuracy and language range, pronunciation, and spoken interaction "
-            "meet the expected standard",
-            speaking_summary,
-        )
+        self.assertEqual(speaking_summary, expected)
+        self.assertNotEqual(speaking_summary, baseline)
+        self.assertEqual(len(report["performance_summary_paragraphs"]), 4)
     def test_report_rejects_missing_subskill_rating(self):
         assessment, _ = self.create_draft()
         assessment = submit_term_assessment(assessment, self.student)
@@ -1303,17 +708,17 @@ class TermAssessmentDraftTests(TestCase):
     def test_persistent_report_contains_generated_content(self):
         assessment, _ = self.create_draft()
         assessment = submit_term_assessment(assessment, self.student)
+        expected = generate_term_assessment_report(assessment)
         report = create_term_assessment_report(assessment, self.student)
         report.refresh_from_db()
         self.assertEqual(report.content["assessment_id"], assessment.pk)
         self.assertEqual(report.content["overall_score"], "6.0")
         self.assertEqual(len(report.content["skills"]), 4)
-        self.assertEqual(len(report.content["development_priorities"]), 4)
-        self.assertEqual(len(report.content["next_term_priorities"]), 3)
-        for skill in ("speaking", "reading", "listening", "writing"):
-            self.assertTrue(report.content["development_priorities"][skill])
-        self.assertIn("performance_summary", report.content)
-        self.assertIn("next_term_focus", report.content)
+        self.assertEqual(len(report.content["performance_summary_paragraphs"]), 4)
+        self.assertEqual(report.content["performance_summary_overview"], expected["performance_summary_overview"])
+        self.assertEqual(report.content["performance_summary_paragraphs"], expected["performance_summary_paragraphs"])
+        self.assertEqual(report.content["development_focus"], expected["development_focus"])
+        self.assertTrue(report.content["development_focus"].strip())
     def test_persistent_report_serializes_date(self):
         assessment, _ = self.create_draft()
         assessment = submit_term_assessment(assessment, self.student)
@@ -1417,29 +822,18 @@ class TermAssessmentDraftTests(TestCase):
 
     def test_report_uses_canonical_writing_performance_summary(self):
         assessment, _ = self.create_draft()
-
         StudentTermSubSkillAssessment.objects.filter(
             skill_snapshot__term_assessment=assessment,
             skill_snapshot__skill="writing",
         ).update(rating="strong")
-
-        assessment = submit_term_assessment(
-            assessment,
-            self.student,
-        )
-
+        assessment = submit_term_assessment(assessment, self.student)
         report = generate_term_assessment_report(assessment)
-        writing_summary = report["performance_summary"]["writing"]
-
-        self.assertIn(
-            "Written communication is a clear strength",
-            writing_summary,
+        writing_summary = report["performance_summary_paragraphs"][3]
+        expected = PERFORMANCE_NARRATIVE_CONFIG["writing"]["narratives"][("strong",) * 4].format(
+            learner_name=self.student.username
         )
-        self.assertIn(
-            "consistently strong performance across organisation and clarity",
-            writing_summary,
-        )
-
+        self.assertEqual(writing_summary, expected)
+        self.assertEqual(len(report["performance_summary_paragraphs"]), 4)
 
 
 class TermAssessmentDetailViewTests(TestCase):

@@ -167,6 +167,8 @@ The application combines course management, automated lesson scheduling, attenda
   - [Lesson Lifecycle and Static Assets](#lesson-lifecycle-and-static-assets)
   - [Email Testing Reminder](#email-testing-reminder)
 
+- [Credits](#credits)
+  - [Pictures](#pictures)
 ---
 
 # DATA PROTECTION & PRIVACY
@@ -8098,3 +8100,11 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ```
 
 Use the console backend as a local development setting only, not as the production transport. For production SMTP, check real recipient inboxes and server error logs. Do not confuse successful transactional email delivery with marketing opt-in verification; inspect the Marketing subscribers Admin record after a new checked/unchecked submission.
+
+---
+
+# CREDITS
+
+## Pictures
+
+- Foto de Cedric Fauntleroy: https://www.pexels.com/es-es/foto/ordenador-portatil-oficina-mesa-ordenador-8154163/

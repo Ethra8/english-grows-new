@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: English Grows\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:14+0100\n"
+"POT-Creation-Date: 2026-11-03 21:06+0100\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,34 +104,82 @@ msgstr "Sab."
 msgid "Sun."
 msgstr "Dom."
 
-#: .\home\templates\home\index.html:18
-msgid "PLATFORM CURRENTLY UNDER DEVELOPMENT"
-msgstr "PLATAFORMA ACTUALMENTE EN DESARROLLO"
-
-#: .\home\templates\home\index.html:23
-msgid ""
-"Thank you for your patience while new features are being built and refined"
-msgstr ""
-"Nuevas funcionalidades están siendo implementadas. Gracias por su paciencia"
-
-#: .\home\templates\home\index.html:79
+#: .\home\templates\home\index.html:25
 msgid "Online professional"
 msgstr "Formación de Inglés Online"
 
-#: .\home\templates\home\index.html:79
+#: .\home\templates\home\index.html:26
 msgid "English training"
 msgstr "De profesional a profesional"
 
-#: .\home\templates\home\index.html:81
+#: .\home\templates\home\index.html:30
 msgid "Communicate confidently and improve your performance"
 msgstr "Comunícate con confianza y mejora tu rendimiento"
 
-#: .\home\templates\home\index.html:82
+#: .\home\templates\home\index.html:32
 msgid "Take the best from different methodologies"
 msgstr "Llévate lo mejor de dos metodologías"
 
+#: .\home\templates\home\index.html:37
+#, fuzzy
+#| msgid "English training"
+msgid "Explore Training"
+msgstr "De profesional a profesional"
+
+#: .\home\templates\home\index.html:42
+#, fuzzy
+#| msgid "Level"
+msgid "Level Test"
+msgstr "Nivel"
+
+#: .\home\templates\home\index.html:67
+msgid "TAILORED TO YOUR GOALS"
+msgstr "PROGRAMAS A MEDIDA"
+
+#: .\home\templates\home\index.html:68
+#, fuzzy
+#| msgid "Online professional"
+msgid "English training for professionals"
+msgstr "Formación de Inglés Online"
+
+#: .\home\templates\home\index.html:69
+msgid "Discover the training that works for you."
+msgstr "Descubre el programa que mejor se adapta a tus necesidades."
+
+#: .\home\templates\home\index.html:77 .\templates\base.html:359
+msgid "Companies"
+msgstr "Empresas"
+
+#: .\home\templates\home\index.html:78
+msgid "Tailored English training for teams and organisations."
+msgstr "Formación de inglés a medida para equipos y organizaciones"
+
+#: .\home\templates\home\index.html:79 .\home\templates\home\index.html:86
+#: .\home\templates\home\index.html:93
+#, fuzzy
+#| msgid "English training"
+msgid "Explore training"
+msgstr "De profesional a profesional"
+
+#: .\home\templates\home\index.html:84 .\templates\base.html:366
+msgid "Professionals"
+msgstr "Profesionales"
+
+#: .\home\templates\home\index.html:85
+msgid ""
+"Develop your confidence and communication skills for professional success."
+msgstr "Mejora tus dotes comunicativas, mejora tu confianza y consigue tus metas."
+
+#: .\home\templates\home\index.html:91 .\templates\base.html:373
+msgid "Cambridge Exams"
+msgstr "Exámenes Cambridge"
+
+#: .\home\templates\home\index.html:92
+msgid "Prepare for internationally recognised English qualifications."
+msgstr "Preparación para los mundialmente reconocidos certificados de nivel de Cambridge."
+
 #: .\home\templates\home\legal_notice.html:5
-#: .\home\templates\home\legal_notice.html:19 .\templates\base.html:385
+#: .\home\templates\home\legal_notice.html:19 .\templates\base.html:408
 msgid "Legal Notice"
 msgstr "Aviso legal"
 
@@ -144,7 +192,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Este Aviso legal proporciona información sobre la titularidad y el funcionamiento del sitio web de English Grows y las condiciones que regulan su uso."
+"Este Aviso legal proporciona información sobre la titularidad y el "
+"funcionamiento del sitio web de English Grows y las condiciones que regulan "
+"su uso."
 
 #: .\home\templates\home\legal_notice.html:31
 #: .\home\templates\home\privacy_policy.html:39
@@ -169,7 +219,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"De conformidad con el artículo 10 de la Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), la siguiente información identifica a la persona responsable de este sitio web."
+"De conformidad con el artículo 10 de la Ley 34/2002 de Servicios de la "
+"Sociedad de la Información y de Comercio Electrónico (LSSI-CE), la siguiente "
+"información identifica a la persona responsable de este sitio web."
 
 #: .\home\templates\home\legal_notice.html:52
 #, fuzzy
@@ -239,7 +291,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows presta sus servicios de formación exclusivamente en línea y no dispone de ningún establecimiento abierto al público."
+"English Grows presta sus servicios de formación exclusivamente en línea y no "
+"dispone de ningún establecimiento abierto al público."
 
 #: .\home\templates\home\legal_notice.html:79
 msgid "2. Purpose and scope"
@@ -255,7 +308,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El sitio web de English Grows proporciona información sobre sus servicios de formación y acceso a su plataforma de aprendizaje en línea. Algunas funciones son de acceso público, mientras que otras requieren registro o acceso autorizado."
+"El sitio web de English Grows proporciona información sobre sus servicios de "
+"formación y acceso a su plataforma de aprendizaje en línea. Algunas "
+"funciones son de acceso público, mientras que otras requieren registro o "
+"acceso autorizado."
 
 #: .\home\templates\home\legal_notice.html:91
 msgid ""
@@ -265,7 +321,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El acceso al sitio web no establece, por sí mismo, una relación contractual para servicios de formación de pago."
+"El acceso al sitio web no establece, por sí mismo, una relación contractual "
+"para servicios de formación de pago."
 
 #: .\home\templates\home\legal_notice.html:101
 msgid "3. Intellectual and industrial property"
@@ -281,7 +338,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"ENGLISH GROWS es un nombre comercial registrado en la Oficina Española de Patentes y Marcas (OEPM), con registros denominativo y figurativo independientes:"
+"ENGLISH GROWS es un nombre comercial registrado en la Oficina Española de "
+"Patentes y Marcas (OEPM), con registros denominativo y figurativo "
+"independientes:"
 
 #: .\home\templates\home\legal_notice.html:112
 #, fuzzy
@@ -306,7 +365,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El nombre comercial registrado y su representación gráfica están protegidos por la legislación aplicable en materia de propiedad industrial."
+"El nombre comercial registrado y su representación gráfica están protegidos "
+"por la legislación aplicable en materia de propiedad industrial."
 
 #: .\home\templates\home\legal_notice.html:125
 msgid ""
@@ -318,7 +378,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El diseño original del sitio web, los textos, gráficos, materiales educativos y demás contenidos protegidos pertenecen a sus respectivos titulares de derechos y están protegidos por la legislación aplicable en materia de propiedad intelectual."
+"El diseño original del sitio web, los textos, gráficos, materiales "
+"educativos y demás contenidos protegidos pertenecen a sus respectivos "
+"titulares de derechos y están protegidos por la legislación aplicable en "
+"materia de propiedad intelectual."
 
 #: .\home\templates\home\legal_notice.html:134
 msgid ""
@@ -331,7 +394,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El acceso al sitio web no transfiere la titularidad de sus contenidos ni autoriza su reproducción, redistribución o explotación comercial sin la autorización correspondiente, salvo en los casos permitidos por la ley."
+"El acceso al sitio web no transfiere la titularidad de sus contenidos ni "
+"autoriza su reproducción, redistribución o explotación comercial sin la "
+"autorización correspondiente, salvo en los casos permitidos por la ley."
 
 #: .\home\templates\home\legal_notice.html:147
 msgid "4. Acceptable use"
@@ -350,7 +415,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los usuarios deben acceder y utilizar el sitio web y la plataforma de aprendizaje de forma lícita y conforme a sus finalidades previstas. Se prohíben el acceso no autorizado, la interferencia con el funcionamiento de la plataforma, la vulneración de derechos de terceros y las actividades que comprometan su seguridad."
+"Los usuarios deben acceder y utilizar el sitio web y la plataforma de "
+"aprendizaje de forma lícita y conforme a sus finalidades previstas. Se "
+"prohíben el acceso no autorizado, la interferencia con el funcionamiento de "
+"la plataforma, la vulneración de derechos de terceros y las actividades que "
+"comprometan su seguridad."
 
 #: .\home\templates\home\legal_notice.html:160
 msgid ""
@@ -362,7 +431,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los usuarios registrados deben proteger las credenciales de su cuenta y notificar a English Grows cualquier sospecha de acceso no autorizado a su cuenta."
+"Los usuarios registrados deben proteger las credenciales de su cuenta y "
+"notificar a English Grows cualquier sospecha de acceso no autorizado a su "
+"cuenta."
 
 #: .\home\templates\home\legal_notice.html:171
 msgid "5. External links"
@@ -378,7 +449,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El sitio web puede contener enlaces a sitios web y servicios independientes de terceros. Estos se rigen por sus propios términos aplicables y avisos de privacidad."
+"El sitio web puede contener enlaces a sitios web y servicios independientes "
+"de terceros. Estos se rigen por sus propios términos aplicables y avisos de "
+"privacidad."
 
 #: .\home\templates\home\legal_notice.html:182
 msgid ""
@@ -390,7 +463,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows no controla el contenido ni el funcionamiento de sitios web independientes de terceros. Nada de lo dispuesto en esta sección excluye las responsabilidades derivadas de la legislación aplicable."
+"English Grows no controla el contenido ni el funcionamiento de sitios web "
+"independientes de terceros. Nada de lo dispuesto en esta sección excluye las "
+"responsabilidades derivadas de la legislación aplicable."
 
 #: .\home\templates\home\legal_notice.html:194
 msgid "6. Training services and privacy"
@@ -406,7 +481,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los servicios de formación de pago se rigen por los Términos y Condiciones aplicables, la propuesta de formación o el acuerdo contractual individual, incluidas las disposiciones correspondientes sobre precios, pago, programación y cancelación."
+"Los servicios de formación de pago se rigen por los Términos y Condiciones "
+"aplicables, la propuesta de formación o el acuerdo contractual individual, "
+"incluidas las disposiciones correspondientes sobre precios, pago, "
+"programación y cancelación."
 
 #: .\home\templates\home\legal_notice.html:206
 msgid ""
@@ -418,7 +496,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La información sobre el tratamiento de datos personales, los derechos de protección de datos y el uso de cookies se proporciona en nuestra Política de Privacidad, accesible desde el pie de página del sitio web."
+"La información sobre el tratamiento de datos personales, los derechos de "
+"protección de datos y el uso de cookies se proporciona en nuestra Política "
+"de Privacidad, accesible desde el pie de página del sitio web."
 
 #: .\home\templates\home\legal_notice.html:218
 msgid "7. Applicable law and updates"
@@ -434,7 +514,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Este Aviso legal se rige por la legislación española, sin perjuicio de las disposiciones imperativas aplicables a los usuarios, incluidos los derechos legales de los consumidores y las garantías jurisdiccionales."
+"Este Aviso legal se rige por la legislación española, sin perjuicio de las "
+"disposiciones imperativas aplicables a los usuarios, incluidos los derechos "
+"legales de los consumidores y las garantías jurisdiccionales."
 
 #: .\home\templates\home\legal_notice.html:230
 msgid ""
@@ -446,10 +528,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows puede actualizar este Aviso legal para reflejar cambios en sus actividades o en los requisitos legales aplicables. La versión vigente y la fecha de revisión estarán disponibles en esta página."
+"English Grows puede actualizar este Aviso legal para reflejar cambios en sus "
+"actividades o en los requisitos legales aplicables. La versión vigente y la "
+"fecha de revisión estarán disponibles en esta página."
 
 #: .\home\templates\home\privacy_policy.html:4
-#: .\home\templates\home\privacy_policy.html:18 .\templates\base.html:377
+#: .\home\templates\home\privacy_policy.html:18 .\templates\base.html:400
 msgid "Privacy Policy"
 msgstr "Política de Privacidad"
 
@@ -463,7 +547,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Esta Política de Privacidad explica cómo English Grows recopila, utiliza, protege y comparte información personal y cómo puede ejercer sus derechos de protección de datos."
+"Esta Política de Privacidad explica cómo English Grows recopila, utiliza, "
+"protege y comparte información personal y cómo puede ejercer sus derechos de "
+"protección de datos."
 
 #: .\home\templates\home\privacy_policy.html:29
 msgid ""
@@ -475,7 +561,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows utiliza únicamente cookies estrictamente necesarias. No utilizamos cookies para analítica web, publicidad ni seguimiento del comportamiento."
+"English Grows utiliza únicamente cookies estrictamente necesarias. No "
+"utilizamos cookies para analítica web, publicidad ni seguimiento del "
+"comportamiento."
 
 #: .\home\templates\home\privacy_policy.html:34
 msgid "View our cookie information"
@@ -500,7 +588,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows está gestionado por una profesional autónoma independiente establecida en España y está sujeto al Reglamento General de Protección de Datos (RGPD) y a la Ley Orgánica 3/2018 (LOPDGDD)."
+"English Grows está gestionado por una profesional autónoma independiente "
+"establecida en España y está sujeto al Reglamento General de Protección de "
+"Datos (RGPD) y a la Ley Orgánica 3/2018 (LOPDGDD)."
 
 #: .\home\templates\home\privacy_policy.html:60
 msgid "Trading name:"
@@ -529,7 +619,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows determina las finalidades y los medios esenciales del tratamiento para la prestación de su propia formación, la evaluación académica y la gestión empresarial. Los clientes corporativos siguen siendo responsables de sus propias actividades de tratamiento, incluida la selección de empleados para la formación y la determinación del uso lícito de la información relativa a la formación."
+"English Grows determina las finalidades y los medios esenciales del "
+"tratamiento para la prestación de su propia formación, la evaluación "
+"académica y la gestión empresarial. Los clientes corporativos siguen siendo "
+"responsables de sus propias actividades de tratamiento, incluida la "
+"selección de empleados para la formación y la determinación del uso lícito "
+"de la información relativa a la formación."
 
 #: .\home\templates\home\privacy_policy.html:87
 msgid "2. What personal information do we process?"
@@ -547,7 +642,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Esta política se aplica a los visitantes del sitio web, las personas que realizan consultas, los participantes en la prueba de nivel, los usuarios registrados, los estudiantes, los empleados que reciben formación, los profesores, los administradores de empresa, los contactos corporativos y los suscriptores de comunicaciones comerciales."
+"Esta política se aplica a los visitantes del sitio web, las personas que "
+"realizan consultas, los participantes en la prueba de nivel, los usuarios "
+"registrados, los estudiantes, los empleados que reciben formación, los "
+"profesores, los administradores de empresa, los contactos corporativos y los "
+"suscriptores de comunicaciones comerciales."
 
 #: .\home\templates\home\privacy_policy.html:99
 msgid "Account and profile information"
@@ -563,7 +662,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Nombre, dirección de correo electrónico, información de autenticación, rol de la cuenta y cualquier información opcional del perfil que proporcione, como país, preferencias de idioma o fotografía de perfil."
+"Nombre, dirección de correo electrónico, información de autenticación, rol "
+"de la cuenta y cualquier información opcional del perfil que proporcione, "
+"como país, preferencias de idioma o fotografía de perfil."
 
 #: .\home\templates\home\privacy_policy.html:110
 #, fuzzy
@@ -580,7 +681,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Asignaciones de cursos, estado de inscripción, horarios, asistencia, necesidades de aprendizaje, niveles de idioma, evaluaciones, comentarios del profesor y registros de progreso."
+"Asignaciones de cursos, estado de inscripción, horarios, asistencia, "
+"necesidades de aprendizaje, niveles de idioma, evaluaciones, comentarios del "
+"profesor y registros de progreso."
 
 #: .\home\templates\home\privacy_policy.html:120
 msgid "Online classroom and connection information"
@@ -602,7 +705,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Las clases en línea en directo se imparten mediante Microsoft Teams. La información generada en relación con una clase en línea puede incluir el nombre del participante o el identificador de su cuenta, la dirección de correo electrónico cuando esté disponible, los detalles de la reunión o sesión, la fecha de asistencia, las horas de entrada y salida y la duración total de la conexión."
+"Las clases en línea en directo se imparten mediante Microsoft Teams. La "
+"información generada en relación con una clase en línea puede incluir el "
+"nombre del participante o el identificador de su cuenta, la dirección de "
+"correo electrónico cuando esté disponible, los detalles de la reunión o "
+"sesión, la fecha de asistencia, las horas de entrada y salida y la duración "
+"total de la conexión."
 
 #: .\home\templates\home\privacy_policy.html:134
 msgid ""
@@ -617,7 +725,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Estos registros de conexión pueden utilizarse para verificar la asistencia y la participación en la formación, incluidos los casos en que se requiera documentación acreditativa para formación financiada por la empresa o relacionada con FUNDAE."
+"Estos registros de conexión pueden utilizarse para verificar la asistencia y "
+"la participación en la formación, incluidos los casos en que se requiera "
+"documentación acreditativa para formación financiada por la empresa o "
+"relacionada con FUNDAE."
 
 #: .\home\templates\home\privacy_policy.html:142
 msgid "Placement-test information"
@@ -633,7 +744,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Dirección de correo electrónico, respuestas enviadas, puntuación de la prueba, nivel de curso recomendado y referencia del MCER. Los resultados de los usuarios registrados también pueden asociarse a sus cuentas de la plataforma."
+"Dirección de correo electrónico, respuestas enviadas, puntuación de la "
+"prueba, nivel de curso recomendado y referencia del MCER. Los resultados de "
+"los usuarios registrados también pueden asociarse a sus cuentas de la "
+"plataforma."
 
 #: .\home\templates\home\privacy_policy.html:153
 msgid "Communications and marketing"
@@ -648,7 +762,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Información proporcionada en consultas y comunicaciones, junto con los datos opcionales de suscripción a comunicaciones comerciales y los registros de consentimiento o retirada."
+"Información proporcionada en consultas y comunicaciones, junto con los datos "
+"opcionales de suscripción a comunicaciones comerciales y los registros de "
+"consentimiento o retirada."
 
 #: .\home\templates\home\privacy_policy.html:163
 msgid "Billing and payment information"
@@ -665,7 +781,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Datos identificativos de facturación, facturas, importes cobrados, estado de los pagos y referencias de transacciones necesarios para la gestión de pagos y la contabilidad. Los datos de las tarjetas de pago introducidos en páginas de pago alojadas por Stripe son recopilados directamente por Stripe."
+"Datos identificativos de facturación, facturas, importes cobrados, estado de "
+"los pagos y referencias de transacciones necesarios para la gestión de pagos "
+"y la contabilidad. Los datos de las tarjetas de pago introducidos en páginas "
+"de pago alojadas por Stripe son recopilados directamente por Stripe."
 
 #: .\home\templates\home\privacy_policy.html:175
 msgid "Technical information"
@@ -679,7 +798,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Información técnica necesaria para el funcionamiento del sitio web, la autenticación, la seguridad y el mantenimiento."
+"Información técnica necesaria para el funcionamiento del sitio web, la "
+"autenticación, la seguridad y el mantenimiento."
 
 #: .\home\templates\home\privacy_policy.html:184
 msgid "Sources and required information"
@@ -697,7 +817,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La mayor parte de la información la proporciona directamente usted. Cuando un empleador organiza la formación, podemos recibir de dicho empleador sus datos identificativos, datos de contacto profesionales y asignación de curso. Los profesores y el personal administrativo autorizado también pueden crear registros académicos y de formación."
+"La mayor parte de la información la proporciona directamente usted. Cuando "
+"un empleador organiza la formación, podemos recibir de dicho empleador sus "
+"datos identificativos, datos de contacto profesionales y asignación de "
+"curso. Los profesores y el personal administrativo autorizado también pueden "
+"crear registros académicos y de formación."
 
 #: .\home\templates\home\privacy_policy.html:198
 msgid ""
@@ -708,7 +832,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Microsoft Teams puede generar automáticamente información de conexión y asistencia cuando los participantes entran y salen de las clases en línea en directo."
+"Microsoft Teams puede generar automáticamente información de conexión y "
+"asistencia cuando los participantes entran y salen de las clases en línea en "
+"directo."
 
 #: .\home\templates\home\privacy_policy.html:206
 msgid ""
@@ -721,7 +847,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La información necesaria para el registro, la evaluación o la prestación de un servicio solicitado debe proporcionarse para poder prestar dicho servicio. Los datos opcionales del perfil y la suscripción a comunicaciones comerciales no son necesarios para acceder a los servicios de formación."
+"La información necesaria para el registro, la evaluación o la prestación de "
+"un servicio solicitado debe proporcionarse para poder prestar dicho "
+"servicio. Los datos opcionales del perfil y la suscripción a comunicaciones "
+"comerciales no son necesarios para acceder a los servicios de formación."
 
 #: .\home\templates\home\privacy_policy.html:219
 msgid "3. Why do we process your personal data?"
@@ -741,7 +870,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Tratamos la información necesaria para gestionar cuentas, organizar cursos, programar clases, impartir formación y comunicarnos con los estudiantes sobre los servicios que han contratado."
+"Tratamos la información necesaria para gestionar cuentas, organizar cursos, "
+"programar clases, impartir formación y comunicarnos con los estudiantes "
+"sobre los servicios que han contratado."
 
 #: .\home\templates\home\privacy_policy.html:233
 #: .\home\templates\home\privacy_policy.html:249
@@ -773,7 +904,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Cuando un empleador contrata English Grows, tratamos la información necesaria para organizar la participación, impartir la formación, evaluar el aprendizaje y mantener los registros de formación pertinentes."
+"Cuando un empleador contrata English Grows, tratamos la información "
+"necesaria para organizar la participación, impartir la formación, evaluar el "
+"aprendizaje y mantener los registros de formación pertinentes."
 
 #: .\home\templates\home\privacy_policy.html:250
 msgid ""
@@ -784,7 +917,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Intereses legítimos conforme al artículo 6.1.f del RGPD para organizar e impartir la formación corporativa acordada y apoyar el desarrollo académico de los estudiantes."
+"Intereses legítimos conforme al artículo 6.1.f del RGPD para organizar e "
+"impartir la formación corporativa acordada y apoyar el desarrollo académico "
+"de los estudiantes."
 
 #: .\home\templates\home\privacy_policy.html:257
 msgid "Live online lessons and attendance verification"
@@ -801,7 +936,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Microsoft Teams se utiliza para impartir clases en línea en directo. La información de conexión y asistencia puede tratarse para organizar e impartir las clases, verificar la participación, mantener registros de asistencia y proporcionar documentación acreditativa de la formación cuando sea necesario."
+"Microsoft Teams se utiliza para impartir clases en línea en directo. La "
+"información de conexión y asistencia puede tratarse para organizar e "
+"impartir las clases, verificar la participación, mantener registros de "
+"asistencia y proporcionar documentación acreditativa de la formación cuando "
+"sea necesario."
 
 #: .\home\templates\home\privacy_policy.html:270
 msgid ""
@@ -817,7 +956,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Cuando la formación se gestiona a través de FUNDAE u otro sistema aplicable de formación financiada, los registros de conexión pueden conservarse y ponerse a disposición como prueba de participación de acuerdo con los requisitos aplicables de gestión, seguimiento y verificación de la formación."
+"Cuando la formación se gestiona a través de FUNDAE u otro sistema aplicable "
+"de formación financiada, los registros de conexión pueden conservarse y "
+"ponerse a disposición como prueba de participación de acuerdo con los "
+"requisitos aplicables de gestión, seguimiento y verificación de la formación."
 
 #: .\home\templates\home\privacy_policy.html:281
 msgid ""
@@ -831,7 +973,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Artículo 6.1.b del RGPD cuando el tratamiento sea necesario para impartir formación contratada individualmente; artículo 6.1.f del RGPD para la organización y verificación de la formación financiada por la empresa; y artículo 6.1.c del RGPD cuando la conservación o aportación de pruebas de asistencia sea exigida por una obligación legal aplicable."
+"Artículo 6.1.b del RGPD cuando el tratamiento sea necesario para impartir "
+"formación contratada individualmente; artículo 6.1.f del RGPD para la "
+"organización y verificación de la formación financiada por la empresa; y "
+"artículo 6.1.c del RGPD cuando la conservación o aportación de pruebas de "
+"asistencia sea exigida por una obligación legal aplicable."
 
 #: .\home\templates\home\privacy_policy.html:291
 msgid "Academic assessment and Learning Needs"
@@ -847,7 +993,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La información académica se trata para identificar las necesidades de aprendizaje, personalizar la enseñanza, evaluar el desarrollo lingüístico y apoyar la prestación de la formación."
+"La información académica se trata para identificar las necesidades de "
+"aprendizaje, personalizar la enseñanza, evaluar el desarrollo lingüístico y "
+"apoyar la prestación de la formación."
 
 #: .\home\templates\home\privacy_policy.html:304
 msgid ""
@@ -858,7 +1006,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Artículo 6.1.b del RGPD para la formación contratada individualmente o artículo 6.1.f del RGPD para la formación financiada por la empresa, según corresponda."
+"Artículo 6.1.b del RGPD para la formación contratada individualmente o "
+"artículo 6.1.f del RGPD para la formación financiada por la empresa, según "
+"corresponda."
 
 #: .\home\templates\home\privacy_policy.html:311
 msgid "Placement tests"
@@ -877,7 +1027,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Tratamos las respuestas enviadas y la información de la evaluación para calcular un nivel de curso recomendado y comunicar el resultado al participante. Cuando hay un profesor asignado, se envía una notificación separada con el resultado a dicho profesor; de lo contrario, la administración autorizada de English Grows recibe el resultado para gestionar la asignación de nivel."
+"Tratamos las respuestas enviadas y la información de la evaluación para "
+"calcular un nivel de curso recomendado y comunicar el resultado al "
+"participante. Cuando hay un profesor asignado, se envía una notificación "
+"separada con el resultado a dicho profesor; de lo contrario, la "
+"administración autorizada de English Grows recibe el resultado para "
+"gestionar la asignación de nivel."
 
 #: .\home\templates\home\privacy_policy.html:327
 msgid ""
@@ -888,7 +1043,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Intereses legítimos conforme al artículo 6.1.f del RGPD para proporcionar la evaluación solicitada y facilitar una asignación de curso adecuada."
+"Intereses legítimos conforme al artículo 6.1.f del RGPD para proporcionar la "
+"evaluación solicitada y facilitar una asignación de curso adecuada."
 
 #: .\home\templates\home\privacy_policy.html:334
 msgid "Optional marketing communications"
@@ -905,7 +1061,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Cuando se suscribe activamente, utilizamos su dirección de correo electrónico para enviarle noticias, ofertas e información sobre los servicios de formación de English Grows. La suscripción es opcional y requiere una acción afirmativa mediante una casilla de selección que no está premarcada."
+"Cuando se suscribe activamente, utilizamos su dirección de correo "
+"electrónico para enviarle noticias, ofertas e información sobre los "
+"servicios de formación de English Grows. La suscripción es opcional y "
+"requiere una acción afirmativa mediante una casilla de selección que no está "
+"premarcada."
 
 #: .\home\templates\home\privacy_policy.html:348
 msgid ""
@@ -916,7 +1076,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Consentimiento conforme al artículo 6.1.a del RGPD, junto con los requisitos aplicables del artículo 21 de la LSSI-CE."
+"Consentimiento conforme al artículo 6.1.a del RGPD, junto con los requisitos "
+"aplicables del artículo 21 de la LSSI-CE."
 
 #: .\home\templates\home\privacy_policy.html:356
 msgid ""
@@ -929,7 +1090,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Completar una prueba de nivel o crear una cuenta no le suscribe automáticamente a comunicaciones comerciales. Puede retirar su consentimiento en cualquier momento mediante el mecanismo de baja incluido en nuestros correos comerciales o poniéndose en contacto con nosotros."
+"Completar una prueba de nivel o crear una cuenta no le suscribe "
+"automáticamente a comunicaciones comerciales. Puede retirar su "
+"consentimiento en cualquier momento mediante el mecanismo de baja incluido "
+"en nuestros correos comerciales o poniéndose en contacto con nosotros."
 
 #: .\home\templates\home\privacy_policy.html:365
 msgid "Enquiries and customer support"
@@ -944,7 +1108,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Tratamos la información proporcionada en las consultas para responder a las solicitudes y gestionar las comunicaciones relacionadas con nuestros servicios."
+"Tratamos la información proporcionada en las consultas para responder a las "
+"solicitudes y gestionar las comunicaciones relacionadas con nuestros "
+"servicios."
 
 #: .\home\templates\home\privacy_policy.html:377
 msgid ""
@@ -955,7 +1121,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Artículo 6.1.b del RGPD cuando sea necesario para adoptar medidas previas a un contrato, o artículo 6.1.f del RGPD para consultas generales y atención al cliente."
+"Artículo 6.1.b del RGPD cuando sea necesario para adoptar medidas previas a "
+"un contrato, o artículo 6.1.f del RGPD para consultas generales y atención "
+"al cliente."
 
 #: .\home\templates\home\privacy_policy.html:384
 msgid "Billing and payment administration"
@@ -970,7 +1138,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Tratamos la información de facturación y de las transacciones para gestionar los pagos, emitir facturas y mantener los registros contables."
+"Tratamos la información de facturación y de las transacciones para gestionar "
+"los pagos, emitir facturas y mantener los registros contables."
 
 #: .\home\templates\home\privacy_policy.html:396
 msgid ""
@@ -981,7 +1150,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Artículo 6.1.b del RGPD cuando sea necesario para el servicio contratado y artículo 6.1.c del RGPD para las obligaciones contables y fiscales aplicables."
+"Artículo 6.1.b del RGPD cuando sea necesario para el servicio contratado y "
+"artículo 6.1.c del RGPD para las obligaciones contables y fiscales "
+"aplicables."
 
 #: .\home\templates\home\privacy_policy.html:403
 msgid "Platform operation and security"
@@ -997,7 +1168,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Se trata la información técnica necesaria para mantener el sitio web, proteger las cuentas, investigar incidencias técnicas y prevenir accesos no autorizados."
+"Se trata la información técnica necesaria para mantener el sitio web, "
+"proteger las cuentas, investigar incidencias técnicas y prevenir accesos no "
+"autorizados."
 
 #: .\home\templates\home\privacy_policy.html:416
 msgid ""
@@ -1009,7 +1182,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Intereses legítimos conforme al artículo 6.1.f del RGPD para mantener un servicio seguro y funcional, o artículo 6.1.c del RGPD cuando sea aplicable una obligación legal específica."
+"Intereses legítimos conforme al artículo 6.1.f del RGPD para mantener un "
+"servicio seguro y funcional, o artículo 6.1.c del RGPD cuando sea aplicable "
+"una obligación legal específica."
 
 #: .\home\templates\home\privacy_policy.html:428
 msgid "4. Learning Needs and employer access"
@@ -1024,7 +1199,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El cuestionario de necesidades de aprendizaje ayuda a los profesores a comprender las necesidades comunicativas de los estudiantes, sus prioridades y su grado de confianza en las distintas habilidades lingüísticas."
+"El cuestionario de necesidades de aprendizaje ayuda a los profesores a "
+"comprender las necesidades comunicativas de los estudiantes, sus prioridades "
+"y su grado de confianza en las distintas habilidades lingüísticas."
 
 #: .\home\templates\home\privacy_policy.html:439
 msgid ""
@@ -1036,7 +1213,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los estudiantes pueden acceder a sus propias respuestas. Los profesores asignados y la administración autorizada de English Grows pueden acceder a la información necesaria para la enseñanza y la gestión académica."
+"Los estudiantes pueden acceder a sus propias respuestas. Los profesores "
+"asignados y la administración autorizada de English Grows pueden acceder a "
+"la información necesaria para la enseñanza y la gestión académica."
 
 #: .\home\templates\home\privacy_policy.html:448
 msgid ""
@@ -1050,7 +1229,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los administradores de empresa solo pueden ver el estado de envío del cuestionario (Pendiente o Enviado). No pueden acceder a las respuestas individuales, las valoraciones de confianza, las prioridades de comunicación ni las respuestas adicionales de texto libre a través de la interfaz de administración de la empresa."
+"Los administradores de empresa solo pueden ver el estado de envío del "
+"cuestionario (Pendiente o Enviado). No pueden acceder a las respuestas "
+"individuales, las valoraciones de confianza, las prioridades de comunicación "
+"ni las respuestas adicionales de texto libre a través de la interfaz de "
+"administración de la empresa."
 
 #: .\home\templates\home\privacy_policy.html:462
 msgid "5. Who can access or receive your information?"
@@ -1070,7 +1253,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"El acceso a la información personal está restringido según el rol y las responsabilidades del usuario. Los estudiantes acceden a su propia información, los profesores acceden a la información necesaria para sus cursos asignados y los administradores de empresa acceden a la información necesaria para gestionar la formación de su organización, con las restricciones descritas anteriormente."
+"El acceso a la información personal está restringido según el rol y las "
+"responsabilidades del usuario. Los estudiantes acceden a su propia "
+"información, los profesores acceden a la información necesaria para sus "
+"cursos asignados y los administradores de empresa acceden a la información "
+"necesaria para gestionar la formación de su organización, con las "
+"restricciones descritas anteriormente."
 
 #: .\home\templates\home\privacy_policy.html:477
 msgid "External service providers"
@@ -1086,7 +1274,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows utiliza los siguientes proveedores para gestionar su plataforma, impartir formación en línea, gestionar las comunicaciones empresariales y procesar los pagos de los clientes."
+"English Grows utiliza los siguientes proveedores para gestionar su "
+"plataforma, impartir formación en línea, gestionar las comunicaciones "
+"empresariales y procesar los pagos de los clientes."
 
 #: .\home\templates\home\privacy_policy.html:492
 msgid "Service provider"
@@ -1100,25 +1290,34 @@ msgstr "Finalidad del tratamiento"
 msgid ""
 "Hosting the English Grows website, learning platform, database and "
 "associated infrastructure."
-msgstr "Alojamiento del sitio web de English Grows, la plataforma de aprendizaje, la base de datos y la infraestructura asociada."
+msgstr ""
+"Alojamiento del sitio web de English Grows, la plataforma de aprendizaje, la "
+"base de datos y la infraestructura asociada."
 
 #: .\home\templates\home\privacy_policy.html:503
 msgid ""
 "Business email hosting and the management and delivery of service-related "
 "communications."
-msgstr "Alojamiento del correo electrónico empresarial y gestión y envío de comunicaciones relacionadas con los servicios."
+msgstr ""
+"Alojamiento del correo electrónico empresarial y gestión y envío de "
+"comunicaciones relacionadas con los servicios."
 
 #: .\home\templates\home\privacy_policy.html:507
 msgid ""
 "Delivery of live online lessons and generation of meeting, connection and "
 "attendance information associated with those lessons."
-msgstr "Impartición de clases en línea en directo y generación de información sobre reuniones, conexión y asistencia asociada a dichas clases."
+msgstr ""
+"Impartición de clases en línea en directo y generación de información sobre "
+"reuniones, conexión y asistencia asociada a dichas clases."
 
 #: .\home\templates\home\privacy_policy.html:511
 msgid ""
 "Processing customer payments through Stripe-hosted payment pages, including "
 "payment confirmation and transaction management."
-msgstr "Procesamiento de los pagos de los clientes mediante páginas de pago alojadas por Stripe, incluida la confirmación del pago y la gestión de las transacciones."
+msgstr ""
+"Procesamiento de los pagos de los clientes mediante páginas de pago alojadas "
+"por Stripe, incluida la confirmación del pago y la gestión de las "
+"transacciones."
 
 #: .\home\templates\home\privacy_policy.html:518
 msgid ""
@@ -1133,7 +1332,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Al participar en una clase en línea en directo a través de Microsoft Teams, la información necesaria para gestionar la reunión e identificar la participación se trata dentro de los servicios en línea de Microsoft. English Grows puede descargar y conservar informes de asistencia cuando sea necesario para la gestión del curso o la verificación de la formación."
+"Al participar en una clase en línea en directo a través de Microsoft Teams, "
+"la información necesaria para gestionar la reunión e identificar la "
+"participación se trata dentro de los servicios en línea de Microsoft. "
+"English Grows puede descargar y conservar informes de asistencia cuando sea "
+"necesario para la gestión del curso o la verificación de la formación."
 
 #: .\home\templates\home\privacy_policy.html:530
 msgid ""
@@ -1148,7 +1351,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Cuando los clientes pagan mediante páginas alojadas por Stripe, los datos de la tarjeta de pago se proporcionan directamente a Stripe. English Grows recibe la información necesaria para confirmar los pagos y mantener los registros de facturación. Stripe actúa como encargado del tratamiento para determinadas actividades y como responsable del tratamiento independiente para otras, de acuerdo con sus condiciones de privacidad aplicables."
+"Cuando los clientes pagan mediante páginas alojadas por Stripe, los datos de "
+"la tarjeta de pago se proporcionan directamente a Stripe. English Grows "
+"recibe la información necesaria para confirmar los pagos y mantener los "
+"registros de facturación. Stripe actúa como encargado del tratamiento para "
+"determinadas actividades y como responsable del tratamiento independiente "
+"para otras, de acuerdo con sus condiciones de privacidad aplicables."
 
 #: .\home\templates\home\privacy_policy.html:542
 msgid ""
@@ -1162,7 +1370,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La información también puede comunicarse a autoridades públicas u organismos competentes en la gestión de la formación cuando lo exija la legislación aplicable o los requisitos aplicables de la formación financiada. En la siguiente sección se proporciona más información sobre el tratamiento internacional."
+"La información también puede comunicarse a autoridades públicas u organismos "
+"competentes en la gestión de la formación cuando lo exija la legislación "
+"aplicable o los requisitos aplicables de la formación financiada. En la "
+"siguiente sección se proporciona más información sobre el tratamiento "
+"internacional."
 
 #: .\home\templates\home\privacy_policy.html:556
 msgid "6. International data transfers"
@@ -1177,7 +1389,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Nuestros proveedores de servicios pueden tratar datos personales fuera del Espacio Económico Europeo (EEE), incluidos los Estados Unidos."
+"Nuestros proveedores de servicios pueden tratar datos personales fuera del "
+"Espacio Económico Europeo (EEE), incluidos los Estados Unidos."
 
 #: .\home\templates\home\privacy_policy.html:567
 msgid ""
@@ -1193,7 +1406,12 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Las transferencias internacionales están sujetas al capítulo V del RGPD y a los acuerdos contractuales aplicables. En función del destinatario y de las circunstancias, las transferencias pueden basarse en una decisión de adecuación, incluido el Marco de Privacidad de Datos UE-EE. UU. cuando sea aplicable, o en garantías adecuadas, como las cláusulas contractuales tipo de la Comisión Europea."
+"Las transferencias internacionales están sujetas al capítulo V del RGPD y a "
+"los acuerdos contractuales aplicables. En función del destinatario y de las "
+"circunstancias, las transferencias pueden basarse en una decisión de "
+"adecuación, incluido el Marco de Privacidad de Datos UE-EE. UU. cuando sea "
+"aplicable, o en garantías adecuadas, como las cláusulas contractuales tipo "
+"de la Comisión Europea."
 
 #: .\home\templates\home\privacy_policy.html:579
 msgid "Applicable provider arrangements"
@@ -1204,7 +1422,10 @@ msgid ""
 "Its Data Processing Addendum addresses international processing and provides "
 "for applicable Data Privacy Framework or Standard Contractual Clause "
 "arrangements."
-msgstr "Su Anexo de Tratamiento de Datos regula el tratamiento internacional y prevé los mecanismos aplicables del Marco de Privacidad de Datos o de las cláusulas contractuales tipo."
+msgstr ""
+"Su Anexo de Tratamiento de Datos regula el tratamiento internacional y prevé "
+"los mecanismos aplicables del Marco de Privacidad de Datos o de las "
+"cláusulas contractuales tipo."
 
 #: .\home\templates\home\privacy_policy.html:585
 #: .\home\templates\home\privacy_policy.html:591
@@ -1217,20 +1438,27 @@ msgstr "Ver acuerdo"
 msgid ""
 "Its Cloud Data Processing Addendum establishes the applicable international-"
 "transfer provisions."
-msgstr "Su Anexo de Tratamiento de Datos en la Nube establece las disposiciones aplicables sobre transferencias internacionales."
+msgstr ""
+"Su Anexo de Tratamiento de Datos en la Nube establece las disposiciones "
+"aplicables sobre transferencias internacionales."
 
 #: .\home\templates\home\privacy_policy.html:596
 msgid ""
 "Microsoft's Products and Services Data Protection Addendum establishes data-"
 "protection and international-transfer provisions applicable to Microsoft "
 "online services."
-msgstr "El Anexo de Protección de Datos de Productos y Servicios de Microsoft establece las disposiciones de protección de datos y de transferencias internacionales aplicables a los servicios en línea de Microsoft."
+msgstr ""
+"El Anexo de Protección de Datos de Productos y Servicios de Microsoft "
+"establece las disposiciones de protección de datos y de transferencias "
+"internacionales aplicables a los servicios en línea de Microsoft."
 
 #: .\home\templates\home\privacy_policy.html:602
 msgid ""
 "Its Data Processing Agreement and incorporated Data Transfers Addendum "
 "establish the applicable transfer mechanisms."
-msgstr "Su Acuerdo de Tratamiento de Datos y el Anexo de Transferencias de Datos incorporado establecen los mecanismos de transferencia aplicables."
+msgstr ""
+"Su Acuerdo de Tratamiento de Datos y el Anexo de Transferencias de Datos "
+"incorporado establecen los mecanismos de transferencia aplicables."
 
 #: .\home\templates\home\privacy_policy.html:608
 msgid ""
@@ -1242,7 +1470,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Puede solicitar más información sobre las transferencias internacionales que afecten a sus datos y sobre cómo obtener una copia de las garantías correspondientes poniéndose en contacto con nosotros en"
+"Puede solicitar más información sobre las transferencias internacionales que "
+"afecten a sus datos y sobre cómo obtener una copia de las garantías "
+"correspondientes poniéndose en contacto con nosotros en"
 
 #: .\home\templates\home\privacy_policy.html:621
 msgid "7. How long do we retain your information?"
@@ -1258,7 +1488,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"La información personal se conserva durante el período necesario para cumplir la finalidad de tratamiento correspondiente, teniendo en cuenta los requisitos legales, contractuales y probatorios aplicables."
+"La información personal se conserva durante el período necesario para "
+"cumplir la finalidad de tratamiento correspondiente, teniendo en cuenta los "
+"requisitos legales, contractuales y probatorios aplicables."
 
 #: .\home\templates\home\privacy_policy.html:634
 #, fuzzy
@@ -1270,7 +1502,9 @@ msgstr "Configuración"
 msgid ""
 "While the account is required for the service, and afterwards only where a "
 "valid retention purpose remains."
-msgstr "Mientras la cuenta sea necesaria para el servicio y, posteriormente, solo cuando subsista una finalidad válida de conservación."
+msgstr ""
+"Mientras la cuenta sea necesaria para el servicio y, posteriormente, solo "
+"cuando subsista una finalidad válida de conservación."
 
 #: .\home\templates\home\privacy_policy.html:639
 #, fuzzy
@@ -1282,7 +1516,9 @@ msgstr "registros de asistencia"
 msgid ""
 "For training administration and academic follow-up, subject to applicable "
 "contractual or legal requirements."
-msgstr "Para la gestión de la formación y el seguimiento académico, sujeto a los requisitos contractuales o legales aplicables."
+msgstr ""
+"Para la gestión de la formación y el seguimiento académico, sujeto a los "
+"requisitos contractuales o legales aplicables."
 
 #: .\home\templates\home\privacy_policy.html:644
 msgid "Online-class attendance and connection records:"
@@ -1300,7 +1536,11 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Durante el período necesario para gestionar y verificar la participación en la formación. Cuando los registros formen parte de la documentación justificativa de formación financiada o bonificada por FUNDAE, podrán conservarse durante cuatro años de acuerdo con los requisitos aplicables de conservación de documentación."
+"Durante el período necesario para gestionar y verificar la participación en "
+"la formación. Cuando los registros formen parte de la documentación "
+"justificativa de formación financiada o bonificada por FUNDAE, podrán "
+"conservarse durante cuatro años de acuerdo con los requisitos aplicables de "
+"conservación de documentación."
 
 #: .\home\templates\home\privacy_policy.html:656
 msgid "Placement-test attempts:"
@@ -1310,7 +1550,9 @@ msgstr "Intentos de la prueba de nivel:"
 msgid ""
 "For result delivery and related placement administration, including "
 "necessary follow-up."
-msgstr "Para comunicar el resultado y gestionar la asignación de nivel correspondiente, incluido el seguimiento necesario."
+msgstr ""
+"Para comunicar el resultado y gestionar la asignación de nivel "
+"correspondiente, incluido el seguimiento necesario."
 
 #: .\home\templates\home\privacy_policy.html:661
 msgid "Marketing information:"
@@ -1321,7 +1563,10 @@ msgid ""
 "While the subscription remains active. Following withdrawal, limited "
 "information may be retained where necessary to respect the request or "
 "demonstrate compliance."
-msgstr "Mientras la suscripción permanezca activa. Tras la baja, podrá conservarse información limitada cuando sea necesario para respetar la solicitud o demostrar el cumplimiento."
+msgstr ""
+"Mientras la suscripción permanezca activa. Tras la baja, podrá conservarse "
+"información limitada cuando sea necesario para respetar la solicitud o "
+"demostrar el cumplimiento."
 
 #: .\home\templates\home\privacy_policy.html:666
 msgid "Billing and accounting records:"
@@ -1331,7 +1576,9 @@ msgstr "Registros de facturación y contabilidad:"
 msgid ""
 "For the periods required under applicable commercial, accounting and tax "
 "legislation."
-msgstr "Durante los períodos exigidos por la legislación mercantil, contable y fiscal aplicable."
+msgstr ""
+"Durante los períodos exigidos por la legislación mercantil, contable y "
+"fiscal aplicable."
 
 #: .\home\templates\home\privacy_policy.html:672
 msgid ""
@@ -1342,7 +1589,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Cuando la información ya no sea necesaria para su finalidad original ni exista otra base válida para conservarla, se eliminará o anonimizará, según corresponda."
+"Cuando la información ya no sea necesaria para su finalidad original ni "
+"exista otra base válida para conservarla, se eliminará o anonimizará, según "
+"corresponda."
 
 #: .\home\templates\home\privacy_policy.html:683
 msgid "8. Your data protection rights"
@@ -1358,7 +1607,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"De acuerdo con las condiciones establecidas por la ley, puede solicitar el acceso, la rectificación, la supresión, la limitación del tratamiento y la portabilidad de los datos, u oponerse al tratamiento cuando sea aplicable."
+"De acuerdo con las condiciones establecidas por la ley, puede solicitar el "
+"acceso, la rectificación, la supresión, la limitación del tratamiento y la "
+"portabilidad de los datos, u oponerse al tratamiento cuando sea aplicable."
 
 #: .\home\templates\home\privacy_policy.html:695
 msgid ""
@@ -1371,7 +1622,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Puede retirar su consentimiento en cualquier momento cuando el tratamiento se base en el consentimiento, sin que ello afecte a la licitud del tratamiento realizado antes de su retirada. Puede oponerse al marketing directo en cualquier momento."
+"Puede retirar su consentimiento en cualquier momento cuando el tratamiento "
+"se base en el consentimiento, sin que ello afecte a la licitud del "
+"tratamiento realizado antes de su retirada. Puede oponerse al marketing "
+"directo en cualquier momento."
 
 #: .\home\templates\home\privacy_policy.html:705
 msgid ""
@@ -1381,7 +1635,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"También puede ejercer los derechos aplicables en relación con la toma de decisiones individuales automatizadas."
+"También puede ejercer los derechos aplicables en relación con la toma de "
+"decisiones individuales automatizadas."
 
 #: .\home\templates\home\privacy_policy.html:712
 msgid ""
@@ -1402,7 +1657,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Podemos solicitar información adicional cuando sea necesario para verificar su identidad. Normalmente, las solicitudes se responden en el plazo de un mes, sin perjuicio de las ampliaciones permitidas por el RGPD."
+"Podemos solicitar información adicional cuando sea necesario para verificar "
+"su identidad. Normalmente, las solicitudes se responden en el plazo de un "
+"mes, sin perjuicio de las ampliaciones permitidas por el RGPD."
 
 #: .\home\templates\home\privacy_policy.html:725
 msgid ""
@@ -1412,7 +1669,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"También tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD)."
+"También tiene derecho a presentar una reclamación ante la Agencia Española "
+"de Protección de Datos (AEPD)."
 
 #: .\home\templates\home\privacy_policy.html:730
 msgid "Visit the AEPD website"
@@ -1432,7 +1690,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows utiliza cookies esenciales para la seguridad del sitio web, la protección de formularios y la gestión de sesiones. Durante la auditoría de nuestro sitio web y de la plataforma se identificaron las siguientes cookies."
+"English Grows utiliza cookies esenciales para la seguridad del sitio web, la "
+"protección de formularios y la gestión de sesiones. Durante la auditoría de "
+"nuestro sitio web y de la plataforma se identificaron las siguientes cookies."
 
 #: .\home\templates\home\privacy_policy.html:753
 msgid "Cookie"
@@ -1460,7 +1720,9 @@ msgstr "Duración de Clase"
 
 #: .\home\templates\home\privacy_policy.html:763
 msgid "Protects forms against cross-site request forgery."
-msgstr "Protege los formularios contra la falsificación de solicitudes entre sitios web."
+msgstr ""
+"Protege los formularios contra la falsificación de solicitudes entre sitios "
+"web."
 
 #: .\home\templates\home\privacy_policy.html:764
 msgid "364 days (Django default; renewable)."
@@ -1470,13 +1732,17 @@ msgstr "364 días (valor predeterminado de Django; renovable)."
 msgid ""
 "Maintains website sessions, including placement-test functionality and "
 "authenticated access."
-msgstr "Mantiene las sesiones del sitio web, incluida la funcionalidad de la prueba de nivel y el acceso autenticado."
+msgstr ""
+"Mantiene las sesiones del sitio web, incluida la funcionalidad de la prueba "
+"de nivel y el acceso autenticado."
 
 #: .\home\templates\home\privacy_policy.html:771
 msgid ""
 "Browser session or configured expiration period, depending on session "
 "settings."
-msgstr "Sesión del navegador o período de caducidad configurado, según la configuración de la sesión."
+msgstr ""
+"Sesión del navegador o período de caducidad configurado, según la "
+"configuración de la sesión."
 
 #: .\home\templates\home\privacy_policy.html:778
 msgid ""
@@ -1488,7 +1754,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Las cookies utilizadas exclusivamente con fines técnicamente necesarios o para prestar un servicio expresamente solicitado por el usuario están exentas del requisito de consentimiento previo conforme al artículo 22.2 de la LSSI-CE."
+"Las cookies utilizadas exclusivamente con fines técnicamente necesarios o "
+"para prestar un servicio expresamente solicitado por el usuario están "
+"exentas del requisito de consentimiento previo conforme al artículo 22.2 de "
+"la LSSI-CE."
 
 #: .\home\templates\home\privacy_policy.html:787
 msgid ""
@@ -1500,7 +1769,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Puede gestionar o eliminar las cookies mediante la configuración de su navegador. Desactivar las cookies esenciales puede impedir que determinadas funciones del sitio web funcionen correctamente."
+"Puede gestionar o eliminar las cookies mediante la configuración de su "
+"navegador. Desactivar las cookies esenciales puede impedir que determinadas "
+"funciones del sitio web funcionen correctamente."
 
 #: .\home\templates\home\privacy_policy.html:796
 msgid ""
@@ -1512,7 +1783,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"A las clases en línea en directo se accede a través del entorno externo de Teams de Microsoft. Los sitios web y servicios propios de Microsoft se rigen por la información aplicable de Microsoft sobre privacidad y cookies."
+"A las clases en línea en directo se accede a través del entorno externo de "
+"Teams de Microsoft. Los sitios web y servicios propios de Microsoft se rigen "
+"por la información aplicable de Microsoft sobre privacidad y cookies."
 
 #: .\home\templates\home\privacy_policy.html:805
 msgid ""
@@ -1523,7 +1796,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Los pagos se completan mediante el entorno alojado externamente por Stripe, que se rige por los avisos aplicables de Stripe sobre privacidad y cookies."
+"Los pagos se completan mediante el entorno alojado externamente por Stripe, "
+"que se rige por los avisos aplicables de Stripe sobre privacidad y cookies."
 
 #: .\home\templates\home\privacy_policy.html:816
 msgid "10. Security and automated assessment"
@@ -1539,7 +1813,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"English Grows aplica medidas de seguridad técnicas y organizativas diseñadas para proteger la información personal contra el acceso no autorizado, la divulgación, la alteración y la pérdida."
+"English Grows aplica medidas de seguridad técnicas y organizativas diseñadas "
+"para proteger la información personal contra el acceso no autorizado, la "
+"divulgación, la alteración y la pérdida."
 
 #: .\home\templates\home\privacy_policy.html:828
 msgid ""
@@ -1552,7 +1828,10 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Las respuestas de la prueba de nivel se puntúan automáticamente para generar un nivel de curso recomendado. El resultado sirve de apoyo para la asignación del curso, puede ser revisado por un profesor y no constituye una certificación formal del MCER."
+"Las respuestas de la prueba de nivel se puntúan automáticamente para generar "
+"un nivel de curso recomendado. El resultado sirve de apoyo para la "
+"asignación del curso, puede ser revisado por un profesor y no constituye una "
+"certificación formal del MCER."
 
 #: .\home\templates\home\privacy_policy.html:841
 msgid "11. Changes to this Privacy Policy"
@@ -1569,7 +1848,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Esta política puede actualizarse para reflejar cambios en nuestros servicios, actividades de tratamiento o requisitos legales aplicables. La versión vigente y la fecha de revisión estarán disponibles en esta página."
+"Esta política puede actualizarse para reflejar cambios en nuestros "
+"servicios, actividades de tratamiento o requisitos legales aplicables. La "
+"versión vigente y la fecha de revisión estarán disponibles en esta página."
 
 #: .\placement\forms.py:7
 msgid "Full name"
@@ -1585,13 +1866,18 @@ msgstr "Emails Asociados a Tu Cuenta"
 msgid ""
 "I have read the Privacy Policy and understand how my placement information "
 "will be processed."
-msgstr "He leído la Política de Privacidad y entiendo cómo se tratará la información de mi prueba de nivel."
+msgstr ""
+"He leído la Política de Privacidad y entiendo cómo se tratará la información "
+"de mi prueba de nivel."
 
 #: .\placement\forms.py:23
 msgid ""
 "I would also like to receive news, course information and special offers "
 "from English Grows by email. I can unsubscribe at any time."
-msgstr "También me gustaría recibir por correo electrónico noticias, información sobre cursos y ofertas especiales de English Grows. Puedo darme de baja en cualquier momento."
+msgstr ""
+"También me gustaría recibir por correo electrónico noticias, información "
+"sobre cursos y ofertas especiales de English Grows. Puedo darme de baja en "
+"cualquier momento."
 
 #: .\placement\forms.py:52
 msgid "Unable to process this submission. Please try again."
@@ -1602,14 +1888,14 @@ msgid "Placement Test"
 msgstr "Prueba de nivel"
 
 #: .\placement\templates\placement\base.html:27
-#: .\profiles\templates\profiles\profile_base.html:51 .\templates\base.html:105
-#: .\templates\includes\mobile_top_header.html:35
+#: .\profiles\templates\profiles\profile_base.html:51 .\templates\base.html:107
+#: .\templates\includes\mobile_top_header.html:34
 msgid "Switch language to English"
 msgstr "Cambiar idioma al inglés"
 
 #: .\placement\templates\placement\base.html:38
-#: .\profiles\templates\profiles\profile_base.html:63 .\templates\base.html:120
-#: .\templates\includes\mobile_top_header.html:47
+#: .\profiles\templates\profiles\profile_base.html:63 .\templates\base.html:122
+#: .\templates\includes\mobile_top_header.html:46
 msgid "Switch language to Spanish"
 msgstr "Cambiar idioma al español"
 
@@ -1657,13 +1943,17 @@ msgid ""
 "Your result suggests a suitable starting point based on grammar and "
 "vocabulary. Your teacher may confirm or adjust your placement after "
 "assessing your communication skills."
-msgstr "Su resultado sugiere un punto de partida adecuado basado en la gramática y el vocabulario. Su profesor puede confirmar o ajustar su nivel después de evaluar sus habilidades comunicativas."
+msgstr ""
+"Su resultado sugiere un punto de partida adecuado basado en la gramática y "
+"el vocabulario. Su profesor puede confirmar o ajustar su nivel después de "
+"evaluar sus habilidades comunicativas."
 
 #: .\placement\templates\placement\result.html:50
 msgid ""
 "This recommendation is provisional and does not certify an attained CEFR "
 "level."
-msgstr "Esta recomendación es provisional y no certifica un nivel MCER alcanzado."
+msgstr ""
+"Esta recomendación es provisional y no certifica un nivel MCER alcanzado."
 
 #: .\placement\templates\placement\result.html:54
 msgid "Return to English Grows"
@@ -1679,7 +1969,10 @@ msgid ""
 "Take our free 50-question English level test online. Check your grammar and "
 "vocabulary, receive a recommended course level and CEFR reference. No "
 "registration required."
-msgstr "Realice nuestra prueba gratuita de nivel de inglés en línea de 50 preguntas. Compruebe su gramática y vocabulario, reciba un nivel de curso recomendado y una referencia MCER. No es necesario registrarse."
+msgstr ""
+"Realice nuestra prueba gratuita de nivel de inglés en línea de 50 preguntas. "
+"Compruebe su gramática y vocabulario, reciba un nivel de curso recomendado y "
+"una referencia MCER. No es necesario registrarse."
 
 #: .\placement\templates\placement\test.html:17
 msgid "Free English Level Test Online | English Grows"
@@ -1689,7 +1982,9 @@ msgstr "Prueba de nivel de inglés gratuita en línea | English Grows"
 msgid ""
 "Take our free 50-question English level test and receive your recommended "
 "course level. No registration required."
-msgstr "Realice nuestra prueba gratuita de nivel de inglés de 50 preguntas y reciba su nivel de curso recomendado. No es necesario registrarse."
+msgstr ""
+"Realice nuestra prueba gratuita de nivel de inglés de 50 preguntas y reciba "
+"su nivel de curso recomendado. No es necesario registrarse."
 
 #: .\placement\templates\placement\test.html:38
 msgid "FREE ENGLISH LEVEL TEST"
@@ -1700,7 +1995,10 @@ msgid ""
 "Find your starting point with our 50-question grammar and vocabulary "
 "assessment. Receive your recommended English course level and CEFR reference "
 "by email."
-msgstr "Descubra su punto de partida con nuestra evaluación de gramática y vocabulario de 50 preguntas. Reciba por correo electrónico su nivel de curso de inglés recomendado y la referencia MCER."
+msgstr ""
+"Descubra su punto de partida con nuestra evaluación de gramática y "
+"vocabulario de 50 preguntas. Reciba por correo electrónico su nivel de curso "
+"de inglés recomendado y la referencia MCER."
 
 #: .\placement\templates\placement\test.html:45
 msgid "No registration required"
@@ -1719,7 +2017,10 @@ msgid ""
 "This assessment recommends a suitable starting course level. It is not a "
 "formal certification of English proficiency, and your teacher may confirm "
 "your placement."
-msgstr "Esta evaluación recomienda un nivel de curso inicial adecuado. No es una certificación formal del dominio del inglés y su profesor puede confirmar el nivel asignado."
+msgstr ""
+"Esta evaluación recomienda un nivel de curso inicial adecuado. No es una "
+"certificación formal del dominio del inglés y su profesor puede confirmar el "
+"nivel asignado."
 
 #: .\placement\templates\placement\test.html:57
 msgid "Before you begin"
@@ -1729,7 +2030,9 @@ msgstr "Antes de empezar"
 msgid ""
 "Enter your email address so we can send you your placement result. No "
 "account is required."
-msgstr "Introduzca su dirección de correo electrónico para que podamos enviarle el resultado de la prueba de nivel. No es necesario tener una cuenta."
+msgstr ""
+"Introduzca su dirección de correo electrónico para que podamos enviarle el "
+"resultado de la prueba de nivel. No es necesario tener una cuenta."
 
 #: .\placement\templates\placement\test.html:71
 #, fuzzy
@@ -1743,13 +2046,19 @@ msgid ""
 "your placement result and send it to you. A separate copy will be sent to "
 "your assigned teacher, where applicable, or otherwise to English Grows for "
 "educational follow-up."
-msgstr "English Grows utilizará su dirección de correo electrónico y las respuestas enviadas para calcular el resultado de su prueba de nivel y enviárselo. Se enviará una copia independiente a su profesor asignado, cuando corresponda, o, en caso contrario, a English Grows para el seguimiento educativo."
+msgstr ""
+"English Grows utilizará su dirección de correo electrónico y las respuestas "
+"enviadas para calcular el resultado de su prueba de nivel y enviárselo. Se "
+"enviará una copia independiente a su profesor asignado, cuando corresponda, "
+"o, en caso contrario, a English Grows para el seguimiento educativo."
 
 #: .\placement\templates\placement\test.html:77
 msgid ""
 "Completing this assessment does not automatically subscribe you to marketing "
 "communications."
-msgstr "Completar esta evaluación no le suscribe automáticamente a comunicaciones comerciales."
+msgstr ""
+"Completar esta evaluación no le suscribe automáticamente a comunicaciones "
+"comerciales."
 
 #: .\placement\templates\placement\test.html:81
 #, fuzzy
@@ -1764,7 +2073,9 @@ msgstr "Opcional. Puede darse de baja en cualquier momento."
 #: .\placement\templates\placement\test.html:105
 msgid ""
 "Enter a valid email address and acknowledge the Privacy Policy to begin."
-msgstr "Introduzca una dirección de correo electrónico válida y confirme que ha leído la Política de Privacidad para comenzar."
+msgstr ""
+"Introduzca una dirección de correo electrónico válida y confirme que ha "
+"leído la Política de Privacidad para comenzar."
 
 #: .\placement\templates\placement\test.html:109
 #, fuzzy
@@ -1811,7 +2122,8 @@ msgstr "Bloque de preguntas %(number)s"
 
 #: .\placement\templates\placement\test.html:163
 msgid "Security verification could not be completed. Please try again."
-msgstr "No se ha podido completar la verificación de seguridad. Inténtelo de nuevo."
+msgstr ""
+"No se ha podido completar la verificación de seguridad. Inténtelo de nuevo."
 
 #: .\placement\templates\placement\test.html:168
 #, fuzzy
@@ -1833,11 +2145,15 @@ msgstr "Ver el resultado de mi prueba de nivel"
 
 #: .\placement\views.py:50
 msgid "The placement test is temporarily unavailable. Please try again later."
-msgstr "La prueba de nivel no está disponible temporalmente. Inténtelo de nuevo más tarde."
+msgstr ""
+"La prueba de nivel no está disponible temporalmente. Inténtelo de nuevo más "
+"tarde."
 
 #: .\placement\views.py:71
 msgid "This test session has expired. Reload the page and try again."
-msgstr "Esta sesión de la prueba ha caducado. Vuelva a cargar la página e inténtelo de nuevo."
+msgstr ""
+"Esta sesión de la prueba ha caducado. Vuelva a cargar la página e inténtelo "
+"de nuevo."
 
 #: .\placement\views.py:117
 msgid "We could not grade your answers. Please try again later."
@@ -2050,7 +2366,8 @@ msgstr "¿Qué nivel de confianza tiene actualmente al hablar en inglés?"
 
 #: .\profiles\forms\student_needs_analysis.py:153
 msgid "How confident do you currently feel understanding spoken English?"
-msgstr "¿Qué nivel de confianza tiene actualmente al comprender el inglés hablado?"
+msgstr ""
+"¿Qué nivel de confianza tiene actualmente al comprender el inglés hablado?"
 
 #: .\profiles\forms\student_needs_analysis.py:168
 msgid "How confident do you currently feel reading English?"
@@ -2064,7 +2381,9 @@ msgstr "¿Qué nivel de confianza tiene actualmente al escribir en inglés?"
 msgid ""
 "Which communication situations would you most like to focus on during this "
 "course?"
-msgstr "¿En qué situaciones comunicativas le gustaría centrarse más durante este curso?"
+msgstr ""
+"¿En qué situaciones comunicativas le gustaría centrarse más durante este "
+"curso?"
 
 #: .\profiles\forms\student_needs_analysis.py:203
 msgid "Choose up to three."
@@ -2184,7 +2503,8 @@ msgstr "Registros actualizados"
 
 #: .\profiles\models.py:745
 msgid "For example: Assessment 1, Mid-course review or Final review."
-msgstr "Por ejemplo: Evaluación 1, revisión de mitad de curso o revisión final."
+msgstr ""
+"Por ejemplo: Evaluación 1, revisión de mitad de curso o revisión final."
 
 #: .\profiles\models.py:757
 msgid "Academic date of the formal assessment."
@@ -2216,7 +2536,8 @@ msgstr "El contenido del informe no puede estar vacío."
 
 #: .\profiles\models.py:1033
 msgid "Generated assessment reports cannot be deleted directly."
-msgstr "Los informes de evaluación generados no se pueden eliminar directamente."
+msgstr ""
+"Los informes de evaluación generados no se pueden eliminar directamente."
 
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:24
 #: .\profiles\templates\profiles\company_admin\company_admin_all_courses_attendance.html:46
@@ -2512,7 +2833,7 @@ msgid "Course information unavailable"
 msgstr "Información del curso no disponible"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_calendar.html:74
-#: .\templates\base.html:299
+#: .\templates\base.html:301
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2987,11 +3308,6 @@ msgstr "Progreso"
 msgid "No courses to show for this filter"
 msgstr "No se encontraron cursos en este filtro"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:27
-#: .\profiles\templates\profiles\student\student_dashboard.html:24
-msgid "Welcome"
-msgstr "Bienvenido"
-
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:67
 msgid "View employees list"
 msgstr "Ver lista de empleados"
@@ -3325,7 +3641,11 @@ msgid ""
 "To protect learner privacy, company administrators can view questionnaire "
 "submission status only. Individual responses remain accessible to the "
 "learner and authorised academic staff only."
-msgstr "Para proteger la privacidad del estudiante, los administradores de empresa solo pueden ver el estado de envío del cuestionario. Las respuestas individuales siguen siendo accesibles únicamente para el estudiante y el personal académico autorizado."
+msgstr ""
+"Para proteger la privacidad del estudiante, los administradores de empresa "
+"solo pueden ver el estado de envío del cuestionario. Las respuestas "
+"individuales siguen siendo accesibles únicamente para el estudiante y el "
+"personal académico autorizado."
 
 #: .\profiles\templates\profiles\company_admin\company_admin_student_needs_analysis.html:84
 #, fuzzy
@@ -3415,7 +3735,9 @@ msgstr "Pendiente"
 msgid ""
 "The teacher's notes will appear here once the employee's progress has been "
 "assessed."
-msgstr "Las notas del profesor aparecerán aquí una vez se haya evaluado el progreso del empleado."
+msgstr ""
+"Las notas del profesor aparecerán aquí una vez se haya evaluado el progreso "
+"del empleado."
 
 #: .\profiles\templates\profiles\components\course_details_header.html:19
 msgid "Course Name"
@@ -3507,13 +3829,18 @@ msgid ""
 "Your answers will help your teacher understand how you use English, how "
 "confident you feel, and which communication situations you would most like "
 "to focus on."
-msgstr "Sus respuestas ayudarán a su profesor a entender cómo utiliza el inglés, qué nivel de confianza tiene y en qué situaciones comunicativas le gustaría centrarse más."
+msgstr ""
+"Sus respuestas ayudarán a su profesor a entender cómo utiliza el inglés, qué "
+"nivel de confianza tiene y en qué situaciones comunicativas le gustaría "
+"centrarse más."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:51
 msgid ""
 "There are no right or wrong answers. Please choose the options that best "
 "reflect your experience and priorities."
-msgstr "No hay respuestas correctas o incorrectas. Elija las opciones que mejor reflejen su experiencia y sus prioridades."
+msgstr ""
+"No hay respuestas correctas o incorrectas. Elija las opciones que mejor "
+"reflejen su experiencia y sus prioridades."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:62
 #: .\profiles\templates\profiles\includes\teacher\class_session_row.html:66
@@ -3556,7 +3883,9 @@ msgstr "¿Algo más?"
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:128
 msgid ""
 "Tell us how often you use English and where you use or expect to use it."
-msgstr "Cuéntenos con qué frecuencia utiliza el inglés y dónde lo utiliza o espera utilizarlo."
+msgstr ""
+"Cuéntenos con qué frecuencia utiliza el inglés y dónde lo utiliza o espera "
+"utilizarlo."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:176
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:269
@@ -3569,7 +3898,9 @@ msgstr "Continuar"
 msgid ""
 "Tell us who you communicate with and the English accents or varieties you "
 "regularly hear."
-msgstr "Cuéntenos con quién se comunica y qué acentos o variedades del inglés escucha habitualmente."
+msgstr ""
+"Cuéntenos con quién se comunica y qué acentos o variedades del inglés "
+"escucha habitualmente."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:244
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:651
@@ -3593,30 +3924,40 @@ msgstr "Valore qué nivel de confianza tiene actualmente en cada área."
 msgid ""
 "Identify the communication situations you would most like to focus on during "
 "your course."
-msgstr "Identifique las situaciones comunicativas en las que más le gustaría centrarse durante el curso."
+msgstr ""
+"Identifique las situaciones comunicativas en las que más le gustaría "
+"centrarse durante el curso."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:480
 msgid ""
 "Add any other information that could help your teacher support your learning."
-msgstr "Añada cualquier otra información que pueda ayudar a su profesor a apoyar su aprendizaje."
+msgstr ""
+"Añada cualquier otra información que pueda ayudar a su profesor a apoyar su "
+"aprendizaje."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:510
 msgid ""
 "Please review your answers carefully before submitting. Once submitted, you "
 "will no longer be able to edit them."
-msgstr "Revise atentamente sus respuestas antes de enviarlas. Una vez enviadas, ya no podrá editarlas."
+msgstr ""
+"Revise atentamente sus respuestas antes de enviarlas. Una vez enviadas, ya "
+"no podrá editarlas."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:519
 msgid ""
 "Your Learning Needs questionnaire is not yet available for submission. "
 "Please contact your course administrator."
-msgstr "Su cuestionario de necesidades de aprendizaje todavía no está disponible para enviarlo. Póngase en contacto con el administrador del curso."
+msgstr ""
+"Su cuestionario de necesidades de aprendizaje todavía no está disponible "
+"para enviarlo. Póngase en contacto con el administrador del curso."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:528
 msgid ""
 "You can review the Learning Needs questionnaire now. It will become "
 "available for completion and submission once a course has been assigned."
-msgstr "Ahora puede revisar el cuestionario de necesidades de aprendizaje. Estará disponible para completarlo y enviarlo una vez se le haya asignado un curso."
+msgstr ""
+"Ahora puede revisar el cuestionario de necesidades de aprendizaje. Estará "
+"disponible para completarlo y enviarlo una vez se le haya asignado un curso."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:543
 msgid "Submit Learning Needs"
@@ -3628,7 +3969,9 @@ msgstr "Necesidades de aprendizaje pendientes"
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:565
 msgid "The learner has not submitted their Learning Needs questionnaire yet."
-msgstr "El estudiante todavía no ha enviado su cuestionario de necesidades de aprendizaje."
+msgstr ""
+"El estudiante todavía no ha enviado su cuestionario de necesidades de "
+"aprendizaje."
 
 #: .\profiles\templates\profiles\components\student_needs_analysis_content.html:578
 #, fuzzy
@@ -3726,7 +4069,7 @@ msgstr "Configuración"
 #: .\profiles\templates\profiles\includes\company_admin\company_admin_sidebar.html:73
 #: .\profiles\templates\profiles\includes\student\student_sidebar.html:76
 #: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:79
-#: .\templates\base.html:214 .\templates\includes\mobile_top_header.html:140
+#: .\templates\base.html:216 .\templates\includes\mobile_top_header.html:139
 msgid "Logout"
 msgstr "Salir"
 
@@ -3788,13 +4131,13 @@ msgstr "Reagendar"
 msgid "Evaluations"
 msgstr "Evaluaciones"
 
-#: .\profiles\templates\profiles\profile_base.html:75 .\templates\base.html:135
-#: .\templates\includes\mobile_top_header.html:59
+#: .\profiles\templates\profiles\profile_base.html:75 .\templates\base.html:137
+#: .\templates\includes\mobile_top_header.html:58
 msgid "Switch language to Catalan"
 msgstr "Cambiar idioma al Catalán"
 
-#: .\profiles\templates\profiles\profile_base.html:87 .\templates\base.html:150
-#: .\templates\includes\mobile_top_header.html:71
+#: .\profiles\templates\profiles\profile_base.html:87 .\templates\base.html:152
+#: .\templates\includes\mobile_top_header.html:70
 msgid "Switch language to French"
 msgstr "Cambiar idioma al francés"
 
@@ -3907,13 +4250,17 @@ msgstr "¿Solicitar el aplazamiento de esta clase?"
 msgid ""
 "This class will be marked as pending reschedule. Your teacher will arrange a "
 "new date and time with you."
-msgstr "Esta clase se marcará como pendiente de reprogramación. Su profesor acordará con usted una nueva fecha y hora."
+msgstr ""
+"Esta clase se marcará como pendiente de reprogramación. Su profesor acordará "
+"con usted una nueva fecha y hora."
 
 #: .\profiles\templates\profiles\student\my_classes.html:160
 msgid ""
 "Postponement requests are available until 17:00 CET on the day before the "
 "class."
-msgstr "Las solicitudes de aplazamiento están disponibles hasta las 17:00 CET del día anterior a la clase."
+msgstr ""
+"Las solicitudes de aplazamiento están disponibles hasta las 17:00 CET del "
+"día anterior a la clase."
 
 #: .\profiles\templates\profiles\student\my_classes.html:165
 #: .\profiles\templates\profiles\student\my_pending_classes.html:171
@@ -3958,7 +4305,9 @@ msgstr "Reagendar"
 msgid ""
 "View classes waiting to be rescheduled and review classes that have already "
 "been rescheduled."
-msgstr "Consulte las clases pendientes de reprogramación y revise las clases que ya se han reprogramado."
+msgstr ""
+"Consulte las clases pendientes de reprogramación y revise las clases que ya "
+"se han reprogramado."
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:36
 #: .\profiles\templates\profiles\student\my_pending_classes.html:121
@@ -4308,13 +4657,18 @@ msgstr "p. ej., septiembre–diciembre de 2026"
 msgid ""
 "Enter a name that identifies the assessment period. For example: Term 1, "
 "September–December 2026, or Final Assessment."
-msgstr "Introduzca un nombre que identifique el período de evaluación. Por ejemplo: Trimestre 1, septiembre–diciembre de 2026 o Evaluación final."
+msgstr ""
+"Introduzca un nombre que identifique el período de evaluación. Por ejemplo: "
+"Trimestre 1, septiembre–diciembre de 2026 o Evaluación final."
 
 #: .\profiles\templates\profiles\teacher\teacher_student_term_assessment.html:62
 msgid ""
 "Your learner's current skill ratings will be copied into a separate draft. "
 "You can review and adjust them before submitting the final assessment."
-msgstr "Las valoraciones actuales de las habilidades del estudiante se copiarán en un borrador independiente. Podrá revisarlas y ajustarlas antes de enviar la evaluación final."
+msgstr ""
+"Las valoraciones actuales de las habilidades del estudiante se copiarán en "
+"un borrador independiente. Podrá revisarlas y ajustarlas antes de enviar la "
+"evaluación final."
 
 #: .\profiles\templates\profiles\teacher\teacher_student_term_assessment.html:67
 #, fuzzy
@@ -4391,7 +4745,9 @@ msgstr "¿Listo para finalizar?"
 msgid ""
 "All 14 subskills must be rated before submission. Once submitted, the "
 "assessment becomes read-only."
-msgstr "Las 14 subhabilidades deben estar valoradas antes del envío. Una vez enviada, la evaluación pasará a ser de solo lectura."
+msgstr ""
+"Las 14 subhabilidades deben estar valoradas antes del envío. Una vez "
+"enviada, la evaluación pasará a ser de solo lectura."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:71
 msgid "Submit this assessment? You will no longer be able to edit its ratings."
@@ -4424,7 +4780,8 @@ msgstr "pendiente"
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:138
 msgid "No formal skill snapshots are available for this assessment."
-msgstr "No hay instantáneas formales de habilidades disponibles para esta evaluación."
+msgstr ""
+"No hay instantáneas formales de habilidades disponibles para esta evaluación."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:148
 #, fuzzy
@@ -4454,7 +4811,9 @@ msgstr "Pendiente"
 msgid ""
 "Complete and submit the assessment before generating the learner's "
 "performance report."
-msgstr "Complete y envíe la evaluación antes de generar el informe de rendimiento del estudiante."
+msgstr ""
+"Complete y envíe la evaluación antes de generar el informe de rendimiento "
+"del estudiante."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:180
 msgid "Ready to generate"
@@ -4464,13 +4823,17 @@ msgstr "Listo para generar"
 msgid ""
 "Generate a permanent report from the submitted assessment. The saved report "
 "cannot be edited or regenerated."
-msgstr "Genere un informe permanente a partir de la evaluación enviada. El informe guardado no se podrá editar ni volver a generar."
+msgstr ""
+"Genere un informe permanente a partir de la evaluación enviada. El informe "
+"guardado no se podrá editar ni volver a generar."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:185
 msgid ""
 "Generate this assessment report? The saved report cannot be edited or "
 "regenerated."
-msgstr "¿Generar este informe de evaluación? El informe guardado no se podrá editar ni volver a generar."
+msgstr ""
+"¿Generar este informe de evaluación? El informe guardado no se podrá editar "
+"ni volver a generar."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:190
 msgid "Generate Report"
@@ -4484,7 +4847,9 @@ msgstr "Informe generado correctamente"
 msgid ""
 "This report is a permanent snapshot of the submitted assessment and is "
 "currently available to the teacher only."
-msgstr "Este informe es una instantánea permanente de la evaluación enviada y actualmente solo está disponible para el profesor."
+msgstr ""
+"Este informe es una instantánea permanente de la evaluación enviada y "
+"actualmente solo está disponible para el profesor."
 
 #: .\profiles\templates\profiles\teacher\teacher_term_assessment_detail.html:203
 #, fuzzy
@@ -4606,7 +4971,10 @@ msgstr "Atención:"
 msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
-msgstr "Actualmente no tiene ninguna dirección de correo electrónico configurada. Debería añadir una para poder recibir notificaciones, restablecer su contraseña, etc."
+msgstr ""
+"Actualmente no tiene ninguna dirección de correo electrónico configurada. "
+"Debería añadir una para poder recibir notificaciones, restablecer su "
+"contraseña, etc."
 
 #: .\templates\account\email.html:52
 msgid "Add E-mail Address"
@@ -4618,7 +4986,8 @@ msgstr "Añadir correo"
 
 #: .\templates\account\email.html:67
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr "¿Realmente desea eliminar la dirección de correo electrónico seleccionada?"
+msgstr ""
+"¿Realmente desea eliminar la dirección de correo electrónico seleccionada?"
 
 #: .\templates\account\email_change.html:5
 #, fuzzy
@@ -4685,7 +5054,9 @@ msgstr "Confirmar dirección de correo?"
 msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user %(user_display)s."
-msgstr "Confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una dirección de correo electrónico del usuario %(user_display)s."
+msgstr ""
+"Confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una dirección de "
+"correo electrónico del usuario %(user_display)s."
 
 #: .\templates\account\email_confirm.html:20
 msgid "Confirm"
@@ -4696,7 +5067,10 @@ msgstr "Confirmado"
 msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
-msgstr "Este enlace de confirmación del correo electrónico ha caducado o no es válido. <a href=\"%(email_url)s\">Solicite una nueva confirmación por correo electrónico</a>."
+msgstr ""
+"Este enlace de confirmación del correo electrónico ha caducado o no es "
+"válido. <a href=\"%(email_url)s\">Solicite una nueva confirmación por correo "
+"electrónico</a>."
 
 #: .\templates\account\login.html:7
 msgid "Sign in to your account"
@@ -4828,7 +5202,11 @@ msgid ""
 "account. Learn more about how your data is used and your rights in our <a "
 "href=\"%(policy_url)s\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">Privacy Policy</a>."
-msgstr "English Grows trata su información personal para crear y gestionar su cuenta. Más información sobre cómo se utilizan sus datos y sobre sus derechos en nuestra <a href=\"%(policy_url)s\" target=\"_blank\" rel=\"noopener noreferrer\">Política de Privacidad</a>."
+msgstr ""
+"English Grows trata su información personal para crear y gestionar su "
+"cuenta. Más información sobre cómo se utilizan sus datos y sobre sus "
+"derechos en nuestra <a href=\"%(policy_url)s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">Política de Privacidad</a>."
 
 #: .\templates\account\signup.html:31
 msgid "Sign Up"
@@ -4913,59 +5291,57 @@ msgstr "Administración de Django"
 msgid " By %(filter_title)s "
 msgstr " Por %(filter_title)s "
 
-#: .\templates\base.html:65
+#: .\templates\base.html:67
 msgid "Skip to main content"
 msgstr "Saltar a contenido principal"
 
-#: .\templates\base.html:75
+#: .\templates\base.html:77
 msgid "Go to the home page"
 msgstr "Ir a página de inicio"
 
-#: .\templates\base.html:175 .\templates\base.html:184
-#: .\templates\base.html:193 .\templates\base.html:202
+#: .\templates\base.html:177 .\templates\base.html:186
+#: .\templates\base.html:195 .\templates\base.html:204
 msgid "My Platform"
 msgstr "Mi Plataforma"
 
-#: .\templates\base.html:224 .\templates\includes\mobile_top_header.html:149
+#: .\templates\base.html:226 .\templates\includes\mobile_top_header.html:148
 msgid "Login"
 msgstr "Conectarse"
 
-#: .\templates\base.html:336
-msgid "Companies"
-msgstr "Empresas"
+#: .\templates\base.html:325
+msgid "PLATFORM CURRENTLY UNDER DEVELOPMENT"
+msgstr "PLATAFORMA ACTUALMENTE EN DESARROLLO"
 
-#: .\templates\base.html:343
-msgid "Professionals"
-msgstr "Profesionales"
+#: .\templates\base.html:330
+msgid ""
+"Thank you for your patience while new features are being built and refined"
+msgstr ""
+"Nuevas funcionalidades están siendo implementadas. Gracias por su paciencia"
 
-#: .\templates\base.html:350
-msgid "Cambridge Exams"
-msgstr "Exámenes Cambridge"
-
-#: .\templates\base.html:361
+#: .\templates\base.html:384
 msgid "About"
 msgstr "Sobre mí"
 
-#: .\templates\base.html:368
+#: .\templates\base.html:391
 msgid "Contact"
 msgstr "Contacto"
 
-#: .\templates\base.html:381
+#: .\templates\base.html:404
 msgid "Terms & Cons"
 msgstr "Términos y Condiciones"
 
-#: .\templates\base.html:425
+#: .\templates\base.html:448
 msgid "All rights reserved"
 msgstr "Reservados todos los derechos"
 
-#: .\templates\base.html:429
+#: .\templates\base.html:452
 msgid "Developed & designed by Edna T.M."
 msgstr "Desarrollado y diseñado por Edna T.M."
 
-#: .\templates\includes\mobile_top_header.html:104
-#: .\templates\includes\mobile_top_header.html:112
-#: .\templates\includes\mobile_top_header.html:120
-#: .\templates\includes\mobile_top_header.html:128
+#: .\templates\includes\mobile_top_header.html:103
+#: .\templates\includes\mobile_top_header.html:111
+#: .\templates\includes\mobile_top_header.html:119
+#: .\templates\includes\mobile_top_header.html:127
 msgid "Platform"
 msgstr "Mi Plataforma"
 

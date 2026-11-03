@@ -20,7 +20,7 @@ from profiles.models import (
 )
 
 from profiles.utils.skills import build_student_skill_cards
-from profiles.views import (
+from profiles.views.shared import (
     build_skill_note_display,
     build_skill_progress_chart_data,
     build_overall_skill_progress_chart_data,
