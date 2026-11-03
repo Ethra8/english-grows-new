@@ -4343,7 +4343,7 @@ msgstr "Demander le report du cours"
 
 #: .\profiles\templates\profiles\includes\student\class_session_row.html:80
 msgid "Join Class"
-msgstr "Rejoindre le cours"
+msgstr "Se Connecter"
 
 #: .\profiles\templates\profiles\includes\student\class_session_row.html:87
 msgid "View calendar"

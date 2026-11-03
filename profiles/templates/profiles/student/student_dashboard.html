@@ -143,11 +143,11 @@
                                             <img src="{% static 'icons/reschedule_teal_icon.png' %}" alt="icon"></button>
 
                                         <a href="{{ session.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-class-today btn" aria-label="start session">
-                                            Start
+                                            {% trans 'Join Class' %}
                                             <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
                                         {% else %}
                                         <a href="{% url 'profiles:teacher_calendar' %}" class="btn-class-today btn" aria-label="check calendar">
-                                            Calendar
+                                            {% trans 'Calendar' %}
                                             <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="icon"></a>
                                         {% endif %}
                                     </div>

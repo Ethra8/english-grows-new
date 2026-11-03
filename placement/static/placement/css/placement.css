@@ -4,6 +4,10 @@
 .placement-shell *::before,
 .placement-shell *::after { box-sizing: border-box; }
 
+:root {
+    --maintenance-banner-height: 0px;
+}
+
 body:has(.placement-shell) {
     background: linear-gradient(180deg, var(--color-mist), var(--color-whitesmoke) 360px);
     color: var(--color-navy);
@@ -14,7 +18,7 @@ body:has(.placement-shell) {
     max-width: 1000px;
     flex: 1;
     margin: 0 auto;
-    padding: 8rem 1.25rem 5rem;
+    padding: calc(8em + var(--maintenance-banner-height)) 1.25rem 5rem;
     color: var(--color-navy);
     font-family: "Montserrat", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -510,7 +514,7 @@ body:has(.placement-shell) {
 
 /* RESPONSIVE ****************************************************/
 @media (max-width: 767px) {
-    .placement-shell { padding: 7rem 1rem 3rem; }
+    .placement-shell { padding: calc(7rem + var(--maintenance-banner-height)) 1rem 3rem; }
     .placement-hero { padding: 1.5rem; }
     .placement-hero h1 { font-size: clamp(1.85rem, 8vw, 2.4rem); }
     .placement-benefits { flex-direction: column; gap: .4rem; }

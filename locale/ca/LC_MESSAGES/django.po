@@ -4274,7 +4274,7 @@ msgstr "Sol·licita l'ajornament de la classe"
 
 #: .\profiles\templates\profiles\includes\student\class_session_row.html:80
 msgid "Join Class"
-msgstr "Accedeix a la classe"
+msgstr "Accedir"
 
 #: .\profiles\templates\profiles\includes\student\class_session_row.html:87
 msgid "View calendar"
