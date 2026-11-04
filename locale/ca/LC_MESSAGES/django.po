@@ -8,25 +8,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\config\settings.py:258
-#, fuzzy
-#| msgid "Your English"
-msgid "English"
-msgstr "El vostre anglès"
-
-#: .\config\settings.py:259
-#, fuzzy
-#| msgid "Companies"
-msgid "Spanish"
-msgstr "Empreses"
-
-#: .\config\settings.py:260
-msgid "Catalan"
-msgstr ""
-
-#: .\config\settings.py:261
-msgid "French"
-msgstr ""
 
 #: .\config\signup_forms.py:33 .\placement\views.py:82
 msgid "Security verification failed. Please try again."
@@ -125,49 +106,41 @@ msgid "Take the best from different methodologies"
 msgstr "Aprofiteu el millor de diferents metodologies"
 
 #: .\home\templates\home\index.html:37
-#, fuzzy
-#| msgid "English training"
 msgid "Explore Training"
-msgstr "Professional en línia"
+msgstr "Descobrir"
 
 #: .\home\templates\home\index.html:42
-#, fuzzy
-#| msgid "Level"
 msgid "Level Test"
-msgstr "Nivell"
+msgstr "Test de Nivell"
 
 #: .\home\templates\home\index.html:67
 msgid "TAILORED TO YOUR GOALS"
-msgstr "FET A MIDA DELS TEUS OBJECTIUS"
+msgstr "A LA MIDA DELS TEUS OBJECTIUS"
 
 #: .\home\templates\home\index.html:68
-#, fuzzy
-#| msgid "Online professional"
-msgid "English training for professionals"
-msgstr "Formació d'anglès"
+msgid "Reach your goals"
+msgstr "Assoleix els teus objectius professionals"
 
 #: .\home\templates\home\index.html:69
 msgid "Discover the training that works for you."
 msgstr "Descobreix el programa que més s'ajusta a les teves necessitats"
 
 #: .\home\templates\home\index.html:77 .\templates\base.html:359
-msgid "Companies"
-msgstr "Empreses"
+msgid "For Companies"
+msgstr "Per Empreses"
 
 #: .\home\templates\home\index.html:78
 msgid "Tailored English training for teams and organisations."
-msgstr "Formació d'anglès per equips i organitzacions"
+msgstr "Formació d'anglès per equips i organitzacions."
 
 #: .\home\templates\home\index.html:79 .\home\templates\home\index.html:86
 #: .\home\templates\home\index.html:93
-#, fuzzy
-#| msgid "English training"
 msgid "Explore training"
-msgstr "Professional en línia"
+msgstr "Programes"
 
 #: .\home\templates\home\index.html:84 .\templates\base.html:366
-msgid "Professionals"
-msgstr "Professionals"
+msgid "For Professionals"
+msgstr "Per a Professionals"
 
 #: .\home\templates\home\index.html:85
 msgid ""
@@ -175,8 +148,8 @@ msgid ""
 msgstr "Millora les teves habilitats comunicative i guanya confiança"
 
 #: .\home\templates\home\index.html:91 .\templates\base.html:373
-msgid "Cambridge Exams"
-msgstr "Exàmens de Cambridge"
+msgid "Cambridge Exams Preparation"
+msgstr "Preparació Exàmens de Cambridge"
 
 #: .\home\templates\home\index.html:92
 msgid "Prepare for internationally recognised English qualifications."
@@ -4266,7 +4239,7 @@ msgstr "Configuració del compte"
 #: .\profiles\templates\profiles\includes\teacher\teacher_sidebar.html:79
 #: .\templates\base.html:216 .\templates\includes\mobile_top_header.html:139
 msgid "Logout"
-msgstr "Tanca la sessió"
+msgstr "Tancar sessió"
 
 #: .\profiles\templates\profiles\includes\student\class_session_row.html:66
 msgid "Request lesson postponement"
@@ -4386,9 +4359,14 @@ msgstr "Impartides"
 #: .\profiles\templates\profiles\student\my_classes.html:77
 #: .\profiles\templates\profiles\student\my_classes.html:115
 #: .\profiles\templates\profiles\student\my_classes.html:125
-#: .\profiles\templates\profiles\student\my_pending_classes.html:90
 msgid "All"
 msgstr "Totes"
+
+#: .\profiles\templates\profiles\student\my_pending_classes.html:90
+msgctxt "rescheduled classes"
+msgid "All"
+msgstr "Totes"
+
 
 #: .\profiles\templates\profiles\student\my_classes.html:73
 msgid "Filter upcoming classes"
@@ -4461,8 +4439,8 @@ msgstr ""
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:5
 #: .\profiles\templates\profiles\student\my_pending_classes.html:22
-msgid "Reschedule Classes"
-msgstr "Reprogramar classes"
+msgid "Class Rescheduling"
+msgstr "Reprogramació de classes"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:27
 msgid ""
@@ -4476,7 +4454,7 @@ msgstr ""
 #: .\profiles\templates\profiles\student\my_pending_classes.html:121
 #: .\profiles\templates\profiles\student\my_pending_classes.html:127
 msgid "Rescheduled"
-msgstr "Reprogramada"
+msgstr "Reprogramades"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:73
 msgid "Waiting for a new date and time"
@@ -5171,7 +5149,7 @@ msgstr "Esteu segur que voleu tancar la sessió?"
 
 #: .\templates\account\logout.html:21
 msgid "Log Out"
-msgstr "Tanca la sessió"
+msgstr "Tancar"
 
 #: .\templates\account\password_change.html:6
 #: .\templates\account\password_change.html:13

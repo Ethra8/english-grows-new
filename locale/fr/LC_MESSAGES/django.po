@@ -8,25 +8,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\config\settings.py:258
-#, fuzzy
-#| msgid "Your English"
-msgid "English"
-msgstr "Votre anglais"
-
-#: .\config\settings.py:259
-#, fuzzy
-#| msgid "Companies"
-msgid "Spanish"
-msgstr "Entreprises"
-
-#: .\config\settings.py:260
-msgid "Catalan"
-msgstr ""
-
-#: .\config\settings.py:261
-msgid "French"
-msgstr ""
 
 #: .\config\signup_forms.py:33 .\placement\views.py:82
 msgid "Security verification failed. Please try again."
@@ -133,28 +114,24 @@ msgid "Explore Training"
 msgstr "English Grows"
 
 #: .\home\templates\home\index.html:42
-#, fuzzy
-#| msgid "Level"
 msgid "Level Test"
-msgstr "Niveau"
+msgstr "Test de Niveau"
 
 #: .\home\templates\home\index.html:67
 msgid "TAILORED TO YOUR GOALS"
-msgstr ""
+msgstr "FAIT À MESURE"
 
 #: .\home\templates\home\index.html:68
-#, fuzzy
-#| msgid "Online professional"
-msgid "English training for professionals"
-msgstr "Professionnel en ligne"
+msgid "Reach your goals"
+msgstr "Au service de vos objectifs professionnels"
 
 #: .\home\templates\home\index.html:69
 msgid "Discover the training that works for you."
 msgstr "Découvrez la formation qui vous convient."
 
 #: .\home\templates\home\index.html:77 .\templates\base.html:359
-msgid "Companies"
-msgstr "Entreprises"
+msgid "For Companies"
+msgstr "Pour Entreprises"
 
 #: .\home\templates\home\index.html:78
 msgid "Tailored English training for teams and organisations."
@@ -162,14 +139,12 @@ msgstr "Formation en anglais adaptée aux équipes et aux organisations."
 
 #: .\home\templates\home\index.html:79 .\home\templates\home\index.html:86
 #: .\home\templates\home\index.html:93
-#, fuzzy
-#| msgid "English Grows"
 msgid "Explore training"
-msgstr "English Grows"
+msgstr "Découvrir"
 
 #: .\home\templates\home\index.html:84 .\templates\base.html:366
-msgid "Professionals"
-msgstr "Professionnels"
+msgid "For Professionals"
+msgstr "Pour Professionnels"
 
 #: .\home\templates\home\index.html:85
 msgid ""
@@ -178,8 +153,8 @@ msgstr ""
 "Développez votre confiance en vous et vos compétences en communication pour réussir professionnellement."
 
 #: .\home\templates\home\index.html:91 .\templates\base.html:373
-msgid "Cambridge Exams"
-msgstr "Examens Cambridge"
+msgid "Cambridge Exams Preparation"
+msgstr "Préparation Examens Cambridge"
 
 #: .\home\templates\home\index.html:92
 msgid "Prepare for internationally recognised English qualifications."
@@ -4459,6 +4434,12 @@ msgstr "Dispensés"
 msgid "All"
 msgstr "Tous"
 
+#: .\profiles\templates\profiles\student\my_pending_classes.html:90
+msgctxt "rescheduled classes"
+msgid "All"
+msgstr "Tous"
+
+
 #: .\profiles\templates\profiles\student\my_classes.html:73
 msgid "Filter upcoming classes"
 msgstr "Filtrer les cours à venir"
@@ -4529,7 +4510,7 @@ msgstr ""
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:5
 #: .\profiles\templates\profiles\student\my_pending_classes.html:22
-msgid "Reschedule Classes"
+msgid "Class Rescheduling"
 msgstr "Reprogrammer les cours"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:27
@@ -4556,7 +4537,7 @@ msgstr "Aucun cours n'est actuellement en attente de reprogrammation."
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:84
 msgid "Rescheduled Classes"
-msgstr "Cours reprogrammés"
+msgstr "Cours Reprogrammés"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:89
 #: .\profiles\templates\profiles\student\my_pending_classes.html:124
@@ -5239,7 +5220,7 @@ msgstr "Êtes-vous sûr de vouloir vous déconnecter ?"
 
 #: .\templates\account\logout.html:21
 msgid "Log Out"
-msgstr "Se déconnecter"
+msgstr "Sortir"
 
 #: .\templates\account\password_change.html:6
 #: .\templates\account\password_change.html:13

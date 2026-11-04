@@ -2,7 +2,7 @@
 {% load static i18n %}
 {% load date_extras %}
 
-{% block extra_title %}| {% trans "Reschedule Classes" %} {% endblock %}
+{% block extra_title %}| {% trans "Class Rescheduling" %} {% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
@@ -19,7 +19,7 @@
     <!-- PAGE HEADER -->
     <header>
         <div class="row">
-            <div class="col-12 ml-0 pl-0"><h1>{% trans "Reschedule Classes" %}</h1></div>
+            <div class="col-12 ml-0 pl-0"><h1>{% trans "Class Rescheduling" %}</h1></div>
         </div>
         <hr>
     </header>
@@ -87,7 +87,7 @@
             <div class="reschedule-page-filter-tabs">
                 <button type="button" class="reschedule-page-filter-btn active" data-rescheduled-filter="upcoming" aria-selected="true">{% trans "Upcoming" %}</button>
                 <button type="button" class="reschedule-page-filter-btn" data-rescheduled-filter="past" aria-selected="false">{% trans "Past" %}</button>
-                <button type="button" class="reschedule-page-filter-btn" data-rescheduled-filter="all" aria-selected="false">{% trans "All" %}</button>
+                <button type="button" class="reschedule-page-filter-btn" data-rescheduled-filter="all" aria-selected="false">{% trans "All" context "rescheduled classes" %}</button>
             </div>
 
             <div class="reschedule-page-list">

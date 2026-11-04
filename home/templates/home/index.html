@@ -23,7 +23,10 @@
                 <img src="{% static 'images/title_landingpage_mobile.png' %}" alt="Your English grows with Edna" class="hero-title-image-mobile">
 
                 <h1>{% trans 'Online professional' %}
-                    <span>{% trans 'English training' %}</span>
+                    {% trans "English training" as training_text %}
+                    <span class="training-title">
+                        {{ training_text|linebreaksbr }}
+                    </span>
                 </h1>
 
                 <p class="mb-0">
@@ -64,33 +67,49 @@
     <section class="training-services">
         <div class="training-services-container">
             <div class="training-services-header">
-                <span class="services-eyebrow">{% trans "TAILORED TO YOUR GOALS" %}</span>
-                <h2>{% trans "English training for professionals" %}</h2>
+                <span class="services-eyebrow">{% trans "100% LIVE TRAINING" %}</span>
+                <h2>{% trans "Reach your goals" %}</h2>
                 <p>{% trans "Discover the training that works for you." %}</p>
             </div>
 
             <div class="training-services-grid">
                 <a href="#" class="training-service-card">
-                    <span class="service-icon">
-                        <img src="{% static 'icons/custom/briefcase_icon.png' %}" alt="" aria-hidden="true" width="32">
-                    </span>
-                    <h3>{% trans "Companies" %}</h3>
+                    <div class="service-card-header">
+                        <span class="service-icon">
+                            <img src="{% static 'icons/companies_dark_icon.png' %}" alt="" aria-hidden="true" width="46">
+                        </span>
+                        <h3>{% trans "For Companies" %}</h3>
+                    </div>
                     <p>{% trans "Tailored English training for teams and organisations." %}</p>
-                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="service-link">{% trans "Explore training" %}
+                        <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" width="46" aria-hidden="true">
+                    </span>
                 </a>
 
                 <a href="#" class="training-service-card">
-                    <span class="service-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></span>
-                    <h3>{% trans "Professionals" %}</h3>
+                    <div class="service-card-header">
+                        <span class="service-icon">
+                            <img src="{% static 'icons/professionals_dark_icon.png' %}" alt="" aria-hidden="true" width="36">
+                        </span>
+                        <h3>{% trans "For Professionals" %}</h3>                           
+                    </div>
                     <p>{% trans "Develop your confidence and communication skills for professional success." %}</p>
-                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="service-link">{% trans "Explore training" %}
+                        <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" width="46" aria-hidden="true">
+                    </span>
                 </a>
 
                 <a href="#" class="training-service-card">
-                    <span class="service-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
-                    <h3>{% trans "Cambridge Exams" %}</h3>
+                    <div class="service-card-header">
+                        <span class="service-icon">
+                            <img src="{% static 'icons/cambridge_qualification_dark_icon.png' %}" alt="" aria-hidden="true" width="36">
+                        </span>
+                        <h3>{% trans "Cambridge Exams Preparation" %}</h3>
+                    </div>
                     <p>{% trans "Prepare for internationally recognised English qualifications." %}</p>
-                    <span class="service-link">{% trans "Explore training" %}<i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="service-link">{% trans "Explore training" %}
+                        <img src="{% static 'icons/custom/arrows/arrow_right_thin_teal_icon.png' %}" alt="" width="46" aria-hidden="true">
+                    </span>
                 </a>
             </div>
         </div>

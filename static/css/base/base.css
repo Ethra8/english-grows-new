@@ -260,7 +260,7 @@ a.js-back-link:hover {
 
 #topnav {
     background-color: var(--color-navy);
-    max-height: 104px;
+    max-height: 96px;
     width: 100%;
     padding: 0 2%;
 }
@@ -338,8 +338,8 @@ a.text-white:hover {
 .logo {
     margin-top: 0;
     padding-top: 0;
-    height: 5.5rem;
-    width: 5.5rem;
+    height: 5rem;
+    width: 5rem;
 }
 
 #topnav ul li {

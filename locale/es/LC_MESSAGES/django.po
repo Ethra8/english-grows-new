@@ -110,7 +110,7 @@ msgstr "Formación de Inglés Online"
 
 #: .\home\templates\home\index.html:26
 msgid "English training"
-msgstr "De profesional a profesional"
+msgstr "De profesional\na profesional"
 
 #: .\home\templates\home\index.html:30
 msgid "Communicate confidently and improve your performance"
@@ -120,63 +120,54 @@ msgstr "Comunícate con confianza y mejora tu rendimiento"
 msgid "Take the best from different methodologies"
 msgstr "Llévate lo mejor de dos metodologías"
 
-#: .\home\templates\home\index.html:37
-#, fuzzy
-#| msgid "English training"
 msgid "Explore Training"
-msgstr "De profesional a profesional"
+msgstr "Ver Detalles"
 
 #: .\home\templates\home\index.html:42
-#, fuzzy
-#| msgid "Level"
 msgid "Level Test"
-msgstr "Nivel"
+msgstr "Test de Nivel"
 
 #: .\home\templates\home\index.html:67
 msgid "TAILORED TO YOUR GOALS"
 msgstr "PROGRAMAS A MEDIDA"
 
 #: .\home\templates\home\index.html:68
-#, fuzzy
-#| msgid "Online professional"
-msgid "English training for professionals"
-msgstr "Formación de Inglés Online"
+msgid "Reach your goals"
+msgstr "Alcanza tus objetivos"
 
 #: .\home\templates\home\index.html:69
 msgid "Discover the training that works for you."
 msgstr "Descubre el programa que mejor se adapta a tus necesidades."
 
 #: .\home\templates\home\index.html:77 .\templates\base.html:359
-msgid "Companies"
-msgstr "Empresas"
+msgid "For Companies"
+msgstr "Para Empresas"
 
 #: .\home\templates\home\index.html:78
 msgid "Tailored English training for teams and organisations."
-msgstr "Formación de inglés a medida para equipos y organizaciones"
+msgstr "Formación de inglés a medida para equipos y organizaciones."
 
 #: .\home\templates\home\index.html:79 .\home\templates\home\index.html:86
 #: .\home\templates\home\index.html:93
-#, fuzzy
-#| msgid "English training"
 msgid "Explore training"
-msgstr "De profesional a profesional"
+msgstr "Programas"
 
 #: .\home\templates\home\index.html:84 .\templates\base.html:366
-msgid "Professionals"
-msgstr "Profesionales"
+msgid "For Professionals"
+msgstr "Para Profesionales"
 
 #: .\home\templates\home\index.html:85
 msgid ""
 "Develop your confidence and communication skills for professional success."
-msgstr "Mejora tus dotes comunicativas, mejora tu confianza y consigue tus metas."
+msgstr "Mejora tus dotes comunicativas, mejora tu confianza y consigue tus metas profesionales."
 
 #: .\home\templates\home\index.html:91 .\templates\base.html:373
-msgid "Cambridge Exams"
-msgstr "Exámenes Cambridge"
+msgid "Cambridge Exams Preparation"
+msgstr "Preparación Exámenes Cambridge"
 
 #: .\home\templates\home\index.html:92
 msgid "Prepare for internationally recognised English qualifications."
-msgstr "Preparación para los mundialmente reconocidos certificados de nivel de Cambridge."
+msgstr "Preparación experta para conseguir la acreditación más reconocida globalmente ."
 
 #: .\home\templates\home\legal_notice.html:5
 #: .\home\templates\home\legal_notice.html:19 .\templates\base.html:408
@@ -4105,10 +4096,8 @@ msgstr "Mi Progreso"
 #: .\profiles\templates\profiles\student\my_pending_classes.html:46
 #: .\profiles\templates\profiles\student\my_pending_classes.html:69
 #: .\profiles\templates\profiles\student\my_pending_classes.html:166
-#, fuzzy
-#| msgid "Reschedule"
 msgid "Pending Reschedule"
-msgstr "Reagendar"
+msgstr "Pendiente de Reagendar"
 
 #: .\profiles\templates\profiles\includes\student\student_sidebar.html:62
 #: .\profiles\templates\profiles\includes\student\student_sidebar.html:64
@@ -4193,9 +4182,6 @@ msgstr "Listado de Clases"
 
 #: .\profiles\templates\profiles\student\my_classes.html:35
 #: .\profiles\templates\profiles\student\my_pending_classes.html:88
-#, fuzzy
-#| msgctxt "classes list"
-#| msgid "Upcoming"
 msgid "Upcoming"
 msgstr "Próximas"
 
@@ -4210,19 +4196,18 @@ msgstr "Realizadas"
 #: .\profiles\templates\profiles\student\my_classes.html:77
 #: .\profiles\templates\profiles\student\my_classes.html:115
 #: .\profiles\templates\profiles\student\my_classes.html:125
-#: .\profiles\templates\profiles\student\my_pending_classes.html:90
-#, fuzzy
-#| msgctxt "classes list"
-#| msgid "All"
 msgid "All"
 msgstr "Todas"
 
+#: .\profiles\templates\profiles\student\my_pending_classes.html:90
+msgctxt "rescheduled classes"
+msgid "All"
+msgstr "Todas"
+
+
 #: .\profiles\templates\profiles\student\my_classes.html:73
-#, fuzzy
-#| msgctxt "dashboard training overview"
-#| msgid "Upcoming Classes"
 msgid "Filter upcoming classes"
-msgstr "Próximas Clases"
+msgstr "Filtrar Próximas Clases"
 
 #: .\profiles\templates\profiles\student\my_classes.html:89
 #, fuzzy
@@ -4296,10 +4281,8 @@ msgstr ""
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:5
 #: .\profiles\templates\profiles\student\my_pending_classes.html:22
-#, fuzzy
-#| msgid "Reschedule"
-msgid "Reschedule Classes"
-msgstr "Reagendar"
+msgid "Class Rescheduling"
+msgstr "Clases Reagendadas"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:27
 msgid ""
@@ -4312,10 +4295,8 @@ msgstr ""
 #: .\profiles\templates\profiles\student\my_pending_classes.html:36
 #: .\profiles\templates\profiles\student\my_pending_classes.html:121
 #: .\profiles\templates\profiles\student\my_pending_classes.html:127
-#, fuzzy
-#| msgid "Reschedule"
 msgid "Rescheduled"
-msgstr "Reagendar"
+msgstr "Reagendadas"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:73
 msgid "Waiting for a new date and time"
@@ -4326,10 +4307,8 @@ msgid "No classes are currently pending reschedule."
 msgstr "Actualmente no hay ninguna clase pendiente de reprogramación."
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:84
-#, fuzzy
-#| msgid "held classes"
 msgid "Rescheduled Classes"
-msgstr "clases impartidas"
+msgstr "Clases Reagendadas"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:89
 #: .\profiles\templates\profiles\student\my_pending_classes.html:124
@@ -4337,8 +4316,6 @@ msgid "Past"
 msgstr "Pasadas"
 
 #: .\profiles\templates\profiles\student\my_pending_classes.html:141
-#, fuzzy
-#| msgid "Reschedule"
 msgid "Request Reschedule"
 msgstr "Reagendar"
 
@@ -4537,9 +4514,6 @@ msgstr "Clases realizadas"
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:309
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:424
 #: .\profiles\templates\profiles\teacher\teacher_dashboard.html:473
-#, fuzzy
-#| msgctxt "dashboard training overview"
-#| msgid "Upcoming Classes"
 msgid "Upcoming Classes"
 msgstr "Próximas Clases"
 
@@ -5345,125 +5319,3 @@ msgstr "Desarrollado y diseñado por Edna T.M."
 msgid "Platform"
 msgstr "Mi Plataforma"
 
-#~ msgctxt "course details page"
-#~ msgid "Delivered"
-#~ msgstr "Desarrollo general"
-
-#~| msgid "Classes held since enrollment"
-#~ msgid "Classes since enrollment"
-#~ msgstr "Clases desde inscripción"
-
-#~ msgctxt "course details page"
-#~ msgid "Hours Delivered"
-#~ msgstr "Horas Impartidas"
-
-#~ msgctxt "course details page"
-#~ msgid "total"
-#~ msgstr "totales"
-
-#~ msgctxt "course details page"
-#~ msgid "Total Hours"
-#~ msgstr "Horas Totales"
-
-#~ msgctxt "course details page attendance"
-#~ msgid "classes held"
-#~ msgstr "clases impartidas"
-
-#~ msgctxt "course details page attendance"
-#~ msgid "delivered"
-#~ msgstr "impartidas"
-
-#~ msgctxt "my course"
-#~ msgid "Upcoming"
-#~ msgstr "Próxima"
-
-#~| msgctxt "student dashboard"
-#~| msgid "Next Class"
-#~ msgid "Next Class"
-#~ msgstr "Próxima Clase"
-
-#~| msgid "Enrollment date"
-#~ msgid "End date"
-#~ msgstr "Fecha de inscripción"
-
-#~ msgid "Completed Lessons"
-#~ msgstr "Clases Completadas"
-
-#~ msgctxt "student dashboard"
-#~ msgid "Next Class"
-#~ msgstr "Próxima Clase"
-
-#~ msgctxt "student dashboard"
-#~ msgid "No upcoming class scheduled yet"
-#~ msgstr "Todavía no tiene clases agendadas próximamente"
-
-#~ msgid "Register"
-#~ msgstr "Registro"
-
-#~| msgid "Hours Attended"
-#~ msgid "Hours Done"
-#~ msgstr "Horas Asistidas"
-
-#~| msgid "Class Sessions List"
-#~ msgid "Class Sessions Held"
-#~ msgstr "Listado de Clases"
-
-#~| msgid "Attendance Submitted"
-#~ msgid "attendance submitted"
-#~ msgstr "Registros de asistencia"
-
-#~| msgid "Attendance Submitted"
-#~ msgid "All attendance submitted"
-#~ msgstr "Registros de asistencia"
-
-#~ msgid "Completed Hours"
-#~ msgstr "Horas Completadas"
-
-#~ msgid "Enrolled on"
-#~ msgstr "Fecha de Inscripción"
-
-#~ msgid "My Profile"
-#~ msgstr "Mi Perfil"
-
-#~ msgid "My Attendance"
-#~ msgstr "Mi Asistencia"
-
-#~ msgid "Completed Classes"
-#~ msgstr "Clases Completadas"
-
-#~ msgid "Next class"
-#~ msgstr "Próxima clase"
-
-#~ msgid "All-day"
-#~ msgstr "Festivo"
-
-#~ msgid "Session"
-#~ msgstr "Sesión"
-
-#~ msgid "assessed yet"
-#~ msgstr "evaluadas"
-
-#~ msgid "Lessons Missed"
-#~ msgstr "Sin justificar"
-
-#~ msgid "Inactive"
-#~ msgstr "Inactivo"
-
-#~ msgid "Enrolled"
-#~ msgstr "inscrito"
-
-#~ msgctxt "employees list"
-#~ msgid "Review"
-#~ msgstr "Revisar"
-
-#~ msgctxt "learner enrollment status"
-#~ msgid "Inactive"
-#~ msgstr "Inactivo"
-
-#~ msgctxt "company attendance summary"
-#~ msgid "active"
-#~ msgstr "activos"
-
-#~ msgctxt "course details page"
-#~ msgid "Delivery"
-#~ msgstr "Desarrollo"

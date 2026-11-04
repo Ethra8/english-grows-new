@@ -1,10 +1,13 @@
 
 /* PRIVACY POLICY ****************************************************/
+:root {
+    --maintenance-banner-height: 0px;
+}
 
 .privacy-policy {
     width: 100%;
     max-width: 920px;
-    margin: 70px auto 0;
+    margin: calc(var(--maintenance-banner-height) + 4em) auto 0;
     padding: clamp(1.75rem, 5vw, 4rem);
     background: #fff;
     border: 1px solid rgba(0, 45, 90, .09);

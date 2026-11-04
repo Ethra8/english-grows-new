@@ -8107,4 +8107,6 @@ Use the console backend as a local development setting only, not as the producti
 
 ## Pictures
 
+### Landing Page
+#### Hero
 - Foto de Cedric Fauntleroy: https://www.pexels.com/es-es/foto/ordenador-portatil-oficina-mesa-ordenador-8154163/
