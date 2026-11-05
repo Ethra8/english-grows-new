@@ -481,6 +481,7 @@ stacks every slide in precisely the same screen position.
     align-items: center;
     justify-content: center;
     width: 54px;
+    min-width: 54px;
     height: 54px;
     margin-bottom: 24px;
     border-radius: 12px;

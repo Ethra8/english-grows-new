@@ -2,6 +2,10 @@
     --maintenance-banner-height: 0px;
 }
 
+.maintenance-banner {
+    padding: .75rem 1rem .75em 280px;
+}
+
 h1 {
     color: var(--color-navy);
     font-family: "Big Shoulders Display", sans-serif;
@@ -640,15 +644,12 @@ div:has(> .student-action-btn) {
 /* **************************************************|
 ******** MEDIA QUERIES ******************************|
 *****************************************************/
-@media (max-width: 1360.98px) {
-    .maintenance-banner {
-        padding: .75rem 1rem .75em 280px;
-    }
-
-}
 
 
 @media (max-width: 1250px) {
+    .maintenance-banner {
+        padding: .75rem 1rem .75em 220px;
+    }
 
     /* === SIDEBAR ================================ */
     .profile-sidebar {
@@ -664,6 +665,9 @@ div:has(> .student-action-btn) {
 
 
 @media (max-width: 991.98px) {
+    .maintenance-banner {
+        padding: .75rem 1rem;
+    }
 
     h1 {
         font-weight: 700;
