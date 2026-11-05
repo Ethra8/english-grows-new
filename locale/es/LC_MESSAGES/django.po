@@ -2855,11 +2855,6 @@ msgstr "Próximas"
 msgid "Past Classes"
 msgstr "clases realizadas"
 
-#: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:36
-msgctxt "classes list"
-msgid "Held"
-msgstr "Realizadas"
-
 #: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:49
 #: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:64
 #: .\profiles\templates\profiles\company_admin\company_admin_classes_list.html:87
@@ -3076,7 +3071,7 @@ msgstr "Enfoque del Programa"
 #: .\profiles\templates\profiles\student\my_course.html:47
 #: .\profiles\templates\profiles\teacher\teacher_course_details.html:89
 msgid "No programme focus has been assigned to this course yet."
-msgstr "Este curso todavía no tiene los programas asignados."
+msgstr "Este curso todavía no tiene programa asignado."
 
 #: .\profiles\templates\profiles\company_admin\company_admin_course_details.html:108
 #: .\profiles\templates\profiles\student\my_course.html:57
@@ -3371,7 +3366,7 @@ msgstr "clases"
 #: .\profiles\templates\profiles\student\student_dashboard.html:296
 msgctxt "dashboard training overview"
 msgid "Classes Held"
-msgstr "Clases realizadas"
+msgstr "Clases Realizadas"
 
 #: .\profiles\templates\profiles\company_admin\company_admin_dashboard.html:268
 #: .\profiles\templates\profiles\student\student_dashboard.html:208
@@ -4186,9 +4181,7 @@ msgid "Upcoming"
 msgstr "Próximas"
 
 #: .\profiles\templates\profiles\student\my_classes.html:41
-#, fuzzy
-#| msgctxt "classes list"
-#| msgid "Held"
+msgctxt "classes list"
 msgid "Held"
 msgstr "Realizadas"
 
@@ -4361,16 +4354,14 @@ msgstr "Clases Hoy"
 
 #: .\profiles\templates\profiles\student\student_dashboard.html:226
 #: .\profiles\templates\profiles\student\student_dashboard.html:319
-#, fuzzy
-#| msgid "attendance records"
 msgid "Attendance records"
-msgstr "registros de asistencia"
+msgstr "Registros de asistencia"
 
 #: .\profiles\templates\profiles\teacher\student_skills_overview.html:87
 #, fuzzy, python-format
 #| msgid "Pending assessment"
-msgid "Edit %(name)s assessment"
-msgstr "Evaluación pendiente"
+msgid "Edit assessment"
+msgstr "Editar evaluación de %(name)s"
 
 #: .\profiles\templates\profiles\teacher\student_skills_overview.html:89
 msgid "Edit Skill"
@@ -4683,13 +4674,6 @@ msgstr "Evaluación Pendiente"
 #| msgid "Assessment"
 msgid "View Assessment"
 msgstr "Evaluaciones"
-
-#: .\profiles\templates\profiles\teacher\teacher_student_term_assessment.html:117
-#, fuzzy
-#| msgid "No programme focus has been assigned to this course yet."
-msgid ""
-"No formal term assessments have been created for this learner and course yet."
-msgstr "Este curso todavía no tiene los programas asignados."
 
 #: .\profiles\templates\profiles\teacher\teacher_take_attendance.html:47
 msgid "employee record"

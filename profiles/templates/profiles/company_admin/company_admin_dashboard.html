@@ -21,15 +21,11 @@
     <div class="overlay-mist"></div>
 
     <header>
-        <div class="row">
-            <div class="col-12 pl-0">
-                <h1>
-                    {% trans "Welcome" %},
-                    {{ request.user.first_name|default:request.user.username }}
-                </h1>
-            </div>
-            <hr>
-        </div>
+        <h1>
+            {% trans "Welcome" %},
+            {{ request.user.first_name|default:request.user.username }}
+        </h1>
+        <hr>
     </header>
 
 
@@ -522,6 +518,9 @@
                         </div>
                     </div>
                 </div>
+                <p class="attendance-rate-disclaimer">
+                    {% trans 'Attendance rate calculated based on submitted records.' %}
+                </p>
 
             </div>
         </div>

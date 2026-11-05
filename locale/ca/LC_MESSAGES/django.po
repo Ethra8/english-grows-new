@@ -4517,7 +4517,7 @@ msgstr "Registres d'assistència"
 #: .\profiles\templates\profiles\teacher\student_skills_overview.html:87
 #, python-format
 msgid "Edit %(name)s assessment"
-msgstr "Edita l'avaluació de %(name)s"
+msgstr "Editar avaluació de %(name)s"
 
 #: .\profiles\templates\profiles\teacher\student_skills_overview.html:89
 msgid "Edit Skill"

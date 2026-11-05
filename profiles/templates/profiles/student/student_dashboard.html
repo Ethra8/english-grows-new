@@ -19,12 +19,8 @@
     <div class="overlay-mist"></div>
 
     <header>
-        <div class="row">
-            <div class="col-12 pl-0">
-                <h1>{% trans "Welcome" %}, {{ request.user.first_name|default:request.user.username }}</h1>
-            </div>
-            <hr>
-        </div>
+        <h1>{% trans "Welcome" %}, {{ request.user.first_name|default:request.user.username }}</h1>
+        <hr>
     </header>
 
     <!-- GENERAL META CARDS -->
@@ -65,7 +61,7 @@
                     </strong>
                     <span>
                         {% if request.user.profile.current_level %}
-                            <small>{{ request.user.profile.get_current_level_display }}</small>
+                            <small>{{ request.user.profile.current_level }}</small>
                         {% else %}
                             <small>{% trans "Pending" %}</small>
                         {% endif %}
@@ -366,6 +362,9 @@
                     </div>
 
                 </div>
+                <p class="attendance-rate-disclaimer">
+                    {% trans 'Attendance rate calculated based on submitted records.' %}
+                </p>
             </div>
         </div>
 
